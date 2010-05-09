@@ -1,0 +1,5 @@
+menu=PlugIns/EBSD/Micron Bar
+#icon=org/ebsdimage/plugin/MicronBar_(24x24).gif
+tooltip=Create micron bar maps
+plugin=org.ebsdimage.plugin.MicronBar
+workerthread=true

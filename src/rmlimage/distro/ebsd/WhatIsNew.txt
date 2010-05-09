@@ -1,0 +1,503 @@
+8.7.32:
+- EBSD-PTP engine beta 1
+
+8.7.30:
+- Fixed the warning when closing the subMap of a MultiMap
+
+8.7.27:
+- The Maps name in a MultiMap will now be prefixed with the MultiMap name.
+Used to distinguish between Maps of the same alias but different MultiMap
+in the GUI.
+
+8.7.26:
+- Added method Identification.identify(ByteMap) to do an identification on
+ByteMaps. All pixels with value > 0 will be considered as part of an object.
+The method is accessible via the identify button and menu item.
+
+8.7.25:
+- Added RealMap.clear(float value).
+- Added a very basic implementation of the MapWindow display tree.
+- Added rmlimage.core.Edit.clipAndCopy.
+- Added DesktopListener and MapWindowListener to better manage window events.
+
+8.7.24:
+- MultiMap is now abstract.
+- JDom dependency removed from MultiMap.
+- Fixed the CUI ProgressBar flushing bug.
+
+8.7.23:
+- JpgLoader now loads 8bit jpegs in a ByteMap (FS#63).
+- Added SmpInputStream, SmpOutputStream and SmpCreator 
+in package rmlimage.module.ebsd.io (FS#183).
+- Added a plugin to build a SMP file from all the files in a directory 
+(PlugIns->EBSD->Create SMP File).
+
+8.7.22:
+- Method Arrays.contains(Object[], Object) now uses the equals(Object)
+method to do the comparison (FS#191)
+- Added the assertEquals(Map) and duplicate(IdentMap) methods to IdentMap.
+- Can now save RGBMaps to bmp format
+- Added a removeObjectsWithinAreaRange method that works on a BinMap
+- Added a button for RemoveObjectsWithinAreaRange in the Utility toolbar.
+
+8.7.21:
+- Fixed an error on the median filter. The pixels of the left border line were
+not treated properly.
+
+8.7.20:
+- When adding a Map to a MultiMap, if the added Map is unnamed (Untitled),
+its name will be set to the alias it is being added under.
+
+8.7.19:
+- Simplified the HklMMap class
+
+8.7.18:
+- Put the code in CtfFile in CtfLoader.
+- Created EbsdMap and HklMap
+
+8.7.17:
+- Replaced the rmlshared.io.IOFilter interface with the rmlshared.io.Loader
+and rmlshared.io.Saver interface.
+- All the filters for the Map loading and saving have been renamed to
+loaders and savers (ex.: BmpFilter is not BmpLoader and BmpSaver).
+
+8.7.16:
+- Cleaned up code for the list methods to JarFile (Request #173)
+
+8.7.15:
+- Added list methods to JarFile (Request #173)
+- Added a constructor to CsvReader that uses an URL (Request #174)
+
+8.7.14:
+- Added the median filter button to the main button bar.
+- Moved the median filter from rmlimage.core.MathMorph to rmlimage.core.Filter.
+- In the GUI, the median filter can now be applied to any Map type 
+that supports it.
+
+8.7.12:
+-Added sliders to the threshodlding panel for RealMaps
+-RealMaps can now be cropped from the GUI
+-Fixed the app failing to start on Ubuntu
+
+8.7.11:
+Converted MapStats, Transform and IO to the new handler architecture.
+
+8.7.10:
+- New handler architecture to find which module needs to deal with operations
+on different Map types. The methods of Conversion and MapMath have already
+been converted to this architecture.
+- Added a menu item to LUT menu to set the LUT as greyscale or thermal. 
+
+8.7.9:
+- Created the new methods Map.isValidFileFormat(File file) that is called
+by Map.setFile(File file) to check if the extension is valid for the 
+Map type used (Request #162 + Bug #164).
+- Use Map.getValidFileFormats() to get a list of valid extensions
+for the Map type used.
+
+8.7.8:
+- Fixed the unwarp bug (Bug #153).
+
+8.7.7:
+- Fixed the Reflection.newInstance(String) bug in Eclipse (Bug #163).
+
+8.7.6:
+- Added the possibility to save HoughMaps to their own file format (hmp)
+via rmlimage.io.IO methods.
+
+8.7.5:
+- Extracted the EBSD module from the main repo to put it in its own.
+
+8.7.4:
+- rmlimage.module.real.core.Drawing.line(...) will throw an
+IllegalArgumentException if the thickness of the line is higher than
+both the width and height of the RealMap to draw on.
+
+8.7.3:
+- Flipped the y axis of the ByteMap (so the positive axis is pointing up)
+when doing a Hough transform. So now, when doing the interactive line overlay
+on a HoughMap, the overlaid line on the ByteMap will go down if the mouse
+goes down on the HoughMap.
+- Fixed the FileUtil.getFile(String name) NullPointerException bug in Eclipse.
+
+8.7.2:
+- Added methods to draw lines of specified thickness and color distribution
+to the Drawing class of the core packages of modules EBSD and Real
+
+8.7.1:
+- Cleaned up the rmlimage.core.BasicDrawing and rmlimage.core.Drawing.
+- Removed support for python macros in the GUI.
+
+8.7.0:
+- Added a window that informs the user about the delay when starting
+the jython interpreter.
+- Rebuilt MapMath to be able to handle different types of Maps.
+- Added Abs (Real module) to the MapMath menu.
+- Added conjugate (Complex module) to the MapMath menu.
+- Removed Division and Multiplication from the PlugIns->FFT menu.
+These operations can now be done via the MapMath dialog.
+- Transform->Flip can now be done on RealMaps.
+- Transform->Rotate can now be done on RealMaps.
+- Analysis->Average can now be done on RealMaps.
+- Analysis->Standard Deviation can now be done on RealMaps.
+- Changed rmlimage.module.ebsd.core.Transform.hough(ByteMap, double) from an
+instance method back to a static method.
+- In division of two ByteMaps, if the pixel value of the divider is 0, the
+resulting pixel will be set to 255. Before, the divider was set to 1 before
+doing the division.
+- Removed beanshell and python macro functions.
+- Aggregated all macro functions in the rmlimage.macro.command package.
+- Beanshell intrepreter now set to automatically import all static methods
+from the rmlimage.macro.command package.
+- Removed all the beanshell macro functions from the EBSD module.
+- Aggregated all macro functions of the EBSD module in 
+the rmlimage.module.ebsd.macro.EBSD class.
+
+8.6.58:
+- The infrastructure to incorporate Jython methods in the GUI is up and running.
+- Jython methods HelloWorld and MaskDisc have been added to the EBSD module menu
+(PlugIns->EBSD->Hello World!!!  and  PlugIns->EBSD->MaskDisc)
+- The conversion menu items have all been centralized 
+in the Transform->Conversion menu.
+- The GetInfo menu item (?->Get Info) now also displays the file name.
+
+8.6.55:
+- Added the "Save", "Save As" and "Convert to ByteMap" menu item to the
+Real module (PlugIns->Real).
+
+8.6.54:
+- Removed the criterion that erased peaks that were smaller than 9 pixels
+in the tophat thresholding in the EBSD module.
+
+8.6.53:
+- Fixed the extractObjects bug in rmlimage.core.Identification
+
+8.6.52:
+- Added the rmlimage.utility package to the core distro.
+
+8.6.51:
+- Added the inversion method to rmlimage.module.real.core.MapMath
+(Request #140).
+
+8.6.50:
+- Added the flatten method to rmlimage.module.real.core.Edit.
+See Request #135 for more info.
+
+8.6.49:
+- Added division to rmlimage.module.real.core.MapMath (Request #140).
+
+8.6.48:
+- Fixed the bad pointer increment bug in the convolution method
+of the Real module (Bug #135).
+
+8.6.47:
+- Added methods to extract objects from an IdentMap to a BinMap
+in rmlimage.core.Identification (Request #132).
+
+8.6.46:
+- Added methods to get the norm, the real and the imaginary parts of a
+ComplexMap into a RealMap (Request #107).
+
+8.6.45:
+- Removed convolution method from rmlimage.module.ebsd.core.Convolution and
+put them in rmlimage.module.real.core.Convolution.
+- These convolution methods now return "non contrast expanded" results 
+in a RealMap (Request #135).
+
+8.6.44:
+- Added the truncate method in rmlimage.module.real.core.Edit (Request #134).
+
+8.6.43:
+- Added a menu item to load RealMaps (PlugIns->Real->Open)(Request #133)
+- The index of the pixel in the pixArray is now shown on the status bar 
+for RealMaps.
+
+8.6.42:
+- Fixed the duplication bug (Bug #108)
+
+8.6.41:
+- Returned to an hybrid of the more precise and the less precise HoughMap
+for performance purposes.
+- Fixed the rmlimage.module.ebsd.core.Edit.crop(HoughMap, double) exception
+(Bug #108).
+- The method notOp has been added to rmlimage.core.MapMath (Request #117)
+
+8.6.40:
+- New more precise HoughMap (but Hough Transform 340x slower).
+
+8.6.38:
+- Removed the "WARNING!!! Old border pixel strategy" in the MathMorph
+operations on ByteMaps (Request #108).
+
+8.6.37:
+- Added the method rmlimage.core.MapStats.range(ByteMap, ROI)
+
+8.6.36:
+- In package rmlimage.module.real.core:         (Request #129)
+  - MapMath.and(RealMap, BinMap, RealMap) will now set the RealMap' pixels 
+    to Float.NaN if the corresponding pixel in the BinMap is OFF.
+  - Added MapStats in which the Float.NaN pixels are not considered 
+    in the calculations.
+  - The Conversion.toByteMap(...) methods will convert Float.NaN pixels to 0 
+    in the ByteMap.
+
+8.6.35:
+- Added the horizontal flip method in rmlimage.core.Transform
+and rmlimage.module.real.core.Transform.
+- Added rotation methods in rmlimage.modules.real.core.Transform
+(Request #112).
+
+8.6.34:
+- Implemented methods "andOp", "orOp", "xorOp" and "absOp" 
+in all MapMath classes.
+
+8.6.33:
+- Added methods "abs", "addition", "multiplication" and "and" 
+in rmlimage.module.real.core.MapMath (Request #112).
+
+8.6.32:
+- Added thresholding method signatures using a ByteMap in 
+rmlimage.module.ebsd.core.Threshold
+
+8.6.30:
+- Added the rmlimage.macro.python.cui.MapMath class with the andOp, orOp 
+and xorOp methods to the Core distro (Request #117).
+
+8.6.29:
+- Added methods to convert ByteMaps to RealMaps 
+(rmlimage.module.real.core.Conversion)
+- Added methods to load and save RealMaps (rmlimage.module.real.io.IO)
+(Request #112).
+
+8.6.28:
+- Added a cropping method for RealMaps (rmlimage.module.real.core.Edit)
+(Request #112).
+- Rebuilt rmlimage.core.Edit. Some methods have been removed for clarity.
+May break some code.
+
+8.6.26:
+- Added the real module (rmlimage.module.real) (Request #112).
+
+8.6.25:
+- Modules moved from rmlimage.plugin to rmlimage.module.
+- Modules subtree modified to match the main tree structure (Request #117).
+
+8.6.24:
+- Added a method to crop a HoughMap at a certain radius 
+in rmlimage.plugin.ebsd.Edit (Request #108).
+- Added methods to get the r and theta values of a pixel of a HoughMap derived
+ByteMap in rmlimage.plugin.ebsd.Analysis (Request #108).
+
+8.6.23:
+- FFT module now in GUI distro (Request #107)
+- Added the method rmlimage.plugin.ebsd.Conversion.toHoughMap(ByteMap map)
+(Request # 108)
+
+8.6.22:
+- New HoughMap constructor with another HoughMap as a parameter (Request #77).
+
+8.6.21:
+- Rebuilt HoughMap to make it more robust and better documented.
+
+8.6.20:
+- Added methods to get the average, standard deviation and entropy from a 
+masked ByteMap in rmlimage.plugin.ebsd.Analysis.
+
+8.6.19:
+- Added entropy measuring method in rmlimage.kernel.Analysis.
+- Added entropy measurement plugin (Analysis->Entropy).
+
+8.6.18:
+- Added an contrast adjusted convolution in rmlimage.plugin.ebsd.Convolution.
+
+8.6.17:
+- Fixed the convolution leaving a band of untouched pixels around the border
+
+8.6.16:
+- Bug of Macros->Exec Last not recording the last macro run = FIXED (Bug #52).
+
+8.6.15:
+- Can now specify the minimum color value of the gaussian line (Request #99)
+
+8.6.14:
+- Made the methods in rmlimage.utility.Noise static. This will fix the
+method call in jython (Request #73)
+
+8.6.13:
+- Added the package rmlimage.complex to the core distro.
+
+8.6.12:
+- Added a binning method int rmlimage.kernel.Transform (Request #73).
+
+8.6.11:
+- Added the class rmlimage.utility.Noise to add some gaussian noise to a ByteMap
+
+8.6.10:
+- Compiled classes can be added to the class subdirectory
+(need to create it first) of the RML-Image installation directory.
+These classes can then be called using the macro language.
+The classes are not dynamically loaded meaning that they need to be present 
+in the subdir when RML-Image is started.
+
+8.6.9:
+- New line methods in rmlimage.kernel.BasicDrawing and rmlimage.kernel.Drawing
+to draw lines of a specified thickness (Request #72).
+
+8.6.8:
+- Can now paste the micron bar on RGBMaps.
+
+8.6.3:
+- First implementation of the jython macro interpreter.
+
+8.6.2:
+- Faster appearance of the warp map verification window
+- Location of the warp maps is now specified along with the source 
+and destination directories in the dialog 
+(PlugIn->EBSD->UnWarp) 
+
+8.6.1:
+- Added a dialog informing the user that the UnWarping is over (Request #42)
+- Will look for the warp maps in the destination directory first. If they are
+not found there, a dialog will appear asking the user if he/she wants to also
+look in the source directory (Request #43).
+
+8.6:
+- Added image rotation functions (Transform->Rotate)(see user manual p.19)
+- Better splashscreen implementation. Should stay visible until the main
+windows appears.
+- Migrated to Java 6.0.
+- Documentation now written in LaTeX. May be a little rough around the edges.
+
+8.5.6:
+- Fixed the bug with Unwarp (EBSD) that gave half treated patterns because
+of the many ways the warp maps are coded to disk (why make is simple when
+it can be complicated...).
+- When starting an Unwarp run, the first pattern treated and its unwarp image
+will be shown on the desktop along with the warp maps to check for correctness.
+If the unwarp image is deamed correct, the run will continue (check the progress
+bar). If not, the run will be aborted and no patterns will be unwarped.
+- Added support for the TopHat and 2Sigma thresholding techniques
+(PlugIn->EBSD->Thresholding).
+- Added a function to deconvolve a pattern based on two other patterns
+(PlugIn->EBSD->Deconvolve).
+- Fixed the rounding error for Surface Fraction measurement
+(Analysis->Surface Fraction).
+- Removing object according to their size can now be done also on BinMaps
+(Analysis->Remove Objects->Within Area Range).
+
+8.5.5:
+- Added a "quick&dirty" plugin to save the peaks values for HoughMaps from their
+BinMap (PlugIn->EBSD->Save Peaks).
+
+8.5.4:
+- Added ByteMap opening and closing
+- Added automatic HoughMap thresholding (PlugIn->EBSD->Thresholding).
+- HoughMaps can now be saved as bmp.
+- Surface fraction (Analysis->Surface Fraction) now also works on IdentMaps.
+- Added function that returns the number of objects in a BinMap or IdentMap
+(Analysis->Count)
+
+8.5.3:
+- Can now do an opening or a closing on ByteMaps
+- Macro count
+- Macro contrastExpansion
+- Macro houghThresholding
+- Macro median with multipass 
+
+8.5.2:
+- Added a plugin to overlay the detected lines on a Kikuchi pattern
+(PlugIn->EBSD->QC Overlay Line) (see EBSD manual p.3).
+- Added buttons to the PlugIn Toobar (see EBSD manual p.7).
+- Added the Line Overlay button to the HoughMap Toolbar (see EBSD manual p.9)
+
+8.5.1:
+vAdded BackMapped Hough Transform (PlugIn->EBSD->BackMapped Hough Transform).
+- Removed Normalized Hough Transform. From now on, the Hough Transform will
+be normalized by default.
+
+8.5.0:
+- Added function to scale down ByteMaps (Transform->Scale Down)(see user manual p.19)
+- Added the watershed function (MathMorph->Watershed)(see user manual p.26).
+- Added warning if macro editor is closed with an unsaved macro.
+- Added Sobel filter (Transform->Filters->Sobel)(see user manual p.22).
+- Macro function "add" added (see macro programming manual p.60).
+- Macro function "and" between ByteMaps and BinMaps added (see macro programming manual p.38).
+- Macro function "or" between ByteMaps and BinMaps added (see macro programming manual p.39).
+- Macro function "watershed" added (see macro programming manual p.36)
+- Macro function "sobel" added (see macro programming manual p.30)
+- Macro function "smooth" added (see macro programming manual p.29)
+- Macro function "laplacian" added (see macro programming manual p.29)
+- Macro function "sharpen" added (see macro programming manual p.29)
+- Macro function "iterativeThresholding" added (see macro programming manual p.26)
+- Macro function "minErrorThresholding" added (see macro programming manual p.26)
+- Macro function "entropyThresholding" added (see macro programming manual p.27)
+- Macro function "johannsenBilleThresholding" added (see macro programming manual p.27)
+- Macro function "momentPreservingThresholding" added (see macro programming manual p.28)
+- Macro function "otsu" renamed to "otsuThresholding" added (see macro programming manual p.26)
+
+8.4.4:
+- Can open Lispix raw images.
+- User manual started for the functions available in the EBSD module. The manual
+can be found in the RML-Image installation directory. A link to the manual 
+can also be found in the RML-Image item of the Windows Start menu for 
+local installations.
+- Kikuchi images can be unwarped in batch mode (see EBSD manual p.1)
+(PlugIn->EBSD->UnWarp)
+
+8.4.2:
+- Added batch contrast expansion
+(PlugIn->EBSD->Contrast Expansion)
+
+8.4.0:
+- Macro function "addition" added (see macro programming manual p.34).
+- Macro function "subtraction" added (see macro programming manual p.34).
+- Macro function "arithmetic" added (see macro programming manual p.34).
+- Macro function "division" added (see macro programming manual p.34).
+- Macro function "refresh" added (see macro programming manual p.57).
+
+8.3.3:
+- Origin set at the middle of the ByteMap in Hough Transform 
+(PlugIn->EBSD->Hough Transform).
+- Normalized hough transform implemented 
+(PlugIn->EBSD->Normalized Hough Transform).
+- Conversion of HoughMaps to ByteMaps for saving to disk
+(PlugIn->EBSD->Convert to ByteMap).
+
+8.3.2:
+- Bug when starting RML-Image from c:\Program Files = FIXED!
+
+8.3.1:
+- Hough transform added in PlugIn->EBSD
+
+8.3.0:
+- Error handling infrastructure completely rebuilt. Should be transparent to user
+but some bugs may have crawled in. Please report any bugs.
+- Macro function "and" added (see macro programming manual p.32).
+- Macro function "or" added (see macro programming manual p.32).
+- Macro function "xor" added (see macro programming manual p.33).
+- Macro function "grid" added (see macro programming manual p.49-50).
+- Macro function "qcOverlay" added (see macro programming manual p.50).
+- Macro function "qcOutline" added (see macro programming manual p.50-51).
+- Keyboard shortcut for MapMath->Invert set to CTRL-I.
+- Keyboard shortcut for File->Reload set to CTRL-R.
+- Keyboard shortcut for Edit->Undo set to CTRL-Z.
+
+8.2.3:
+- Macro files can be run directly from Macro->Exec (see page 36 of the manual).
+- The name of the last macro executed will now appear as a tooltip when the
+mouse is left on the Macro->Exec Last menu item (see page 36 of the manual).
+- Wait macro command added (see page 58 of Macro manual).
+
+8.2.1:
+- Items added in the Utilities->Options->View tab to show or hide 
+the different toolbars (see page 35 of the manual for more details).
+
+8.2:
+- Contrast expansion added (Transform->Contrast->Expansion).
+- Sobel filter added (Transform->Filter=>Sobel).
+- Print out of all the automatic thresholding algorithms results added
+(Threshold->Test All).
+- Documentation split into two manuals. One for the software itself and one for
+macro programmings. They are in the software installation directory (and
+in the Start menu for Windows users).
+

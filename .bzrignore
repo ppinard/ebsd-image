@@ -1,0 +1,7 @@
+bin/*
+*.pdf
+.classpath
+.checkstyle
+.settings
+.project
+.pydevproject

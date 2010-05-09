@@ -1,0 +1,11 @@
+#RML-Image Property File
+#Fri Apr 02 13:15:08 EDT 2010
+threshold.min=128
+EBSD.threshold.automatic.average=112.001024428684
+Hough.dr=4609083938642684951
+EBSD.threshold.automatic.mode=2*sigma
+Hough.dtheta=4580687790476533049
+Hough.height=141
+threshold.max=255
+Hough.width=180
+EBSD.threshold.automatic.stdDev=8.141760791124508

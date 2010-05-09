@@ -1,0 +1,5 @@
+menu=PlugIns/EBSD/Thresholding
+icon=rmlimage/gui/Threshold_(24x24).gif
+tooltip=Hough Auto Thresholding
+plugin=org.ebsdimage.plugin.Thresholding
+workerthread=true

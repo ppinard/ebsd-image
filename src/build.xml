@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+
+<project name="EBSD-Image" basedir="." default="help">
+
+<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask"/>
+
+
+  <!-- Read the local properties -->
+<fail message="property.file not defined" unless="property.file"/>
+<property environment="env"/>
+<property file="${property.file}"/>
+
+
+<!-- Check if the properties needed are defined-->
+
+    <!-- Root directory of the project tree -->
+<fail message="ebsd-image.dir not defined" unless="ebsd-image.dir"/>
+
+    <!-- Root directory of the source code -->
+<fail message="ebsd-image.src.dir not defined" unless="ebsd-image.src.dir"/>
+
+    <!-- Root directory of the unit tests -->
+<fail message="ebsd-image.test.dir not defined" unless="ebsd-image.test.dir"/>
+
+    <!-- Directory where the external libraries are stored -->
+<fail message="ebsd-image.lib.dir not defined" unless="ebsd-image.lib.dir"/>
+
+    <!-- Temporary directory -->
+<property name="tmp.dir" location="${java.io.tmpdir}"/>
+<echo message="tmp.dir = ${tmp.dir}"/>
+
+    <!-- Directory where the class files will be saved -->
+<fail message="class.dir not defined" unless="class.dir"/>
+<echo message="class.dir = ${class.dir}"/>
+
+    <!-- Directory where RML-Image is installed
+         (on Linux: /usr/share/rml-image) -->
+<fail message="rmlimage.install.dir not defined" unless="rmlimage.install.dir"/>
+
+    <!-- Directory where to put the built the distro (jar files) -->
+<fail message="build.dir not defined" unless="build.dir"/>
+<echo message="build.dir = ${build.dir}"/>
+
+    <!-- Directory where the ebsd-image.jar file will be saved -->
+<property name="modules.dir" location="${build.dir}/module"/>
+<property name="extensions.dir" location="${build.dir}/ext"/>
+
+
+  <!-- The list of RML-Image jars (main + modules)
+       and all the needed librairies. -->
+<path id="ebsd-image.jar.path">
+  <fileset dir="${rmlimage.install.dir}">
+    <include name="*.jar"/>
+    <include name="module/*.jar"/>
+  </fileset>
+  <fileset dir="${ebsd-image.lib.dir}">
+    <include name="*.jar"/>
+  </fileset>
+</path>
+
+
+
+
+
+
+<target name="build" depends="compile,cli,math,opencsv,jdom,wizard"  
+        unless="noebsd" description="Creates the full ebsd-image.jar file">
+
+    <!-- Backup the development module.prop file -->
+  <move file="${class.dir}/rmlimage/module.prop" todir="${tmp.dir}"
+                                                 overwrite="true"/>
+
+    <!-- Copy the module.prop file to the rmlimage directory -->
+  <copy file="${ebsd-image.src.dir}/module.prop"
+        todir="${class.dir}/rmlimage"/>
+
+    <!-- Build ebsd-image.jar -->
+  <mkdir dir="${modules.dir}"/>
+  <jar destfile="${modules.dir}/ebsd-image.jar">
+    <fileset dir="${class.dir}">
+      <include name="org/ebsdimage/**"/>
+      <include name="rmlimage/module.prop"/>
+      <include name="ptpshared/**"/>
+      <include name="crystallography/**"/>
+    </fileset>
+  </jar>
+
+    <!-- Restore the development module.prop file -->
+  <move file="${tmp.dir}/module.prop" todir="${class.dir}/rmlimage"/>
+
+  <echo message="Created ${modules.dir}/ebsd-image.jar"/>
+</target>
+
+
+
+
+
+
+
+<target name="build-core" depends="compile-core,opencsv" unless="noebsd"
+        description="Creates the core ebsd-image.jar file">
+  <mkdir dir="${modules.dir}"/>
+  <jar destfile="${modules.dir}/ebsd-image.jar">
+    <fileset dir="${class.dir}">
+      <include name="org/ebsdimage/**"/>
+      <exclude name="org/ebsdimage/plugin/**"/>
+      <include name="ptpshared/**"/>
+      <include name="crystallography/**"/>
+    </fileset>
+  </jar>
+  <echo message="Created ${modules.dir}/ebsd-image.jar"/>
+</target>
+
+
+
+
+
+
+<target name="build-standalone" depends="build-core,cli,xml,sql,math"
+        description="Builds the core with all the libraries included">
+  
+      <!-- Explode all the jars -->
+  <delete dir="${tmp.dir}/ebsd-standalone"/>
+  <mkdir dir="${tmp.dir}/ebsd-standalone"/>
+  <unjar dest="${tmp.dir}/ebsd-standalone" overwrite="true">
+    <fileset dir="${rmlimage.install.dir}" includes="**/*.jar"/>
+    <fileset dir="${build.dir}" includes="**/*.jar"/>
+  </unjar>
+  <delete dir="${tmp.dir}/ebsd-standalone/META-INF"/>
+        
+        <!-- Reform the final jar containing all the exploded classes -->
+  <mkdir dir="${dest.dir}"/>
+  <jar destfile="${dest.dir}/ebsd-standalone.jar">
+    <fileset dir="${tmp.dir}/ebsd-standalone"/>
+  </jar>
+    
+	<delete dir="${tmp.dir}/ebsd-standalone"/>     <!-- Clean up -->
+  
+  <echo message="Created ${dest.dir}/ebsd-standalone.jar"/>
+</target>
+
+
+
+
+
+
+
+<target name="clean" description="Removes the class directory">
+  <delete dir="${class.dir}/ebsd"/>
+  <delete dir="${class.dir}/ptpshared"/>
+  <delete dir="${class.dir}/crystallography"/>
+  <delete dir="${build.dir}"/>
+  <delete dir="${tmp.dir}/experiment-ptp"/>
+</target>
+
+
+
+
+
+
+<target name="cli">
+  <!-- Copies the commons cli library to the ext directory -->
+  <mkdir dir="${extensions.dir}"/>
+  <copy todir="${extensions.dir}">
+    <fileset dir="${ebsd-image.lib.dir}" includes="commons-cli*.jar"/>
+  </copy>
+</target>
+
+
+
+
+
+
+<target name="compile" unless="noebsd"
+        description="Compiles the source code">
+
+        <!-- Compile the source code -->
+  <mkdir dir="${class.dir}"/>
+  <javac srcdir="${ebsd-image.src.dir}" destdir="${class.dir}" source="1.5"
+         failonerror="true" debug="true">
+    <classpath refid="ebsd-image.jar.path"/>
+  </javac>
+
+      <!-- Copy the plugin button icon and menu definition files
+           and the support files -->
+  <copy todir="${class.dir}">
+    <fileset dir="${ebsd-image.src.dir}">
+      <include name="**/*.gif"/>
+      <include name="**/*.png"/>
+      <include name="**/*.menu"/>
+      <include name="**/*.csv"/>
+    </fileset>
+  </copy>
+
+    <!-- Splices the menu list file into the master one -->
+  <concat destfile="${class.dir}/rmlimage/module.prop" append="true">
+    <filelist dir="${ebsd-image.src.dir}" files="module.prop"/>
+  </concat>
+</target>
+
+
+
+
+
+<target name="compile-core" unless="noebsd"
+        description="Compiles only the core classes">
+  <mkdir dir="${class.dir}"/>
+  <javac srcdir="${ebsd-image.src.dir}" destdir="${class.dir}" source="1.5"
+         failonerror="true" debug="true">
+    <classpath refid="ebsd-image.jar.path"/>
+    <exclude name="org/ebsdimage/gui/**"/>
+    <exclude name="org/ebsdimage/macro/**"/>
+    <exclude name="org/ebsdimage/plugin/**"/>
+    <exclude name="org/ebsdimage/python/**"/>
+  </javac>
+	<copy todir="${class.dir}">
+    <fileset dir="${ebsd-image.src.dir}" includes="**/*.csv"/>
+  </copy>
+</target>
+
+
+
+
+<target name="findbugs-html"
+        description="Runs FindBugs and create an html report readable by FireFox">
+  <property name="findbugs.output" value="html"/>
+  <property name="findbugs.outputFile" value="${tmp.dir}/ebsd-image_bugs.html"/>
+  <antcall target="findbugs"/>
+</target>
+
+
+
+<target name="findbugs-xml"
+        description="Runs FindBugs and create an xml report readable by the FindBugs GUI">
+  <property name="findbugs.output" value="xml:withMessages"/>
+  <property name="findbugs.outputFile" value="${tmp.dir}/ebsd-image_bugs.xml"/>
+  <antcall target="findbugs"/>
+</target>
+
+
+
+<target name="findbugs" depends="compile" if="findbugs.dir">
+  <fail message="findbugs.output not defined" unless="findbugs.output"/>
+  <fail message="findbugs.outputFile not defined" unless="findbugs.outputFile"/>
+  <fail message="junit.jar not defined" unless="junit.jar"/>
+  <findbugs home="${findbugs.dir}" output="${findbugs.output}"
+            outputFile="${findbugs.outputFile}" failonerror="true"
+            jvmargs="-Duser.language=us"
+            errorProperty="findbugs.errors"
+            warningsProperty="findbugs.warnings">
+    <class location="${class.dir}/ebsd"/>
+    <class location="${class.dir}/ptpshared"/>
+    <auxClasspath>
+      <pathelement path="${class.dir}"/>
+      <path refid="ebsd-image.jar.path"/>
+      <pathelement path="${junit.jar}"/>
+    </auxClasspath>
+    <sourcePath path="${ebsd-image.src.dir}" />
+  </findbugs>
+
+  <fail message="FindBugs detected errors in the module. See ${findbugs.outputFile} for more details."
+        if="findbugs.errors"/>
+  <fail message="FindBugs detected warnings in the module. See ${findbugs.outputFile} for more details."
+        if="findbugs.warnings"/>
+</target>
+
+
+
+       
+       
+
+<target name="help" description="Shows a help screen">
+  <echo>Build script for the EBSD-PTP module.
+The code is compiled to class.dir (${class.dir}).
+The distro is built in build.dir (${build.dir}).
+To avoid compiling or building the module, set the property "noebsd".
+To avoid building the javadoc, set the property "nojavadoc".
+Use ant -p to get a listing of all the available targets.</echo>
+</target>
+
+
+
+
+<target name="javadoc" unless="nojavadoc"
+        description="Builds the javadoc for the core classes">
+  <fail message="javadoc not defined" unless="javadoc"/>
+
+  <javadoc destdir="${build.dir}/javadoc/ebsd-image" executable="${javadoc}"
+           Public="true">
+    <classpath path="${class.dir}"/>
+    <classpath refid="ebsd-image.jar.path"/>
+    <!--<link href="../core"/>
+    <link href="../integer"/>-->
+  	
+    <fileset dir="${ebsd-image.src.dir}" defaultexcludes="yes">
+      <include name="org/ebsdimage/**/*.java"/>
+      <include name="ptpshared/**/*.java"/>
+      <include name="crystallography/**/*.java"/>
+    </fileset>
+  </javadoc>
+</target>
+
+
+
+
+<!-- Target used by jEdit to compile the whole module -->
+<target name="jedit-compile" depends="compile"/>
+
+
+
+
+<target name="jdom" unless="noebsd">
+  <!-- Copies the OpenCSV library to the ext directory -->
+  <mkdir dir="${extensions.dir}"/>
+  <copy todir="${extensions.dir}">
+    <fileset dir="${ebsd-image.lib.dir}" includes="jdom*.jar"/>
+  </copy>
+</target>
+
+
+
+
+<target name="math">
+  <!-- Copies the commons math library to the ext directory -->
+  <mkdir dir="${extensions.dir}"/>
+  <copy todir="${extensions.dir}">
+    <fileset dir="${ebsd-image.lib.dir}" includes="commons-math*.jar"/>
+  </copy>
+</target>
+
+
+
+
+<target name="opencsv" unless="noebsd">
+  <!-- Copies the OpenCSV library to the ext directory -->
+  <mkdir dir="${extensions.dir}"/>
+  <copy todir="${extensions.dir}">
+    <fileset dir="${ebsd-image.lib.dir}" includes="opencsv*.jar"/>
+  </copy>
+</target>
+
+
+
+
+<target name="publish-casir" depends="build-standalone"
+        description="Builds the Experiment application and puts it on Casir">
+
+        <!-- Move the files to Casir -->
+  <input addproperty="casir.user" message="Casir user = ">
+    <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
+  </input>
+  <input addproperty="casir.password" message="Casir password = ">
+    <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
+  </input>
+
+  <scp todir="${casir.user}@casir-1:~/programs/experiments/" password="${casir.password}"
+       trust="true">
+    <fileset file="${dest.dir}/experiment.jar"/>
+  </scp>
+  
+  <echo message="Put experiment.jar in casir-1:~"/>  
+</target>
+
+
+
+
+<target name="sql">
+  <!-- Copies the mysql library to the ext directory -->
+  <mkdir dir="${extensions.dir}"/>
+  <copy todir="${extensions.dir}">
+    <fileset dir="${ebsd-image.lib.dir}" includes="mysql-connector-java*.jar"/>
+  </copy>
+</target>
+
+
+
+
+<!-- Downloads and installs the current distro to the rmlimage.install.dir -->
+<target name="update-rmlimage" 
+        description="Downloads and installs RML-Image EBSD-dev to the rmlimage.install.dir directory">
+  <mkdir dir="${rmlimage.install.dir}"/>
+  <get src="http://www.rml-image.com/repos/zip/RML-Image_dev.zip" 
+       dest="${rmlimage.install.dir}/RML-Image_dev.zip" 
+       verbose="true" usetimestamp="true"/>
+  <unzip src="${rmlimage.install.dir}/RML-Image_dev.zip"
+         dest="${rmlimage.install.dir}" overwrite="true"/>
+</target>
+  
+
+
+
+<target name="wizard">
+  <!-- Copies the commons cli library to the ext directory -->
+  <mkdir dir="${extensions.dir}"/>
+  <copy todir="${extensions.dir}">
+    <fileset dir="${ebsd-image.lib.dir}" includes="wizard*.jar"/>
+  </copy>
+</target>
+
+
+
+<target name="xml">
+  <!-- Copies the jDom library to the ext directory -->
+  <mkdir dir="${extensions.dir}"/>
+  <copy todir="${extensions.dir}">
+    <fileset dir="${ebsd-image.lib.dir}" includes="jdom*.jar"/>
+  </copy>
+</target>
+
+
+</project>
+

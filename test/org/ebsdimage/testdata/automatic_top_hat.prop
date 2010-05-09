@@ -1,0 +1,8 @@
+#RML-Image Property File
+#Sat May 08 22:19:20 EDT 2010
+Hough.height=141
+threshold.max=255
+Hough.width=180
+Hough.dr=4609083938642684951
+threshold.min=10
+Hough.dtheta=4580687790476533049

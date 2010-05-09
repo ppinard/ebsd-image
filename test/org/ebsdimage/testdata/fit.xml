@@ -1,0 +1,7 @@
+<Simulation name="Sim" basepath="/tmp">
+  <HoughPeaks>
+    <HoughPeak rho="5" theta="1.5" maxintensity="-1" />
+    <HoughPeak rho="1" theta="2" maxintensity="-1" />
+    <HoughPeak rho="8" theta="1" maxintensity="-1" />
+  </HoughPeaks>
+</Simulation>

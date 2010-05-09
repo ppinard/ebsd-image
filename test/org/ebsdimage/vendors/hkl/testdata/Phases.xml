@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--PhasesMap v1-->
+<PhasesMap>
+  <Phases>
+    <Crystal name="Copper" id="1">
+      <UnitCell a="3.6144" b="3.6144" c="3.6144" dimUnits="angstrom" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="1.5707963267948966" angleUnits="rad" />
+      <AtomSites>
+        <AtomSite>
+          <Element atomicNumber="14" />
+          <Position x="0.0" y="0.0" z="0.0" />
+        </AtomSite>
+        <AtomSite>
+          <Element atomicNumber="14" />
+          <Position x="0.0" y="0.5" z="0.5" />
+        </AtomSite>
+        <AtomSite>
+          <Element atomicNumber="14" />
+          <Position x="0.5" y="0.0" z="0.5" />
+        </AtomSite>
+        <AtomSite>
+          <Element atomicNumber="14" />
+          <Position x="0.5" y="0.5" z="0.0" />
+        </AtomSite>
+      </AtomSites>
+      <PointGroup laueGroup="11" schoenflies="O" hermannMauguin="432" crystalSystem="CUBIC" />
+    </Crystal>
+  </Phases>
+</PhasesMap>
+

@@ -1,0 +1,5 @@
+#menu=PlugIns/EBSD/Create a mask disc
+icon=org/ebsdimage/plugin/MaskDisc_(24x24).png
+tooltip=Creates a circular mask disc for a pattern
+plugin=org.ebsdimage.plugin.MaskDisc
+workerthread=true

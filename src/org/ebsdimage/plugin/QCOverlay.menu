@@ -1,0 +1,5 @@
+menu=PlugIns/EBSD/QC Overlay Lines
+icon=org/ebsdimage/plugin/QCOverlay_(24x24).gif
+tooltip=QC Overlay Lines
+plugin=org.ebsdimage.plugin.QCOverlay
+workerthread=true

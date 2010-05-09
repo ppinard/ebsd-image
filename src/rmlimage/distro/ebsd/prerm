@@ -1,0 +1,28 @@
+#!/bin/sh
+
+set -e
+
+
+# Remove the app except the config directory
+if [ "$1" = "remove" ] || [ "$1" = "upgrade" ] ; then
+  echo "Removing RML-Image"
+  rm -rf /usr/share/rml-image-ebsd-core       #Remove the main app
+fi
+
+
+# Remove the config directory for each user
+if [ "$1" = "remove" ] ; then
+  homeDirs=$(find /home -mindepth 1 -maxdepth 1 -type d)
+  for homeDir in $homeDirs ; do
+    if [ -d "$homeDir/.RML-Image" ] ; then
+      echo "Removing RML-Image user config dir for user $(basename $homeDir)"
+      rm -rf "$homeDir/.RML-Image"
+    else
+      echo "No RML-Image user config dir found for user $(basename $homeDir)"
+    fi
+  done
+fi
+
+
+exit 0
+

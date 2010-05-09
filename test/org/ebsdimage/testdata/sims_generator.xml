@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SimsGenerator>
+  <output>
+    <OutputOpsMock>1</OutputOpsMock>
+    <OutputOpsMock>1</OutputOpsMock>
+    <OutputOps2Mock>2</OutputOps2Mock>
+    <OutputOpsMock>3</OutputOpsMock>
+  </output>
+</SimsGenerator>
+

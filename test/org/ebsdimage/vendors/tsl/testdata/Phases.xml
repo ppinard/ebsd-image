@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--PhasesMap v1-->
+<PhasesMap>
+  <Phases>
+    <Crystal name="WC" id="1">
+      <UnitCell a="2.906" b="2.906" c="2.838" dimUnits="angstrom" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="2.0943951023931953" angleUnits="rad" />
+      <AtomSites>
+        <AtomSite>
+          <Element atomicNumber="74" />
+          <Position x="0.0" y="0.0" z="0.0" />
+        </AtomSite>
+        <AtomSite>
+          <Element atomicNumber="6" />
+          <Position x="0.33333" y="0.66666" z="0.5" />
+        </AtomSite>
+      </AtomSites>
+      <PointGroup laueGroup="9" schoenflies="D6" hermannMauguin="622" crystalSystem="HEXAGONAL" />
+    </Crystal>
+    <Crystal name="Nickel" id="2">
+      <UnitCell a="3.52" b="3.52" c="3.52" dimUnits="angstrom" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="1.5707963267948966" angleUnits="rad" />
+      <AtomSites>
+        <AtomSite>
+          <Element atomicNumber="28" />
+          <Position x="0.0" y="0.0" z="0.0" />
+        </AtomSite>
+        <AtomSite>
+          <Element atomicNumber="28" />
+          <Position x="0.0" y="0.5" z="0.5" />
+        </AtomSite>
+        <AtomSite>
+          <Element atomicNumber="28" />
+          <Position x="0.5" y="0.0" z="0.5" />
+        </AtomSite>
+        <AtomSite>
+          <Element atomicNumber="28" />
+          <Position x="0.5" y="0.5" z="0.0" />
+        </AtomSite>
+      </AtomSites>
+      <PointGroup laueGroup="11" schoenflies="O" hermannMauguin="432" crystalSystem="CUBIC" />
+    </Crystal>
+  </Phases>
+</PhasesMap>
+

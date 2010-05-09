@@ -1,0 +1,4 @@
+icon=rmlimage/gui/ContrastExpansion_(24x24).gif
+tooltip=Contrast Expansion
+plugin=rmlimage.plugin.builtin.ContrastExpansion
+workerthread=true

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test>
+  <child1 attr="a">text1</child1>
+  <child2 attr="b">text2</child2>
+</test>

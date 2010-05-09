@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExpsGenerator>
+  <pattern.results>
+    <PatternResultsOpsMock>1</PatternResultsOpsMock>
+  </pattern.results>
+  <pattern.post>
+    <PatternPostOps2Mock var="1">1</PatternPostOps2Mock>
+    <PatternPostOps2Mock var="4">1</PatternPostOps2Mock>
+    <PatternPostOps2Mock var="8">1</PatternPostOps2Mock>
+    <PatternPostOpsMock>2</PatternPostOpsMock>
+    <PatternPostOps2Mock var="1">3</PatternPostOps2Mock>
+  </pattern.post>
+</ExpsGenerator>
+

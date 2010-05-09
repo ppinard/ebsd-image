@@ -1,0 +1,21 @@
+name = EBSD-Image
+
+package=org.ebsdimage
+
+init=org.ebsdimage.Init
+init=org.ebsdimage.plugin.Init
+init=org.ebsdimage.vendors.hkl.Init
+init=org.ebsdimage.vendors.tsl.Init
+
+menu=org/ebsdimage/plugin/ContrastExpansion.menu
+menu=org/ebsdimage/plugin/HoughTransform.menu
+menu=org/ebsdimage/plugin/Thresholding.menu
+menu=org/ebsdimage/plugin/QCOverlay.menu
+menu=org/ebsdimage/plugin/UnWarp.menu
+menu=org/ebsdimage/plugin/MaskDisc.menu
+menu=org/ebsdimage/plugin/Exp.menu
+menu=org/ebsdimage/plugin/RGBEulers.menu
+menu=org/ebsdimage/plugin/MicronBar.menu
+
+menu=org/ebsdimage/vendors/hkl/plugin/HklImport.menu
+menu=org/ebsdimage/vendors/tsl/plugin/TslImport.menu

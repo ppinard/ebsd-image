@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "upgrade" ] ; then
+  echo "Upgrading RML-Image"
+fi
+
+exit 0
+

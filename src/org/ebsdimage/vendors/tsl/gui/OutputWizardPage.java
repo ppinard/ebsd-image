@@ -1,0 +1,99 @@
+/*
+ * EBSD-Image
+ * Copyright (C) 2010 Philippe T. Pinard
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+package org.ebsdimage.vendors.tsl.gui;
+
+import javax.swing.JLabel;
+
+import net.miginfocom.swing.MigLayout;
+import ptpshared.gui.WizardPage;
+import rmlimage.gui.FileDialog;
+import rmlshared.gui.CheckBox;
+import rmlshared.gui.FileNameField;
+
+/**
+ * Wizard page for the output of the import.
+ * 
+ * @author Philippe T. Pinard
+ * 
+ */
+public class OutputWizardPage extends WizardPage {
+
+    /** Map key for the output file. */
+    public static final String KEY_OUTPUT_FILE = "outputFile";
+
+    /** Map key for whether to display the multimap in the GUI. */
+    public static final String KEY_DISPLAY_GUI = "displayGUI";
+
+
+
+    /**
+     * Returns a description of this page.
+     * 
+     * @return description
+     */
+    public static String getDescription() {
+        return "Output";
+    }
+
+
+
+    /** Field for the output file. */
+    private FileNameField outputFileField;
+
+    /** Check box to display the MMap after being loaded. */
+    private CheckBox displayCBox;
+
+
+
+    /**
+     * Creates a new <code>OutputWizardPage</code>.
+     */
+    public OutputWizardPage() {
+        setLayout(new MigLayout("", "[][grow, fill][]"));
+
+        add(new JLabel("Multimap output file"));
+        outputFileField = new FileNameField("OUTPUTFILE", 32, false);
+        FileDialog.addFilter("*.zip");
+        outputFileField.setFileFilter("*.zip");
+        outputFileField.setExtension("zip");
+        add(outputFileField);
+        add(outputFileField.getBrowseButton(), "wrap");
+
+        displayCBox = new CheckBox("Display multimap after loading");
+        add(displayCBox, "span 3");
+        displayCBox.setSelected(true);
+    }
+
+
+
+    @Override
+    public boolean isCorrect(boolean buffer) {
+        if (outputFileField.getFile() == null) {
+            showErrorDialog("Please specify an output file.");
+            return false;
+        }
+
+        if (buffer) {
+            put(KEY_OUTPUT_FILE, outputFileField.getFile());
+            put(KEY_DISPLAY_GUI, displayCBox.isSelected());
+        }
+
+        return true;
+    }
+
+}

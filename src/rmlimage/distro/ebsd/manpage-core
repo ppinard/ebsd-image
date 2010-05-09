@@ -1,0 +1,30 @@
+.TH "RML-Image EBSD Core" 1 "$DATE" " " $VERSION
+
+.SH NAME
+RML-Image EBSD Core \- Image analysis freeware libraries
+
+.SH SYNOPSYS 
+.B ---
+
+.SH DESCRIPTION 
+This package holds the jar files composing the core librairies of RML-Image, 
+the most excellent free image analysis.
+The files have been installed in /usr/share/rml-image-core.
+The javadoc is in /usr/share/doc/rml-image-core.
+
+.SH AUTHOR
+Marin Lagace (marin@rml-image.com)
+
+.SH BUGS
+Please report any bugs to http://www.rml-image.com/flyspray
+
+.SH COPYRIGHT 
+Copyright (c) 2001-2009 Marin Lagace
+
+.SH SEE ALSO
+http://www.rml-image.com
+
+
+
+
+

@@ -1,0 +1,5 @@
+menu=PlugIns/EBSD/Hough Transform
+icon=org/ebsdimage/plugin/HoughTransform_(24x24).gif
+tooltip=Hough Transform
+plugin=org.ebsdimage.plugin.HoughTransform
+workerthread=true

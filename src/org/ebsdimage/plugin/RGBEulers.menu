@@ -1,0 +1,5 @@
+menu=PlugIns/EBSD/Convert Euler maps to RGB map
+icon=org/ebsdimage/plugin/RGBEulers_(24x24).png
+tooltip=A color is assigned to each Euler to make a RGB map
+plugin=org.ebsdimage.plugin.RGBEulers
+workerthread=false

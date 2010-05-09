@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="RML-Image EBSD" basedir="." default="help">
+
+<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+<taskdef name="deb" classname="com.googlecode.ant_deb_task.Deb"/>
+<taskdef name="desktopentry" 
+         classname="com.googlecode.ant_deb_task.DesktopEntry"/>
+ 
+  <!-- Read the local properties -->
+<fail message="property.file not defined" unless="property.file"/>
+<property environment="env"/>
+<property file="${property.file}"/>
+
+<!-- Check if the properties needed are defined-->
+<fail message="rmlimage.dir not defined" unless="rmlimage.dir"/>
+<echo message="rmlimage.dir = ${rmlimage.dir}"/>
+<fail message="rmlimage.src.dir not defined" unless="rmlimage.src.dir"/>
+<fail message="ebsd-ptp.dir not defined" unless="ebsd-ptp.dir"/>
+
+  <!-- Read the version -->
+<property file="${ebsd-ptp.src.dir}/version.props"/>  
+<fail message="version not defined" unless="version"/>
+
+<property name="tmp.dir" location="${java.io.tmpdir}"/>
+<echo message="tmp.dir = ${tmp.dir}"/>
+
+<fail message="class.dir not defined" unless="class.dir"/>
+<echo message="class.dir = ${class.dir}"/>
+
+<fail message="build.dir not defined" unless="build.dir"/>
+<echo message="build.dir = ${build.dir}"/>
+<property name="modules.dir" location="${build.dir}/module"/>
+
+<fail message="dest.dir not defined" unless="dest.dir"/>
+<echo message="dest.dir = ${dest.dir}"/>
+
+<property name="distro" value="ebsd"/>    
+
+<fail message="nsis.flags should not be set." if="nsis.flags"/>
+<property name="nsis.flags" value="/DEBSD /DSLIDESHOW"/>
+
+
+<property name="deb.dir" value="${tmp.dir}/deb"/>
+<property name="debian.version" value="1"/>
+
+
+
+
+<target name="all" depends="deb,nsis-all" 
+        description="Builds the deb, IzPack and NSIS installers"/>
+
+
+
+        
+<!--Builds the whole structure for the core distro in the build directory -->
+<target name="build" description="Builds the full distro">
+
+  <ant dir="${rmlimage.src.dir}/rmlimage/distro/basic" target="build"/>
+  
+        <!-- Build the modules -->
+  <ant dir="${rmlimage.src.dir}/rmlimage/module/slideshow" target="build"/>
+  <ant dir="${rmlimage.src.dir}/rmlimage/module/complex" target="build"/>
+  <ant dir="${rmlimage.src.dir}/rmlimage/module/real" target="build"/>
+  <ant dir="${rmlimage.src.dir}/rmlimage/module/integer" target="build"/>
+  <ant dir="${rmlimage.src.dir}/rmlimage/module/multi" target="build"/>
+  <ant dir="${ebsd-ptp.dir}/src" target="build"/>
+  
+        <!-- Build EBSD doc 
+  <ant antfile="${rmlimage.dir}/Doc/build.xml" target="ebsd-pdf"/> -->
+</target>
+
+
+
+
+
+<target name="clean" description="Deletes all temporary files and directories">
+  <delete dir="${class.dir}"/>
+  <delete dir="${build.dir}"/>
+</target>
+
+
+
+
+
+<target name="compile" description="Compiles the distro with all the modules">
+  <ant dir="${rmlimage.src.dir}/rmlimage/distro/basic" target="compile"/>
+  <ant dir="${rmlimage.src.dir}/rmlimage/module/slideshow" target="compile"/>
+  <ant dir="${rmlimage.src.dir}/rmlimage/module/complex" target="compile"/>
+  <ant dir="${rmlimage.src.dir}/rmlimage/module/real" target="compile"/>
+  <ant dir="${rmlimage.src.dir}/rmlimage/module/integer" target="compile"/>
+  <ant dir="${rmlimage.src.dir}/rmlimage/module/multi" target="compile"/>
+  <ant dir="${ebsd-ptp.dir}/src" target="compile"/>  
+</target>
+
+
+        
+
+<target name="deb" depends="build" 
+        description="Builds the deb package for the full distro">
+
+    <!-- Create the startup script -->
+  <echo file="${tmp.dir}/rml-image">
+#!/bin/sh
+java -jar /usr/share/rml-image/rml-image.jar
+  </echo>
+  
+    <!-- Create the desktop shortcut -->
+  <desktopentry toFile="${tmp.dir}/rml-image.desktop"
+                name="RML-Image EBSD"
+                comment="Image Analysis Freeware"
+                exec="/usr/bin/rml-image"
+                path="/usr/share/rml-image/"
+                icon="/usr/share/rml-image/RML-Image_(16x16).gif"
+                categories="Graphics"/>
+  
+      <!-- Create the manpage -->
+  <copy file="${rmlimage.src.dir}/rmlimage/distro/org/ebsdimage/manpage" 
+        tofile="${tmp.dir}/rml-image.1"/>
+  <tstamp>
+     <format property="date" pattern="d-MMMM-yyyy" locale="en,US"/>
+   </tstamp>
+  <replace file="${tmp.dir}/rml-image.1">  
+    <replacefilter token="$VERSION" value="${version}"/>
+    <replacefilter token="$DATE" value="${date}"/>
+  </replace>  
+  <gzip src="${tmp.dir}/rml-image.1" 
+        destfile="${tmp.dir}/rml-image.1.gz"/>
+  
+      <!-- Build the deb package -->
+  <deb package="rml-image-ebsd" section="graphics" todir="${dest.dir}"
+       depends="sun-java6-jre" recommends="sun-java6-fonts"
+       conflicts="rml-image, rml-image-ireq"
+       preinst="${rmlimage.dir}/install/preinst"
+       postinst="${rmlimage.dir}/install/postinst"
+       prerm="${rmlimage.dir}/install/prerm">
+    <version upstream="${version}" debian="${debian.version}"/>
+    <maintainer name="Marin Lagace" email="marin@rml-image.com"/>
+    <description synopsis="RML-Image EBSD GUI distro">
+The most excellent free image analysis software RML-Image with the
+plugins designed for EBSD pattern analysis (GUI version).
+    </description>
+    <tarfileset file="${tmp.dir}/rml-image" prefix="usr/bin"
+                filemode="755"/>
+    <tarfileset dir="${build.dir}" prefix="usr/share/rml-image"/>
+    <tarfileset file="${tmp.dir}/rml-image.desktop" 
+                prefix="usr/share/applications"/>
+    <tarfileset dir="${rmlimage.dir}/install" includes="RML-Image_(16x16).*"
+                prefix="usr/share/rml-image"/>
+    <tarfileset dir="${rmlimage.dir}/install" includes="RML-Image_(32x32).*"
+                prefix="usr/share/rml-image"/>
+    <tarfileset file="${tmp.dir}/rml-image.1.gz"
+                prefix="usr/man/man1"/>
+  </deb>
+  
+        <!-- Cleanup -->
+  <delete file="${tmp.dir}/rml-image"/>
+  <delete file="${tmp.dir}/rml-image.desktop"/>
+  <delete file="${tmp.dir}/rml-image.1"/>
+  <delete file="${tmp.dir}/rml-image.1.gz"/>
+</target>
+  
+
+
+
+
+
+<target name="help" description="Shows a help screen">
+  <echo>Build script for the EBSD distro.
+The code is compiled to class.dir (${class.dir}).
+The distro is built in build.dir (${build.dir}).
+To avoid compiling the javadoc, set the properties "nojavadoc" or "nodoc".
+To avoid compiling the manuals in pdf, set the properties "nopdf" or "nodoc".
+Use ant -p to get a listing of all the available targets.</echo>
+</target>
+
+
+
+
+
+
+
+
+<target name="javadoc" description="Builds the javadoc for the core classes">
+  <ant dir="${rmlimage.src.dir}/rmlimage/distro/core" target="javadoc"/>
+  <ant dir="${rmlimage.src.dir}/rmlimage/module/real" target="javadoc"/>
+  <ant dir="${rmlimage.src.dir}/rmlimage/module/complex" target="javadoc"/>
+  <ant dir="${rmlimage.src.dir}/rmlimage/module/integer" target="javadoc"/>
+  <ant dir="${rmlimage.src.dir}/rmlimage/module/multi" target="javadoc"/>
+  <ant dir="${ebsd-ptp.dir}/src" target="javadoc"/>
+</target>
+
+
+
+
+
+<target name="osFamily" description="Finds the OS used">
+  <condition property="unix">
+    <os family="unix"/>
+  </condition>
+  <condition property="windows">
+    <os family="windows"/>
+  </condition>
+</target>
+
+
+
+
+
+<target name="nsis-all" 
+        depends="nsis-update,nsis-full"
+        description="Builds the all the NSIS installers"/>
+            <!-- The update distros must be build before the full ones
+                 because the full will copy the jre to the build dir -->
+
+
+
+<target name="nsis-full" depends="build"
+        description="Builds the full NSIS installer">
+  <property name="http.prefix" value="http://ebsd-image.sourceforge.net"/>
+  <ant dir="${rmlimage.src.dir}/rmlimage/distro" target="nsis-full"/>
+</target>
+
+
+
+<target name="nsis-update" depends="build"
+        description="Builds the update NSIS installer">
+  <property name="http.prefix" value="http://ebsd-image.sourceforge.net"/>
+  <ant dir="${rmlimage.src.dir}/rmlimage/distro" target="nsis-update"/>
+</target>
+
+
+
+
+<target name="publish" depends="build,nsis-all"
+        description="Places the Windows installer in the repo">
+  <fail message="version not defined." unless="scp.user"/>
+	
+    <!-- Create the ini file -->
+  <property file="${jre.dir}/version.prop"/>
+  <fail message="version not defined." unless="version"/>
+  <fail message="jre.version not found in ${jre.dir}/version.prop" 
+        unless="jre.version"/>    
+  <echo file="${tmp.dir}/RML-Image.ini">
+  [RML-Image]
+  version=${version}
+  jre.version=${jre.version}
+  </echo>
+  
+        <!-- Transfert the files to the ftp server -->
+  <input addproperty="scp.password" message="SCP password = ">
+    <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
+  </input>
+  <property name="scp.server" value="web.sourceforge.net"/>
+  
+  <scp todir="${scp.user}@${scp.server}:/home/groups/e/eb/ebsd-image/htdocs/repos/windows/${distro}"
+       password="${scp.password}">
+    <fileset dir="${dest.dir}">
+      <include name="RML-Image_v${version}_${distro}*.exe"/>
+    </fileset>
+    <fileset file="${tmp.dir}/RML-Image.ini"/>
+  </scp>
+  
+  <delete file="${tmp.dir}/RML-Image.ini"/>
+</target>
+
+
+
+
+
+
+<target name="test-targets" 
+        description="Runs all the targets to test if they work properly">
+
+  <antcall target="clean" inheritall="false"/>
+  <antcall target="build" inheritall="false"/>
+  
+  <antcall target="clean" inheritall="false"/>
+  <antcall target="deb" inheritall="false"/>
+  <delete file="${dest.dir}/rml-image-ebsd_${version}-1_all.deb"/>
+    
+  <antcall target="clean" inheritall="false"/>
+  <antcall target="nsis-full" inheritall="false"/>
+  <delete file="${dest.dir}/RML-Image_v${version}_${distro}-full.exe"/>
+  
+  <antcall target="clean" inheritall="false"/>
+  <antcall target="nsis-update" inheritall="false"/>
+  <delete file="${dest.dir}/RML-Image_v${version}_${distro}-update.exe"/>
+
+  <antcall target="clean" inheritall="false"/>
+  <antcall target="nsis-all" inheritall="false"/>
+  <delete file="${dest.dir}/RML-Image_v${version}_${distro}-full.exe"/>
+  <delete file="${dest.dir}/RML-Image_v${version}_${distro}-update.exe"/>
+
+  <antcall target="clean" inheritall="false"/>
+  <antcall target="all" inheritall="false"/>
+  <delete file="${dest.dir}/RML-Image_v${version}_${distro}-full.exe"/>
+  <delete file="${dest.dir}/RML-Image_v${version}_${distro}-update.exe"/>
+  
+  <antcall target="clean" inheritall="false"/>
+  <antcall target="compile" inheritall="false"/>
+</target>
+
+
+
+</project>
+

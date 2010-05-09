@@ -1,0 +1,5 @@
+menu=PlugIns/EBSD/Import from HKL
+icon=org/ebsdimage/vendors/hkl/plugin/HklImport.png
+tooltip=Import data from HKL ctf file
+plugin=org.ebsdimage.vendors.hkl.plugin.HklImport
+workerthread=true

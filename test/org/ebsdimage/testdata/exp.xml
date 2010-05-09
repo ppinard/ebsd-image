@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Exp name="ExpTester" path="" width="2" height="1">
+  <ExpMetadata>
+    <BeamEnergy units="eV">20000.0</BeamEnergy>
+    <Magnification>100.0</Magnification>
+    <TiltAngle units="rad">1.2217304763960306</TiltAngle>
+    <WorkingDistance units="m">0.015</WorkingDistance>
+    <PixelDimension width="1.0E-6" height="2.0E-6" units="m" />
+    <SampleRotation q0="0.18257418583505539" q1="0.36514837167011077" q2="0.5477225575051662" q3="0.7302967433402215" />
+    <Calibration patternCenterH="0.1" patternCenterV="0.2" detectorDistance="0.3" />
+  </ExpMetadata>
+  <Phases>
+    <Silicon name="Silicon" id="1">
+      <UnitCell a="5.43" b="5.43" c="5.43" dimUnits="angstrom" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="1.5707963267948966" angleUnits="rad" />
+      <AtomSites>
+        <AtomSite>
+          <Element atomicNumber="14" />
+          <Position x="0.0" y="0.0" z="0.0" />
+        </AtomSite>
+        <AtomSite>
+          <Element atomicNumber="14" />
+          <Position x="0.0" y="0.5" z="0.5" />
+        </AtomSite>
+        <AtomSite>
+          <Element atomicNumber="14" />
+          <Position x="0.5" y="0.0" z="0.5" />
+        </AtomSite>
+        <AtomSite>
+          <Element atomicNumber="14" />
+          <Position x="0.5" y="0.5" z="0.0" />
+        </AtomSite>
+      </AtomSites>
+      <PointGroup laueGroup="11" schoenflies="O" hermannMauguin="432" crystalSystem="CUBIC" />
+    </Silicon>
+  </Phases>
+  <CurrentMapsFileSaver saveAllMaps="true" savePatternMap="true" saveHoughMap="true" savePeaksMap="true" />
+  <PatternOp>
+    <PatternOpMock index="0">0</PatternOpMock>
+    <PatternOpMock index="1">1</PatternOpMock>
+  </PatternOp>
+  <PatternPostOps>
+    <PatternPostOpsMock>0</PatternPostOpsMock>
+  </PatternPostOps>
+  <PatternResultsOps>
+    <PatternResultsOpsMock>0</PatternResultsOpsMock>
+  </PatternResultsOps>
+  <HoughPreOps>
+    <HoughPreOpsMock>0</HoughPreOpsMock>
+  </HoughPreOps>
+  <HoughOp>
+    <HoughOpMock />
+  </HoughOp>
+  <HoughPostOps>
+    <HoughPostOpsMock>0</HoughPostOpsMock>
+  </HoughPostOps>
+  <HoughResultsOps>
+    <HoughResultsOpsMock>0</HoughResultsOpsMock>
+  </HoughResultsOps>
+  <DetectionPreOps>
+    <DetectionPreOpsMock>0</DetectionPreOpsMock>
+  </DetectionPreOps>
+  <DetectionOp>
+    <DetectionOpMock />
+  </DetectionOp>
+  <DetectionPostOps>
+    <DetectionPostOpsMock>0</DetectionPostOpsMock>
+  </DetectionPostOps>
+  <DetectionResultsOps>
+    <DetectionResultsOpsMock>0</DetectionResultsOpsMock>
+  </DetectionResultsOps>
+  <IdentificationPreOps>
+    <IdentificationPreOpsMock>0</IdentificationPreOpsMock>
+  </IdentificationPreOps>
+  <IdentificationOp>
+    <IdentificationOpMock />
+  </IdentificationOp>
+  <IdentificationPostOps>
+    <IdentificationPostOpsMock>0</IdentificationPostOpsMock>
+  </IdentificationPostOps>
+  <IdentificationResultsOps>
+    <IdentificationResultsOpsMock>0</IdentificationResultsOpsMock>
+  </IdentificationResultsOps>
+  <IndexingPreOps>
+    <IndexingPreOpsMock>0</IndexingPreOpsMock>
+  </IndexingPreOps>
+  <IndexingOp>
+    <IndexingOpMock />
+  </IndexingOp>
+  <IndexingPostOps>
+    <IndexingPostOpsMock>0</IndexingPostOpsMock>
+  </IndexingPostOps>
+  <IndexingResultsOps>
+    <IndexingResultsOpsMock>0</IndexingResultsOpsMock>
+  </IndexingResultsOps>
+</Exp>
+

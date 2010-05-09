@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+
+
+<project name="EBSD-Image" basedir="." default="help">
+
+
+  <!-- Read the local properties -->
+<fail message="property.file not defined" unless="property.file"/>
+<property file="${property.file}"/>
+
+<!-- Check if the properties needed are defined-->
+<fail message="ebsd-image.dir not defined" unless="ebsd-image.dir"/>
+<echo message="ebsd-image.dir = ${ebsd-image.dir}"/>
+<fail message="ebsd-image.src.dir not defined" unless="ebsd-image.src.dir"/>
+<fail message="ebsd-image.test.dir not defined" unless="ebsd-image.test.dir"/>
+
+
+
+
+<target name="build" description="Creates the full ebsd-image.jar file">
+  <ant dir="${ebsd-image.src.dir}" target="build"/>
+</target>
+
+
+
+<target name="build-core" description="Creates the core ebsd-image.jar file">
+  <ant dir="${ebsd-image.src.dir}" target="build"/>
+</target>
+
+
+
+<target name="build-experiment" description="Builds the Experiment application">
+  <ant dir="${ebsd-image.src.dir}" target="build-experiment"/>
+</target>
+
+
+
+
+<target name="clean"
+        description="Removes all the temporary files and directories">
+  <ant dir="${ebsd-image.src.dir}" target="clean"/>
+  <ant dir="${ebsd-image.test.dir}" target="clean"/>
+</target>
+
+
+
+
+<target name="compile" description="Compiles the app">
+  <ant dir="${ebsd-image.src.dir}" target="compile"/>
+</target>
+
+        
+
+<target name="compile-core" description="Compiles only the core classes">
+  <ant dir="${ebsd-image.src.dir}" target="compile-core"/>
+</target>
+
+
+
+
+
+<target name="findbugs" description="Runs FindBugs on the source code">
+  <ant dir="${ebsd-image.src.dir}" target="findbugs-xml"/>
+</target>
+
+
+
+
+<target name="help">
+  <echo>Use ant -p to get a listing of all the available targets.
+  </echo>
+</target>
+
+
+
+
+<target name="publish-casir"
+        description="Builds the Experiment application and puts it on Casir">
+  <ant dir="${ebsd-image.src.dir}" target="publish-casir"/>
+</target>
+
+
+
+
+<target name="update-rmlimage"
+        description="Downloads and installs RML-Image EBSD-core-dev to the rmlimage.install.dir directory">
+  <ant dir="${ebsd-image.src.dir}" target="update-rmlimage"/>
+</target>
+
+
+
+
+<target name="test" description="Runs the core tests">
+  <ant dir="${ebsd-image.test.dir}" target="test"/>
+</target>
+
+
+
+</project>
+

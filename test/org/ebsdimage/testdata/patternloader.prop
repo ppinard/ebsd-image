@@ -1,0 +1,16 @@
+#Tue Dec 15 09:03:05 EST 2009
+OutputOps.BmpFile=2
+RotationParam.theta3=0.0
+RotationParam.theta2=0.0
+PatternSimulationOp.PatternFilledBandXrayScatter.width=336
+RotationParam.theta1=0.0
+Simulation.name=Sim
+OutputOps.PropFile=0
+CameraParam.detectorDistance=0.3
+OutputOps.XMLFile=1
+CrystalParam.name=SILICON
+PatternSimulationOp.PatternFilledBandXrayScatter.height=256
+EnergyParam.value=20000.0
+CameraParam.patternCenterY=0.0
+CameraParam.patternCenterX=0.0
+Simulation.basepath=/tmp
