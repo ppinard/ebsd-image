@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io;
 
 import static ptpshared.io.FileUtil.getClassesInJars;
@@ -78,7 +78,8 @@ public class FileUtil {
                 // It is $rootDir/org/ebsdimage/core/HoughMap.class
                 File rootDir =
                         getFile(houghMapURL).getParentFile().getParentFile()
-                                .getParentFile();
+                                .getParentFile().getParentFile();
+                System.out.println(rootDir);
                 return getClassesInPath(rootDir, packageName);
             } else
                 throw new IllegalArgumentException(
