@@ -32,12 +32,17 @@ import rmlshared.thread.Reflection;
  * and the same dimensions.
  * <p/>
  * The file format is pretty straightforward. The first three bytes are 83, 77
- * and 80 which translate to SMP. The next byte is the number of characters of
+ * and 80 which translate to SMP. 
+ * The next byte is the version label.
+ * The next byte is the number of characters of
  * the full class name of the <code>Map</code>'s in the file. The next bytes
  * represent the full class name of the <code>Map</code>s held in the file. The
  * rest of the file consists of a series of numbers saved in Java binary format.
  * The first two numbers are the width and the height of the <code>Map</code>s
- * in integer format. The rest of the file is filled with the values of the
+ * in integer format. 
+ * Then comes the index of the first <dfn>Map</dfn> (useful for split smp files)
+ * in integer format.
+ * The rest of the file is filled with the values of the
  * <code>pixArray</code>s of every <code>Map</code> sequentially. It is straight
  * dump of the <code>pixArray</code>s.
  * 
@@ -67,6 +72,9 @@ public class SmpInputStream {
     /** Number of maps. */
     private int nbMaps;
 
+    /** Index of the first Map in the file */
+    private int startIndex;
+    
     /** Length of the header (= header + width + height). */
     private final int headerLength;
 
@@ -93,16 +101,15 @@ public class SmpInputStream {
                 || header[2] != (byte) 'P')
             throw new IOException(file + " is not a stream of Maps.");
 
+                //Read the version 
+        byte versionByte = raf.readByte();
+        
         // Read the map type
         int classNameLength = raf.readByte() & 0xff;
         byte[] classNameChars = new byte[classNameLength];
         raf.read(classNameChars);
         String className = new String(classNameChars);
         mapType = Reflection.forName(className);
-
-        // Calculate the header length
-        // = "SMP" + classNameLength + className + width + height
-        headerLength = 3 + 1 + classNameLength + 4 + 4;
 
         // Read the dimensions of the Maps
         width = raf.readInt();
@@ -115,9 +122,35 @@ public class SmpInputStream {
                     + file);
         size = width * height;
 
+                
+            //If it is an SMP2, read the index of the first Map in the file
+        switch (versionByte)
+          {
+            case ((byte)'1'):    //If smp1
+              startIndex = 0;
+                    // = "SMP#" + classNameLength + className + width + height
+              headerLength = 4 + 1 + classNameLength + 4 + 4;
+              break;
+            
+            case ((byte)'2'):     //If rmp2, read the start index
+              startIndex = raf.readInt();
+                    // = "SMP#" + classNameLength + className + width + height 
+                    //          + startIndex
+              headerLength = 4 + 1 + classNameLength + 4 + 4 + 4;
+        
+            break;
+            
+          default:
+            throw new IllegalArgumentException("Invalid SMP version: " 
+                                               + (char)(header[3]&0xff));
+          }
+
+          
         nbMaps = (int) ((raf.length() - headerLength) / size);
         assert ((raf.length() - headerLength) % size == 0) : "Too many bytes ("
                 + ((raf.length() - headerLength) % size) + ") in " + file;
+          
+          
     }
 
 
@@ -133,6 +166,15 @@ public class SmpInputStream {
     }
 
 
+    
+    /**
+     * Returns the index of the last <dfn>Map</dfn> in the file
+     */
+    public int getEndIndex() {
+        return startIndex + nbMaps - 1;
+    }
+    
+    
 
     /**
      * Returns the number of <code>Map</code>s in the file.
@@ -177,10 +219,18 @@ public class SmpInputStream {
     }
 
 
-
     /**
-     * Returns the <code>Map</code> at the specified index in the file. The
-     * first <code>Map</code> in the file has index <code>0</code>.
+     * Returns the index of the first <dfn>Map</dfn> in the file
+     */
+    public int getStartIndex() {
+        return startIndex;
+    }
+
+    
+    /**
+     * Returns the <code>Map</code> at the specified index in the file.
+     * The first <code>Map</code> in the
+     * file has the index specified by <code>getStartIndex()</code>.
      * 
      * @param index
      *            index of the <code>Map</code> to return
@@ -189,6 +239,9 @@ public class SmpInputStream {
      * 
      * @throws IOException
      *             if an error occurred while reading from the file
+     *
+     * @see #getStartIndex()
+     * @see #getEndIndex()
      */
     public Map readMap(int index) throws IOException {
         // Create a new empty ByteMap
@@ -203,7 +256,7 @@ public class SmpInputStream {
     /**
      * Reads the <code>Map</code> at the specified index in the file and places
      * it in the specified <code>Map</code>. The first <code>Map</code> in the
-     * file has index <code>0</code>.
+     * file has the index specified by <code>getStartIndex()</code>.
      * <p/>
      * To be sure to use a <code>Map</code> of the proper type and size as the
      * argument, first call {@link #readMap(int)} to get a new <code>Map</code>
@@ -216,18 +269,23 @@ public class SmpInputStream {
      *            <code>Map</code> to place it into
      * 
      * @throws ArrayIndexOutOfBoundsException
-     *             if <code>index</code> is negative or higher than the number
+     *             if <code>index</code> is not between the bounds set by
+     *             the <code>start index</code> and the number
      *             of <code>Map</code>s in the file
      * @throws IllegalArgumentException
      *             if <code>map</code> is not of the proper type or dimensions
      * @throws IOException
      *             if an error occurred while reading from the file
+     *
+     * @see #getStartIndex()
+     * @see #getEndIndex()
      */
     public void readMap(int index, Map map) throws IOException {
-        if (index >= nbMaps)
-            throw new ArrayIndexOutOfBoundsException("Invalid index (" + index
-                    + "). " + "Max index = " + (nbMaps - 1));
-
+        if (index < getStartIndex()  ||  index > getEndIndex())
+          throw new ArrayIndexOutOfBoundsException("index (" + index 
+                  + ") must between " + getStartIndex() + " and " 
+                  + getEndIndex() + '.');
+        
         if (!(map instanceof ByteMap))
             throw new IllegalArgumentException("map type (" + map.getName()
                     + ")(" + map.getClass().getName() + ") must be a ByteMap");
@@ -239,7 +297,7 @@ public class SmpInputStream {
 
         ByteMap byteMap = (ByteMap) map;
 
-        raf.seek(index * size + headerLength);
+        raf.seek((index-getStartIndex()) * size + headerLength);
         raf.read(byteMap.pixArray);
 
         File file = FileUtil.append(this.file, index);
