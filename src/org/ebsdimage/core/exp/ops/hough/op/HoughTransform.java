@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.hough.op;
 
 import static java.lang.Math.PI;
@@ -24,6 +24,7 @@ import org.ebsdimage.core.Transform;
 import org.ebsdimage.core.exp.Exp;
 
 import rmlimage.core.ByteMap;
+import rmlimage.core.Filter;
 
 /**
  * Operation to perform the Hough transform.
@@ -109,6 +110,9 @@ public class HoughTransform extends HoughOp {
     @Override
     public HoughMap transform(Exp exp, ByteMap srcMap) {
         HoughMap houghMap = Transform.hough(srcMap, resolution);
+
+        // Apply median to remove gap at theta = 90 deg
+        Filter.median(houghMap);
 
         return houghMap;
     }
