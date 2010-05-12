@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.core.math;
 
 import static java.lang.Math.PI;
@@ -45,7 +45,7 @@ public class QuaternionMath {
      * @param q2
      *            a quaternion
      * 
-     * @return misorientation (in radians)
+     * @return misorientation
      */
     @CheckReturnValue
     public static Quaternion misorientation(Quaternion q1, Quaternion q2) {
@@ -77,8 +77,9 @@ public class QuaternionMath {
 
             // Have to prevent quaternion to be automatically made positive
             // since it prevents 180 deg rotation
-            qout = qrotation.multiply(qout, false).multiply(
-                    qrotation.conjugate(false), false);
+            qout =
+                    qrotation.multiply(qout, false).multiply(
+                            qrotation.conjugate(false), false);
         }
 
         return qout.vector;
@@ -103,8 +104,8 @@ public class QuaternionMath {
 
         // Have to prevent quaternion to be automatically made positive since it
         // prevents 180 deg rotation
-        Quaternion out = q.multiply(in, false).multiply(q.conjugate(false),
-                false);
+        Quaternion out =
+                q.multiply(in, false).multiply(q.conjugate(false), false);
 
         return out.vector;
     }

@@ -14,38 +14,40 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.pattern.post;
 
+import static org.ebsdimage.core.MaskDisc.KEY_CENTROID_X;
+import static org.ebsdimage.core.MaskDisc.KEY_CENTROID_Y;
+import static org.ebsdimage.core.MaskDisc.KEY_RADIUS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import org.ebsdimage.TestCase;
-import org.ebsdimage.core.MaskDisc;
 import org.junit.Before;
 import org.junit.Test;
 
 import rmlimage.core.ByteMap;
 
-public class MaskTest extends TestCase {
+public class MaskDiscTest extends TestCase {
 
-    private Mask mask;
+    private MaskDisc mask;
 
 
 
     @Before
     public void setUp() throws Exception {
-        mask = new Mask(10, 11, 8);
+        mask = new MaskDisc(10, 11, 8);
     }
 
 
 
     @Test
     public void testCrop() {
-        Mask other = new Mask();
-        assertEquals(Mask.DEFAULT_CENTROID_X, other.centroidX);
-        assertEquals(Mask.DEFAULT_CENTROID_Y, other.centroidY);
-        assertEquals(Mask.DEFAULT_RADIUS, other.radius);
+        MaskDisc other = new MaskDisc();
+        assertEquals(MaskDisc.DEFAULT_CENTROID_X, other.centroidX);
+        assertEquals(MaskDisc.DEFAULT_CENTROID_Y, other.centroidY);
+        assertEquals(MaskDisc.DEFAULT_RADIUS, other.radius);
     }
 
 
@@ -61,7 +63,7 @@ public class MaskTest extends TestCase {
 
     @Test
     public void testEquals() {
-        Mask other = new Mask(10, 11, 8);
+        MaskDisc other = new MaskDisc(10, 11, 8);
         assertFalse(mask == other);
         assertEquals(mask, other);
     }
@@ -77,9 +79,9 @@ public class MaskTest extends TestCase {
 
         destMap.assertEquals(expectedMap);
 
-        assertEquals(10, destMap.getProperty(MaskDisc.KEY_CENTROID_X, -1));
-        assertEquals(11, destMap.getProperty(MaskDisc.KEY_CENTROID_Y, -1));
-        assertEquals(8, destMap.getProperty(MaskDisc.KEY_RADIUS, -1));
+        assertEquals(10, destMap.getProperty(KEY_CENTROID_X, -1));
+        assertEquals(11, destMap.getProperty(KEY_CENTROID_Y, -1));
+        assertEquals(8, destMap.getProperty(KEY_RADIUS, -1));
     }
 
 
@@ -87,16 +89,13 @@ public class MaskTest extends TestCase {
     @Test
     public void testProcess2() {
         ByteMap srcMap = (ByteMap) load("org/ebsdimage/testdata/srcMap.bmp");
-        Mask other = new Mask(-1, -1, -3);
+        MaskDisc other = new MaskDisc(-1, -1, -3);
 
         ByteMap destMap = other.process(null, srcMap);
 
-        assertEquals(srcMap.width / 2, destMap.getProperty(
-                MaskDisc.KEY_CENTROID_X, -1));
-        assertEquals(srcMap.height / 2, destMap.getProperty(
-                MaskDisc.KEY_CENTROID_Y, -1));
-        assertEquals(srcMap.width / 2 - 2, destMap.getProperty(
-                MaskDisc.KEY_RADIUS, -1));
+        assertEquals(srcMap.width / 2, destMap.getProperty(KEY_CENTROID_X, -1));
+        assertEquals(srcMap.height / 2, destMap.getProperty(KEY_CENTROID_Y, -1));
+        assertEquals(srcMap.width / 2 - 2, destMap.getProperty(KEY_RADIUS, -1));
     }
 
 
@@ -104,7 +103,7 @@ public class MaskTest extends TestCase {
     @Test
     public void testToString() {
         assertEquals(mask.toString(),
-                "Mask [centroid X=10 px, centroid Y=11 px, radius=8 px]");
+                "Mask Disc [centroid X=10 px, centroid Y=11 px, radius=8 px]");
     }
 
 }

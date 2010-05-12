@@ -14,12 +14,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.pattern.post;
 
 import static java.lang.Math.min;
 
-import org.ebsdimage.core.MaskDisc;
 import org.ebsdimage.core.exp.Exp;
 
 import rmlimage.core.BinMap;
@@ -31,7 +30,7 @@ import rmlimage.core.MapMath;
  * 
  * @author Philippe T. Pinard
  */
-public class Mask extends PatternPostOps {
+public class MaskDisc extends PatternPostOps {
 
     /** Horizontal position of the centroid of the disc mask. */
     public final int centroidX;
@@ -54,9 +53,9 @@ public class Mask extends PatternPostOps {
 
 
     /**
-     * Creates a new <code>Mask</code> operation from the default values.
+     * Creates a new <code>MaskDisc</code> operation from the default values.
      */
-    public Mask() {
+    public MaskDisc() {
         centroidX = DEFAULT_CENTROID_X;
         centroidY = DEFAULT_CENTROID_Y;
         radius = DEFAULT_RADIUS;
@@ -65,7 +64,8 @@ public class Mask extends PatternPostOps {
 
 
     /**
-     * Creates a new <code>Mask</code> operation from the specified parameters.
+     * Creates a new <code>MaskDisc</code> operation from the specified
+     * parameters.
      * <p/>
      * If the centroid x is negative, the centroid x position will be
      * automatically calculated as half of the pattern map's width.
@@ -84,7 +84,7 @@ public class Mask extends PatternPostOps {
      * @param radius
      *            radius of the disc mask
      */
-    public Mask(int centroidX, int centroidY, int radius) {
+    public MaskDisc(int centroidX, int centroidY, int radius) {
         // No restriction on arguments since they can be negative to force the
         // auto-computation.
         this.centroidX = centroidX;
@@ -103,7 +103,7 @@ public class Mask extends PatternPostOps {
         if (getClass() != obj.getClass())
             return false;
 
-        Mask other = (Mask) obj;
+        MaskDisc other = (MaskDisc) obj;
         if (centroidX != other.centroidX)
             return false;
         if (centroidY != other.centroidY)
@@ -171,8 +171,8 @@ public class Mask extends PatternPostOps {
 
         // Create MaskDisc
         BinMap maskDisc =
-                new MaskDisc(srcMap.width, srcMap.height, centroidX, centroidY,
-                        radius);
+                new org.ebsdimage.core.MaskDisc(srcMap.width, srcMap.height,
+                        centroidX, centroidY, radius);
 
         // Apply mask
         ByteMap destMap = new ByteMap(srcMap.width, srcMap.height);
@@ -187,8 +187,8 @@ public class Mask extends PatternPostOps {
 
     @Override
     public String toString() {
-        return "Mask [centroid X=" + centroidX + " px, centroid Y=" + centroidY
-                + " px, radius=" + radius + " px]";
+        return "Mask Disc [centroid X=" + centroidX + " px, centroid Y="
+                + centroidY + " px, radius=" + radius + " px]";
     }
 
 }

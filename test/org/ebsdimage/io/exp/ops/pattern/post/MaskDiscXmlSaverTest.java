@@ -17,14 +17,14 @@
 */
 package org.ebsdimage.io.exp.ops.pattern.post;
 
-import static org.ebsdimage.io.exp.ops.pattern.post.MaskXmlTags.ATTR_CENTROIDX;
-import static org.ebsdimage.io.exp.ops.pattern.post.MaskXmlTags.ATTR_CENTROIDY;
-import static org.ebsdimage.io.exp.ops.pattern.post.MaskXmlTags.ATTR_RADIUS;
-import static org.ebsdimage.io.exp.ops.pattern.post.MaskXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlTags.ATTR_CENTROIDX;
+import static org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlTags.ATTR_CENTROIDY;
+import static org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlTags.ATTR_RADIUS;
+import static org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
-import org.ebsdimage.core.exp.ops.pattern.post.Mask;
-import org.ebsdimage.io.exp.ops.pattern.post.MaskXmlSaver;
+import org.ebsdimage.core.exp.ops.pattern.post.MaskDisc;
+import org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlSaver;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,22 +32,22 @@ import org.junit.Test;
 
 import ptpshared.utility.xml.JDomUtil;
 
-public class MaskXmlSaverTest {
+public class MaskDiscXmlSaverTest {
 
-    private Mask op;
+    private MaskDisc op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        op = new Mask(10, 11, 8);
+        op = new MaskDisc(10, 11, 8);
     }
 
 
 
     @Test
     public void testSaveCrop() {
-        Element element = new MaskXmlSaver().save(op);
+        Element element = new MaskDiscXmlSaver().save(op);
 
         assertEquals(TAG_NAME, element.getName());
         assertEquals(10, JDomUtil.getIntegerFromAttribute(element,

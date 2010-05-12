@@ -14,15 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.post;
 
-import static org.ebsdimage.io.exp.ops.pattern.post.MaskXmlTags.ATTR_CENTROIDX;
-import static org.ebsdimage.io.exp.ops.pattern.post.MaskXmlTags.ATTR_CENTROIDY;
-import static org.ebsdimage.io.exp.ops.pattern.post.MaskXmlTags.ATTR_RADIUS;
-import static org.ebsdimage.io.exp.ops.pattern.post.MaskXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlTags.ATTR_CENTROIDX;
+import static org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlTags.ATTR_CENTROIDY;
+import static org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlTags.ATTR_RADIUS;
+import static org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlTags.TAG_NAME;
 
-import org.ebsdimage.core.exp.ops.pattern.post.Mask;
+import org.ebsdimage.core.exp.ops.pattern.post.MaskDisc;
 import org.jdom.Element;
 
 import ptpshared.utility.xml.ObjectXml;
@@ -30,33 +30,33 @@ import ptpshared.utility.xml.ObjectXmlSaver;
 import ptpshared.utility.xml.UnitsXmlTags;
 
 /**
- * XML saver for a <code>Mask</code> operation.
+ * XML saver for a <code>MaskDisc</code> operation.
  * 
  * @author Philippe T. Pinard
  * 
  */
-public class MaskXmlSaver implements ObjectXmlSaver {
+public class MaskDiscXmlSaver implements ObjectXmlSaver {
 
     /**
      * {@inheritDoc}
      * 
-     * @see #save(Mask)
+     * @see #save(MaskDisc)
      */
     @Override
     public Element save(ObjectXml obj) {
-        return save((Mask) obj);
+        return save((MaskDisc) obj);
     }
 
 
 
     /**
-     * Saves a <code>Mask</code> operation to an XML <code>Element</code>.
+     * Saves a <code>MaskDisc</code> operation to an XML <code>Element</code>.
      * 
      * @param op
-     *            a <code>Mask</code> operation
+     *            a <code>MaskDisc</code> operation
      * @return an XML <code>Element</code>
      */
-    public Element save(Mask op) {
+    public Element save(MaskDisc op) {
         Element element = new Element(TAG_NAME);
 
         element.setAttribute(ATTR_CENTROIDX, Integer.toString(op.centroidX));

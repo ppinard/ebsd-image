@@ -17,20 +17,20 @@
 */
 package org.ebsdimage.io.exp.ops.pattern.post;
 
-import static org.ebsdimage.io.exp.ops.pattern.post.MaskXmlTags.ATTR_CENTROIDX;
-import static org.ebsdimage.io.exp.ops.pattern.post.MaskXmlTags.ATTR_CENTROIDY;
-import static org.ebsdimage.io.exp.ops.pattern.post.MaskXmlTags.ATTR_RADIUS;
-import static org.ebsdimage.io.exp.ops.pattern.post.MaskXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlTags.ATTR_CENTROIDX;
+import static org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlTags.ATTR_CENTROIDY;
+import static org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlTags.ATTR_RADIUS;
+import static org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
-import org.ebsdimage.core.exp.ops.pattern.post.Mask;
-import org.ebsdimage.io.exp.ops.pattern.post.MaskXmlLoader;
+import org.ebsdimage.core.exp.ops.pattern.post.MaskDisc;
+import org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlLoader;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
 
 
-public class MaskXmlLoaderTest {
+public class MaskDiscXmlLoaderTest {
 
     private Element element;
 
@@ -49,7 +49,7 @@ public class MaskXmlLoaderTest {
 
     @Test
     public void testLoad() {
-        Mask op = new MaskXmlLoader().load(element);
+        MaskDisc op = new MaskDiscXmlLoader().load(element);
 
         assertEquals(TAG_NAME, op.getName());
         assertEquals(10, op.centroidX);

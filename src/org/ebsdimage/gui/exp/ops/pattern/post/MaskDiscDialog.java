@@ -14,12 +14,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp.ops.pattern.post;
 
 import javax.swing.JLabel;
 
-import org.ebsdimage.core.exp.ops.pattern.post.Mask;
+import org.ebsdimage.core.exp.ops.pattern.post.MaskDisc;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.exp.ops.OperationDialog;
 
@@ -28,12 +28,12 @@ import rmlshared.gui.IntField;
 import rmlshared.gui.Panel;
 
 /**
- * GUI Dialog for the <code>Mask</code> operation.
+ * GUI Dialog for the <code>MaskDisc</code> operation.
  * 
  * @author Philippe T. Pinard
  * 
  */
-public class MaskDialog extends OperationDialog {
+public class MaskDiscDialog extends OperationDialog {
 
     /** Field for the centroid X. */
     private IntField centroidXField;
@@ -47,16 +47,18 @@ public class MaskDialog extends OperationDialog {
 
 
     /**
-     * Creates a new <code>MaskDialog</code>.
+     * Creates a new <code>MaskDiscDialog</code>.
      */
-    public MaskDialog() {
+    public MaskDiscDialog() {
         super("Crop");
 
-        centroidXField = new IntField("Centroid X", Mask.DEFAULT_CENTROID_X);
+        centroidXField =
+                new IntField("Centroid X", MaskDisc.DEFAULT_CENTROID_X);
         centroidXField.setRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
-        centroidYField = new IntField("Centroid Y", Mask.DEFAULT_CENTROID_Y);
+        centroidYField =
+                new IntField("Centroid Y", MaskDisc.DEFAULT_CENTROID_Y);
         centroidYField.setRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
-        radiusField = new IntField("Radius", Mask.DEFAULT_RADIUS);
+        radiusField = new IntField("Radius", MaskDisc.DEFAULT_RADIUS);
         radiusField.setRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
 
         Panel panel = new ColumnPanel(3);
@@ -88,7 +90,7 @@ public class MaskDialog extends OperationDialog {
 
     @Override
     public Operation getOperation() {
-        return new Mask(centroidXField.getValueBFR(), centroidYField
+        return new MaskDisc(centroidXField.getValueBFR(), centroidYField
                 .getValueBFR(), radiusField.getValueBFR());
     }
 
@@ -101,7 +103,7 @@ public class MaskDialog extends OperationDialog {
      */
     @Override
     public String toString() {
-        return "Mask";
+        return "Mask Disc";
     }
 
 }

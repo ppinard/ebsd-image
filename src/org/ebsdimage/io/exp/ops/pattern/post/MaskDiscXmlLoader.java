@@ -14,15 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.post;
 
-import static org.ebsdimage.io.exp.ops.pattern.post.MaskXmlTags.ATTR_CENTROIDX;
-import static org.ebsdimage.io.exp.ops.pattern.post.MaskXmlTags.ATTR_CENTROIDY;
-import static org.ebsdimage.io.exp.ops.pattern.post.MaskXmlTags.ATTR_RADIUS;
-import static org.ebsdimage.io.exp.ops.pattern.post.MaskXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlTags.ATTR_CENTROIDX;
+import static org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlTags.ATTR_CENTROIDY;
+import static org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlTags.ATTR_RADIUS;
+import static org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlTags.TAG_NAME;
 
-import org.ebsdimage.core.exp.ops.pattern.post.Mask;
+import org.ebsdimage.core.exp.ops.pattern.post.MaskDisc;
 import org.jdom.Element;
 import org.jdom.IllegalNameException;
 
@@ -32,26 +32,26 @@ import ptpshared.utility.xml.ObjectXmlLoader;
 import ptpshared.utility.xml.UnitsXmlTags;
 
 /**
- * XML loader for a <code>Mask</code> operation.
+ * XML loader for a <code>MaskDisc</code> operation.
  * 
  * @author Philippe T. Pinard
  * 
  */
-public class MaskXmlLoader implements ObjectXmlLoader {
+public class MaskDiscXmlLoader implements ObjectXmlLoader {
 
     /**
-     * Loads a <code>Mask</code> operation from an XML <code>Element</code>.
+     * Loads a <code>MaskDisc</code> operation from an XML <code>Element</code>.
      * 
      * @param element
      *            an XML <code>Element</code>
-     * @return a <code>Mask</code> operation
+     * @return a <code>MaskDisc</code> operation
      * @throws IllegalNameException
      *             if the <code>Element</code> tag name is incorrect.
      * @throws BadUnitException
      *             if the dimensions unit is incorrect
      */
     @Override
-    public Mask load(Element element) {
+    public MaskDisc load(Element element) {
         if (!element.getName().equals(TAG_NAME))
             throw new IllegalNameException("Name of the element should be "
                     + TAG_NAME + " not " + element.getName() + ".");
@@ -62,15 +62,15 @@ public class MaskXmlLoader implements ObjectXmlLoader {
 
         int centroidX =
                 JDomUtil.getIntegerFromAttribute(element, ATTR_CENTROIDX,
-                        Mask.DEFAULT_CENTROID_X);
+                        MaskDisc.DEFAULT_CENTROID_X);
         int centroidY =
                 JDomUtil.getIntegerFromAttribute(element, ATTR_CENTROIDY,
-                        Mask.DEFAULT_CENTROID_Y);
+                        MaskDisc.DEFAULT_CENTROID_Y);
         int radius =
                 JDomUtil.getIntegerFromAttribute(element, ATTR_RADIUS,
-                        Mask.DEFAULT_RADIUS);
+                        MaskDisc.DEFAULT_RADIUS);
 
-        return new Mask(centroidX, centroidY, radius);
+        return new MaskDisc(centroidX, centroidY, radius);
     }
 
 }
