@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.cui;
 
 import java.io.File;
@@ -26,6 +26,8 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.ExpUtil;
+import org.ebsdimage.core.exp.ops.pattern.op.PatternSmpLoader;
+import org.ebsdimage.io.SmpCreator;
 import org.ebsdimage.io.exp.ExpLoader;
 import org.ebsdimage.io.exp.ExpSaver;
 
@@ -135,34 +137,71 @@ public class ExpSplit extends BaseCUI {
         // Save experiment in directory
         MessageDialog.show("Saving smaller experiments...");
 
-        File expDir;
+        File splitExpDir;
         Exp splitExp;
         ExpSaver saver = new ExpSaver();
+        SmpCreator smpCreator = new SmpCreator();
+
         for (int i = 0; i < exps.length; i++) {
             MessageDialog.show("Saving split experiment " + (i + 1) + "...");
 
             splitExp = exps[i];
 
             // Experiment directory
-            expDir = new File(dir, splitExp.getName() + "_" + i);
+            splitExpDir = new File(dir, splitExp.getName());
 
             // Create directory
-            if (!expDir.mkdirs()) {
+            if (!splitExpDir.mkdirs()) {
                 ErrorDialog.show("Cannot create experiment directory: "
-                        + expDir);
+                        + splitExpDir);
                 return;
             }
 
             // Set new working directory
-            splitExp.setDir(expDir);
+            splitExp.setDir(splitExpDir);
 
             // Save
-            File splitExpFile = new File(expDir, splitExp.getName());
+            File splitExpFile = new File(splitExpDir, splitExp.getName());
             splitExpFile = FileUtil.setExtension(splitExpFile, "xml");
             saver.save(splitExp, splitExpFile);
 
             MessageDialog.show("Saving split experiment " + (i + 1)
                     + "... DONE");
+
+            // Smp split
+            if (splitExp.getPatternOps()[0] instanceof PatternSmpLoader) {
+                MessageDialog.show("Saving split smp " + (i + 1) + "...");
+
+                // Start and end index
+                int startIndex = splitExp.getPatternOps()[0].index;
+                int endIndex =
+                        splitExp.getPatternOps()[splitExp.getPatternOps().length - 1].index;
+
+                PatternSmpLoader op =
+                        (PatternSmpLoader) splitExp.getPatternOps()[0];
+
+                // Source smp file
+                File srcSmpFile = new File(op.filedir, op.filename);
+                if (!file.exists()) {
+                    file = new File(dir, op.filename);
+
+                    if (!file.exists()) {
+                        ErrorDialog.show("Cannot find file (" + op.filename
+                                + ") in the specified "
+                                + "directory or working directory.");
+                        return;
+                    }
+                }
+
+                // Destination smp file
+                File destSmpFile = new File(splitExpDir, op.filename);
+
+                // Extract
+                smpCreator.extract(srcSmpFile, startIndex, endIndex,
+                        destSmpFile);
+
+                MessageDialog.show("Saving split smp " + (i + 1) + "... DONE");
+            }
         }
 
         MessageDialog.show("Saving smaller experiments... DONE");

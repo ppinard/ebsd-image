@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp;
 
 import java.io.File;
@@ -197,9 +197,11 @@ public class ExpUtil {
             ops.addAll(Arrays.asList(patternOps));
 
             // Create and add new experiment to the array
-            exps[n] =
+            Exp splitExp =
                     new Exp(exp.mmap.duplicate(),
                             ops.toArray(new Operation[0]), exp.currentMapsSaver);
+            splitExp.setName(exp.getName() + "_" + n);
+            exps[n] = splitExp;
         }
 
         return exps;
