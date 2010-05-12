@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.hough.op;
 
 import static java.lang.Math.toRadians;
@@ -27,10 +27,12 @@ import java.io.IOException;
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.io.HoughMapLoader;
+import org.ebsdimage.io.HoughMapSaver;
 import org.junit.Before;
 import org.junit.Test;
 
 import rmlimage.core.ByteMap;
+import rmlimage.core.Filter;
 import rmlshared.io.FileUtil;
 
 public class HoughTransformTest extends TestCase {
@@ -93,7 +95,13 @@ public class HoughTransformTest extends TestCase {
                 new HoughMapLoader().load(FileUtil
                         .getFile("org/ebsdimage/testdata/houghmap.bmp"));
 
+        // Quick fix to apply median
+        Filter.median(expectedMap);
+
         HoughMap destMap = hough.transform(null, srcMap);
+
+        destMap.setFile("/tmp/houghmap.bmp");
+        new HoughMapSaver().save(destMap);
 
         destMap.assertEquals(expectedMap);
     }

@@ -14,20 +14,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.identification.pre;
 
-import org.ebsdimage.core.exp.ops.identification.pre.CleanEdges;
+import org.ebsdimage.core.exp.ops.identification.pre.CleanEdge;
 
 /**
- * Tags for <code>CleanEdges</code>'s XML <code>Element</code>.
+ * Tags for <code>CleanEdge</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
  * 
  */
-public class CleanEdgesXmlTags {
+public class CleanEdgeXmlTags {
 
-    /** XML tag name for <code>CleanEdges</code>. */
-    public static final String TAG_NAME = CleanEdges.class.getSimpleName();
+    /** XML tag name for <code>CleanEdge</code>. */
+    public static final String TAG_NAME = CleanEdge.class.getSimpleName();
 
 }

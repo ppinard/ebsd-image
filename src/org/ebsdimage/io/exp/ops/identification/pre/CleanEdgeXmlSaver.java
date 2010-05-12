@@ -14,45 +14,45 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.identification.pre;
 
-import static org.ebsdimage.io.exp.ops.identification.pre.CleanEdgesXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.identification.pre.CleanEdgeXmlTags.TAG_NAME;
 
-import org.ebsdimage.core.exp.ops.identification.pre.CleanEdges;
+import org.ebsdimage.core.exp.ops.identification.pre.CleanEdge;
 import org.jdom.Element;
 
 import ptpshared.utility.xml.ObjectXml;
 import ptpshared.utility.xml.ObjectXmlSaver;
 
 /**
- * XML saver for a <code>CleanEdges</code> operation.
+ * XML saver for a <code>CleanEdge</code> operation.
  * 
  * @author Philippe T. Pinard
  * 
  */
-public class CleanEdgesXmlSaver implements ObjectXmlSaver {
+public class CleanEdgeXmlSaver implements ObjectXmlSaver {
 
     /**
      * {@inheritDoc}
      * 
-     * @see #save(CleanEdges)
+     * @see #save(CleanEdge)
      */
     @Override
     public Element save(ObjectXml obj) {
-        return save((CleanEdges) obj);
+        return save((CleanEdge) obj);
     }
 
 
 
     /**
-     * Saves a <code>CleanEdges</code> operation to an XML <code>Element</code>.
+     * Saves a <code>CleanEdge</code> operation to an XML <code>Element</code>.
      * 
      * @param op
-     *            a <code>CleanEdges</code> operation
+     *            a <code>CleanEdge</code> operation
      * @return an XML <code>Element</code>
      */
-    public Element save(CleanEdges op) {
+    public Element save(CleanEdge op) {
         return new Element(TAG_NAME);
     }
 

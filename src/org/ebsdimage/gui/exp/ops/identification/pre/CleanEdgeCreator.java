@@ -14,33 +14,33 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp.ops.identification.pre;
 
-import org.ebsdimage.core.exp.ops.identification.pre.CleanEdges;
+import org.ebsdimage.core.exp.ops.identification.pre.CleanEdge;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.exp.ops.OperationCreator;
 
 import rmlshared.gui.OkCancelDialog;
 
 /**
- * GUI creator for the <code>CleanEdges</code> operation.
+ * GUI creator for the <code>CleanEdge</code> operation.
  * 
  * @author Philippe T. Pinard
  * 
  */
-public class CleanEdgesCreator implements OperationCreator {
+public class CleanEdgeCreator implements OperationCreator {
 
     @Override
     public String getDescription() {
-        return "Removes peaks touching the edge of the peaks map.";
+        return "Removes peaks touching the right edge of the peaks map.";
     }
 
 
 
     @Override
     public Operation getOperation() {
-        return new CleanEdges();
+        return new CleanEdge();
     }
 
 
@@ -59,7 +59,7 @@ public class CleanEdgesCreator implements OperationCreator {
      */
     @Override
     public String toString() {
-        return "Clean Edges";
+        return "Clean Edge";
     }
 
 }

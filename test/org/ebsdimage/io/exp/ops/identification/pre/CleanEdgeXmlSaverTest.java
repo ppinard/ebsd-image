@@ -17,34 +17,44 @@
 */
 package org.ebsdimage.io.exp.ops.identification.pre;
 
-import static org.ebsdimage.io.exp.ops.identification.pre.CleanEdgesXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.identification.pre.CleanEdgeXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
+import org.ebsdimage.core.exp.ops.identification.pre.CleanEdge;
 import org.ebsdimage.core.run.Operation;
-import org.ebsdimage.io.exp.ops.identification.pre.CleanEdgesXmlLoader;
+import org.ebsdimage.io.exp.ops.identification.pre.CleanEdgeXmlSaver;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
 
 
-public class CleanEdgesXmlLoaderTest {
+public class CleanEdgeXmlSaverTest {
 
-    private Element element;
+    private Operation op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        element = new Element(TAG_NAME);
+        op = new CleanEdge();
     }
 
 
 
     @Test
-    public void testLoad() {
-        Operation op = new CleanEdgesXmlLoader().load(element);
+    public void testSaveObjectXml() {
+        Element element = new CleanEdgeXmlSaver().save(op);
 
-        assertEquals(TAG_NAME, op.getName());
+        assertEquals(TAG_NAME, element.getName());
+    }
+
+
+
+    @Test
+    public void testSaveDetectionOpMock() {
+        Element element = new CleanEdgeXmlSaver().save(op);
+
+        assertEquals(TAG_NAME, element.getName());
     }
 
 }

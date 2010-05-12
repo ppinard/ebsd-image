@@ -14,42 +14,42 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.identification.pre;
 
-import static org.ebsdimage.io.exp.ops.identification.pre.CleanEdgesXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.identification.pre.CleanEdgeXmlTags.TAG_NAME;
 
-import org.ebsdimage.core.exp.ops.identification.pre.CleanEdges;
+import org.ebsdimage.core.exp.ops.identification.pre.CleanEdge;
 import org.jdom.Element;
 import org.jdom.IllegalNameException;
 
 import ptpshared.utility.xml.ObjectXmlLoader;
 
 /**
- * XML loader for a <code>CleanEdges</code> operation.
+ * XML loader for a <code>CleanEdge</code> operation.
  * 
  * @author Philippe T. Pinard
  * 
  */
-public class CleanEdgesXmlLoader implements ObjectXmlLoader {
+public class CleanEdgeXmlLoader implements ObjectXmlLoader {
 
     /**
-     * Loads a <code>CleanEdges</code> operation from an XML
-     * <code>Element</code> .
+     * Loads a <code>CleanEdge</code> operation from an XML <code>Element</code>
+     * .
      * 
      * @param element
      *            an XML <code>Element</code>
-     * @return a <code>CleanEdges</code> operation
+     * @return a <code>CleanEdge</code> operation
      * @throws IllegalNameException
      *             if the <code>Element</code> tag name is incorrect.
      */
     @Override
-    public CleanEdges load(Element element) {
+    public CleanEdge load(Element element) {
         if (!element.getName().equals(TAG_NAME))
             throw new IllegalNameException("Name of the element should be "
                     + TAG_NAME + " not " + element.getName() + ".");
 
-        return new CleanEdges();
+        return new CleanEdge();
     }
 
 }

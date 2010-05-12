@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.identification.pre;
 
 import static org.junit.Assert.assertEquals;
@@ -26,23 +26,23 @@ import org.junit.Test;
 import rmlimage.core.BinMap;
 import rmlimage.core.Identification;
 
-public class CleanEdgesTest extends TestCase {
+public class CleanEdgeTest extends TestCase {
 
-    private CleanEdges cleanEdges;
+    private CleanEdge cleanEdge;
 
 
 
     @Before
     public void setUp() throws Exception {
-        cleanEdges = new CleanEdges();
+        cleanEdge = new CleanEdge();
     }
 
 
 
     @Test
     public void testToString() {
-        String expected = "Clean Edges";
-        assertEquals(expected, cleanEdges.toString());
+        String expected = "Clean Edge";
+        assertEquals(expected, cleanEdge.toString());
     }
 
 
@@ -53,9 +53,9 @@ public class CleanEdgesTest extends TestCase {
                 (BinMap) load(getFile("org/ebsdimage/testdata/automatic_stddev.bmp"));
         assertEquals(12, Identification.identify(srcMap).getObjectCount());
 
-        BinMap destMap = cleanEdges.process(null, srcMap);
+        BinMap destMap = cleanEdge.process(null, srcMap);
 
-        assertEquals(10, Identification.identify(destMap).getObjectCount());
+        assertEquals(11, Identification.identify(destMap).getObjectCount());
     }
 
 }
