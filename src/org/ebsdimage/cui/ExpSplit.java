@@ -182,10 +182,10 @@ public class ExpSplit extends BaseCUI {
 
                 // Source smp file
                 File srcSmpFile = new File(op.filedir, op.filename);
-                if (!file.exists()) {
-                    file = new File(dir, op.filename);
+                if (!srcSmpFile.exists()) {
+                    srcSmpFile = new File(dir, op.filename);
 
-                    if (!file.exists()) {
+                    if (!srcSmpFile.exists()) {
                         ErrorDialog.show("Cannot find file (" + op.filename
                                 + ") in the specified "
                                 + "directory or working directory.");

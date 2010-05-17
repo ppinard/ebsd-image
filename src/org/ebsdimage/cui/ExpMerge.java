@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.cui;
 
 import java.io.File;
@@ -132,6 +132,9 @@ public class ExpMerge extends BaseCUI {
             ErrorDialog.show(ex.getMessage());
             return;
         }
+
+        // Clear NaN values in destination multimap
+        dest.clearNaN(0.0f);
 
         MessageDialog.show("Loading first experiment multimap... DONE");
 

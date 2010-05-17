@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp;
 
 import org.ebsdimage.core.HoughMap;
@@ -66,6 +66,7 @@ public class CurrentMapsGUISaver implements CurrentMapsSaver {
     @Override
     public void saveHoughMap(Exp exp, HoughMap map) {
         map.setName(createName(exp, "Hough"));
+        map.shouldSave(false);
         add(map);
     }
 
@@ -74,6 +75,7 @@ public class CurrentMapsGUISaver implements CurrentMapsSaver {
     @Override
     public void saveMap(Exp exp, Operation op, Map map) {
         map.setName(createName(exp, op.getName()));
+        map.shouldSave(false);
         add(map);
     }
 
@@ -82,6 +84,7 @@ public class CurrentMapsGUISaver implements CurrentMapsSaver {
     @Override
     public void savePatternMap(Exp exp, ByteMap map) {
         map.setName(createName(exp, "Pattern"));
+        map.shouldSave(false);
         add(map);
     }
 
@@ -90,6 +93,7 @@ public class CurrentMapsGUISaver implements CurrentMapsSaver {
     @Override
     public void savePeaksMap(Exp exp, BinMap map) {
         map.setName(createName(exp, "Peaks"));
+        map.shouldSave(false);
         add(map);
     }
 

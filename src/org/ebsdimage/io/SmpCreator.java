@@ -151,7 +151,8 @@ public class SmpCreator implements Monitorable {
     public void extract(File srcSmpFile, int startIndex, int endIndex,
             File destSmpFile) throws IOException {
         SmpInputStream inStream = new SmpInputStream(srcSmpFile);
-        SmpOutputStream outStream = new SmpOutputStream(destSmpFile);
+        SmpOutputStream outStream =
+                new SmpOutputStream(destSmpFile, startIndex);
 
         // Transfert the first map to get the proper map type and size
         Map map = inStream.readMap(startIndex);
