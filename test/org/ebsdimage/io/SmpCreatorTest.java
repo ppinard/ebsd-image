@@ -14,20 +14,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io;
-
 
 import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.TestCase;
-import org.ebsdimage.io.SmpCreator;
-import org.ebsdimage.io.SmpInputStream;
 import org.junit.Test;
 
 import rmlimage.core.ByteMap;
-
 import rmlshared.io.FileUtil;
 
 public class SmpCreatorTest extends TestCase {
@@ -134,10 +130,11 @@ public class SmpCreatorTest extends TestCase {
 
         // Test that the map were properly extracted
         SmpInputStream inStream = new SmpInputStream(destFile);
-        ByteMap map = (ByteMap) inStream.readMap(0);
-        ByteMap expected = (ByteMap) load("org/ebsdimage/io/Lena_Rotate90deg.bmp");
+        ByteMap map = (ByteMap) inStream.readMap(1);
+        ByteMap expected =
+                (ByteMap) load("org/ebsdimage/io/Lena_Rotate90deg.bmp");
         map.assertEquals(expected);
-        map = (ByteMap) inStream.readMap(1);
+        map = (ByteMap) inStream.readMap(2);
         expected = (ByteMap) load("org/ebsdimage/io/Lena_Rotate180deg.bmp");
         map.assertEquals(expected);
         inStream.close();

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.pattern.post;
 
 import org.ebsdimage.core.exp.Exp;
@@ -69,10 +69,12 @@ public class Noise extends PatternPostOps {
             return false;
         if (getClass() != obj.getClass())
             return false;
+
         Noise other = (Noise) obj;
         if (Double.doubleToLongBits(stdDev) != Double
                 .doubleToLongBits(other.stdDev))
             return false;
+
         return true;
     }
 
@@ -102,8 +104,11 @@ public class Noise extends PatternPostOps {
      */
     @Override
     public ByteMap process(Exp exp, ByteMap srcMap) {
-        rmlimage.utility.Noise.gaussian(srcMap, stdDev);
-        return srcMap;
+        ByteMap destMap = srcMap.duplicate();
+
+        rmlimage.utility.Noise.gaussian(destMap, stdDev);
+
+        return destMap;
     }
 
 
