@@ -27,7 +27,6 @@ import java.io.IOException;
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.io.HoughMapLoader;
-import org.ebsdimage.io.HoughMapSaver;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -99,9 +98,6 @@ public class HoughTransformTest extends TestCase {
         Filter.median(expectedMap);
 
         HoughMap destMap = hough.transform(null, srcMap);
-
-        destMap.setFile("/tmp/houghmap.bmp");
-        new HoughMapSaver().save(destMap);
 
         destMap.assertEquals(expectedMap);
     }
