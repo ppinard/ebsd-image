@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.plugin;
 
 import org.ebsdimage.core.EbsdMMap;
@@ -26,6 +26,7 @@ import rmlimage.gui.PlugIn;
 import rmlimage.module.multi.core.BasicMultiMap;
 import rmlshared.gui.ColumnPanel;
 import rmlshared.gui.ComboBox;
+import rmlshared.gui.IntField;
 import rmlshared.gui.Panel;
 
 /**
@@ -48,6 +49,9 @@ public class MicronBar extends PlugIn {
         /** Combo box to select the EBSD multimap. */
         private ComboBox<Map> mmapCBox;
 
+        /** Field for the scale factor. */
+        private IntField scaleFactorField;
+
 
 
         /**
@@ -58,11 +62,17 @@ public class MicronBar extends PlugIn {
 
             Panel panel = new ColumnPanel(2);
 
-            panel.add("Select EBSD multimap:");
+            panel.add("EBSD multimap");
 
             Map[] maps = getMapList(EbsdMMap.class);
             mmapCBox = new ComboBox<Map>(maps);
             panel.add(mmapCBox);
+
+            panel.add("Scaling factor");
+
+            scaleFactorField = new IntField("Scaling factor", 1);
+            scaleFactorField.setRange(1, Integer.MAX_VALUE);
+            panel.add(scaleFactorField);
 
             setMainComponent(panel);
         }
@@ -76,6 +86,17 @@ public class MicronBar extends PlugIn {
          */
         public EbsdMMap getSelectedMap() {
             return (EbsdMMap) mmapCBox.getSelectedItem();
+        }
+
+
+
+        /**
+         * Returns the scaling factor.
+         * 
+         * @return scaling factor
+         */
+        public int getScaleFactor() {
+            return scaleFactorField.getValue();
         }
 
     }
@@ -104,8 +125,9 @@ public class MicronBar extends PlugIn {
             return null;
 
         EbsdMMap mmap = dialog.getSelectedMap();
+        int scaleFactor = dialog.getScaleFactor();
 
-        BasicMultiMap dest = EbsdMMapUtil.pasteMicronBar(mmap, 2);
+        BasicMultiMap dest = EbsdMMapUtil.pasteMicronBar(mmap, scaleFactor);
 
         add(dest);
 

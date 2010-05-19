@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.plugin;
 
 import java.awt.Color;
@@ -286,7 +286,7 @@ public class UnWarp extends PlugIn implements Monitorable {
         for (int nbDigits = 1; nbDigits < 10; nbDigits++) {
             String fNo = rmlshared.math.Long.format(1, nbDigits);
             File file = FileUtil.append(genericFile, fNo);
-            System.out.println("Testing for" + file);
+            // System.out.println("Testing for" + file);
             if (file.exists())
                 return nbDigits;
         }

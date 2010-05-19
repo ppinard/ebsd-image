@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.plugin;
 
 import java.io.File;
@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.swing.JLabel;
+
+import net.miginfocom.swing.MigLayout;
 
 import org.ebsdimage.core.exp.CurrentMapsFileSaver;
 import org.ebsdimage.core.exp.CurrentMapsSaver;
@@ -32,9 +34,9 @@ import org.ebsdimage.gui.exp.ExpWizard;
 import org.ebsdimage.io.exp.ExpMMapSaver;
 import org.ebsdimage.io.exp.ExpSaver;
 
-import net.miginfocom.swing.MigLayout;
 import ptpshared.utility.LoggerUtil;
 import rmlimage.plugin.PlugIn;
+import rmlimage.plugin.builtin.CloseAll;
 import rmlshared.gui.Panel;
 import rmlshared.gui.YesNoCancelDialog;
 import rmlshared.ui.Monitorable;
@@ -119,8 +121,8 @@ public class Exp extends PlugIn implements Monitorable {
         File dir = wizard.getDir();
 
         exp =
-                new org.ebsdimage.core.exp.Exp(width, height, metadata, phases, ops,
-                        currentMapsSaver);
+                new org.ebsdimage.core.exp.Exp(width, height, metadata, phases,
+                        ops, currentMapsSaver);
         exp.setName(name);
         exp.setDir(dir);
     }
@@ -146,8 +148,8 @@ public class Exp extends PlugIn implements Monitorable {
         File dir = wizard.getDir();
 
         exp =
-                new org.ebsdimage.core.exp.Exp(width, height, metadata, phases, ops,
-                        currentMapsSaver);
+                new org.ebsdimage.core.exp.Exp(width, height, metadata, phases,
+                        ops, currentMapsSaver);
         exp.setName(name);
         exp.setDir(dir);
     }
@@ -208,6 +210,9 @@ public class Exp extends PlugIn implements Monitorable {
 
             // Turn off the logger
             LoggerUtil.turnOffLogger(Logger.getLogger("ebsd"));
+
+            // Close all maps before run
+            new CloseAll().xRun();
 
             // Run experiment
             exp.run();

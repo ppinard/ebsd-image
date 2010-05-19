@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp;
 
 import java.io.IOException;
@@ -24,7 +24,6 @@ import javax.swing.DefaultListModel;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.ExpConstants;
 import org.ebsdimage.core.run.Operation;
-
 
 /**
  * Wizard page for the pattern operations.
@@ -95,7 +94,6 @@ public class PatternWizardPage extends OperationWizardPage {
         if (exp == null)
             return;
 
-        System.out.println("IN RENDERING PAGE:" + get(KEY_LOADED));
         if (get(KEY_LOADED) != null)
             if ((Integer) get(KEY_LOADED) > 0)
                 return;

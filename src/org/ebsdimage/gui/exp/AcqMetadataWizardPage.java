@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp;
 
 import static java.lang.Math.toDegrees;
@@ -23,12 +23,13 @@ import static java.lang.Math.toRadians;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import net.miginfocom.swing.MigLayout;
+
 import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.EbsdMetadata;
 import org.ebsdimage.core.exp.ExpMetadata;
 
-import net.miginfocom.swing.MigLayout;
 import ptpshared.core.math.Eulers;
 import ptpshared.core.math.Quaternion;
 import ptpshared.gui.WizardPage;
@@ -241,8 +242,6 @@ public class AcqMetadataWizardPage extends WizardPage {
 
         Panel microscopeDataPanel =
                 new Panel(new MigLayout("", "[][grow,fill][]25[][]"));
-
-        // System.out.println(getWizardDataKeys().length);
 
         // Beam energy line
         microscopeDataPanel.add("Beam energy");
