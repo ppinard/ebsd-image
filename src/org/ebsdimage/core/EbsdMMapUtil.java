@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static rmlimage.utility.MicroscopeConstants.*;
@@ -22,8 +22,6 @@ import rmlimage.core.*;
 import rmlimage.core.Conversion;
 import rmlimage.core.Transform;
 import rmlimage.module.multi.core.BasicMultiMap;
-import rmlimage.module.real.core.Contrast;
-import rmlimage.module.real.core.RealMap;
 import rmlimage.utility.MicronBar;
 
 /**
@@ -72,8 +70,6 @@ public class EbsdMMapUtil {
             if (mmap.getMap(alias) instanceof ByteMap
                     || mmap.getMap(alias) instanceof RGBMap)
                 map = mmap.getMap(alias).duplicate();
-            else if (mmap.getMap(alias) instanceof RealMap)
-                map = Contrast.expansion((RealMap) mmap.getMap(alias));
             else
                 map = Conversion.toByteMap(mmap.getMap(alias));
 
