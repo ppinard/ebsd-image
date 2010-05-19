@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp.ops.pattern.post;
 
 import javax.swing.JLabel;
@@ -23,7 +23,7 @@ import org.ebsdimage.core.exp.ops.pattern.post.Smoothing;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.exp.ops.OperationDialog;
 
-import rmlshared.gui.IntField;
+import rmlshared.gui.OddIntField;
 import rmlshared.gui.Panel;
 
 /**
@@ -35,7 +35,7 @@ import rmlshared.gui.Panel;
 public class SmoothingDialog extends OperationDialog {
 
     /** Field for the kernel size. */
-    private IntField kernelSizeField;
+    private OddIntField kernelSizeField;
 
 
 
@@ -46,12 +46,12 @@ public class SmoothingDialog extends OperationDialog {
         super("Smoothing");
 
         kernelSizeField =
-                new IntField("Kernel Size", Smoothing.DEFAULT_KERNEL_SIZE);
-        // FIXME: Test range
+                new OddIntField("Kernel Size", Smoothing.DEFAULT_KERNEL_SIZE);
+        kernelSizeField.setRange(1, Integer.MAX_VALUE);
 
         Panel panel = new Panel();
 
-        panel.add(new JLabel("Kernel size: "));
+        panel.add(new JLabel("Kernel size"));
         panel.add(kernelSizeField);
 
         setMainComponent(panel);

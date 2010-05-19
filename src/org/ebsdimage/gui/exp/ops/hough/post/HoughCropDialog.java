@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp.ops.hough.post;
 
 import javax.swing.JLabel;
@@ -45,7 +45,7 @@ public class HoughCropDialog extends OperationDialog {
         super("Hough Crop");
 
         radiusField = new IntField("Radius", HoughCrop.DEFAULT_RADIUS);
-        // radiusField.setRange(0, Integer.MAX_VALUE);
+        radiusField.setRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
 
         Panel panel = new Panel();
         panel.add(new JLabel("Radius: "));

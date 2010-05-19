@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp.ops.indexing.pre;
 
 import javax.swing.JLabel;
@@ -24,6 +24,7 @@ import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.exp.ops.OperationDialog;
 
 import rmlshared.gui.ColumnPanel;
+import rmlshared.gui.ErrorDialog;
 import rmlshared.gui.IntField;
 import rmlshared.gui.Panel;
 
@@ -51,10 +52,11 @@ public class HoughPeaksSelectorDialog extends OperationDialog {
 
         minimumField =
                 new IntField("Minimum", HoughPeaksSelector.DEFAULT_MINIMUM);
-        // FIXME: Check minimumField range
+        minimumField.setRange(3, Integer.MAX_VALUE);
+
         maximumField =
                 new IntField("Maximum", HoughPeaksSelector.DEFAULT_MAXIMUM);
-        // FIXME: Check maximumField range
+        maximumField.setRange(3, Integer.MAX_VALUE);
 
         Panel panel = new ColumnPanel(2);
 
@@ -64,6 +66,22 @@ public class HoughPeaksSelectorDialog extends OperationDialog {
         panel.add(maximumField);
 
         setMainComponent(panel);
+    }
+
+
+
+    @Override
+    public boolean isCorrect() {
+        if (!super.isCorrect())
+            return false;
+
+        if (minimumField.getValue() > maximumField.getValue()) {
+            ErrorDialog.show("The maximum number of Hough peaks "
+                    + "cannot be greater than the minimum number.");
+            return false;
+        }
+
+        return true;
     }
 
 

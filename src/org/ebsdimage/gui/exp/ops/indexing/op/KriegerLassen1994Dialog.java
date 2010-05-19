@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp.ops.indexing.op;
 
 import javax.swing.JLabel;
@@ -54,15 +54,17 @@ public class KriegerLassen1994Dialog extends OperationDialog {
         maxIndexField =
                 new IntField("Maximum Index",
                         KriegerLassen1994.DEFAULT_MAX_INDEX);
-        // FIXME: Check maxIndexField range
+        maxIndexField.setRange(1, Integer.MAX_VALUE);
+
         scatterTypeField =
                 new ComboBox<ScatteringFactorsEnum>(ScatteringFactorsEnum
                         .values());
 
         Panel panel = new ColumnPanel(2);
-        panel.add(new JLabel("Maximum index of the reflectors: "));
+        panel.add(new JLabel("Maximum index of the reflectors"));
         panel.add(maxIndexField);
-        panel.add(new JLabel("Type of scattering factors: "));
+
+        panel.add(new JLabel("Type of scattering factors"));
         panel.add(scatterTypeField);
 
         setMainComponent(panel);

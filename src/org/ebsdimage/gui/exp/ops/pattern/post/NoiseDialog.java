@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp.ops.pattern.post;
 
 import javax.swing.JLabel;
@@ -47,7 +47,7 @@ public class NoiseDialog extends OperationDialog {
 
         stdDevField =
                 new DoubleField("Standard Deviation", Noise.DEFAULT_STDDEV);
-        // FIXME: Test range
+        stdDevField.setRange(0.1, Double.MAX_VALUE);
 
         Panel panel = new Panel();
 

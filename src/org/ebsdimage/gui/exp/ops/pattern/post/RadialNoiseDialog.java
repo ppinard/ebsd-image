@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp.ops.pattern.post;
 
 import javax.swing.JLabel;
@@ -63,20 +63,30 @@ public class RadialNoiseDialog extends OperationDialog {
         super("Radial Noise");
 
         xField = new IntField("Center X", RadialNoise.DEFAULT_X);
+        xField.setRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
+
         yField = new IntField("Center Y", RadialNoise.DEFAULT_Y);
+        yField.setRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
+
         stdDevXField =
                 new DoubleField("Standard deviation in X",
                         RadialNoise.DEFAULT_STDDEV_X);
+        // stdDevXField.setRange(Double.MIN_VALUE, Double.MAX_VALUE);
+
         stdDevYField =
                 new DoubleField("Standard deviation in Y",
                         RadialNoise.DEFAULT_STDDEV_Y);
+        // stdDevYField.setRange(Double.MIN_VALUE, Double.MAX_VALUE);
+
         initialNoiseStdDevField =
                 new DoubleField("Initial Noise Standard Deviation",
                         RadialNoise.DEFALT_INITIAL_NOISE_STDDEV);
+        // initialNoiseStdDevField.setRange(0.1, Double.MAX_VALUE);
+
         finalNoiseStdDevField =
                 new DoubleField("Final Noise Standard Deviation",
                         RadialNoise.DEFALT_FINAL_NOISE_STDDEV);
-        // FIXME: Test range
+        // finalNoiseStdDevField.setRange(0.1, Double.MAX_VALUE);
 
         Panel panel = new ColumnPanel(3);
 

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.indexing.pre;
 
 import static java.util.Arrays.sort;
@@ -25,7 +25,6 @@ import java.util.Arrays;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.HoughPeakIntensityComparator;
 import org.ebsdimage.core.exp.Exp;
-
 
 /**
  * Operation to select the number of Hough Peaks for the indexing operation.
@@ -47,13 +46,13 @@ public class HoughPeaksSelector extends IndexingPreOps {
     public final int minimum;
 
     /** Default minimum number of Hough peaks. */
-    public static final int DEFAULT_MINIMUM = 1;
+    public static final int DEFAULT_MINIMUM = 3;
 
     /** Maximum number of Hough Peaks. */
     public final int maximum;
 
     /** Default maximum number of Hough peaks. */
-    public static final int DEFAULT_MAXIMUM = Integer.MAX_VALUE;
+    public static final int DEFAULT_MAXIMUM = 5;
 
 
 
@@ -86,10 +85,10 @@ public class HoughPeaksSelector extends IndexingPreOps {
      *             minimum number
      */
     public HoughPeaksSelector(int minimum, int maximum) {
-        if (minimum < 0)
+        if (minimum < 3)
             throw new IllegalArgumentException(
                     "The minimum number of Hough peaks cannot be less than zero.");
-        if (maximum < 0)
+        if (maximum < 3)
             throw new IllegalArgumentException(
                     "The maximum number of Hough peaks cannot be less than zero.");
         if (minimum > maximum)

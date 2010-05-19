@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.pattern.post;
 
 import org.ebsdimage.core.Noise;
@@ -100,17 +100,17 @@ public class RadialNoise extends PatternPostOps {
      * @param finalNoiseStdDev
      *            final noise level
      * 
-     * @see org.ebsdimage.core.Noise#radialNoise(ByteMap, int, int, double, double,
-     *      double, double)
+     * @see org.ebsdimage.core.Noise#radialNoise(ByteMap, int, int, double,
+     *      double, double, double)
      */
     public RadialNoise(int x, int y, double stdDevX, double stdDevY,
             double initialNoiseStdDev, double finalNoiseStdDev) {
-        if (stdDevX <= 0)
-            throw new IllegalArgumentException("The std.dev. in x (" + stdDevX
-                    + ") must be greater than 0.");
-        if (stdDevY <= 0)
-            throw new IllegalArgumentException("The std.dev. in y (" + stdDevY
-                    + ") must be greater than 0.");
+        if (initialNoiseStdDev <= 0)
+            throw new IllegalArgumentException("The initial std.dev. ("
+                    + initialNoiseStdDev + ") must be greater than 0.");
+        if (finalNoiseStdDev <= 0)
+            throw new IllegalArgumentException("The final std.dev. in y ("
+                    + finalNoiseStdDev + ") must be greater than 0.");
 
         this.x = x;
         this.y = y;
@@ -130,6 +130,7 @@ public class RadialNoise extends PatternPostOps {
             return false;
         if (getClass() != obj.getClass())
             return false;
+
         RadialNoise other = (RadialNoise) obj;
         if (Double.doubleToLongBits(finalNoiseStdDev) != Double
                 .doubleToLongBits(other.finalNoiseStdDev))
@@ -147,6 +148,7 @@ public class RadialNoise extends PatternPostOps {
             return false;
         if (y != other.y)
             return false;
+
         return true;
     }
 
@@ -198,8 +200,12 @@ public class RadialNoise extends PatternPostOps {
         if (stdDevY < 0)
             stdDevY = srcMap.height / 2.0;
 
-        return Noise.radialNoise(srcMap, x, y, stdDevX, stdDevY,
-                initialNoiseStdDev, finalNoiseStdDev);
+        ByteMap destMap = srcMap.duplicate();
+
+        Noise.radialNoise(destMap, x, y, stdDevX, stdDevY, initialNoiseStdDev,
+                finalNoiseStdDev);
+
+        return destMap;
     }
 
 

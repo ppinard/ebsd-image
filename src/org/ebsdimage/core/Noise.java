@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static java.lang.Math.exp;
@@ -116,6 +116,13 @@ public class Noise {
             throw new IllegalArgumentException("The std.dev. in y (" + stdDevY
                     + ") must be greater than 0.");
 
+        if (initialNoiseStdDev <= 0)
+            throw new IllegalArgumentException("The initial std.dev. ("
+                    + initialNoiseStdDev + ") must be greater than 0.");
+        if (finalNoiseStdDev <= 0)
+            throw new IllegalArgumentException("The final std.dev. in y ("
+                    + finalNoiseStdDev + ") must be greater than 0.");
+
         int pixValue;
         byte[] pixArray = map.pixArray;
 
@@ -128,10 +135,11 @@ public class Noise {
                 int y = j - map.height / 2;
 
                 double a = finalNoiseStdDev - initialNoiseStdDev;
-                double exponent = pow(x - x0, 2) / pow(stdDevX, 2)
-                        + pow(y - y0, 2) / pow(stdDevY, 2);
-                double amplitude = a * (1 - exp(-exponent / 2.0))
-                        + initialNoiseStdDev;
+                double exponent =
+                        pow(x - x0, 2) / pow(stdDevX, 2) + pow(y - y0, 2)
+                                / pow(stdDevY, 2);
+                double amplitude =
+                        a * (1 - exp(-exponent / 2.0)) + initialNoiseStdDev;
 
                 pixValue = pixArray[index] & 0xff;
                 pixValue += (int) (amplitude * rnd.nextGaussian());

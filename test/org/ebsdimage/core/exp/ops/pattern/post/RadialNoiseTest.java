@@ -14,14 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.pattern.post;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.ebsdimage.core.exp.ops.pattern.post.RadialNoise;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -84,14 +83,14 @@ public class RadialNoiseTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testRadialNoiseIntIntDoubleDoubleDoubleDoubleException1() {
-        new RadialNoise(2, 3, 0, 5, 6, 7);
+        new RadialNoise(2, 3, 4, 5, 0, 7);
     }
 
 
 
     @Test(expected = IllegalArgumentException.class)
     public void testRadialNoiseIntIntDoubleDoubleDoubleDoubleException2() {
-        new RadialNoise(2, 3, 4, 0, 6, 7);
+        new RadialNoise(2, 3, 4, 5, 6, 0);
     }
 
 

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp.ops.hough.op;
 
 import static java.lang.Math.toDegrees;
@@ -51,13 +51,12 @@ public class HoughTransformDialog extends OperationDialog {
         resolutionField =
                 new DoubleField("Resolution",
                         toDegrees(HoughTransform.DEFAULT_RESOLUTION));
-        // FIXME: Should work but does not
-        // resolutionField.setRange(0.1, 10.0);
+        resolutionField.setRange(0.1, 90.0);
 
         Panel panel = new Panel();
-        panel.add(new JLabel("Theta resolution: "));
+        panel.add(new JLabel("Theta resolution"));
         panel.add(resolutionField);
-        panel.add(new JLabel(" deg"));
+        panel.add(new JLabel("\u00b0")); // deg
 
         setMainComponent(panel);
     }

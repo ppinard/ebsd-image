@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp.ops.detection.pre;
 
 import javax.swing.JLabel;
@@ -23,10 +23,7 @@ import org.ebsdimage.core.exp.ops.detection.pre.Butterfly;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.exp.ops.OperationDialog;
 
-import rmlshared.gui.ColumnPanel;
-import rmlshared.gui.DoubleField;
-import rmlshared.gui.IntField;
-import rmlshared.gui.Panel;
+import rmlshared.gui.*;
 
 /**
  * GUI Dialog for the <code>Butterfly</code> operation.
@@ -43,7 +40,7 @@ public class ButterflyDialog extends OperationDialog {
     private DoubleField flattenUpperLimitField;
 
     /** Field for the kernel size. */
-    private IntField kernelSizeField;
+    private OddIntField kernelSizeField;
 
 
 
@@ -56,23 +53,26 @@ public class ButterflyDialog extends OperationDialog {
         flattenLowerLimitField =
                 new DoubleField("Flatten Lower Limit",
                         Butterfly.DEFAULT_FLATTEN_LOWER_LIMIT);
+        // flattenLowerLimitField.setRange(Double.MIN_VALUE, Double.MAX_VALUE);
+
         flattenUpperLimitField =
                 new DoubleField("Flatten Upper Limit",
                         Butterfly.DEFAULT_FLATTEN_UPPER_LIMIT);
+        // flattenUpperLimitField.setRange(Double.MIN_VALUE, Double.MAX_VALUE);
+
         kernelSizeField =
-                new IntField("Kernel Size", Butterfly.DEFAULT_KERNEL_SIZE);
+                new OddIntField("Kernel Size", Butterfly.DEFAULT_KERNEL_SIZE);
         kernelSizeField.setEnabled(false);
-        // FIXME: Test range
 
         Panel panel = new ColumnPanel(2);
 
-        panel.add(new JLabel("Flatten (lower limit): "));
+        panel.add(new JLabel("Flatten (lower limit)"));
         panel.add(flattenLowerLimitField);
 
-        panel.add(new JLabel("Flatten (upper limit): "));
+        panel.add(new JLabel("Flatten (upper limit)"));
         panel.add(flattenUpperLimitField);
 
-        panel.add(new JLabel("Kernel size: "));
+        panel.add(new JLabel("Kernel size"));
         panel.add(kernelSizeField);
 
         setMainComponent(panel);
@@ -95,6 +95,25 @@ public class ButterflyDialog extends OperationDialog {
         return new Butterfly(kernelSizeField.getValueBFR(),
                 flattenLowerLimitField.getValueBFR().floatValue(),
                 flattenUpperLimitField.getValueBFR().floatValue());
+    }
+
+
+
+    @Override
+    public boolean isCorrect() {
+        if (!super.isCorrect())
+            return false;
+
+        double flattenLowerLimit = flattenLowerLimitField.getValue();
+        double flattenUpperLimit = flattenUpperLimitField.getValue();
+        if (flattenLowerLimit >= flattenUpperLimit) {
+            ErrorDialog.show("Flatten lower limit (" + flattenLowerLimit
+                    + ") must be < than the upper limit (" + flattenUpperLimit
+                    + ").");
+            return false;
+        }
+
+        return true;
     }
 
 

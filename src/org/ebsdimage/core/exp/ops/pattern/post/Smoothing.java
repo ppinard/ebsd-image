@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.pattern.post;
 
 import org.ebsdimage.core.exp.Exp;
@@ -58,6 +58,9 @@ public class Smoothing extends PatternPostOps {
         if (kernelSize <= 0)
             throw new IllegalArgumentException(
                     "Kernel size must be greater than 0.");
+        if (kernelSize % 2 == 0)
+            throw new IllegalArgumentException("Kernel size (" + kernelSize
+                    + ") must be an odd number");
 
         this.kernelSize = kernelSize;
     }
@@ -72,9 +75,11 @@ public class Smoothing extends PatternPostOps {
             return false;
         if (getClass() != obj.getClass())
             return false;
+
         Smoothing other = (Smoothing) obj;
         if (kernelSize != other.kernelSize)
             return false;
+
         return true;
     }
 
@@ -104,7 +109,7 @@ public class Smoothing extends PatternPostOps {
     @Override
     public ByteMap process(Exp exp, ByteMap srcMap) {
         if (kernelSize < 3)
-            return srcMap;
+            return srcMap.duplicate();
 
         int[][] data = new int[kernelSize][kernelSize];
 

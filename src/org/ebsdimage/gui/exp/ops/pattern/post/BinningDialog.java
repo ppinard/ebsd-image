@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp.ops.pattern.post;
 
 import javax.swing.JLabel;
@@ -23,7 +23,7 @@ import org.ebsdimage.core.exp.ops.pattern.post.Binning;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.exp.ops.OperationDialog;
 
-import rmlshared.gui.IntField;
+import ptpshared.gui.PowerOfTwoIntField;
 import rmlshared.gui.Panel;
 
 /**
@@ -35,7 +35,7 @@ import rmlshared.gui.Panel;
 public class BinningDialog extends OperationDialog {
 
     /** Field for the binning size. */
-    private IntField binningSizeField;
+    private PowerOfTwoIntField binningSizeField;
 
 
 
@@ -46,12 +46,12 @@ public class BinningDialog extends OperationDialog {
         super("Binning");
 
         binningSizeField =
-                new IntField("Binning Size", Binning.DEFAULT_BINNING_SIZE);
-        // FIXME: Test range
+                new PowerOfTwoIntField("Binning Size",
+                        Binning.DEFAULT_BINNING_SIZE);
 
         Panel panel = new Panel();
 
-        panel.add(new JLabel("Binning size: "));
+        panel.add(new JLabel("Binning size"));
         panel.add(binningSizeField);
 
         setMainComponent(panel);
