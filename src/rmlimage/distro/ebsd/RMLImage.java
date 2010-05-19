@@ -14,10 +14,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package rmlimage.distro.ebsd;
 
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.net.URL;
+
 import rmlimage.core.Constants;
+import rmlshared.io.FileUtil;
+import rmlshared.thread.PlugIn;
+import rmlshared.thread.PlugInBuilder;
 import rmlshared.util.Preferences;
 
 /**
@@ -30,6 +37,21 @@ public class RMLImage extends rmlimage.gui.RMLImage {
 
     @Override
     protected void autoExec() {
+    }
+
+
+
+    @Override
+    public PlugIn getAbout() {
+        return PlugInBuilder.newInstance("org.ebsdimage.plugin.About");
+    }
+
+
+
+    @Override
+    protected Image getTitleBarIcon() {
+        URL iconFile = FileUtil.getURL("org/ebsdimage/gui/logo_(16x16).png");
+        return Toolkit.getDefaultToolkit().getImage(iconFile);
     }
 
 
