@@ -14,14 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.ebsdimage.core.PhasesMap;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -102,28 +101,6 @@ public class PhasesMapTest {
         assertEquals(1, other.getPixValue(1));
         assertEquals(2, other.getPixValue(2));
         assertEquals(1, other.getPixValue(3));
-    }
-
-
-
-    @Test
-    public void testDuplicatePhasesMap() {
-        PhasesMap other = new PhasesMap(2, 2);
-        map.duplicate(other);
-
-        assertEquals(2, map.width);
-        assertEquals(2, map.height);
-        assertEquals(4, map.size);
-
-        for (int i = 0; i < 4; i++)
-            assertEquals(0, map.getPixValue(i));
-    }
-
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testDuplicatePhasesMapException() {
-        map.duplicate(new PhasesMap(3, 3));
     }
 
 

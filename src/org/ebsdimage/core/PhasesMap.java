@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import java.util.ArrayList;
@@ -22,7 +22,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 
-import rmlimage.core.*;
+import rmlimage.core.EightBitMap;
+import rmlimage.core.LUT;
+import rmlimage.core.Map;
+import rmlimage.core.Pixel;
 import crystallography.core.Crystal;
 
 /**
@@ -167,9 +170,16 @@ public class PhasesMap extends EightBitMap {
      *            a <code>PhasesMap</code>
      */
     public PhasesMap(PhasesMap map) {
-        this(map.width, map.height, map.pixArray, map.phases);
+        this(map.width, map.height, map.phases.clone());
 
-        duplicate(map);
+        // Copy pixArray
+        System.arraycopy(map.pixArray, 0, pixArray, 0, size);
+
+        // Copy the lut
+        lut.setLUT(map.lut);
+
+        // Copy properties
+        setProperties(map);
     }
 
 
@@ -311,44 +321,6 @@ public class PhasesMap extends EightBitMap {
     @Override
     public PhasesMap duplicate() {
         return new PhasesMap(this);
-    }
-
-
-
-    /**
-     * Duplicates this map properties and values in the specified map.
-     * 
-     * @param map
-     *            output map
-     * 
-     * @throws NullPointerException
-     *             if the map is null
-     * @throws IllegalArgumentException
-     *             if the specified map and this map are not of the same size
-     */
-    public void duplicate(PhasesMap map) {
-        if (map == null)
-            throw new NullPointerException("Map cannot be null.");
-        if (!isSameSize(map))
-            throw new IllegalArgumentException("map ("
-                    + map.getDimensionLabel()
-                    + ") is not the same size as this (" + getDimensionLabel()
-                    + ')');
-
-        // Copy the file name
-        setFile(map.getFile());
-
-        // Copy the lut
-        lut.setLUT(map.lut);
-
-        // Copy the properties of the source map to the new map
-        clearProperties();
-        setProperties(map);
-
-        System.arraycopy(map.pixArray, 0, pixArray, 0, size);
-        System.arraycopy(map.phases, 0, phases, 0, map.phases.length);
-
-        setChanged(ByteMap.MAP_CHANGED | ByteMap.LUT_CHANGED);
     }
 
 
