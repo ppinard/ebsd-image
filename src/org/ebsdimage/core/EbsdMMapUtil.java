@@ -67,8 +67,10 @@ public class EbsdMMapUtil {
         // Create micron bar maps
         Map map;
         for (String alias : mmap.getAliases()) {
-            if (mmap.getMap(alias) instanceof ByteMap
-                    || mmap.getMap(alias) instanceof RGBMap)
+            if (mmap.getMap(alias) instanceof ByteMap) {
+                map = mmap.getMap(alias).duplicate();
+                Contrast.expansion((ByteMap) map);
+            } else if (mmap.getMap(alias) instanceof RGBMap)
                 map = mmap.getMap(alias).duplicate();
             else
                 map = Conversion.toByteMap(mmap.getMap(alias));
