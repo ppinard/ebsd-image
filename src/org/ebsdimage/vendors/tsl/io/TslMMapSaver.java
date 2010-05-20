@@ -42,4 +42,10 @@ public class TslMMapSaver extends EbsdMMapSaver {
         return new TslMetadataXmlSaver();
     }
 
+    
+    @Override
+    protected int getVersion() {
+        return 1;
+    }
+    
 }

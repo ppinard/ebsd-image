@@ -52,8 +52,12 @@ public class HklMMapLoader extends EbsdMMapLoader {
 
 
     @Override
-    protected HklMMap createMap(int width, int height,
+    protected HklMMap createMap(int version, int width, int height,
             HashMap<String, Map> mapList, Document metadata) {
+    
+        if (version != 1)
+            throw new IllegalArgumentException("Invalid version: " + version);
+    
         Element element = metadata.getRootElement();
         HklMetadata data = new HklMetadataXmlLoader().load(element);
 

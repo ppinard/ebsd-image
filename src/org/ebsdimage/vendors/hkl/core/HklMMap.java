@@ -58,7 +58,7 @@ import rmlshared.io.FileUtil;
 public class HklMMap extends EbsdMMap {
 
     /** Header for the zip file containing a hklMMap. */
-    public static final String FILE_HEADER = EbsdMMap.FILE_HEADER + "-hkl";
+    public static final String FILE_HEADER = EbsdMMap.FILE_HEADER + "-HKL";
 
     /** Alias of the map of the first euler angle. */
     public static final String EULER1 = "Euler1";

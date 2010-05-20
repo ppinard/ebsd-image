@@ -36,7 +36,7 @@ import rmlimage.core.Map;
 public class ExpMMap extends EbsdMMap {
 
     /** Header for the zip file containing an EbsdMMap. */
-    public static final String FILE_HEADER = EbsdMMap.FILE_HEADER + "-exp";
+    public static final String FILE_HEADER = EbsdMMap.FILE_HEADER + "-EXP";
 
 
 

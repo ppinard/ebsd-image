@@ -60,8 +60,12 @@ public class ExpMMapLoader extends EbsdMMapLoader {
 
 
     @Override
-    protected ExpMMap createMap(int width, int height,
+    protected ExpMMap createMap(int version, int width, int height,
             HashMap<String, Map> mapList, Document metadata) {
+    
+        if (version != 1)
+            throw new IllegalArgumentException("Invalid version: " + version);
+        
         Element element = metadata.getRootElement();
         ExpMetadata data = new ExpMetadataXmlLoader().load(element);
 

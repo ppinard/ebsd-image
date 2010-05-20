@@ -41,5 +41,12 @@ public class ExpMMapSaver extends EbsdMMapSaver {
     protected EbsdMetadataXmlSaver getMetadataSaver() {
         return new ExpMetadataXmlSaver();
     }
+    
+    
+    @Override
+    protected int getVersion() {
+        return 1;
+    }
+    
 
 }

@@ -48,7 +48,7 @@ import rmlimage.module.real.core.RealMap;
 public class TslMMap extends EbsdMMap {
 
     /** Header for the zip file containing a TslMMap. */
-    public static final String FILE_HEADER = EbsdMMap.FILE_HEADER + "-tsl";
+    public static final String FILE_HEADER = EbsdMMap.FILE_HEADER + "-TSL";
 
     /** Alias of the map of the first euler angle. */
     public static final String EULER1 = "Euler1";

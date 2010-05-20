@@ -42,4 +42,10 @@ public class HklMMapSaver extends EbsdMMapSaver {
         return new HklMetadataXmlSaver();
     }
 
+
+    @Override
+    protected int getVersion() {
+        return 1;
+    }
+    
 }

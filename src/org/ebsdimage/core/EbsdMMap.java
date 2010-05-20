@@ -38,7 +38,7 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
 public abstract class EbsdMMap extends MultiMap {
 
     /** Header for the zip file containing an EbsdMMap. */
-    public static final String FILE_HEADER = "ebsd";
+    public static final String FILE_HEADER = "EBSD";
 
     /**
      * Alias of the map for the first coordinate of the quaternion representing

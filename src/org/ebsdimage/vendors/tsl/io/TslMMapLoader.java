@@ -53,8 +53,12 @@ public class TslMMapLoader extends EbsdMMapLoader {
 
 
     @Override
-    protected TslMMap createMap(int width, int height,
+    protected TslMMap createMap(int version, int width, int height,
             HashMap<String, Map> mapList, Document metadata) {
+
+        if (version != 1)
+            throw new IllegalArgumentException("Invalid version: " + version);
+        
         Element element = metadata.getRootElement();
         TslMetadata data = new TslMetadataXmlLoader().load(element);
 
