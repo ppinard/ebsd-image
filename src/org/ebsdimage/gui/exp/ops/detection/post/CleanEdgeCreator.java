@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.gui.exp.ops.identification.pre;
+package org.ebsdimage.gui.exp.ops.detection.post;
 
-import org.ebsdimage.core.exp.ops.identification.pre.CleanEdge;
+import org.ebsdimage.core.exp.ops.detection.post.CleanEdge;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.exp.ops.OperationCreator;
 

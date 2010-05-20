@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package org.ebsdimage.io.exp.ops.identification.pre;
+package org.ebsdimage.io.exp.ops.detection.post;
 
-import static org.ebsdimage.io.exp.ops.identification.pre.CleanEdgeXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.detection.post.CleanEdgeXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
-import org.ebsdimage.core.exp.ops.identification.pre.CleanEdge;
+import org.ebsdimage.core.exp.ops.detection.post.CleanEdge;
 import org.ebsdimage.core.run.Operation;
-import org.ebsdimage.io.exp.ops.identification.pre.CleanEdgeXmlSaver;
+import org.ebsdimage.io.exp.ops.detection.post.CleanEdgeXmlSaver;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;

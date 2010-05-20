@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.core.exp.ops.identification.pre;
+package org.ebsdimage.core.exp.ops.detection.post;
 
 import org.ebsdimage.core.exp.Exp;
 
@@ -32,7 +32,7 @@ import rmlimage.core.Identification.Edge;
  * @author Philippe T. Pinard
  * 
  */
-public class CleanEdge extends IdentificationPreOps {
+public class CleanEdge extends DetectionPostOps {
 
     /**
      * Removes the peaks touching the right edge of the peaks map.
