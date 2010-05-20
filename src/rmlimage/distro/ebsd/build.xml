@@ -6,7 +6,9 @@
 <taskdef name="deb" classname="com.googlecode.ant_deb_task.Deb"/>
 <taskdef name="desktopentry" 
          classname="com.googlecode.ant_deb_task.DesktopEntry"/>
- 
+<taskdef name="jarbundler" 
+        classname="net.sourceforge.jarbundler.JarBundler" />
+
   <!-- Read the local properties -->
 <fail message="property.file not defined" unless="property.file"/>
 <property environment="env"/>
@@ -192,6 +194,17 @@ Use ant -p to get a listing of all the available targets.</echo>
 </target>
 
 
+
+<target name="mac" description="Build the Mac installer" depends="build">
+  <mkdir dir="${dest.dir}"/>
+  <jarbundler name="EBSD-Image" mainclass="rmlimage.loader.Loader"
+              dir="${dest.dir}"
+              stubfile="${ebsd-image.dir}/install/JavaApplicationStub">
+    <jarfilelist dir="${build.dir}" files="rml-image.jar"/>
+    <javafileset dir="${build.dir}"/>
+  </jarbundler>
+</target>
+    
 
 
 
