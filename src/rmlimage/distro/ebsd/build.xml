@@ -56,6 +56,7 @@
 <!--Builds the whole structure for the core distro in the build directory -->
 <target name="build" description="Builds the full distro">
 
+  <property name="splashscreen.dir" value="${ebsd-image.dir}/install"/>
   <ant dir="${rmlimage.src.dir}/rmlimage/distro/basic" target="build"/>
   
         <!-- Build the modules -->
