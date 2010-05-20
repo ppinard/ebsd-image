@@ -21,6 +21,7 @@ import static java.lang.Math.PI;
 import static org.ebsdimage.core.HoughMap.DELTA_R;
 import static org.ebsdimage.core.HoughMap.DELTA_THETA;
 
+import java.io.File;
 import java.util.Properties;
 
 import ptpshared.core.math.Eulers;
@@ -28,6 +29,7 @@ import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
 import rmlimage.core.RGBMap;
 import rmlimage.core.handler.ConversionHandler;
+import rmlshared.io.FileUtil;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 
 /**
@@ -67,6 +69,13 @@ public class Conversion implements ConversionHandler {
      */
     public static ByteMap toByteMap(PhasesMap map) {
         ByteMap byteMap = new ByteMap(map.width, map.height);
+
+        // Set the ByteMap name to the same as the PhaseMap with the
+        // suffix (ByteMap) added.
+        File file = map.getFile();
+        file = FileUtil.append(file, "(ByteMap)");
+        file = FileUtil.setExtension(file, "bmp");
+        byteMap.setFile(file);
 
         // Copy pixArray
         System.arraycopy(map.pixArray, 0, byteMap.pixArray, 0, map.size);
@@ -133,6 +142,13 @@ public class Conversion implements ConversionHandler {
         props.remove(HoughMap.DELTA_THETA);
         houghMap.setProperties(props);
 
+        // Set the HoughMap name to the same as the ByteMap with the
+        // suffix (HoughMap) added.
+        File file = byteMap.getFile();
+        file = FileUtil.append(file, "(HoughMap)");
+        file = FileUtil.setExtension(file, "bmp");
+        houghMap.setFile(file);
+
         return houghMap;
     }
 
@@ -148,6 +164,13 @@ public class Conversion implements ConversionHandler {
      */
     public static RGBMap toRGBMap(EbsdMMap ebsdMMap) {
         RGBMap rgbMap = new RGBMap(ebsdMMap.width, ebsdMMap.height);
+
+        // Set the RGBMap name to the same as the EbsdMMap with the
+        // suffix (RGBMap) added.
+        File file = ebsdMMap.getFile();
+        file = FileUtil.append(file, "(RGBMap)");
+        file = FileUtil.setExtension(file, "bmp");
+        rgbMap.setFile(file);
 
         int red;
         int green;
