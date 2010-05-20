@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static ptpshared.core.math.Math.sign;
@@ -170,6 +170,9 @@ public class Indexing implements Monitorable {
         if (peaks.length < 3)
             throw new IllegalArgumentException(
                     "At least 3 peaks must be defined.");
+        if (calibration.detectorDistance <= 1e-6)
+            throw new IllegalArgumentException(
+                    "Calibration's detector distance cannot be zero.");
 
         // HashMaps to store solutions
         HashMap<String, Solution> solutions = new HashMap<String, Solution>();

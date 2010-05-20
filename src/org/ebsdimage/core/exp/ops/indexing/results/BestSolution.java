@@ -14,15 +14,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.indexing.results;
-
-import static java.util.Arrays.sort;
 
 import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.PhasesMap;
 import org.ebsdimage.core.Solution;
-import org.ebsdimage.core.SolutionFitComparator;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 
@@ -48,12 +45,8 @@ public class BestSolution extends IndexingResultsOps {
      * @return result(s)
      */
     @Override
-    public OpResult[] calculate(Exp exp, org.ebsdimage.core.Solution[] solutions) {
-
+    public OpResult[] calculate(Exp exp, Solution[] solutions) {
         if (solutions.length > 0) {
-            // Sort solutions by fit
-            sort(solutions, new SolutionFitComparator());
-
             // Best result
             Solution sln = solutions[0];
 

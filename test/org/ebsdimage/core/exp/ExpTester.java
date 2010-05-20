@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp;
 
 import static java.lang.Math.toRadians;
@@ -29,9 +29,6 @@ import java.util.ArrayList;
 import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.PhasesMap;
-import org.ebsdimage.core.exp.CurrentMapsFileSaver;
-import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.exp.ExpMetadata;
 import org.ebsdimage.core.exp.ops.detection.op.DetectionOpMock;
 import org.ebsdimage.core.exp.ops.detection.post.DetectionPostOpsMock;
 import org.ebsdimage.core.exp.ops.detection.pre.DetectionPreOpsMock;
@@ -351,7 +348,7 @@ public abstract class ExpTester {
         exp.run();
 
         // Test save maps
-        assertEquals(12 * 2, FileUtil.listFiles(expPath).length);
+        assertEquals(13 * 2, FileUtil.listFiles(expPath).length);
 
         // Test maps
         assertEquals(10, exp.mmap.getAliases().length);

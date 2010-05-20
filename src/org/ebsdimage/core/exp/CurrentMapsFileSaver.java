@@ -14,17 +14,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp;
 
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import net.jcip.annotations.Immutable;
+
 import org.ebsdimage.core.HoughMap;
+import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.io.HoughMapSaver;
 
-import net.jcip.annotations.Immutable;
 import rmlimage.core.BinMap;
 import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
@@ -36,7 +38,7 @@ import rmlimage.io.IO;
  * @author Philippe T. Pinard
  */
 @Immutable
-public class CurrentMapsFileSaver implements CurrentMapsSaver {
+public class CurrentMapsFileSaver extends CurrentMapsSaver {
 
     /** Logger. */
     private final Logger logger = Logger.getLogger("ebsd");
@@ -165,6 +167,7 @@ public class CurrentMapsFileSaver implements CurrentMapsSaver {
      * @param map
      *            Hough map
      */
+    @Override
     public void saveHoughMap(Exp exp, HoughMap map) {
         if (saveHoughMap) {
             map.setDir(exp.getDir());
@@ -224,6 +227,7 @@ public class CurrentMapsFileSaver implements CurrentMapsSaver {
      * @param map
      *            pattern map
      */
+    @Override
     public void savePatternMap(Exp exp, ByteMap map) {
         if (savePatternMap) {
             map.setDir(exp.getDir());
@@ -252,6 +256,7 @@ public class CurrentMapsFileSaver implements CurrentMapsSaver {
      * @param map
      *            peaks map
      */
+    @Override
     public void savePeaksMap(Exp exp, BinMap map) {
         if (savePeaksMap) {
             map.setDir(exp.getDir());
@@ -275,6 +280,25 @@ public class CurrentMapsFileSaver implements CurrentMapsSaver {
         return "CurrentMapsSaver [saveAllMaps=" + saveAllMaps
                 + ", saveHoughMap=" + saveHoughMap + ", savePatternMap="
                 + savePatternMap + ", savePeaksMap=" + savePeaksMap + "]";
+    }
+
+
+
+    @Override
+    public void saveSolutionOverlay(Exp exp, Solution sln) {
+        ByteMap map = createSolutionOverlay(exp, sln);
+
+        map.setDir(exp.getDir());
+        map.setName(createName(exp, "solution"));
+
+        try {
+            rmlimage.io.IO.save(map);
+        } catch (IOException ex) {
+            logger.warning("Solution map could not be saved because: "
+                    + ex.getMessage());
+        }
+
+        logger.info("Solution map saved at " + map.getFile().getPath());
     }
 
 }

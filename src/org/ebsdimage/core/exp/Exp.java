@@ -17,6 +17,7 @@
  */
 package org.ebsdimage.core.exp;
 
+import static java.util.Arrays.sort;
 import static org.ebsdimage.core.exp.ExpConstants.*;
 
 import java.io.File;
@@ -72,6 +73,9 @@ public class Exp extends Run {
 
     /** List of pattern operations of the experiment. */
     private ArrayList<PatternOp> patternOps = new ArrayList<PatternOp>();
+
+    /** Runtime variable for the source pattern map. */
+    protected ByteMap sourcePatternMap;
 
     /** Runtime variable of the pattern map. */
     protected ByteMap currentPatternMap;
@@ -518,6 +522,21 @@ public class Exp extends Run {
 
 
     /**
+     * Returns the source pattern map that is currently being used by the
+     * experiment. Only valid when the experiment is running.
+     * 
+     * @return pattern map
+     */
+    public ByteMap getSourcePatternMap() {
+        if (sourcePatternMap == null)
+            throw new RuntimeException(
+                    "The experiment is not running, there is no pattern map.");
+        return sourcePatternMap;
+    }
+
+
+
+    /**
      * Returns the Hough peaks that are currently being used by the experiment.
      * Only valid when the experiment is running.
      * 
@@ -799,6 +818,7 @@ public class Exp extends Run {
     protected void initRuntimeVariables() {
         super.initRuntimeVariables();
 
+        sourcePatternMap = null;
         currentPatternMap = null;
         currentHoughMap = null;
         currentPeaksMap = null;
@@ -884,7 +904,8 @@ public class Exp extends Run {
         setStatus("Performing " + patternOp.getName() + " (" + patternOp.index
                 + ")...");
 
-        currentPatternMap = patternOp.load(this);
+        sourcePatternMap = patternOp.load(this);
+        currentPatternMap = sourcePatternMap.duplicate();
 
         setStatus("Performing " + patternOp.getName() + "... DONE");
 
@@ -1080,6 +1101,13 @@ public class Exp extends Run {
                         setStatus("Performing " + indexingOp.getName() + "...");
 
                         currentSolutions = indexingOp.index(this, currentPeaks);
+
+                        // Sort solutions by fit
+                        sort(currentSolutions, new SolutionFitComparator());
+
+                        if (currentSolutions.length > 0)
+                            currentMapsSaver.saveSolutionOverlay(this,
+                                    currentSolutions[0]);
 
                         setStatus("Performing " + indexingOp.getName()
                                 + "... DONE");

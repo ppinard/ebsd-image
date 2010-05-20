@@ -14,18 +14,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.indexing.results;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Arrays;
+
 import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.Solution;
+import org.ebsdimage.core.SolutionFitComparator;
 import org.ebsdimage.core.exp.CurrentMapsFileSaver;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.ExpMetadata;
 import org.ebsdimage.core.exp.OpResult;
-import org.ebsdimage.core.exp.ops.indexing.results.BestSolution;
 import org.ebsdimage.core.run.Operation;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,6 +62,7 @@ public class BestSolutionTest {
                         new Solution(phases[0], new Quaternion(1, 2, 3, 4), 4),
                         new Solution(phases[0], new Quaternion(2, 3, 4, 5), 7),
                         new Solution(phases[1], new Quaternion(3, 4, 5, 6), 1) };
+        Arrays.sort(srcSlns, new SolutionFitComparator());
     }
 
 

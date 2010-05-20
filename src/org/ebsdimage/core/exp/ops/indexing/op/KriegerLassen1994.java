@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.indexing.op;
 
 import java.io.IOException;
@@ -116,6 +116,9 @@ public class KriegerLassen1994 extends IndexingOp {
 
         // Camera
         calibration = exp.mmap.calibration;
+        if (calibration.detectorDistance <= 1e-6)
+            throw new IllegalArgumentException(
+                    "Calibration's detector distance cannot be zero.");
 
         // Scattering factors
         ScatteringFactors scatter = null;

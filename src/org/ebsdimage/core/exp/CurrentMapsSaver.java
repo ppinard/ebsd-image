@@ -14,16 +14,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp;
 
 import org.ebsdimage.core.HoughMap;
+import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.sim.Energy;
+import org.ebsdimage.core.sim.PatternBandCenter;
 
 import ptpshared.utility.xml.ObjectXml;
-import rmlimage.core.BinMap;
-import rmlimage.core.ByteMap;
-import rmlimage.core.Map;
+import rmlimage.core.*;
+import crystallography.core.Reflectors;
+import crystallography.core.XrayScatteringFactors;
 
 /**
  * Interface for saving current maps of an experiment.
@@ -31,7 +34,7 @@ import rmlimage.core.Map;
  * @author Philippe T. Pinard
  * 
  */
-public interface CurrentMapsSaver extends ObjectXml {
+public abstract class CurrentMapsSaver implements ObjectXml {
 
     /**
      * Saves the pattern map.
@@ -41,7 +44,7 @@ public interface CurrentMapsSaver extends ObjectXml {
      * @param map
      *            pattern map
      */
-    public void savePatternMap(Exp exp, ByteMap map);
+    public abstract void savePatternMap(Exp exp, ByteMap map);
 
 
 
@@ -53,7 +56,7 @@ public interface CurrentMapsSaver extends ObjectXml {
      * @param map
      *            Hough map
      */
-    public void saveHoughMap(Exp exp, HoughMap map);
+    public abstract void saveHoughMap(Exp exp, HoughMap map);
 
 
 
@@ -65,7 +68,7 @@ public interface CurrentMapsSaver extends ObjectXml {
      * @param map
      *            peaks map
      */
-    public void savePeaksMap(Exp exp, BinMap map);
+    public abstract void savePeaksMap(Exp exp, BinMap map);
 
 
 
@@ -79,5 +82,69 @@ public interface CurrentMapsSaver extends ObjectXml {
      * @param map
      *            a map
      */
-    public void saveMap(Exp exp, Operation op, Map map);
+    public abstract void saveMap(Exp exp, Operation op, Map map);
+
+
+
+    /**
+     * Saves a map with the solution is overlaid on top of the source pattern
+     * map.
+     * 
+     * @param exp
+     *            experiment executing this method
+     * @param sln
+     *            solution
+     */
+    public abstract void saveSolutionOverlay(Exp exp, Solution sln);
+
+
+
+    /**
+     * Creates a map with the solution is overlaid on top of the source pattern
+     * map.
+     * 
+     * @param exp
+     *            experiment executing this method
+     * @param sln
+     *            solution
+     * @return solution map
+     */
+    protected ByteMap createSolutionOverlay(Exp exp, Solution sln) {
+        // Get source pattern map
+        ByteMap patternMap = exp.getSourcePatternMap();
+        int width = patternMap.width;
+        int height = patternMap.height;
+
+        // Draw simulation pattern
+        Reflectors refls =
+                new Reflectors(sln.phase, new XrayScatteringFactors(), 1);
+
+        PatternBandCenter patternBandCenter =
+                new PatternBandCenter(width, height, refls, -1,
+                        exp.mmap.calibration, new Energy(exp.mmap.beamEnergy),
+                        sln.rotation);
+
+        ByteMap simPatternMap = patternBandCenter.getPatternMap();
+        Contrast.expansion(simPatternMap);
+
+        // Combine simulation pattern with source pattern map
+        ByteMap slnMap = new ByteMap(width, height);
+        MapMath.addition(patternMap, simPatternMap, 1.0, 0.0, slnMap);
+
+        // Draw pattern center
+        int pcH = (int) ((exp.mmap.calibration.patternCenterH + 0.5) * width);
+        int pcV =
+                height
+                        - (int) ((exp.mmap.calibration.patternCenterV + 0.5) * height);
+        for (int x = pcH - width / 50; x <= pcH + width / 50; x++)
+            slnMap.setPixValue(x, pcV, 254);
+        for (int y = pcV - height / 50; y <= pcV + height / 50; y++)
+            slnMap.setPixValue(pcH, y, 254);
+
+        // Change color for solution and pattern center
+        slnMap.lut.setLUT(255, 255, 0, 0);
+        slnMap.lut.setLUT(254, 0, 255, 0);
+
+        return slnMap;
+    }
 }

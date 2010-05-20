@@ -18,6 +18,7 @@
 package org.ebsdimage.gui.exp;
 
 import org.ebsdimage.core.HoughMap;
+import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.exp.CurrentMapsSaver;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.run.Operation;
@@ -33,7 +34,7 @@ import rmlimage.core.Map;
  * @author Philippe T. Pinard
  * 
  */
-public class CurrentMapsGUISaver implements CurrentMapsSaver {
+public class CurrentMapsGUISaver extends CurrentMapsSaver {
 
     /**
      * Adds a map to the GUI Desktop.
@@ -93,6 +94,16 @@ public class CurrentMapsGUISaver implements CurrentMapsSaver {
     @Override
     public void savePeaksMap(Exp exp, BinMap map) {
         map.setName(createName(exp, "Peaks"));
+        map.shouldSave(false);
+        add(map);
+    }
+
+
+
+    @Override
+    public void saveSolutionOverlay(Exp exp, Solution sln) {
+        ByteMap map = createSolutionOverlay(exp, sln);
+        map.setName(createName(exp, "Solution"));
         map.shouldSave(false);
         add(map);
     }
