@@ -14,9 +14,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
+import static org.ebsdimage.core.Threshold.*;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
@@ -51,7 +52,9 @@ public class ThresholdTest extends TestCase {
 
         // Test the properties
         Properties props = destMap.getProperties();
-        assertEquals(10, props.getProperty("threshold.min", -1));
+        assertEquals(7, props.getProperty(KEY_MINERROR, -1));
+        assertEquals(13, props.getProperty(KEY_KAPUR, -1));
+        assertEquals((7 + 13) / 2, props.getProperty(KEY_THRESHOLD, -1));
     }
 
 
@@ -63,7 +66,7 @@ public class ThresholdTest extends TestCase {
                 new HoughMapLoader()
                         .load(FileUtil
                                 .getFile("org/ebsdimage/testdata/houghmap_cropped.bmp"));
-        BinMap destMap = Threshold.automaticStdDev(houghMap);
+        BinMap destMap = Threshold.automaticStdDev(houghMap, 1.5);
 
         // Test the pixArray
         BinMap expected =
@@ -72,13 +75,11 @@ public class ThresholdTest extends TestCase {
 
         // Test the properties
         Properties props = destMap.getProperties();
-        assertEquals(128, props.getProperty("threshold.min", -1));
-        assertEquals("2*sigma", props.getProperty(
-                "EBSD.threshold.automatic.mode", ""));
-        assertEquals(112.0010, props.getProperty(
-                "EBSD.threshold.automatic.average", Double.NaN), 0.001);
-        assertEquals(8.14176, props.getProperty(
-                "EBSD.threshold.automatic.stdDev", Double.NaN), 0.001);
+        assertEquals("false", props.getProperty(KEY_OVERFLOW, ""));
+        assertEquals(1.5, props.getProperty(KEY_SIGMAFACTOR, Double.NaN), 1e-3);
+        assertEquals(118.8344, props.getProperty(KEY_AVERAGE, Double.NaN), 1e-3);
+        assertEquals(4.572028, props.getProperty(KEY_STDDEV, Double.NaN), 1e-3);
+        assertEquals(126, props.getProperty(KEY_THRESHOLD, -1));
     }
 
 

@@ -17,12 +17,14 @@
  */
 package org.ebsdimage.io.exp.ops.detection.op;
 
+import static org.ebsdimage.io.exp.ops.detection.op.AutomaticStdDevXmlTags.ATTR_SIGMAFACTOR;
 import static org.ebsdimage.io.exp.ops.detection.op.AutomaticStdDevXmlTags.TAG_NAME;
 
 import org.ebsdimage.core.exp.ops.detection.op.AutomaticStdDev;
 import org.jdom.Element;
 import org.jdom.IllegalNameException;
 
+import ptpshared.utility.xml.JDomUtil;
 import ptpshared.utility.xml.ObjectXmlLoader;
 
 /**
@@ -49,7 +51,11 @@ public class AutomaticStdDevXmlLoader implements ObjectXmlLoader {
             throw new IllegalNameException("Name of the element should be "
                     + TAG_NAME + " not " + element.getName() + ".");
 
-        return new AutomaticStdDev();
+        double sigmaFactor =
+                JDomUtil.getDoubleFromAttribute(element, ATTR_SIGMAFACTOR,
+                        AutomaticStdDev.DEFAULT_SIGMAFACTOR);
+
+        return new AutomaticStdDev(sigmaFactor);
     }
 
 }

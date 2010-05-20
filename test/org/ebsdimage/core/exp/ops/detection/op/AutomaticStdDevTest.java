@@ -29,6 +29,7 @@ import org.junit.Test;
 import rmlimage.core.BinMap;
 import rmlimage.core.IdentMap;
 import rmlimage.core.Identification;
+import rmlimage.core.MathMorph;
 import rmlshared.io.FileUtil;
 
 public class AutomaticStdDevTest {
@@ -45,12 +46,31 @@ public class AutomaticStdDevTest {
 
 
     @Test
+    public void testAutomaticStdDev() {
+        assertEquals(AutomaticStdDev.DEFAULT_SIGMAFACTOR,
+                autoStdDev.sigmaFactor, 1e-6);
+    }
+
+
+
+    @Test
+    public void testAutomaticStdDevDouble() {
+        AutomaticStdDev other = new AutomaticStdDev(1.5);
+        assertEquals(1.5, other.sigmaFactor, 1e-6);
+    }
+
+
+
+    @Test
     public void testIdentify() throws IOException {
         HoughMap srcMap =
                 new HoughMapLoader()
                         .load(FileUtil
                                 .getFile("org/ebsdimage/testdata/houghmap_cropped.bmp"));
         BinMap peaksMap = autoStdDev.detect(null, srcMap);
+
+        // Remove small objects for comparison
+        MathMorph.opening(peaksMap, 2, 8);
 
         IdentMap identMap = Identification.identify(peaksMap);
 
@@ -61,7 +81,8 @@ public class AutomaticStdDevTest {
 
     @Test
     public void testToString() {
-        assertEquals(autoStdDev.toString(), "Automatic Std Dev");
+        assertEquals(autoStdDev.toString(),
+                "Automatic Std Dev [sigmaFactor=2.0]");
     }
 
 }

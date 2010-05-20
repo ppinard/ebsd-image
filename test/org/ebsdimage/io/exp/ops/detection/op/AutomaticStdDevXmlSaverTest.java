@@ -17,6 +17,7 @@
  */
 package org.ebsdimage.io.exp.ops.detection.op;
 
+import static org.ebsdimage.io.exp.ops.detection.op.AutomaticStdDevXmlTags.ATTR_SIGMAFACTOR;
 import static org.ebsdimage.io.exp.ops.detection.op.AutomaticStdDevXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
@@ -24,6 +25,8 @@ import org.ebsdimage.core.exp.ops.detection.op.AutomaticStdDev;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
+
+import ptpshared.utility.xml.JDomUtil;
 
 public class AutomaticStdDevXmlSaverTest {
 
@@ -33,7 +36,7 @@ public class AutomaticStdDevXmlSaverTest {
 
     @Before
     public void setUp() throws Exception {
-        op = new AutomaticStdDev();
+        op = new AutomaticStdDev(1.5);
     }
 
 
@@ -43,6 +46,8 @@ public class AutomaticStdDevXmlSaverTest {
         Element element = new AutomaticStdDevXmlSaver().save(op);
 
         assertEquals(TAG_NAME, element.getName());
+        assertEquals(1.5, JDomUtil.getDoubleFromAttribute(element,
+                ATTR_SIGMAFACTOR), 1e-6);
     }
 
 }

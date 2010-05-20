@@ -14,20 +14,24 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.plugin;
 
 import javax.swing.ButtonGroup;
 
+import org.ebsdimage.core.Conversion;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.Threshold;
 
 import rmlimage.RMLImage;
 import rmlimage.core.BinMap;
+import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
+import rmlimage.core.MathMorph;
 import rmlimage.gui.BasicDialog;
 import rmlimage.plugin.PlugIn;
 import rmlshared.gui.ColumnPanel;
+import rmlshared.gui.DoubleField;
 import rmlshared.gui.RadioButton;
 
 /**
@@ -40,6 +44,50 @@ import rmlshared.gui.RadioButton;
 public class Thresholding extends PlugIn {
 
     /**
+     * Dialog to select the sigma factor for the automatic std. dev.
+     * thresholding.
+     * 
+     * @author ppinard
+     * 
+     */
+    private class StdDevDialog extends BasicDialog {
+
+        /** Double field for the sigma factor. */
+        private DoubleField sigmaFactorField;
+
+
+
+        /**
+         * Creates a new dialog.
+         */
+        public StdDevDialog() {
+            super("Standard Deviation Thresholding");
+
+            ColumnPanel panel = new ColumnPanel(2);
+
+            panel.add("Sigma factor");
+            sigmaFactorField = new DoubleField("Sigma factor", 2);
+            sigmaFactorField.setRange(0, Double.MAX_VALUE);
+            panel.add(sigmaFactorField);
+
+            setMainComponent(panel);
+        }
+
+
+
+        /**
+         * Returns the sigma factor value.
+         * 
+         * @return sigma factor
+         */
+        public double getSigmaFactor() {
+            return sigmaFactorField.getValueBFR();
+        }
+    }
+
+
+
+    /**
      * Dialog to select the thresholding.
      * 
      * @author Marin Lagac&eacute;
@@ -50,8 +98,8 @@ public class Thresholding extends PlugIn {
         /** Radio button for the top hat thresholding. */
         private RadioButton tophatButton;
 
-        /** Radio button for the two sigma thresholding. */
-        private RadioButton twoSigmaButton;
+        /** Radio button for the standard deviation thresholding. */
+        private RadioButton stdDevButton;
 
 
 
@@ -63,14 +111,14 @@ public class Thresholding extends PlugIn {
 
             // Create the buttons
             tophatButton = new RadioButton("Top Hat (classic)", true);
-            tophatButton.setName("TopHat");
-            twoSigmaButton = new RadioButton("2Sigma (aggressive)", false);
-            twoSigmaButton.setName("2Sigma");
+            tophatButton.setName("Top hat");
+            stdDevButton = new RadioButton("Standard deviation", false);
+            stdDevButton.setName("Standard deviation");
 
             // Create the button group
             ButtonGroup buttonGroup = new ButtonGroup();
             buttonGroup.add(tophatButton);
-            buttonGroup.add(twoSigmaButton);
+            buttonGroup.add(stdDevButton);
 
             // Create the control panel
             ColumnPanel controlPanel = new ColumnPanel(1);
@@ -78,13 +126,13 @@ public class Thresholding extends PlugIn {
 
             // Place the buttons
             controlPanel.add(tophatButton);
-            controlPanel.add(twoSigmaButton);
+            controlPanel.add(stdDevButton);
 
             controlPanel.setPreferences(getPlugIn().getPreferences().node(
                     "EBSD.Thresholding"));
 
-            setMainComponent(controlPanel); // Add the control panel to the
-            // dialog
+            // Add the control panel to the dialog
+            setMainComponent(controlPanel);
 
         }
 
@@ -98,10 +146,10 @@ public class Thresholding extends PlugIn {
         public Method getMethod() {
             if (tophatButton.isSelectedBFR())
                 return Method.TOPHAT;
-            if (twoSigmaButton.isSelectedBFR())
-                return Method.TWOSIGMA;
+            if (stdDevButton.isSelectedBFR())
+                return Method.STDDEV;
             throw new AssertionError(
-                    "Neither tophat or 2sigma buttons are selected.");
+                    "Neither tophat or standard deviation buttons are selected.");
         }
 
     }
@@ -118,8 +166,8 @@ public class Thresholding extends PlugIn {
         /** Top hat thresholding. */
         TOPHAT,
 
-        /** Two sigma standard deviation thresholding. */
-        TWOSIGMA
+        /** Standard deviation thresholding. */
+        STDDEV
     }
 
 
@@ -149,11 +197,35 @@ public class Thresholding extends PlugIn {
         BinMap binMap = null;
         switch (dialog.getMethod()) {
         case TOPHAT:
+            // Thresholding
             binMap = Threshold.automaticTopHat(houghMap);
+
+            // Remove small peaks
+            MathMorph.opening(binMap, 2, 8);
+
             break;
 
-        case TWOSIGMA:
-            binMap = Threshold.automaticStdDev(houghMap);
+        case STDDEV:
+            StdDevDialog stdDevDialog = new StdDevDialog();
+            if (stdDevDialog.show() != BasicDialog.OK)
+                return null;
+
+            // Perform inversion division
+            ByteMap dup = Conversion.toByteMap(houghMap);
+            rmlimage.core.MapMath.not(dup);
+            rmlimage.core.MapMath.division(houghMap, dup, 128.0, 0, dup);
+
+            // Important to get a hough-related binMap
+            dup.setProperties(houghMap);
+
+            // Thresholding
+            binMap =
+                    Threshold.automaticStdDev(houghMap, stdDevDialog
+                            .getSigmaFactor());
+
+            // Remove small peaks
+            MathMorph.opening(binMap, 2, 8);
+
             break;
 
         default:

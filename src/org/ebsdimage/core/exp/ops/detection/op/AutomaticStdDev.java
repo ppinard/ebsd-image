@@ -32,9 +32,40 @@ import rmlimage.core.BinMap;
  */
 public class AutomaticStdDev extends DetectionOp {
 
-    @Override
-    public String toString() {
-        return "Automatic Std Dev";
+    /** Standard deviation scaling factor. */
+    public final double sigmaFactor;
+
+    /** Default value for the standard deviation scaling factor. */
+    public static final double DEFAULT_SIGMAFACTOR = 2;
+
+
+
+    /**
+     * Creates a new <code>AutomaticStdDev</code> operation with the default
+     * sigma factor.
+     */
+    public AutomaticStdDev() {
+        sigmaFactor = DEFAULT_SIGMAFACTOR;
+    }
+
+
+
+    /**
+     * Creates a new <code>AutomaticStdDev</code> operation with the specified
+     * sigma factor.
+     * 
+     * @param sigmaFactor
+     *            standard deviation scaling factor
+     * 
+     * @throws IllegalArgumentException
+     *             if the sigma factor is less than 0
+     */
+    public AutomaticStdDev(double sigmaFactor) {
+        if (sigmaFactor < 0)
+            throw new IllegalArgumentException("Sigma factor (" + sigmaFactor
+                    + ") cannot be less than 0.");
+
+        this.sigmaFactor = sigmaFactor;
     }
 
 
@@ -52,9 +83,16 @@ public class AutomaticStdDev extends DetectionOp {
      */
     @Override
     public BinMap detect(Exp exp, HoughMap srcMap) {
-        BinMap peaksMap = Threshold.automaticStdDev(srcMap);
+        BinMap peaksMap = Threshold.automaticStdDev(srcMap, sigmaFactor);
 
         return peaksMap;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Automatic Std Dev [sigmaFactor=" + sigmaFactor + "]";
     }
 
 }

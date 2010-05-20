@@ -29,4 +29,7 @@ public class AutomaticStdDevXmlTags {
 
     /** XML tag name for <code>AutomaticStdDev</code>. */
     public static final String TAG_NAME = AutomaticStdDev.class.getSimpleName();
+
+    /** XML attribute for the sigma factor. */
+    public static final String ATTR_SIGMAFACTOR = "sigmaFactor";
 }

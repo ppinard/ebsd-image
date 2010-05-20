@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.detection.op;
 
 import static org.junit.Assert.assertEquals;
@@ -29,6 +29,7 @@ import org.junit.Test;
 import rmlimage.core.BinMap;
 import rmlimage.core.IdentMap;
 import rmlimage.core.Identification;
+import rmlimage.core.MathMorph;
 import rmlshared.io.FileUtil;
 
 public class AutomaticTopHatTest {
@@ -51,6 +52,9 @@ public class AutomaticTopHatTest {
                         .load(FileUtil
                                 .getFile("org/ebsdimage/testdata/houghmap_cropped.bmp"));
         BinMap peaksMap = topHat.detect(null, srcMap);
+
+        // Remove small objects for comparison
+        MathMorph.opening(peaksMap, 2, 8);
 
         IdentMap identMap = Identification.identify(peaksMap);
 

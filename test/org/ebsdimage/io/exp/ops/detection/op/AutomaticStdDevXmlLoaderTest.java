@@ -17,6 +17,7 @@
  */
 package org.ebsdimage.io.exp.ops.detection.op;
 
+import static org.ebsdimage.io.exp.ops.detection.op.AutomaticStdDevXmlTags.ATTR_SIGMAFACTOR;
 import static org.ebsdimage.io.exp.ops.detection.op.AutomaticStdDevXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
@@ -34,6 +35,8 @@ public class AutomaticStdDevXmlLoaderTest {
     @Before
     public void setUp() throws Exception {
         element = new Element(TAG_NAME);
+
+        element.setAttribute(ATTR_SIGMAFACTOR, Double.toString(1.5));
     }
 
 
@@ -43,6 +46,7 @@ public class AutomaticStdDevXmlLoaderTest {
         AutomaticStdDev op = new AutomaticStdDevXmlLoader().load(element);
 
         assertEquals(TAG_NAME, op.getName());
+        assertEquals(1.5, op.sigmaFactor, 1e-6);
     }
 
 }

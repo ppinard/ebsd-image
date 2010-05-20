@@ -19,17 +19,41 @@ package org.ebsdimage.gui.exp.ops.detection.op;
 
 import org.ebsdimage.core.exp.ops.detection.op.AutomaticStdDev;
 import org.ebsdimage.core.run.Operation;
-import org.ebsdimage.gui.exp.ops.OperationCreator;
+import org.ebsdimage.gui.exp.ops.OperationDialog;
 
-import rmlshared.gui.OkCancelDialog;
+import rmlshared.gui.ColumnPanel;
+import rmlshared.gui.DoubleField;
 
 /**
- * GUI creator for the <code>AutomaticStdDev</code> operation.
+ * GUI dialog for the <code>AutomaticStdDev</code> operation.
  * 
  * @author Philippe T. Pinard
  * 
  */
-public class AutomaticStdDevCreator implements OperationCreator {
+public class AutomaticStdDevDialog extends OperationDialog {
+
+    /** Double field for the sigma factor. */
+    private DoubleField sigmaFactorField;
+
+
+
+    /**
+     * Creates a new <code>AutomaticStdDevDialog</code>.
+     */
+    public AutomaticStdDevDialog() {
+        super("Automatic Std Dev");
+
+        ColumnPanel panel = new ColumnPanel(2);
+
+        panel.add("Sigma factor");
+        sigmaFactorField = new DoubleField("Sigma factor", 2);
+        sigmaFactorField.setRange(0, Double.MAX_VALUE);
+        panel.add(sigmaFactorField);
+
+        setMainComponent(panel);
+    }
+
+
 
     @Override
     public String getDescription() {
@@ -41,14 +65,7 @@ public class AutomaticStdDevCreator implements OperationCreator {
 
     @Override
     public Operation getOperation() {
-        return new AutomaticStdDev();
-    }
-
-
-
-    @Override
-    public int show() {
-        return OkCancelDialog.OK;
+        return new AutomaticStdDev(sigmaFactorField.getValueBFR());
     }
 
 

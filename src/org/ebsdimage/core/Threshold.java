@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import java.io.File;
@@ -30,75 +30,145 @@ import rmlshared.io.FileUtil;
  */
 public class Threshold {
 
-    /**
-     * Performs a thresholding based on the standard deviation of the
-     * <code>HoughMap</code>.
-     * 
-     * @param houghMap
-     *            a <code>HoughMap</code> to be threshold
-     * @return the thresholded map
-     * @see Threshold#automaticStdDev(ByteMap)
-     */
-    public static BinMap automaticStdDev(HoughMap houghMap) {
-        return automaticStdDev((ByteMap) houghMap);
-    }
+    /** Property key for the sigma factor value. */
+    public static final String KEY_SIGMAFACTOR =
+            "EBSD.threshold.automatic.sigmaFactor";
+
+    /** Property key for the average value. */
+    public static final String KEY_AVERAGE = "EBSD.threshold.automatic.average";
+
+    /** Property key for the standard deviation value. */
+    public static final String KEY_STDDEV = "EBSD.threshold.automatic.stdDev";
+
+    /** Property key for the threshold value. */
+    public static final String KEY_THRESHOLD =
+            "EBSD.threshold.automatic.threshold";
+
+    /** Property key for the overflow. */
+    public static final String KEY_OVERFLOW =
+            "EBSD.threshold.automatic.overflow";
+
+    /** Property key for the Kapur thresholding value. */
+    public static final String KEY_KAPUR = "EBSD.threshold.automatic.kapur";
+
+    /** Property key for the minimum error thresholding value. */
+    public static final String KEY_MINERROR =
+            "EBSD.threshold.automatic.minError";
 
 
 
     /**
      * Performs a thresholding based on the standard deviation of the
      * <code>HoughMap</code>. The thresholding selects all the pixels that are
-     * above a threshold of 2 sigma. If no pixel are above this threshold, a 1
-     * sigma threshold is used.
+     * above the specified <code>sigmaFactor</code> of the standard deviation.
+     * If no pixel are above this threshold, the value of 255 is used as the
+     * threshold and the property <code>KEY_OVERFLOW</code> is set to
+     * <code>true</code>.
      * 
-     * @param houghMap
+     * @param map
      *            a <code>ByteMap</code> representation of a
      *            <code>HoughMap</code>
+     * @param sigmaFactor
+     *            standard deviation scaling factor
      * @return the thresholded map
+     * 
+     * @throws NullPointerException
+     *             if the map is null
+     * @throws IllegalArgumentException
+     *             if the sigma factor is less than 0
      */
-    public static BinMap automaticStdDev(ByteMap houghMap) {
-        ByteMap dup;
-        if (houghMap instanceof HoughMap)
-            dup = Conversion.toByteMap((HoughMap) houghMap);
-        else
-            dup = houghMap.duplicate();
+    public static BinMap automaticStdDev(ByteMap map, double sigmaFactor) {
+        if (map == null)
+            throw new NullPointerException("Map cannot be null.");
+        if (sigmaFactor < 0)
+            throw new IllegalArgumentException("Sigma factor (" + sigmaFactor
+                    + ") cannot be less than 0.");
 
-        rmlimage.core.MapMath.not(dup);
-        rmlimage.core.MapMath.division(houghMap, dup, 128.0, 0, dup);
-        dup.setProperties(houghMap); // Important to get a hough-related binMap
+        ByteMap dup = map.duplicate();
 
-        // Calculate the average and stdDev within the kink
+        // Calculate the average and standard deviation within the kink
         double average = MapStats.average(dup);
-        // System.out.println("average = " + average);
         double stdDev = MapStats.standardDeviation(dup);
-        // System.out.println("stdDev = " + stdDev);
 
-        int threshold = (int) (average + 2 * stdDev + 0.5);
-        // System.out.println("threshold = " + threshold);
-        dup.setProperty("EBSD.threshold.automatic.mode", "2*sigma");
+        int threshold = (int) (average + sigmaFactor * stdDev + 0.5);
 
-        if (threshold > 255) {
-            threshold = (int) (average + stdDev + 0.5);
-            dup.setProperty("EBSD.threshold.automatic.mode", "1*sigma");
-        }
-
+        // Check if the threshold overflow
         if (threshold > 255) {
             threshold = 255;
-            dup.setProperty("EBSD.threshold.automatic.mode", "overflow");
-        }
+            dup.setProperty(KEY_OVERFLOW, "true");
+        } else
+            dup.setProperty(KEY_OVERFLOW, "false");
 
-        dup.setProperty("EBSD.threshold.automatic.average", average);
-        dup.setProperty("EBSD.threshold.automatic.stdDev", stdDev);
+        // Set properties
+        dup.setProperty(KEY_SIGMAFACTOR, sigmaFactor);
+        dup.setProperty(KEY_AVERAGE, average);
+        dup.setProperty(KEY_STDDEV, stdDev);
+        dup.setProperty(KEY_THRESHOLD, threshold);
 
         // Do the thresholding
-        Filter.median(dup);
         BinMap binMap =
                 rmlimage.core.Threshold.densitySlice(dup, threshold, 255);
 
-        MathMorph.opening(binMap, 2, 8);
-
         return binMap;
 
+    }
+
+
+
+    /**
+     * Performs a thresholding based on the standard deviation of the
+     * <code>HoughMap</code>.
+     * 
+     * @param houghMap
+     *            a <code>HoughMap</code> to be threshold
+     * @param sigmaFactor
+     *            standard deviation scaling factor
+     * @return the thresholded map
+     * @see Threshold#automaticStdDev(ByteMap)
+     */
+    public static BinMap automaticStdDev(HoughMap houghMap, double sigmaFactor) {
+        return automaticStdDev((ByteMap) houghMap, sigmaFactor);
+    }
+
+
+
+    /**
+     * Does a thresholding using a tophat-like filter. Peak found above and
+     * below the kink at 90deg are removed.
+     * <p/>
+     * See {@link #automaticTopHat(HoughMap)} for more info.
+     * 
+     * @param map
+     *            map to do the thresholding on
+     * 
+     * @return the thresholded map
+     */
+    public static BinMap automaticTopHat(ByteMap map) {
+        // Do a "top hat" filter
+        ByteMap dup = map.duplicate();
+        MathMorph.opening(dup, 5);
+        ByteMap topHat = new ByteMap(map.width, map.height);
+
+        // Important to get a hough-related binMap
+        topHat.setProperties(map);
+
+        rmlimage.core.MapMath.subtraction(map, dup, 1.0, 0, topHat);
+
+        // Calculate the threshold
+        int minError = rmlimage.core.Threshold.minErrorThreshold(topHat);
+        int kapur = rmlimage.core.Threshold.kapurThreshold(topHat);
+        int threshold = (minError + kapur) / 2;
+
+        // Set properties
+        topHat.setProperty(KEY_MINERROR, minError);
+        topHat.setProperty(KEY_KAPUR, kapur);
+        topHat.setProperty(KEY_THRESHOLD, threshold);
+
+        // Do the thresholding
+        BinMap binMap =
+                rmlimage.core.Threshold.densitySlice(topHat, threshold, 255);
+
+        return binMap;
     }
 
 
@@ -137,38 +207,43 @@ public class Threshold {
 
 
     /**
-     * Does a thresholding using a tophat-like filter. Peak found above and
-     * below the kink at 90deg are removed.
-     * <p/>
-     * See {@link #automaticTopHat(HoughMap)} for more info.
+     * Thresholds a specified phase id from a <code>PhasesMap</code>.
      * 
-     * @param houghMap
-     *            map to do the thresholding on
+     * @param map
+     *            source <code>PhasesMap</code>
+     * @param phaseId
+     *            phase id to threshold
      * 
      * @return the thresholded map
+     * 
+     * @throws NullPointerException
+     *             if the phases map is null
+     * @throws IllegalArgumentException
+     *             if the phase id is less than 0 or greater than the number of
+     *             phases defined in the phases map
      */
-    public static BinMap automaticTopHat(ByteMap houghMap) {
-        // Do a "top hat" filter
-        ByteMap dup = houghMap.duplicate();
-        MathMorph.opening(dup, 5);
-        ByteMap topHat = new ByteMap(houghMap.width, houghMap.height);
-        topHat.setProperties(houghMap); // Important to get a hough-related
-        // binMap
-        rmlimage.core.MapMath.subtraction(houghMap, dup, 1.0, 0, topHat);
+    public static BinMap phase(PhasesMap map, int phaseId) {
+        if (map == null)
+            throw new NullPointerException("Source phases map cannot be null.");
 
-        // Calculate the threshold
-        int minError = rmlimage.core.Threshold.minErrorThreshold(topHat);
-        int kapur = rmlimage.core.Threshold.kapurThreshold(topHat);
-        int threshold = (minError + kapur) / 2;
+        if (phaseId < 0 || phaseId > map.getPhases().length)
+            throw new IllegalArgumentException("Phase id must be between [0, "
+                    + map.getPhases().length + "].");
 
-        dup.setProperty("EBSD.threshold.automatic.minError", minError);
-        dup.setProperty("EBSD.threshold.automatic.kapur", kapur);
+        BinMap binMap = new BinMap(map.width, map.height);
 
-        // Do the thresholding
-        BinMap binMap =
-                rmlimage.core.Threshold.densitySlice(topHat, threshold, 255);
+        String phaseName;
+        if (phaseId == 0)
+            phaseName = "Non-indexed";
+        else
+            phaseName = map.getPhases()[phaseId - 1].name;
+        File file =
+                FileUtil.appendBeforeNumber(map.getFile(), "(Phase_"
+                        + phaseName + ')');
+        file = FileUtil.setExtension(file, "bmp");
+        binMap.setFile(file);
 
-        MathMorph.opening(binMap, 2, 8);
+        phase(map, phaseId, binMap);
 
         return binMap;
     }
@@ -231,49 +306,5 @@ public class Threshold {
         dest.setProperty(Constants.MAX_THRESHOLD, phaseId);
 
         dest.setChanged(BinMap.MAP_CHANGED);
-    }
-
-
-
-    /**
-     * Thresholds a specified phase id from a <code>PhasesMap</code>.
-     * 
-     * @param map
-     *            source <code>PhasesMap</code>
-     * @param phaseId
-     *            phase id to threshold
-     * 
-     * @return the thresholded map
-     * 
-     * @throws NullPointerException
-     *             if the phases map is null
-     * @throws IllegalArgumentException
-     *             if the phase id is less than 0 or greater than the number of
-     *             phases defined in the phases map
-     */
-    public static BinMap phase(PhasesMap map, int phaseId) {
-        if (map == null)
-            throw new NullPointerException("Source phases map cannot be null.");
-
-        if (phaseId < 0 || phaseId > map.getPhases().length)
-            throw new IllegalArgumentException("Phase id must be between [0, "
-                    + map.getPhases().length + "].");
-
-        BinMap binMap = new BinMap(map.width, map.height);
-
-        String phaseName;
-        if (phaseId == 0)
-            phaseName = "Non-indexed";
-        else
-            phaseName = map.getPhases()[phaseId - 1].name;
-        File file =
-                FileUtil.appendBeforeNumber(map.getFile(), "(Phase_"
-                        + phaseName + ')');
-        file = FileUtil.setExtension(file, "bmp");
-        binMap.setFile(file);
-
-        phase(map, phaseId, binMap);
-
-        return binMap;
     }
 }

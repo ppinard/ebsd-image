@@ -17,6 +17,7 @@
  */
 package org.ebsdimage.io.exp.ops.detection.op;
 
+import static org.ebsdimage.io.exp.ops.detection.op.AutomaticStdDevXmlTags.ATTR_SIGMAFACTOR;
 import static org.ebsdimage.io.exp.ops.detection.op.AutomaticStdDevXmlTags.TAG_NAME;
 
 import org.ebsdimage.core.exp.ops.detection.op.AutomaticStdDev;
@@ -54,7 +55,11 @@ public class AutomaticStdDevXmlSaver implements ObjectXmlSaver {
      * @return an XML <code>Element</code>
      */
     public Element save(AutomaticStdDev op) {
-        return new Element(TAG_NAME);
+        Element element = new Element(TAG_NAME);
+
+        element.setAttribute(ATTR_SIGMAFACTOR, Double.toString(op.sigmaFactor));
+
+        return element;
     }
 
 }

@@ -51,11 +51,11 @@ public class CleanEdgeTest extends TestCase {
     public void testProcess() {
         BinMap srcMap =
                 (BinMap) load(getFile("org/ebsdimage/testdata/automatic_stddev.bmp"));
-        assertEquals(12, Identification.identify(srcMap).getObjectCount());
+        assertEquals(44, Identification.identify(srcMap).getObjectCount());
 
         BinMap destMap = cleanEdge.process(null, srcMap);
 
-        assertEquals(11, Identification.identify(destMap).getObjectCount());
+        assertEquals(43, Identification.identify(destMap).getObjectCount());
     }
 
 }

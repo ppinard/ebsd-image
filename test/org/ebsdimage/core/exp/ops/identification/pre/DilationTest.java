@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.identification.pre;
 
 import static org.junit.Assert.assertEquals;
@@ -53,7 +53,7 @@ public class DilationTest extends TestCase {
 
         IdentMap identMap = Identification.identify(srcMap);
         Area area = Analysis.getArea(identMap);
-        assertEquals(21, area.val[0], 1e-6);
+        assertEquals(42, area.val[0], 1e-6);
 
         BinMap destMap = dilation.process(null, srcMap);
 
@@ -61,7 +61,7 @@ public class DilationTest extends TestCase {
         identMap = Identification.identify(destMap);
         area = Analysis.getArea(identMap);
 
-        assertEquals(31, area.val[0], 1e-6);
+        assertEquals(58, area.val[0], 1e-6);
     }
 
 }
