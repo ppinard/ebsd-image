@@ -14,17 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.hkl.io;
 
 import java.io.File;
 
+import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.EbsdMetadata;
 import org.ebsdimage.vendors.hkl.core.HklMMap;
 import org.ebsdimage.vendors.hkl.core.HklMMapTester;
-import org.ebsdimage.vendors.hkl.io.CtfLoader;
-import org.ebsdimage.vendors.hkl.io.HklMMapLoader;
-import org.ebsdimage.vendors.hkl.io.HklMMapSaver;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -51,9 +49,8 @@ public class HklMMapSaverTest extends HklMMapTester {
 
         HklMMap tempMMap =
                 new CtfLoader().load(file,
-                        EbsdMetadata.DEFAULT_WORKING_DISTANCE,
-                        EbsdMetadata.DEFAULT_CALIBRATION,
-                        new Crystal[] { copperPhase });
+                        EbsdMetadata.DEFAULT_WORKING_DISTANCE, new Camera(0.1,
+                                0.2, 0.3), new Crystal[] { copperPhase });
 
         // Save mmap to temp dir
         new HklMMapSaver().save(tempMMap, zipFile);

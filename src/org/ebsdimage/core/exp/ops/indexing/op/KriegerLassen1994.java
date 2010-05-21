@@ -116,9 +116,6 @@ public class KriegerLassen1994 extends IndexingOp {
 
         // Camera
         calibration = exp.mmap.calibration;
-        if (calibration.detectorDistance <= 1e-6)
-            throw new IllegalArgumentException(
-                    "Calibration's detector distance cannot be zero.");
 
         // Scattering factors
         ScatteringFactors scatter = null;

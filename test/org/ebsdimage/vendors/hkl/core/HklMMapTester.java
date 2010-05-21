@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.hkl.core;
 
 import static org.junit.Assert.assertEquals;
@@ -24,10 +24,9 @@ import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.TestCase;
+import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.PhasesMap;
 import org.ebsdimage.io.PhasesMapLoader;
-import org.ebsdimage.vendors.hkl.core.HklMMap;
-import org.ebsdimage.vendors.hkl.core.HklMetadata;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -154,6 +153,7 @@ public abstract class HklMMapTester extends TestCase {
         assertEquals(8e-7, metadata.pixelWidth, 1e-9);
         assertEquals(8e-7, metadata.pixelHeight, 1e-9);
         assertEquals("Project19", metadata.projectName);
+        assertTrue(new Camera(0.1, 0.2, 0.3).equals(metadata.calibration, 1e-3));
         // Cannot be tested
         // assertEquals(new File("").getAbsoluteFile(), metadata.projectPath);
     }
@@ -227,8 +227,9 @@ public abstract class HklMMapTester extends TestCase {
         PhasesMap phasesMap = mmap.getPhasesMap();
 
         PhasesMap expectedPhasesMap =
-                new PhasesMapLoader().load(FileUtil
-                        .getFile("org/ebsdimage/vendors/hkl/testdata/Phases.bmp"));
+                new PhasesMapLoader()
+                        .load(FileUtil
+                                .getFile("org/ebsdimage/vendors/hkl/testdata/Phases.bmp"));
 
         phasesMap.assertEquals(expectedPhasesMap);
 

@@ -79,7 +79,7 @@ public class FileUtil {
                 File rootDir =
                         getFile(houghMapURL).getParentFile().getParentFile()
                                 .getParentFile().getParentFile();
-                System.out.println(rootDir);
+                // System.out.println(rootDir);
                 return getClassesInPath(rootDir, packageName);
             } else
                 throw new IllegalArgumentException(

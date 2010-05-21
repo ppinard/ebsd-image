@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static java.lang.Math.abs;
@@ -96,9 +96,9 @@ public class Camera implements ObjectXml {
                     + ") of the pattern center must be with the range"
                     + "[-0.5, 0.5].");
 
-        if (detectorDistance < 0)
+        if (detectorDistance < 1e-6)
             throw new IllegalArgumentException("The detector distance ("
-                    + detectorDistance + ") must greater or equal to zero.");
+                    + detectorDistance + ") must greater than zero.");
 
         this.patternCenterH = patternCenterH;
         this.patternCenterV = patternCenterV;

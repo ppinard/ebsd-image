@@ -75,7 +75,7 @@ public abstract class EbsdMetadata implements ObjectXml {
     public final Camera calibration;
 
     /** Default or not defined value of the camera's calibration. */
-    public static final Camera DEFAULT_CALIBRATION = new Camera(0.0, 0.0, 0.0);
+    public static final Camera DEFAULT_CALIBRATION = new Camera(0.0, 0.0, 1.0);
 
 
 

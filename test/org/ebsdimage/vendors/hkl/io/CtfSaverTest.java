@@ -14,19 +14,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.hkl.io;
 
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.EbsdMetadata;
 import org.ebsdimage.vendors.hkl.core.HklMMap;
 import org.ebsdimage.vendors.hkl.core.HklMMapTester;
-import org.ebsdimage.vendors.hkl.io.CtfLoader;
-import org.ebsdimage.vendors.hkl.io.CtfSaver;
-import org.ebsdimage.vendors.hkl.io.HklMMapLoader;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -45,8 +43,9 @@ public class CtfSaverTest extends HklMMapTester {
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         HklMMap old =
-                new HklMMapLoader().load(FileUtil
-                        .getFile("org/ebsdimage/vendors/hkl/testdata/Project19.zip"));
+                new HklMMapLoader()
+                        .load(FileUtil
+                                .getFile("org/ebsdimage/vendors/hkl/testdata/Project19.zip"));
 
         new CtfSaver().save(old, file);
     }
@@ -70,9 +69,8 @@ public class CtfSaverTest extends HklMMapTester {
 
         mmap =
                 new CtfLoader().load(file,
-                        EbsdMetadata.DEFAULT_WORKING_DISTANCE,
-                        EbsdMetadata.DEFAULT_CALIBRATION,
-                        new Crystal[] { copperPhase });
+                        EbsdMetadata.DEFAULT_WORKING_DISTANCE, new Camera(0.1,
+                                0.2, 0.3), new Crystal[] { copperPhase });
     }
 
 

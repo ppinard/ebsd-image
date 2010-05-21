@@ -170,9 +170,6 @@ public class Indexing implements Monitorable {
         if (peaks.length < 3)
             throw new IllegalArgumentException(
                     "At least 3 peaks must be defined.");
-        if (calibration.detectorDistance <= 1e-6)
-            throw new IllegalArgumentException(
-                    "Calibration's detector distance cannot be zero.");
 
         // HashMaps to store solutions
         HashMap<String, Solution> solutions = new HashMap<String, Solution>();
