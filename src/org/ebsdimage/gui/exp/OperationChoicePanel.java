@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp;
 
 import static rmlshared.io.FileUtil.getURL;
@@ -26,11 +26,12 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
+import net.miginfocom.swing.MigLayout;
+
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.exp.ops.OperationCreator;
 import org.ebsdimage.io.FileUtil;
 
-import net.miginfocom.swing.MigLayout;
 import rmlshared.gui.Button;
 import rmlshared.thread.Reflection;
 

@@ -56,7 +56,7 @@ public class Exp extends PlugIn implements Monitorable {
      * @author Philippe T. Pinard
      * 
      */
-    private class PreviewDialog extends YesNoCancelDialog {
+    private static class PreviewDialog extends YesNoCancelDialog {
 
         /**
          * Creates a new <code>PreviewDialog</code>.

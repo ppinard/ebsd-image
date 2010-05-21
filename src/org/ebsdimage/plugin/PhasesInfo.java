@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.plugin;
 
 import static java.lang.Math.toDegrees;
@@ -31,9 +31,10 @@ import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.AbstractTableModel;
 
+import net.miginfocom.swing.MigLayout;
+
 import org.ebsdimage.core.PhasesMap;
 
-import net.miginfocom.swing.MigLayout;
 import ptpshared.utility.ElementProperties;
 import rmlimage.core.Map;
 import rmlimage.gui.PlugIn;
@@ -59,7 +60,7 @@ public class PhasesInfo extends PlugIn {
      * @author Philippe T. Pinard
      * 
      */
-    private class Dialog extends BasicDialog {
+    private static class Dialog extends BasicDialog {
 
         /**
          * Table model for the atom site.
@@ -67,7 +68,7 @@ public class PhasesInfo extends PlugIn {
          * @author Philippe T. Pinard
          * 
          */
-        private class AtomSiteTableModel extends AbstractTableModel {
+        private static class AtomSiteTableModel extends AbstractTableModel {
             /** Column names. */
             String[] columnNames = { "Symbol", "X", "Y", "Z", "Occupancy" };
 

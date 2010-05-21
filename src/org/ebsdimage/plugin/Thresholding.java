@@ -50,7 +50,7 @@ public class Thresholding extends PlugIn {
      * @author ppinard
      * 
      */
-    private class StdDevDialog extends BasicDialog {
+    private static class StdDevDialog extends BasicDialog {
 
         /** Double field for the sigma factor. */
         private DoubleField sigmaFactorField;

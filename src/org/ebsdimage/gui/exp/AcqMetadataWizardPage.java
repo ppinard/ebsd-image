@@ -347,7 +347,7 @@ public class AcqMetadataWizardPage extends WizardPage {
         pcvField = new DoubleField("PCv", 0);
         dataPanel.add(pcvField);
         dataPanel.add("DD", "skip");
-        ddField = new DoubleField("DD", 0.1);
+        ddField = new DoubleField("DD", 1.0);
         ddField.setRange(1e-5, Double.MAX_VALUE);
         dataPanel.add(ddField);
 

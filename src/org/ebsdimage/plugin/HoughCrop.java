@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.plugin;
 
 import org.ebsdimage.core.Edit;
@@ -45,7 +45,7 @@ public class HoughCrop extends PlugIn {
      * @author Philippe T. Pinard
      * 
      */
-    private class Dialog extends BasicDialog {
+    private static class Dialog extends BasicDialog {
 
         /** Field for the crop radius. */
         private DoubleField rhoField;

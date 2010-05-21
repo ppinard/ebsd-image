@@ -40,7 +40,7 @@ public class KriegerLassen1994 extends IndexingOp {
     public final int maxIndex;
 
     /** Default maximum index. */
-    public static final int DEFAULT_MAX_INDEX = 6;
+    public static final int DEFAULT_MAX_INDEX = 4;
 
     /** Type of scattering factor. */
     public final ScatteringFactorsEnum scatterType;

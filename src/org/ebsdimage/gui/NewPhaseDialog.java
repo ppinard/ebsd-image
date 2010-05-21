@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui;
 
 import static crystallography.core.PointGroup.*;
@@ -99,7 +99,7 @@ public class NewPhaseDialog extends BasicDialog {
      * @author Philippe T. Pinard
      * 
      */
-    private class AtomSiteTableModel extends AbstractTableModel {
+    private static class AtomSiteTableModel extends AbstractTableModel {
         /** Column names. */
         String[] columnNames = { "Symbol", "X", "Y", "Z", "Occupancy" };
 

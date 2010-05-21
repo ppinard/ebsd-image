@@ -59,6 +59,7 @@ public class KriegerLassen1994Dialog extends OperationDialog {
         scatterTypeField =
                 new ComboBox<ScatteringFactorsEnum>(ScatteringFactorsEnum
                         .values());
+        scatterTypeField.setSelectedItem(ScatteringFactorsEnum.XRAY);
 
         Panel panel = new ColumnPanel(2);
         panel.add(new JLabel("Maximum index of the reflectors"));
