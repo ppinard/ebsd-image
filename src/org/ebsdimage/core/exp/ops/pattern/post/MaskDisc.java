@@ -146,7 +146,7 @@ public class MaskDisc extends PatternPostOps {
      * @param srcMap
      *            input pattern map.
      * @return output pattern map
-     * @see MaskDisc#MaskDisc(int, int, int, int, int)
+     * @see org.ebsdimage.core.MaskDisc#MaskDisc(int, int, int, int, int)
      */
     @Override
     public ByteMap process(Exp exp, ByteMap srcMap) {

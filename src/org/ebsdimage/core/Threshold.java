@@ -124,7 +124,7 @@ public class Threshold {
      * @param sigmaFactor
      *            standard deviation scaling factor
      * @return the thresholded map
-     * @see Threshold#automaticStdDev(ByteMap)
+     * @see Threshold#automaticStdDev(ByteMap, double)
      */
     public static BinMap automaticStdDev(HoughMap houghMap, double sigmaFactor) {
         return automaticStdDev((ByteMap) houghMap, sigmaFactor);

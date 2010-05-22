@@ -79,7 +79,7 @@ public class AutomaticStdDev extends DetectionOp {
      * @param srcMap
      *            Hough map
      * @return peaks map
-     * @see Threshold#automaticStdDev(HoughMap)
+     * @see Threshold#automaticStdDev(HoughMap, double)
      */
     @Override
     public BinMap detect(Exp exp, HoughMap srcMap) {

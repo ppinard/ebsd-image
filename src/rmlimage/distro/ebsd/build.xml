@@ -190,7 +190,7 @@ Use ant -p to get a listing of all the available targets.</echo>
   <ant dir="${rmlimage.src.dir}/rmlimage/module/complex" target="javadoc"/>
   <ant dir="${rmlimage.src.dir}/rmlimage/module/integer" target="javadoc"/>
   <ant dir="${rmlimage.src.dir}/rmlimage/module/multi" target="javadoc"/>
-  <ant dir="${ebsd-ptp.dir}/src" target="javadoc"/>
+  <ant dir="${ebsd-image.dir}/src" target="javadoc"/>
 </target>
 
 
