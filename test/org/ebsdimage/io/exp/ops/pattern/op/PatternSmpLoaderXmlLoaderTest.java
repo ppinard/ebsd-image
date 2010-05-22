@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.op;
 
 import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_INDEX;
@@ -42,6 +42,11 @@ public class PatternSmpLoaderXmlLoaderTest {
     @Before
     public void setUp() throws Exception {
         filepath = FileUtil.getFile("org/ebsdimage/testdata/Project19.smp");
+
+        if (filepath == null)
+            throw new RuntimeException(
+                    "File \"org/ebsdimage/testdata/Project19.smp\" "
+                            + "cannot be found.");
 
         element = new Element(TAG_NAME);
         element.setAttribute(ATTR_INDEX, Integer.toString(45));

@@ -14,10 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui;
-
-import static rmlshared.io.FileUtil.getURL;
 
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
@@ -31,6 +29,7 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 
 import net.miginfocom.swing.MigLayout;
+import ptpshared.gui.GuiUtil;
 import ptpshared.gui.WizardPage;
 import rmlshared.enums.YesNo;
 import rmlshared.gui.*;
@@ -399,38 +398,35 @@ public class PhasesWizardPage extends WizardPage {
 
     /** Icon for the add button. */
     private static final ImageIcon ADD_ICON =
-            new ImageIcon(getURL("ptpshared/data/icon/list-add_(22x22).png"));
+            GuiUtil.loadIcon("ptpshared/data/icon/list-add_(22x22).png");
 
     /** Icon for the add all button. */
     private static final ImageIcon ADD_ALL_ICON =
-            new ImageIcon(
-                    getURL("ptpshared/data/icon/list-add-all_(22x22).png"));
+            GuiUtil.loadIcon("ptpshared/data/icon/list-add-all_(22x22).png");
 
     /** Icon for the remove button. */
     private static final ImageIcon REMOVE_ICON =
-            new ImageIcon(getURL("ptpshared/data/icon/list-remove_(22x22).png"));
+            GuiUtil.loadIcon("ptpshared/data/icon/list-remove_(22x22).png");
 
     /** Icon for the clear button. */
     private static final ImageIcon CLEAR_ICON =
-            new ImageIcon(getURL("ptpshared/data/icon/list-clear_(22x22).png"));
+            GuiUtil.loadIcon("ptpshared/data/icon/list-clear_(22x22).png");
 
     /** Icon for the up button. */
     private static final ImageIcon UP_ICON =
-            new ImageIcon(getURL("ptpshared/data/icon/go-up_(22x22).png"));
+            GuiUtil.loadIcon("ptpshared/data/icon/go-up_(22x22).png");
 
     /** Icon for the down button. */
     private static final ImageIcon DOWN_ICON =
-            new ImageIcon(getURL("ptpshared/data/icon/go-down_(22x22).png"));
+            GuiUtil.loadIcon("ptpshared/data/icon/go-down_(22x22).png");
 
     /** Icon for the new button. */
     private static final ImageIcon NEW_ICON =
-            new ImageIcon(
-                    getURL("ptpshared/data/icon/document-new_(22x22).png"));
+            GuiUtil.loadIcon("ptpshared/data/icon/document-new_(22x22).png");
 
     /** Icon for the edit button. */
     private static final ImageIcon EDIT_ICON =
-            new ImageIcon(
-                    getURL("ptpshared/data/icon/document-edit_(22x22).png"));
+            GuiUtil.loadIcon("ptpshared/data/icon/document-edit_(22x22).png");
 
     /** Map key for the phases. */
     public static final String KEY_PHASES = "phases";

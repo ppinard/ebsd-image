@@ -19,6 +19,7 @@ package org.ebsdimage.vendors.hkl.core;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.EbsdMetadata;
@@ -205,9 +206,8 @@ public class HklMMap extends EbsdMMap {
     public HklMMap duplicate() {
         HashMap<String, Map> mapList = new HashMap<String, Map>();
 
-        String[] aliases = getAliases();
-        for (String alias : aliases)
-            mapList.put(alias, getMap(alias).duplicate());
+        for (Entry<String, Map> entry : getEntrySet())
+            mapList.put(entry.getKey(), entry.getValue().duplicate());
 
         HklMMap dup = new HklMMap(width, height, mapList, getMetadata());
         dup.setProperties(this);

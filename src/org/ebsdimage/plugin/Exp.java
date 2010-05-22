@@ -228,6 +228,7 @@ public class Exp extends PlugIn implements Monitorable {
                 break; // Continue to run
             case 1: // No
                 xRun();
+                break;
             case 2: // Cancel
                 return;
             }

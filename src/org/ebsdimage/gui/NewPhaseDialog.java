@@ -20,7 +20,6 @@ package org.ebsdimage.gui;
 import static crystallography.core.PointGroup.*;
 import static java.lang.Math.toDegrees;
 import static java.lang.Math.toRadians;
-import static rmlshared.io.FileUtil.getURL;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -33,6 +32,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.AbstractTableModel;
 
 import net.miginfocom.swing.MigLayout;
+import ptpshared.gui.GuiUtil;
 import ptpshared.utility.ElementProperties;
 import rmlimage.gui.BasicDialog;
 import rmlshared.gui.*;
@@ -50,11 +50,11 @@ public class NewPhaseDialog extends BasicDialog {
 
     /** Icon for the add button. */
     private static final ImageIcon ADD_ICON =
-            new ImageIcon(getURL("ptpshared/data/icon/list-add_(22x22).png"));
+            GuiUtil.loadIcon("ptpshared/data/icon/list-add_(22x22).png");
 
     /** Icon for the remove button. */
     private static final ImageIcon REMOVE_ICON =
-            new ImageIcon(getURL("ptpshared/data/icon/list-remove_(22x22).png"));
+            GuiUtil.loadIcon("ptpshared/data/icon/list-remove_(22x22).png");
 
 
 

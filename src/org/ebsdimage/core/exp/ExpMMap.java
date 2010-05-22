@@ -18,6 +18,7 @@
 package org.ebsdimage.core.exp;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.EbsdMetadata;
@@ -89,9 +90,8 @@ public class ExpMMap extends EbsdMMap {
     public ExpMMap duplicate() {
         HashMap<String, Map> mapList = new HashMap<String, Map>();
 
-        String[] aliases = getAliases();
-        for (String alias : aliases)
-            mapList.put(alias, getMap(alias).duplicate());
+        for (Entry<String, Map> entry : getEntrySet())
+            mapList.put(entry.getKey(), entry.getValue().duplicate());
 
         ExpMMap dup = new ExpMMap(width, height, mapList, getMetadata());
         dup.setProperties(this);

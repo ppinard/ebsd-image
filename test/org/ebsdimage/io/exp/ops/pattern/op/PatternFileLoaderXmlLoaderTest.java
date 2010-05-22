@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.op;
 
 import static org.ebsdimage.io.exp.ops.pattern.op.PatternFileLoaderXmlTags.ATTR_FILEDIR;
@@ -43,8 +43,12 @@ public class PatternFileLoaderXmlLoaderTest {
     public void setUp() throws Exception {
         filepath = FileUtil.getFile("org/ebsdimage/testdata/patternloader.bmp");
 
-        element = new Element(TAG_NAME);
+        if (filepath == null)
+            throw new RuntimeException(
+                    "File \"org/ebsdimage/testdata/patternloader.bmp\" "
+                            + "cannot be found.");
 
+        element = new Element(TAG_NAME);
         element.setAttribute(ATTR_INDEX, Integer.toString(45));
         element.setAttribute(ATTR_FILEDIR, filepath.getParent());
         element.setAttribute(ATTR_FILENAME, filepath.getName());

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.pattern.op;
 
 import static org.junit.Assert.assertEquals;
@@ -40,6 +40,12 @@ public class PatternFileLoaderTest extends TestCase {
     @Before
     public void setUp() throws Exception {
         filepath = FileUtil.getFile("org/ebsdimage/testdata/patternloader.bmp");
+
+        if (filepath == null)
+            throw new RuntimeException(
+                    "File \"org/ebsdimage/testdata/patternloader.bmp\" "
+                            + "cannot be found.");
+
         loader = new PatternFileLoader(45, filepath);
     }
 

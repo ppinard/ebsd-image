@@ -17,8 +17,6 @@
  */
 package org.ebsdimage.gui.exp;
 
-import static rmlshared.io.FileUtil.getURL;
-
 import java.awt.Dimension;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,6 +30,7 @@ import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.exp.ops.OperationCreator;
 import org.ebsdimage.io.FileUtil;
 
+import ptpshared.gui.GuiUtil;
 import rmlshared.gui.Button;
 import rmlshared.thread.Reflection;
 
@@ -45,28 +44,27 @@ public abstract class OperationChoicePanel extends JPanel {
 
     /** Icon for the add button. */
     protected static final ImageIcon ADD_ICON =
-            new ImageIcon(getURL("ptpshared/data/icon/list-add_(22x22).png"));
+            GuiUtil.loadIcon("ptpshared/data/icon/list-add_(22x22).png");
 
     /** Icon for the add all button. */
     protected static final ImageIcon ADD_ALL_ICON =
-            new ImageIcon(
-                    getURL("ptpshared/data/icon/list-add-all_(22x22).png"));
+            GuiUtil.loadIcon("ptpshared/data/icon/list-add-all_(22x22).png");
 
     /** Icon for the remove button. */
     protected static final ImageIcon REMOVE_ICON =
-            new ImageIcon(getURL("ptpshared/data/icon/list-remove_(22x22).png"));
+            GuiUtil.loadIcon("ptpshared/data/icon/list-remove_(22x22).png");
 
     /** Icon for the clear button. */
     protected static final ImageIcon CLEAR_ICON =
-            new ImageIcon(getURL("ptpshared/data/icon/list-clear_(22x22).png"));
+            GuiUtil.loadIcon("ptpshared/data/icon/list-clear_(22x22).png");
 
     /** Icon for the up button. */
     protected static final ImageIcon UP_ICON =
-            new ImageIcon(getURL("ptpshared/data/icon/go-up_(22x22).png"));
+            GuiUtil.loadIcon("ptpshared/data/icon/go-up_(22x22).png");
 
     /** Icon for the down button. */
     protected static final ImageIcon DOWN_ICON =
-            new ImageIcon(getURL("ptpshared/data/icon/go-down_(22x22).png"));
+            GuiUtil.loadIcon("ptpshared/data/icon/go-down_(22x22).png");
 
     /** List of operations available. */
     protected JList opList;

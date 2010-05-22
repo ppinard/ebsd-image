@@ -18,6 +18,9 @@
 package org.ebsdimage.core;
 
 import static rmlimage.utility.MicroscopeConstants.*;
+
+import java.util.Map.Entry;
+
 import rmlimage.core.*;
 import rmlimage.core.Conversion;
 import rmlimage.core.Transform;
@@ -66,14 +69,14 @@ public class EbsdMMapUtil {
 
         // Create micron bar maps
         Map map;
-        for (String alias : mmap.getAliases()) {
-            if (mmap.getMap(alias) instanceof ByteMap) {
-                map = mmap.getMap(alias).duplicate();
+        for (Entry<String, Map> entry : mmap.getEntrySet()) {
+            if (entry.getValue() instanceof ByteMap) {
+                map = entry.getValue().duplicate();
                 Contrast.expansion((ByteMap) map);
-            } else if (mmap.getMap(alias) instanceof RGBMap)
-                map = mmap.getMap(alias).duplicate();
+            } else if (entry.getValue() instanceof RGBMap)
+                map = entry.getValue().duplicate();
             else
-                map = Conversion.toByteMap(mmap.getMap(alias));
+                map = Conversion.toByteMap(entry.getValue());
 
             // Scale up
             if (map instanceof ByteMap)
@@ -101,7 +104,7 @@ public class EbsdMMapUtil {
                 map = micronBar.pasteUnder((RGBMap) map);
 
             // Add map
-            dest.add(alias, map);
+            dest.add(entry.getKey(), map);
         }
 
         return dest;

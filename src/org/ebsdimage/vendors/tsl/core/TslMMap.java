@@ -18,6 +18,7 @@
 package org.ebsdimage.vendors.tsl.core;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.EbsdMetadata;
@@ -150,9 +151,8 @@ public class TslMMap extends EbsdMMap {
     public TslMMap duplicate() {
         HashMap<String, Map> mapList = new HashMap<String, Map>();
 
-        String[] aliases = getAliases();
-        for (String alias : aliases)
-            mapList.put(alias, getMap(alias).duplicate());
+        for (Entry<String, Map> entry : getEntrySet())
+            mapList.put(entry.getKey(), entry.getValue().duplicate());
 
         TslMMap dup = new TslMMap(width, height, mapList, getMetadata());
         dup.setProperties(this);

@@ -53,6 +53,9 @@ public class FileUtil {
         // Get the location of org.ebsdimage.core.HoughMap
         URL houghMapURL = getURL(org.ebsdimage.core.HoughMap.class);
 
+        if (houghMapURL == null)
+            throw new IOException("Class HoughMap not found.");
+
         if (isJar(houghMapURL)) { // If the class is in a jar (standard mode)
             // It is in $installDir/module/ebsd.jar
             File installDir =
@@ -73,8 +76,8 @@ public class FileUtil {
             return getClassesInJars(jarFiles.toArray(new JarFile[0]),
                     packageName);
         } else {
-            if (isFile(houghMapURL)) {// If class in directory (development
-                // mode)
+            // If class in directory (development mode)
+            if (isFile(houghMapURL)) {
                 // It is $rootDir/org/ebsdimage/core/HoughMap.class
                 File rootDir =
                         getFile(houghMapURL).getParentFile().getParentFile()

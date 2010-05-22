@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.toolbar;
 
 import static rmlimage.core.Constants.MULTI_DESKTOP_ENABLED;
@@ -24,13 +24,13 @@ import javax.swing.JToggleButton;
 
 import org.ebsdimage.plugin.LineOverlay;
 
+import ptpshared.gui.GuiUtil;
 import rmlimage.gui.toolbar.LinkButton;
 import rmlimage.gui.toolbar.MapToolBar;
 import rmlimage.gui.toolbar.ZoomButton;
 import rmlimage.plugin.PlugIn;
 import rmlshared.gui.Button;
 import rmlshared.gui.ToggleButton;
-import rmlshared.io.FileUtil;
 import rmlshared.thread.WorkerThread;
 
 /**
@@ -43,12 +43,11 @@ public class HoughMapToolBar extends MapToolBar {
 
     /** Icon for the line overlay. */
     private static final ImageIcon LINE_OVERLAY_ICON =
-            new ImageIcon(FileUtil
-                    .getURL("org/ebsdimage/plugin/LineOverlay_(16x16).gif"));
+            GuiUtil.loadIcon("org/ebsdimage/plugin/LineOverlay_(16x16).gif");
 
     /** Icon for the crop. */
     private static final ImageIcon CROP_ICON =
-            new ImageIcon(FileUtil.getURL("rmlimage/gui/Crop_(16x16).gif"));
+            GuiUtil.loadIcon("rmlimage/gui/Crop_(16x16).gif");
 
 
 

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.toolbar;
 
 import javax.swing.ImageIcon;
@@ -22,13 +22,13 @@ import javax.swing.JToggleButton;
 
 import org.ebsdimage.plugin.PhasesInfo;
 
+import ptpshared.gui.GuiUtil;
 import rmlimage.gui.toolbar.CropButton;
 import rmlimage.gui.toolbar.MapToolBar;
 import rmlimage.gui.toolbar.ROIButton;
 import rmlimage.gui.toolbar.ZoomButton;
 import rmlimage.plugin.PlugIn;
 import rmlshared.gui.Button;
-import rmlshared.io.FileUtil;
 import rmlshared.thread.WorkerThread;
 
 /**
@@ -41,8 +41,7 @@ public class PhasesMapToolBar extends MapToolBar {
 
     /** Icon for the phases info. */
     private static final ImageIcon INFO_ICON =
-            new ImageIcon(FileUtil
-                    .getURL("org/ebsdimage/plugin/PhasesInfo_(16x16).png"));
+            GuiUtil.loadIcon("org/ebsdimage/plugin/PhasesInfo_(16x16).png");
 
 
 
