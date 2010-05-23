@@ -14,21 +14,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp;
 
-import static org.ebsdimage.io.exp.CurrentMapsFileSaverXmlTags.ATTR_SAVEALLMAPS;
-import static org.ebsdimage.io.exp.CurrentMapsFileSaverXmlTags.ATTR_SAVEHOUGHMAP;
-import static org.ebsdimage.io.exp.CurrentMapsFileSaverXmlTags.ATTR_SAVEPATTERNMAP;
-import static org.ebsdimage.io.exp.CurrentMapsFileSaverXmlTags.TAG_NAME;
-import static org.junit.Assert.assertEquals;
+import static org.ebsdimage.io.exp.CurrentMapsFileSaverXmlTags.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.ebsdimage.core.exp.CurrentMapsFileSaver;
-import org.ebsdimage.io.exp.CurrentMapsFileSaverXmlLoader;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
-
 
 public class CurrentMapsSaverXmlLoaderTest {
 
@@ -43,17 +39,22 @@ public class CurrentMapsSaverXmlLoaderTest {
         element.setAttribute(ATTR_SAVEALLMAPS, Boolean.toString(false));
         element.setAttribute(ATTR_SAVEPATTERNMAP, Boolean.toString(false));
         element.setAttribute(ATTR_SAVEHOUGHMAP, Boolean.toString(true));
+        element.setAttribute(ATTR_SAVEPEAKSMAP, Boolean.toString(false));
+        element.setAttribute(ATTR_SAVESOLUTIONOVERLAY, Boolean.toString(true));
     }
 
 
 
     @Test
     public void testLoad() {
-        CurrentMapsFileSaver saveMaps = new CurrentMapsFileSaverXmlLoader().load(element);
+        CurrentMapsFileSaver saveMaps =
+                new CurrentMapsFileSaverXmlLoader().load(element);
 
-        assertEquals(false, saveMaps.saveAllMaps);
-        assertEquals(false, saveMaps.savePatternMap);
-        assertEquals(true, saveMaps.saveHoughMap);
+        assertFalse(saveMaps.saveAllMaps);
+        assertFalse(saveMaps.savePatternMap);
+        assertTrue(saveMaps.saveHoughMap);
+        assertFalse(saveMaps.savePeaksMap);
+        assertTrue(saveMaps.saveSolutionOverlay);
     }
 
 }

@@ -142,7 +142,7 @@ public abstract class ExpTester {
 
 
     public static CurrentMapsFileSaver createSaveMaps() {
-        return new CurrentMapsFileSaver(true, true, true, true);
+        return new CurrentMapsFileSaver(true, true, true, true, true);
     }
 
 
@@ -438,8 +438,8 @@ public abstract class ExpTester {
         assertEquals(RealMap.class, map.getClass());
 
         realMap = (RealMap) map;
-        assertEquals(138, realMap.pixArray[0], 1e-6);
-        assertEquals(138, realMap.pixArray[1], 1e-6);
+        assertEquals(0.5, realMap.pixArray[0], 1e-6);
+        assertEquals(0.5, realMap.pixArray[1], 1e-6);
     }
 
 

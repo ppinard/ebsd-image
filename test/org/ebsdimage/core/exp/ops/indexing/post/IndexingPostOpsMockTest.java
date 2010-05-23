@@ -14,14 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.indexing.post;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.ebsdimage.core.Solution;
-import org.ebsdimage.core.exp.ops.indexing.post.IndexingPostOps;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,9 +41,10 @@ public class IndexingPostOpsMockTest {
 
         Crystal phase = new Silicon();
         Quaternion rotation = Quaternion.IDENTITY;
-        srcSlns = new Solution[] { new Solution(phase, rotation, 15.0),
-                new Solution(phase, rotation, 23.0),
-                new Solution(phase, rotation, 31.0) };
+        srcSlns =
+                new Solution[] { new Solution(phase, rotation, 0.0),
+                        new Solution(phase, rotation, 1.0 / 3.0),
+                        new Solution(phase, rotation, 2.0 / 3.0) };
     }
 
 
@@ -62,9 +62,9 @@ public class IndexingPostOpsMockTest {
             assertTrue(expectedRotation.equals(sln.rotation, 1e-6));
         }
 
-        assertEquals(30.0, destSlns[0].fit, 1e-6);
-        assertEquals(46.0, destSlns[1].fit, 1e-6);
-        assertEquals(62.0, destSlns[2].fit, 1e-6);
+        assertEquals(0.0, destSlns[0].fit, 1e-6);
+        assertEquals(1.0 / 6.0, destSlns[1].fit, 1e-6);
+        assertEquals(1.0 / 3.0, destSlns[2].fit, 1e-6);
     }
 
 }

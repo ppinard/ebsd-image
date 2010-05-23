@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp;
 
 import org.ebsdimage.core.exp.CurrentMapsFileSaver;
@@ -41,4 +41,7 @@ public class CurrentMapsFileSaverXmlTags {
 
     /** XML attribute for saving the peaks map. */
     public static final String ATTR_SAVEPEAKSMAP = "savePeaksMap";
+
+    /** XML attribute for saving the solution overlay. */
+    public static final String ATTR_SAVESOLUTIONOVERLAY = "saveSolutionOverlay";
 }

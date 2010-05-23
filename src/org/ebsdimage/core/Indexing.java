@@ -17,14 +17,15 @@
  */
 package org.ebsdimage.core;
 
+import static java.lang.Math.abs;
 import static ptpshared.core.math.Math.sign;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import ptpshared.core.math.*;
+import rmlshared.math.Stats;
 import rmlshared.ui.Monitorable;
 import crystallography.core.Calculations;
 import crystallography.core.Reflector;
@@ -173,7 +174,7 @@ public class Indexing implements Monitorable {
 
         // HashMaps to store solutions
         HashMap<String, Solution> solutions = new HashMap<String, Solution>();
-        HashMap<String, Integer> counts = new HashMap<String, Integer>();
+        // HashMap<String, Integer> counts = new HashMap<String, Integer>();
 
         // Calculate Hough peaks pairs (experimental)
         HoughPeakPairs expPairs = new HoughPeakPairs(peaks, calibration);
@@ -230,42 +231,44 @@ public class Indexing implements Monitorable {
                             Calculations.reduce(rotation,
                                     refls.crystal.pointGroup);
                     String key = crystalName + rotation.hashCode(1e-6);
-                    if (counts.containsKey(key)) {
-                        counts.put(key, counts.get(key) + 1);
+                    if (solutions.containsKey(key))
                         continue;
-                    }
+                    // if (counts.containsKey(key)) {
+                    // counts.put(key, counts.get(key) + 1);
+                    // continue;
+                    // }
 
                     setStatus(rotation.toAxisAngle().toString());
 
-                    double totalFit = 0.0;
-                    double mad[] = new double[peaks.length];
+                    double[] fits = new double[peaks.length];
+                    // double mad[] = new double[peaks.length];
 
-                    for (int i = 0; i < mad.length; i++) {
+                    for (int i = 0; i < peaks.length; i++) {
                         Vector3D normal = expPairs.get(i).normal0;
 
-                        totalFit += fit(normal, refls, rotation);
-                        mad[i] = angularDev(normal, refls, rotation);
+                        fits[i] = fit(normal, refls, rotation);
+                        // mad[i] = angularDev(normal, refls, rotation);
                     }
 
-                    counts.put(key, 0);
+                    // counts.put(key, 0);
                     solutions.put(key, new Solution(refls.crystal, rotation,
-                            totalFit));
+                            Stats.average(fits)));
                 }
             }
         }
 
-        Solution[] tmpArray = new Solution[solutions.size()];
-        int i = 0;
-        for (Entry<String, Solution> entry : solutions.entrySet()) {
-            Solution solution = entry.getValue();
-            int count = counts.get(entry.getKey());
-            tmpArray[i] =
-                    new Solution(solution.phase, solution.rotation,
-                            solution.fit / (count * count));
-            i++;
-        }
+        // Solution[] tmpArray = new Solution[solutions.size()];
+        // int i = 0;
+        // for (Entry<String, Solution> entry : solutions.entrySet()) {
+        // Solution solution = entry.getValue();
+        // int count = counts.get(entry.getKey());
+        // tmpArray[i] =
+        // new Solution(solution.phase, solution.rotation,
+        // solution.fit / (count * count));
+        // i++;
+        // }
 
-        return tmpArray;
+        return solutions.values().toArray(new Solution[0]);
     }
 
 
@@ -275,7 +278,8 @@ public class Indexing implements Monitorable {
      * calculated from a Hough peak and the theoretical normals calculated from
      * the proposed lattice orientation and proposed phase's reflectors.
      * <p/>
-     * The value of the fit is inversely related to how good is the solution.
+     * The fit is equal to the direction cosine between the experimental and
+     * theoretical normal.
      * 
      * @param exp
      *            experimental normal from a Hough peak
@@ -286,24 +290,16 @@ public class Indexing implements Monitorable {
      * @return minimal fit value
      */
     private double fit(Vector3D exp, Reflectors refls, Quaternion rotation) {
-        double fit = Double.POSITIVE_INFINITY;
+        double fit = 0.0;
 
         for (Reflector refl : refls) {
             Vector3D u = refl.plane.toVector3D();
 
-            // Positive refl
             double tmpFit =
-                    exp.minus(QuaternionMath.rotate(u, rotation)).square();
+                    abs(Vector3DMath.directionCosine(exp, QuaternionMath
+                            .rotate(u, rotation)));
 
-            if (tmpFit < fit)
-                fit = tmpFit;
-
-            // Negative refl
-            tmpFit =
-                    exp.minus(QuaternionMath.rotate(u.negate(), rotation))
-                            .square();
-
-            if (tmpFit < fit)
+            if (tmpFit > fit)
                 fit = tmpFit;
         }
 

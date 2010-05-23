@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import ptpshared.core.math.Quaternion;
@@ -49,8 +49,14 @@ public class Solution {
      *            lattice orientation
      * @param fit
      *            goodness of a solution
+     * 
+     * @throws IllegalArgumentException
+     *             if the fit is less than 0 or greater than 1
      */
     public Solution(Crystal phase, Quaternion rotation, double fit) {
+        if (fit < -1e-6 || (fit - 1) > 1e-6)
+            throw new IllegalArgumentException("Fit must be between [0, 1].");
+
         this.phase = phase;
         this.rotation = rotation;
         this.fit = fit;

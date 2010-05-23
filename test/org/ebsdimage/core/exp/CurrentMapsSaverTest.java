@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp;
 
 import static org.junit.Assert.assertEquals;
@@ -23,8 +23,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
-import org.ebsdimage.core.exp.CurrentMapsFileSaver;
-import org.ebsdimage.core.exp.Exp;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +39,7 @@ public class CurrentMapsSaverTest {
 
     @Before
     public void setUp() throws Exception {
-        saveMaps = new CurrentMapsFileSaver(true, true, true, true);
+        saveMaps = new CurrentMapsFileSaver(true, true, true, true, true);
         path = new File(FileUtil.getTempDirFile(), "saveMaps");
 
         exp = ExpTester.createExp(saveMaps);
@@ -60,7 +58,8 @@ public class CurrentMapsSaverTest {
 
     @Test
     public void testEquals() {
-        CurrentMapsFileSaver other = new CurrentMapsFileSaver(true, true, true, true);
+        CurrentMapsFileSaver other =
+                new CurrentMapsFileSaver(true, true, true, true, true);
         assertFalse(saveMaps == other);
         assertEquals(other, saveMaps);
     }
@@ -100,6 +99,14 @@ public class CurrentMapsSaverTest {
 
 
     @Test
+    public void testSaveMapSolutionOverlay() {
+        // Cannot be tested since experiment needs to be running.
+        assertTrue(true);
+    }
+
+
+
+    @Test
     public void testSaveMaps() {
         CurrentMapsFileSaver tmpSaveMaps = new CurrentMapsFileSaver();
         assertEquals(CurrentMapsFileSaver.DEFAULT_SAVEMAPS_ALL,
@@ -110,6 +117,8 @@ public class CurrentMapsSaverTest {
                 tmpSaveMaps.saveHoughMap);
         assertEquals(CurrentMapsFileSaver.DEFAULT_SAVE_PEAKSMAP,
                 tmpSaveMaps.savePeaksMap);
+        assertEquals(CurrentMapsFileSaver.DEFAULT_SAVE_SOLUTIONOVERLAY,
+                tmpSaveMaps.saveSolutionOverlay);
     }
 
 
@@ -118,16 +127,18 @@ public class CurrentMapsSaverTest {
     public void testSaveMapsStringBooleanBooleanBoolean() {
         CurrentMapsFileSaver tmpSaveMaps;
 
-        tmpSaveMaps = new CurrentMapsFileSaver(false, true, false, false);
-        assertEquals(false, tmpSaveMaps.saveAllMaps);
-        assertEquals(true, tmpSaveMaps.savePatternMap);
-        assertEquals(false, tmpSaveMaps.saveHoughMap);
+        tmpSaveMaps = new CurrentMapsFileSaver(false, true, false, false, true);
+        assertFalse(tmpSaveMaps.saveAllMaps);
+        assertTrue(tmpSaveMaps.savePatternMap);
+        assertFalse(tmpSaveMaps.saveHoughMap);
+        assertFalse(tmpSaveMaps.savePeaksMap);
+        assertTrue(tmpSaveMaps.saveSolutionOverlay);
 
-        tmpSaveMaps = new CurrentMapsFileSaver(true, true, false, false);
-        assertEquals(true, tmpSaveMaps.saveAllMaps);
-        assertEquals(true, tmpSaveMaps.savePatternMap);
-        assertEquals(true, tmpSaveMaps.saveHoughMap);
-        assertEquals(true, tmpSaveMaps.savePeaksMap);
+        tmpSaveMaps = new CurrentMapsFileSaver(true, true, false, false, false);
+        assertTrue(tmpSaveMaps.saveAllMaps);
+        assertTrue(tmpSaveMaps.savePatternMap);
+        assertTrue(tmpSaveMaps.saveHoughMap);
+        assertTrue(tmpSaveMaps.savePeaksMap);
     }
 
 
@@ -151,10 +162,10 @@ public class CurrentMapsSaverTest {
     @Test
     public void testToString() {
         CurrentMapsFileSaver tmpSaveMaps =
-                new CurrentMapsFileSaver(false, false, false, false);
+                new CurrentMapsFileSaver(false, false, false, false, false);
         assertEquals(
                 tmpSaveMaps.toString(),
-                "CurrentMapsSaver [saveAllMaps=false, saveHoughMap=false, savePatternMap=false, savePeaksMap=false]");
+                "CurrentMapsSaver [saveAllMaps=false, saveHoughMap=false, savePatternMap=false, savePeaksMap=false, saveSolutionOverlay=false]");
     }
 
 }

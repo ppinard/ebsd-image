@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp;
 
 import static org.ebsdimage.io.exp.ExpXmlTags.ATTR_HEIGHT;
@@ -45,8 +45,6 @@ import org.ebsdimage.core.exp.ops.pattern.op.PatternOpMock;
 import org.ebsdimage.core.exp.ops.pattern.post.PatternPostOpsMock;
 import org.ebsdimage.core.exp.ops.pattern.results.PatternResultsOpsMock;
 import org.ebsdimage.io.PhasesMapXmlSaver;
-import org.ebsdimage.io.exp.CurrentMapsFileSaverXmlSaver;
-import org.ebsdimage.io.exp.ExpMetadataXmlSaver;
 import org.ebsdimage.io.exp.ops.detection.op.DetectionOpMockXmlSaver;
 import org.ebsdimage.io.exp.ops.detection.op.DetectionOpXmlTags;
 import org.ebsdimage.io.exp.ops.detection.post.DetectionPostOpsMockXmlSaver;
@@ -87,7 +85,6 @@ import org.ebsdimage.io.exp.ops.pattern.results.PatternResultsOpsMockXmlSaver;
 import org.ebsdimage.io.exp.ops.pattern.results.PatternResultsOpsXmlTags;
 import org.jdom.Element;
 
-
 public abstract class ExpXmlTester extends ExpTester {
 
     public static Element createElement() {
@@ -101,7 +98,7 @@ public abstract class ExpXmlTester extends ExpTester {
 
         // Save Maps
         element.addContent(new CurrentMapsFileSaverXmlSaver()
-                .save(new CurrentMapsFileSaver(true, true, true, true)));
+                .save(new CurrentMapsFileSaver(true, true, true, true, true)));
 
         // Phases
         element.addContent(new PhasesMapXmlSaver().save(ExpTester

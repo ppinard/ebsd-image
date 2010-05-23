@@ -14,17 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp;
 
-import static org.ebsdimage.io.exp.CurrentMapsFileSaverXmlTags.ATTR_SAVEALLMAPS;
-import static org.ebsdimage.io.exp.CurrentMapsFileSaverXmlTags.ATTR_SAVEHOUGHMAP;
-import static org.ebsdimage.io.exp.CurrentMapsFileSaverXmlTags.ATTR_SAVEPATTERNMAP;
-import static org.ebsdimage.io.exp.CurrentMapsFileSaverXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.CurrentMapsFileSaverXmlTags.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.ebsdimage.core.exp.CurrentMapsFileSaver;
-import org.ebsdimage.io.exp.CurrentMapsFileSaverXmlSaver;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +37,7 @@ public class CurrentMapsSaverXmlSaverTest {
 
     @Before
     public void setUp() throws Exception {
-        saveMaps = new CurrentMapsFileSaver(false, false, true, false);
+        saveMaps = new CurrentMapsFileSaver(false, false, true, false, false);
     }
 
 
@@ -49,12 +47,14 @@ public class CurrentMapsSaverXmlSaverTest {
         Element element = new CurrentMapsFileSaverXmlSaver().save(saveMaps);
 
         assertEquals(TAG_NAME, element.getName());
-        assertEquals(false, JDomUtil.getBooleanFromAttribute(element,
-                ATTR_SAVEALLMAPS));
-        assertEquals(false, JDomUtil.getBooleanFromAttribute(element,
+        assertFalse(JDomUtil.getBooleanFromAttribute(element, ATTR_SAVEALLMAPS));
+        assertFalse(JDomUtil.getBooleanFromAttribute(element,
                 ATTR_SAVEPATTERNMAP));
-        assertEquals(true, JDomUtil.getBooleanFromAttribute(element,
-                ATTR_SAVEHOUGHMAP));
+        assertTrue(JDomUtil.getBooleanFromAttribute(element, ATTR_SAVEHOUGHMAP));
+        assertFalse(JDomUtil
+                .getBooleanFromAttribute(element, ATTR_SAVEPEAKSMAP));
+        assertFalse(JDomUtil.getBooleanFromAttribute(element,
+                ATTR_SAVESOLUTIONOVERLAY));
     }
 
 }

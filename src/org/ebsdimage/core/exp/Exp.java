@@ -19,6 +19,7 @@ package org.ebsdimage.core.exp;
 
 import static java.util.Arrays.sort;
 import static org.ebsdimage.core.exp.ExpConstants.*;
+import static ptpshared.utility.Arrays.reverse;
 
 import java.io.File;
 import java.io.IOException;
@@ -1104,7 +1105,9 @@ public class Exp extends Run {
 
                         // Sort solutions by fit
                         sort(currentSolutions, new SolutionFitComparator());
+                        reverse(currentSolutions);
 
+                        // Solution overlay
                         if (currentSolutions.length > 0)
                             currentMapsSaver.saveSolutionOverlay(this,
                                     currentSolutions[0]);

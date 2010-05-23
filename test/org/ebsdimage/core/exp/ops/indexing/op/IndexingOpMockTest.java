@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.indexing.op;
 
 import static org.junit.Assert.assertEquals;
@@ -22,7 +22,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.Solution;
-import org.ebsdimage.core.exp.ops.indexing.op.IndexingOp;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,8 +40,9 @@ public class IndexingOpMockTest {
     public void setUp() throws Exception {
         op = new IndexingOpMock();
 
-        srcPeaks = new HoughPeak[] { new HoughPeak(15.0, 0.0),
-                new HoughPeak(23.0, 1.0), new HoughPeak(31.0, 0.0) };
+        srcPeaks =
+                new HoughPeak[] { new HoughPeak(15.0, 0.0),
+                        new HoughPeak(23.0, 1.0), new HoughPeak(31.0, 0.0) };
     }
 
 
@@ -60,8 +60,8 @@ public class IndexingOpMockTest {
             assertTrue(expectedRotation.equals(sln.rotation, 1e-6));
         }
 
-        assertEquals(15.0, slns[0].fit, 1e-6);
-        assertEquals(23.0, slns[1].fit, 1e-6);
-        assertEquals(31.0, slns[2].fit, 1e-6);
+        assertEquals(0.0, slns[0].fit, 1e-6);
+        assertEquals(0.333333, slns[1].fit, 1e-6);
+        assertEquals(0.666666, slns[2].fit, 1e-6);
     }
 }

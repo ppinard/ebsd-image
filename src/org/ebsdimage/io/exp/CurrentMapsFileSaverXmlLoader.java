@@ -14,9 +14,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp;
 
+import static org.ebsdimage.core.exp.CurrentMapsFileSaver.*;
 import static org.ebsdimage.io.exp.CurrentMapsFileSaverXmlTags.*;
 
 import org.ebsdimage.core.exp.CurrentMapsFileSaver;
@@ -52,19 +53,22 @@ public class CurrentMapsFileSaverXmlLoader implements ObjectXmlLoader {
 
         boolean saveAllMaps =
                 JDomUtil.getBooleanFromAttribute(element, ATTR_SAVEALLMAPS,
-                        CurrentMapsFileSaver.DEFAULT_SAVEMAPS_ALL);
+                        DEFAULT_SAVEMAPS_ALL);
         boolean savePatternMap =
                 JDomUtil.getBooleanFromAttribute(element, ATTR_SAVEPATTERNMAP,
-                        CurrentMapsFileSaver.DEFAULT_SAVE_PATTERNMAP);
+                        DEFAULT_SAVE_PATTERNMAP);
         boolean saveHoughMap =
                 JDomUtil.getBooleanFromAttribute(element, ATTR_SAVEHOUGHMAP,
-                        CurrentMapsFileSaver.DEFAULT_SAVE_HOUGHMAP);
+                        DEFAULT_SAVE_HOUGHMAP);
         boolean savePeaksMap =
                 JDomUtil.getBooleanFromAttribute(element, ATTR_SAVEPEAKSMAP,
-                        CurrentMapsFileSaver.DEFAULT_SAVE_PEAKSMAP);
+                        DEFAULT_SAVE_PEAKSMAP);
+        boolean saveSolutionOverlay =
+                JDomUtil.getBooleanFromAttribute(element,
+                        ATTR_SAVESOLUTIONOVERLAY, DEFAULT_SAVE_SOLUTIONOVERLAY);
 
         return new CurrentMapsFileSaver(saveAllMaps, savePatternMap,
-                saveHoughMap, savePeaksMap);
+                saveHoughMap, savePeaksMap, saveSolutionOverlay);
     }
 
 }

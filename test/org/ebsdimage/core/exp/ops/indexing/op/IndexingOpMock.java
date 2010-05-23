@@ -14,13 +14,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.indexing.op;
 
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.exp.ops.indexing.op.IndexingOp;
 
 import ptpshared.core.math.Quaternion;
 import crystallography.core.Crystal;
@@ -36,7 +35,8 @@ public class IndexingOpMock extends IndexingOp {
         Quaternion rotation = Quaternion.IDENTITY;
 
         for (int i = 0; i < slns.length; i++)
-            slns[i] = new Solution(phase, rotation, srcPeaks[i].rho);
+            slns[i] =
+                    new Solution(phase, rotation, (double) i / srcPeaks.length);
 
         return slns;
     }

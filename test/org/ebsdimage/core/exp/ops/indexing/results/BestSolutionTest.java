@@ -18,6 +18,7 @@
 package org.ebsdimage.core.exp.ops.indexing.results;
 
 import static org.junit.Assert.assertEquals;
+import static ptpshared.utility.Arrays.reverse;
 
 import java.util.Arrays;
 
@@ -59,10 +60,11 @@ public class BestSolutionTest {
 
         srcSlns =
                 new Solution[] {
-                        new Solution(phases[0], new Quaternion(1, 2, 3, 4), 4),
-                        new Solution(phases[0], new Quaternion(2, 3, 4, 5), 7),
-                        new Solution(phases[1], new Quaternion(3, 4, 5, 6), 1) };
+                        new Solution(phases[0], new Quaternion(1, 2, 3, 4), 0.4),
+                        new Solution(phases[0], new Quaternion(2, 3, 4, 5), 0.7),
+                        new Solution(phases[1], new Quaternion(3, 4, 5, 6), 0.1) };
         Arrays.sort(srcSlns, new SolutionFitComparator());
+        reverse(srcSlns);
     }
 
 
@@ -74,32 +76,32 @@ public class BestSolutionTest {
         // Q0
         OpResult result = results[0];
         assertEquals(EbsdMMap.Q0, result.alias);
-        assertEquals(3.0, result.value.doubleValue(), 1e-6);
+        assertEquals(2.0, result.value.doubleValue(), 1e-6);
 
         // Q1
         result = results[1];
         assertEquals(EbsdMMap.Q1, result.alias);
-        assertEquals(4.0, result.value.doubleValue(), 1e-6);
+        assertEquals(3.0, result.value.doubleValue(), 1e-6);
 
         // Q2
         result = results[2];
         assertEquals(EbsdMMap.Q2, result.alias);
-        assertEquals(5.0, result.value.doubleValue(), 1e-6);
+        assertEquals(4.0, result.value.doubleValue(), 1e-6);
 
         // Q3
         result = results[3];
         assertEquals(EbsdMMap.Q3, result.alias);
-        assertEquals(6.0, result.value.doubleValue(), 1e-6);
+        assertEquals(5.0, result.value.doubleValue(), 1e-6);
 
         // Phase
         result = results[4];
         assertEquals(EbsdMMap.PHASES, result.alias);
-        assertEquals(2, result.value.intValue());
+        assertEquals(1, result.value.intValue());
 
         // Fit
         result = results[5];
         assertEquals("SolutionFit", result.alias);
-        assertEquals(1.0, result.value.doubleValue(), 1e-6);
+        assertEquals(0.7, result.value.doubleValue(), 1e-6);
     }
 
 

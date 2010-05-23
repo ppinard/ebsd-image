@@ -14,12 +14,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.indexing.post;
 
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.exp.ops.indexing.post.IndexingPostOps;
 
 public class IndexingPostOpsMock extends IndexingPostOps {
 
@@ -28,8 +27,9 @@ public class IndexingPostOpsMock extends IndexingPostOps {
         Solution[] destSolutions = new Solution[srcSolutions.length];
 
         for (int i = 0; i < destSolutions.length; i++)
-            destSolutions[i] = new Solution(srcSolutions[i].phase,
-                    srcSolutions[i].rotation, srcSolutions[i].fit * 2);
+            destSolutions[i] =
+                    new Solution(srcSolutions[i].phase,
+                            srcSolutions[i].rotation, srcSolutions[i].fit / 2);
 
         return destSolutions;
     }

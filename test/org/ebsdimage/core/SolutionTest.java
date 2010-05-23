@@ -14,13 +14,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.ebsdimage.core.Solution;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,7 +41,7 @@ public class SolutionTest {
     public void setUp() throws Exception {
         crystal = new Silicon();
         rotation = new Quaternion(new Eulers(0.5, 0.6, 0.7));
-        fit = 2.5;
+        fit = 0.5;
 
         solution = new Solution(crystal, rotation, fit);
     }
@@ -60,7 +59,8 @@ public class SolutionTest {
 
     @Test
     public void testToString() {
-        String expected = "Silicon\tAxisAngle [angle=75.91387921717522, axis=(0.47806636403682407;-0.04796663187071836;0.8770129724260584)]\t2.5";
+        String expected =
+                "Silicon\tAxisAngle [angle=75.91387921717522, axis=(0.47806636403682407;-0.04796663187071836;0.8770129724260584)]\t0.5";
         assertEquals(expected, solution.toString());
     }
 

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp;
 
 import static org.ebsdimage.io.exp.CurrentMapsFileSaverXmlTags.*;
@@ -63,6 +63,8 @@ public class CurrentMapsFileSaverXmlSaver implements ObjectXmlSaver {
                 .toString(saveMaps.saveHoughMap));
         element.setAttribute(ATTR_SAVEPEAKSMAP, Boolean
                 .toString(saveMaps.savePeaksMap));
+        element.setAttribute(ATTR_SAVESOLUTIONOVERLAY, Boolean
+                .toString(saveMaps.saveSolutionOverlay));
 
         return element;
     }

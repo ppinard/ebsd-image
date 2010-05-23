@@ -14,14 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.indexing.results;
 
 import static org.junit.Assert.assertEquals;
 
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.exp.OpResult;
-import org.ebsdimage.core.exp.ops.indexing.results.IndexingResultsOps;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,16 +42,16 @@ public class IndexingResultsOpsMockTest {
         Crystal phase = new Silicon();
         Quaternion rotation = Quaternion.IDENTITY;
         srcSlns =
-                new Solution[] { new Solution(phase, rotation, 30.0),
-                        new Solution(phase, rotation, 46.0),
-                        new Solution(phase, rotation, 62.0) };
+                new Solution[] { new Solution(phase, rotation, 0.0),
+                        new Solution(phase, rotation, 1.0 / 6.0),
+                        new Solution(phase, rotation, 1.0 / 3.0) };
     }
 
 
 
     @Test
     public void testCalculate() {
-        double expected = 138;
+        double expected = 0.5;
         OpResult result = op.calculate(null, srcSlns)[0];
 
         assertEquals(expected, result.value.doubleValue(), 1e-6);

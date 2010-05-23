@@ -116,7 +116,7 @@ public class Exp extends PlugIn implements Monitorable {
         Crystal[] phases = wizard.getPhases();
         Operation[] ops = wizard.getOperations();
         CurrentMapsSaver currentMapsSaver =
-                new CurrentMapsFileSaver(false, false, false, false);
+                new CurrentMapsFileSaver(false, false, false, false, false);
         String name = wizard.getName();
         File dir = wizard.getDir();
 
@@ -230,6 +230,8 @@ public class Exp extends PlugIn implements Monitorable {
                 xRun();
                 break;
             case 2: // Cancel
+                return;
+            default:
                 return;
             }
         }
