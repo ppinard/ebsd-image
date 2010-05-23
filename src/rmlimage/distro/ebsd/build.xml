@@ -307,7 +307,52 @@ Use ant -p to get a listing of all the available targets.</echo>
 
 
 
+ 
+<target name="publish-deb" description="Publish the deb file in the repo" 
+        depends="deb">
+  <fail message="user not defined." unless="scp.user"/>
 
+      <!-- Copy the deb to put in the repo-->
+  <delete dir="${tmp.dir}/repos"/>
+  <copy todir="${tmp.dir}/repos/stable">
+    <fileset dir="${dest.dir}">
+      <include name="ebsd-image*${version}*.deb"/>
+    </fileset>
+  </copy>
+    
+      <!--Build the repos summary file -->
+  <exec dir="${tmp.dir}/repos" executable="dpkg-scanpackages"
+        output="${tmp.dir}/Packages.out" error="${tmp.dir}/Packages.err">
+      <arg value="."/>
+  </exec>
+  <gzip src="${tmp.dir}/Packages.out" 
+        destfile="${tmp.dir}/repos/stable/Packages.gz"/>
+        
+        
+     <!-- Transfer deb files to ftp server -->
+        
+  <input addproperty="scp.password" message="SCP password = ">
+    <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
+  </input>
+    
+  <property name="scp.server" value="web.sourceforge.net"/>
+
+  <scp todir="${scp.user}@${scp.server}:/home/groups/e/eb/ebsd-image/htdocs/repos/debian/stable"
+       password="${scp.password}">
+    <fileset dir="${tmp.dir}/repos/stable"/>
+  </scp>
+
+        <!-- Cleanup -->
+  <delete file="${tmp.dir}/Packages.out"/>
+  <delete file="${tmp.dir}/Packages.err"/>
+  <delete dir="${tmp.dir}/repos"/>
+  <delete includeemptydirs="true">
+    <fileset dir="${tmp.dir}" includes="deb*.dir/**"/>
+  </delete>   
+</target>
+  
+
+  
 <target name="publish-javadoc" description="Publish the javadoc in the repo"
         depends="javadoc">
   <fail message="user not defined." unless="scp.user"/>
