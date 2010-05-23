@@ -39,13 +39,17 @@ public class RMLImage extends rmlimage.gui.RMLImage {
     protected void autoExec() {
     }
 
-
-
+    
     @Override
     public PlugIn getAbout() {
         return PlugInBuilder.newInstance("org.ebsdimage.plugin.About");
     }
 
+    
+    @Override
+    public String getAppName() {
+        return "EBSD-Image";
+    }
 
 
     @Override

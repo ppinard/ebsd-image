@@ -1,0 +1,40 @@
+Bloodthirsty License Agreement
+------------------------------
+
+This is where the bloodthirsty license agreement is supposed to go,
+explaining that EBSD-Image is a copyrighted package licensed
+for use by a single person, and sternly warning you not to pirate
+copies of it and explaining, in detail, the gory consequences if you
+do.
+
+We know that you are an honest person, and are not going to go around
+pirating copies of EBSD-Image; this is just as well with us
+since we worked hard to perfect it and selling copies of it is our only
+method of making anything out of all the hard work.
+
+If, on the other hand, you are one of those few people who do go around
+pirating copies of software you probably aren't going to pay much
+attention to a license agreement, bloodthirsty or not.  Just keep your
+doors locked and look out for the attack shark.
+
+Honest Disclaimer
+-----------------
+
+We don't claim EBSD-Image is good for anything -- if you
+think it is, great, but it's up to you to decide.  If EBSD-Image
+doesn't work: tough.  If you lose a million because
+EBSD-Image messes up, it's you that's out the million, not
+us.  If you don't like this disclaimer: tough.  We reserve the right to
+do the absolute minimum provided by law, up to and including nothing.
+
+This is basically the same disclaimer that comes with all software
+packages, but ours is in plain English and theirs is in legalese.
+
+We didn't really want to include any disclaimer at all, but our lawyers
+insisted.  We tried to ignore them but they threatened us with the
+attack shark (see license agreement above) at which point we relented.
+
+
+
+(Taken from http://www.netfunny.com/rhf/jokes/88q2/29609.17.html)
+

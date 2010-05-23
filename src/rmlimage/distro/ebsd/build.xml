@@ -46,6 +46,8 @@
 <property name="deb.dir" value="${tmp.dir}/deb"/>
 <property name="debian.version" value="1"/>
 
+<property name="app.name" value="EBSD-Image"/>
+
 
 
 
@@ -60,6 +62,7 @@
 
   <property name="splashscreen.dir" value="${ebsd-image.dir}/install"/>
   <ant dir="${rmlimage.src.dir}/rmlimage/distro/basic" target="build"/>
+  <rename src="${build.dir}/rml-image.jar" dest="${build.dir}/ebsd-image.jar"/>
   
         <!-- Build the modules -->
   <ant dir="${rmlimage.src.dir}/rmlimage/module/slideshow" target="build"/>
@@ -231,6 +234,9 @@ Use ant -p to get a listing of all the available targets.</echo>
 
 <target name="nsis-full" depends="build"
         description="Builds the full NSIS installer">
+  <property name="splashscreen.dir" value="${ebsd-image.dir}/install"/>
+  <property name="license.dir" value="${ebsd-image.dir}/install"/>
+  <property name="icon.dir" value="${ebsd-image.dir}/install"/>
   <property name="http.prefix" value="http://ebsd-image.sourceforge.net"/>
   <ant dir="${rmlimage.src.dir}/rmlimage/distro" target="nsis-full"/>
 </target>
@@ -239,6 +245,9 @@ Use ant -p to get a listing of all the available targets.</echo>
 
 <target name="nsis-update" depends="build"
         description="Builds the update NSIS installer">
+  <property name="splashscreen.dir" value="${ebsd-image.dir}/install"/>
+  <property name="license.dir" value="${ebsd-image.dir}/install"/>
+  <property name="icon.dir" value="${ebsd-image.dir}/install"/>
   <property name="http.prefix" value="http://ebsd-image.sourceforge.net"/>
   <ant dir="${rmlimage.src.dir}/rmlimage/distro" target="nsis-update"/>
 </target>
@@ -255,8 +264,8 @@ Use ant -p to get a listing of all the available targets.</echo>
   <fail message="version not defined." unless="version"/>
   <fail message="jre.version not found in ${jre.dir}/version.prop" 
         unless="jre.version"/>    
-  <echo file="${tmp.dir}/RML-Image.ini">
-  [RML-Image]
+  <echo file="${tmp.dir}/${app.name}.ini">
+  [${app.name}]
   version=${version}
   jre.version=${jre.version}
   </echo>
@@ -270,12 +279,12 @@ Use ant -p to get a listing of all the available targets.</echo>
   <scp todir="${scp.user}@${scp.server}:/home/groups/e/eb/ebsd-image/htdocs/repos/windows/${distro}"
        password="${scp.password}">
     <fileset dir="${dest.dir}">
-      <include name="RML-Image_v${version}_${distro}*.exe"/>
+      <include name="${app.name}_v${version}_${distro}*.exe"/>
     </fileset>
-    <fileset file="${tmp.dir}/RML-Image.ini"/>
+    <fileset file="${tmp.dir}/${app.name}.ini"/>
   </scp>
   
-  <delete file="${tmp.dir}/RML-Image.ini"/>
+  <delete file="${tmp.dir}/${app.name}.ini"/>
 </target>
 
 
@@ -295,21 +304,21 @@ Use ant -p to get a listing of all the available targets.</echo>
     
   <antcall target="clean" inheritall="false"/>
   <antcall target="nsis-full" inheritall="false"/>
-  <delete file="${dest.dir}/RML-Image_v${version}_${distro}-full.exe"/>
+  <delete file="${dest.dir}/${app.name}_v${version}_${distro}-full.exe"/>
   
   <antcall target="clean" inheritall="false"/>
   <antcall target="nsis-update" inheritall="false"/>
-  <delete file="${dest.dir}/RML-Image_v${version}_${distro}-update.exe"/>
+  <delete file="${dest.dir}/${app.name}_v${version}_${distro}-update.exe"/>
 
   <antcall target="clean" inheritall="false"/>
   <antcall target="nsis-all" inheritall="false"/>
-  <delete file="${dest.dir}/RML-Image_v${version}_${distro}-full.exe"/>
-  <delete file="${dest.dir}/RML-Image_v${version}_${distro}-update.exe"/>
+  <delete file="${dest.dir}/${app.name}_v${version}_${distro}-full.exe"/>
+  <delete file="${dest.dir}/${app.name}_v${version}_${distro}-update.exe"/>
 
   <antcall target="clean" inheritall="false"/>
   <antcall target="all" inheritall="false"/>
-  <delete file="${dest.dir}/RML-Image_v${version}_${distro}-full.exe"/>
-  <delete file="${dest.dir}/RML-Image_v${version}_${distro}-update.exe"/>
+  <delete file="${dest.dir}/${app.name}_v${version}_${distro}-full.exe"/>
+  <delete file="${dest.dir}/${app.name}_v${version}_${distro}-update.exe"/>
   
   <antcall target="clean" inheritall="false"/>
   <antcall target="compile" inheritall="false"/>
