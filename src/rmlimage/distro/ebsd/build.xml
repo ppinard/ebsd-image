@@ -297,6 +297,13 @@ Use ant -p to get a listing of all the available targets.</echo>
 
 
 
+<target name="tar" depends="build">
+  <tar destfile="${dest.dir}/EBSD-Image_v${version}.tgz"
+       compression="gzip">
+    <tarfileset dir="${build.dir}" prefix="EBSD-Image_${version}"/>
+  </tar>
+  <echo message="EBSD-Image_v${version}.tgz created in ${dest.dir}"/>
+</target>
 
 
 
