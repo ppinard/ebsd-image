@@ -186,7 +186,8 @@ Use ant -p to get a listing of all the available targets.</echo>
 
 
 
-<target name="javadoc" description="Builds the javadoc for the core classes">
+<target name="javadoc" description="Builds the javadoc for the core classes"
+        depends="compile">
   <ant dir="${rmlimage.src.dir}/rmlimage/distro/core" target="javadoc"/>
   <ant dir="${rmlimage.src.dir}/rmlimage/module/real" target="javadoc"/>
   <ant dir="${rmlimage.src.dir}/rmlimage/module/complex" target="javadoc"/>
@@ -262,9 +263,10 @@ Use ant -p to get a listing of all the available targets.</echo>
 
 
 
-<target name="publish" depends="build,nsis-all"
+
+<target name="publish-windows" depends="build,nsis-all"
         description="Places the Windows installer in the repo">
-  <fail message="version not defined." unless="scp.user"/>
+  <fail message="user not defined." unless="scp.user"/>
 	
     <!-- Create the ini file -->
   <property file="${jre.dir}/version.prop"/>
@@ -277,12 +279,13 @@ Use ant -p to get a listing of all the available targets.</echo>
   jre.version=${jre.version}
   </echo>
   
-        <!-- Transfert the files to the ftp server -->
+  <!-- scp property -->
   <input addproperty="scp.password" message="SCP password = ">
     <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
   </input>
   <property name="scp.server" value="web.sourceforge.net"/>
   
+  <!-- Transfert the files to the ftp server -->
   <scp todir="${scp.user}@${scp.server}:/home/groups/e/eb/ebsd-image/htdocs/repos/windows/${distro}"
        password="${scp.password}">
     <fileset dir="${dest.dir}">
@@ -290,10 +293,80 @@ Use ant -p to get a listing of all the available targets.</echo>
     </fileset>
     <fileset file="${tmp.dir}/${app.name}.ini"/>
   </scp>
+	
+  <!-- Transfert the files to the file release system -->
+  <scp todir="${scp.user}@${scp.server}:/home/frs/project/e/eb/ebsd-image/v${version}/"
+       password="${scp.password}">
+    <fileset dir="${dest.dir}">
+      <include name="${app.name}_v${version}_${distro}*.exe"/>
+    </fileset>
+  </scp>
   
   <delete file="${tmp.dir}/${app.name}.ini"/>
 </target>
 
+
+
+
+<target name="publish-javadoc" description="Publish the javadoc in the repo"
+        depends="javadoc">
+  <fail message="user not defined." unless="scp.user"/>
+
+  <!-- Transfer javadoc directories to ftp server -->
+  <input addproperty="scp.password" message="SCP password = ">
+    <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
+  </input>
+  <property name="scp.server" value="web.sourceforge.net"/>
+
+  <scp todir="${scp.user}@${scp.server}:/home/groups/e/eb/ebsd-image/htdocs/javadoc/"
+       password="${scp.password}">
+    <fileset dir="${build.dir}/javadoc/" />
+  </scp>
+
+</target>
+
+	
+	
+<target name="publish-mac" description="Publish mac distro in the repo" 
+        depends="mac">
+  <fail message="user not defined." unless="scp.user"/>
+
+  <!-- Transfer mac tarball to ftp server -->
+  <input addproperty="scp.password" message="SCP password = ">
+    <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
+  </input>
+	
+  <property name="scp.server" value="web.sourceforge.net"/>
+
+  <scp todir="${scp.user}@${scp.server}:/home/frs/project/e/eb/ebsd-image/v${version}/"
+       password="${scp.password}">
+    <fileset dir="${dest.dir}">
+      <include name="EBSD-Image_v${version}_Mac.tgz"/>
+    </fileset>
+  </scp>
+</target>
+
+
+  
+<target name="publish-tar" description="Publish tarball in the repo" 
+        depends="tar">
+    <fail message="user not defined." unless="scp.user"/>
+
+    <!-- Transfer mac tarball to ftp server -->
+    <input addproperty="scp.password" message="SCP password = ">
+      <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
+    </input>
+      
+    <property name="scp.server" value="web.sourceforge.net"/>
+
+    <scp todir="${scp.user}@${scp.server}:/home/frs/project/e/eb/ebsd-image/v${version}/"
+         password="${scp.password}">
+      <fileset dir="${dest.dir}">
+        <include name="EBSD-Image_v${version}.tgz"/>
+      </fileset>
+    </scp>
+  </target>
+  
 
 
 <target name="tar" depends="build">
