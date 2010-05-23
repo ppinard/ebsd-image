@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static org.junit.Assert.assertEquals;
@@ -101,7 +101,7 @@ public class QualityIndexTest extends TestCase {
 
     @Test
     public void testImageQualityIncaPeaks() {
-        double expected = 256 * (peak2.intensity - peak1.intensity) / 20000.0;
+        double expected = peak2.intensity - peak1.intensity;
         assertEquals(expected, QualityIndex.imageQualityInca(peaks), 1e-7);
     }
 

@@ -14,17 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.identification.results;
 
 import static org.junit.Assert.assertEquals;
 
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.OpResult;
-import org.ebsdimage.core.exp.ops.identification.results.ImageQualityInca;
 import org.junit.Before;
 import org.junit.Test;
-
 
 public class ImageQualityIncaTest {
 
@@ -51,7 +49,7 @@ public class ImageQualityIncaTest {
 
     @Test
     public void testCalculate() {
-        double expected = 256 * (peak2.intensity - peak1.intensity) / 20000.0;
+        double expected = peak2.intensity - peak1.intensity;
         OpResult result = iq.calculate(null, peaks)[0];
 
         assertEquals(expected, result.value.doubleValue(), 1e-7);

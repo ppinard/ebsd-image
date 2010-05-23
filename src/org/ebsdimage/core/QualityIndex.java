@@ -14,14 +14,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static java.lang.Math.pow;
 import static java.util.Arrays.sort;
-
-import java.util.Arrays;
-
+import static ptpshared.utility.Arrays.reverse;
 import rmlimage.core.ByteMap;
 import rmlimage.core.MapStats;
 import rmlimage.module.complex.core.ComplexMap;
@@ -190,14 +188,18 @@ public class QualityIndex {
         if (peaks.length < 2)
             return 0.0;
 
-        Arrays.sort(peaks, new HoughPeakIntensityComparator());
+        sort(peaks, new HoughPeakIntensityComparator());
+        reverse(peaks);
 
-        double maximum = peaks[peaks.length - 1].intensity;
-        double minimum = peaks[0].intensity;
+        double minimum;
+        if (peaks.length >= 7)
+            minimum = peaks[6].intensity;
+        else
+            minimum = peaks[peaks.length - 1].intensity;
 
-        double iq = 256 * (maximum - minimum) / 20000.0;
+        double maximum = peaks[0].intensity;
 
-        return iq;
+        return maximum - minimum;
     }
 
 
