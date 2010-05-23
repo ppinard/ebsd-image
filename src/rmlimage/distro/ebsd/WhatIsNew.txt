@@ -1,3 +1,4 @@
 0.1.0:
-- First release (Tadaaa!!!)
+- Release for the Microbeam Analysis Society Topical Conference: EBSD 2010 in
+  Madison, Wiscosin
 

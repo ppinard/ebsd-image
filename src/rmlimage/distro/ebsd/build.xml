@@ -294,7 +294,7 @@ Use ant -p to get a listing of all the available targets.</echo>
     <fileset file="${tmp.dir}/${app.name}.ini"/>
   </scp>
 	
-  <!-- Transfert the files to the file release system -->
+  <!-- Transfert the files to sf's frs repos -->
   <scp todir="${scp.user}@${scp.server}:/home/frs/project/e/eb/ebsd-image/v${version}/"
        password="${scp.password}">
     <fileset dir="${dest.dir}">
@@ -330,7 +330,6 @@ Use ant -p to get a listing of all the available targets.</echo>
         
         
      <!-- Transfer deb files to ftp server -->
-        
   <input addproperty="scp.password" message="SCP password = ">
     <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
   </input>
@@ -340,6 +339,13 @@ Use ant -p to get a listing of all the available targets.</echo>
   <scp todir="${scp.user}@${scp.server}:/home/groups/e/eb/ebsd-image/htdocs/repos/debian/stable"
        password="${scp.password}">
     <fileset dir="${tmp.dir}/repos/stable"/>
+  </scp>
+  
+  <scp todir="${scp.user}@${scp.server}:/home/frs/project/e/eb/ebsd-image/v${version}/"
+       password="${scp.password}">
+    <fileset dir="${dest.dir}">
+      <include name="ebsd-image*${version}*.deb"/>
+    </fileset>
   </scp>
 
         <!-- Cleanup -->
@@ -376,7 +382,7 @@ Use ant -p to get a listing of all the available targets.</echo>
         depends="mac">
   <fail message="user not defined." unless="scp.user"/>
 
-  <!-- Transfer mac tarball to ftp server -->
+  <!-- Transfer mac tarball to sf's frs repos -->
   <input addproperty="scp.password" message="SCP password = ">
     <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
   </input>
@@ -397,7 +403,7 @@ Use ant -p to get a listing of all the available targets.</echo>
         depends="tar">
     <fail message="user not defined." unless="scp.user"/>
 
-    <!-- Transfer mac tarball to ftp server -->
+    <!-- Transfer tarball to sf's frs repos -->
     <input addproperty="scp.password" message="SCP password = ">
       <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
     </input>
