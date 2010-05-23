@@ -106,64 +106,63 @@
         description="Builds the deb package for the full distro">
 
     <!-- Create the startup script -->
-  <echo file="${tmp.dir}/rml-image">
+  <echo file="${tmp.dir}/ebsd-image">
 #!/bin/sh
-java -jar /usr/share/rml-image/rml-image.jar
+java -jar /usr/share/ebsd-image/EBSD-Image.jar
   </echo>
   
     <!-- Create the desktop shortcut -->
-  <desktopentry toFile="${tmp.dir}/rml-image.desktop"
-                name="RML-Image EBSD"
-                comment="Image Analysis Freeware"
-                exec="/usr/bin/rml-image"
-                path="/usr/share/rml-image/"
-                icon="/usr/share/rml-image/RML-Image_(16x16).gif"
+  <desktopentry toFile="${tmp.dir}/ebsd-image.desktop"
+                name="EBSD-Image"
+                comment="EBSD Image Analysis Freeware"
+                exec="/usr/bin/ebsd-image"
+                path="/usr/share/ebsd-image/"
+                icon="/usr/share/ebsd-image/EBSD-Image_32x32.png"
                 categories="Graphics"/>
   
       <!-- Create the manpage -->
-  <copy file="${rmlimage.src.dir}/rmlimage/distro/org/ebsdimage/manpage" 
-        tofile="${tmp.dir}/rml-image.1"/>
+  <copy file="${ebsd-image.dir}/install/manpage" 
+        tofile="${tmp.dir}/ebsd-image.1"/>
   <tstamp>
      <format property="date" pattern="d-MMMM-yyyy" locale="en,US"/>
    </tstamp>
-  <replace file="${tmp.dir}/rml-image.1">  
+  <replace file="${tmp.dir}/ebsd-image.1">  
     <replacefilter token="$VERSION" value="${version}"/>
     <replacefilter token="$DATE" value="${date}"/>
   </replace>  
-  <gzip src="${tmp.dir}/rml-image.1" 
-        destfile="${tmp.dir}/rml-image.1.gz"/>
+  <gzip src="${tmp.dir}/ebsd-image.1" 
+        destfile="${tmp.dir}/ebsd-image.1.gz"/>
   
       <!-- Build the deb package -->
-  <deb package="rml-image-ebsd" section="graphics" todir="${dest.dir}"
+  <deb package="ebsd-image" section="graphics" todir="${dest.dir}"
        depends="sun-java6-jre" recommends="sun-java6-fonts"
-       conflicts="rml-image, rml-image-ireq"
-       preinst="${rmlimage.dir}/install/preinst"
-       postinst="${rmlimage.dir}/install/postinst"
-       prerm="${rmlimage.dir}/install/prerm">
+       preinst="${ebsd-image.dir}/install/preinst"
+       postinst="${ebsd-image.dir}/install/postinst"
+       prerm="${ebsd-image.dir}/install/prerm">
     <version upstream="${version}" debian="${debian.version}"/>
-    <maintainer name="Marin Lagace" email="marin@rml-image.com"/>
-    <description synopsis="RML-Image EBSD GUI distro">
-The most excellent free image analysis software RML-Image with the
-plugins designed for EBSD pattern analysis (GUI version).
+    <maintainer name="Philippe T. Pinard" email="ebsdimage@gmail.com"/>
+    <description synopsis="EBSD Image Analysis Freeware">
+Software to analyze electron backscattered diffraction (EBSD) 
+patterns obtained in a scanning electron microscope (SEM).
     </description>
-    <tarfileset file="${tmp.dir}/rml-image" prefix="usr/bin"
+    <tarfileset file="${tmp.dir}/ebsd-image" prefix="usr/bin"
                 filemode="755"/>
-    <tarfileset dir="${build.dir}" prefix="usr/share/rml-image"/>
-    <tarfileset file="${tmp.dir}/rml-image.desktop" 
+    <tarfileset dir="${build.dir}" prefix="usr/share/ebsd-image"/>
+    <tarfileset file="${tmp.dir}/ebsd-image.desktop" 
                 prefix="usr/share/applications"/>
-    <tarfileset dir="${rmlimage.dir}/install" includes="RML-Image_(16x16).*"
-                prefix="usr/share/rml-image"/>
-    <tarfileset dir="${rmlimage.dir}/install" includes="RML-Image_(32x32).*"
-                prefix="usr/share/rml-image"/>
-    <tarfileset file="${tmp.dir}/rml-image.1.gz"
+    <tarfileset dir="${ebsd-image.dir}/install" includes="EBSD-Image_32x32.png"
+                prefix="usr/share/ebsd-image"/>
+    <tarfileset file="${tmp.dir}/ebsd-image.1.gz"
                 prefix="usr/man/man1"/>
   </deb>
   
         <!-- Cleanup -->
-  <delete file="${tmp.dir}/rml-image"/>
-  <delete file="${tmp.dir}/rml-image.desktop"/>
-  <delete file="${tmp.dir}/rml-image.1"/>
-  <delete file="${tmp.dir}/rml-image.1.gz"/>
+  <delete file="${tmp.dir}/ebsd-image"/>
+  <delete file="${tmp.dir}/ebsd-image.desktop"/>
+  <delete file="${tmp.dir}/ebsd-image.1"/>
+  <delete file="${tmp.dir}/ebsd-image.1.gz"/>
+  
+  <echo message="ebsd-image_${version}-1_all.deb created in ${dest.dir}"/>
 </target>
   
 
@@ -187,7 +186,7 @@ Use ant -p to get a listing of all the available targets.</echo>
 
 
 
-<target name="javadoc" description="Builds the javadoc for the core classes" depends="compile">
+<target name="javadoc" description="Builds the javadoc for the core classes">
   <ant dir="${rmlimage.src.dir}/rmlimage/distro/core" target="javadoc"/>
   <ant dir="${rmlimage.src.dir}/rmlimage/module/real" target="javadoc"/>
   <ant dir="${rmlimage.src.dir}/rmlimage/module/complex" target="javadoc"/>
@@ -263,9 +262,9 @@ Use ant -p to get a listing of all the available targets.</echo>
 
 
 
-<target name="publish-windows" depends="build,nsis-all"
+<target name="publish" depends="build,nsis-all"
         description="Places the Windows installer in the repo">
-  <fail message="user not defined." unless="scp.user"/>
+  <fail message="version not defined." unless="scp.user"/>
 	
     <!-- Create the ini file -->
   <property file="${jre.dir}/version.prop"/>
@@ -278,13 +277,12 @@ Use ant -p to get a listing of all the available targets.</echo>
   jre.version=${jre.version}
   </echo>
   
-  <!-- scp property -->
+        <!-- Transfert the files to the ftp server -->
   <input addproperty="scp.password" message="SCP password = ">
     <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
   </input>
   <property name="scp.server" value="web.sourceforge.net"/>
   
-  <!-- Transfert the files to the ftp server -->
   <scp todir="${scp.user}@${scp.server}:/home/groups/e/eb/ebsd-image/htdocs/repos/windows/${distro}"
        password="${scp.password}">
     <fileset dir="${dest.dir}">
@@ -292,82 +290,12 @@ Use ant -p to get a listing of all the available targets.</echo>
     </fileset>
     <fileset file="${tmp.dir}/${app.name}.ini"/>
   </scp>
-	
-  <!-- Transfert the files to the file release system -->
-  <scp todir="${scp.user}@${scp.server}:/home/frs/project/e/eb/ebsd-image/v${version}/"
-       password="${scp.password}">
-    <fileset dir="${dest.dir}">
-      <include name="${app.name}_v${version}_${distro}*.exe"/>
-    </fileset>
-  </scp>
   
   <delete file="${tmp.dir}/${app.name}.ini"/>
 </target>
 
 
 
-
-<target name="publish-javadoc" description="Publish the javadoc in the repo"
-  depends="javadoc">
-  <fail message="user not defined." unless="scp.user"/>
-
-  <!-- Transfer javadoc directories to ftp server -->
-  <input addproperty="scp.password" message="SCP password = ">
-    <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
-  </input>
-  <property name="scp.server" value="web.sourceforge.net"/>
-
-  <scp todir="${scp.user}@${scp.server}:/home/groups/e/eb/ebsd-image/htdocs/javadoc/"
-       password="${scp.password}">
-    <fileset dir="${build.dir}/javadoc/" />
-  </scp>
-
-</target>
-
-	
-	
-<target name="publish-mac" description="Publish mac distro in the repo" 
-    depends="mac">
-  <fail message="user not defined." unless="scp.user"/>
-
-  <!-- Transfer mac tarball to ftp server -->
-  <input addproperty="scp.password" message="SCP password = ">
-    <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
-  </input>
-	
-  <property name="scp.server" value="web.sourceforge.net"/>
-
-  <scp todir="${scp.user}@${scp.server}:/home/frs/project/e/eb/ebsd-image/v${version}/"
-       password="${scp.password}">
-    <fileset dir="${dest.dir}">
-      <include name="EBSD-Image_v${version}_Mac.tgz"/>
-    </fileset>
-  </scp>
-</target>
-
-
-  
-<target name="publish-tar" description="Publish tarball in the repo" 
-      depends="tar">
-    <fail message="user not defined." unless="scp.user"/>
-
-    <!-- Transfer mac tarball to ftp server -->
-    <input addproperty="scp.password" message="SCP password = ">
-      <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
-    </input>
-      
-    <property name="scp.server" value="web.sourceforge.net"/>
-
-    <scp todir="${scp.user}@${scp.server}:/home/frs/project/e/eb/ebsd-image/v${version}/"
-         password="${scp.password}">
-      <fileset dir="${dest.dir}">
-        <include name="EBSD-Image_v${version}.tgz"/>
-      </fileset>
-    </scp>
-  </target>
-  
-  
-  
 <target name="tar" depends="build">
   <tar destfile="${dest.dir}/EBSD-Image_v${version}.tgz"
        compression="gzip">
@@ -375,7 +303,6 @@ Use ant -p to get a listing of all the available targets.</echo>
   </tar>
   <echo message="EBSD-Image_v${version}.tgz created in ${dest.dir}"/>
 </target>
-
 
 
 

@@ -1,0 +1,28 @@
+#!/bin/sh
+
+set -e
+
+
+# Remove the app except the config directory
+if [ "$1" = "remove" ] || [ "$1" = "upgrade" ] ; then
+  echo "Removing EBSD-Image"
+  rm -rf /usr/share/ebsd-image       #Remove the main app
+fi
+
+
+# Remove the config directory for each user
+if [ "$1" = "remove" ] ; then
+  homeDirs=$(find /home -mindepth 1 -maxdepth 1 -type d)
+  for homeDir in $homeDirs ; do
+    if [ -d "$homeDir/.EBSD-Image" ] ; then
+      echo "Removing EBSD-Image user config dir for user $(basename $homeDir)"
+      rm -rf "$homeDir/.EBSD-Image"
+    else
+      echo "No EBSD-Image user config dir found for user $(basename $homeDir)"
+    fi
+  done
+fi
+
+
+exit 0
+

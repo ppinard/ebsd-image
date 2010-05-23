@@ -1,0 +1,33 @@
+.TH "EBSD-Image" 1 "$DATE" " " $VERSION
+
+.SH NAME
+EBSD-Image
+
+.SH SYNOPSYS 
+.B ebsd-image
+
+.SH DESCRIPTION 
+Software to analyze electron backscattered diffraction (EBSD) 
+patterns obtained in a scanning electron microscope (SEM). 
+.PP
+More info can be found on the project's website (http://www.ebsd-image.org).
+
+.SH AUTHOR
+Philippe T. Pinard
+Marin Lagace
+Pierre Hovington
+Raynald Gauvin
+
+.SH BUGS
+https://sourceforge.net/tracker/?group_id=316228&atid=1330214
+
+.SH COPYRIGHT 
+Copyright (c) 2010 Philippe T. Pinard
+
+.SH SEE ALSO
+http://www.ebsd-image.org
+
+
+
+
+

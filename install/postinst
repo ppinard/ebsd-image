@@ -4,7 +4,7 @@ set -e
 
 
 if [ "$1" = "configure" ] ; then
-  echo "Configuring RML-Image"
+  echo "Configuring EBSD-Image"
 fi
 
 exit 0
