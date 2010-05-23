@@ -62,7 +62,7 @@
 
   <property name="splashscreen.dir" value="${ebsd-image.dir}/install"/>
   <ant dir="${rmlimage.src.dir}/rmlimage/distro/basic" target="build"/>
-  <rename src="${build.dir}/rml-image.jar" dest="${build.dir}/ebsd-image.jar"/>
+  <rename src="${build.dir}/rml-image.jar" dest="${build.dir}/${app.name}.jar"/>
   
         <!-- Build the modules -->
   <ant dir="${rmlimage.src.dir}/rmlimage/module/slideshow" target="build"/>
@@ -201,11 +201,19 @@ Use ant -p to get a listing of all the available targets.</echo>
 <target name="mac" description="Build the Mac installer" depends="build">
   <mkdir dir="${dest.dir}"/>
   <jarbundler name="EBSD-Image" mainclass="rmlimage.loader.Loader"
+              bundleid="rmlimage.loader.Loader" version="${version}"
+              build="${version}" infostring="${version}" jvmversion="1.6+"
+              icon="${ebsd-image.dir}/install/EBSD-Image.icns"
               dir="${dest.dir}"
               stubfile="${ebsd-image.dir}/install/JavaApplicationStub">
-    <jarfilelist dir="${build.dir}" files="rml-image.jar"/>
-    <javafileset dir="${build.dir}"/>
+    <jarfileset dir="${build.dir}" includes="**/*.jar"/>
   </jarbundler>
+  
+  <tar basedir="${dest.dir}" includes="EBSD-Image.app/**"
+       destfile="${dest.dir}/EBSD-Image_v${version}_Mac.tgz"
+       compression="gzip"/>
+  <delete dir="${dest.dir}/EBSD-Image.app"/>
+  <echo message="EBSD-Image_v${version}_Mac.tgz created in ${dest.dir}"/>
 </target>
     
 
