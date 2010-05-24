@@ -200,14 +200,23 @@ Use ant -p to get a listing of all the available targets.</echo>
 
 <target name="mac" description="Build the Mac installer" depends="build">
   <mkdir dir="${dest.dir}"/>
+
+  <delete dir="${tmp.dir}/mac"/>
+  <mkdir dir="${tmp.dir}/mac"/>
+  <copy todir="${tmp.dir}/mac">
+    <fileset dir="${build.dir}"/>
+    <mapper type="flatten"/>
+  </copy>
+
   <jarbundler name="EBSD-Image" mainclass="rmlimage.loader.Loader"
               bundleid="rmlimage.loader.Loader" version="${version}"
               build="${version}" infostring="${version}" jvmversion="1.6+"
               icon="${ebsd-image.dir}/install/EBSD-Image.icns"
               dir="${dest.dir}"
               stubfile="${ebsd-image.dir}/install/JavaApplicationStub">
-    <jarfileset dir="${build.dir}" includes="**/*.jar"/>
+    <jarfileset dir="${tmp.dir}/mac" includes="**/*.jar"/>
   </jarbundler>
+  <delete dir="${tmp.dir}/mac"/>
   
   <tar basedir="${dest.dir}" includes="EBSD-Image.app/**"
        destfile="${dest.dir}/EBSD-Image_v${version}_Mac.tgz"
