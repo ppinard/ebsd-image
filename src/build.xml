@@ -78,7 +78,7 @@
 
     <!-- Build ebsd-image.jar -->
   <mkdir dir="${modules.dir}"/>
-  <jar destfile="${modules.dir}/ebsd-image.jar">
+  <jar destfile="${modules.dir}/ebsd-imageM.jar">
     <fileset dir="${class.dir}">
       <include name="org/ebsdimage/**"/>
       <include name="rmlimage/module.prop"/>
