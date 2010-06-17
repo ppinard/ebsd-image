@@ -18,6 +18,7 @@
 package org.ebsdimage.io;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -53,7 +54,6 @@ public class SmpCreator implements Monitorable {
      * @param directory
      *            directory holding all the files to save to the
      *            <code>SMP</code> file
-     * 
      * @throws IOException
      *             if <code>directory</code> does not exist or any of the files
      *             in the directory does not hold a <code>Map</code>.
@@ -70,7 +70,9 @@ public class SmpCreator implements Monitorable {
      *             to disk.
      */
     public void create(File smpFile, File directory) throws IOException {
-        File[] files = directory.listFiles();
+        // File[] files = directory.listFiles();
+        FileFilter filter = new ImagesFileFilter();
+        File[] files = FileUtil.listFiles(directory, filter);
         Arrays.sort(files);
         create(smpFile, files);
     }
@@ -86,7 +88,6 @@ public class SmpCreator implements Monitorable {
      *            name of the <code>SMP</code> file to create
      * @param files
      *            list of files to save to the <code>SMP</code> file
-     * 
      * @throws IOException
      *             if any of the files does not hold a <code>Map</code>.
      * @throws IllegalArgumentException
@@ -144,7 +145,6 @@ public class SmpCreator implements Monitorable {
      *            <code>SMP</code> file in which to put the extracted
      *            <code>Map</code>s. If the file already exists, it will be
      *            overwritten without warning.
-     * 
      * @throws IOException
      *             if an error occurred during the extraction
      */

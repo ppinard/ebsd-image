@@ -39,7 +39,7 @@
 
 <property name="distro" value="ebsd"/>    
 
-<fail message="nsis.flags should not be set." if="nsis.flags"/>
+<!-- <fail message="nsis.flags should not be set." if="nsis.flags"/> -->
 <property name="nsis.flags" value="/DEBSD /DSLIDESHOW"/>
 
 
@@ -270,6 +270,13 @@ Use ant -p to get a listing of all the available targets.</echo>
 </target>
 
 
+
+<target name="publish-all">
+  <antcall target="clean"/>
+  <antcall target="publish-tar"/>
+  <antcall target="clean"/>
+  <antcall target="publish-windows"/>
+</target>
 
 
 

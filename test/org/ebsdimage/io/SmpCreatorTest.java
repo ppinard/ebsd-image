@@ -17,6 +17,8 @@
  */
 package org.ebsdimage.io;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -73,11 +75,12 @@ public class SmpCreatorTest extends TestCase {
     public void create2() throws IOException {
         // Copy the test maps to a new directory
         File tmpDir = FileUtil.createTempDir("SmpCreatorTest");
-        File[] files = new File[4];
+        File[] files = new File[5];
         files[0] = getFile("org/ebsdimage/io/Lena.bmp");
         files[1] = getFile("org/ebsdimage/io/Lena_Rotate90deg.bmp");
         files[2] = getFile("org/ebsdimage/io/Lena_Rotate180deg.bmp");
         files[3] = getFile("org/ebsdimage/io/Lena_Rotate270deg.bmp");
+        files[4] = getFile("org/ebsdimage/io/warp-x-map.raw");
         FileUtil.copy(files, tmpDir);
 
         File smpFile = new File(FileUtil.getTempDir(), "SmpCreatorTest.smp");
@@ -85,6 +88,8 @@ public class SmpCreatorTest extends TestCase {
 
         // Read the maps back
         SmpInputStream inStream = new SmpInputStream(smpFile);
+
+        assertEquals(4, inStream.getMapCount());
 
         ByteMap map = (ByteMap) inStream.readMap(0);
         ByteMap expected = (ByteMap) load(files[0]);
