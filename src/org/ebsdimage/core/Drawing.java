@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static java.lang.Math.abs;
@@ -33,7 +33,6 @@ import rmlshared.geom.LineUtil;
  * Drawing line using Hough space coordinates.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Drawing {
 
@@ -47,7 +46,6 @@ public class Drawing {
      *            <code>r</code> coordinates of the line.
      * @param theta
      *            <code>theta</code> coordinates of the line.
-     * 
      * @return the line
      */
     public static Line2D getLine(ByteMap map, double r, double theta) {
@@ -68,9 +66,7 @@ public class Drawing {
      *            width of the frame used to crop the line to.
      * @param height
      *            height of the frame used to crop the line to.
-     * 
      * @return the line
-     * 
      * @throws IllegalArgumentException
      *             if <code>width</code> or <code>height</code> are <= 0.
      */
@@ -151,7 +147,6 @@ public class Drawing {
      *            y coordinate of the second endpoint.
      * @param colors
      *            color distribution array
-     * 
      * @throws IllegalArgumentException
      *             if any color in the array is < 0 or > 255
      */
@@ -165,15 +160,13 @@ public class Drawing {
         // Draw the center line
         BasicDrawing.line(map, x1, y1, x2, y2, colors[thickness / 2]);
 
-        if (abs(slope) <= 1) // If line <= 45deg
-        {
+        if (abs(slope) <= 1) { // If line <= 45deg
             int xx1 = x1;
             int xx2 = x2;
             int yy1 = y1;
             int yy2 = y2;
             double dx = 0;
-            for (int n = thickness / 2 - 1; n >= 0; n--) // Do upper part
-            {
+            for (int n = thickness / 2 - 1; n >= 0; n--) { // Do upper part
                 dx += -1 / perpendicularSlope;
                 // System.out.println("dx = " + dx);
                 if (dx >= 0.5) {
@@ -223,8 +216,7 @@ public class Drawing {
             int yy1 = y1;
             int yy2 = y2;
             double dy = 0;
-            for (int n = thickness / 2 - 1; n >= 0; n--) // Do left part
-            {
+            for (int n = thickness / 2 - 1; n >= 0; n--) { // Do left part
                 dy += -1 * perpendicularSlope;
                 // System.out.println("dy = " + dy);
                 if (dy >= 0.5) {
@@ -272,5 +264,4 @@ public class Drawing {
 
         map.setChanged(ByteMap.MAP_CHANGED);
     }
-
 }

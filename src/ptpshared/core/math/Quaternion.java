@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.core.math;
 
 import static java.lang.Math.*;
@@ -35,7 +35,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
  * For a rotation, the positive quaternion is equivalent to the negative
  * quaternion. A positive quaternion is a quaternion where its first non-zero
  * component is positive. By definition, a quaternion is always positive.
- * 
  * <p/>
  * <b>References:</b>
  * <ul>
@@ -45,7 +44,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
  * </ul>
  * 
  * @author Philippe T. Pinard
- * 
  */
 @Immutable
 public class Quaternion implements ObjectXml {
@@ -174,7 +172,6 @@ public class Quaternion implements ObjectXml {
      *            vector
      * @param positive
      *            <code>true</code> if the quaternion should be made positive
-     * 
      * @throws NullPointerException
      *             vector cannot be null
      */
@@ -249,7 +246,6 @@ public class Quaternion implements ObjectXml {
      *            a special orthogonal matrix
      * @param precision
      *            precision to check for SO3
-     * 
      * @see #Quaternion(Matrix3D)
      * @throws NullPointerException
      *             SO3 matrix cannot be null
@@ -430,7 +426,6 @@ public class Quaternion implements ObjectXml {
      * 
      * @param obj
      *            other <code>Quaternion</code> to check equality
-     * 
      * @return whether the two <code>Quaternion</code> are equal
      */
     @Override
@@ -443,8 +438,7 @@ public class Quaternion implements ObjectXml {
             return false;
 
         Quaternion other = (Quaternion) obj;
-        if (Double.doubleToLongBits(scalar) != Double
-                .doubleToLongBits(other.scalar))
+        if (Double.doubleToLongBits(scalar) != Double.doubleToLongBits(other.scalar))
             return false;
         if (!vector.equals(other.vector))
             return false;
@@ -463,7 +457,6 @@ public class Quaternion implements ObjectXml {
      * @param precision
      *            level of precision
      * @return whether the two <code>Quaternion</code> are almost equal
-     * 
      * @throws IllegalArgumentException
      *             if the precision is less than 0.0
      * @throws IllegalArgumentException
@@ -595,9 +588,7 @@ public class Quaternion implements ObjectXml {
 
     /**
      * Returns a new <code>Quaternion</code> resulting from inverting this
-     * quaternion.
-     * 
-     * <b>References:</b>
+     * quaternion. <b>References:</b>
      * <ul>
      * <li>"Altmann, Simon (1986) Rotations, Quaternions, and Double Groups"</li>
      * </ul>
@@ -642,32 +633,24 @@ public class Quaternion implements ObjectXml {
      * 
      * @param precision
      *            level of precision
-     * 
      * @see #norm
-     * 
      * @return <code>true</code> if the quaternion is normalized.
      */
     public boolean isNormalized(double precision) {
-        if (abs(norm() - 1.0) < precision)
-            return true;
-        else
-            return false;
+        return (abs(norm() - 1.0) < precision);
     }
 
 
 
     /**
      * Returns a new <code>Quaternion</code> resulting from the subtraction of
-     * this quaternion by the specified quaternion.
-     * 
-     * <b>References:</b>
+     * this quaternion by the specified quaternion. <b>References:</b>
      * <ul>
      * <li>"Altmann, Simon (1986) Rotations, Quaternions, and Double Groups"</li>
      * </ul>
      * 
      * @param other
      *            other quaternion
-     * 
      * @return resultant quaternion
      * @throws NullPointerException
      *             if the other quaternion is null
@@ -690,7 +673,6 @@ public class Quaternion implements ObjectXml {
      * 
      * @param value
      *            scalar
-     * 
      * @return resultant quaternion
      */
     @CheckReturnValue
@@ -713,7 +695,6 @@ public class Quaternion implements ObjectXml {
      * 
      * @param other
      *            other quaternion
-     * 
      * @return resultant quaternion
      */
     @CheckReturnValue
@@ -735,7 +716,6 @@ public class Quaternion implements ObjectXml {
      *            other quaternion
      * @param positive
      *            if <code>true</code> the quaternion is force to be positive
-     * 
      * @return resultant quaternion
      */
     @CheckReturnValue
@@ -749,8 +729,9 @@ public class Quaternion implements ObjectXml {
 
         Vector3D vector = new Vector3D();
         for (int i = 0; i < 3; i++)
-            vector.v[i] = this.scalar * other.vector.v[i] + other.scalar
-                    * this.vector.v[i] + v3.v[i];
+            vector.v[i] =
+                    this.scalar * other.vector.v[i] + other.scalar
+                            * this.vector.v[i] + v3.v[i];
 
         return new Quaternion(scalar, vector, positive);
     }
@@ -758,9 +739,7 @@ public class Quaternion implements ObjectXml {
 
 
     /**
-     * Returns the norm of this <code>Quaternion</code>.
-     * 
-     * <b>References:</b>
+     * Returns the norm of this <code>Quaternion</code>. <b>References:</b>
      * <ul>
      * <li>"Altmann, Simon (1986) Rotations, Quaternions, and Double Groups"</li>
      * <li><a href="http://www.euclideansplace.com">Martin Baker (2008)
@@ -780,7 +759,6 @@ public class Quaternion implements ObjectXml {
     /**
      * Returns a new <code>Quaternion</code> resulting from normalizing this
      * quaternion. The norm of the new quaternion is equal to 1.0.
-     * 
      * <b>References:</b>
      * <ul>
      * <li>"<a
@@ -800,16 +778,13 @@ public class Quaternion implements ObjectXml {
 
     /**
      * Return a new <code>Quaternion</code> resulting from the addition of this
-     * quaternion with the specified one.
-     * 
-     * <b>References:</b>
+     * quaternion with the specified one. <b>References:</b>
      * <ul>
      * <li>"Altmann, Simon (1986) Rotations, Quaternions, and Double Groups"</li>
      * </ul>
      * 
      * @param other
      *            other quaternion
-     * 
      * @return resultant quaternion
      */
     @CheckReturnValue
@@ -840,7 +815,6 @@ public class Quaternion implements ObjectXml {
 
     /**
      * Returns the axis angle representation of this quaternion.
-     * 
      * <b>References:</b>
      * <ul>
      * <li><a href="http://www.euclideansplace.com">Martin Baker (2008)
@@ -869,9 +843,7 @@ public class Quaternion implements ObjectXml {
 
 
     /**
-     * Returns the Euler angles for this quaternion.
-     * 
-     * <b>References:</b>
+     * Returns the Euler angles for this quaternion. <b>References:</b>
      * <ul>
      * <li>"Altmann, Simon (1986) Rotations, Quaternions, and Double Groups"</li>
      * </ul>
@@ -914,9 +886,7 @@ public class Quaternion implements ObjectXml {
 
 
     /**
-     * Returns the SO3 matrix for this quaternion.
-     * 
-     * <b>References:</b>
+     * Returns the SO3 matrix for this quaternion. <b>References:</b>
      * <ul>
      * <li><a href="http://www.euclideansplace.com">Martin Baker (2008)
      * Euclidean Space</a></li>

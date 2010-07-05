@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.hkl.io;
 
 import static java.lang.Double.parseDouble;
@@ -47,7 +47,6 @@ import crystallography.core.Crystal;
  * Parser for HKL ctf file.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class CtfLoader implements Monitorable {
 
@@ -163,8 +162,6 @@ public class CtfLoader implements Monitorable {
             throw new IOException(message);
     }
 
-
-
     /** Progress value. */
     protected double progress;
 
@@ -195,7 +192,6 @@ public class CtfLoader implements Monitorable {
      * 
      * @param columns
      *            line values
-     * 
      * @return <code>true</code> if the line is the columns header line,
      *         <code>false</code> otherwise
      */
@@ -436,8 +432,7 @@ public class CtfLoader implements Monitorable {
         double beamEnergy = Double.NaN;
 
         for (String[] line : headerLines) {
-            if ("Euler angles refer to Sample Coordinate system (CS0)!"
-                    .equals(line[0])) {
+            if ("Euler angles refer to Sample Coordinate system (CS0)!".equals(line[0])) {
                 if (!"KV".equals(line[7]))
                     throw new IOException(
                             "Expected KV on line 'Euler angles refer to...'");
@@ -498,7 +493,7 @@ public class CtfLoader implements Monitorable {
             if ("XStep".equals(line[0])) {
                 if (line.length != 2)
                     throw new IOException("Expected 2 items on line 'XStep'");
-                xstep = parseDouble(line[1]) * 1e-6;// in meters
+                xstep = parseDouble(line[1]) * 1e-6; // in meters
             }
         }
 
@@ -524,8 +519,7 @@ public class CtfLoader implements Monitorable {
         double mag = Double.NaN;
 
         for (String[] line : headerLines) {
-            if ("Euler angles refer to Sample Coordinate system (CS0)!"
-                    .equals(line[0])) {
+            if ("Euler angles refer to Sample Coordinate system (CS0)!".equals(line[0])) {
                 if (!"Mag".equals(line[1]))
                     throw new IOException(
                             "Expected Mag on line 'Euler angles refer to...'");
@@ -640,8 +634,7 @@ public class CtfLoader implements Monitorable {
         double tiltAngle = Double.NaN;
 
         for (String[] line : headerLines) {
-            if ("Euler angles refer to Sample Coordinate system (CS0)!"
-                    .equals(line[0])) {
+            if ("Euler angles refer to Sample Coordinate system (CS0)!".equals(line[0])) {
                 if (!"TiltAngle".equals(line[9]))
                     throw new IOException(
                             "Expected TiltAngle on line 'Euler angles refer to...'");
@@ -674,7 +667,7 @@ public class CtfLoader implements Monitorable {
             if ("YStep".equals(line[0])) {
                 if (line.length != 2)
                     throw new IOException("Expected 2 items on line 'YStep'");
-                ystep = parseDouble(line[1]) * 1e-6;// in meters
+                ystep = parseDouble(line[1]) * 1e-6; // in meters
             }
         }
 

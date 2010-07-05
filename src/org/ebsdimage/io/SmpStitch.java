@@ -11,6 +11,11 @@ import rmlimage.core.ByteMap;
 import rmlimage.core.ROI;
 import rmlshared.ui.Monitorable;
 
+/**
+ * Stitch smp files together.
+ * 
+ * @author ppinard
+ */
 @Immutable
 public class SmpStitch implements Monitorable {
 

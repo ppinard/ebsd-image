@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import static java.lang.Math.*;
@@ -42,7 +42,6 @@ import edu.umd.cs.findbugs.annotations.CheckReturnValue;
  * </ul>
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Calculations {
 
@@ -51,7 +50,6 @@ public class Calculations {
      * <code>atom1</code> to <code>atom2</code> and the vector from
      * <code>atom1</code> to <code>atom3</code>.
      * <p/>
-     * 
      * <b>References:</b>
      * <ul>
      * <li>Equation 1.13 from Mathematical Crystallography</li>
@@ -100,7 +98,6 @@ public class Calculations {
      * Returns the distance between <code>atom1</code> and <code>atom2</code> of
      * a given <code>unitCell</code>.
      * <p/>
-     * 
      * <b>References:</b>
      * <ul>
      * <li>Equation 1.13 from Mathematical Crystallography</li>
@@ -222,7 +219,6 @@ public class Calculations {
      *            atoms contained in the unit cell
      * @param scatteringFactors
      *            scattering factors to calculate for the form factor
-     * 
      * @return form factor (complex form)
      */
     public static Complex formFactor(Plane plane, UnitCell unitCell,
@@ -306,10 +302,7 @@ public class Calculations {
             double maxIntensity, double fraction) {
         double lowerlimit = fraction * maxIntensity;
 
-        if (intensity > lowerlimit)
-            return true;
-        else
-            return false;
+        return intensity > lowerlimit;
     }
 
 
@@ -384,7 +377,6 @@ public class Calculations {
      *            atoms contained in the unit cell
      * @param scatteringFactors
      *            scattering factors to calculate for the form factor
-     * 
      * @return maximum form factor (complex form)
      */
     public static Complex maximumFormFactor(UnitCell unitCell,
@@ -408,7 +400,6 @@ public class Calculations {
     /**
      * Returns the plane spacing between two adjacent planes of a unit cell.
      * <p/>
-     * 
      * <b>References:</b>
      * <ul>
      * <li>Mathematical Crystallography</li>
@@ -463,7 +454,6 @@ public class Calculations {
      * Returns the zone axis of <code>plane1</code> and <code>plane2</code> of a
      * unit cell.
      * <p/>
-     * 
      * <b>References:</b>
      * <ul>
      * <li>Theorem 2.14 from Mathematical Crystallography</li>

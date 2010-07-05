@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.utility;
 
 import java.util.HashMap;
@@ -22,7 +22,6 @@ import java.util.HashMap;
 /**
  * A singleton containing a <code>HashMap</code> of buffers. Each buffer is
  * identified by a unique key. Only one cache can exist in a session.
- * 
  * <p/>
  * <b>References:</b>
  * <ul>
@@ -30,9 +29,8 @@ import java.util.HashMap;
  * </ul>
  * 
  * @author Philippe T. Pinard
- * 
  */
-public class Cache extends HashMap<String, Buffer> {
+public final class Cache extends HashMap<String, Buffer> {
     /**
      * SingletonHolder is loaded on the first execution of
      * Singleton.getInstance() or the first access to SingletonHolder.INSTANCE,

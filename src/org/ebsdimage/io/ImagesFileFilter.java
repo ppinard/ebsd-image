@@ -18,10 +18,7 @@ public class ImagesFileFilter implements FileFilter {
             return false;
 
         String ext = FileUtil.getExtension(f);
-        if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("bmp"))
-            return true;
-        else
-            return false;
+        return (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("bmp"));
     }
 
 }

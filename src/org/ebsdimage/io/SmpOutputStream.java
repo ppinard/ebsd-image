@@ -31,17 +31,14 @@ import rmlimage.core.Map;
  * and dimensions.
  * <p/>
  * The file format is pretty straightforward. The first three bytes are 83, 77
- * and 80 which translate to SMP. 
- * The next byte is the version label.
- * The next byte is the number of characters of
- * the full class name of the <code>Map</code>'s in the file. The next bytes
- * represent the full class name of the <code>Map</code>s held in the file. The
- * rest of the file consists of a series of numbers saved in Java binary format.
- * The first two numbers are the width and the height of the <code>Map</code>s
- * in integer format. 
- * Then comes the index of the first <dfn>Map</dfn> (useful for split smp files)
- * in integer format.
- * The rest of the file is filled with the values of the
+ * and 80 which translate to SMP. The next byte is the version label. The next
+ * byte is the number of characters of the full class name of the
+ * <code>Map</code>'s in the file. The next bytes represent the full class name
+ * of the <code>Map</code>s held in the file. The rest of the file consists of a
+ * series of numbers saved in Java binary format. The first two numbers are the
+ * width and the height of the <code>Map</code>s in integer format. Then comes
+ * the index of the first <dfn>Map</dfn> (useful for split smp files) in integer
+ * format. The rest of the file is filled with the values of the
  * <code>pixArray</code>s of every <code>Map</code> sequentially. It is straight
  * dump of the <code>pixArray</code>s.
  * 
@@ -60,10 +57,10 @@ public class SmpOutputStream {
     /** Number of Maps written to the stream. */
     private int nbMaps = 0;
 
-    /** Index of the first Map in the stream */
+    /** Index of the first Map in the stream. */
     private int startIndex;
 
-    
+
 
     /**
      * Creates a new <code>SmpOutputStream</code> to save maps in a smp file.
@@ -77,28 +74,30 @@ public class SmpOutputStream {
         this(file, 0);
     }
 
-    
-    
+
+
     /**
      * Creates a new <code>SmpOutputStream</code> to save maps in a smp file.
      * 
-     * @param   file  smp file
-     * @param   startIndex  index of the first <dfn>Map</dfn> in the file.
-     *
+     * @param file
+     *            smp file
+     * @param startIndex
+     *            index of the first <dfn>Map</dfn> in the file.
      * @throws IOException
      *             if an error occurs while writing the header
      */
     public SmpOutputStream(File file, int startIndex) throws IOException {
         if (startIndex < 0)
-          throw new IllegalArgumentException("startIndex (" + startIndex
-                                             + ") must be >= 0.");
+            throw new IllegalArgumentException("startIndex (" + startIndex
+                    + ") must be >= 0.");
         this.startIndex = startIndex;
-        
+
         outStream = new DataOutputStream(new FileOutputStream(file));
 
         // Write the header
         outStream.write("SMP2".getBytes());
     }
+
 
 
     /**
@@ -121,7 +120,6 @@ public class SmpOutputStream {
      * 
      * @param map
      *            <code>Map</code> to write to the file
-     * 
      * @throws IllegalArgumentException
      *             if the <code>Map</code>'s dimensions are not the same as the
      *             other <code>Map</code>s previously saved to the file.
@@ -136,8 +134,7 @@ public class SmpOutputStream {
             throw new IllegalArgumentException("map type (" + map.getName()
                     + ")(" + map.getClass().getName() + " must be a ByteMap");
 
-        if (nbMaps == 0) // If no Map written yet
-        {
+        if (nbMaps == 0) { // If no Map written yet
             // Write the map type
             String mapTypeName = map.getClass().getName();
             outStream.writeByte(mapTypeName.length());
@@ -148,8 +145,8 @@ public class SmpOutputStream {
             outStream.writeInt(map.height);
             width = map.width;
             height = map.height;
-            
-            //Write the start index
+
+            // Write the start index
             outStream.writeInt(startIndex);
         }
 

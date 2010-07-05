@@ -46,7 +46,6 @@ public class HoughMap extends ByteMap {
      *            distance axis (vertical) range
      * @param deltaR
      *            distance increment (height of a pixel)
-     * 
      * @return the height
      */
     protected static int calculateHeight(double rMax, double deltaR) {
@@ -73,7 +72,6 @@ public class HoughMap extends ByteMap {
      * 
      * @param deltaTheta
      *            distance increment (width of a pixel)
-     * 
      * @return the width
      */
     protected static int calculateWidth(double deltaTheta) {
@@ -95,8 +93,6 @@ public class HoughMap extends ByteMap {
         return (widthDouble - widthInteger > 0) ? (int) widthInteger
                 : (int) widthInteger - 1;
     }
-
-
 
     /** Minimum value of the distance axis (y = height-1). */
     public final double rMin;
@@ -182,7 +178,6 @@ public class HoughMap extends ByteMap {
      *            distance increment (Height of a pixel)
      * @param deltaTheta
      *            angle increment in radians (Width of a pixel)
-     * 
      * @throws IllegalArgumentException
      *             if the height is not odd
      * @throws IllegalArgumentException
@@ -278,9 +273,7 @@ public class HoughMap extends ByteMap {
      *            rho coordinate (in pixel)
      * @param theta
      *            theta coordinate (in radians)
-     * 
      * @return the index in the pixArray
-     * 
      * @throws IllegalArgumentException
      *             if either <code>r</code> or <code>theta</code> are outside
      *             the <code>HougMap</code>
@@ -297,7 +290,6 @@ public class HoughMap extends ByteMap {
      * 
      * @param index
      *            index of the pixel in the pixArray
-     * 
      * @return the value of the specified pixel
      */
     @Override
@@ -310,9 +302,9 @@ public class HoughMap extends ByteMap {
     @Override
     public double getProperty(String key, double deFault) {
         if (key.equals(DELTA_R))
-            return Double.longBitsToDouble(super.getProperty(DELTA_R, 0l));
+            return Double.longBitsToDouble(super.getProperty(DELTA_R, 0L));
         else if (key.equals(DELTA_THETA))
-            return Double.longBitsToDouble(super.getProperty(DELTA_THETA, 0l));
+            return Double.longBitsToDouble(super.getProperty(DELTA_THETA, 0L));
         else
             return super.getProperty(key, deFault);
     }
@@ -324,9 +316,7 @@ public class HoughMap extends ByteMap {
      * 
      * @param index
      *            index
-     * 
      * @return the <code>r</code> value of the specified index
-     * 
      * @throws IllegalArgumentException
      *             if <code>index</code> is outside the range of the
      *             <code>pixArray</code>
@@ -349,9 +339,7 @@ public class HoughMap extends ByteMap {
      *            x coordinate
      * @param y
      *            y coordinate
-     * 
      * @return the <code>r</code> value of the specified index
-     * 
      * @throws IllegalArgumentException
      *             if either <code>x</code> or <code>y</code> are outside the
      *             <code>HougMap</code>
@@ -367,9 +355,7 @@ public class HoughMap extends ByteMap {
      * 
      * @param index
      *            index
-     * 
      * @return the <code>theta</code> value in radians
-     * 
      * @throws IllegalArgumentException
      *             if <code>index</code> is outside the range of the
      *             <code>pixArray</code>
@@ -391,9 +377,7 @@ public class HoughMap extends ByteMap {
      *            x coordinate
      * @param y
      *            y coordinate
-     * 
      * @return the <code>theta</code> value in radians
-     * 
      * @throws IllegalArgumentException
      *             if either <code>x</code> or <code>y</code> are outside the
      *             <code>HougMap</code>
@@ -420,9 +404,7 @@ public class HoughMap extends ByteMap {
      * 
      * @param theta
      *            theta coordinate to convert
-     * 
      * @return the corresponding x coordinate
-     * 
      * @throws IllegalArgumentException
      *             if <code>theta</code> is not between {@link #thetaMin} and
      *             {@link #thetaMax}
@@ -442,9 +424,7 @@ public class HoughMap extends ByteMap {
      * 
      * @param r
      *            r coordinate to convert
-     * 
      * @return the corresponding y coordinate
-     * 
      * @throws IllegalArgumentException
      *             if <code>r</code> is not between {@link #rMin} and
      *             {@link #rMax}

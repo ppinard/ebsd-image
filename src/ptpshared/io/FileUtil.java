@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.io;
 
 import static rmlshared.io.FileUtil.getBaseName;
@@ -31,7 +31,6 @@ import rmlshared.util.ArrayList;
  * Miscellaneous utilities to deal with files, jars and class path.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class FileUtil {
 
@@ -49,8 +48,8 @@ public class FileUtil {
             if (packageName.startsWith("."))
                 packageName = packageName.substring(1);
             if (packageName.endsWith("."))
-                packageName = packageName
-                        .substring(0, packageName.length() - 1);
+                packageName =
+                        packageName.substring(0, packageName.length() - 1);
             finalPackageName.append(packageName + ".");
         }
 
@@ -72,10 +71,7 @@ public class FileUtil {
      *         <code>false</code> otherwise
      */
     public static boolean jarContainsPackage(JarFile jarFile, String packagePath) {
-        if (jarFile.getEntry(packagePath) == null)
-            return false;
-        else
-            return true;
+        return (jarFile.getEntry(packagePath) != null);
     }
 
 
@@ -142,8 +138,8 @@ public class FileUtil {
      *            directory to search
      * @param packageName
      *            package name
-     * @return array of classes
-     *         or an empty array if the directory is empty or does not exist
+     * @return array of classes or an empty array if the directory is empty or
+     *         does not exist
      */
     public static Class<?>[] getClassesInPath(File rootDir, String packageName) {
         // Convert the package name to a path
@@ -151,13 +147,14 @@ public class FileUtil {
 
         ArrayList<Class<?>> classList = new ArrayList<Class<?>>();
 
-            //Build the package full path
+        // Build the package full path
         File packageDir = new File(rootDir, packagePath);
-        
-            //If the package directory does not exist
-        if (!packageDir.exists())  return new Class<?>[0];
-        
-            //List the files in the package directory
+
+        // If the package directory does not exist
+        if (!packageDir.exists())
+            return new Class<?>[0];
+
+        // List the files in the package directory
         File[] files = listFilesOnly(packageDir, "*.class");
 
         for (File file : files) {

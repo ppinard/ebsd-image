@@ -32,7 +32,6 @@ import crystallography.core.*;
  * Lassen (1994).
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class KriegerLassen1994 extends IndexingOp {
 
@@ -118,7 +117,7 @@ public class KriegerLassen1994 extends IndexingOp {
         calibration = exp.mmap.calibration;
 
         // Scattering factors
-        ScatteringFactors scatter = null;
+        ScatteringFactors scatter;
         switch (scatterType) {
         case ELECTRON:
             scatter = new ElectronScatteringFactors();
@@ -126,10 +125,9 @@ public class KriegerLassen1994 extends IndexingOp {
         case XRAY:
             scatter = new XrayScatteringFactors();
             break;
-        }
-
-        if (scatter == null)
+        default:
             throw new IOException("The scattering factor type is unknown.");
+        }
 
         // Reflectors
         Crystal[] phases = exp.mmap.getPhases();

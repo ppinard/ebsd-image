@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.utility.xml;
 
 import java.io.File;
@@ -700,10 +700,7 @@ public class JDomUtil {
     public static boolean hasAttribute(Element element, String attrName) {
         Attribute attr = element.getAttribute(attrName);
 
-        if (attr == null)
-            return false;
-        else
-            return true;
+        return (attr != null);
     }
 
 
@@ -721,10 +718,7 @@ public class JDomUtil {
     public static boolean hasChild(Element element, String childName) {
         Element child = element.getChild(childName);
 
-        if (child == null)
-            return false;
-        else
-            return true;
+        return (child != null);
     }
 
 
@@ -833,12 +827,13 @@ public class JDomUtil {
                 Element subLevel = (Element) itrNext;
 
                 // Find prefix from the parent nodes
-                String prefix = findPrefixFromParents(subLevel, element,
-                        separator);
+                String prefix =
+                        findPrefixFromParents(subLevel, element, separator);
 
                 // Cycle through all attributes
-                props = addAttributesToProperties(props, subLevel, prefix,
-                        separator);
+                props =
+                        addAttributesToProperties(props, subLevel, prefix,
+                                separator);
 
                 // Add property for the node's text value
                 if (subLevel.getText().length() > 0) {
@@ -849,8 +844,9 @@ public class JDomUtil {
         }
 
         // Add attributes from the root element
-        props = addAttributesToProperties(props, element, element.getName(),
-                separator);
+        props =
+                addAttributesToProperties(props, element, element.getName(),
+                        separator);
 
         return props;
     }

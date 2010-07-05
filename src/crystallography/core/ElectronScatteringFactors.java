@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import static java.lang.Math.PI;
@@ -35,15 +35,12 @@ import rmlshared.io.CsvReader;
  * values of the fitting coefficients were taken from the International
  * Crystallography Tables. See the methods {@link #getFromPlaneSpacing} and
  * {@link #getFromS} to obtain the scattering factor of a given atomic number
- * and plane spacing.
- * 
- * <b>References:</b>
+ * and plane spacing. <b>References:</b>
  * <ul>
  * <li>International Crystallography Tables</li>
  * </ul>
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class ElectronScatteringFactors extends ScatteringFactors {
 
@@ -54,7 +51,7 @@ public class ElectronScatteringFactors extends ScatteringFactors {
      * @throws RuntimeException
      *             if one csv file cannot be read
      */
-    public ElectronScatteringFactors() throws RuntimeException {
+    public ElectronScatteringFactors() {
         read02();
         read26();
     }
@@ -95,10 +92,12 @@ public class ElectronScatteringFactors extends ScatteringFactors {
     private double calculateScatteringFactor02(int atomicNumber, double s) {
         HashMap<String, Double> coeffs = coefficients02.get(atomicNumber);
 
-        double[] a = { coeffs.get("a1"), coeffs.get("a2"), coeffs.get("a3"),
-                coeffs.get("a4"), coeffs.get("a5") };
-        double[] b = { coeffs.get("b1"), coeffs.get("b2"), coeffs.get("b3"),
-                coeffs.get("b4"), coeffs.get("b5") };
+        double[] a =
+                { coeffs.get("a1"), coeffs.get("a2"), coeffs.get("a3"),
+                        coeffs.get("a4"), coeffs.get("a5") };
+        double[] b =
+                { coeffs.get("b1"), coeffs.get("b2"), coeffs.get("b3"),
+                        coeffs.get("b4"), coeffs.get("b5") };
 
         return calculateScatteringFactor(s, a, b);
     }
@@ -117,10 +116,12 @@ public class ElectronScatteringFactors extends ScatteringFactors {
     private double calculateScatteringFactor26(int atomicNumber, double s) {
         HashMap<String, Double> coeffs = coefficients26.get(atomicNumber);
 
-        double[] a = { coeffs.get("a1"), coeffs.get("a2"), coeffs.get("a3"),
-                coeffs.get("a4"), coeffs.get("a5") };
-        double[] b = { coeffs.get("b1"), coeffs.get("b2"), coeffs.get("b3"),
-                coeffs.get("b4"), coeffs.get("b5") };
+        double[] a =
+                { coeffs.get("a1"), coeffs.get("a2"), coeffs.get("a3"),
+                        coeffs.get("a4"), coeffs.get("a5") };
+        double[] b =
+                { coeffs.get("b1"), coeffs.get("b2"), coeffs.get("b3"),
+                        coeffs.get("b4"), coeffs.get("b5") };
 
         return calculateScatteringFactor(s, a, b);
     }
@@ -181,9 +182,7 @@ public class ElectronScatteringFactors extends ScatteringFactors {
         else {
             Logger logger = Logger.getLogger("crystallography");
 
-            logger
-                    .warning("Outside table range of s (" + s
-                            + ") < 6 angstroms");
+            logger.warning("Outside table range of s (" + s + ") < 6 angstroms");
 
             return calculateScatteringFactor26(atomicNumber, s);
         }
@@ -198,8 +197,9 @@ public class ElectronScatteringFactors extends ScatteringFactors {
      * @throws RuntimeException
      *             if the file cannot be read
      */
-    private void read02() throws RuntimeException {
-        URL url = getURL("crystallography/data/electron_scattering_factors_0_2.csv");
+    private void read02() {
+        URL url =
+                getURL("crystallography/data/electron_scattering_factors_0_2.csv");
 
         if (url == null)
             throw new RuntimeException(
@@ -220,7 +220,8 @@ public class ElectronScatteringFactors extends ScatteringFactors {
                 int atomicNumber = readAtomicNumber(line);
 
                 // Get coefficients
-                HashMap<String, Double> coefficients = new HashMap<String, Double>();
+                HashMap<String, Double> coefficients =
+                        new HashMap<String, Double>();
                 coefficients.put("a1", Double.parseDouble(line[1]));
                 coefficients.put("a2", Double.parseDouble(line[2]));
                 coefficients.put("a3", Double.parseDouble(line[3]));
@@ -248,8 +249,9 @@ public class ElectronScatteringFactors extends ScatteringFactors {
      * @throws RuntimeException
      *             if the file cannot be read
      */
-    private void read26() throws RuntimeException {
-        URL url = getURL("crystallography/data/electron_scattering_factors_2_6.csv");
+    private void read26() {
+        URL url =
+                getURL("crystallography/data/electron_scattering_factors_2_6.csv");
 
         if (url == null)
             throw new RuntimeException(
@@ -270,7 +272,8 @@ public class ElectronScatteringFactors extends ScatteringFactors {
                 int atomicNumber = readAtomicNumber(line);
 
                 // Get coefficients
-                HashMap<String, Double> coefficients = new HashMap<String, Double>();
+                HashMap<String, Double> coefficients =
+                        new HashMap<String, Double>();
                 coefficients.put("a1", Double.parseDouble(line[1]));
                 coefficients.put("a2", Double.parseDouble(line[2]));
                 coefficients.put("a3", Double.parseDouble(line[3]));

@@ -207,7 +207,6 @@ public class Exp extends Run {
      *            operations for the experiment
      * @param currentMapsSaver
      *            <code>SaveMaps</code> object
-     * 
      * @throws NullPointerException
      *             if the <code>EbsdMMap</code> is null
      * @throws NullPointerException
@@ -216,7 +215,6 @@ public class Exp extends Run {
      *             if the <code>SaveMaps</code> is null
      * @throws NullPointerException
      *             if an <code>Operation</code> is null
-     * 
      * @see EbsdMMap
      * @see CurrentMapsFileSaver
      */
@@ -264,7 +262,6 @@ public class Exp extends Run {
      *            operations for the experiment
      * @param currentMapsSaver
      *            <code>SaveMaps</code> object
-     * 
      * @throws NullPointerException
      *             if the metadata is null
      * @throws NullPointerException
@@ -277,7 +274,6 @@ public class Exp extends Run {
      *             if an <code>Operation</code> is null
      * @throws IllegalArgumentException
      *             if the width or the height are less or equal to zero
-     * 
      * @see Exp#Exp(EbsdMMap, Operation[], CurrentMapsSaver)
      * @see EbsdMetadata
      * @see CurrentMapsFileSaver
@@ -427,7 +423,6 @@ public class Exp extends Run {
      * @param type
      *            class of the map's type
      * @return a new map
-     * 
      * @throws IllegalArgumentException
      *             if the map's type is unknown
      */
@@ -599,8 +594,7 @@ public class Exp extends Run {
      * @return detection post operations
      */
     public DetectionPostOps[] getDetectionPostOps() {
-        return detectionPostOps.toArray(new DetectionPostOps[detectionPostOps
-                .size()]);
+        return detectionPostOps.toArray(new DetectionPostOps[detectionPostOps.size()]);
     }
 
 
@@ -611,8 +605,7 @@ public class Exp extends Run {
      * @return detection pre operations
      */
     public DetectionPreOps[] getDetectionPreOps() {
-        return detectionPreOps.toArray(new DetectionPreOps[detectionPreOps
-                .size()]);
+        return detectionPreOps.toArray(new DetectionPreOps[detectionPreOps.size()]);
     }
 
 
@@ -623,8 +616,7 @@ public class Exp extends Run {
      * @return detection results operations
      */
     public DetectionResultsOps[] getDetectionResultsOps() {
-        return detectionResultsOps
-                .toArray(new DetectionResultsOps[detectionResultsOps.size()]);
+        return detectionResultsOps.toArray(new DetectionResultsOps[detectionResultsOps.size()]);
     }
 
 
@@ -668,8 +660,7 @@ public class Exp extends Run {
      * @return Hough results operations
      */
     public HoughResultsOps[] getHoughResultsOps() {
-        return houghResultsOps.toArray(new HoughResultsOps[houghResultsOps
-                .size()]);
+        return houghResultsOps.toArray(new HoughResultsOps[houghResultsOps.size()]);
     }
 
 
@@ -691,8 +682,7 @@ public class Exp extends Run {
      * @return identification post operations
      */
     public IdentificationPostOps[] getIdentificationPostOps() {
-        return identificationPostOps
-                .toArray(new IdentificationPostOps[identificationPostOps.size()]);
+        return identificationPostOps.toArray(new IdentificationPostOps[identificationPostOps.size()]);
     }
 
 
@@ -703,8 +693,7 @@ public class Exp extends Run {
      * @return identification pre operations
      */
     public IdentificationPreOps[] getIdentificationPreOps() {
-        return identificationPreOps
-                .toArray(new IdentificationPreOps[identificationPreOps.size()]);
+        return identificationPreOps.toArray(new IdentificationPreOps[identificationPreOps.size()]);
     }
 
 
@@ -715,9 +704,7 @@ public class Exp extends Run {
      * @return identification results operations
      */
     public IdentificationResultsOps[] getIdentificationResultsOps() {
-        return identificationResultsOps
-                .toArray(new IdentificationResultsOps[identificationResultsOps
-                        .size()]);
+        return identificationResultsOps.toArray(new IdentificationResultsOps[identificationResultsOps.size()]);
     }
 
 
@@ -739,8 +726,7 @@ public class Exp extends Run {
      * @return indexing post operations
      */
     public IndexingPostOps[] getIndexingPostOps() {
-        return indexingPostOps.toArray(new IndexingPostOps[indexingPostOps
-                .size()]);
+        return indexingPostOps.toArray(new IndexingPostOps[indexingPostOps.size()]);
     }
 
 
@@ -751,8 +737,7 @@ public class Exp extends Run {
      * @return indexing pre operations
      */
     public IndexingPreOps[] getIndexingPreOps() {
-        return indexingPreOps
-                .toArray(new IndexingPreOps[indexingPreOps.size()]);
+        return indexingPreOps.toArray(new IndexingPreOps[indexingPreOps.size()]);
     }
 
 
@@ -763,8 +748,7 @@ public class Exp extends Run {
      * @return indexing results operations
      */
     public IndexingResultsOps[] getIndexingResultsOps() {
-        return indexingResultsOps
-                .toArray(new IndexingResultsOps[indexingResultsOps.size()]);
+        return indexingResultsOps.toArray(new IndexingResultsOps[indexingResultsOps.size()]);
     }
 
 
@@ -786,8 +770,7 @@ public class Exp extends Run {
      * @return pattern post operations
      */
     public PatternPostOps[] getPatternPostOps() {
-        return patternPostOps
-                .toArray(new PatternPostOps[patternPostOps.size()]);
+        return patternPostOps.toArray(new PatternPostOps[patternPostOps.size()]);
     }
 
 
@@ -798,8 +781,7 @@ public class Exp extends Run {
      * @return pattern results operations
      */
     public PatternResultsOps[] getPatternResultsOps() {
-        return patternResultsOps
-                .toArray(new PatternResultsOps[patternResultsOps.size()]);
+        return patternResultsOps.toArray(new PatternResultsOps[patternResultsOps.size()]);
     }
 
 

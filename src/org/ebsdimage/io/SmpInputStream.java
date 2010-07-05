@@ -69,7 +69,7 @@ public class SmpInputStream {
     /** Number of maps. */
     private int nbMaps;
 
-    /** Index of the first Map in the file */
+    /** Index of the first Map in the file. */
     private int startIndex;
 
     /** Length of the header (= header + width + height). */
@@ -161,7 +161,9 @@ public class SmpInputStream {
 
 
     /**
-     * Returns the index of the last <dfn>Map</dfn> in the file
+     * Returns the index of the last <code>Map</code> in the file.
+     * 
+     * @return index of last <code>Map</code>.
      */
     public int getEndIndex() {
         return startIndex + nbMaps - 1;
@@ -214,7 +216,9 @@ public class SmpInputStream {
 
 
     /**
-     * Returns the index of the first <dfn>Map</dfn> in the file
+     * Returns the index of the first <code>Map</code> in the file.
+     * 
+     * @return index of the first <code>Map</code> in the file
      */
     public int getStartIndex() {
         return startIndex;

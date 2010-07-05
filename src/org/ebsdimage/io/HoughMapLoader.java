@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io;
 
 import static org.ebsdimage.core.HoughMap.*;
@@ -35,7 +35,6 @@ import rmlshared.util.Properties;
  * Loads a Hough map.
  * 
  * @author Marin Lagac&eacute;
- * 
  */
 public class HoughMapLoader extends BasicBmpLoader {
 
@@ -156,13 +155,13 @@ public class HoughMapLoader extends BasicBmpLoader {
                     + " (" + height + ").");
 
         double deltaR =
-                Double.longBitsToDouble(props.getProperty(DELTA_R, -1l));
+                Double.longBitsToDouble(props.getProperty(DELTA_R, -1L));
         if (deltaR < 0)
             throw new IOException("Incorrect value for property " + DELTA_R
                     + " (" + deltaR + ").");
 
         double deltaTheta =
-                Double.longBitsToDouble(props.getProperty(DELTA_THETA, -1l));
+                Double.longBitsToDouble(props.getProperty(DELTA_THETA, -1L));
         if (deltaTheta < 0)
             throw new IOException("Incorrect value for property " + DELTA_THETA
                     + " (" + deltaTheta + ").");

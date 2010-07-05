@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static java.lang.Math.abs;
@@ -62,7 +62,6 @@ public class MaskDisc extends BinMap {
      *            y position in pixels of the center of the disc
      * @param radius
      *            radius of the disc in pixels
-     * 
      * @throws IllegalArgumentException
      *             if either <code>width</code>, <code>height</code> or
      *             <code>radius</code> are <= 0
@@ -90,9 +89,9 @@ public class MaskDisc extends BinMap {
         double squareRoot;
         double xMin;
         double xMax;
-        for (int y = 0; y < height; y++) // Cycle through every pixel in the
-        // BinMap
-        {
+
+        // Cycle through every pixel in the BinMap
+        for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 // Skip if above or below the disc
                 if (abs(y - centroidY) >= radius)
@@ -103,10 +102,9 @@ public class MaskDisc extends BinMap {
                 /*
                  * (x-centroidX)^2 + (y-centroidY)^2 < radius^2 (x-centroidX)^2
                  * < radius^2 - (y-centroidY)^2 abs(x-centroidX) < sqrt(radius^2
-                 * - (y-centroidY)^2)
-                 * 
-                 * so: x > centroidX - sqrt(radius^2 - (y-centroidY)^2) and x <
-                 * centroidX + sqrt(radius^2 - (y-centroidY)^2)
+                 * - (y-centroidY)^2) so: x > centroidX - sqrt(radius^2 -
+                 * (y-centroidY)^2) and x < centroidX + sqrt(radius^2 -
+                 * (y-centroidY)^2)
                  */
 
                 squareRoot =

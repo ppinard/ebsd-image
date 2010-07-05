@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.gui;
 
 import java.awt.Dimension;
@@ -35,7 +35,6 @@ import rmlshared.thread.EventThreadDispatcher;
  * A wizard.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Wizard {
 
@@ -43,7 +42,6 @@ public class Wizard {
      * Event thread to show the wizard.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class Show extends EventThreadDispatcher {
 
@@ -52,8 +50,6 @@ public class Wizard {
             return WizardDisplayer.showWizard(wizard, dimensions);
         }
     }
-
-
 
     /** Pages of the wizard. */
     private WizardPage[] pages;
@@ -183,7 +179,6 @@ public class Wizard {
      * 
      * @param title
      *            descriptive title
-     * 
      * @throws NullPointerException
      *             if the title is null
      */
@@ -215,9 +210,6 @@ public class Wizard {
         // Reset background image
         UIManager.put("wizard.sidebar.image", null);
 
-        if (result == null)
-            return false;
-        else
-            return true;
+        return (result != null);
     }
 }

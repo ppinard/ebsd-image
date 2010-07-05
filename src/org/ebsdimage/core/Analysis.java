@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static org.ebsdimage.core.HoughMap.DELTA_R;
@@ -30,7 +30,6 @@ import rmlshared.math.Stats;
  * Analysis of maps and results.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Analysis {
 
@@ -40,9 +39,7 @@ public class Analysis {
      * 
      * @param map
      *            <code>ByteMap</code> to get the average pixel value of
-     * 
      * @return the average pixel value
-     * 
      * @throws NullPointerException
      *             if the map is null
      */
@@ -86,9 +83,7 @@ public class Analysis {
      * 
      * @param map
      *            <code>ByteMap</code> to get the entropy of
-     * 
      * @return the entropy
-     * 
      * @throws NullPointerException
      *             if the map is null
      */
@@ -112,9 +107,7 @@ public class Analysis {
      * 
      * @param binMap
      *            <code>BinMap</code> to get the centroid of
-     * 
      * @return the list of centroid coordinates in (r;theta)
-     * 
      * @throws NullPointerException
      *             if the bin map is null
      */
@@ -151,9 +144,7 @@ public class Analysis {
      * @param byteMap
      *            corresponding <code>ByteMap</code> to get the maximum color
      *            index from
-     * 
      * @return the list of the objects maximum pixel color index
-     * 
      * @throws NullPointerException
      *             if the ident map or the byte map is null
      * @throws IllegalArgumentException
@@ -214,9 +205,7 @@ public class Analysis {
      *            <code>ByteMap</code> to use
      * @param index
      *            index to the the <code>r</code> coordinate of
-     * 
      * @return the <code>r</code> coordinate
-     * 
      * @throws IllegalArgumentException
      *             if <code>map</code> does not hold the
      *             <code>HoughMap.DELTA_R</code> property
@@ -237,7 +226,7 @@ public class Analysis {
             throw new IllegalArgumentException(map.getName()
                     + " does not hold the " + DELTA_R + " property.");
 
-        double deltaR = Double.longBitsToDouble(map.getProperty(DELTA_R, -1l));
+        double deltaR = Double.longBitsToDouble(map.getProperty(DELTA_R, -1L));
         if (deltaR < 0)
             throw new IllegalArgumentException("Incorrect value for property "
                     + DELTA_R + " (" + deltaR + ").");
@@ -297,9 +286,7 @@ public class Analysis {
      *            <code>ByteMap</code> to use
      * @param index
      *            index to the the <code>r</code> coordinate of
-     * 
      * @return the <code>theta</code> coordinate
-     * 
      * @throws IllegalArgumentException
      *             if <code>map</code> does not hold the
      *             <code>HoughMap.DELTA_THETA</code> property
@@ -322,7 +309,7 @@ public class Analysis {
                     + " property.");
 
         double deltaTheta =
-                Double.longBitsToDouble(map.getProperty(DELTA_THETA, -1l));
+                Double.longBitsToDouble(map.getProperty(DELTA_THETA, -1L));
         if (deltaTheta < 0)
             throw new IllegalArgumentException("Incorrect value for property "
                     + DELTA_THETA + " (" + deltaTheta + ").");
@@ -357,12 +344,9 @@ public class Analysis {
      * 
      * @param map
      *            <code>ByteMap</code> to get the standard deviation of
-     * 
      * @return the population standard deviation
-     * 
      * @throws NullPointerException
      *             if the map is null
-     * 
      * @see #variance(ByteMap)
      */
     public static double standardDeviation(ByteMap map) {
@@ -390,9 +374,7 @@ public class Analysis {
      * 
      * @param map
      *            <code>ByteMap</code> to get the variance of
-     * 
      * @return the population variance
-     * 
      * @throws NullPointerException
      *             if the map is null
      */

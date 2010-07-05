@@ -44,7 +44,6 @@ import crystallography.core.*;
  * 
  * @author Marin Lagac&eacute;
  * @author Philippe T. Pinard
- * 
  */
 public class NewPhaseDialog extends BasicDialog {
 
@@ -56,13 +55,10 @@ public class NewPhaseDialog extends BasicDialog {
     private static final ImageIcon REMOVE_ICON =
             GuiUtil.loadIcon("ptpshared/data/icon/list-remove_(22x22).png");
 
-
-
     /**
      * Action to insert a new atom site.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class Add extends PlugIn {
         @Override
@@ -84,20 +80,17 @@ public class NewPhaseDialog extends BasicDialog {
 
             AtomSite atomSite =
                     new AtomSite(ElementProperties.getAtomicNumber(symbol),
-                            xField.getValue(), yField.getValue(), zField
-                                    .getValue(), occupancyField.getValue());
+                            xField.getValue(), yField.getValue(),
+                            zField.getValue(), occupancyField.getValue());
 
             ((AtomSiteTableModel) atomSiteTable.getModel()).append(atomSite);
         }
     }
 
-
-
     /**
      * Table model for the atom site.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private static class AtomSiteTableModel extends AbstractTableModel {
         /** Column names. */
@@ -223,8 +216,6 @@ public class NewPhaseDialog extends BasicDialog {
 
     }
 
-
-
     /**
      * Listener of the crystal system combo box.
      */
@@ -235,23 +226,17 @@ public class NewPhaseDialog extends BasicDialog {
         }
     }
 
-
-
     /**
      * Action to remove an atom site.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class Remove extends PlugIn {
         @Override
         public void xRun() {
-            ((AtomSiteTableModel) atomSiteTable.getModel())
-                    .remove(atomSiteTable.getSelectedRow());
+            ((AtomSiteTableModel) atomSiteTable.getModel()).remove(atomSiteTable.getSelectedRow());
         }
     }
-
-
 
     /** Field for the crystal's name. */
     private TextField nameField;
@@ -477,26 +462,27 @@ public class NewPhaseDialog extends BasicDialog {
     private UnitCell getUnitCell() {
         switch (crystalSystemCBox.getSelectedItem()) {
         case TRICLINIC:
-            return UnitCellFactory.triclinic(aField.getValueBFR(), bField
-                    .getValueBFR(), cField.getValueBFR(), toRadians(alphaField
-                    .getValueBFR()), toRadians(betaField.getValueBFR()),
+            return UnitCellFactory.triclinic(aField.getValueBFR(),
+                    bField.getValueBFR(), cField.getValueBFR(),
+                    toRadians(alphaField.getValueBFR()),
+                    toRadians(betaField.getValueBFR()),
                     toRadians(gammaField.getValueBFR()));
         case MONOCLINIC:
-            return UnitCellFactory.monoclinic(aField.getValueBFR(), bField
-                    .getValueBFR(), cField.getValueBFR(), toRadians(betaField
-                    .getValueBFR()));
+            return UnitCellFactory.monoclinic(aField.getValueBFR(),
+                    bField.getValueBFR(), cField.getValueBFR(),
+                    toRadians(betaField.getValueBFR()));
         case ORTHORHOMBIC:
-            return UnitCellFactory.orthorhombic(aField.getValueBFR(), bField
-                    .getValueBFR(), cField.getValueBFR());
+            return UnitCellFactory.orthorhombic(aField.getValueBFR(),
+                    bField.getValueBFR(), cField.getValueBFR());
         case TRIGONAL:
             return UnitCellFactory.trigonal(aField.getValueBFR(),
                     toRadians(alphaField.getValueBFR()));
         case TETRAGONAL:
-            return UnitCellFactory.tetragonal(aField.getValueBFR(), cField
-                    .getValueBFR());
+            return UnitCellFactory.tetragonal(aField.getValueBFR(),
+                    cField.getValueBFR());
         case HEXAGONAL:
-            return UnitCellFactory.hexagonal(aField.getValueBFR(), cField
-                    .getValueBFR());
+            return UnitCellFactory.hexagonal(aField.getValueBFR(),
+                    cField.getValueBFR());
         case CUBIC:
             return UnitCellFactory.cubic(aField.getValueBFR());
         default:
@@ -646,6 +632,9 @@ public class NewPhaseDialog extends BasicDialog {
             symmetryCBox.addGeneric(PG432);
 
             break;
+        default:
+            throw new RuntimeException("Unknown crystal system ("
+                    + crystalSystemCBox.getSelectedItem() + ")");
         }
     }
 

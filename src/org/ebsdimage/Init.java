@@ -14,19 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage;
 
-
 import rmlimage.RMLImage;
-
-
 
 /**
  * Init class for the EBSD module.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Init extends rmlimage.module.Init {
 
@@ -52,10 +48,10 @@ public class Init extends rmlimage.module.Init {
 
     @Override
     public void postGUI() {
-        //Activate the Cancel button
-      rmlimage.ui.Desktop desktop = RMLImage.getDesktop();
-      if (desktop instanceof rmlimage.gui.Desktop)
-        ((rmlimage.gui.Desktop)desktop).showCancelButton(true);
+        // Activate the Cancel button
+        rmlimage.ui.Desktop desktop = RMLImage.getDesktop();
+        if (desktop instanceof rmlimage.gui.Desktop)
+            ((rmlimage.gui.Desktop) desktop).showCancelButton(true);
     }
 
 }

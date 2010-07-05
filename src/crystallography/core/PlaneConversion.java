@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import ptpshared.core.math.Vector;
@@ -25,7 +25,6 @@ import ptpshared.core.math.Vector;
  * The Bravais definition is typically used for the hexagonal crystal system.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PlaneConversion {
     /**
@@ -43,8 +42,7 @@ public class PlaneConversion {
      * @throws InvalidPlaneException
      *             if the miller plane is a null plane
      */
-    public static Plane bravaisToMiller(int h, int k, int i, int l)
-            throws InvalidPlaneException {
+    public static Plane bravaisToMiller(int h, int k, int i, int l) {
         return new Plane(h, k, l);
     }
 
@@ -59,8 +57,7 @@ public class PlaneConversion {
      * @throws InvalidPlaneException
      *             if the miller plane is a null plane
      */
-    public static Plane bravaisToMiller(Vector plane)
-            throws InvalidPlaneException {
+    public static Plane bravaisToMiller(Vector plane) {
         if (plane.size() != 4)
             throw new IllegalArgumentException(
                     "A Bravais plane has 4 indices (Given plane has "

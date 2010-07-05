@@ -14,14 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.utility;
 
 /**
  * Utilities to deal with primitive data types.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class DataTypeUtil {
 
@@ -37,17 +36,12 @@ public class DataTypeUtil {
      * 
      * @param str
      *            string
-     * 
      * @return <code>true</code> if it can be parsed
      */
     public static boolean isBoolean(String str) {
         str = str.toLowerCase();
 
-        if ("true".equals(str) || "yes".equals(str) || "false".equals(str)
-                || "no".equals(str))
-            return true;
-        else
-            return false;
+        return ("true".equals(str) || "yes".equals(str) || "false".equals(str) || "no".equals(str));
     }
 
 
@@ -57,7 +51,6 @@ public class DataTypeUtil {
      * 
      * @param str
      *            string
-     * 
      * @return <code>true</code> if it can be parsed
      */
     public static boolean isDouble(String str) {
@@ -76,7 +69,6 @@ public class DataTypeUtil {
      * 
      * @param str
      *            string
-     * 
      * @return <code>true</code> if it can be parsed
      */
     public static boolean isInteger(String str) {

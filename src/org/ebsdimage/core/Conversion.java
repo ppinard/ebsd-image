@@ -36,7 +36,6 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
  * Convert one type of map to another.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Conversion implements ConversionHandler {
 
@@ -45,7 +44,6 @@ public class Conversion implements ConversionHandler {
      * 
      * @param houghMap
      *            <code>HoughMap</code> to convert.
-     * 
      * @return the <code>ByteMap</code>.
      */
     public static ByteMap toByteMap(HoughMap houghMap) {
@@ -104,24 +102,21 @@ public class Conversion implements ConversionHandler {
      * 
      * @param byteMap
      *            <code>ByteMap</code> to convert.
-     * 
      * @return the <code>HoughMap</code>.
-     * 
      * @throws IllegalArgumentException
      *             if any of the properties listed above are missing.
-     * 
      * @see Map#setProperty(String, double)
      */
     public static HoughMap toHoughMap(ByteMap byteMap) {
         // Get the needed properties from the bytemap
         double deltaR =
-                Double.longBitsToDouble(byteMap.getProperty(DELTA_R, -1l));
+                Double.longBitsToDouble(byteMap.getProperty(DELTA_R, -1L));
         if (deltaR < 0)
             throw new IllegalArgumentException("Incorrect value for property "
                     + DELTA_R + " (" + deltaR + ").");
 
         double deltaTheta =
-                Double.longBitsToDouble(byteMap.getProperty(DELTA_THETA, -1l));
+                Double.longBitsToDouble(byteMap.getProperty(DELTA_THETA, -1L));
         if (deltaTheta < 0)
             throw new IllegalArgumentException("Incorrect value for property "
                     + DELTA_THETA + " (" + deltaTheta + ").");
@@ -215,7 +210,6 @@ public class Conversion implements ConversionHandler {
      * <li><code>EbsdMMap</code> (Eulers) -> <code>RGBMap</code></li>
      * </ul>
      * .
-     * 
      * <p/>
      * {@inheritDoc}
      */

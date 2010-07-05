@@ -29,7 +29,6 @@ import rmlimage.core.Map;
  * <code>EbsdMMap</code> holding all the results from an <code>Exp</code>.
  * 
  * @author Philippe T. Pinard
- * 
  * @see EbsdMMap
  * @see EbsdMetadata
  * @see ExpMetadata

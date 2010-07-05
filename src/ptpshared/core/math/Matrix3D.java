@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.core.math;
 
 import static java.lang.Math.abs;
@@ -43,8 +43,8 @@ public class Matrix3D {
     public static final Matrix3D ZERO = new Matrix3D(0, 0, 0, 0, 0, 0, 0, 0, 0);
 
     /** Identity matrix. */
-    public static final Matrix3D IDENTITY = new Matrix3D(1, 0, 0, 0, 1, 0, 0,
-            0, 1);
+    public static final Matrix3D IDENTITY =
+            new Matrix3D(1, 0, 0, 0, 1, 0, 0, 0, 1);
 
     /** Array that holds the actual data. */
     @NonNull
@@ -100,11 +100,10 @@ public class Matrix3D {
      * 
      * @param data
      *            array containing 9 values
-     * 
      * @throws IllegalArgumentException
      *             if the array does not have 9 items
      */
-    public Matrix3D(double[] data) throws IllegalArgumentException {
+    public Matrix3D(double[] data) {
         if (data.length != 9)
             throw new IllegalArgumentException("data array length ("
                     + data.length + ") must be 9.");
@@ -141,11 +140,10 @@ public class Matrix3D {
      * 
      * @param data
      *            2d array containing the values
-     * 
      * @throws IllegalArgumentException
      *             if the array is not 3x3
      */
-    public Matrix3D(double[][] data) throws IllegalArgumentException {
+    public Matrix3D(double[][] data) {
         if (data.length != 3)
             throw new IllegalArgumentException("The number of matrix rows ("
                     + data.length + ") must be 3.");
@@ -183,10 +181,12 @@ public class Matrix3D {
      * @return determinant
      */
     public double det() {
-        double a = m[0][0] * m[1][1] * m[2][2] + m[0][1] * m[1][2] * m[2][0]
-                + m[0][2] * m[2][1] * m[1][0];
-        double b = m[0][0] * m[1][2] * m[2][1] + m[0][1] * m[2][2] * m[1][0]
-                + m[0][2] * m[2][0] * m[1][1];
+        double a =
+                m[0][0] * m[1][1] * m[2][2] + m[0][1] * m[1][2] * m[2][0]
+                        + m[0][2] * m[2][1] * m[1][0];
+        double b =
+                m[0][0] * m[1][2] * m[2][1] + m[0][1] * m[2][2] * m[1][0]
+                        + m[0][2] * m[2][0] * m[1][1];
 
         return a - b;
     }
@@ -220,7 +220,6 @@ public class Matrix3D {
      * @param precision
      *            level of precision
      * @return whether the two <code>Matrix3D</code> are almost equal
-     * 
      * @throws IllegalArgumentException
      *             if the precision is less than 0.0
      * @throws IllegalArgumentException
@@ -255,7 +254,6 @@ public class Matrix3D {
      * 
      * @param obj
      *            other <code>Matrix3D</code> to check equality
-     * 
      * @return whether the two <code>Matrix3D</code> are equal
      */
     @Override
@@ -270,8 +268,7 @@ public class Matrix3D {
         Matrix3D other = (Matrix3D) obj;
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < 3; j++)
-                if (Double.doubleToLongBits(m[i][j]) != Double
-                        .doubleToLongBits(other.m[i][j]))
+                if (Double.doubleToLongBits(m[i][j]) != Double.doubleToLongBits(other.m[i][j]))
                     return false;
         return true;
     }
@@ -321,9 +318,7 @@ public class Matrix3D {
 
 
     /**
-     * Returns the inverse of the current matrix.
-     * 
-     * <b>References:</b>
+     * Returns the inverse of the current matrix. <b>References:</b>
      * <ul>
      * <li><a href="http://www.dr-lex.be/random/matrix_inv.html">Algorithm from
      * Alexander Thomas</a></li>
@@ -379,16 +374,12 @@ public class Matrix3D {
      * 
      * @param precision
      *            precision of the comparison
-     * 
      * @return <code>true</code> if the <code>Matrix3D</code> is a special
      *         orthogonal matrix
      */
     public boolean isSpecialOrthogonal(double precision) {
-        if (abs(det() - 1.0) < precision
-                && multiply(transpose()).equals(IDENTITY, precision))
-            return true;
-        else
-            return false;
+        return (abs(det() - 1.0) < precision && multiply(transpose()).equals(
+                IDENTITY, precision));
     }
 
 
@@ -400,7 +391,6 @@ public class Matrix3D {
      * 
      * @param value
      *            scalar
-     * 
      * @return resultant matrix
      */
     @CheckReturnValue
@@ -422,7 +412,6 @@ public class Matrix3D {
      * 
      * @param other
      *            matrix
-     * 
      * @return resultant matrix
      */
     @CheckReturnValue
@@ -445,7 +434,6 @@ public class Matrix3D {
      * 
      * @param other
      *            column vector
-     * 
      * @return resultant <code>Vector3D</code>
      */
     @CheckReturnValue

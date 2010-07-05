@@ -39,7 +39,6 @@ import rmlshared.geom.LineUtil;
  * <code>m</code> and <code>k</code> respectively.
  * 
  * @author Philippe T. Pinard
- * 
  */
 @Immutable
 public class Line {
@@ -59,7 +58,6 @@ public class Line {
      *            slope
      * @param k
      *            intercept
-     * 
      * @throws IllegalArgumentException
      *             if the slope is not a number (NaN)
      * @throws IllegalArgumentException
@@ -108,7 +106,6 @@ public class Line {
      * 
      * @param obj
      *            other <code>Line</code> to check equality
-     * 
      * @return whether the two <code>Line</code> are equal
      */
     @Override
@@ -181,14 +178,12 @@ public class Line {
      * Converts the line to two points (x1, y1) and (x2, y2) saved in a Line2D.
      * The line with slope m and k uses an origin at width/2 and height/2 where
      * the y axis is pointing up and x axis pointing to the right of the image.
-     * 
      * The line is extended to 10% outside the image.
      * 
      * @param width
      *            width of the image
      * @param height
      *            height of the image
-     * 
      * @return <code>Line2D</code> containing the two points
      */
     public Line2D.Double toLine2D(int width, int height) {
@@ -238,21 +233,18 @@ public class Line {
         Vector3D vector;
         Vector3D point;
         switch (plane) {
-        case XY: {
+        case XY:
             vector = new Vector3D(deltax, deltay, 0);
             point = new Vector3D(line2D.x1, line2D.y1, 0);
             return new Line3D(point, vector);
-        }
-        case XZ: {
+        case XZ:
             vector = new Vector3D(deltax, 0, deltay);
             point = new Vector3D(line2D.x1, 0, line2D.y1);
             return new Line3D(point, vector);
-        }
-        case YZ: {
+        case YZ:
             vector = new Vector3D(0, deltax, deltay);
             point = new Vector3D(0, line2D.x1, line2D.y1);
             return new Line3D(point, vector);
-        }
         default:
             throw new IllegalArgumentException(plane.toString()
                     + " is invalid.");
