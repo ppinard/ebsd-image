@@ -34,7 +34,6 @@ import org.ebsdimage.vendors.hkl.core.HklMetadata;
 
 import ptpshared.core.math.Eulers;
 import ptpshared.core.math.Quaternion;
-import ptpshared.utility.DataFile;
 import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
 import rmlimage.module.real.core.RealMap;
@@ -49,6 +48,93 @@ import crystallography.core.Crystal;
  * @author Philippe T. Pinard
  */
 public class CtfLoader implements Monitorable {
+
+    /**
+     * Return an array list containing only the lines of the header. The file
+     * reader stops reading when it encounters a non-header line. Empty lines
+     * are ignored.
+     * 
+     * @param file
+     *            ctf file
+     * @return array list of lines
+     * @throws IOException
+     *             if an error occurs while reading the ctf file
+     */
+    private static ArrayList<String[]> getHeaderLines(File file)
+            throws IOException {
+        TsvReader reader = new TsvReader(file);
+
+        // Separate lines in to header and data
+        ArrayList<String[]> headerLines = new ArrayList<String[]>();
+
+        while (true) {
+            String[] line = reader.readLine();
+            if (line == null) // end of file
+                throw new IOException(
+                        "End of file without finding end of header.");
+
+            // Remove empty lines
+            if (line.length == 0)
+                continue;
+
+            // End when column header line is read
+            if (isColumnsHeaderLine(line))
+                break;
+
+            headerLines.add(line);
+        }
+
+        reader.close();
+
+        return headerLines;
+    }
+
+
+
+    /**
+     * Returns a <code>HklMetadata</code> from parsing the header of the ctf
+     * file. Since the working distance and the calibration is not defined, it
+     * needs to be specified by the user.
+     * 
+     * @param headerLines
+     *            array list containing all the lines in the header
+     * @param workingDistance
+     *            working distance of the acquisition in meters
+     * @param calibration
+     *            calibration of the camera
+     * @return a <code>HklMetadata</code>
+     * @throws IOException
+     *             if an error occurs while parsing the ctf file
+     * @throws NullPointerException
+     *             if the file is null
+     */
+    private static HklMetadata getMetadata(ArrayList<String[]> headerLines,
+            double workingDistance, Camera calibration) throws IOException {
+        // Read project path
+        String projectName = parseProjectName(headerLines);
+        File projectPath = parseProjectPath(headerLines);
+
+        // Read horizontal step size
+        double xstep = parseHorizontalStepSize(headerLines);
+
+        // Read vertical step size
+        double ystep = parseVerticalStepSize(headerLines);
+
+        // Read acquisition eulers
+        Eulers acquisitionEulers = parseAcquisitionEulers(headerLines);
+
+        // Read magnification, beam energy, tilt angle
+        double magnification = parseMagnification(headerLines);
+        double beamEnergy = parseBeamEnergy(headerLines);
+        double tiltAngle = parseTiltAngle(headerLines);
+
+        return new HklMetadata(beamEnergy, magnification, tiltAngle,
+                workingDistance, xstep, ystep,
+                new Quaternion(acquisitionEulers), calibration, projectName,
+                projectPath);
+    }
+
+
 
     /**
      * Returns a <code>HklMetadata</code> from parsing the header of the ctf
@@ -72,11 +158,9 @@ public class CtfLoader implements Monitorable {
         if (file == null)
             throw new NullPointerException("File cannot be null.");
 
-        CtfLoader loader = new CtfLoader();
+        ArrayList<String[]> headerLines = getHeaderLines(file);
 
-        DataFile dataFile = loader.readFile(file);
-
-        return loader.readHeader(dataFile, workingDistance, calibration);
+        return getMetadata(headerLines, workingDistance, calibration);
     }
 
 
@@ -96,11 +180,7 @@ public class CtfLoader implements Monitorable {
         if (file == null)
             throw new NullPointerException("File cannot be null.");
 
-        CtfLoader loader = new CtfLoader();
-
-        DataFile dataFile = loader.readFile(file);
-
-        return loader.parsePhaseNames(dataFile.getHeaderLines());
+        return parsePhaseNames(getHeaderLines(file));
     }
 
 
@@ -130,6 +210,27 @@ public class CtfLoader implements Monitorable {
 
 
     /**
+     * Checks that the line is the header of the columns for the data.
+     * 
+     * @param columns
+     *            line values
+     * @return <code>true</code> if the line is the columns header line,
+     *         <code>false</code> otherwise
+     */
+    private static boolean isColumnsHeaderLine(String[] columns) {
+        if (columns.length != 11)
+            return false;
+        if (!"Phase".equals(columns[0]))
+            return false;
+        if (!"BC".equals(columns[9]))
+            return false;
+
+        return true;
+    }
+
+
+
+    /**
      * Checks if the file is a valid ctf file.
      * 
      * @param file
@@ -144,6 +245,350 @@ public class CtfLoader implements Monitorable {
             throw new NullPointerException("File cannot be null.");
 
         return (getValidationMessage(file).length() == 0) ? true : false;
+    }
+
+
+
+    /**
+     * Returns the acquisition eulers.
+     * 
+     * @param headerLines
+     *            all the header lines
+     * @return acquisition eulers
+     * @throws IOException
+     *             if an error occurs while parsing
+     */
+    private static Eulers parseAcquisitionEulers(ArrayList<String[]> headerLines)
+            throws IOException {
+        double theta1 = Double.NaN;
+        double theta2 = Double.NaN;
+        double theta3 = Double.NaN;
+
+        for (String[] line : headerLines) {
+            if ("AcqE1".equals(line[0])) {
+                if (line.length != 2)
+                    throw new IOException("Expected 2 items on line 'AcqE1'");
+                theta1 = Double.parseDouble(line[1]);
+            } else if ("AcqE2".equals(line[0])) {
+                if (line.length != 2)
+                    throw new IOException("Expected 2 items on line 'AcqE2'");
+                theta2 = Double.parseDouble(line[1]);
+            } else if ("AcqE3".equals(line[0])) {
+                if (line.length != 2)
+                    throw new IOException("Expected 2 items on line 'AcqE3'");
+                theta3 = Double.parseDouble(line[1]);
+            }
+        }
+
+        if (Double.isNaN(theta1))
+            throw new IOException("First acquisition angle could not be found.");
+        if (Double.isNaN(theta2))
+            throw new IOException(
+                    "Second acquisition angle could not be found.");
+        if (Double.isNaN(theta3))
+            throw new IOException("Third acquisition angle could not be found.");
+
+        return new Eulers(theta1, theta2, theta3);
+    }
+
+
+
+    /**
+     * Returns the beam energy of the acquisition.
+     * 
+     * @param headerLines
+     *            all the header lines
+     * @return beam energy
+     * @throws IOException
+     *             if an error occurs while parsing
+     */
+    private static double parseBeamEnergy(ArrayList<String[]> headerLines)
+            throws IOException {
+        double beamEnergy = Double.NaN;
+
+        for (String[] line : headerLines) {
+            if ("Euler angles refer to Sample Coordinate system (CS0)!".equals(line[0])) {
+                if (!"KV".equals(line[7]))
+                    throw new IOException(
+                            "Expected KV on line 'Euler angles refer to...'");
+                beamEnergy = parseDouble(line[8]) * 1000; // in eV
+                break;
+            }
+        }
+
+        if (Double.isNaN(beamEnergy))
+            throw new NullPointerException("Beam energy cannot be found.");
+
+        return beamEnergy;
+    }
+
+
+
+    /**
+     * Returns the height of the map.
+     * 
+     * @param headerLines
+     *            all the header lines
+     * @return height of the map
+     * @throws IOException
+     *             if an error occurs while parsing
+     */
+    private static int parseHeight(ArrayList<String[]> headerLines)
+            throws IOException {
+        int height = -1;
+
+        for (String[] line : headerLines) {
+            if ("YCells".equals(line[0])) {
+                if (line.length != 2)
+                    throw new IOException("Expected 2 items on line 'YCells'");
+                height = Integer.parseInt(line[1]);
+                break;
+            }
+        }
+
+        if (height < 0)
+            throw new IOException("Height could not be found.");
+
+        return height;
+    }
+
+
+
+    /**
+     * Returns the step size in the x direction.
+     * 
+     * @param headerLines
+     *            all the header lines
+     * @return horizontal step size
+     * @throws IOException
+     *             if an error occurs while parsing
+     */
+    private static double parseHorizontalStepSize(
+            ArrayList<String[]> headerLines) throws IOException {
+        double xstep = -1;
+
+        for (String[] line : headerLines) {
+            if ("XStep".equals(line[0])) {
+                if (line.length != 2)
+                    throw new IOException("Expected 2 items on line 'XStep'");
+                xstep = parseDouble(line[1]) * 1e-6; // in meters
+                break;
+            }
+        }
+
+        if (xstep < 0)
+            throw new IOException("Horizontal step size could not be found.");
+
+        return xstep;
+    }
+
+
+
+    /**
+     * Returns the magnification of the acquisition.
+     * 
+     * @param headerLines
+     *            all the header lines
+     * @return magnification
+     * @throws IOException
+     *             if an error occurs while parsing
+     */
+    private static double parseMagnification(ArrayList<String[]> headerLines)
+            throws IOException {
+        double mag = Double.NaN;
+
+        for (String[] line : headerLines) {
+            if ("Euler angles refer to Sample Coordinate system (CS0)!".equals(line[0])) {
+                if (!"Mag".equals(line[1]))
+                    throw new IOException(
+                            "Expected Mag on line 'Euler angles refer to...'");
+                mag = parseDouble(line[2]);
+                break;
+            }
+        }
+
+        if (Double.isNaN(mag))
+            throw new NullPointerException("Magnification cannot be found.");
+
+        return mag;
+    }
+
+
+
+    /**
+     * Returns the name of all the defined phases.
+     * 
+     * @param headerLines
+     *            all the header lines
+     * @return names of defined phases
+     * @throws IOException
+     *             if an error occurs while parsing
+     */
+    private static String[] parsePhaseNames(ArrayList<String[]> headerLines)
+            throws IOException {
+        ArrayList<String> phaseNames = new ArrayList<String>();
+
+        for (String[] line : headerLines) {
+            if (line.length == 8 && line[0].split(";").length == 3
+                    && line[1].split(";").length == 3)
+                phaseNames.add(line[2].trim());
+        }
+
+        return phaseNames.toArray(new String[phaseNames.size()]);
+    }
+
+
+
+    /**
+     * Returns the project's name.
+     * 
+     * @param headerLines
+     *            all the header lines
+     * @return name of project
+     * @throws IOException
+     *             if an error occurs while parsing
+     */
+    private static String parseProjectName(ArrayList<String[]> headerLines)
+            throws IOException {
+        String projectName = null;
+
+        for (String[] line : headerLines) {
+            if ("Prj".equals(line[0])) {
+                if (line.length != 2)
+                    throw new IOException("Expected 2 items on line 'Prj'");
+
+                String[] paths = line[1].split("\\\\");
+                projectName =
+                        FileUtil.getBaseName(new File(paths[paths.length - 1]));
+                break;
+            }
+        }
+
+        if (projectName == null)
+            throw new NullPointerException("Project name cannot be found.");
+
+        return projectName;
+    }
+
+
+
+    /**
+     * Returns the project's path.
+     * 
+     * @param headerLines
+     *            all the header lines
+     * @return path of the project
+     * @throws IOException
+     *             if an error occurs while parsing
+     */
+    private static File parseProjectPath(ArrayList<String[]> headerLines)
+            throws IOException {
+        File projectPath = null;
+
+        for (String[] line : headerLines) {
+            if ("Prj".equals(line[0])) {
+                if (line.length != 2)
+                    throw new IOException("Expected 2 items on line 'Prj'");
+                projectPath = FileUtil.getDirFile(new File(line[1]));
+                break;
+            }
+        }
+
+        if (projectPath == null)
+            throw new NullPointerException("Project path cannot be found.");
+
+        return projectPath;
+    }
+
+
+
+    /**
+     * Returns the angle of the tilt during the acquisition.
+     * 
+     * @param headerLines
+     *            all the header lines
+     * @return tilt angle
+     * @throws IOException
+     *             if an error occurs while parsing
+     */
+    private static double parseTiltAngle(ArrayList<String[]> headerLines)
+            throws IOException {
+        double tiltAngle = Double.NaN;
+
+        for (String[] line : headerLines) {
+            if ("Euler angles refer to Sample Coordinate system (CS0)!".equals(line[0])) {
+                if (!"TiltAngle".equals(line[9]))
+                    throw new IOException(
+                            "Expected TiltAngle on line 'Euler angles refer to...'");
+                tiltAngle = toRadians(parseDouble(line[10])); // in rad
+                break;
+            }
+        }
+
+        if (Double.isNaN(tiltAngle))
+            throw new NullPointerException("Tilt angle cannot be found.");
+
+        return tiltAngle;
+    }
+
+
+
+    /**
+     * Returns the step size in the y direction.
+     * 
+     * @param headerLines
+     *            all the header lines
+     * @return vertical step size
+     * @throws IOException
+     *             if an error occurs while parsing
+     */
+    private static double parseVerticalStepSize(ArrayList<String[]> headerLines)
+            throws IOException {
+        double ystep = -1;
+
+        for (String[] line : headerLines) {
+            if ("YStep".equals(line[0])) {
+                if (line.length != 2)
+                    throw new IOException("Expected 2 items on line 'YStep'");
+                ystep = parseDouble(line[1]) * 1e-6; // in meters
+                break;
+            }
+        }
+
+        if (ystep < 0)
+            throw new IOException("Vertical step size could not be found.");
+
+        return ystep;
+    }
+
+
+
+    /**
+     * Returns the width of the map.
+     * 
+     * @param headerLines
+     *            all the header lines
+     * @return width of the map
+     * @throws IOException
+     *             if an error occurs while parsing
+     */
+    private static int parseWidth(ArrayList<String[]> headerLines)
+            throws IOException {
+        int width = -1;
+
+        for (String[] line : headerLines) {
+            if ("XCells".equals(line[0])) {
+                if (line.length != 2)
+                    throw new IOException("Expected 2 items on line 'XCells'");
+                width = Integer.parseInt(line[1]);
+                break;
+            }
+        }
+
+        if (width < 0)
+            throw new IOException("Width could not be found.");
+
+        return width;
     }
 
 
@@ -188,22 +633,23 @@ public class CtfLoader implements Monitorable {
 
 
     /**
-     * Checks that the line is the header of the columns for the data.
+     * Interrupts the operation.
+     */
+    public synchronized void interrupt() {
+        isInterrupted = true;
+    }
+
+
+
+    /**
+     * Checks if the operation should be interrupted. This method must be
+     * synchronized because interrupt() may be called from any thread.
      * 
-     * @param columns
-     *            line values
-     * @return <code>true</code> if the line is the columns header line,
+     * @return <code>true</code> if the operation is interrupted,
      *         <code>false</code> otherwise
      */
-    private boolean isColumnsHeaderLine(String[] columns) {
-        if (columns.length != 11)
-            return false;
-        if (!"Phase".equals(columns[0]))
-            return false;
-        if (!"BC".equals(columns[9]))
-            return false;
-
-        return true;
+    private synchronized boolean isInterrupted() {
+        return isInterrupted;
     }
 
 
@@ -239,29 +685,45 @@ public class CtfLoader implements Monitorable {
         status = "Validating ctf file.";
         validate(file);
 
-        // Read lines
-        status = "Reading ctf file.";
-        DataFile dataFile = readFile(file);
-
         // Parse header
         status = "Parsing header.";
+        ArrayList<String[]> headerLines = getHeaderLines(file);
         HklMetadata metadata =
-                readHeader(dataFile, workingDistance, calibration);
+                getMetadata(headerLines, workingDistance, calibration);
 
         // Read width
-        int width = parseWidth(dataFile.getHeaderLines());
+        int width = parseWidth(headerLines);
 
         // Read height
-        int height = parseHeight(dataFile.getHeaderLines());
+        int height = parseHeight(headerLines);
 
         // Check number of phases
-        int phasesCount = parsePhaseNames(dataFile.getHeaderLines()).length;
+        int phasesCount = parsePhaseNames(headerLines).length;
         if (phases.length < phasesCount)
             throw new IOException("At least " + phasesCount
                     + " needs to be defined.");
         if (phasesCount > 255)
             throw new IOException("A maximum of 255 phases can be defined.");
 
+        // Find first data line
+        TsvReader reader = new TsvReader(file);
+
+        while (true) {
+            String[] line = reader.readLine();
+            if (line == null) // end of file
+                throw new IOException(
+                        "End of file without finding end of header.");
+
+            // Remove empty lines
+            if (line.length == 0)
+                continue;
+
+            // End when column header line is read
+            if (isColumnsHeaderLine(line))
+                break;
+        }
+
+        // Read data
         RealMap q0Map = new RealMap(width, height);
         RealMap q1Map = new RealMap(width, height);
         RealMap q2Map = new RealMap(width, height);
@@ -275,7 +737,6 @@ public class CtfLoader implements Monitorable {
         RealMap madMap = new RealMap(width, height);
         ByteMap bsMap = new ByteMap(width, height);
 
-        // Read data
         int size = width * height;
 
         float[] q0 = q0Map.pixArray;
@@ -293,11 +754,17 @@ public class CtfLoader implements Monitorable {
         byte[] bs = bsMap.pixArray;
 
         status = "Reading data and creating maps.";
-        ArrayList<String[]> dataLines = dataFile.getDataLines();
-
         for (int n = 0; n < size; n++) {
             // Get line
-            String[] line = dataLines.get(n);
+            String[] line = reader.readLine();
+
+            if (line == null) // end of file
+                throw new IOException(
+                        "End of file while still data left to read");
+
+            if (line.length != 11)
+                throw new IOException("Line " + reader.getLineReadCount()
+                        + " does not have the right number of columns");
 
             // Update progress
             progress = (double) n / size;
@@ -342,6 +809,9 @@ public class CtfLoader implements Monitorable {
             bs[n] = (byte) parseInt(line[10]);
         }
 
+        // Close reader
+        reader.close();
+
         // Set the maps
         HashMap<String, Map> mapList = new HashMap<String, Map>();
         mapList.put(HklMMap.Q0, q0Map);
@@ -370,459 +840,6 @@ public class CtfLoader implements Monitorable {
         mmap.setFile(file);
 
         return mmap;
-    }
-
-
-
-    /**
-     * Returns the acquisition eulers.
-     * 
-     * @param headerLines
-     *            all the header lines
-     * @return acquisition eulers
-     * @throws IOException
-     *             if an error occurs while parsing
-     */
-    private Eulers parseAcquisitionEulers(ArrayList<String[]> headerLines)
-            throws IOException {
-        double theta1 = Double.NaN;
-        double theta2 = Double.NaN;
-        double theta3 = Double.NaN;
-
-        for (String[] line : headerLines) {
-            if ("AcqE1".equals(line[0])) {
-                if (line.length != 2)
-                    throw new IOException("Expected 2 items on line 'AcqE1'");
-                theta1 = Double.parseDouble(line[1]);
-            } else if ("AcqE2".equals(line[0])) {
-                if (line.length != 2)
-                    throw new IOException("Expected 2 items on line 'AcqE2'");
-                theta2 = Double.parseDouble(line[1]);
-            } else if ("AcqE3".equals(line[0])) {
-                if (line.length != 2)
-                    throw new IOException("Expected 2 items on line 'AcqE3'");
-                theta3 = Double.parseDouble(line[1]);
-            }
-        }
-
-        if (Double.isNaN(theta1))
-            throw new IOException("First acquisition angle could not be found.");
-        if (Double.isNaN(theta2))
-            throw new IOException(
-                    "Second acquisition angle could not be found.");
-        if (Double.isNaN(theta3))
-            throw new IOException("Third acquisition angle could not be found.");
-
-        return new Eulers(theta1, theta2, theta3);
-    }
-
-
-
-    /**
-     * Returns the beam energy of the acquisition.
-     * 
-     * @param headerLines
-     *            all the header lines
-     * @return beam energy
-     * @throws IOException
-     *             if an error occurs while parsing
-     */
-    private double parseBeamEnergy(ArrayList<String[]> headerLines)
-            throws IOException {
-        double beamEnergy = Double.NaN;
-
-        for (String[] line : headerLines) {
-            if ("Euler angles refer to Sample Coordinate system (CS0)!".equals(line[0])) {
-                if (!"KV".equals(line[7]))
-                    throw new IOException(
-                            "Expected KV on line 'Euler angles refer to...'");
-                beamEnergy = parseDouble(line[8]) * 1000; // in eV
-            }
-        }
-
-        if (Double.isNaN(beamEnergy))
-            throw new NullPointerException("Beam energy cannot be found.");
-
-        return beamEnergy;
-    }
-
-
-
-    /**
-     * Returns the height of the map.
-     * 
-     * @param headerLines
-     *            all the header lines
-     * @return height of the map
-     * @throws IOException
-     *             if an error occurs while parsing
-     */
-    private int parseHeight(ArrayList<String[]> headerLines) throws IOException {
-        int height = -1;
-
-        for (String[] line : headerLines) {
-            if ("YCells".equals(line[0])) {
-                if (line.length != 2)
-                    throw new IOException("Expected 2 items on line 'YCells'");
-                height = Integer.parseInt(line[1]);
-            }
-        }
-
-        if (height < 0)
-            throw new IOException("Height could not be found.");
-
-        return height;
-    }
-
-
-
-    /**
-     * Returns the step size in the x direction.
-     * 
-     * @param headerLines
-     *            all the header lines
-     * @return horizontal step size
-     * @throws IOException
-     *             if an error occurs while parsing
-     */
-    private double parseHorizontalStepSize(ArrayList<String[]> headerLines)
-            throws IOException {
-        double xstep = -1;
-
-        for (String[] line : headerLines) {
-            if ("XStep".equals(line[0])) {
-                if (line.length != 2)
-                    throw new IOException("Expected 2 items on line 'XStep'");
-                xstep = parseDouble(line[1]) * 1e-6; // in meters
-            }
-        }
-
-        if (xstep < 0)
-            throw new IOException("Horizontal step size could not be found.");
-
-        return xstep;
-    }
-
-
-
-    /**
-     * Returns the magnification of the acquisition.
-     * 
-     * @param headerLines
-     *            all the header lines
-     * @return magnification
-     * @throws IOException
-     *             if an error occurs while parsing
-     */
-    private double parseMagnification(ArrayList<String[]> headerLines)
-            throws IOException {
-        double mag = Double.NaN;
-
-        for (String[] line : headerLines) {
-            if ("Euler angles refer to Sample Coordinate system (CS0)!".equals(line[0])) {
-                if (!"Mag".equals(line[1]))
-                    throw new IOException(
-                            "Expected Mag on line 'Euler angles refer to...'");
-                mag = parseDouble(line[2]);
-            }
-        }
-
-        if (Double.isNaN(mag))
-            throw new NullPointerException("Magnification cannot be found.");
-
-        return mag;
-    }
-
-
-
-    /**
-     * Returns the name of all the defined phases.
-     * 
-     * @param headerLines
-     *            all the header lines
-     * @return names of defined phases
-     * @throws IOException
-     *             if an error occurs while parsing
-     */
-    private String[] parsePhaseNames(ArrayList<String[]> headerLines)
-            throws IOException {
-        ArrayList<String> phaseNames = new ArrayList<String>();
-
-        for (String[] line : headerLines) {
-            if (line.length == 8 && line[0].split(";").length == 3
-                    && line[1].split(";").length == 3)
-                phaseNames.add(line[2].trim());
-        }
-
-        return phaseNames.toArray(new String[phaseNames.size()]);
-    }
-
-
-
-    /**
-     * Returns the project's name.
-     * 
-     * @param headerLines
-     *            all the header lines
-     * @return name of project
-     * @throws IOException
-     *             if an error occurs while parsing
-     */
-    private String parseProjectName(ArrayList<String[]> headerLines)
-            throws IOException {
-        String projectName = null;
-
-        for (String[] line : headerLines) {
-            if ("Prj".equals(line[0])) {
-                if (line.length != 2)
-                    throw new IOException("Expected 2 items on line 'Prj'");
-
-                String[] paths = line[1].split("\\\\");
-                projectName =
-                        FileUtil.getBaseName(new File(paths[paths.length - 1]));
-            }
-        }
-
-        if (projectName == null)
-            throw new NullPointerException("Project name cannot be found.");
-
-        return projectName;
-    }
-
-
-
-    /**
-     * Returns the project's path.
-     * 
-     * @param headerLines
-     *            all the header lines
-     * @return path of the project
-     * @throws IOException
-     *             if an error occurs while parsing
-     */
-    private File parseProjectPath(ArrayList<String[]> headerLines)
-            throws IOException {
-        File projectPath = null;
-
-        for (String[] line : headerLines) {
-            if ("Prj".equals(line[0])) {
-                if (line.length != 2)
-                    throw new IOException("Expected 2 items on line 'Prj'");
-                projectPath = FileUtil.getDirFile(new File(line[1]));
-            }
-        }
-
-        if (projectPath == null)
-            throw new NullPointerException("Project path cannot be found.");
-
-        return projectPath;
-    }
-
-
-
-    /**
-     * Returns the angle of the tilt during the acquisition.
-     * 
-     * @param headerLines
-     *            all the header lines
-     * @return tilt angle
-     * @throws IOException
-     *             if an error occurs while parsing
-     */
-    private double parseTiltAngle(ArrayList<String[]> headerLines)
-            throws IOException {
-        double tiltAngle = Double.NaN;
-
-        for (String[] line : headerLines) {
-            if ("Euler angles refer to Sample Coordinate system (CS0)!".equals(line[0])) {
-                if (!"TiltAngle".equals(line[9]))
-                    throw new IOException(
-                            "Expected TiltAngle on line 'Euler angles refer to...'");
-                tiltAngle = toRadians(parseDouble(line[10])); // in rad
-            }
-        }
-
-        if (Double.isNaN(tiltAngle))
-            throw new NullPointerException("Tilt angle cannot be found.");
-
-        return tiltAngle;
-    }
-
-
-
-    /**
-     * Returns the step size in the y direction.
-     * 
-     * @param headerLines
-     *            all the header lines
-     * @return vertical step size
-     * @throws IOException
-     *             if an error occurs while parsing
-     */
-    private double parseVerticalStepSize(ArrayList<String[]> headerLines)
-            throws IOException {
-        double ystep = -1;
-
-        for (String[] line : headerLines) {
-            if ("YStep".equals(line[0])) {
-                if (line.length != 2)
-                    throw new IOException("Expected 2 items on line 'YStep'");
-                ystep = parseDouble(line[1]) * 1e-6; // in meters
-            }
-        }
-
-        if (ystep < 0)
-            throw new IOException("Vertical step size could not be found.");
-
-        return ystep;
-    }
-
-
-
-    /**
-     * Returns the width of the map.
-     * 
-     * @param headerLines
-     *            all the header lines
-     * @return width of the map
-     * @throws IOException
-     *             if an error occurs while parsing
-     */
-    private int parseWidth(ArrayList<String[]> headerLines) throws IOException {
-        int width = -1;
-
-        for (String[] line : headerLines) {
-            if ("XCells".equals(line[0])) {
-                if (line.length != 2)
-                    throw new IOException("Expected 2 items on line 'XCells'");
-                width = Integer.parseInt(line[1]);
-            }
-        }
-
-        if (width < 0)
-            throw new IOException("Width could not be found.");
-
-        return width;
-    }
-
-
-
-    /**
-     * Reads the ctf file, separates the header and data and returns a
-     * <code>DataFile</code> containing the lines of the header and data.
-     * 
-     * @param file
-     *            ctf file
-     * @return <code>DataFile</code> containing the lines of the header and data
-     * @throws IOException
-     *             if an error occurs while reading the file
-     */
-    private DataFile readFile(File file) throws IOException {
-        TsvReader reader = new TsvReader(file);
-
-        // Separate lines in to header and data
-        ArrayList<String[]> headerLines = new ArrayList<String[]>();
-        ArrayList<String[]> dataLines = new ArrayList<String[]>();
-
-        boolean header = true;
-        while (true) {
-            String[] line = reader.readLine();
-            if (line == null) // end of file
-                break;
-
-            // Remove empty lines
-            if (line.length == 0)
-                continue;
-
-            // Separate between header and data list
-            if (header)
-                headerLines.add(line);
-            else
-                dataLines.add(line);
-
-            // Switch between header to data
-            if (isColumnsHeaderLine(line))
-                header = false;
-        }
-
-        reader.close();
-
-        return new DataFile(headerLines, dataLines);
-    }
-
-
-
-    /**
-     * Parses the header and returns the associated <code>HklMetadata</code>.
-     * 
-     * @param dataFile
-     *            data file containing the header lines
-     * @param workingDistance
-     *            working distance of the EBSD acquisition in meters
-     * @param calibration
-     *            calibration of the camera
-     * @return a <code>HklMetadata</code> from the information given in the
-     *         header
-     * @throws IOException
-     *             if an error occurs while parsing
-     * @throws IllegalArgumentException
-     *             if the working distance is invalid
-     * @throws NullPointerException
-     *             if the camera is null
-     * @throws NullPointerException
-     *             if the data file is null
-     */
-    private HklMetadata readHeader(DataFile dataFile, double workingDistance,
-            Camera calibration) throws IOException {
-        if (dataFile == null)
-            throw new NullPointerException("Data file cannot be null.");
-
-        ArrayList<String[]> headerLines = dataFile.getHeaderLines();
-
-        // Read project path
-        String projectName = parseProjectName(headerLines);
-        File projectPath = parseProjectPath(headerLines);
-
-        // Read horizontal step size
-        double xstep = parseHorizontalStepSize(headerLines);
-
-        // Read vertical step size
-        double ystep = parseVerticalStepSize(headerLines);
-
-        // Read acquisition eulers
-        Eulers acquisitionEulers = parseAcquisitionEulers(headerLines);
-
-        // Read magnification, beam energy, tilt angle
-        double magnification = parseMagnification(headerLines);
-        double beamEnergy = parseBeamEnergy(headerLines);
-        double tiltAngle = parseTiltAngle(headerLines);
-
-        return new HklMetadata(beamEnergy, magnification, tiltAngle,
-                workingDistance, xstep, ystep,
-                new Quaternion(acquisitionEulers), calibration, projectName,
-                projectPath);
-    }
-
-
-
-    /**
-     * Interrupts the operation.
-     */
-    public synchronized void interrupt() {
-        isInterrupted = true;
-    }
-
-
-
-    /**
-     * Checks if the operation should be interrupted. This method must be
-     * synchronized because interrupt() may be called from any thread.
-     * 
-     * @return <code>true</code> if the operation is interrupted,
-     *         <code>false</code> otherwise
-     */
-    private synchronized boolean isInterrupted() {
-        return isInterrupted;
     }
 
 }

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.tsl.io;
 
 import static java.lang.Double.parseDouble;
@@ -33,7 +33,6 @@ import org.ebsdimage.vendors.tsl.core.TslMetadata;
 
 import ptpshared.core.math.Eulers;
 import ptpshared.core.math.Quaternion;
-import ptpshared.utility.DataFile;
 import rmlimage.core.Map;
 import rmlimage.module.real.core.RealMap;
 import rmlshared.io.FileUtil;
@@ -45,9 +44,96 @@ import crystallography.core.Crystal;
  * Parser for TSL ang file.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class AngLoader implements Monitorable {
+
+    /**
+     * Return an array list containing only the lines of the header. The file
+     * reader stops reading when it encounters a non-header line. Empty lines
+     * are ignored.
+     * 
+     * @param file
+     *            ang file
+     * @return array list of lines
+     * @throws IOException
+     *             if an error occurs while reading the ang file
+     */
+    private static ArrayList<String[]> getHeaderLines(File file)
+            throws IOException {
+        SsvReader reader = new SsvReader(file);
+
+        ArrayList<String[]> headerLines = new ArrayList<String[]>();
+
+        while (true) {
+            String[] line = reader.readLine();
+            if (line == null) // end of file
+                break;
+
+            // Remove empty lines
+            if (line.length == 0)
+                continue;
+
+            // Remove empty columns
+            line = removeEmptyColumns(line);
+
+            // Separate between header and data list
+            if (!"#".equals(line[0]))
+                break;
+
+            line = Arrays.copyOfRange(line, 1, line.length);
+            if (line.length > 0)
+                headerLines.add(line);
+        }
+
+        reader.close();
+
+        return headerLines;
+    }
+
+
+
+    /**
+     * Parses the header and returns the associated <code>TslMetadata</code>.
+     * 
+     * @param headerLines
+     *            array list containing all the lines in the header
+     * @param beamEnergy
+     *            energy of the electron beam in eV
+     * @param magnification
+     *            magnification of the EBSD acquisition
+     * @param tiltAngle
+     *            angle of sample's tilt in radians
+     * @param sampleRotation
+     *            rotation from the pattern frame (camera) into the sample frame
+     * @return a <code>TslMetadata</code> from the information given in the
+     *         header
+     * @throws IOException
+     *             if an error occurs while parsing
+     * @throws IllegalArgumentException
+     *             if the beam energy is invalid
+     * @throws IllegalArgumentException
+     *             if the magnification is invalid
+     * @throws IllegalArgumentException
+     *             if the tilt angle is invalid
+     * @throws NullPointerException
+     *             if the sample rotation is null
+     * @throws NullPointerException
+     *             if the data file is null
+     */
+    private static TslMetadata getMetadata(ArrayList<String[]> headerLines,
+            double beamEnergy, double magnification, double tiltAngle,
+            Quaternion sampleRotation) throws IOException {
+        Camera calibration = parseCalibration(headerLines);
+        double workingDistance = parseWorkingDistance(headerLines);
+
+        double xstep = parseHorizontalStepSize(headerLines);
+        double ystep = parseVerticalStepSize(headerLines);
+
+        return new TslMetadata(beamEnergy, magnification, tiltAngle,
+                workingDistance, xstep, ystep, sampleRotation, calibration);
+    }
+
+
 
     /**
      * Returns a <code>TslMetadata</code> from parsing the header of the ang
@@ -71,12 +157,13 @@ public class AngLoader implements Monitorable {
     public static TslMetadata getMetadata(File file, double beamEnergy,
             double magnification, double tiltAngle, Quaternion sampleRotation)
             throws IOException {
-        AngLoader loader = new AngLoader();
+        if (file == null)
+            throw new NullPointerException("File cannot be null.");
 
-        DataFile dataFile = loader.readFile(file);
+        ArrayList<String[]> headerLines = getHeaderLines(file);
 
-        return loader.readHeader(dataFile, beamEnergy, magnification,
-                tiltAngle, sampleRotation);
+        return getMetadata(headerLines, beamEnergy, magnification, tiltAngle,
+                sampleRotation);
     }
 
 
@@ -91,11 +178,10 @@ public class AngLoader implements Monitorable {
      *             if an error occurs while parsing the ang file
      */
     public static String[] getPhaseNames(File file) throws IOException {
-        AngLoader loader = new AngLoader();
+        if (file == null)
+            throw new NullPointerException("File cannot be null.");
 
-        DataFile dataFile = loader.readFile(file);
-
-        return loader.parsePhaseNames(dataFile.getHeaderLines());
+        return parsePhaseNames(getHeaderLines(file));
     }
 
 
@@ -134,6 +220,311 @@ public class AngLoader implements Monitorable {
 
 
     /**
+     * Returns the calibration.
+     * 
+     * @param headerLines
+     *            all the header lines
+     * @return calibration
+     * @throws IOException
+     *             if an error occurs while parsing
+     */
+    private static Camera parseCalibration(ArrayList<String[]> headerLines)
+            throws IOException {
+        double calX = Double.NaN;
+        double calY = Double.NaN;
+        double calZ = Double.NaN;
+
+        for (String[] line : headerLines) {
+            if ("x-star".equals(line[0])) {
+                if (line.length != 2)
+                    throw new IOException("Expected 2 items on line 'x-star'");
+                calX = Double.parseDouble(line[1]);
+            } else if ("y-star".equals(line[0])) {
+                if (line.length != 2)
+                    throw new IOException("Expected 2 items on line 'y-star'");
+                calY = Double.parseDouble(line[1]);
+            } else if ("z-star".equals(line[0])) {
+                if (line.length != 2)
+                    throw new IOException("Expected 2 items on line 'z-star'");
+                calZ = Double.parseDouble(line[1]);
+            }
+        }
+
+        if (Double.isNaN(calX))
+            throw new IOException(
+                    "X coordinate of the calibration could not be found.");
+        if (Double.isNaN(calY))
+            throw new IOException(
+                    "Y coordinate of the calibration could not be found.");
+        if (Double.isNaN(calZ))
+            throw new IOException(
+                    "Z coordinate of the calibration could not be found.");
+
+        return new Camera(calX - 0.5, calY - 0.5, calZ);
+    }
+
+
+
+    /**
+     * Returns the grid type (HexGrid or ).
+     * 
+     * @param headerLines
+     *            all the header lines
+     * @return grid type
+     * @throws IOException
+     *             if an error occurs while parsing
+     */
+    private static String parseGrid(ArrayList<String[]> headerLines)
+            throws IOException {
+        String grid = null;
+
+        for (String[] line : headerLines) {
+            if ("GRID:".equals(line[0])) {
+                if (line.length != 2)
+                    throw new IOException("Expected 2 items on line 'GRID:'");
+                grid = line[1];
+                break;
+            }
+        }
+
+        if (grid == null)
+            throw new IOException("The grid type could not be found.");
+
+        return grid;
+    }
+
+
+
+    /**
+     * Returns the height of the map.
+     * 
+     * @param headerLines
+     *            all the header lines
+     * @return height of the map
+     * @throws IOException
+     *             if an error occurs while parsing
+     */
+    private static int parseHeight(ArrayList<String[]> headerLines)
+            throws IOException {
+        int height = -1;
+
+        for (String[] line : headerLines) {
+            if ("NROWS:".equals(line[0])) {
+                if (line.length != 2)
+                    throw new IOException("Expected 2 items on line 'NROWS:'");
+                height = Integer.parseInt(line[1]);
+                break;
+            }
+        }
+
+        if (height < 0)
+            throw new IOException("Height is not properly defined.");
+
+        return height;
+    }
+
+
+
+    /**
+     * Returns the step size in the x direction.
+     * 
+     * @param headerLines
+     *            all the header lines
+     * @return horizontal step size
+     * @throws IOException
+     *             if an error occurs while parsing
+     */
+    private static double parseHorizontalStepSize(
+            ArrayList<String[]> headerLines) throws IOException {
+        double xstep = Double.NaN;
+
+        for (String[] line : headerLines) {
+            if ("XSTEP:".equals(line[0])) {
+                if (line.length != 2)
+                    throw new IOException("Expected 2 items on line 'XSTEP:'");
+                xstep = Double.parseDouble(line[1]) * 1e-6;
+                break;
+            }
+        }
+
+        if (Double.isNaN(xstep))
+            throw new IOException("The x step size could not be found.");
+
+        return xstep;
+    }
+
+
+
+    /**
+     * Returns the name of the defined phases.
+     * 
+     * @param headerLines
+     *            all the header lines
+     * @return names of the phases
+     * @throws IOException
+     *             if an error occurs while parsing
+     */
+    private static String[] parsePhaseNames(ArrayList<String[]> headerLines)
+            throws IOException {
+        ArrayList<Integer> ids = new ArrayList<Integer>();
+        ArrayList<String> tmpNames = new ArrayList<String>();
+
+        // Get data from header lines
+        for (String[] line : headerLines) {
+            if ("Phase".equals(line[0])) {
+                if (line.length != 2)
+                    throw new IOException("Expected 2 items on line 'Phase'");
+                ids.add(Integer.parseInt(line[1]));
+            } else if ("MaterialName".equals(line[0])) {
+                if (line.length < 2)
+                    throw new IOException(
+                            "Expected 2 or more items on line 'MaterialName'");
+                tmpNames.add(concatenate(Arrays.copyOfRange(line, 1,
+                        line.length)));
+            }
+        }
+
+        // Check data
+        if (ids.size() == 0)
+            throw new IOException("No phase are defined.");
+        if (ids.size() != tmpNames.size())
+            throw new IOException("Number of phase ids (" + ids.size()
+                    + ") does not match the number of phase names ("
+                    + tmpNames.size() + ").");
+
+        // Associate id with name
+        HashMap<Integer, String> mapNames = new HashMap<Integer, String>();
+
+        for (int i = 0; i < ids.size(); i++)
+            mapNames.put(ids.get(i), tmpNames.get(i));
+
+        // Sort ids
+        String[] names = new String[tmpNames.size()];
+
+        Integer[] keys =
+                mapNames.keySet().toArray(new Integer[mapNames.size()]);
+        Arrays.sort(keys);
+
+        for (int i = 0; i < keys.length; i++)
+            names[i] = mapNames.get(keys[i]);
+
+        return names;
+    }
+
+
+
+    /**
+     * Returns the step size in the y direction.
+     * 
+     * @param headerLines
+     *            all the header lines
+     * @return vertical step size
+     * @throws IOException
+     *             if an error occurs while parsing
+     */
+    private static double parseVerticalStepSize(ArrayList<String[]> headerLines)
+            throws IOException {
+        double ystep = Double.NaN;
+
+        for (String[] line : headerLines) {
+            if ("YSTEP:".equals(line[0])) {
+                if (line.length != 2)
+                    throw new IOException("Expected 2 items on line 'YSTEP:'");
+                ystep = Double.parseDouble(line[1]) * 1e-6;
+                break;
+            }
+        }
+
+        if (Double.isNaN(ystep))
+            throw new IOException("The y step size could not be found.");
+
+        return ystep;
+    }
+
+
+
+    /**
+     * Returns the width of the map.
+     * 
+     * @param headerLines
+     *            all the header lines
+     * @return width of the map
+     * @throws IOException
+     *             if an error occurs while parsing
+     */
+    private static int parseWidth(ArrayList<String[]> headerLines)
+            throws IOException {
+        int widthEven = -1;
+
+        for (String[] line : headerLines) {
+            if ("NCOLS_EVEN:".equals(line[0])) {
+                if (line.length != 2)
+                    throw new IOException(
+                            "Expected 2 items on line 'NCOLS_EVEN:'");
+                widthEven = Integer.parseInt(line[1]);
+                break;
+            }
+        }
+
+        if (widthEven > 0)
+            return widthEven;
+        else
+            throw new IOException("Width is not properly defined.");
+    }
+
+
+
+    /**
+     * Returns the calibration's working distance.
+     * 
+     * @param headerLines
+     *            all the header lines
+     * @return working distance
+     * @throws IOException
+     *             if an error occurs while parsing
+     */
+    private static double parseWorkingDistance(ArrayList<String[]> headerLines)
+            throws IOException {
+        double workingDistance = Double.NaN;
+
+        for (String[] line : headerLines) {
+            if ("WorkingDistance".equals(line[0])) {
+                if (line.length != 2)
+                    throw new IOException(
+                            "Expected 2 items on line 'WorkingDistance'");
+                workingDistance = Double.parseDouble(line[1]) * 1e-3;
+            }
+        }
+
+        if (Double.isNaN(workingDistance))
+            throw new IOException("The working distance could not be found.");
+
+        return workingDistance;
+    }
+
+
+
+    /**
+     * Removes the empty columns corresponding to many white spaces between two
+     * values.
+     * 
+     * @param columns
+     *            a line from the reader
+     * @return an array with only values
+     */
+    private static String[] removeEmptyColumns(String[] columns) {
+        ArrayList<String> newColumns = new ArrayList<String>();
+
+        for (String column : columns)
+            if (column.length() > 0)
+                newColumns.add(column.trim());
+
+        return newColumns.toArray(new String[newColumns.size()]);
+    }
+
+
+
+    /**
      * Validates the file to be a valid ang file.
      * 
      * @param file
@@ -146,8 +537,6 @@ public class AngLoader implements Monitorable {
         if (message.length() > 0)
             throw new IOException(message);
     }
-
-
 
     /** Progress value. */
     protected double progress;
@@ -236,27 +625,24 @@ public class AngLoader implements Monitorable {
         status = "Validating ang file.";
         validate(file);
 
-        // Read lines
-        status = "Reading ang file.";
-        DataFile dataFile = readFile(file);
-
         // Parse header
         status = "Parsing header.";
+        ArrayList<String[]> headerLines = getHeaderLines(file);
         TslMetadata metadata =
-                readHeader(dataFile, beamEnergy, magnification, tiltAngle,
+                getMetadata(headerLines, beamEnergy, magnification, tiltAngle,
                         sampleRotation);
 
         // Read width
-        int width = parseWidth(dataFile.getHeaderLines());
+        int width = parseWidth(headerLines);
 
         // Read height
-        int height = parseHeight(dataFile.getHeaderLines());
+        int height = parseHeight(headerLines);
 
         // Read grid
-        String grid = parseGrid(dataFile.getHeaderLines());
+        String grid = parseGrid(headerLines);
 
         // Check number of phases
-        int phasesCount = parsePhaseNames(dataFile.getHeaderLines()).length;
+        int phasesCount = parsePhaseNames(headerLines).length;
         if (phases.length < phasesCount)
             throw new IOException("At least " + phasesCount
                     + " needs to be defined.");
@@ -266,9 +652,9 @@ public class AngLoader implements Monitorable {
         // Data
         HashMap<String, Map> mapList;
         if ("HexGrid".equals(grid))
-            mapList = readDataHexGrid(dataFile, width, height, phases);
+            mapList = readDataHexGrid(file, width, height, phases);
         else if ("SqrGrid".equals(grid))
-            mapList = readDataSqrGrid(dataFile, width, height, phases);
+            mapList = readDataSqrGrid(file, width, height, phases);
         else
             throw new IOException("Invalid grid type (+ " + grid + ").");
 
@@ -287,291 +673,13 @@ public class AngLoader implements Monitorable {
 
 
     /**
-     * Returns the calibration.
-     * 
-     * @param headerLines
-     *            all the header lines
-     * @return calibration
-     * @throws IOException
-     *             if an error occurs while parsing
-     */
-    private Camera parseCalibration(ArrayList<String[]> headerLines)
-            throws IOException {
-        double calX = Double.NaN;
-        double calY = Double.NaN;
-        double calZ = Double.NaN;
-
-        for (String[] line : headerLines) {
-            if ("x-star".equals(line[0])) {
-                if (line.length != 2)
-                    throw new IOException("Expected 2 items on line 'x-star'");
-                calX = Double.parseDouble(line[1]);
-            } else if ("y-star".equals(line[0])) {
-                if (line.length != 2)
-                    throw new IOException("Expected 2 items on line 'y-star'");
-                calY = Double.parseDouble(line[1]);
-            } else if ("z-star".equals(line[0])) {
-                if (line.length != 2)
-                    throw new IOException("Expected 2 items on line 'z-star'");
-                calZ = Double.parseDouble(line[1]);
-            }
-        }
-
-        if (Double.isNaN(calX))
-            throw new IOException(
-                    "X coordinate of the calibration could not be found.");
-        if (Double.isNaN(calY))
-            throw new IOException(
-                    "Y coordinate of the calibration could not be found.");
-        if (Double.isNaN(calZ))
-            throw new IOException(
-                    "Z coordinate of the calibration could not be found.");
-
-        return new Camera(calX - 0.5, calY - 0.5, calZ);
-    }
-
-
-
-    /**
-     * Returns the grid type (HexGrid or ).
-     * 
-     * @param headerLines
-     *            all the header lines
-     * @return grid type
-     * @throws IOException
-     *             if an error occurs while parsing
-     */
-    private String parseGrid(ArrayList<String[]> headerLines)
-            throws IOException {
-        String grid = null;
-
-        for (String[] line : headerLines) {
-            if ("GRID:".equals(line[0])) {
-                if (line.length != 2)
-                    throw new IOException("Expected 2 items on line 'GRID:'");
-                grid = line[1];
-            }
-        }
-
-        if (grid == null)
-            throw new IOException("The grid type could not be found.");
-
-        return grid;
-    }
-
-
-
-    /**
-     * Returns the height of the map.
-     * 
-     * @param headerLines
-     *            all the header lines
-     * @return height of the map
-     * @throws IOException
-     *             if an error occurs while parsing
-     */
-    private int parseHeight(ArrayList<String[]> headerLines) throws IOException {
-        int height = -1;
-
-        for (String[] line : headerLines) {
-            if ("NROWS:".equals(line[0])) {
-                if (line.length != 2)
-                    throw new IOException("Expected 2 items on line 'NROWS:'");
-                height = Integer.parseInt(line[1]);
-            }
-        }
-
-        if (height < 0)
-            throw new IOException("Height is not properly defined.");
-
-        return height;
-    }
-
-
-
-    /**
-     * Returns the step size in the x direction.
-     * 
-     * @param headerLines
-     *            all the header lines
-     * @return horizontal step size
-     * @throws IOException
-     *             if an error occurs while parsing
-     */
-    private double parseHorizontalStepSize(ArrayList<String[]> headerLines)
-            throws IOException {
-        double xstep = Double.NaN;
-
-        for (String[] line : headerLines) {
-            if ("XSTEP:".equals(line[0])) {
-                if (line.length != 2)
-                    throw new IOException("Expected 2 items on line 'XSTEP:'");
-                xstep = Double.parseDouble(line[1]) * 1e-6;
-            }
-        }
-
-        if (Double.isNaN(xstep))
-            throw new IOException("The x step size could not be found.");
-
-        return xstep;
-    }
-
-
-
-    /**
-     * Returns the name of the defined phases.
-     * 
-     * @param headerLines
-     *            all the header lines
-     * @return names of the phases
-     * @throws IOException
-     *             if an error occurs while parsing
-     */
-    private String[] parsePhaseNames(ArrayList<String[]> headerLines)
-            throws IOException {
-        ArrayList<Integer> ids = new ArrayList<Integer>();
-        ArrayList<String> tmpNames = new ArrayList<String>();
-
-        // Get data from header lines
-        for (String[] line : headerLines) {
-            if ("Phase".equals(line[0])) {
-                if (line.length != 2)
-                    throw new IOException("Expected 2 items on line 'Phase'");
-                ids.add(Integer.parseInt(line[1]));
-            } else if ("MaterialName".equals(line[0])) {
-                if (line.length < 2)
-                    throw new IOException(
-                            "Expected 2 or more items on line 'MaterialName'");
-                tmpNames.add(concatenate(Arrays.copyOfRange(line, 1,
-                        line.length)));
-            }
-        }
-
-        // Check data
-        if (ids.size() == 0)
-            throw new IOException("No phase are defined.");
-        if (ids.size() != tmpNames.size())
-            throw new IOException("Number of phase ids (" + ids.size()
-                    + ") does not match the number of phase names ("
-                    + tmpNames.size() + ").");
-
-        // Associate id with name
-        HashMap<Integer, String> mapNames = new HashMap<Integer, String>();
-
-        for (int i = 0; i < ids.size(); i++)
-            mapNames.put(ids.get(i), tmpNames.get(i));
-
-        // Sort ids
-        String[] names = new String[tmpNames.size()];
-
-        Integer[] keys =
-                mapNames.keySet().toArray(new Integer[mapNames.size()]);
-        Arrays.sort(keys);
-
-        for (int i = 0; i < keys.length; i++)
-            names[i] = mapNames.get(keys[i]);
-
-        return names;
-    }
-
-
-
-    /**
-     * Returns the step size in the y direction.
-     * 
-     * @param headerLines
-     *            all the header lines
-     * @return vertical step size
-     * @throws IOException
-     *             if an error occurs while parsing
-     */
-    private double parseVerticalStepSize(ArrayList<String[]> headerLines)
-            throws IOException {
-        double ystep = Double.NaN;
-
-        for (String[] line : headerLines) {
-            if ("YSTEP:".equals(line[0])) {
-                if (line.length != 2)
-                    throw new IOException("Expected 2 items on line 'YSTEP:'");
-                ystep = Double.parseDouble(line[1]) * 1e-6;
-            }
-        }
-
-        if (Double.isNaN(ystep))
-            throw new IOException("The y step size could not be found.");
-
-        return ystep;
-    }
-
-
-
-    /**
-     * Returns the width of the map.
-     * 
-     * @param headerLines
-     *            all the header lines
-     * @return width of the map
-     * @throws IOException
-     *             if an error occurs while parsing
-     */
-    private int parseWidth(ArrayList<String[]> headerLines) throws IOException {
-        int widthEven = -1;
-
-        for (String[] line : headerLines) {
-            if ("NCOLS_EVEN:".equals(line[0])) {
-                if (line.length != 2)
-                    throw new IOException(
-                            "Expected 2 items on line 'NCOLS_EVEN:'");
-                widthEven = Integer.parseInt(line[1]);
-            }
-        }
-
-        if (widthEven > 0)
-            return widthEven;
-        else
-            throw new IOException("Width is not properly defined.");
-    }
-
-
-
-    /**
-     * Returns the calibration's working distance.
-     * 
-     * @param headerLines
-     *            all the header lines
-     * @return working distance
-     * @throws IOException
-     *             if an error occurs while parsing
-     */
-    private double parseWorkingDistance(ArrayList<String[]> headerLines)
-            throws IOException {
-        double workingDistance = Double.NaN;
-
-        for (String[] line : headerLines) {
-            if ("WorkingDistance".equals(line[0])) {
-                if (line.length != 2)
-                    throw new IOException(
-                            "Expected 2 items on line 'WorkingDistance'");
-                workingDistance = Double.parseDouble(line[1]) * 1e-3;
-            }
-        }
-
-        if (Double.isNaN(workingDistance))
-            throw new IOException("The working distance could not be found.");
-
-        return workingDistance;
-    }
-
-
-
-    /**
      * Returns a list of <code>Map</code> from reading the data from an
      * hexagonal grid. Since an hexagonal grid cannot be represented in
      * RML-Image, the first pixel of odd rows are shifted by a half pixel to the
      * left and the last pixel of even rows are discarded.
      * 
-     * @param dataFile
-     *            data file containing the header lines
+     * @param file
+     *            ang file
      * @param width
      *            width of the maps
      * @param height
@@ -586,8 +694,10 @@ public class AngLoader implements Monitorable {
      * @throws NullPointerException
      *             if the phases array is null
      */
-    private HashMap<String, Map> readDataHexGrid(DataFile dataFile, int width,
+    private HashMap<String, Map> readDataHexGrid(File file, int width,
             int height, Crystal[] phases) throws IOException {
+        SsvReader reader = new SsvReader(file);
+
         RealMap q0Map = new RealMap(width, height);
         RealMap q1Map = new RealMap(width, height);
         RealMap q2Map = new RealMap(width, height);
@@ -611,12 +721,30 @@ public class AngLoader implements Monitorable {
         float[] iq = iqMap.pixArray;
         float[] ci = ciMap.pixArray;
 
-        ArrayList<String[]> dataLines = dataFile.getDataLines();
-
         int rowCount = 0;
         int colCount = -1;
         int n = 0;
-        for (int iLine = 0; iLine < dataLines.size(); iLine++) {
+        int iLine = 0;
+
+        while (true) {
+            // Get line
+            String[] line = reader.readLine();
+
+            if (line == null) // end of file
+                throw new IOException(
+                        "End of file while still data left to read");
+
+            // Remove empty lines
+            if (line.length == 0)
+                continue;
+
+            // Remove empty columns
+            line = removeEmptyColumns(line);
+
+            // Skip header line
+            if ("#".equals(line[0]))
+                continue;
+
             colCount++;
 
             // Skip last entry of even rows
@@ -629,11 +757,14 @@ public class AngLoader implements Monitorable {
                 rowCount++;
             }
 
-            // Get line
-            String[] line = dataLines.get(iLine);
+            // Check that line is a valid data line
+            if (line.length != 10)
+                throw new IOException("Line " + reader.getLineReadCount()
+                        + " does not have the right number of columns ("
+                        + line.length + ")");
 
             // Update progress
-            progress = (double) iLine / dataLines.size();
+            progress = (double) n / size;
 
             // Interrupt
             if (isInterrupted())
@@ -676,7 +807,13 @@ public class AngLoader implements Monitorable {
             q3[n] = (float) rotation.getQ3();
 
             n++;
+            iLine++;
+
+            if (n == size) // All data is read
+                break;
         }
+
+        reader.close();
 
         // Set the maps
         HashMap<String, Map> mapList = new HashMap<String, Map>();
@@ -704,8 +841,8 @@ public class AngLoader implements Monitorable {
      * Returns a list of <code>Map</code> from reading the data from a squared
      * grid.
      * 
-     * @param dataFile
-     *            data file containing the header lines
+     * @param file
+     *            ang file
      * @param width
      *            width of the maps
      * @param height
@@ -716,8 +853,10 @@ public class AngLoader implements Monitorable {
      * @throws IOException
      *             if an error occurs while parsing
      */
-    private HashMap<String, Map> readDataSqrGrid(DataFile dataFile, int width,
+    private HashMap<String, Map> readDataSqrGrid(File file, int width,
             int height, Crystal[] phases) throws IOException {
+        SsvReader reader = new SsvReader(file);
+
         RealMap q0Map = new RealMap(width, height);
         RealMap q1Map = new RealMap(width, height);
         RealMap q2Map = new RealMap(width, height);
@@ -741,18 +880,34 @@ public class AngLoader implements Monitorable {
         float[] iq = iqMap.pixArray;
         float[] ci = ciMap.pixArray;
 
-        ArrayList<String[]> dataLines = dataFile.getDataLines();
-        if (dataLines.size() != size)
-            throw new IOException("The number of data lines ("
-                    + dataLines.size() + ") does not match the size "
-                    + "of the maps (" + size + ").");
+        int n = 0;
 
-        for (int n = 0; n < size; n++) {
+        while (true) {
             // Get line
-            String[] line = dataLines.get(n);
+            String[] line = reader.readLine();
+
+            if (line == null) // end of file
+                throw new IOException(
+                        "End of file while still data left to read");
+
+            // Remove empty lines
+            if (line.length == 0)
+                continue;
+
+            // Remove empty columns
+            line = removeEmptyColumns(line);
+
+            // Skip header line
+            if ("#".equals(line[0]))
+                continue;
+
+            // Check for a valid data line
+            if (line.length != 10)
+                throw new IOException("Line " + reader.getLineReadCount()
+                        + " does not have the right number of columns");
 
             // Update progress
-            progress = (double) n / dataLines.size();
+            progress = (double) n / size;
 
             // Interrupt
             if (isInterrupted())
@@ -793,7 +948,14 @@ public class AngLoader implements Monitorable {
             q1[n] = (float) rotation.getQ1();
             q2[n] = (float) rotation.getQ2();
             q3[n] = (float) rotation.getQ3();
+
+            n++;
+
+            if (n == size) // All data is read
+                break;
         }
+
+        reader.close();
 
         // Set the maps
         HashMap<String, Map> mapList = new HashMap<String, Map>();
@@ -813,119 +975,6 @@ public class AngLoader implements Monitorable {
         mapList.put(TslMMap.CONFIDENCE_INDEX, ciMap);
 
         return mapList;
-    }
-
-
-
-    /**
-     * Reads the ang file, separates the header and data and returns a
-     * <code>DataFile</code> containing the lines of the header and data.
-     * 
-     * @param file
-     *            ang file
-     * @return <code>DataFile</code> containing the lines of the header and data
-     * @throws IOException
-     *             if an error occurs while reading the file
-     */
-    private DataFile readFile(File file) throws IOException {
-        SsvReader reader = new SsvReader(file);
-
-        // Separate lines in to header and data
-        ArrayList<String[]> headerLines = new ArrayList<String[]>();
-        ArrayList<String[]> dataLines = new ArrayList<String[]>();
-
-        while (true) {
-            String[] line = reader.readLine();
-            if (line == null) // end of file
-                break;
-
-            // Remove empty lines
-            if (line.length == 0)
-                continue;
-
-            // Remove empty columns
-            line = removeEmptyColumns(line);
-
-            // Separate between header and data list
-            if ("#".equals(line[0])) {
-                line = Arrays.copyOfRange(line, 1, line.length);
-                if (line.length > 0)
-                    headerLines.add(line);
-            } else
-                dataLines.add(line);
-        }
-
-        reader.close();
-
-        return new DataFile(headerLines, dataLines);
-    }
-
-
-
-    /**
-     * Parses the header and returns the associated <code>TslMetadata</code>.
-     * 
-     * @param dataFile
-     *            data file containing the header lines
-     * @param beamEnergy
-     *            energy of the electron beam in eV
-     * @param magnification
-     *            magnification of the EBSD acquisition
-     * @param tiltAngle
-     *            angle of sample's tilt in radians
-     * @param sampleRotation
-     *            rotation from the pattern frame (camera) into the sample frame
-     * @return a <code>TslMetadata</code> from the information given in the
-     *         header
-     * @throws IOException
-     *             if an error occurs while parsing
-     * @throws IllegalArgumentException
-     *             if the beam energy is invalid
-     * @throws IllegalArgumentException
-     *             if the magnification is invalid
-     * @throws IllegalArgumentException
-     *             if the tilt angle is invalid
-     * @throws NullPointerException
-     *             if the sample rotation is null
-     * @throws NullPointerException
-     *             if the data file is null
-     */
-    private TslMetadata readHeader(DataFile dataFile, double beamEnergy,
-            double magnification, double tiltAngle, Quaternion sampleRotation)
-            throws IOException {
-        if (dataFile == null)
-            throw new NullPointerException("Data file cannot be null.");
-
-        ArrayList<String[]> headerLines = dataFile.getHeaderLines();
-
-        Camera calibration = parseCalibration(headerLines);
-        double workingDistance = parseWorkingDistance(headerLines);
-
-        double xstep = parseHorizontalStepSize(headerLines);
-        double ystep = parseVerticalStepSize(headerLines);
-
-        return new TslMetadata(beamEnergy, magnification, tiltAngle,
-                workingDistance, xstep, ystep, sampleRotation, calibration);
-    }
-
-
-
-    /**
-     * Removes the empty columns corresponding to many white spaces between two
-     * values.
-     * 
-     * @param columns
-     *            a line from the reader
-     * @return an array with only values
-     */
-    private String[] removeEmptyColumns(String[] columns) {
-        ArrayList<String> newColumns = new ArrayList<String>();
-
-        for (String column : columns)
-            if (column.length() > 0)
-                newColumns.add(column.trim());
-
-        return newColumns.toArray(new String[newColumns.size()]);
     }
 
 }
