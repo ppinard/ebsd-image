@@ -23,10 +23,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.logging.Logger;
 
 import org.ebsdimage.TestCase;
-import org.junit.Before;
 import org.junit.Test;
 
-import rmlimage.core.BinMap;
 import rmlimage.core.ByteMap;
 import rmlimage.core.Filter;
 import rmlimage.core.ROI;
@@ -35,21 +33,6 @@ import crystallography.core.crystals.IronBCC;
 import crystallography.core.crystals.Silicon;
 
 public class EditTest extends TestCase {
-
-    private ROI2 roi;
-
-
-
-    @Before
-    public void setUp() {
-        roi = new ROI2();
-        roi.addPoint(1, 1);
-        roi.addPoint(4, 1);
-        roi.addPoint(3, 3);
-        roi.addPoint(1, 3);
-    }
-
-
 
     private PhasesMap createPhasesMap() {
         Crystal[] phases = new Crystal[] { new Silicon(), new IronBCC() };
@@ -164,74 +147,4 @@ public class EditTest extends TestCase {
         testCropPhasesMap(cropMap);
     }
 
-
-
-    @Test
-    public void testCopyEightBitMapROI2EightBitMapIntInt() {
-        BinMap src =
-                new BinMap(4, 4, new byte[] { 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0,
-                        1, 0, 1, 0, 1 });
-        BinMap dest = new BinMap(4, 4);
-
-        Edit.copy(src, roi, dest, 0, 0);
-
-        byte[] expected =
-                new byte[] { 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-        assertArrayEquals(expected, dest.pixArray);
-    }
-
-
-
-    @Test
-    public void testCopyEightBitMapROI2EightBitMapIntInt2() {
-        BinMap src =
-                new BinMap(4, 4, new byte[] { 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0,
-                        1, 0, 1, 0, 1 });
-        BinMap dest = new BinMap(4, 4);
-
-        Edit.copy(src, roi, dest, 1, 1);
-
-        byte[] expected =
-                new byte[] { 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0 };
-        assertArrayEquals(expected, dest.pixArray);
-    }
-
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCopyEightBitMapROI2EightBitMapIntIntExceptionCompletelyInside() {
-        BinMap src = new BinMap(2, 2, new byte[] { 0, 0, 0, 1 });
-        BinMap dest = new BinMap(4, 4);
-
-        Edit.copy(src, roi, dest, 3, 3);
-    }
-
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCopyEightBitMapROI2EightBitMapIntIntExceptionPartialyOutside() {
-        BinMap src =
-                new BinMap(4, 4, new byte[] { 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0,
-                        1, 0, 1, 0, 1 });
-        BinMap dest = new BinMap(4, 4);
-
-        Edit.copy(src, roi, dest, 3, 3);
-    }
-
-
-
-    @Test
-    public void testCropEightBitMapROI2() {
-        BinMap src =
-                new BinMap(4, 4, new byte[] { 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0,
-                        1, 0, 1, 0, 1 });
-
-        BinMap dest = Edit.crop(src, roi);
-
-        assertEquals(3, dest.width);
-        assertEquals(2, dest.height);
-
-        byte[] expected = new byte[] { 1, 1, 1, 0, 0, 1 };
-        assertArrayEquals(expected, dest.pixArray);
-    }
 }
