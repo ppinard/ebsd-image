@@ -1,3 +1,7 @@
+0.1.1:
+- Implements map renderer for RealMap
+- New loaders for ang and ctf files
+
 0.1.0:
 - Release for the Microbeam Analysis Society Topical Conference: EBSD 2010 in
   Madison, Wiscosin
