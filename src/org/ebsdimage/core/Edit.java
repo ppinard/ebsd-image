@@ -220,4 +220,16 @@ public class Edit implements EditHandler {
         else
             return null;
     }
+
+
+
+    @Override
+    public boolean copy(Map src, ROI roi, Map dest, int xx1, int yy1) {
+        if (src instanceof PhasesMap && dest instanceof PhasesMap) {
+            copy((PhasesMap) src, roi, (PhasesMap) dest, xx1, yy1);
+            return true;
+        }
+
+        return false;
+    }
 }
