@@ -14,14 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.tsl;
 
 /**
  * Init class for the TSL vendor.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Init extends rmlimage.module.Init {
 
@@ -36,6 +35,8 @@ public class Init extends rmlimage.module.Init {
 
     @Override
     public void postGUI() {
+
+        rmlimage.module.stitch.MapStitcherFactory.addStitcher(org.ebsdimage.vendors.tsl.gui.TslMMapStitcher.class);
     }
 
 }

@@ -250,29 +250,6 @@ public class SmpInputStream {
 
 
     /**
-     * Returns the <code>Map</code> at the specified x and y position.
-     * 
-     * @param x
-     *            x coordinate of the <code>Map</code> to return
-     * @param y
-     *            y coordinate of the <code>Map</code> to return
-     * @return the <code>Map</code> at the specified index in the file
-     * @throws IOException
-     *             if an error occurred while reading from the file
-     */
-    public Map readMap(int x, int y) throws IOException {
-        ByteMap byteMap = new ByteMap(width, height);
-
-        int index = byteMap.getPixArrayIndex(x, y);
-
-        readMap(index, byteMap);
-
-        return byteMap;
-    }
-
-
-
-    /**
      * Reads the <code>Map</code> at the specified index in the file and places
      * it in the specified <code>Map</code>. The first <code>Map</code> in the
      * file has the index specified by <code>getStartIndex()</code>.

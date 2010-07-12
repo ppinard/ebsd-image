@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp;
 
 import java.awt.event.ActionEvent;
@@ -43,7 +43,6 @@ import rmlshared.gui.FileNameField;
  * Template for the start page of the wizard.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class StartWizardPage extends WizardPage {
 
@@ -62,8 +61,6 @@ public class StartWizardPage extends WizardPage {
         return super.allowNext(stepName, settings, wizard);
     }
 
-
-
     /**
      * Listener to enable/disable the metadata file browser field.
      */
@@ -74,8 +71,6 @@ public class StartWizardPage extends WizardPage {
         }
     }
 
-
-
     /**
      * Listener to enable/disable the operations file browser field.
      */
@@ -85,8 +80,6 @@ public class StartWizardPage extends WizardPage {
             opsFileField.setEnabled(opsCBox.isSelected());
         }
     }
-
-
 
     /** Map key for the temporary EbsdMMap. */
     public static final String KEY_TEMP_EBSDMMAP = "start.ebsdmmap";
@@ -104,8 +97,6 @@ public class StartWizardPage extends WizardPage {
     public static String getDescription() {
         return "Start";
     }
-
-
 
     /** Field for the metadata file. */
     private FileNameField metadataFileField;
@@ -196,14 +187,13 @@ public class StartWizardPage extends WizardPage {
                         showErrorDialog("Not a valid EBSD multimap");
                         return false;
                     }
-                } catch (IOException e1) {
+                } catch (Exception e1) {
                     // try loading as an experiment
                     try {
                         mmap = new ExpLoader().load(metadataFile).mmap;
-                    } catch (IOException e2) {
-                        if (ExpLoader.isExp(metadataFile))
-                            showErrorDialog("Could not import the metadata from "
-                                    + "the specified file.");
+                    } catch (Exception e2) {
+                        showErrorDialog("Could not import the metadata from "
+                                + "the specified file.");
                         return false;
                     }
                 }

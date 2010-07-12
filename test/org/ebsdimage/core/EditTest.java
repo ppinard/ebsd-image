@@ -19,6 +19,7 @@ package org.ebsdimage.core;
 
 import static java.lang.Math.toRadians;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.logging.Logger;
 
@@ -60,7 +61,8 @@ public class EditTest extends TestCase {
         assertEquals(1, destMap.pixArray[1]);
         assertEquals(1, destMap.pixArray[2]);
         assertEquals(0, destMap.pixArray[3]);
-        assertEquals(0, destMap.getPhases().length);
+        assertEquals(2, destMap.getPhases().length);
+        assertTrue(destMap.isCorrect());
     }
 
 

@@ -3,12 +3,11 @@ package org.ebsdimage.io;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 import net.jcip.annotations.Immutable;
 import rmlimage.core.ByteMap;
 import rmlimage.core.ROI;
+import rmlimage.module.stitch.Tessera;
 import rmlshared.ui.Monitorable;
 
 /**
@@ -17,10 +16,16 @@ import rmlshared.ui.Monitorable;
  * @author ppinard
  */
 @Immutable
-public class SmpStitch implements Monitorable {
+public class SmpStitcher implements Monitorable {
 
     /** Progress tracking variable. */
-    private double progress;
+    private double progress = 0;
+
+    /** Progress status. */
+    private String status = "";
+
+    /** Flag indicating if the operation should be interrupted. */
+    protected boolean isInterrupted = false;
 
     /** Regions of interest. */
     private final ROI[] rois;
@@ -40,9 +45,9 @@ public class SmpStitch implements Monitorable {
      * Creates a new <code>SmpMerge</code> to stitch the specified smp files
      * into one smp file according to the defined regions of interest.
      * 
-     * @param maps
-     *            <code>HashMap</code> where the keys are the located of the smp
-     *            files and the values the regions of interest for each smp file
+     * @param tesserae
+     *            array of <code>Tessera</code> containing each smp file and roi
+     *            of the stitch map
      * @param width
      *            width of the final stitch map
      * @param height
@@ -50,9 +55,9 @@ public class SmpStitch implements Monitorable {
      * @throws IOException
      *             if an error occurs while loading the smp file
      */
-    public SmpStitch(HashMap<File, ROI> maps, int width, int height)
+    public SmpStitcher(Tessera[] tesserae, int width, int height)
             throws IOException {
-        if (maps.size() == 0)
+        if (tesserae.length == 0)
             throw new IllegalArgumentException(
                     "Specifigy at least one project.");
         if (width == 0)
@@ -63,17 +68,12 @@ public class SmpStitch implements Monitorable {
         this.width = width;
         this.height = height;
 
-        rois = new ROI[maps.size()];
-        smps = new SmpInputStream[maps.size()];
+        rois = new ROI[tesserae.length];
+        smps = new SmpInputStream[tesserae.length];
 
-        int i = 0;
-        for (Entry<File, ROI> entry : maps.entrySet()) {
-            SmpInputStream smp = new SmpInputStream(entry.getKey());
-            smps[i] = smp;
-
-            rois[i] = entry.getValue();
-
-            i++;
+        for (int i = 0; i < tesserae.length; i++) {
+            smps[i] = new SmpInputStream(tesserae[i].file);
+            rois[i] = tesserae[i].roi;
         }
     }
 
@@ -111,6 +111,28 @@ public class SmpStitch implements Monitorable {
 
 
     /**
+     * Returns the index of map containing the coordinate x and y. A value of
+     * <code>-1</code> is returned if the coordinate doesn't belong to any map.
+     * Note that the first map containing x and y is returned.
+     * 
+     * @param x
+     *            absolute x position of the desired pattern in the stitched map
+     * @param y
+     *            absolute y position of the desired pattern in the stitched map
+     * @return index of map containing x and y, or -1 if no map is found
+     */
+    private int getMapIndex(int x, int y) {
+        for (int i = 0; i < rois.length; i++) {
+            if (rois[i].isInside(x, y))
+                return i;
+        }
+
+        return -1;
+    }
+
+
+
+    /**
      * Returns the pattern at position x, y of the specified map.
      * 
      * @param x
@@ -125,33 +147,13 @@ public class SmpStitch implements Monitorable {
      */
     private ByteMap getPattern(int x, int y, int mapIndex) throws IOException {
         Point relPos = getRelativePosition(x, y, rois[mapIndex]);
+        int index = relPos.y * rois[mapIndex].width + relPos.x;
 
         SmpInputStream smp = smps[mapIndex];
 
-        ByteMap map = (ByteMap) smp.readMap(relPos.x, relPos.y);
+        ByteMap map = (ByteMap) smp.readMap(index);
 
         return map;
-    }
-
-
-
-    /**
-     * Returns the index of map containing the coordinate x and y. A value of
-     * <code>-1</code> is returned if the coordinate doesn't belong to any map.
-     * Note that the first map containing x and y is returned.
-     * 
-     * @param x
-     *            absolute x position of the desired pattern in the stitched map
-     * @param y
-     *            absolute y position of the desired pattern in the stitched map
-     * @return index of map containing x and y, or -1 if no map is found
-     */
-    private int getMapIndex(int x, int y) {
-        for (int i = 0; i < rois.length; i++)
-            if (rois[i].isInside(x, y))
-                return i;
-
-        return -1;
     }
 
 
@@ -171,8 +173,8 @@ public class SmpStitch implements Monitorable {
      *             if the x and y are outside the region of interest
      */
     private Point getRelativePosition(int x, int y, ROI roi) {
-        int newX = roi.x - x;
-        int newY = roi.y - y;
+        int newX = x - roi.x;
+        int newY = y - roi.y;
 
         if (newX < 0)
             throw new IllegalArgumentException("Relative x position (" + newX
@@ -195,7 +197,29 @@ public class SmpStitch implements Monitorable {
 
     @Override
     public String getTaskStatus() {
-        return "";
+        return status;
+    }
+
+
+
+    /**
+     * Interrupts the experiment.
+     */
+    public synchronized void interrupt() {
+        isInterrupted = true;
+    }
+
+
+
+    /**
+     * Checks if the experiment should be interrupted. This method must be
+     * synchronized because interrupt() may be called from any thread.
+     * 
+     * @return <code>true</code> if the operation is interrupted,
+     *         <code>false</code> otherwise
+     */
+    protected synchronized boolean isInterrupted() {
+        return isInterrupted;
     }
 
 
@@ -214,10 +238,15 @@ public class SmpStitch implements Monitorable {
         int size = width * height;
         int count = 0;
 
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                // Update progress
-                progress = (double) count / size;
+        for (int y = 0; y < height; y++) {
+            // Update progress
+            progress = (double) count / size;
+            status = "Stitching image " + count + " out of " + size;
+
+            for (int x = 0; x < width; x++) {
+                // Interrupt
+                if (isInterrupted())
+                    break;
 
                 // Coordinates corresponds to which map
                 int mapIndex = getMapIndex(x, y);
@@ -234,6 +263,10 @@ public class SmpStitch implements Monitorable {
 
                 count++;
             }
+
+            // Interrupt
+            if (isInterrupted())
+                break;
         }
 
         output.close();

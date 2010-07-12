@@ -52,6 +52,8 @@ public class Init extends rmlimage.module.Init {
         rmlimage.ui.Desktop desktop = RMLImage.getDesktop();
         if (desktop instanceof rmlimage.gui.Desktop)
             ((rmlimage.gui.Desktop) desktop).showCancelButton(true);
+
+        rmlimage.module.stitch.MapStitcherFactory.addStitcher(org.ebsdimage.gui.exp.ExpMMapStitcher.class);
     }
 
 }

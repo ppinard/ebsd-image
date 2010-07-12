@@ -17,10 +17,13 @@
  */
 package org.ebsdimage.core;
 
+import java.util.ArrayList;
+
 import rmlimage.core.EightBitMap;
 import rmlimage.core.Map;
 import rmlimage.core.ROI;
 import rmlimage.core.handler.EditHandler;
+import crystallography.core.Crystal;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 
@@ -98,6 +101,17 @@ public class Edit implements EditHandler {
             srcStartIndex += src.width;
             destStartIndex += dest.width;
         }
+
+        // Update destination phases
+        ArrayList<Crystal> phases = new ArrayList<Crystal>();
+        for (Crystal phase : dest.getPhases())
+            phases.add(phase);
+
+        for (Crystal phase : src.getPhases())
+            if (!phases.contains(phase))
+                phases.add(phase);
+
+        dest.setPhases(phases.toArray(new Crystal[0]));
 
         dest.setChanged(EightBitMap.MAP_CHANGED);
     }

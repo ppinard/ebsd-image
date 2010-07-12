@@ -70,6 +70,7 @@
   <ant dir="${rmlimage.src.dir}/rmlimage/module/real" target="build"/>
   <ant dir="${rmlimage.src.dir}/rmlimage/module/integer" target="build"/>
   <ant dir="${rmlimage.src.dir}/rmlimage/module/multi" target="build"/>
+  <ant dir="${rmlimage.src.dir}/rmlimage/module/stitch" target="build"/>
   <ant dir="${ebsd-image.dir}/src" target="build"/>
   
         <!-- Build EBSD doc 
@@ -96,6 +97,7 @@
   <ant dir="${rmlimage.src.dir}/rmlimage/module/real" target="compile"/>
   <ant dir="${rmlimage.src.dir}/rmlimage/module/integer" target="compile"/>
   <ant dir="${rmlimage.src.dir}/rmlimage/module/multi" target="compile"/>
+  <ant dir="${rmlimage.src.dir}/rmlimage/module/stitch" target="compile"/>
   <ant dir="${ebsd-image.dir}/src" target="compile"/>  
 </target>
 
@@ -140,7 +142,7 @@ java -jar /usr/share/ebsd-image/EBSD-Image.jar
        postinst="${ebsd-image.dir}/install/postinst"
        prerm="${ebsd-image.dir}/install/prerm">
     <version upstream="${version}" debian="${debian.version}"/>
-    <maintainer name="Philippe T. Pinard" email="ebsdimage@gmail.com"/>
+    <maintainer name="Philippe T. Pinard" email="philppe.pinard@mail.mcgill.ca"/>
     <description synopsis="EBSD Image Analysis Freeware">
 Software to analyze electron backscattered diffraction (EBSD) 
 patterns obtained in a scanning electron microscope (SEM).
@@ -193,6 +195,7 @@ Use ant -p to get a listing of all the available targets.</echo>
   <ant dir="${rmlimage.src.dir}/rmlimage/module/complex" target="javadoc"/>
   <ant dir="${rmlimage.src.dir}/rmlimage/module/integer" target="javadoc"/>
   <ant dir="${rmlimage.src.dir}/rmlimage/module/multi" target="javadoc"/>
+  <ant dir="${rmlimage.src.dir}/rmlimage/module/stitch" target="javadoc"/>
   <ant dir="${ebsd-image.dir}/src" target="javadoc"/>
 </target>
 
