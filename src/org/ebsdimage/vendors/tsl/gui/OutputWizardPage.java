@@ -14,8 +14,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.tsl.gui;
+
+import java.io.File;
 
 import javax.swing.JLabel;
 
@@ -24,12 +26,12 @@ import ptpshared.gui.WizardPage;
 import rmlimage.gui.FileDialog;
 import rmlshared.gui.CheckBox;
 import rmlshared.gui.FileNameField;
+import rmlshared.io.FileUtil;
 
 /**
  * Wizard page for the output of the import.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class OutputWizardPage extends WizardPage {
 
@@ -49,8 +51,6 @@ public class OutputWizardPage extends WizardPage {
     public static String getDescription() {
         return "Output";
     }
-
-
 
     /** Field for the output file. */
     private FileNameField outputFileField;
@@ -96,4 +96,18 @@ public class OutputWizardPage extends WizardPage {
         return true;
     }
 
+
+
+    @Override
+    protected void renderingPage() {
+        super.renderingPage();
+
+        if (get(StartWizardPage.KEY_ANG_FILE) == null)
+            return;
+
+        File file = (File) get(StartWizardPage.KEY_ANG_FILE);
+        file = FileUtil.setExtension(file, "zip");
+
+        outputFileField.setFile(file);
+    }
 }

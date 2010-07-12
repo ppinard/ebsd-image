@@ -14,8 +14,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.hkl.gui;
+
+import java.io.File;
 
 import javax.swing.JLabel;
 
@@ -24,12 +26,12 @@ import ptpshared.gui.WizardPage;
 import rmlimage.gui.FileDialog;
 import rmlshared.gui.CheckBox;
 import rmlshared.gui.FileNameField;
+import rmlshared.io.FileUtil;
 
 /**
  * Wizard page for the output of the import.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class OutputWizardPage extends WizardPage {
 
@@ -38,8 +40,6 @@ public class OutputWizardPage extends WizardPage {
 
     /** Map key for whether to display the multimap in the GUI. */
     public static final String KEY_DISPLAY_GUI = "displayGUI";
-
-
 
     /**
      * Returns a description of this page.
@@ -57,8 +57,6 @@ public class OutputWizardPage extends WizardPage {
 
     /** Check box to display the MMap after being loaded. */
     private CheckBox displayCBox;
-
-
 
     /**
      * Creates a new <code>OutputWizardPage</code>.
@@ -94,6 +92,21 @@ public class OutputWizardPage extends WizardPage {
         }
 
         return true;
+    }
+
+
+
+    @Override
+    protected void renderingPage() {
+        super.renderingPage();
+
+        if (get(StartWizardPage.KEY_CTF_FILE) == null)
+            return;
+
+        File file = (File) get(StartWizardPage.KEY_CTF_FILE);
+        file = FileUtil.setExtension(file, "zip");
+
+        outputFileField.setFile(file);
     }
 
 }
