@@ -1,3 +1,7 @@
+0.1.2
+- Prototype implementation of EBSD multimap stitching and smp files
+- Release for the Ecole de technologie superieure workshop (Montreal, July 2010)
+
 0.1.1:
 - Implements map renderer for RealMap
 - New loaders for ang and ctf files
