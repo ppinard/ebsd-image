@@ -198,9 +198,12 @@ public class HoughMap extends ByteMap {
         this.deltaTheta = deltaTheta;
         thetaMax = (width - 1) * deltaTheta;
 
-        if (calculateWidth(deltaTheta) != width)
-            throw new IllegalArgumentException("width (" + width
-                    + ") should be " + calculateWidth(deltaTheta));
+        // NOTE: Commented out since the Hough map is still valid without this
+        // restriction. The operation ThetaExpand requires to set a different
+        // width which extends beyond 180 deg theta max limit.
+        // if (calculateWidth(deltaTheta) != width)
+        // throw new IllegalArgumentException("width (" + width
+        // + ") should be " + calculateWidth(deltaTheta));
 
         setProperty(DELTA_R, this.deltaR);
         setProperty(DELTA_THETA, this.deltaTheta);
