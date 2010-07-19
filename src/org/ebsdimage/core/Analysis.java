@@ -332,7 +332,7 @@ public class Analysis {
      * @return the <code>theta</code> coordinate
      */
     private static double getTheta(int index, int width, double deltaTheta) {
-        return (index % width) * deltaTheta;
+        return ((index % width) * deltaTheta) % Math.PI;
     }
 
 
