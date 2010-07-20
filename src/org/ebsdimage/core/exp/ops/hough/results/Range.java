@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.hough.results;
 
 import org.ebsdimage.core.HoughMap;
@@ -29,11 +29,11 @@ import rmlimage.module.real.core.RealMap;
  * 
  * @author Philippe T. Pinard
  */
-public class HoughRange extends HoughResultsOps {
+public class Range extends HoughResultsOps {
 
     @Override
     public String toString() {
-        return "Hough Range";
+        return "Range";
     }
 
 
@@ -46,7 +46,6 @@ public class HoughRange extends HoughResultsOps {
      * @param srcMap
      *            source Hough map
      * @return one entry with the Hough range quality index
-     * 
      * @see QualityIndex#houghRange(HoughMap)
      */
     @Override

@@ -14,19 +14,35 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.hough.results;
 
-import org.ebsdimage.core.exp.ops.hough.results.HoughRange;
+import static org.ebsdimage.io.exp.ops.hough.results.StandardDeviationXmlTags.TAG_NAME;
+import static org.junit.Assert.assertEquals;
 
-/**
- * Tags for <code>HoughRange</code>'s XML <code>Element</code>.
- * 
- * @author Philippe T. Pinard
- * 
- */
-public class HoughRangeXmlTags {
+import org.ebsdimage.core.exp.ops.hough.results.StandardDeviation;
+import org.jdom.Element;
+import org.junit.Before;
+import org.junit.Test;
 
-    /** XML tag name for <code>HoughRange</code>. */
-    public static final String TAG_NAME = HoughRange.class.getSimpleName();
+public class StandardDeviationXmlSaverTest {
+
+    private StandardDeviation op;
+
+
+
+    @Before
+    public void setUp() throws Exception {
+        op = new StandardDeviation();
+    }
+
+
+
+    @Test
+    public void testSaveHoughStandardDeviation() {
+        Element element = new StandardDeviationXmlSaver().save(op);
+
+        assertEquals(TAG_NAME, element.getName());
+    }
+
 }

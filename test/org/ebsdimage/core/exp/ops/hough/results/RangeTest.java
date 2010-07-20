@@ -14,37 +14,48 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-package org.ebsdimage.io.exp.ops.hough.results;
+ */
+package org.ebsdimage.core.exp.ops.hough.results;
 
-import static org.ebsdimage.io.exp.ops.hough.results.HoughRangeXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
-import org.ebsdimage.core.exp.ops.hough.results.HoughRange;
-import org.ebsdimage.io.exp.ops.hough.results.HoughRangeXmlLoader;
-import org.jdom.Element;
+import java.io.IOException;
+
+import org.ebsdimage.core.HoughMap;
+import org.ebsdimage.core.exp.OpResult;
+import org.ebsdimage.io.HoughMapLoader;
 import org.junit.Before;
 import org.junit.Test;
 
+import rmlshared.io.FileUtil;
 
-public class HoughRangeXmlLoaderTest {
+public class RangeTest {
 
-    private Element element;
+    private Range range;
 
 
 
     @Before
     public void setUp() throws Exception {
-        element = new Element(TAG_NAME);
+        range = new Range();
     }
 
 
 
     @Test
-    public void testLoad() {
-        HoughRange op = new HoughRangeXmlLoader().load(element);
+    public void testCalculate() throws IOException {
+        HoughMap srcMap =
+                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
+        OpResult result = range.calculate(null, srcMap)[0];
 
-        assertEquals(TAG_NAME, op.getName());
+        assertEquals(173.0, result.value.doubleValue(), 1e-7);
+    }
+
+
+
+    @Test
+    public void testToString() {
+        assertEquals(range.toString(), "Range");
     }
 
 }

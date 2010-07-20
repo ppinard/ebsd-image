@@ -14,42 +14,40 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.hough.results;
 
-import static org.ebsdimage.io.exp.ops.hough.results.HoughRangeXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.hough.results.AverageXmlTags.TAG_NAME;
 
-import org.ebsdimage.core.exp.ops.hough.results.HoughRange;
+import org.ebsdimage.core.exp.ops.hough.results.Average;
 import org.jdom.Element;
 import org.jdom.IllegalNameException;
 
 import ptpshared.utility.xml.ObjectXmlLoader;
 
 /**
- * XML loader for a <code>HoughRange</code> operation.
+ * XML loader for a <code>Average</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
-public class HoughRangeXmlLoader implements ObjectXmlLoader {
+public class AverageXmlLoader implements ObjectXmlLoader {
 
     /**
-     * Loads a <code>HoughRange</code> operation from an XML
-     * <code>Element</code>.
+     * Loads a <code>Average</code> operation from an XML <code>Element</code>.
      * 
      * @param element
      *            an XML <code>Element</code>
-     * @return a <code>HoughRange</code> operation
+     * @return a <code>Average</code> operation
      * @throws IllegalNameException
      *             if the <code>Element</code> tag name is incorrect.
      */
     @Override
-    public HoughRange load(Element element) {
+    public Average load(Element element) {
         if (!element.getName().equals(TAG_NAME))
             throw new IllegalNameException("Name of the element should be "
                     + TAG_NAME + " not " + element.getName() + ".");
 
-        return new HoughRange();
+        return new Average();
     }
 
 }

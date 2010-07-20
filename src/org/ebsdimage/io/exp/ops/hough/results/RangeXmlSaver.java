@@ -14,45 +14,44 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.hough.results;
 
-import static org.ebsdimage.io.exp.ops.hough.results.HoughRangeXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.hough.results.RangeXmlTags.TAG_NAME;
 
-import org.ebsdimage.core.exp.ops.hough.results.HoughRange;
+import org.ebsdimage.core.exp.ops.hough.results.Range;
 import org.jdom.Element;
 
 import ptpshared.utility.xml.ObjectXml;
 import ptpshared.utility.xml.ObjectXmlSaver;
 
 /**
- * XML saver for a <code>HoughRange</code> operation.
+ * XML saver for a <code>Range</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
-public class HoughRangeXmlSaver implements ObjectXmlSaver {
+public class RangeXmlSaver implements ObjectXmlSaver {
 
     /**
      * {@inheritDoc}
      * 
-     * @see #save(HoughRange)
+     * @see #save(Range)
      */
     @Override
     public Element save(ObjectXml obj) {
-        return save((HoughRange) obj);
+        return save((Range) obj);
     }
 
 
 
     /**
-     * Saves a <code>HoughRange</code> operation to an XML <code>Element</code>.
+     * Saves a <code>Range</code> operation to an XML <code>Element</code>.
      * 
      * @param op
-     *            a <code>HoughRange</code> operation
+     *            a <code>Range</code> operation
      * @return an XML <code>Element</code>
      */
-    public Element save(HoughRange op) {
+    public Element save(Range op) {
         return new Element(TAG_NAME);
     }
 

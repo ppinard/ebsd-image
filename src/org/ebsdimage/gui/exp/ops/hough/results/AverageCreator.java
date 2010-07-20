@@ -14,33 +14,30 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp.ops.hough.results;
 
-import org.ebsdimage.core.exp.ops.hough.results.HoughRange;
+import org.ebsdimage.core.exp.ops.hough.results.Range;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.exp.ops.OperationCreator;
 
 /**
- * GUI creator for the <code>HoughRange</code> operation.
+ * GUI creator for the <code>Average</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
-public class HoughRangeCreator implements OperationCreator {
+public class AverageCreator implements OperationCreator {
 
     @Override
     public Operation getOperation() {
-        return new HoughRange();
+        return new Range();
     }
 
 
 
     @Override
     public String getDescription() {
-        return "Quality index on the Hough map. "
-                + "The range is calculated between the most and the least "
-                + "intense pixel in the Hough map.";
+        return "Average of the pixels in the Hough map.";
     }
 
 
@@ -59,7 +56,7 @@ public class HoughRangeCreator implements OperationCreator {
      */
     @Override
     public String toString() {
-        return "Hough Range";
+        return "Average";
     }
 
 }

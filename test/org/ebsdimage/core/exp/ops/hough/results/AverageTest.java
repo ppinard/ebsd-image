@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.hough.results;
 
 import static org.junit.Assert.assertEquals;
@@ -29,15 +29,15 @@ import org.junit.Test;
 
 import rmlshared.io.FileUtil;
 
-public class HoughRangeTest {
+public class AverageTest {
 
-    private HoughRange houghRange;
+    private Average average;
 
 
 
     @Before
     public void setUp() throws Exception {
-        houghRange = new HoughRange();
+        average = new Average();
     }
 
 
@@ -45,18 +45,17 @@ public class HoughRangeTest {
     @Test
     public void testCalculate() throws IOException {
         HoughMap srcMap =
-                new HoughMapLoader().load(FileUtil
-                        .getFile("org/ebsdimage/testdata/houghmap.bmp"));
-        OpResult result = houghRange.calculate(null, srcMap)[0];
+                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
+        OpResult result = average.calculate(null, srcMap)[0];
 
-        assertEquals(173.0, result.value.doubleValue(), 1e-7);
+        assertEquals(102.933424169, result.value.doubleValue(), 1e-7);
     }
 
 
 
     @Test
     public void testToString() {
-        assertEquals(houghRange.toString(), "Hough Range");
+        assertEquals(average.toString(), "Average []");
     }
 
 }
