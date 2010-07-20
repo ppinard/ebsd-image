@@ -5,7 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.ebsdimage.TestCase;
-import org.ebsdimage.core.exp.OpResult;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,10 +29,9 @@ public class SumRegionTest extends TestCase {
 
     @Test
     public void testCalculateByteMap() {
-        OpResult[] results = averageRegion.calculate(patternMap);
+        double sum = averageRegion.calculateSum(patternMap);
 
-        assertEquals(1, results.length);
-        assertEquals(820193, results[0].value.doubleValue(), 1e-6);
+        assertEquals(820193, sum, 1e-6);
     }
 
 

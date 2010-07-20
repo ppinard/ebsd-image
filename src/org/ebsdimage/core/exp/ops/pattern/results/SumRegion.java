@@ -108,7 +108,14 @@ public class SumRegion extends PatternResultsOps {
      */
     @Override
     public OpResult[] calculate(Exp exp, ByteMap srcMap) {
-        return calculate(exp.getSourcePatternMap());
+        double sum = calculateSum(exp.getSourcePatternMap());
+        String name =
+                getName() + "[(" + xmin + "," + ymin + ")-(" + xmax + ","
+                        + ymax + ")]";
+
+        OpResult result = new OpResult(name, sum, RealMap.class);
+
+        return new OpResult[] { result };
     }
 
 
@@ -120,7 +127,7 @@ public class SumRegion extends PatternResultsOps {
      *            original diffraction pattern
      * @return a result named "AverageRegion"
      */
-    protected OpResult[] calculate(ByteMap originalPattern) {
+    protected double calculateSum(ByteMap originalPattern) {
         int width = originalPattern.width;
         int height = originalPattern.height;
 
@@ -128,11 +135,7 @@ public class SumRegion extends PatternResultsOps {
                 new ROI((int) (xmin * width), (int) (ymin * height),
                         (int) (xmax * width), (int) (ymax * height));
 
-        OpResult result =
-                new OpResult(getName(), MapStats.sum(originalPattern, roi),
-                        RealMap.class);
-
-        return new OpResult[] { result };
+        return MapStats.sum(originalPattern, roi);
     }
 
 
