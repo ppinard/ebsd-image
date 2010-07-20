@@ -25,9 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import rmlimage.core.ByteMap;
-import rmlimage.core.MapStats;
 import rmlshared.io.FileUtil;
-import rmlshared.util.Range;
 
 public class QualityIndexTest extends TestCase {
 
@@ -65,20 +63,6 @@ public class QualityIndexTest extends TestCase {
 
 
     @Test
-    public void testAverage() {
-        assertEquals(119.1859932, QualityIndex.average(pattern), 1e-7);
-    }
-
-
-
-    @Test
-    public void testEntropy() {
-        assertEquals(4.50234954, QualityIndex.entropy(pattern), 1e-7);
-    }
-
-
-
-    @Test
     public void testPatternQuality() {
         assertEquals(0.3565252, QualityIndex.patternQuality(peaks, houghMap),
                 1e-6);
@@ -89,23 +73,6 @@ public class QualityIndexTest extends TestCase {
     @Test
     public void testFourier() {
         assertEquals(0.60047537134, QualityIndex.fourier(pattern), 1e-7);
-    }
-
-
-
-    @Test
-    public void testHoughPeakRangePeaks() {
-        double expected = peak2.intensity - peak1.intensity;
-        assertEquals(expected, QualityIndex.houghPeakRange(peaks), 1e-6);
-    }
-
-
-
-    @Test
-    public void testHoughRange() {
-        Range<Integer> range = MapStats.range(houghMap);
-        int expected = range.max - range.min;
-        assertEquals(expected, QualityIndex.houghRange(houghMap));
     }
 
 
@@ -123,21 +90,6 @@ public class QualityIndexTest extends TestCase {
         double expected =
                 (peak1.intensity + peak2.intensity + peak3.intensity) / 3.0;
         assertEquals(expected, QualityIndex.imageQuality(peaks), 1e-7);
-    }
-
-
-
-    @Test
-    public void testNumberPeaksPeaks() {
-        assertEquals(peaks.length, QualityIndex.peaksCount(peaks));
-    }
-
-
-
-    @Test
-    public void testStandardDeviation() {
-        assertEquals(22.343286285, QualityIndex.standardDeviation(pattern),
-                1e-7);
     }
 
 }

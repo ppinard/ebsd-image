@@ -55,7 +55,7 @@ public class AverageTest {
 
     @Test
     public void testToString() {
-        assertEquals(average.toString(), "Average []");
+        assertEquals(average.toString(), "Average");
     }
 
 }

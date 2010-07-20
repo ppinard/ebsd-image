@@ -17,8 +17,16 @@ public class Entropy extends HoughResultsOps {
     @Override
     public OpResult[] calculate(Exp exp, HoughMap srcMap) {
         OpResult result =
-                new OpResult(getName(), Analysis.entropy(srcMap), RealMap.class);
+                new OpResult("Hough Entropy", Analysis.entropy(srcMap),
+                        RealMap.class);
 
         return new OpResult[] { result };
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Entropy";
     }
 }

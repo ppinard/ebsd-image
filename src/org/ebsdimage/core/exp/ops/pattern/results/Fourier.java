@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.pattern.results;
 
 import org.ebsdimage.core.QualityIndex;
@@ -31,13 +31,6 @@ import rmlimage.module.real.core.RealMap;
  */
 public class Fourier extends PatternResultsOps {
 
-    @Override
-    public String toString() {
-        return "Fourier";
-    }
-
-
-
     /**
      * Calculates the Fourier transform quality index of the source map.
      * 
@@ -46,16 +39,22 @@ public class Fourier extends PatternResultsOps {
      * @param srcMap
      *            source map
      * @return one entry with the Fourier quality index
-     * 
      * @see QualityIndex#fourier(ByteMap)
      */
     @Override
     public OpResult[] calculate(Exp exp, ByteMap srcMap) {
         OpResult result =
-                new OpResult(getName(), QualityIndex.fourier(srcMap),
+                new OpResult("Pattern Fourier", QualityIndex.fourier(srcMap),
                         RealMap.class);
 
         return new OpResult[] { result };
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Fourier";
     }
 
 }

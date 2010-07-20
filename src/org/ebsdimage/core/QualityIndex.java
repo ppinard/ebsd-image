@@ -21,7 +21,6 @@ import static java.lang.Math.pow;
 import static java.util.Arrays.sort;
 import static ptpshared.utility.Arrays.reverse;
 import rmlimage.core.ByteMap;
-import rmlimage.core.MapStats;
 import rmlimage.module.complex.core.ComplexMap;
 import rmlimage.module.complex.core.Edit;
 import rmlimage.module.complex.core.Extract;
@@ -29,7 +28,6 @@ import rmlimage.module.complex.core.FFT;
 import rmlimage.module.real.core.MapMath;
 import rmlimage.module.real.core.RealMap;
 import rmlimage.module.real.core.Stats;
-import rmlshared.util.Range;
 
 /**
  * Calculations of quality indexes related to the diffraction pattern and Hough
@@ -38,32 +36,6 @@ import rmlshared.util.Range;
  * @author Philippe T. Pinard
  */
 public class QualityIndex {
-
-    /**
-     * Returns the average of all the pixels in the pattern.
-     * 
-     * @param pattern
-     *            diffraction pattern
-     * @return average quality index
-     */
-    public static double average(ByteMap pattern) {
-        return Analysis.average(pattern);
-    }
-
-
-
-    /**
-     * Returns the entropy of the pixels in the pattern.
-     * 
-     * @param pattern
-     *            diffraction pattern
-     * @return entropy quality index
-     */
-    public static double entropy(ByteMap pattern) {
-        return Analysis.entropy(pattern);
-    }
-
-
 
     /**
      * Returns the Fourier transform quality index of the pattern.
@@ -108,46 +80,6 @@ public class QualityIndex {
         double quality = 1.0 - intensity / intensityMax;
 
         return quality;
-    }
-
-
-
-    /**
-     * Returns the Hough peak range: intensity of most intense peak subtracted
-     * by the intensity of the least intense peak.
-     * 
-     * @param peaks
-     *            <code>HoughPeaks</code>
-     * @return Hough peak range quality index
-     */
-    public static double houghPeakRange(HoughPeak[] peaks) {
-        if (peaks.length < 2)
-            return 0;
-
-        sort(peaks, new HoughPeakIntensityComparator());
-
-        double maximum = peaks[peaks.length - 1].intensity;
-        double minimum = peaks[0].intensity;
-
-        return maximum - minimum;
-    }
-
-
-
-    /**
-     * Returns the Hough range: maximum intensity in the Hough transform
-     * subtracted from the minimum intensity.
-     * 
-     * @param houghMap
-     *            Hough Transform
-     * @return Hough range quality index
-     */
-    public static int houghRange(HoughMap houghMap) {
-        Range<Integer> range = MapStats.range(houghMap);
-        int minimum = range.min;
-        int maximum = range.max;
-
-        return maximum - minimum;
     }
 
 
@@ -233,19 +165,6 @@ public class QualityIndex {
 
 
     /**
-     * /** Returns the number of peaks detected.
-     * 
-     * @param peaks
-     *            <code>HoughPeaks</code>
-     * @return number of peaks quality index
-     */
-    public static int peaksCount(HoughPeak[] peaks) {
-        return peaks.length;
-    }
-
-
-
-    /**
      * Generates a radius map according to the specified width and height for
      * the Fourier transform quality index.
      * 
@@ -268,19 +187,6 @@ public class QualityIndex {
             }
 
         return map;
-    }
-
-
-
-    /**
-     * Returns the standard deviation of the pixels in the pattern.
-     * 
-     * @param pattern
-     *            diffraction pattern
-     * @return standard deviation quality index
-     */
-    public static double standardDeviation(ByteMap pattern) {
-        return Analysis.standardDeviation(pattern);
     }
 
 

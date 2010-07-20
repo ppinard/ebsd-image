@@ -25,6 +25,7 @@ import java.util.Arrays;
 import rmlimage.core.*;
 import rmlshared.math.IntUtil;
 import rmlshared.math.Stats;
+import rmlshared.util.Range;
 
 /**
  * Analysis of maps and results.
@@ -401,6 +402,43 @@ public class Analysis {
         double average = sum / count;
 
         return (sumSquared / count) - (average * average);
+    }
+
+
+
+    /**
+     * Returns the highest and lowest pixel values found in the whole
+     * <dfn>ByteMap</dfn>. <b>Pixels with value = 0 will not be included in the
+     * calculation</b>
+     * 
+     * @param map
+     *            <dfn>ByteMap</dfn> to find the pixel range of
+     * @return the highest and lowest pixel values
+     * @throws NullPointerException
+     *             if the map is null
+     */
+    public static Range<Integer> range(ByteMap map) {
+        if (map == null)
+            throw new NullPointerException("Map is null.");
+
+        byte[] pixArray = map.pixArray;
+        int size = pixArray.length;
+
+        int min = 255;
+        int max = 0;
+        int pixValue;
+        for (int n = 0; n < size; n++) {
+            pixValue = pixArray[n] & 0xff;
+
+            if (pixValue != 0) {
+                if (min > pixValue)
+                    min = pixValue;
+                if (max < pixValue)
+                    max = pixValue;
+            }
+        }
+
+        return new Range<Integer>(min, max);
     }
 
 }

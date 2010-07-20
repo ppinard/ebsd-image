@@ -18,9 +18,16 @@ public class StandardDeviation extends HoughResultsOps {
     @Override
     public OpResult[] calculate(Exp exp, HoughMap srcMap) {
         OpResult result =
-                new OpResult(getName(), Analysis.standardDeviation(srcMap),
-                        RealMap.class);
+                new OpResult("Hough Standard Deviation",
+                        Analysis.standardDeviation(srcMap), RealMap.class);
 
         return new OpResult[] { result };
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Standard Deviation";
     }
 }

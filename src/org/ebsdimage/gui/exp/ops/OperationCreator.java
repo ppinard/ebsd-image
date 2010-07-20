@@ -69,4 +69,12 @@ public interface OperationCreator {
      */
     public int show();
 
+
+
+    /**
+     * Returns the name of the operation. Used by the list or combo box.
+     * 
+     * @return name of the operation
+     */
+    public String toString();
 }

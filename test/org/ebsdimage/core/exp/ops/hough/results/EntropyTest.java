@@ -55,7 +55,7 @@ public class EntropyTest {
 
     @Test
     public void testToString() {
-        assertEquals(entropy.toString(), "Entropy []");
+        assertEquals(entropy.toString(), "Entropy");
     }
 
 }

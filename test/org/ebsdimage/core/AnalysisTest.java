@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static java.lang.Math.toRadians;
@@ -24,11 +24,12 @@ import org.ebsdimage.TestCase;
 import org.junit.Test;
 
 import rmlimage.core.ByteMap;
+import rmlshared.util.Range;
 
 public class AnalysisTest extends TestCase {
 
     @Test
-    public void average() {
+    public void testAverage() {
         ByteMap map = (ByteMap) load("org/ebsdimage/core/disk127.bmp");
         assertEquals(127.0, Analysis.average(map), 0.01);
     }
@@ -36,7 +37,7 @@ public class AnalysisTest extends TestCase {
 
 
     @Test
-    public void entropy() {
+    public void testEntropy() {
         ByteMap map = (ByteMap) load("org/ebsdimage/core/disk127.bmp");
         assertEquals(0.0, Analysis.entropy(map), 0.01);
     }
@@ -44,7 +45,7 @@ public class AnalysisTest extends TestCase {
 
 
     @Test
-    public void getR() {
+    public void testGetR() {
         ByteMap map = (ByteMap) load("org/ebsdimage/testdata/houghmap.bmp");
         assertEquals(139.3777, Analysis.getR(map, 9405), 0.001);
         assertEquals(28.4444, Analysis.getR(map, 23437), 0.001);
@@ -55,7 +56,7 @@ public class AnalysisTest extends TestCase {
 
 
     @Test
-    public void getTheta() {
+    public void testGetTheta() {
         ByteMap map = (ByteMap) load("org/ebsdimage/testdata/houghmap.bmp");
         assertEquals(toRadians(45), Analysis.getTheta(map, 9405), 0.001);
         assertEquals(toRadians(37), Analysis.getTheta(map, 23437), 0.001);
@@ -66,7 +67,7 @@ public class AnalysisTest extends TestCase {
 
 
     @Test
-    public void standardDeviation() {
+    public void testStandardDeviation() {
         ByteMap map = (ByteMap) load("org/ebsdimage/core/disk127.bmp");
         assertEquals(0.0, Analysis.standardDeviation(map), 0.01);
     }
@@ -74,9 +75,26 @@ public class AnalysisTest extends TestCase {
 
 
     @Test
-    public void variance() {
+    public void testVariance() {
         ByteMap map = (ByteMap) load("org/ebsdimage/core/disk127.bmp");
         assertEquals(0.0, Analysis.variance(map), 0.01);
+    }
+
+
+
+    @Test
+    public void testRange() {
+        ByteMap map = (ByteMap) load("org/ebsdimage/core/disk127.bmp");
+        Range<Integer> range = Analysis.range(map);
+
+        assertEquals(127, range.min.intValue());
+        assertEquals(127, range.max.intValue());
+
+        map = (ByteMap) load("org/ebsdimage/testdata/pattern_masked.bmp");
+        range = Analysis.range(map);
+
+        assertEquals(8, range.min.intValue());
+        assertEquals(232, range.max.intValue());
     }
 
 }

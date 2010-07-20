@@ -48,7 +48,7 @@ public class RangeTest {
                 new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
         OpResult result = range.calculate(null, srcMap)[0];
 
-        assertEquals(173.0, result.value.doubleValue(), 1e-7);
+        assertEquals(110.0, result.value.doubleValue(), 1e-7);
     }
 
 

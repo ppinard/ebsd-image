@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp.ops.pattern.results;
 
 import org.ebsdimage.core.exp.ops.pattern.results.StandardDeviation;
@@ -25,7 +25,6 @@ import org.ebsdimage.gui.exp.ops.OperationCreator;
  * GUI creator for the <code>StandardDeviation</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class StandardDeviationCreator implements OperationCreator {
 
@@ -43,11 +42,6 @@ public class StandardDeviationCreator implements OperationCreator {
 
 
 
-    /**
-     * Returns the name of the operation. Used by the list or combo box.
-     * 
-     * @return name of the operation
-     */
     @Override
     public String toString() {
         return "Standard Deviation";

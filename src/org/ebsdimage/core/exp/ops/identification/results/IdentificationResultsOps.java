@@ -14,10 +14,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.identification.results;
 
+import static java.util.Arrays.sort;
+import static ptpshared.utility.Arrays.reverse;
+
 import org.ebsdimage.core.HoughPeak;
+import org.ebsdimage.core.HoughPeakIntensityComparator;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 import org.ebsdimage.core.run.Operation;
@@ -40,4 +44,47 @@ public abstract class IdentificationResultsOps extends Operation {
      */
     public abstract OpResult[] calculate(Exp exp, HoughPeak[] srcPeaks);
 
+
+
+    /**
+     * Sort peaks from the most intense to the least intense peak.
+     * 
+     * @param peaks
+     *            array of <code>HoughPeak</code>
+     */
+    protected void sortDescending(HoughPeak[] peaks) {
+        sort(peaks, new HoughPeakIntensityComparator());
+        reverse(peaks);
+    }
+
+
+
+    /**
+     * Returns the last index to consider in the calculations. If
+     * <code>max</code> is negative, all peaks are considered. If
+     * <code>max</code> is positive, the minimum between the maximum number of
+     * allowed peaks and the number of peaks in the array is returned.
+     * 
+     * @param peaks
+     *            array of <code>HoughPeak</code>
+     * @param max
+     *            maximum number of peaks to considered in the calculations
+     * @return last index to consider in the array of <code>HoughPeak</code>
+     * @throws IllegalArgumentException
+     *             if the array of <code>HoughPeak</code> is empty
+     * @throws IllegalArgumentException
+     *             if the maximum number of peaks is equal to zero
+     */
+    protected int getLastIndex(HoughPeak[] peaks, int max) {
+        if (peaks.length == 0)
+            throw new IllegalArgumentException("No Hough peak in arrays.");
+        if (max == 0)
+            throw new IllegalArgumentException(
+                    "Maximum number of peaks is zero.");
+
+        if (max < 0)
+            return peaks.length - 1;
+        else
+            return Math.min(max, peaks.length) - 1;
+    }
 }

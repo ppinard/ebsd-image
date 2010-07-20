@@ -17,7 +17,7 @@
  */
 package org.ebsdimage.gui.exp.ops.hough.results;
 
-import org.ebsdimage.core.exp.ops.hough.results.Range;
+import org.ebsdimage.core.exp.ops.hough.results.Entropy;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.exp.ops.OperationCreator;
 
@@ -30,7 +30,7 @@ public class EntropyCreator implements OperationCreator {
 
     @Override
     public Operation getOperation() {
-        return new Range();
+        return new Entropy();
     }
 
 
@@ -49,11 +49,6 @@ public class EntropyCreator implements OperationCreator {
 
 
 
-    /**
-     * Returns the name of the operation. Used by the list or combo box.
-     * 
-     * @return name of the operation
-     */
     @Override
     public String toString() {
         return "Entropy";

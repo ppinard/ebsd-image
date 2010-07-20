@@ -55,7 +55,7 @@ public class StandardDeviationTest {
 
     @Test
     public void testToString() {
-        assertEquals(stdDev.toString(), "StandardDeviation []");
+        assertEquals(stdDev.toString(), "Standard Deviation");
     }
 
 }

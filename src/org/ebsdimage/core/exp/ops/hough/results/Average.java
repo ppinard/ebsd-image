@@ -17,8 +17,16 @@ public class Average extends HoughResultsOps {
     @Override
     public OpResult[] calculate(Exp exp, HoughMap srcMap) {
         OpResult result =
-                new OpResult(getName(), Analysis.average(srcMap), RealMap.class);
+                new OpResult("Hough Average", Analysis.average(srcMap),
+                        RealMap.class);
 
         return new OpResult[] { result };
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Average";
     }
 }

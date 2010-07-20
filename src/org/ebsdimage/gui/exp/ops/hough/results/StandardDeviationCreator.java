@@ -17,7 +17,7 @@
  */
 package org.ebsdimage.gui.exp.ops.hough.results;
 
-import org.ebsdimage.core.exp.ops.hough.results.Range;
+import org.ebsdimage.core.exp.ops.hough.results.StandardDeviation;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.exp.ops.OperationCreator;
 
@@ -30,7 +30,7 @@ public class StandardDeviationCreator implements OperationCreator {
 
     @Override
     public Operation getOperation() {
-        return new Range();
+        return new StandardDeviation();
     }
 
 
@@ -49,11 +49,6 @@ public class StandardDeviationCreator implements OperationCreator {
 
 
 
-    /**
-     * Returns the name of the operation. Used by the list or combo box.
-     * 
-     * @return name of the operation
-     */
     @Override
     public String toString() {
         return "Standard Deviation";

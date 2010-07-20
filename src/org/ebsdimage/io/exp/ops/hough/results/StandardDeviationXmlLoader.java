@@ -26,7 +26,7 @@ import org.jdom.IllegalNameException;
 import ptpshared.utility.xml.ObjectXmlLoader;
 
 /**
- * XML loader for a <code>Average</code> operation.
+ * XML loader for a <code>StandardDeviation</code> operation.
  * 
  * @author Philippe T. Pinard
  */

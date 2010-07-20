@@ -14,10 +14,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.pattern.results;
 
-import org.ebsdimage.core.QualityIndex;
+import org.ebsdimage.core.Analysis;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 
@@ -31,13 +31,6 @@ import rmlimage.module.real.core.RealMap;
  */
 public class Entropy extends PatternResultsOps {
 
-    @Override
-    public String toString() {
-        return "Entropy";
-    }
-
-
-
     /**
      * Calculates the entropy quality index of the source map.
      * 
@@ -46,15 +39,21 @@ public class Entropy extends PatternResultsOps {
      * @param srcMap
      *            source map
      * @return one entry with the entropy quality index
-     * @see QualityIndex#entropy(ByteMap)
      */
     @Override
     public OpResult[] calculate(Exp exp, ByteMap srcMap) {
         OpResult result =
-                new OpResult(getName(), QualityIndex.entropy(srcMap),
+                new OpResult("Pattern Entropy", Analysis.entropy(srcMap),
                         RealMap.class);
 
         return new OpResult[] { result };
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Entropy";
     }
 
 }

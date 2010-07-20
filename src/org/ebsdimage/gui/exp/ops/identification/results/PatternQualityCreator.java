@@ -42,11 +42,6 @@ public class PatternQualityCreator implements OperationCreator {
 
 
 
-    /**
-     * Returns the name of the operation. Used by the list or combo box.
-     * 
-     * @return name of the operation
-     */
     @Override
     public String toString() {
         return "Pattern Quality";
