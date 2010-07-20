@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static java.lang.Math.PI;
@@ -26,7 +26,6 @@ import ptpshared.utility.xml.ObjectXml;
  * Peak in the Hough Transform.
  * 
  * @author Philippe T. Pinard
- * 
  */
 @Immutable
 public class HoughPeak implements ObjectXml {
@@ -51,7 +50,6 @@ public class HoughPeak implements ObjectXml {
      *            value of the theta coordinate
      * @param intensity
      *            value for the intensity of the peak
-     * 
      * @throws IllegalArgumentException
      *             if rho or theta are NaN
      * @throws IllegalArgumentException
@@ -90,7 +88,6 @@ public class HoughPeak implements ObjectXml {
      *            value of the rho coordinate
      * @param theta
      *            value of the theta coordinate
-     * 
      * @throws IllegalArgumentException
      *             if rho or theta are NaN
      * @throws IllegalArgumentException
@@ -113,7 +110,6 @@ public class HoughPeak implements ObjectXml {
      * @param precision
      *            level of precision
      * @return whether the two <code>HoughPeak</code> are almost equal
-     * 
      * @throws IllegalArgumentException
      *             if the precision is less than 0.0
      * @throws IllegalArgumentException
@@ -148,7 +144,6 @@ public class HoughPeak implements ObjectXml {
      * 
      * @param obj
      *            other <code>HoughPeak</code> to check equality
-     * 
      * @return whether the two <code>HoughPeak</code> are equal
      */
     @Override
@@ -164,8 +159,7 @@ public class HoughPeak implements ObjectXml {
 
         if (Double.doubleToLongBits(rho) != Double.doubleToLongBits(other.rho))
             return false;
-        if (Double.doubleToLongBits(theta) != Double
-                .doubleToLongBits(other.theta))
+        if (Double.doubleToLongBits(theta) != Double.doubleToLongBits(other.theta))
             return false;
 
         return true;
@@ -200,7 +194,12 @@ public class HoughPeak implements ObjectXml {
      */
     @Override
     public String toString() {
-        return "(" + rho + ", " + theta + ")";
+        String str = "(" + rho + ", " + theta + ")";
+
+        if (!Double.isNaN(intensity))
+            str += ": " + intensity;
+
+        return str;
     }
 
 }
