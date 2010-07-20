@@ -78,6 +78,9 @@ public class Exp extends Run {
     /** Runtime variable for the source pattern map. */
     protected ByteMap sourcePatternMap;
 
+    /** Runtime variable for the source Hough map (original Hough map). */
+    protected HoughMap sourceHoughMap;
+
     /** Runtime variable of the pattern map. */
     protected ByteMap currentPatternMap;
 
@@ -533,6 +536,22 @@ public class Exp extends Run {
 
 
     /**
+     * Returns the source Hough map that is currently being used by the
+     * experiment. The source Hough map corresponds to the Hough map write after
+     * the Hough operation. Only valid when the experiment is running.
+     * 
+     * @return Hough map
+     */
+    public HoughMap getSourceHoughMap() {
+        if (sourceHoughMap == null)
+            throw new RuntimeException(
+                    "The experiment is not running, there is no Hough map.");
+        return sourceHoughMap;
+    }
+
+
+
+    /**
      * Returns the Hough peaks that are currently being used by the experiment.
      * Only valid when the experiment is running.
      * 
@@ -802,6 +821,7 @@ public class Exp extends Run {
         super.initRuntimeVariables();
 
         sourcePatternMap = null;
+        sourceHoughMap = null;
         currentPatternMap = null;
         currentHoughMap = null;
         currentPeaksMap = null;
@@ -938,7 +958,8 @@ public class Exp extends Run {
 
             setStatus("Performing " + houghOp.getName() + "...");
 
-            currentHoughMap = houghOp.transform(this, currentPatternMap);
+            sourceHoughMap = houghOp.transform(this, currentPatternMap);
+            currentHoughMap = sourceHoughMap.duplicate();
 
             setStatus("Performing " + houghOp.getName() + "... DONE");
 
@@ -1040,7 +1061,7 @@ public class Exp extends Run {
 
                     currentPeaks =
                             identificationOp.identify(this, currentPeaksMap,
-                                    currentHoughMap);
+                                    sourceHoughMap);
 
                     setStatus("Performing " + identificationOp.getName()
                             + "... DONE");

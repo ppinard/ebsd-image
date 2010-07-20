@@ -68,6 +68,7 @@ public abstract class ExpTester {
     }
 
     protected Exp exp;
+
     public static final File expPath =
             new File(FileUtil.getTempDirFile(), "exp1/");
 
@@ -85,8 +86,8 @@ public abstract class ExpTester {
 
         ArrayList<Operation> ops = createOperations();
         Exp exp =
-                new Exp(width, height, createMetadata(), createPhases(), ops
-                        .toArray(new Operation[ops.size()]), saveMaps);
+                new Exp(width, height, createMetadata(), createPhases(),
+                        ops.toArray(new Operation[ops.size()]), saveMaps);
         exp.setName("ExpTester");
         exp.setDir(expPath);
 
@@ -205,8 +206,8 @@ public abstract class ExpTester {
     @Test
     public void testGetDetectionResultsOps() {
         assertEquals(1, exp.getDetectionResultsOps().length);
-        assertEquals(new DetectionResultsOpsMock(), exp
-                .getDetectionResultsOps()[0]);
+        assertEquals(new DetectionResultsOpsMock(),
+                exp.getDetectionResultsOps()[0]);
     }
 
 
@@ -252,8 +253,8 @@ public abstract class ExpTester {
     @Test
     public void testGetIdentificationPostOps() {
         assertEquals(1, exp.getIdentificationPostOps().length);
-        assertEquals(new IdentificationPostOpsMock(), exp
-                .getIdentificationPostOps()[0]);
+        assertEquals(new IdentificationPostOpsMock(),
+                exp.getIdentificationPostOps()[0]);
     }
 
 
@@ -261,8 +262,8 @@ public abstract class ExpTester {
     @Test
     public void testGetIdentificationPreOps() {
         assertEquals(1, exp.getIdentificationPreOps().length);
-        assertEquals(new IdentificationPreOpsMock(), exp
-                .getIdentificationPreOps()[0]);
+        assertEquals(new IdentificationPreOpsMock(),
+                exp.getIdentificationPreOps()[0]);
     }
 
 
@@ -270,8 +271,8 @@ public abstract class ExpTester {
     @Test
     public void testGetIdentificationResultsOps() {
         assertEquals(1, exp.getIdentificationResultsOps().length);
-        assertEquals(new IdentificationResultsOpsMock(), exp
-                .getIdentificationResultsOps()[0]);
+        assertEquals(new IdentificationResultsOpsMock(),
+                exp.getIdentificationResultsOps()[0]);
     }
 
 
@@ -423,14 +424,13 @@ public abstract class ExpTester {
 
         // IdentificationResultsOpsMock
         map =
-                exp.mmap.getMap(IdentificationResultsOpsMock.class
-                        .getSimpleName());
+                exp.mmap.getMap(IdentificationResultsOpsMock.class.getSimpleName());
         assertNotNull(map);
         assertEquals(RealMap.class, map.getClass());
 
         realMap = (RealMap) map;
-        assertEquals(66, realMap.pixArray[0], 1e-6);
-        assertEquals(66, realMap.pixArray[1], 1e-6);
+        assertEquals(30, realMap.pixArray[0], 1e-6);
+        assertEquals(30, realMap.pixArray[1], 1e-6);
 
         // IndexingResultsOpsMock
         map = exp.mmap.getMap(IndexingResultsOpsMock.class.getSimpleName());

@@ -36,7 +36,6 @@ import rmlshared.util.Range;
  * transform.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class QualityIndex {
 
@@ -200,6 +199,35 @@ public class QualityIndex {
         double maximum = peaks[0].intensity;
 
         return maximum - minimum;
+    }
+
+
+
+    /**
+     * Calculate Oxford's INCA pattern quality index. It consists of the sum of
+     * the three most intense peaks divided by 3 times the standard deviation of
+     * the Hough map.
+     * 
+     * @param peaks
+     *            list of peaks
+     * @param houghMap
+     *            hough map
+     * @return pattern quality index (PQI)
+     */
+    public static double patternQuality(HoughPeak[] peaks, HoughMap houghMap) {
+        if (peaks.length < 3)
+            return 0.0;
+
+        double houghStdDev = Analysis.standardDeviation(houghMap);
+
+        sort(peaks, new HoughPeakIntensityComparator());
+        reverse(peaks);
+
+        double quality = 0.0;
+        for (int i = 0; i < 3; i++)
+            quality += peaks[i].intensity;
+
+        return quality / (3.0 * houghStdDev);
     }
 
 

@@ -32,11 +32,15 @@ import rmlshared.util.Range;
 public class QualityIndexTest extends TestCase {
 
     private ByteMap pattern;
+
     private HoughMap houghMap;
 
     private HoughPeak[] peaks;
+
     private HoughPeak peak1;
+
     private HoughPeak peak2;
+
     private HoughPeak peak3;
 
 
@@ -48,8 +52,7 @@ public class QualityIndexTest extends TestCase {
 
         // Hough
         houghMap =
-                new HoughMapLoader().load(FileUtil
-                        .getFile("org/ebsdimage/testdata/houghmap.bmp"));
+                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
 
         // Peak
         peak1 = new HoughPeak(3.0, 0.5, 1);
@@ -71,6 +74,14 @@ public class QualityIndexTest extends TestCase {
     @Test
     public void testEntropy() {
         assertEquals(4.50234954, QualityIndex.entropy(pattern), 1e-7);
+    }
+
+
+
+    @Test
+    public void testPatternQuality() {
+        assertEquals(0.3565252, QualityIndex.patternQuality(peaks, houghMap),
+                1e-6);
     }
 
 
