@@ -1,7 +1,7 @@
 package org.ebsdimage.core.exp.ops.hough.results;
 
-import org.ebsdimage.core.Analysis;
 import org.ebsdimage.core.HoughMap;
+import org.ebsdimage.core.MapStats;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 
@@ -17,7 +17,7 @@ public class Entropy extends HoughResultsOps {
     @Override
     public OpResult[] calculate(Exp exp, HoughMap srcMap) {
         OpResult result =
-                new OpResult("Hough Entropy", Analysis.entropy(srcMap),
+                new OpResult("Hough Entropy", MapStats.entropy(srcMap),
                         RealMap.class);
 
         return new OpResult[] { result };

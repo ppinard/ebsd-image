@@ -24,25 +24,8 @@ import org.ebsdimage.TestCase;
 import org.junit.Test;
 
 import rmlimage.core.ByteMap;
-import rmlshared.util.Range;
 
 public class AnalysisTest extends TestCase {
-
-    @Test
-    public void testAverage() {
-        ByteMap map = (ByteMap) load("org/ebsdimage/core/disk127.bmp");
-        assertEquals(127.0, Analysis.average(map), 0.01);
-    }
-
-
-
-    @Test
-    public void testEntropy() {
-        ByteMap map = (ByteMap) load("org/ebsdimage/core/disk127.bmp");
-        assertEquals(0.0, Analysis.entropy(map), 0.01);
-    }
-
-
 
     @Test
     public void testGetR() {
@@ -62,39 +45,6 @@ public class AnalysisTest extends TestCase {
         assertEquals(toRadians(37), Analysis.getTheta(map, 23437), 0.001);
         assertEquals(toRadians(131), Analysis.getTheta(map, 10211), 0.001);
         assertEquals(toRadians(135), Analysis.getTheta(map, 21195), 0.001);
-    }
-
-
-
-    @Test
-    public void testStandardDeviation() {
-        ByteMap map = (ByteMap) load("org/ebsdimage/core/disk127.bmp");
-        assertEquals(0.0, Analysis.standardDeviation(map), 0.01);
-    }
-
-
-
-    @Test
-    public void testVariance() {
-        ByteMap map = (ByteMap) load("org/ebsdimage/core/disk127.bmp");
-        assertEquals(0.0, Analysis.variance(map), 0.01);
-    }
-
-
-
-    @Test
-    public void testRange() {
-        ByteMap map = (ByteMap) load("org/ebsdimage/core/disk127.bmp");
-        Range<Integer> range = Analysis.range(map);
-
-        assertEquals(127, range.min.intValue());
-        assertEquals(127, range.max.intValue());
-
-        map = (ByteMap) load("org/ebsdimage/testdata/pattern_masked.bmp");
-        range = Analysis.range(map);
-
-        assertEquals(8, range.min.intValue());
-        assertEquals(232, range.max.intValue());
     }
 
 }

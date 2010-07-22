@@ -17,8 +17,8 @@
  */
 package org.ebsdimage.core.exp.ops.hough.results;
 
-import org.ebsdimage.core.Analysis;
 import org.ebsdimage.core.HoughMap;
+import org.ebsdimage.core.MapStats;
 import org.ebsdimage.core.QualityIndex;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
@@ -44,7 +44,7 @@ public class Range extends HoughResultsOps {
      */
     @Override
     public OpResult[] calculate(Exp exp, HoughMap srcMap) {
-        rmlshared.util.Range<Integer> range = Analysis.range(srcMap);
+        rmlshared.util.Range<Integer> range = MapStats.range(srcMap);
         byte value = (byte) (range.max - range.min);
 
         OpResult result = new OpResult("Hough Range", value, ByteMap.class);

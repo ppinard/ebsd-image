@@ -1,7 +1,7 @@
 package org.ebsdimage.core.exp.ops.hough.results;
 
-import org.ebsdimage.core.Analysis;
 import org.ebsdimage.core.HoughMap;
+import org.ebsdimage.core.MapStats;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 
@@ -19,7 +19,7 @@ public class StandardDeviation extends HoughResultsOps {
     public OpResult[] calculate(Exp exp, HoughMap srcMap) {
         OpResult result =
                 new OpResult("Hough Standard Deviation",
-                        Analysis.standardDeviation(srcMap), RealMap.class);
+                        MapStats.standardDeviation(srcMap), RealMap.class);
 
         return new OpResult[] { result };
     }

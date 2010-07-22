@@ -150,7 +150,7 @@ public class QualityIndex {
         if (peaks.length < 3)
             return 0.0;
 
-        double houghStdDev = Analysis.standardDeviation(houghMap);
+        double houghStdDev = MapStats.standardDeviation(houghMap);
 
         sort(peaks, new HoughPeakIntensityComparator());
         reverse(peaks);

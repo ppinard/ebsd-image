@@ -1,6 +1,6 @@
 package org.ebsdimage.core.exp.ops.pattern.results;
 
-import org.ebsdimage.core.Analysis;
+import org.ebsdimage.core.MapStats;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 
@@ -16,7 +16,7 @@ public class Range extends PatternResultsOps {
 
     @Override
     public OpResult[] calculate(Exp exp, ByteMap srcMap) {
-        rmlshared.util.Range<Integer> range = Analysis.range(srcMap);
+        rmlshared.util.Range<Integer> range = MapStats.range(srcMap);
         byte value = (byte) (range.max - range.min);
 
         OpResult result = new OpResult("Pattern Range", value, ByteMap.class);

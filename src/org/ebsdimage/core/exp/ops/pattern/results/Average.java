@@ -17,7 +17,7 @@
  */
 package org.ebsdimage.core.exp.ops.pattern.results;
 
-import org.ebsdimage.core.Analysis;
+import org.ebsdimage.core.MapStats;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 
@@ -43,7 +43,7 @@ public class Average extends PatternResultsOps {
     @Override
     public OpResult[] calculate(Exp exp, ByteMap srcMap) {
         OpResult result =
-                new OpResult("Pattern Average", Analysis.average(srcMap),
+                new OpResult("Pattern Average", MapStats.average(srcMap),
                         RealMap.class);
 
         return new OpResult[] { result };

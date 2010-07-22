@@ -17,7 +17,7 @@
  */
 package org.ebsdimage.core.exp.ops.pattern.results;
 
-import org.ebsdimage.core.Analysis;
+import org.ebsdimage.core.MapStats;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 
@@ -43,7 +43,7 @@ public class Entropy extends PatternResultsOps {
     @Override
     public OpResult[] calculate(Exp exp, ByteMap srcMap) {
         OpResult result =
-                new OpResult("Pattern Entropy", Analysis.entropy(srcMap),
+                new OpResult("Pattern Entropy", MapStats.entropy(srcMap),
                         RealMap.class);
 
         return new OpResult[] { result };
