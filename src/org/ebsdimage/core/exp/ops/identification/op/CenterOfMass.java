@@ -2,6 +2,7 @@ package org.ebsdimage.core.exp.ops.identification.op;
 
 import java.util.Arrays;
 
+import org.ebsdimage.core.Analysis;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.Exp;
@@ -20,7 +21,9 @@ public class CenterOfMass extends IdentificationOp {
 
     @Override
     public HoughPeak[] identify(Exp exp, BinMap peaksMap, HoughMap houghMap) {
-        // Calculate weighted values for each object
+        // Apply houghMap properties on binMap
+        peaksMap.setProperties(houghMap);
+
         IdentMap identMap = Identification.identify(peaksMap);
 
         int nbObjects = identMap.getObjectCount();
@@ -50,9 +53,10 @@ public class CenterOfMass extends IdentificationOp {
             for (int x = 0; x < width; x++) {
                 objectNumber = pixArray[n];
 
-                rho = houghMap.getR(n);
-                theta = houghMap.getTheta(n);
-                value = houghMap.pixArray[n] & 0xff;
+                rho = Analysis.getR(peaksMap, n);
+                theta = Analysis.getTheta(peaksMap, n);
+
+                value = houghMap.pixArray[houghMap.getIndex(rho, theta)] & 0xff;
 
                 massRho[objectNumber] += rho * value;
                 massTheta[objectNumber] += theta * value;

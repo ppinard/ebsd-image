@@ -134,8 +134,6 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
             double deltaTheta) {
         ArrayList<HoughPeak> destPeaks = new ArrayList<HoughPeak>();
 
-        System.out.println(deltaR * spacingRho);
-
         HoughPeak peak0;
         HoughPeak peak1;
         boolean same;
