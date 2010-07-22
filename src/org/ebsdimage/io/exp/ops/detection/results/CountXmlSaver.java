@@ -35,11 +35,11 @@ public class CountXmlSaver implements ObjectXmlSaver {
     /**
      * {@inheritDoc}
      * 
-     * @see #save(Range)
+     * @see #save(Count)
      */
     @Override
     public Element save(ObjectXml obj) {
-        return save(obj);
+        return save((Count) obj);
     }
 
 

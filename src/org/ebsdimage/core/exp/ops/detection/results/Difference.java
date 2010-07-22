@@ -2,6 +2,7 @@ package org.ebsdimage.core.exp.ops.detection.results;
 
 import java.util.Arrays;
 
+import org.ebsdimage.core.Analysis;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
@@ -40,6 +41,9 @@ public class Difference extends DetectionResultsOps {
      *         differences
      */
     protected OpResult[] calculate(BinMap peaksMap, HoughMap houghMap) {
+        // Apply houghMap properties on binMap
+        peaksMap.setProperties(houghMap);
+
         IdentMap identMap = Identification.identify(peaksMap);
 
         // ========= Find min and max of each peak ===========
@@ -60,6 +64,8 @@ public class Difference extends DetectionResultsOps {
         int width = identMap.width;
         int height = identMap.height;
         short[] pixArray = identMap.pixArray;
+        double rho;
+        double theta;
 
         int value;
 
@@ -67,7 +73,10 @@ public class Difference extends DetectionResultsOps {
             for (int x = 0; x < width; x++) {
                 objectNumber = pixArray[n];
 
-                value = houghMap.pixArray[n] & 0xff;
+                rho = Analysis.getR(peaksMap, n);
+                theta = Analysis.getTheta(peaksMap, n);
+
+                value = houghMap.pixArray[houghMap.getIndex(rho, theta)] & 0xff;
 
                 if (value < minValue[objectNumber])
                     minValue[objectNumber] = value;
@@ -87,18 +96,33 @@ public class Difference extends DetectionResultsOps {
 
         // ========= Calculate results ===========
 
-        OpResult average =
-                new OpResult("Difference Average", Stats.average(diff),
-                        RealMap.class);
-        OpResult stddev =
-                new OpResult("Difference Standard Deviation",
-                        Stats.standardDeviation(diff), RealMap.class);
-        OpResult min =
-                new OpResult("Difference Min", (byte) Stats.min(diff),
-                        ByteMap.class);
-        OpResult max =
-                new OpResult("Difference Max", (byte) Stats.max(diff),
-                        ByteMap.class);
+        OpResult average;
+        OpResult stddev;
+        OpResult min;
+        OpResult max;
+
+        if (diff.length > 1) {
+            average =
+                    new OpResult("Difference Average", Stats.average(diff),
+                            RealMap.class);
+            stddev =
+                    new OpResult("Difference Standard Deviation",
+                            Stats.standardDeviation(diff), RealMap.class);
+            min =
+                    new OpResult("Difference Min", (byte) Stats.min(diff),
+                            ByteMap.class);
+            max =
+                    new OpResult("Difference Max", (byte) Stats.max(diff),
+                            ByteMap.class);
+        } else {
+            average =
+                    new OpResult("Difference Average", Float.NaN, RealMap.class);
+            stddev =
+                    new OpResult("Difference Standard Deviation", Float.NaN,
+                            RealMap.class);
+            min = new OpResult("Difference Min", (byte) 0, ByteMap.class);
+            max = new OpResult("Difference Max", (byte) 0, ByteMap.class);
+        }
 
         return new OpResult[] { average, stddev, min, max };
     }

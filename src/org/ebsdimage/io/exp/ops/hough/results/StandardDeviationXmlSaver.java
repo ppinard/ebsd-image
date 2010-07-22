@@ -35,11 +35,11 @@ public class StandardDeviationXmlSaver implements ObjectXmlSaver {
     /**
      * {@inheritDoc}
      * 
-     * @see #save(Range)
+     * @see #save(StandardDeviation)
      */
     @Override
     public Element save(ObjectXml obj) {
-        return save(obj);
+        return save((StandardDeviation) obj);
     }
 
 

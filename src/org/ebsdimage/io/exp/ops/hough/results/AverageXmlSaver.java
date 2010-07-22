@@ -35,11 +35,11 @@ public class AverageXmlSaver implements ObjectXmlSaver {
     /**
      * {@inheritDoc}
      * 
-     * @see #save(Range)
+     * @see #save(Average)
      */
     @Override
     public Element save(ObjectXml obj) {
-        return save(obj);
+        return save((Average) obj);
     }
 
 

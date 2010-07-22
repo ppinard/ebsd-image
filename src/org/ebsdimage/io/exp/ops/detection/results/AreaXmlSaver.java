@@ -35,11 +35,11 @@ public class AreaXmlSaver implements ObjectXmlSaver {
     /**
      * {@inheritDoc}
      * 
-     * @see #save(Range)
+     * @see #save(Area)
      */
     @Override
     public Element save(ObjectXml obj) {
-        return save(obj);
+        return save((Area) obj);
     }
 
 

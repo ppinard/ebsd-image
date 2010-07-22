@@ -133,7 +133,7 @@ public class Sum extends PatternResultsOps {
 
         ROI roi =
                 new ROI((int) (xmin * width), (int) (ymin * height),
-                        (int) (xmax * width), (int) (ymax * height));
+                        (int) (xmax * width) - 1, (int) (ymax * height) - 1);
 
         return MapStats.sum(map, roi);
     }

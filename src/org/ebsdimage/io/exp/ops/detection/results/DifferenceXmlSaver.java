@@ -35,11 +35,11 @@ public class DifferenceXmlSaver implements ObjectXmlSaver {
     /**
      * {@inheritDoc}
      * 
-     * @see #save(Range)
+     * @see #save(Difference)
      */
     @Override
     public Element save(ObjectXml obj) {
-        return save(obj);
+        return save((Difference) obj);
     }
 
 

@@ -72,7 +72,7 @@ public class ThetaExpandDialog extends OperationDialog {
 
     @Override
     public Operation getOperation() {
-        return new ThetaExpand(incrementField.getValueBFR());
+        return new ThetaExpand(Math.toRadians(incrementField.getValueBFR()));
     }
 
 

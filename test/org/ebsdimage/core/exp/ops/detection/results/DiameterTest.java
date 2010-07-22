@@ -47,10 +47,10 @@ public class DiameterTest extends TestCase {
         assertEquals(2.361767530, results[1].value.doubleValue(), 1e-6);
 
         // Min
-        assertEquals(9, results[2].value.doubleValue(), 1e-6);
+        assertEquals(9.245048523, results[2].value.doubleValue(), 1e-6);
 
         // Max
-        assertEquals(15.0, results[3].value.doubleValue(), 1e-6);
+        assertEquals(15.55825805, results[3].value.doubleValue(), 1e-6);
     }
 
 }

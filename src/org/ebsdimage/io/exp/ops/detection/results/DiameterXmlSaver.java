@@ -35,11 +35,11 @@ public class DiameterXmlSaver implements ObjectXmlSaver {
     /**
      * {@inheritDoc}
      * 
-     * @see #save(Range)
+     * @see #save(Diameter)
      */
     @Override
     public Element save(ObjectXml obj) {
-        return save(obj);
+        return save((Diameter) obj);
     }
 
 

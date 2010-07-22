@@ -35,11 +35,11 @@ public class EntropyXmlSaver implements ObjectXmlSaver {
     /**
      * {@inheritDoc}
      * 
-     * @see #save(Range)
+     * @see #save(Entropy)
      */
     @Override
     public Element save(ObjectXml obj) {
-        return save(obj);
+        return save((Entropy) obj);
     }
 
 

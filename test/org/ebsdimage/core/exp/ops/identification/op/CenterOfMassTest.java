@@ -73,7 +73,7 @@ public class CenterOfMassTest {
 
     @Test
     public void testToString() {
-        String expected = "CenterOfMass []";
+        String expected = "Center of Mass";
         assertEquals(expected, centerOfMass.toString());
 
     }

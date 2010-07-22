@@ -83,4 +83,11 @@ public class CenterOfMass extends IdentificationOp {
 
         return destPeaks;
     }
+
+
+
+    @Override
+    public String toString() {
+        return "Center of Mass";
+    }
 }
