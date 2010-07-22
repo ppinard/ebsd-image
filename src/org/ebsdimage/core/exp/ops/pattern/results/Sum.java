@@ -108,12 +108,12 @@ public class Sum extends PatternResultsOps {
      */
     @Override
     public OpResult[] calculate(Exp exp, ByteMap srcMap) {
-        double sum = calculateSum(srcMap);
         String name =
                 "Pattern Sum" + "[(" + xmin + "," + ymin + ")-(" + xmax + ","
                         + ymax + ")]";
 
-        OpResult result = new OpResult(name, sum, RealMap.class);
+        OpResult result =
+                new OpResult(name, calculateSum(srcMap), RealMap.class);
 
         return new OpResult[] { result };
     }
@@ -123,19 +123,19 @@ public class Sum extends PatternResultsOps {
     /**
      * Calculate the total intensity of the specified region of interest.
      * 
-     * @param originalPattern
-     *            original diffraction pattern
+     * @param map
+     *            diffraction pattern
      * @return a result named "AverageRegion"
      */
-    protected double calculateSum(ByteMap originalPattern) {
-        int width = originalPattern.width;
-        int height = originalPattern.height;
+    protected double calculateSum(ByteMap map) {
+        int width = map.width;
+        int height = map.height;
 
         ROI roi =
                 new ROI((int) (xmin * width), (int) (ymin * height),
                         (int) (xmax * width), (int) (ymax * height));
 
-        return MapStats.sum(originalPattern, roi);
+        return MapStats.sum(map, roi);
     }
 
 
