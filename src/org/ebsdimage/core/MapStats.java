@@ -179,7 +179,9 @@ public class MapStats {
             }
         }
 
-        return new Range<Integer>(min, max);
+        if (min > max)
+            return new Range<Integer>(0, 0);
+        else
+            return new Range<Integer>(min, max);
     }
-
 }
