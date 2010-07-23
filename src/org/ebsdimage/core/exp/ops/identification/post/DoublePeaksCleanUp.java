@@ -145,9 +145,6 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
             for (int j = i + 1; j < srcPeaks.length; j++) {
                 peak1 = srcPeaks[j];
 
-                // System.out.println(i + ", " + j + ": "
-                // + abs(peak1.rho - peak0.rho));
-
                 if (equivalent(peak0, peak1, deltaR, deltaTheta))
                     same = true;
             }

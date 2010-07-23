@@ -29,7 +29,6 @@ import ptpshared.utility.xml.ObjectXmlSaver;
  * XML saver for <code>CurrentMapsFileSaver</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class CurrentMapsFileSaverXmlSaver implements ObjectXmlSaver {
 
@@ -55,16 +54,18 @@ public class CurrentMapsFileSaverXmlSaver implements ObjectXmlSaver {
     public Element save(CurrentMapsFileSaver saveMaps) {
         Element element = new Element(TAG_NAME);
 
-        element.setAttribute(ATTR_SAVEALLMAPS, Boolean
-                .toString(saveMaps.saveAllMaps));
-        element.setAttribute(ATTR_SAVEPATTERNMAP, Boolean
-                .toString(saveMaps.savePatternMap));
-        element.setAttribute(ATTR_SAVEHOUGHMAP, Boolean
-                .toString(saveMaps.saveHoughMap));
-        element.setAttribute(ATTR_SAVEPEAKSMAP, Boolean
-                .toString(saveMaps.savePeaksMap));
-        element.setAttribute(ATTR_SAVESOLUTIONOVERLAY, Boolean
-                .toString(saveMaps.saveSolutionOverlay));
+        element.setAttribute(ATTR_SAVEALLMAPS,
+                Boolean.toString(saveMaps.saveAllMaps));
+        element.setAttribute(ATTR_SAVEPATTERNMAP,
+                Boolean.toString(saveMaps.savePatternMap));
+        element.setAttribute(ATTR_SAVEHOUGHMAP,
+                Boolean.toString(saveMaps.saveHoughMap));
+        element.setAttribute(ATTR_SAVEPEAKSMAP,
+                Boolean.toString(saveMaps.savePeaksMap));
+        element.setAttribute(ATTR_SAVEHOUGHPEAKSOVERLAY,
+                Boolean.toString(saveMaps.saveHoughPeaksOverlay));
+        element.setAttribute(ATTR_SAVESOLUTIONOVERLAY,
+                Boolean.toString(saveMaps.saveSolutionOverlay));
 
         return element;
     }

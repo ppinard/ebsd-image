@@ -14,21 +14,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.ebsdimage.core.HoughPeak;
 import org.junit.Before;
 import org.junit.Test;
-
 
 public class HoughPeakTest {
 
     private HoughPeak peak1;
+
     private HoughPeak peak2;
 
 
@@ -67,6 +66,23 @@ public class HoughPeakTest {
 
         assertEquals(0.1, peak2.theta, 1e-7);
         assertEquals(5.0, peak2.rho, 1e-7);
+    }
+
+
+
+    @Test
+    public void testThetaOutsidePI() {
+        HoughPeak other = new HoughPeak(4, Math.PI + 1.25);
+        assertEquals(1.25, other.theta, 1e-6);
+        assertEquals(-4, other.rho, 1e-6);
+
+        other = new HoughPeak(4, Math.PI * 2 + 1.25);
+        assertEquals(1.25, other.theta, 1e-6);
+        assertEquals(4, other.rho, 1e-6);
+
+        other = new HoughPeak(4, Math.PI * 3 + 1.25);
+        assertEquals(1.25, other.theta, 1e-6);
+        assertEquals(-4, other.rho, 1e-6);
     }
 
 

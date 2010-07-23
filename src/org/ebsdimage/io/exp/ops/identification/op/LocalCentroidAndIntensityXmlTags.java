@@ -15,35 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.core.exp.ops.detection.post;
+package org.ebsdimage.io.exp.ops.identification.op;
 
-import org.ebsdimage.core.exp.Exp;
-
-import rmlimage.core.BinMap;
-import rmlimage.core.MathMorph;
+import org.ebsdimage.core.exp.ops.identification.op.LocalCentroidAndIntensity;
 
 /**
- * Operation to remove small false peaks in the peaks map.
+ * Tags for <code>LocalCentroid</code>'s XML <code>Element</code>.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
-public class Opening extends DetectionPostOps {
-
-    @Override
-    public BinMap process(Exp exp, BinMap srcMap) {
-        BinMap destMap = srcMap.duplicate();
-
-        MathMorph.opening(destMap, 2, 8);
-        destMap.setProperties(srcMap);
-
-        return destMap;
-    }
-
-
-
-    @Override
-    public String toString() {
-        return "Opening";
-    }
-
+public class LocalCentroidAndIntensityXmlTags {
+    /** XML tag name for <code>LocalCentroid</code>. */
+    public static final String TAG_NAME =
+            LocalCentroidAndIntensity.class.getSimpleName();
 }

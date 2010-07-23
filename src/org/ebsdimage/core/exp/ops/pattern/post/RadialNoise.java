@@ -26,7 +26,6 @@ import rmlimage.core.ByteMap;
  * Operation to add radial noise to the pattern map.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class RadialNoise extends PatternPostOps {
 
@@ -47,6 +46,7 @@ public class RadialNoise extends PatternPostOps {
 
     /** Default standard deviation in x. */
     public static final double DEFAULT_STDDEV_X = -1.0; // Recalculate from
+
     // srcMap
 
     /** Standard deviation in y for the 2D gaussian distribution. */
@@ -54,6 +54,7 @@ public class RadialNoise extends PatternPostOps {
 
     /** Default standard deviation in y. */
     public static final double DEFAULT_STDDEV_Y = -1.0; // Recalculate from
+
     // srcMap
 
     /** Initial noise level at (x0, y0). */
@@ -74,12 +75,8 @@ public class RadialNoise extends PatternPostOps {
      * Creates a new radial noise operation using the default parameters.
      */
     public RadialNoise() {
-        x = DEFAULT_X;
-        y = DEFAULT_Y;
-        stdDevX = DEFAULT_STDDEV_X;
-        stdDevY = DEFAULT_STDDEV_Y;
-        initialNoiseStdDev = DEFALT_INITIAL_NOISE_STDDEV;
-        finalNoiseStdDev = DEFALT_FINAL_NOISE_STDDEV;
+        this(DEFAULT_X, DEFAULT_Y, DEFAULT_STDDEV_X, DEFAULT_STDDEV_Y,
+                DEFALT_INITIAL_NOISE_STDDEV, DEFALT_FINAL_NOISE_STDDEV);
     }
 
 
@@ -99,7 +96,6 @@ public class RadialNoise extends PatternPostOps {
      *            initial noise level at (x0, y0)
      * @param finalNoiseStdDev
      *            final noise level
-     * 
      * @see org.ebsdimage.core.Noise#radialNoise(ByteMap, int, int, double,
      *      double, double, double)
      */
@@ -132,17 +128,13 @@ public class RadialNoise extends PatternPostOps {
             return false;
 
         RadialNoise other = (RadialNoise) obj;
-        if (Double.doubleToLongBits(finalNoiseStdDev) != Double
-                .doubleToLongBits(other.finalNoiseStdDev))
+        if (Double.doubleToLongBits(finalNoiseStdDev) != Double.doubleToLongBits(other.finalNoiseStdDev))
             return false;
-        if (Double.doubleToLongBits(initialNoiseStdDev) != Double
-                .doubleToLongBits(other.initialNoiseStdDev))
+        if (Double.doubleToLongBits(initialNoiseStdDev) != Double.doubleToLongBits(other.initialNoiseStdDev))
             return false;
-        if (Double.doubleToLongBits(stdDevX) != Double
-                .doubleToLongBits(other.stdDevX))
+        if (Double.doubleToLongBits(stdDevX) != Double.doubleToLongBits(other.stdDevX))
             return false;
-        if (Double.doubleToLongBits(stdDevY) != Double
-                .doubleToLongBits(other.stdDevY))
+        if (Double.doubleToLongBits(stdDevY) != Double.doubleToLongBits(other.stdDevY))
             return false;
         if (x != other.x)
             return false;
@@ -204,6 +196,9 @@ public class RadialNoise extends PatternPostOps {
 
         Noise.radialNoise(destMap, x, y, stdDevX, stdDevY, initialNoiseStdDev,
                 finalNoiseStdDev);
+
+        // Apply properties of srcMap
+        destMap.setProperties(srcMap);
 
         return destMap;
     }

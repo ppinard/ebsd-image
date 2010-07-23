@@ -37,7 +37,7 @@ import org.ebsdimage.core.exp.ops.hough.post.HoughPostOps;
 import org.ebsdimage.core.exp.ops.hough.pre.HoughPreOps;
 import org.ebsdimage.core.exp.ops.hough.results.HoughResultsOps;
 import org.ebsdimage.core.exp.ops.identification.op.IdentificationOp;
-import org.ebsdimage.core.exp.ops.identification.op.LocalCentroid;
+import org.ebsdimage.core.exp.ops.identification.op.LocalCentroidMaxIntensity;
 import org.ebsdimage.core.exp.ops.identification.post.IdentificationPostOps;
 import org.ebsdimage.core.exp.ops.identification.pre.IdentificationPreOps;
 import org.ebsdimage.core.exp.ops.identification.results.IdentificationResultsOps;
@@ -146,7 +146,7 @@ public class Exp extends Run {
 
     /** Default identification operation. */
     public static final IdentificationOp DEFAULT_IDENTIFICATION_OP =
-            new LocalCentroid();
+            new LocalCentroidMaxIntensity();
 
     /** Identification operation. */
     private IdentificationOp identificationOp = DEFAULT_IDENTIFICATION_OP;
@@ -1072,6 +1072,9 @@ public class Exp extends Run {
                     setStatus("Performing " + identificationOp.getName()
                             + "... DONE");
 
+                    currentMapsSaver.saveHoughPeaks(this, identificationOp,
+                            currentPeaks);
+
                     // Identification Post Ops
                     setStatus("--- Identification Post Operations ---");
                     for (IdentificationPostOps op : identificationPostOps) {
@@ -1080,6 +1083,8 @@ public class Exp extends Run {
                         currentPeaks = op.process(this, currentPeaks);
 
                         setStatus("Performing " + op.getName() + "... DONE");
+
+                        currentMapsSaver.saveHoughPeaks(this, op, currentPeaks);
                     }
 
                     // Identification Results Ops
@@ -1103,6 +1108,9 @@ public class Exp extends Run {
                             currentPeaks = op.process(this, currentPeaks);
 
                             setStatus("Performing " + op.getName() + "... DONE");
+
+                            currentMapsSaver.saveHoughPeaks(this, op,
+                                    currentPeaks);
                         }
 
                         // Indexing Op

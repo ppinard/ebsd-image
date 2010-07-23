@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.hough.post;
 
 import static java.lang.Math.min;
@@ -45,7 +45,7 @@ public class HoughCrop extends HoughPostOps {
      * Creates a new Hough crop operation using the default radius.
      */
     public HoughCrop() {
-        radius = DEFAULT_RADIUS;
+        this(DEFAULT_RADIUS);
     }
 
 
@@ -105,7 +105,6 @@ public class HoughCrop extends HoughPostOps {
      * @param srcMap
      *            input Hough map
      * @return output Hough map
-     * 
      * @see Edit#crop(HoughMap, double)
      */
     @Override

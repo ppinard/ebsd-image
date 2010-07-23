@@ -45,7 +45,7 @@ public class HoughTransform extends HoughOp {
      * Creates a new Hough transform operation with the default values.
      */
     public HoughTransform() {
-        resolution = DEFAULT_RESOLUTION;
+        this(DEFAULT_RESOLUTION);
     }
 
 
@@ -76,8 +76,7 @@ public class HoughTransform extends HoughOp {
             return false;
 
         HoughTransform other = (HoughTransform) obj;
-        if (Double.doubleToLongBits(resolution) != Double
-                .doubleToLongBits(other.resolution))
+        if (Double.doubleToLongBits(resolution) != Double.doubleToLongBits(other.resolution))
             return false;
 
         return true;
@@ -121,7 +120,8 @@ public class HoughTransform extends HoughOp {
 
     @Override
     public String toString() {
-        return "Hough Transform [resolution=" + resolution + " rad]";
+        return "Hough Transform [resolution=" + Math.toDegrees(resolution)
+                + " deg]";
     }
 
 }

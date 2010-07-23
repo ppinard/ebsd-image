@@ -43,7 +43,7 @@ public class Smoothing extends PatternPostOps {
      * Creates a new smoothing operation with the default kernel size.
      */
     public Smoothing() {
-        kernelSize = DEFAULT_KERNEL_SIZE;
+        this(DEFAULT_KERNEL_SIZE);
     }
 
 
@@ -103,7 +103,6 @@ public class Smoothing extends PatternPostOps {
      * @param srcMap
      *            input pattern map
      * @return output pattern map
-     * 
      * @see Convolution#convolve(ByteMap, Kernel)
      */
     @Override
@@ -120,6 +119,9 @@ public class Smoothing extends PatternPostOps {
 
         ByteMap destMap = new ByteMap(srcMap.width, srcMap.height);
         Convolution.convolve(srcMap, kernel, destMap);
+
+        // Apply properties of srcMap
+        destMap.setProperties(srcMap);
 
         return destMap;
     }

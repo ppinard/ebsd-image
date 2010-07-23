@@ -1,5 +1,10 @@
 package org.ebsdimage.core.exp.ops.detection.results;
 
+import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.average;
+import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.max;
+import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.min;
+import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.standardDeviation;
+
 import java.util.Arrays;
 
 import org.ebsdimage.core.Analysis;
@@ -12,7 +17,6 @@ import rmlimage.core.ByteMap;
 import rmlimage.core.IdentMap;
 import rmlimage.core.Identification;
 import rmlimage.module.real.core.RealMap;
-import rmlshared.math.Stats;
 
 /**
  * Result operation that evaluate the minimum and maximum value inside each
@@ -89,40 +93,22 @@ public class Difference extends DetectionResultsOps {
 
         // ========= Calculate difference ===========
 
-        int diff[] = new int[nbObjects]; // Ignore background
+        float diff[] = new float[nbObjects]; // Ignore background
 
         for (int i = 1; i <= nbObjects; i++)
             diff[i - 1] = maxValue[i] - minValue[i];
 
         // ========= Calculate results ===========
 
-        OpResult average;
-        OpResult stddev;
-        OpResult min;
-        OpResult max;
-
-        if (diff.length > 1) {
-            average =
-                    new OpResult("Difference Average", Stats.average(diff),
-                            RealMap.class);
-            stddev =
-                    new OpResult("Difference Standard Deviation",
-                            Stats.standardDeviation(diff), RealMap.class);
-            min =
-                    new OpResult("Difference Min", (byte) Stats.min(diff),
-                            ByteMap.class);
-            max =
-                    new OpResult("Difference Max", (byte) Stats.max(diff),
-                            ByteMap.class);
-        } else {
-            average =
-                    new OpResult("Difference Average", Float.NaN, RealMap.class);
-            stddev =
-                    new OpResult("Difference Standard Deviation", Float.NaN,
-                            RealMap.class);
-            min = new OpResult("Difference Min", (byte) 0, ByteMap.class);
-            max = new OpResult("Difference Max", (byte) 0, ByteMap.class);
-        }
+        OpResult average =
+                new OpResult("Area Average", average(diff), RealMap.class);
+        OpResult stddev =
+                new OpResult("Area Standard Deviation",
+                        standardDeviation(diff), RealMap.class);
+        OpResult min =
+                new OpResult("Area Min", (byte) min(diff), ByteMap.class);
+        OpResult max =
+                new OpResult("Area Max", (byte) max(diff), ByteMap.class);
 
         return new OpResult[] { average, stddev, min, max };
     }

@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import net.jcip.annotations.Immutable;
 
 import org.ebsdimage.core.HoughMap;
+import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.io.HoughMapSaver;
@@ -67,10 +68,16 @@ public class CurrentMapsFileSaver extends CurrentMapsSaver {
     /** Default value whether to save the peak map. */
     public static final boolean DEFAULT_SAVE_PEAKSMAP = false;
 
+    /** If <code>true</code>, the Hough peaks overlay map is saved. */
+    public final boolean saveHoughPeaksOverlay;
+
+    /** Default value whether to save the Hough peaks map. */
+    public static final boolean DEFAULT_SAVE_HOUGHPEAKSOVERLAY = false;
+
     /** If <code>true</code>, the solution overlay map is saved. */
     public final boolean saveSolutionOverlay;
 
-    /** Default value whether to save the peak map. */
+    /** Default value whether to save the solution map. */
     public static final boolean DEFAULT_SAVE_SOLUTIONOVERLAY = false;
 
 
@@ -80,12 +87,12 @@ public class CurrentMapsFileSaver extends CurrentMapsSaver {
      * values.
      */
     public CurrentMapsFileSaver() {
-        saveAllMaps = DEFAULT_SAVEMAPS_ALL;
-        savePatternMap = DEFAULT_SAVE_PATTERNMAP || DEFAULT_SAVEMAPS_ALL;
-        saveHoughMap = DEFAULT_SAVE_HOUGHMAP || DEFAULT_SAVEMAPS_ALL;
-        savePeaksMap = DEFAULT_SAVE_PEAKSMAP || DEFAULT_SAVEMAPS_ALL;
-        saveSolutionOverlay =
-                DEFAULT_SAVE_SOLUTIONOVERLAY || DEFAULT_SAVEMAPS_ALL;
+        this(DEFAULT_SAVEMAPS_ALL, DEFAULT_SAVE_PATTERNMAP
+                || DEFAULT_SAVEMAPS_ALL, DEFAULT_SAVE_HOUGHMAP
+                || DEFAULT_SAVEMAPS_ALL, DEFAULT_SAVE_PEAKSMAP
+                || DEFAULT_SAVEMAPS_ALL, DEFAULT_SAVE_HOUGHPEAKSOVERLAY
+                || DEFAULT_SAVEMAPS_ALL, DEFAULT_SAVE_SOLUTIONOVERLAY
+                || DEFAULT_SAVEMAPS_ALL);
     }
 
 
@@ -101,16 +108,19 @@ public class CurrentMapsFileSaver extends CurrentMapsSaver {
      *            if <code>true</code>, all Hough maps are saved
      * @param savePeaksMap
      *            if <code>true</code>, all peaks maps are saved
+     * @param saveHoughPeaksOverlay
+     *            if <code>true</code> the Hough peaks overlay map is saved
      * @param saveSolutionOverlay
      *            if <code>true</code> the solution overlay map is saved
      */
     public CurrentMapsFileSaver(boolean saveAllMaps, boolean savePatternMap,
             boolean saveHoughMap, boolean savePeaksMap,
-            boolean saveSolutionOverlay) {
+            boolean saveHoughPeaksOverlay, boolean saveSolutionOverlay) {
         this.saveAllMaps = saveAllMaps;
         this.savePatternMap = savePatternMap || saveAllMaps;
         this.saveHoughMap = saveHoughMap || saveAllMaps;
         this.savePeaksMap = savePeaksMap || saveAllMaps;
+        this.saveHoughPeaksOverlay = saveHoughPeaksOverlay || saveAllMaps;
         this.saveSolutionOverlay = saveSolutionOverlay || saveAllMaps;
     }
 
@@ -150,6 +160,8 @@ public class CurrentMapsFileSaver extends CurrentMapsSaver {
             return false;
         if (savePeaksMap != other.savePeaksMap)
             return false;
+        if (saveHoughPeaksOverlay != other.saveHoughPeaksOverlay)
+            return false;
         if (saveSolutionOverlay != other.saveSolutionOverlay)
             return false;
 
@@ -166,6 +178,7 @@ public class CurrentMapsFileSaver extends CurrentMapsSaver {
         result = prime * result + (saveHoughMap ? 1231 : 1237);
         result = prime * result + (savePatternMap ? 1231 : 1237);
         result = prime * result + (savePeaksMap ? 1231 : 1237);
+        result = prime * result + (saveHoughPeaksOverlay ? 1231 : 1237);
         result = prime * result + (saveSolutionOverlay ? 1231 : 1237);
         return result;
     }
@@ -196,6 +209,27 @@ public class CurrentMapsFileSaver extends CurrentMapsSaver {
             }
 
             logger.info("Hough map saved at " + map.getFile().getPath());
+        }
+    }
+
+
+
+    @Override
+    public void saveHoughPeaks(Exp exp, Operation op, HoughPeak[] peaks) {
+        if (saveHoughPeaksOverlay) {
+            ByteMap map = createHoughPeaksOverlay(exp, peaks);
+
+            map.setDir(exp.getDir());
+            map.setName(createName(exp, op.getName()));
+
+            try {
+                rmlimage.io.IO.save(map);
+            } catch (IOException ex) {
+                logger.warning("Hough peaks map could not be saved because: "
+                        + ex.getMessage());
+            }
+
+            logger.info("Hough peaks map saved at " + map.getFile().getPath());
         }
     }
 
@@ -291,16 +325,6 @@ public class CurrentMapsFileSaver extends CurrentMapsSaver {
 
 
     @Override
-    public String toString() {
-        return "CurrentMapsSaver [saveAllMaps=" + saveAllMaps
-                + ", saveHoughMap=" + saveHoughMap + ", savePatternMap="
-                + savePatternMap + ", savePeaksMap=" + savePeaksMap
-                + ", saveSolutionOverlay=" + saveSolutionOverlay + "]";
-    }
-
-
-
-    @Override
     public void saveSolutionOverlay(Exp exp, Solution sln) {
         if (saveSolutionOverlay) {
             ByteMap map = createSolutionOverlay(exp, sln);
@@ -317,6 +341,17 @@ public class CurrentMapsFileSaver extends CurrentMapsSaver {
 
             logger.info("Solution map saved at " + map.getFile().getPath());
         }
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "CurrentMapsFileSaver [saveAllMaps=" + saveAllMaps
+                + ", savePatternMap=" + savePatternMap + ", saveHoughMap="
+                + saveHoughMap + ", savePeaksMap=" + savePeaksMap
+                + ", saveHoughPeaksOverlay=" + saveHoughPeaksOverlay
+                + ", saveSolutionOverlay=" + saveSolutionOverlay + "]";
     }
 
 }

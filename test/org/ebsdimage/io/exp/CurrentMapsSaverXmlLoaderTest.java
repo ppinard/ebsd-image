@@ -40,6 +40,7 @@ public class CurrentMapsSaverXmlLoaderTest {
         element.setAttribute(ATTR_SAVEPATTERNMAP, Boolean.toString(false));
         element.setAttribute(ATTR_SAVEHOUGHMAP, Boolean.toString(true));
         element.setAttribute(ATTR_SAVEPEAKSMAP, Boolean.toString(false));
+        element.setAttribute(ATTR_SAVEHOUGHPEAKSOVERLAY, Boolean.toString(true));
         element.setAttribute(ATTR_SAVESOLUTIONOVERLAY, Boolean.toString(true));
     }
 
@@ -54,6 +55,7 @@ public class CurrentMapsSaverXmlLoaderTest {
         assertFalse(saveMaps.savePatternMap);
         assertTrue(saveMaps.saveHoughMap);
         assertFalse(saveMaps.savePeaksMap);
+        assertTrue(saveMaps.saveHoughPeaksOverlay);
         assertTrue(saveMaps.saveSolutionOverlay);
     }
 

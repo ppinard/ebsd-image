@@ -17,12 +17,14 @@
  */
 package org.ebsdimage.core;
 
+import static java.lang.Math.PI;
 import static org.ebsdimage.core.HoughMap.DELTA_R;
 import static org.ebsdimage.core.HoughMap.DELTA_THETA;
 
 import java.util.Arrays;
 
-import rmlimage.core.*;
+import rmlimage.core.IdentMap;
+import rmlimage.core.Map;
 import rmlshared.math.IntUtil;
 
 /**
@@ -38,31 +40,105 @@ public class Analysis {
      * thresholding of a <code>HoughMap</code>. The centroid coordinates are
      * returned in the (r;theta) coordinate system.
      * 
-     * @param binMap
-     *            <code>BinMap</code> to get the centroid of
+     * @param peaksMap
+     *            <code>IdentMap</code> to get the centroid of
      * @return the list of centroid coordinates in (r;theta)
      * @throws NullPointerException
      *             if the bin map is null
      */
-    public static Centroid getCentroid(BinMap binMap) {
-        if (binMap == null)
+    public static HoughPoint getCentroid(IdentMap peaksMap) {
+        if (peaksMap == null)
             throw new NullPointerException("Bin map cannot be null.");
 
-        IdentMap identMap = Identification.identify(binMap);
         rmlimage.core.Centroid centroids =
-                rmlimage.core.Analysis.getCentroid(identMap);
+                rmlimage.core.Analysis.getCentroid(peaksMap);
 
         int nbPeaks = centroids.getValueCount();
-        Centroid houghCentroids = new Centroid(nbPeaks);
+        HoughPoint houghCentroids = new HoughPoint(nbPeaks);
+
         for (int n = 0; n < nbPeaks; n++) {
             int index =
-                    binMap.getPixArrayIndex((int) (centroids.x[n] + 0.5f),
+                    peaksMap.getPixArrayIndex((int) (centroids.x[n] + 0.5f),
                             (int) (centroids.y[n] + 0.5f));
-            houghCentroids.rho[n] = (float) getR(binMap, index);
-            houghCentroids.theta[n] = (float) getTheta(binMap, index);
+
+            houghCentroids.rho[n] = (float) getR(peaksMap, index);
+            houghCentroids.theta[n] = (float) getTheta(peaksMap, index);
         }
 
         return houghCentroids;
+    }
+
+
+
+    /**
+     * Returns a list of center of mass of each object in the
+     * <code>BinMap</code>.
+     * 
+     * @param houghMap
+     *            hough map where the intensity (mass) will be taken
+     * @param peaksMap
+     *            map where the Hough peaks are detected
+     * @return the list of points in the Hough (rho, theta)
+     * @throws NullPointerException
+     *             if either the hough map or peaks map is null
+     */
+    public static HoughPoint getCenterOfMass(HoughMap houghMap,
+            IdentMap peaksMap) {
+        if (houghMap == null)
+            throw new NullPointerException("Hough map cannot be null.");
+        if (peaksMap == null)
+            throw new NullPointerException("Peaks map cannot be null.");
+
+        // Apply houghMap properties on peaksMap
+        peaksMap.setProperties(houghMap);
+
+        int nbObjects = peaksMap.getObjectCount();
+
+        // +1 for object 0 (background)
+        double[] massRho = new double[nbObjects + 1];
+        double[] massTheta = new double[nbObjects + 1];
+        double[] area = new double[nbObjects + 1];
+
+        // Initialize the array to 0
+        Arrays.fill(massRho, 0);
+        Arrays.fill(massTheta, 0);
+        Arrays.fill(area, 0);
+
+        int width = peaksMap.width;
+        int height = peaksMap.height;
+        short[] pixArray = peaksMap.pixArray;
+
+        short objectNumber;
+        int n = 0;
+        double rho;
+        double theta;
+        double value;
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                objectNumber = pixArray[n];
+
+                theta = getTheta(peaksMap, n);
+                rho = getR(peaksMap, n);
+
+                value = houghMap.pixArray[houghMap.getIndex(rho, theta)] & 0xff;
+
+                massRho[objectNumber] += rho * value;
+                massTheta[objectNumber] += theta * value;
+                area[objectNumber] += value;
+
+                n++;
+            }
+        }
+
+        HoughPoint points = new HoughPoint(nbObjects);
+
+        for (n = 0; n < nbObjects; n++) {
+            points.rho[n] = (float) (massRho[n + 1] / area[n + 1]);
+            points.theta[n] = (float) (massTheta[n + 1] / area[n + 1]);
+        }
+
+        return points;
     }
 
 
@@ -72,31 +148,28 @@ public class Analysis {
      * <code>IdentMap</code>. The pixel color index is determined from the
      * specified <code>ByteMap</code>.
      * 
-     * @param identMap
-     *            <code>IdentMap</code> to get the objects maximum of
-     * @param byteMap
-     *            corresponding <code>ByteMap</code> to get the maximum color
+     * @param houghMap
+     *            corresponding <code>HoughMap</code> to get the maximum color
      *            index from
+     * @param peaksMap
+     *            map where the Hough peaks are detected
      * @return the list of the objects maximum pixel color index
      * @throws NullPointerException
      *             if the ident map or the byte map is null
      * @throws IllegalArgumentException
      *             if the ident map and byte map don't have the same size
      */
-    public static Maximum getMaximum(IdentMap identMap, ByteMap byteMap) {
-        if (identMap == null)
+    public static Maximum getMaximumIntensity(HoughMap houghMap,
+            IdentMap peaksMap) {
+        if (houghMap == null)
             throw new NullPointerException("Ident map cannot be null.");
-        if (byteMap == null)
+        if (peaksMap == null)
             throw new NullPointerException("Byte map cannot be null.");
 
-        if (!identMap.isSameSize(byteMap))
-            throw new IllegalArgumentException("identMap ("
-                    + identMap.getName() + ")(" + identMap.getDimensionLabel()
-                    + ") must be the same size as byteMap ("
-                    + byteMap.getName() + ")(" + byteMap.getDimensionLabel()
-                    + ')');
+        // Apply houghMap properties on peaksMap
+        peaksMap.setProperties(houghMap);
 
-        int nbObjects = identMap.getObjectCount();
+        int nbObjects = peaksMap.getObjectCount();
 
         // If no objects, return empty results
         if (nbObjects <= 0)
@@ -107,15 +180,21 @@ public class Analysis {
 
         // Calculate the maxima
         int objectNumber;
-        short[] identPixArray = identMap.pixArray;
-        byte[] bytePixArray = byteMap.pixArray;
-        int size = identMap.size;
-        for (int n = 0; n < size; n++) {
-            objectNumber = identPixArray[n] & 0xff;
+        int value;
+        double rho, theta;
+
+        for (int n = 0; n < peaksMap.size; n++) {
+            objectNumber = peaksMap.pixArray[n] & 0xff;
             if (objectNumber == 0)
                 continue;
-            if ((bytePixArray[n] & 0xff) > maxima[objectNumber])
-                maxima[objectNumber] = bytePixArray[n] & 0xff;
+
+            theta = Analysis.getTheta(peaksMap, n);
+            rho = Analysis.getR(peaksMap, n);
+
+            value = houghMap.pixArray[houghMap.getIndex(rho, theta)] & 0xff;
+
+            if (value > maxima[objectNumber])
+                maxima[objectNumber] = value;
         }
 
         // Create a proper Result object
@@ -148,6 +227,36 @@ public class Analysis {
      *             if the map is null
      */
     public static double getR(Map map, int index) {
+        if (index < 0 || index >= map.size)
+            throw new IllegalArgumentException("index (" + index
+                    + ") must be between 0 and " + (map.size - 1));
+
+        double deltaR = getDeltaR(map);
+        double theta = ((index % map.width) * getDeltaTheta(map));
+
+        // return (height-1 - y) * deltaR + rMin; (equivalent equation)
+        return ((map.height - 1 - index / map.width) * deltaR - deltaR
+                * ((map.height - 1) / 2))
+                * Math.pow(-1, (int) (theta / PI));
+    }
+
+
+
+    /**
+     * Returns the delta rho saved in the property of the map.
+     * 
+     * @param map
+     *            a map
+     * @return delta rho
+     * @throws IllegalArgumentException
+     *             if <code>map</code> does not hold the
+     *             <code>HoughMap.DELTA_R</code> property
+     * @throws IllegalArgumentException
+     *             if its height is not odd
+     * @throws NullPointerException
+     *             if the map is null
+     */
+    private static double getDeltaR(Map map) {
         if (map == null)
             throw new NullPointerException("Map cannot be null.");
 
@@ -164,48 +273,7 @@ public class Analysis {
             throw new IllegalArgumentException("Incorrect value for property "
                     + DELTA_R + " (" + deltaR + ").");
 
-        return getR(index, map.width, map.height, deltaR);
-    }
-
-
-
-    /**
-     * Returns the <code>r</code> coordinate of the specified index. The
-     * dimensions of the HoughMap are specified as arguments.
-     * 
-     * @param index
-     *            index to the the <code>r</code> coordinate of
-     * @param width
-     *            width of the map
-     * @param height
-     *            height of the map
-     * @param deltaR
-     *            rho resolution (y direction)
-     * @return the <code>r</code> coordinate
-     */
-    private static double getR(int index, int width, int height, double deltaR) {
-        if (width <= 0)
-            throw new IllegalArgumentException("width (" + width
-                    + ") must be > " + 0 + '.');
-        if (height <= 0)
-            throw new IllegalArgumentException("height (" + height
-                    + ") must be > " + 0 + '.');
-        if (!IntUtil.isOdd(height))
-            throw new IllegalArgumentException("height (" + height
-                    + ") must be odd.");
-
-        int size = width * height;
-        if (index < 0 || index >= size)
-            throw new IllegalArgumentException("index (" + index
-                    + ") must be between 0 and " + (size - 1));
-
-        if (deltaR <= 0)
-            throw new IllegalArgumentException("deltaR (" + deltaR
-                    + ") must be > 0");
-
-        // return (height-1 - y) * deltaR + rMin; (equivalent equation)
-        return (height - 1 - index / width) * deltaR - deltaR
-                * ((height - 1) / 2);
+        return deltaR;
     }
 
 
@@ -229,6 +297,32 @@ public class Analysis {
      *             if the map is null
      */
     public static double getTheta(Map map, int index) {
+        if (index < 0 || index >= map.size)
+            throw new IllegalArgumentException("index (" + index
+                    + ") must be between 0 and " + (map.size - 1));
+
+        double deltaTheta = getDeltaTheta(map);
+
+        return ((index % map.width) * deltaTheta) % PI;
+    }
+
+
+
+    /**
+     * Returns the delta theta value saved in the property of the map.
+     * 
+     * @param map
+     *            a map
+     * @return delta theta
+     * @throws IllegalArgumentException
+     *             if <code>map</code> does not hold the
+     *             <code>HoughMap.DELTA_THETA</code> property
+     * @throws IllegalArgumentException
+     *             if its height is not odd
+     * @throws NullPointerException
+     *             if the map is null
+     */
+    private static double getDeltaTheta(Map map) {
         if (map == null)
             throw new NullPointerException("Map cannot be null.");
 
@@ -247,25 +341,7 @@ public class Analysis {
             throw new IllegalArgumentException("Incorrect value for property "
                     + DELTA_THETA + " (" + deltaTheta + ").");
 
-        return getTheta(index, map.width, deltaTheta);
-    }
-
-
-
-    /**
-     * Returns the <code>theta</code> coordinate of the specified index. The
-     * dimensions of the HoughMap are specified as arguments.
-     * 
-     * @param index
-     *            index to the the <code>r</code> coordinate of
-     * @param width
-     *            width of the map
-     * @param deltaTheta
-     *            theta resolution (x direction)
-     * @return the <code>theta</code> coordinate
-     */
-    private static double getTheta(int index, int width, double deltaTheta) {
-        return ((index % width) * deltaTheta) % Math.PI;
+        return deltaTheta;
     }
 
 }

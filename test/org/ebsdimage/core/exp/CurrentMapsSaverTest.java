@@ -32,14 +32,16 @@ import rmlshared.io.FileUtil;
 public class CurrentMapsSaverTest {
 
     private CurrentMapsFileSaver saveMaps;
+
     private File path;
+
     private Exp exp;
 
 
 
     @Before
     public void setUp() throws Exception {
-        saveMaps = new CurrentMapsFileSaver(true, true, true, true, true);
+        saveMaps = new CurrentMapsFileSaver(true, true, true, true, true, true);
         path = new File(FileUtil.getTempDirFile(), "saveMaps");
 
         exp = ExpTester.createExp(saveMaps);
@@ -59,7 +61,7 @@ public class CurrentMapsSaverTest {
     @Test
     public void testEquals() {
         CurrentMapsFileSaver other =
-                new CurrentMapsFileSaver(true, true, true, true, true);
+                new CurrentMapsFileSaver(true, true, true, true, true, true);
         assertFalse(saveMaps == other);
         assertEquals(other, saveMaps);
     }
@@ -99,6 +101,14 @@ public class CurrentMapsSaverTest {
 
 
     @Test
+    public void testSaveMapHoughPeaksOverlay() {
+        // Cannot be tested since experiment needs to be running.
+        assertTrue(true);
+    }
+
+
+
+    @Test
     public void testSaveMapSolutionOverlay() {
         // Cannot be tested since experiment needs to be running.
         assertTrue(true);
@@ -127,18 +137,23 @@ public class CurrentMapsSaverTest {
     public void testSaveMapsStringBooleanBooleanBoolean() {
         CurrentMapsFileSaver tmpSaveMaps;
 
-        tmpSaveMaps = new CurrentMapsFileSaver(false, true, false, false, true);
+        tmpSaveMaps =
+                new CurrentMapsFileSaver(false, true, false, false, true, true);
         assertFalse(tmpSaveMaps.saveAllMaps);
         assertTrue(tmpSaveMaps.savePatternMap);
         assertFalse(tmpSaveMaps.saveHoughMap);
         assertFalse(tmpSaveMaps.savePeaksMap);
+        assertTrue(tmpSaveMaps.saveHoughPeaksOverlay);
         assertTrue(tmpSaveMaps.saveSolutionOverlay);
 
-        tmpSaveMaps = new CurrentMapsFileSaver(true, true, false, false, false);
+        tmpSaveMaps =
+                new CurrentMapsFileSaver(true, true, false, false, false, false);
         assertTrue(tmpSaveMaps.saveAllMaps);
         assertTrue(tmpSaveMaps.savePatternMap);
         assertTrue(tmpSaveMaps.saveHoughMap);
         assertTrue(tmpSaveMaps.savePeaksMap);
+        assertTrue(tmpSaveMaps.saveHoughPeaksOverlay);
+        assertTrue(tmpSaveMaps.saveSolutionOverlay);
     }
 
 
@@ -162,10 +177,10 @@ public class CurrentMapsSaverTest {
     @Test
     public void testToString() {
         CurrentMapsFileSaver tmpSaveMaps =
-                new CurrentMapsFileSaver(false, false, false, false, false);
-        assertEquals(
-                tmpSaveMaps.toString(),
-                "CurrentMapsSaver [saveAllMaps=false, saveHoughMap=false, savePatternMap=false, savePeaksMap=false, saveSolutionOverlay=false]");
+                new CurrentMapsFileSaver(false, false, false, false, false,
+                        false);
+        String expected =
+                "CurrentMapsFileSaver [saveAllMaps=false, savePatternMap=false, saveHoughMap=false, savePeaksMap=false, saveHoughPeaksOverlay=false, saveSolutionOverlay=false]";
+        assertEquals(expected, tmpSaveMaps.toString());
     }
-
 }

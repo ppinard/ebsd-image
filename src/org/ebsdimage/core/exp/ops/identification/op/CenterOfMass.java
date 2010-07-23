@@ -1,10 +1,9 @@
 package org.ebsdimage.core.exp.ops.identification.op;
 
-import java.util.Arrays;
-
 import org.ebsdimage.core.Analysis;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
+import org.ebsdimage.core.HoughPoint;
 import org.ebsdimage.core.exp.Exp;
 
 import rmlimage.core.BinMap;
@@ -21,59 +20,20 @@ public class CenterOfMass extends IdentificationOp {
 
     @Override
     public HoughPeak[] identify(Exp exp, BinMap peaksMap, HoughMap houghMap) {
-        // Apply houghMap properties on binMap
-        peaksMap.setProperties(houghMap);
-
         IdentMap identMap = Identification.identify(peaksMap);
 
-        int nbObjects = identMap.getObjectCount();
+        // Center of mass
+        HoughPoint peaks = Analysis.getCenterOfMass(houghMap, identMap);
+        int size = peaks.getValueCount();
 
-        // +1 for object 0 (background)
-        double[] massRho = new double[nbObjects + 1];
-        double[] massTheta = new double[nbObjects + 1];
-        double[] area = new double[nbObjects + 1];
+        // Create Hough peaks with intensity at center of mass
+        HoughPeak[] destPeaks = new HoughPeak[size];
 
-        // Initialize the array to 0
-        Arrays.fill(massRho, 0);
-        Arrays.fill(massTheta, 0);
-        Arrays.fill(area, 0);
-
-        short objectNumber;
-
-        int n = 0;
-        int width = identMap.width;
-        int height = identMap.height;
-        double rho;
-        double theta;
-        double value;
-
-        short[] pixArray = identMap.pixArray;
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                objectNumber = pixArray[n];
-
-                rho = Analysis.getR(peaksMap, n);
-                theta = Analysis.getTheta(peaksMap, n);
-
-                value = houghMap.pixArray[houghMap.getIndex(rho, theta)] & 0xff;
-
-                massRho[objectNumber] += rho * value;
-                massTheta[objectNumber] += theta * value;
-                area[objectNumber] += value;
-
-                n++;
-            }
-        }
-
-        // Create Hough peaks
-        HoughPeak[] destPeaks = new HoughPeak[nbObjects];
-
-        double intensity;
+        double rho, theta, intensity;
         int index;
-        for (n = 0; n < nbObjects; n++) {
-            rho = massRho[n + 1] / area[n + 1];
-            theta = massTheta[n + 1] / area[n + 1];
+        for (int n = 0; n < size; n++) {
+            rho = peaks.rho[n];
+            theta = peaks.theta[n];
 
             index = houghMap.getIndex(rho, theta);
             intensity = houghMap.pixArray[index] & 0xff;

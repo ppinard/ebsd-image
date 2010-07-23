@@ -91,8 +91,7 @@ public class HoughTransformTest extends TestCase {
     public void testProcess() throws IOException {
         ByteMap srcMap = (ByteMap) load("org/ebsdimage/testdata/pattern.bmp");
         HoughMap expectedMap =
-                new HoughMapLoader().load(FileUtil
-                        .getFile("org/ebsdimage/testdata/houghmap.bmp"));
+                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
 
         // Quick fix to apply median
         Filter.median(expectedMap);
@@ -106,8 +105,7 @@ public class HoughTransformTest extends TestCase {
 
     @Test
     public void testToString() {
-        assertEquals(hough.toString(),
-                "Hough Transform [resolution=0.017453292519943295 rad]");
+        assertEquals(hough.toString(), "Hough Transform [resolution=1.0 deg]");
     }
 
 }

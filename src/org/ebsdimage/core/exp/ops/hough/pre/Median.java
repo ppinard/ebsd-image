@@ -51,6 +51,9 @@ public class Median extends HoughPreOps {
 
         Filter.median(destMap);
 
+        // Apply properties of srcMap
+        destMap.setProperties(srcMap);
+
         return destMap;
     }
 

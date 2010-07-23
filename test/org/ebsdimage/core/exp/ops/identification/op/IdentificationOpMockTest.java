@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.identification.op;
 
 import static org.junit.Assert.assertEquals;
@@ -22,7 +22,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
-import org.ebsdimage.core.exp.ops.identification.op.IdentificationOp;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,7 +30,9 @@ import rmlimage.core.BinMap;
 public class IdentificationOpMockTest {
 
     private IdentificationOp op;
+
     private BinMap peaksMap;
+
     private HoughMap houghMap;
 
 
@@ -57,9 +58,9 @@ public class IdentificationOpMockTest {
         HoughPeak[] destPeaks = op.identify(null, peaksMap, houghMap);
 
         assertEquals(3, destPeaks.length);
-        assertTrue(destPeaks[0].equals(new HoughPeak(7.0, 0.0), 1e-6));
-        assertTrue(destPeaks[1].equals(new HoughPeak(11.0, 1.0), 1e-6));
-        assertTrue(destPeaks[2].equals(new HoughPeak(15.0, 0.0), 1e-6));
+        assertTrue(destPeaks[0].equals(new HoughPeak(0.07, 0.0), 1e-6));
+        assertTrue(destPeaks[1].equals(new HoughPeak(0.11, 1.0), 1e-6));
+        assertTrue(destPeaks[2].equals(new HoughPeak(0.15, 0.0), 1e-6));
     }
 
 }

@@ -14,13 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.identification.op;
 
 import org.ebsdimage.core.Analysis;
-import org.ebsdimage.core.Centroid;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
+import org.ebsdimage.core.HoughPoint;
 import org.ebsdimage.core.exp.Exp;
 
 import rmlimage.core.BinMap;
@@ -33,13 +33,12 @@ import rmlimage.core.Identification;
  * peaks.
  * 
  * @author Philippe T. Pinard
- * 
  */
-public class LocalCentroid extends IdentificationOp {
+public class LocalCentroidMaxIntensity extends IdentificationOp {
 
     @Override
     public String toString() {
-        return "Local Centroid";
+        return "Local Centroid with Maximum Intensity";
     }
 
 
@@ -59,16 +58,15 @@ public class LocalCentroid extends IdentificationOp {
      */
     @Override
     public HoughPeak[] identify(Exp exp, BinMap peaksMap, HoughMap houghMap) {
-        // Apply houghMap properties on binMap
-        peaksMap.setProperties(houghMap);
+        IdentMap identMap = Identification.identify(peaksMap);
 
-        Centroid centroids = Analysis.getCentroid(peaksMap);
+        // Calculate centroids
+        HoughPoint centroids = Analysis.getCentroid(identMap);
         float[] rhos = centroids.rho;
         float[] thetas = centroids.theta;
 
         // Maximum
-        IdentMap identMap = Identification.identify(peaksMap);
-        float[] maximums = Analysis.getMaximum(identMap, houghMap).val;
+        float[] maximums = Analysis.getMaximumIntensity(houghMap, identMap).val;
 
         // Create Peak objects
         HoughPeak[] peaks = new HoughPeak[identMap.getObjectCount()];

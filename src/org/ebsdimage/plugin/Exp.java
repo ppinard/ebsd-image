@@ -46,7 +46,6 @@ import crystallography.core.Crystal;
  * Plug-in for the experiment's engine.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Exp extends PlugIn implements Monitorable {
 
@@ -54,7 +53,6 @@ public class Exp extends PlugIn implements Monitorable {
      * Dialog displayed after the preview to decided the next action.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private static class PreviewDialog extends YesNoCancelDialog {
 
@@ -76,8 +74,6 @@ public class Exp extends PlugIn implements Monitorable {
             setMainComponent(panel);
         }
     }
-
-
 
     /** Experiment. */
     private org.ebsdimage.core.exp.Exp exp;
@@ -116,7 +112,8 @@ public class Exp extends PlugIn implements Monitorable {
         Crystal[] phases = wizard.getPhases();
         Operation[] ops = wizard.getOperations();
         CurrentMapsSaver currentMapsSaver =
-                new CurrentMapsFileSaver(false, false, false, false, false);
+                new CurrentMapsFileSaver(false, false, false, false, false,
+                        false);
         String name = wizard.getName();
         File dir = wizard.getDir();
 

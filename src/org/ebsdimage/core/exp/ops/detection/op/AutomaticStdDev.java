@@ -27,7 +27,6 @@ import rmlimage.core.BinMap;
  * Operation to perform the automatic standard deviation detection algorithm.
  * 
  * @author Philippe T. Pinard
- * 
  * @see Threshold#automaticStdDev
  */
 public class AutomaticStdDev extends DetectionOp {
@@ -45,7 +44,7 @@ public class AutomaticStdDev extends DetectionOp {
      * sigma factor.
      */
     public AutomaticStdDev() {
-        sigmaFactor = DEFAULT_SIGMAFACTOR;
+        this(DEFAULT_SIGMAFACTOR);
     }
 
 
@@ -56,7 +55,6 @@ public class AutomaticStdDev extends DetectionOp {
      * 
      * @param sigmaFactor
      *            standard deviation scaling factor
-     * 
      * @throws IllegalArgumentException
      *             if the sigma factor is less than 0
      */

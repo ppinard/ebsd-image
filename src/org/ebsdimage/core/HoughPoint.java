@@ -26,7 +26,7 @@ import rmlimage.core.Result;
  * @author Philippe T. Pinard
  * 
  */
-public class Centroid extends Result {
+public class HoughPoint extends Result {
 
     /** Id for the rho values. */
     public static final int ID_RHO = 0;
@@ -51,7 +51,7 @@ public class Centroid extends Result {
      * @param nbValues
      *            number of centroids
      */
-    public Centroid(int nbValues) {
+    public HoughPoint(int nbValues) {
         super(2, nbValues);
 
         name[ID_RHO] = "Centroid R";
@@ -67,8 +67,8 @@ public class Centroid extends Result {
 
 
     @Override
-    public Centroid duplicate() {
-        Centroid dup = new Centroid(rho.length);
+    public HoughPoint duplicate() {
+        HoughPoint dup = new HoughPoint(rho.length);
         System.arraycopy(rho, 0, dup.rho, 0, rho.length);
         System.arraycopy(theta, 0, dup.theta, 0, theta.length);
         return dup;

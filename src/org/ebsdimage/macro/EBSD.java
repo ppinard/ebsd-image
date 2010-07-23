@@ -25,6 +25,7 @@ import org.ebsdimage.core.*;
 
 import rmlimage.core.BinMap;
 import rmlimage.core.ByteMap;
+import rmlimage.core.Identification;
 import rmlimage.core.RGB;
 import rmlimage.io.IOManager;
 import rmlimage.io.ResultSaver;
@@ -48,9 +49,7 @@ public class EBSD {
      * 
      * @param houghMap
      *            <code>HoughMap</code> to do a thresholding on.
-     * 
      * @return the resulting <code>BinMap</code>
-     * 
      * @see Threshold#automaticTopHat(HoughMap)
      */
     public static BinMap houghThresholding(HoughMap houghMap) {
@@ -73,7 +72,6 @@ public class EBSD {
      * 
      * @param byteMap
      *            <code>ByteMap</code> to do the thransform on.
-     * 
      * @return the resulting <code>HoughMap</code> or <code>null</code> if an
      *         error occured.
      */
@@ -92,9 +90,7 @@ public class EBSD {
      *            <code>ByteMap</code> to do the transform of.
      * @param deltaTheta
      *            angle increment (in radians).
-     * 
      * @return the Hough transform.
-     * 
      * @see Transform#hough(ByteMap, double)
      */
     public static HoughMap houghTransform(ByteMap byteMap, double deltaTheta) {
@@ -121,7 +117,6 @@ public class EBSD {
      *            <code>ByteMap</code> to overlay the line on.
      * @param color
      *            color index of the line
-     * 
      * @see Drawing#line(ByteMap, double, double, int)
      */
     public static void qcLineOverlay(double r, double theta, ByteMap byteMap,
@@ -146,7 +141,6 @@ public class EBSD {
      *            green component value of the line.
      * @param blue
      *            blue component value of the line.
-     * 
      * @see QC#overlay(ByteMap, BinMap, RGB)
      */
     public static void qcLineOverlay(BinMap binMap, ByteMap byteMap, int red,
@@ -164,7 +158,6 @@ public class EBSD {
      *            binarized <code>HoughMap</code>.
      * @param fileName
      *            file name
-     * 
      * @return <code>true</code> if the results were properly saved or
      *         <code>false</code> if an error occured.
      */
@@ -181,7 +174,6 @@ public class EBSD {
      *            binarized <code>HoughMap</code>.
      * @param file
      *            file name
-     * 
      * @return <code>true</code> if the results were properly saved or
      *         <code>false</code> if an error occured.
      */
@@ -189,10 +181,11 @@ public class EBSD {
         // BADLY WRITTEN!!!!!!!
         // Duplicates code from rmlimage.plugin.wbsd.SavePeaks
 
-        Centroid centroids = Analysis.getCentroid(binMap);
+        HoughPoint centroids =
+                Analysis.getCentroid(Identification.identify(binMap));
 
         // Converts radians to degrees
-        centroids.units[Centroid.ID_THETA] = "deg";
+        centroids.units[HoughPoint.ID_THETA] = "deg";
         for (int n = 0; n < centroids.getValueCount(); n++)
             centroids.theta[n] = (float) Math.toDegrees(centroids.theta[n]);
 

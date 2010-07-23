@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.pattern.post;
 
 import org.ebsdimage.core.exp.Exp;
@@ -41,7 +41,7 @@ public class Binning extends PatternPostOps {
      * Creates a new binning operation with the default binning size.
      */
     public Binning() {
-        size = DEFAULT_BINNING_SIZE;
+        this(DEFAULT_BINNING_SIZE);
     }
 
 
@@ -103,6 +103,10 @@ public class Binning extends PatternPostOps {
     @Override
     public ByteMap process(Exp exp, ByteMap srcMap) {
         ByteMap destMap = Transform.binning(srcMap, size, size);
+
+        // Apply properties of srcMap
+        destMap.setProperties(srcMap);
+
         return destMap;
     }
 

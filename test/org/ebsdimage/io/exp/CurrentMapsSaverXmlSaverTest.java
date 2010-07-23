@@ -37,7 +37,9 @@ public class CurrentMapsSaverXmlSaverTest {
 
     @Before
     public void setUp() throws Exception {
-        saveMaps = new CurrentMapsFileSaver(false, false, true, false, false);
+        saveMaps =
+                new CurrentMapsFileSaver(false, false, true, false, false,
+                        false);
     }
 
 
@@ -51,8 +53,9 @@ public class CurrentMapsSaverXmlSaverTest {
         assertFalse(JDomUtil.getBooleanFromAttribute(element,
                 ATTR_SAVEPATTERNMAP));
         assertTrue(JDomUtil.getBooleanFromAttribute(element, ATTR_SAVEHOUGHMAP));
-        assertFalse(JDomUtil
-                .getBooleanFromAttribute(element, ATTR_SAVEPEAKSMAP));
+        assertFalse(JDomUtil.getBooleanFromAttribute(element, ATTR_SAVEPEAKSMAP));
+        assertFalse(JDomUtil.getBooleanFromAttribute(element,
+                ATTR_SAVEHOUGHPEAKSOVERLAY));
         assertFalse(JDomUtil.getBooleanFromAttribute(element,
                 ATTR_SAVESOLUTIONOVERLAY));
     }

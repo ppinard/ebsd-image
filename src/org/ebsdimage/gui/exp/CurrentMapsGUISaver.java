@@ -18,6 +18,7 @@
 package org.ebsdimage.gui.exp;
 
 import org.ebsdimage.core.HoughMap;
+import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.exp.CurrentMapsSaver;
 import org.ebsdimage.core.exp.Exp;
@@ -32,7 +33,6 @@ import rmlimage.core.Map;
  * Display current maps from an experiment in the GUI.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class CurrentMapsGUISaver extends CurrentMapsSaver {
 
@@ -67,6 +67,16 @@ public class CurrentMapsGUISaver extends CurrentMapsSaver {
     @Override
     public void saveHoughMap(Exp exp, HoughMap map) {
         map.setName(createName(exp, "Hough"));
+        map.shouldSave(false);
+        add(map);
+    }
+
+
+
+    @Override
+    public void saveHoughPeaks(Exp exp, Operation op, HoughPeak[] peaks) {
+        ByteMap map = createHoughPeaksOverlay(exp, peaks);
+        map.setName(createName(exp, op.getName()));
         map.shouldSave(false);
         add(map);
     }

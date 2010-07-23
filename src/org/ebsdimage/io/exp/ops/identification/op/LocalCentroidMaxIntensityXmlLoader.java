@@ -17,9 +17,9 @@
 */
 package org.ebsdimage.io.exp.ops.identification.op;
 
-import static org.ebsdimage.io.exp.ops.identification.op.LocalCentroidXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.identification.op.LocalCentroidMaxIntensityXmlTags.TAG_NAME;
 
-import org.ebsdimage.core.exp.ops.identification.op.LocalCentroid;
+import org.ebsdimage.core.exp.ops.identification.op.LocalCentroidMaxIntensity;
 import org.jdom.Element;
 import org.jdom.IllegalNameException;
 
@@ -31,7 +31,7 @@ import ptpshared.utility.xml.ObjectXmlLoader;
  * @author Philippe T. Pinard
  * 
  */
-public class LocalCentroidXmlLoader implements ObjectXmlLoader {
+public class LocalCentroidMaxIntensityXmlLoader implements ObjectXmlLoader {
 
     /**
      * Loads a <code>LocalCentroid</code> operation from an XML
@@ -44,12 +44,12 @@ public class LocalCentroidXmlLoader implements ObjectXmlLoader {
      *             if the <code>Element</code> tag name is incorrect.
      */
     @Override
-    public LocalCentroid load(Element element) {
+    public LocalCentroidMaxIntensity load(Element element) {
         if (!element.getName().equals(TAG_NAME))
             throw new IllegalNameException("Name of the element should be "
                     + TAG_NAME + " not " + element.getName() + ".");
 
-        return new LocalCentroid();
+        return new LocalCentroidMaxIntensity();
     }
 
 }

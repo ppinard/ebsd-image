@@ -142,7 +142,7 @@ public abstract class ExpTester {
 
 
     public static CurrentMapsFileSaver createSaveMaps() {
-        return new CurrentMapsFileSaver(true, true, true, true, true);
+        return new CurrentMapsFileSaver(true, true, true, true, true, true);
     }
 
 
@@ -346,7 +346,7 @@ public abstract class ExpTester {
         exp.run();
 
         // Test save maps
-        assertEquals(13 * 2, FileUtil.listFiles(expPath).length);
+        assertEquals(19 * 2, FileUtil.listFiles(expPath).length);
 
         // Test maps
         assertEquals(10, exp.mmap.getAliases().length);
@@ -426,8 +426,8 @@ public abstract class ExpTester {
         assertEquals(RealMap.class, map.getClass());
 
         realMap = (RealMap) map;
-        assertEquals(26, realMap.pixArray[0], 1e-6);
-        assertEquals(30, realMap.pixArray[1], 1e-6);
+        assertEquals(0.26, realMap.pixArray[0], 1e-6);
+        assertEquals(0.30, realMap.pixArray[1], 1e-6);
 
         // IndexingResultsOpsMock
         map = exp.mmap.getMap(IndexingResultsOpsMock.class.getSimpleName());

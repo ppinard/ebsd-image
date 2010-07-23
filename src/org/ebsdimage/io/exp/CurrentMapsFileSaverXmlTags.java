@@ -23,7 +23,6 @@ import org.ebsdimage.core.exp.CurrentMapsFileSaver;
  * Tags for <code>CurrentMapsFileSaver</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class CurrentMapsFileSaverXmlTags {
     /** XML tag name for Results. */
@@ -41,6 +40,10 @@ public class CurrentMapsFileSaverXmlTags {
 
     /** XML attribute for saving the peaks map. */
     public static final String ATTR_SAVEPEAKSMAP = "savePeaksMap";
+
+    /** XML attribute for saving the Hough peaks overlay. */
+    public static final String ATTR_SAVEHOUGHPEAKSOVERLAY =
+            "saveHoughPeaksOverlay";
 
     /** XML attribute for saving the solution overlay. */
     public static final String ATTR_SAVESOLUTIONOVERLAY = "saveSolutionOverlay";

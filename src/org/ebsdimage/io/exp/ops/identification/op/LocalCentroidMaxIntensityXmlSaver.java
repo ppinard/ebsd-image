@@ -17,9 +17,9 @@
 */
 package org.ebsdimage.io.exp.ops.identification.op;
 
-import static org.ebsdimage.io.exp.ops.identification.op.LocalCentroidXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.identification.op.LocalCentroidMaxIntensityXmlTags.TAG_NAME;
 
-import org.ebsdimage.core.exp.ops.identification.op.LocalCentroid;
+import org.ebsdimage.core.exp.ops.identification.op.LocalCentroidMaxIntensity;
 import org.jdom.Element;
 
 import ptpshared.utility.xml.ObjectXml;
@@ -31,16 +31,16 @@ import ptpshared.utility.xml.ObjectXmlSaver;
  * @author Philippe T. Pinard
  * 
  */
-public class LocalCentroidXmlSaver implements ObjectXmlSaver {
+public class LocalCentroidMaxIntensityXmlSaver implements ObjectXmlSaver {
 
     /**
      * {@inheritDoc}
      * 
-     * @see #save(LocalCentroid)
+     * @see #save(LocalCentroidMaxIntensity)
      */
     @Override
     public Element save(ObjectXml obj) {
-        return save((LocalCentroid) obj);
+        return save((LocalCentroidMaxIntensity) obj);
     }
 
 
@@ -53,7 +53,7 @@ public class LocalCentroidXmlSaver implements ObjectXmlSaver {
      *            a <code>LocalCentroid</code> operation
      * @return an XML <code>Element</code>
      */
-    public Element save(LocalCentroid op) {
+    public Element save(LocalCentroidMaxIntensity op) {
         return new Element(TAG_NAME);
     }
 

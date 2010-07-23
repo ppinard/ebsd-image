@@ -56,9 +56,7 @@ public class MaskDisc extends PatternPostOps {
      * Creates a new <code>MaskDisc</code> operation from the default values.
      */
     public MaskDisc() {
-        centroidX = DEFAULT_CENTROID_X;
-        centroidY = DEFAULT_CENTROID_Y;
-        radius = DEFAULT_RADIUS;
+        this(DEFAULT_CENTROID_X, DEFAULT_CENTROID_Y, DEFAULT_RADIUS);
     }
 
 
@@ -179,6 +177,7 @@ public class MaskDisc extends PatternPostOps {
         MapMath.and(srcMap, maskDisc, destMap);
 
         destMap.setProperties(maskDisc);
+        destMap.setProperties(srcMap);
 
         return destMap;
     }

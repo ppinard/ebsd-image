@@ -59,7 +59,7 @@ public class CenterOfMassTest {
         assertEquals(123.0, destPeaks[0].intensity, 1e-6);
 
         // Peak 2
-        assertEquals(87.4705610, destPeaks[1].rho, 1e-6);
+        assertEquals(87.47055816, destPeaks[1].rho, 1e-6);
         assertEquals(2.927335805, destPeaks[1].theta, 1e-6);
         assertEquals(125.0, destPeaks[1].intensity, 1e-6);
 

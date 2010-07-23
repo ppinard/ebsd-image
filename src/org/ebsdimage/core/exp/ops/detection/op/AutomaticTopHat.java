@@ -30,13 +30,6 @@ import rmlimage.core.BinMap;
  */
 public class AutomaticTopHat extends DetectionOp {
 
-    @Override
-    public String toString() {
-        return "Automatic Top Hat";
-    }
-
-
-
     /**
      * Detects peaks in the Hough map using the automatic top hat peak detection
      * algorithm.
@@ -53,6 +46,13 @@ public class AutomaticTopHat extends DetectionOp {
         BinMap peaksMap = Threshold.automaticTopHat(srcMap);
 
         return peaksMap;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Automatic Top Hat";
     }
 
 }

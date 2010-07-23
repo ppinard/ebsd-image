@@ -17,7 +17,7 @@
 */
 package org.ebsdimage.io.exp.ops.identification.op;
 
-import org.ebsdimage.core.exp.ops.identification.op.LocalCentroid;
+import org.ebsdimage.core.exp.ops.identification.op.LocalCentroidMaxIntensity;
 
 /**
  * Tags for <code>LocalCentroid</code>'s XML <code>Element</code>.
@@ -25,7 +25,7 @@ import org.ebsdimage.core.exp.ops.identification.op.LocalCentroid;
  * @author Philippe T. Pinard
  * 
  */
-public class LocalCentroidXmlTags {
+public class LocalCentroidMaxIntensityXmlTags {
     /** XML tag name for <code>LocalCentroid</code>. */
-    public static final String TAG_NAME = LocalCentroid.class.getSimpleName();
+    public static final String TAG_NAME = LocalCentroidMaxIntensity.class.getSimpleName();
 }

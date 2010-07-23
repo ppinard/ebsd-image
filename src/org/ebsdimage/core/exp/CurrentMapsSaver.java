@@ -17,7 +17,11 @@
  */
 package org.ebsdimage.core.exp;
 
+import java.util.Arrays;
+
 import org.ebsdimage.core.HoughMap;
+import org.ebsdimage.core.HoughPeak;
+import org.ebsdimage.core.HoughPeakIntensityComparator;
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.sim.Energy;
@@ -32,7 +36,6 @@ import crystallography.core.XrayScatteringFactors;
  * Interface for saving current maps of an experiment.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public abstract class CurrentMapsSaver implements ObjectXml {
 
@@ -83,6 +86,90 @@ public abstract class CurrentMapsSaver implements ObjectXml {
      *            a map
      */
     public abstract void saveMap(Exp exp, Operation op, Map map);
+
+
+
+    /**
+     * Saves a map with the position of the Hough peaks overlaid on top of the
+     * Hough map.
+     * 
+     * @param exp
+     *            experiment executing this method
+     * @param op
+     *            operation that created the map
+     * @param peaks
+     *            identified Hough peaks
+     */
+    public abstract void saveHoughPeaks(Exp exp, Operation op, HoughPeak[] peaks);
+
+
+
+    /**
+     * Creates a map with the position of the Hough peaks overlaid on top of the
+     * original Hough map of the experiment.
+     * 
+     * @param exp
+     *            experiment executing this method
+     * @param peaks
+     *            identified Hough peaks
+     * @return <code>HoughMap</code> with overlay
+     */
+    protected HoughMap createHoughPeaksOverlay(Exp exp, HoughPeak[] peaks) {
+        HoughMap destMap = exp.getSourceHoughMap().duplicate();
+
+        MapMath.subtraction(destMap, -3, destMap);
+
+        destMap.getLUT().setLUT(255, 255, 0, 0);
+        destMap.getLUT().setLUT(254, 0, 255, 0);
+        destMap.getLUT().setLUT(253, 0, 0, 255);
+
+        Arrays.sort(peaks, new HoughPeakIntensityComparator());
+
+        int index;
+        for (int i = 0; i < peaks.length / 3; i++) {
+            index = destMap.getIndex(peaks[i].rho, peaks[i].theta);
+            drawHoughPeakPosition(destMap, index, (byte) 253);
+        }
+        for (int i = peaks.length / 3; i < 2 * peaks.length / 3; i++) {
+            index = destMap.getIndex(peaks[i].rho, peaks[i].theta);
+            drawHoughPeakPosition(destMap, index, (byte) 254);
+        }
+
+        for (int i = 2 * peaks.length / 3; i < peaks.length; i++) {
+            index = destMap.getIndex(peaks[i].rho, peaks[i].theta);
+            drawHoughPeakPosition(destMap, index, (byte) 255);
+        }
+
+        return destMap;
+    }
+
+
+
+    /**
+     * Draw a cross at the position of the Hough peak.
+     * 
+     * @param map
+     *            map to draw in
+     * @param index
+     *            index of the position of the Hough peak
+     * @param value
+     *            value of the cross
+     */
+    private void drawHoughPeakPosition(HoughMap map, int index, byte value) {
+        if ((index - 1) >= 0)
+            map.pixArray[index - 1] = value;
+
+        map.pixArray[index] = value;
+
+        if ((index + 1) < map.size)
+            map.pixArray[index + 1] = value;
+
+        if ((index - map.width) >= 0)
+            map.pixArray[index - map.width] = value;
+
+        if ((index + map.width) < map.size)
+            map.pixArray[index + map.width] = value;
+    }
 
 
 

@@ -98,7 +98,7 @@ public abstract class ExpXmlTester extends ExpTester {
 
         // Save Maps
         element.addContent(new CurrentMapsFileSaverXmlSaver().save(new CurrentMapsFileSaver(
-                true, true, true, true, true)));
+                true, true, true, true, true, true)));
 
         // Phases
         element.addContent(new PhasesMapXmlSaver().save(ExpTester.createPhases()));

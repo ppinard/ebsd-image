@@ -43,6 +43,10 @@ public class ThetaExpand extends DetectionPreOps {
      *            theta range of the Hough map.
      */
     public ThetaExpand(double increment) {
+        if (increment < 0.0 || increment > Math.PI)
+            throw new IllegalArgumentException("Increment (" + increment
+                    + ") must be between [0, PI].");
+
         this.increment = increment;
     }
 
@@ -72,16 +76,14 @@ public class ThetaExpand extends DetectionPreOps {
                         srcMap.deltaTheta);
 
         // Copy srcMap in destMap
-        Edit.copy(srcMap, new ROI(0, 0, width - 1, height - 1), destMap, 0, 0);
+        Edit.copy(srcMap, srcMap.getROI(), destMap, 0, 0);
 
         // Slice
-        ROI roi = new ROI(0, 0, incrementWidth, height - 1);
-
+        ROI roi = new ROI(0, 0, incrementWidth - 1, height - 1);
         ByteMap slice = Edit.crop(srcMap, roi);
         Transform.verticalFlip(slice);
 
-        Edit.copy(slice, new ROI(0, 0, slice.width - 1, slice.height - 1),
-                destMap, width - 1, 0);
+        Edit.copy(slice, slice.getROI(), destMap, width, 0);
 
         return destMap;
     }
@@ -120,6 +122,6 @@ public class ThetaExpand extends DetectionPreOps {
 
     @Override
     public String toString() {
-        return "ThetaExpand [increment=" + increment + "]";
+        return "ThetaExpand [increment=" + Math.toDegrees(increment) + " deg]";
     }
 }

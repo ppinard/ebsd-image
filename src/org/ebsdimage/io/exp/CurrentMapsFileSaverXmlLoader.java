@@ -31,7 +31,6 @@ import ptpshared.utility.xml.ObjectXmlLoader;
  * XML loader for <code>CurrentMapsFileSaver</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class CurrentMapsFileSaverXmlLoader implements ObjectXmlLoader {
 
@@ -63,12 +62,17 @@ public class CurrentMapsFileSaverXmlLoader implements ObjectXmlLoader {
         boolean savePeaksMap =
                 JDomUtil.getBooleanFromAttribute(element, ATTR_SAVEPEAKSMAP,
                         DEFAULT_SAVE_PEAKSMAP);
+        boolean saveHoughPeaksOverlay =
+                JDomUtil.getBooleanFromAttribute(element,
+                        ATTR_SAVEHOUGHPEAKSOVERLAY,
+                        DEFAULT_SAVE_HOUGHPEAKSOVERLAY);
         boolean saveSolutionOverlay =
                 JDomUtil.getBooleanFromAttribute(element,
                         ATTR_SAVESOLUTIONOVERLAY, DEFAULT_SAVE_SOLUTIONOVERLAY);
 
         return new CurrentMapsFileSaver(saveAllMaps, savePatternMap,
-                saveHoughMap, savePeaksMap, saveSolutionOverlay);
+                saveHoughMap, savePeaksMap, saveHoughPeaksOverlay,
+                saveSolutionOverlay);
     }
 
 }

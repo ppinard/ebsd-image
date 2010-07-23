@@ -14,13 +14,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.identification.op;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.exp.ops.identification.op.IdentificationOp;
 
 import rmlimage.core.BinMap;
 
@@ -31,7 +30,9 @@ public class IdentificationOpMock extends IdentificationOp {
         HoughPeak[] peaks = new HoughPeak[peaksMap.height];
 
         for (int i = 0; i < peaksMap.height; i++)
-            peaks[i] = new HoughPeak(houghMap.pixArray[i], peaksMap.pixArray[i]);
+            peaks[i] =
+                    new HoughPeak(houghMap.pixArray[i] / 100.0,
+                            peaksMap.pixArray[i]);
 
         return peaks;
     }

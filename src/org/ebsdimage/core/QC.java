@@ -14,19 +14,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
-import rmlimage.core.BinMap;
-import rmlimage.core.ByteMap;
+import rmlimage.core.*;
 import rmlimage.core.MapMath;
-import rmlimage.core.RGB;
 
 /**
  * Quality control methods.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class QC {
 
@@ -42,7 +39,8 @@ public class QC {
      *            color of the lines
      */
     public void overlay(ByteMap patternMap, BinMap peaksMap, RGB rgb) {
-        Centroid centroids = Analysis.getCentroid(peaksMap);
+        HoughPoint centroids =
+                Analysis.getCentroid(Identification.identify(peaksMap));
 
         // Set color 255 to specified RGB
         MapMath.subtraction(patternMap, 1, patternMap);

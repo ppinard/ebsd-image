@@ -70,13 +70,13 @@ public class HoughPeak implements ObjectXml {
         if (Double.isInfinite(intensity))
             throw new IllegalArgumentException("Rho cannot be infinite.");
 
-        if (theta < 0 || theta > PI)
-            throw new IllegalArgumentException("Theta (" + theta
-                    + ") must be between [0,PI[");
-
-        this.rho = rho;
-        this.theta = theta;
+        this.theta = theta % PI;
+        this.rho = rho * Math.pow(-1, (int) (theta / PI));
         this.intensity = intensity;
+
+        if (this.theta < 0 || this.theta > PI)
+            throw new IllegalArgumentException("Theta (" + this.theta
+                    + ") must be between [0,PI[");
     }
 
 

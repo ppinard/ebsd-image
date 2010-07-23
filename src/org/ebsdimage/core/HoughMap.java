@@ -435,8 +435,8 @@ public class HoughMap extends ByteMap {
      */
     public int getY(double r) {
         if (r < rMin - deltaR / 2.0 || r > rMax + deltaR / 2.0)
-            throw new IllegalArgumentException("r (" + r + ") must be between "
-                    + rMin + " and " + rMax);
+            throw new IllegalArgumentException("rho (" + r
+                    + ") must be between " + rMin + " and " + rMax);
 
         // If r < 0, need to round toward the bottom (thus the - 0.5)
         if (r >= 0)

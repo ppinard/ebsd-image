@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.detection.pre;
 
 import org.ebsdimage.core.Conversion;
@@ -59,9 +59,8 @@ public class Butterfly extends DetectionPreOps {
      * Creates a new butterfly operation with the default values.
      */
     public Butterfly() {
-        kernelSize = DEFAULT_KERNEL_SIZE;
-        flattenLowerLimit = DEFAULT_FLATTEN_LOWER_LIMIT;
-        flattenUpperLimit = DEFAULT_FLATTEN_UPPER_LIMIT;
+        this(DEFAULT_KERNEL_SIZE, DEFAULT_FLATTEN_LOWER_LIMIT,
+                DEFAULT_FLATTEN_UPPER_LIMIT);
     }
 
 
@@ -103,11 +102,9 @@ public class Butterfly extends DetectionPreOps {
             return false;
 
         Butterfly other = (Butterfly) obj;
-        if (Float.floatToIntBits(flattenLowerLimit) != Float
-                .floatToIntBits(other.flattenLowerLimit))
+        if (Float.floatToIntBits(flattenLowerLimit) != Float.floatToIntBits(other.flattenLowerLimit))
             return false;
-        if (Float.floatToIntBits(flattenUpperLimit) != Float
-                .floatToIntBits(other.flattenUpperLimit))
+        if (Float.floatToIntBits(flattenUpperLimit) != Float.floatToIntBits(other.flattenUpperLimit))
             return false;
         if (kernelSize != other.kernelSize)
             return false;
@@ -140,7 +137,6 @@ public class Butterfly extends DetectionPreOps {
      * @param srcMap
      *            input Hough map
      * @return output Hough map
-     * 
      * @see Convolution#convolve(ByteMap, Kernel)
      * @see Edit#flatten(RealMap, float, float, float)
      * @see Contrast#expansion(RealMap)

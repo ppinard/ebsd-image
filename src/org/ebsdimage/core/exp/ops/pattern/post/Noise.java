@@ -40,7 +40,7 @@ public class Noise extends PatternPostOps {
      * Creates a new noise operation with the default standard deviation.
      */
     public Noise() {
-        stdDev = DEFAULT_STDDEV;
+        this(DEFAULT_STDDEV);
     }
 
 
@@ -71,8 +71,7 @@ public class Noise extends PatternPostOps {
             return false;
 
         Noise other = (Noise) obj;
-        if (Double.doubleToLongBits(stdDev) != Double
-                .doubleToLongBits(other.stdDev))
+        if (Double.doubleToLongBits(stdDev) != Double.doubleToLongBits(other.stdDev))
             return false;
 
         return true;
@@ -107,6 +106,9 @@ public class Noise extends PatternPostOps {
         ByteMap destMap = srcMap.duplicate();
 
         rmlimage.utility.Noise.gaussian(destMap, stdDev);
+
+        // Apply properties of srcMap
+        destMap.setProperties(srcMap);
 
         return destMap;
     }

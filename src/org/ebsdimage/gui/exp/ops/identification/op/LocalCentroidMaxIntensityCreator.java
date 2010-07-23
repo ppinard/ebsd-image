@@ -14,10 +14,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp.ops.identification.op;
 
-import org.ebsdimage.core.exp.ops.identification.op.LocalCentroid;
+import org.ebsdimage.core.exp.ops.identification.op.LocalCentroidMaxIntensity;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.exp.ops.OperationCreator;
 
@@ -27,9 +27,8 @@ import rmlshared.gui.OkCancelDialog;
  * GUI creator for the <code>LocalCentroid</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
-public class LocalCentroidCreator implements OperationCreator {
+public class LocalCentroidMaxIntensityCreator implements OperationCreator {
 
     @Override
     public String getDescription() {
@@ -42,7 +41,7 @@ public class LocalCentroidCreator implements OperationCreator {
 
     @Override
     public Operation getOperation() {
-        return new LocalCentroid();
+        return new LocalCentroidMaxIntensity();
     }
 
 
@@ -61,7 +60,7 @@ public class LocalCentroidCreator implements OperationCreator {
      */
     @Override
     public String toString() {
-        return "Local Centroid";
+        return "Local Centroid with Maximum Intensity";
     }
 
 }
