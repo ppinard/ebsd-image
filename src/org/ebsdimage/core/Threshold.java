@@ -19,14 +19,16 @@ package org.ebsdimage.core;
 
 import java.io.File;
 
-import rmlimage.core.*;
+import rmlimage.core.BinMap;
+import rmlimage.core.ByteMap;
+import rmlimage.core.Constants;
+import rmlimage.core.MathMorph;
 import rmlshared.io.FileUtil;
 
 /**
  * Threshold of EBSD specific maps (e.g. <code>HoughMap</code>).
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Threshold {
 
@@ -71,7 +73,6 @@ public class Threshold {
      * @param sigmaFactor
      *            standard deviation scaling factor
      * @return the thresholded map
-     * 
      * @throws NullPointerException
      *             if the map is null
      * @throws IllegalArgumentException
@@ -91,6 +92,9 @@ public class Threshold {
         double stdDev = MapStats.standardDeviation(dup);
 
         int threshold = (int) (average + sigmaFactor * stdDev + 0.5);
+
+        if (threshold == 0)
+            threshold = 1;
 
         // Check if the threshold overflow
         if (threshold > 255) {
@@ -140,7 +144,6 @@ public class Threshold {
      * 
      * @param map
      *            map to do the thresholding on
-     * 
      * @return the thresholded map
      */
     public static BinMap automaticTopHat(ByteMap map) {
@@ -158,6 +161,9 @@ public class Threshold {
         int minError = rmlimage.core.Threshold.minErrorThreshold(topHat);
         int kapur = rmlimage.core.Threshold.kapurThreshold(topHat);
         int threshold = (minError + kapur) / 2;
+
+        if (threshold == 0)
+            threshold = 1;
 
         // Set properties
         topHat.setProperty(KEY_MINERROR, minError);
@@ -197,7 +203,6 @@ public class Threshold {
      * 
      * @param houghMap
      *            map to do the thresholding on
-     * 
      * @return the thresholded map
      */
     public static BinMap automaticTopHat(HoughMap houghMap) {
@@ -213,9 +218,7 @@ public class Threshold {
      *            source <code>PhasesMap</code>
      * @param phaseId
      *            phase id to threshold
-     * 
      * @return the thresholded map
-     * 
      * @throws NullPointerException
      *             if the phases map is null
      * @throws IllegalArgumentException
@@ -259,7 +262,6 @@ public class Threshold {
      *            phase id to threshold
      * @param dest
      *            destination map
-     * 
      * @throws NullPointerException
      *             if the source or destination map is null
      * @throws IllegalArgumentException
