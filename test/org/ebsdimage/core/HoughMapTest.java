@@ -14,13 +14,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static java.lang.Math.toRadians;
 import static org.junit.Assert.assertEquals;
 
-import org.ebsdimage.core.HoughMap;
 import org.junit.Test;
 
 import rmlimage.core.LUT;
@@ -209,7 +208,7 @@ public class HoughMapTest {
     public void testGetIndexException3() {
         // Test r > max
         HoughMap map = new HoughMap(400, 230 * toRadians(0.5), toRadians(0.5));
-        map.getIndex(402.0, 1.0);
+        map.getIndex(403.0, 1.0);
     }
 
 
@@ -218,7 +217,8 @@ public class HoughMapTest {
     public void testGetIndexException4() {
         // Test negative r < min
         HoughMap map = new HoughMap(400, 230 * toRadians(0.5), toRadians(0.5));
-        map.getIndex(-402, 1.0);
+        System.out.println(map.deltaR);
+        map.getIndex(-403, 1.0);
     }
 
 
@@ -306,10 +306,8 @@ public class HoughMapTest {
     /*
      * @Test public void getTheta4() { // Even increments
      * assertEquals(toRadians(80.5), HoughMap.getTheta(88721, 360,
-     * toRadians(0.5)), 0.001);
-     * 
-     * // Odd increments assertEquals(toRadians(80.3), HoughMap.getTheta(2697,
-     * 164, toRadians(1.1)), 0.001); }
+     * toRadians(0.5)), 0.001); // Odd increments assertEquals(toRadians(80.3),
+     * HoughMap.getTheta(2697, 164, toRadians(1.1)), 0.001); }
      */
 
     @Test

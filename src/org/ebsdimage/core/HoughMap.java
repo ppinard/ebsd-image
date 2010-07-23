@@ -413,7 +413,8 @@ public class HoughMap extends ByteMap {
      *             {@link #thetaMax}
      */
     public int getX(double theta) {
-        if (theta < thetaMin || theta > thetaMax)
+        if (theta < thetaMin - deltaTheta / 2.0
+                || theta > thetaMax + deltaTheta / 2.0)
             throw new IllegalArgumentException("theta (" + theta
                     + ") must be between " + thetaMin + " and " + thetaMax);
 
@@ -433,7 +434,7 @@ public class HoughMap extends ByteMap {
      *             {@link #rMax}
      */
     public int getY(double r) {
-        if (r < rMin || r > rMax)
+        if (r < rMin - deltaR / 2.0 || r > rMax + deltaR / 2.0)
             throw new IllegalArgumentException("r (" + r + ") must be between "
                     + rMin + " and " + rMax);
 
