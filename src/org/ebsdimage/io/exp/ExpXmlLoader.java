@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp;
 
 import static org.ebsdimage.core.exp.ExpConstants.*;
@@ -67,7 +67,6 @@ import crystallography.core.Crystal;
  * XML loader for an <code>Exp</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class ExpXmlLoader extends RunXmlLoader {
 
@@ -134,7 +133,7 @@ public class ExpXmlLoader extends RunXmlLoader {
         String tagName = PatternOpXmlTags.TAG_NAME;
         String packageName =
                 FileUtil.joinPackageNames(PATTERN_IO_PACKAGE, "op");
-        ops.addAll(loadOperations(element, tagName, packageName));
+        ops.add(loadOperation(element, tagName, packageName));
 
         // Pattern Post Ops
         tagName = PatternPostOpsXmlTags.TAG_NAME;
@@ -233,8 +232,8 @@ public class ExpXmlLoader extends RunXmlLoader {
 
         // Constructor experiment
         Exp exp =
-                new Exp(width, height, metadata, phases, ops
-                        .toArray(new Operation[ops.size()]), saveMaps);
+                new Exp(width, height, metadata, phases,
+                        ops.toArray(new Operation[ops.size()]), saveMaps);
         exp.setName(name);
         exp.setDir(path);
 

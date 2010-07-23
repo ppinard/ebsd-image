@@ -14,40 +14,46 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.pattern.op;
 
 import java.io.IOException;
 
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
 
 import rmlimage.core.ByteMap;
 
 public class PatternOpMock extends PatternOp {
 
+    public PatternOpMock() {
+        super(0, 1);
+    }
+
+
+
+    public PatternOpMock(int size) {
+        super(0, size);
+    }
+
+
+
     @Override
     public String toString() {
-        return "PatternOpMock [index=" + index + "]";
+        return "PatternOpMock";
     }
 
 
 
     @Override
-    public ByteMap load(Exp exp) throws IOException {
-        return new ByteMap(2, 2, new byte[] { 1, 2, 3, 4 });
+    public ByteMap load(Exp exp, int index) throws IOException {
+        return new ByteMap(2, 2, new byte[] { (byte) index, 2, 3, 4 });
     }
 
 
 
-    public PatternOpMock(int index) {
-        super(index);
-    }
-
-
-
-    public PatternOpMock() {
-        super();
+    @Override
+    public PatternOp split(int startIndex, int endIndex) {
+        return new PatternOpMock(endIndex - startIndex + 1);
     }
 
 }

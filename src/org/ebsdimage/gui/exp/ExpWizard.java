@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp;
 
 import static rmlshared.io.FileUtil.getURL;
@@ -29,7 +29,7 @@ import javax.imageio.ImageIO;
 
 import org.ebsdimage.core.exp.ExpMetadata;
 import org.ebsdimage.core.exp.ExpUtil;
-import org.ebsdimage.core.exp.ops.pattern.op.PatternFileLoader;
+import org.ebsdimage.core.exp.ops.pattern.op.PatternFilesLoader;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternSmpLoader;
 import org.ebsdimage.core.run.Operation;
@@ -39,12 +39,12 @@ import ptpshared.gui.Wizard;
 import ptpshared.gui.WizardPage;
 import rmlshared.cui.ErrorDialog;
 import crystallography.core.Crystal;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
 
 /**
  * Wizard to setup an experiment.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class ExpWizard extends Wizard {
 
@@ -168,7 +168,9 @@ public class ExpWizard extends Wizard {
         ArrayList<Operation> ops = new ArrayList<Operation>();
 
         // Pattern
-        ops.addAll(Arrays.asList(getPatternOperations()));
+        PatternOp patternOp = getPatternOperation();
+        if (patternOp != null)
+            ops.add(patternOp);
 
         // Other operations
         ops.addAll(Arrays.asList(getOperationsExceptPatternOps()));
@@ -221,34 +223,31 @@ public class ExpWizard extends Wizard {
 
 
     /**
-     * Returns the pattern operations for the experiment. The operations can be
+     * Returns the pattern operation for the experiment. The operation can be
      * coming from a smp file, a directory or a single file.
      * 
-     * @return pattern operations
+     * @return pattern operation
      */
-    private PatternOp[] getPatternOperations() {
+    @CheckForNull
+    private PatternOp getPatternOperation() {
         File smpFile = (File) results.get(PatternsWizardPage.KEY_SMP_FILE);
         File dir = (File) results.get(PatternsWizardPage.KEY_DIR);
         File patternFile =
                 (File) results.get(PatternsWizardPage.KEY_PATTERN_FILE);
 
-        PatternOp[] ops;
-
         if (smpFile != null) {
             try {
-                ops = ExpUtil.createPatternOpsFromSmp(smpFile);
+                return ExpUtil.createPatternOpFromSmp(smpFile);
             } catch (IOException e) {
-                ops = new PatternOp[0];
                 ErrorDialog.show("Cannot load images in smp file.");
+                return null;
             }
         } else if (dir != null) {
-            ops = ExpUtil.createPatternOpsFromDir(dir);
+            return ExpUtil.createPatternOpFromDir(dir);
         } else if (patternFile != null)
-            ops = new PatternOp[] { new PatternFileLoader(0, patternFile) };
-        else
-            ops = new PatternOp[0];
+            return new PatternFilesLoader(0, patternFile);
 
-        return ops;
+        return null;
     }
 
 
@@ -325,18 +324,15 @@ public class ExpWizard extends Wizard {
         File patternFile =
                 (File) results.get(PatternsWizardPage.KEY_PATTERN_FILE);
 
-        PatternOp op;
-
         if (smpFile != null) {
-            op = new PatternSmpLoader(index, smpFile);
+            return new PatternSmpLoader(index, 1, smpFile);
         } else if (dir != null) {
-            op = ExpUtil.createPatternOpsFromDir(dir)[index];
+            PatternFilesLoader tmpOp = ExpUtil.createPatternOpFromDir(dir);
+            return new PatternFilesLoader(index, tmpOp.getFiles());
         } else if (patternFile != null)
-            op = new PatternFileLoader(0, patternFile);
+            return new PatternFilesLoader(0, patternFile);
         else
             throw new IllegalArgumentException("Invalid pattern operation.");
-
-        return op;
     }
 
 

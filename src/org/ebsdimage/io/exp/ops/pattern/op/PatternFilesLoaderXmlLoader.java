@@ -17,13 +17,14 @@
  */
 package org.ebsdimage.io.exp.ops.pattern.op;
 
+import static org.ebsdimage.io.exp.ops.pattern.op.PatternFilesLoaderXmlTags.TAG_NAME;
 import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_SIZE;
 import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_START_INDEX;
-import static org.ebsdimage.io.exp.ops.pattern.op.PatternSmpLoaderXmlTags.ATTR_FILEDIR;
-import static org.ebsdimage.io.exp.ops.pattern.op.PatternSmpLoaderXmlTags.ATTR_FILENAME;
-import static org.ebsdimage.io.exp.ops.pattern.op.PatternSmpLoaderXmlTags.TAG_NAME;
 
-import org.ebsdimage.core.exp.ops.pattern.op.PatternSmpLoader;
+import java.io.File;
+import java.util.ArrayList;
+
+import org.ebsdimage.core.exp.ops.pattern.op.PatternFilesLoader;
 import org.jdom.Element;
 import org.jdom.IllegalNameException;
 
@@ -31,24 +32,24 @@ import ptpshared.utility.xml.JDomUtil;
 import ptpshared.utility.xml.ObjectXmlLoader;
 
 /**
- * XML loader for a <code>PatternFileLoader</code> operation.
+ * XML loader for a <code>PatternFilesLoader</code> operation.
  * 
  * @author Philippe T. Pinard
  */
-public class PatternSmpLoaderXmlLoader implements ObjectXmlLoader {
+public class PatternFilesLoaderXmlLoader implements ObjectXmlLoader {
 
     /**
-     * Loads a <code>PatternFileLoader</code> operation from an XML
+     * Loads a <code>PatternFilesLoader</code> operation from an XML
      * <code>Element</code>.
      * 
      * @param element
      *            an XML <code>Element</code>
-     * @return a <code>PatternFileLoader</code> operation
+     * @return a <code>PatternFilesLoader</code> operation
      * @throws IllegalNameException
      *             if the <code>Element</code> tag name is incorrect.
      */
     @Override
-    public PatternSmpLoader load(Element element) {
+    public PatternFilesLoader load(Element element) {
         if (!element.getName().equals(TAG_NAME))
             throw new IllegalNameException("Name of the element should be "
                     + TAG_NAME + " not " + element.getName() + ".");
@@ -56,14 +57,18 @@ public class PatternSmpLoaderXmlLoader implements ObjectXmlLoader {
         int startIndex =
                 JDomUtil.getIntegerFromAttribute(element, ATTR_START_INDEX);
         int size = JDomUtil.getIntegerFromAttribute(element, ATTR_SIZE);
-        String filedir =
-                JDomUtil.getStringFromAttributeDefault(element, ATTR_FILEDIR,
-                        "");
-        String filename =
-                JDomUtil.getStringFromAttributeDefault(element, ATTR_FILENAME,
-                        "");
 
-        return new PatternSmpLoader(startIndex, size, filedir, filename);
+        ArrayList<File> files = new ArrayList<File>();
+        for (Object obj : element.getChildren())
+            files.add(new File(((Element) obj).getText()));
+
+        if (files.size() != size)
+            throw new IllegalArgumentException(
+                    "The number of files in the XML (" + files.size()
+                            + ") does not match the value " + "of the size "
+                            + "attribute (" + size + ").");
+
+        return new PatternFilesLoader(startIndex, files.toArray(new File[0]));
     }
 
 }

@@ -30,9 +30,10 @@ import org.junit.Test;
 import rmlimage.core.ByteMap;
 import rmlshared.io.FileUtil;
 
-public class PatternFileLoaderTest extends TestCase {
+public class PatternFilesLoaderTest extends TestCase {
 
-    private PatternFileLoader loader;
+    private PatternFilesLoader loader;
+
     private File filepath;
 
 
@@ -46,14 +47,14 @@ public class PatternFileLoaderTest extends TestCase {
                     "File \"org/ebsdimage/testdata/patternloader.bmp\" "
                             + "cannot be found.");
 
-        loader = new PatternFileLoader(45, filepath);
+        loader = new PatternFilesLoader(45, filepath);
     }
 
 
 
     @Test
     public void testEquals() {
-        PatternFileLoader other = new PatternFileLoader(45, filepath);
+        PatternFilesLoader other = new PatternFilesLoader(45, filepath);
         assertFalse(loader == other);
         assertEquals(loader, other);
     }
@@ -62,7 +63,7 @@ public class PatternFileLoaderTest extends TestCase {
 
     @Test
     public void testLoad() throws IOException {
-        ByteMap patternMap = loader.load(null);
+        ByteMap patternMap = loader.load(null, 45);
 
         ByteMap expected =
                 (ByteMap) load("org/ebsdimage/testdata/patternloader.bmp");
@@ -73,56 +74,42 @@ public class PatternFileLoaderTest extends TestCase {
 
 
     @Test
-    public void testPatternLoader() {
-        PatternFileLoader loader = new PatternFileLoader();
-        assertEquals("", loader.filedir);
-        assertEquals("", loader.filename);
-        assertEquals(0, loader.index);
-    }
-
-
-
-    @Test
     public void testPatternLoaderIntFile() {
-        assertEquals(filepath.getName(), loader.filename);
-        assertEquals(filepath.getParent(), loader.filedir);
-        assertEquals(45, loader.index);
+        assertEquals(filepath.getAbsolutePath(),
+                loader.getFiles()[0].getAbsolutePath());
+        assertEquals(45, loader.startIndex);
     }
 
 
 
     @Test(expected = IllegalArgumentException.class)
     public void testPatternLoaderIntFileException() {
-        new PatternFileLoader(-1, filepath);
+        new PatternFilesLoader(-1, filepath);
     }
 
 
 
     @Test
     public void testPatternLoaderIntString() {
-        PatternFileLoader other =
-                new PatternFileLoader(45, "", filepath.getName());
+        PatternFilesLoader other =
+                new PatternFilesLoader(45, "", filepath.getName());
 
-        assertEquals(filepath.getName(), other.filename);
-        assertEquals("", other.filedir);
-        assertEquals(45, other.index);
+        assertEquals(filepath.getName(), other.getFiles()[0].getName());
+        assertEquals(45, other.startIndex);
     }
 
 
 
     @Test(expected = IllegalArgumentException.class)
     public void testPatternLoaderIntStringException() {
-        new PatternFileLoader(-1, filepath);
+        new PatternFilesLoader(-1, filepath);
     }
 
 
 
     @Test
     public void testToString() {
-        String expected =
-                "Pattern File Loader [index=45, filedir="
-                        + filepath.getParent() + ", filename="
-                        + filepath.getName() + "]";
+        String expected = "Pattern Files Loader [startIndex=45, size=1]";
         assertEquals(expected, loader.toString());
     }
 

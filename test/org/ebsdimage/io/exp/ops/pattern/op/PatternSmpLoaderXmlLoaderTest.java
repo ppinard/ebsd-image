@@ -17,7 +17,8 @@
  */
 package org.ebsdimage.io.exp.ops.pattern.op;
 
-import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_INDEX;
+import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_SIZE;
+import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_START_INDEX;
 import static org.ebsdimage.io.exp.ops.pattern.op.PatternSmpLoaderXmlTags.ATTR_FILEDIR;
 import static org.ebsdimage.io.exp.ops.pattern.op.PatternSmpLoaderXmlTags.ATTR_FILENAME;
 import static org.ebsdimage.io.exp.ops.pattern.op.PatternSmpLoaderXmlTags.TAG_NAME;
@@ -35,6 +36,7 @@ import rmlshared.io.FileUtil;
 public class PatternSmpLoaderXmlLoaderTest {
 
     private Element element;
+
     private File filepath;
 
 
@@ -49,7 +51,8 @@ public class PatternSmpLoaderXmlLoaderTest {
                             + "cannot be found.");
 
         element = new Element(TAG_NAME);
-        element.setAttribute(ATTR_INDEX, Integer.toString(45));
+        element.setAttribute(ATTR_START_INDEX, Integer.toString(45));
+        element.setAttribute(ATTR_SIZE, Integer.toString(4));
         element.setAttribute(ATTR_FILEDIR, filepath.getParent());
         element.setAttribute(ATTR_FILENAME, filepath.getName());
     }
@@ -61,7 +64,8 @@ public class PatternSmpLoaderXmlLoaderTest {
         PatternSmpLoader op = new PatternSmpLoaderXmlLoader().load(element);
 
         assertEquals(TAG_NAME, op.getName());
-        assertEquals(45, op.index);
+        assertEquals(45, op.startIndex);
+        assertEquals(4, op.size);
         assertEquals(filepath.getParent(), op.filedir);
         assertEquals(filepath.getName(), op.filename);
     }

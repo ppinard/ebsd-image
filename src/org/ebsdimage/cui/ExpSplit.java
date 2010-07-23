@@ -41,7 +41,6 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
  * Command line interface to split an experiment into smaller experiments.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class ExpSplit extends BaseCUI {
     /**
@@ -105,7 +104,7 @@ public class ExpSplit extends BaseCUI {
 
         // Parse split count
         int splitCount = getSplitCount(cmdLine);
-        if (splitCount < 0)
+        if (splitCount < 1)
             return;
 
         // Load experiment
@@ -169,28 +168,25 @@ public class ExpSplit extends BaseCUI {
                     + "... DONE");
 
             // Smp split
-            if (splitExp.getPatternOps()[0] instanceof PatternSmpLoader) {
+            if (splitExp.getPatternOp() instanceof PatternSmpLoader) {
                 MessageDialog.show("Saving split smp " + (i + 1) + "...");
 
-                // Start and end index
-                int startIndex = splitExp.getPatternOps()[0].index;
-                int endIndex =
-                        splitExp.getPatternOps()[splitExp.getPatternOps().length - 1].index;
-
                 PatternSmpLoader op =
-                        (PatternSmpLoader) splitExp.getPatternOps()[0];
+                        (PatternSmpLoader) splitExp.getPatternOp();
+
+                // Start and end index
+                int startIndex = op.startIndex;
+                int endIndex = op.size - 1;
 
                 // Source smp file
-                File srcSmpFile = new File(op.filedir, op.filename);
-                if (!srcSmpFile.exists()) {
-                    srcSmpFile = new File(dir, op.filename);
-
-                    if (!srcSmpFile.exists()) {
-                        ErrorDialog.show("Cannot find file (" + op.filename
-                                + ") in the specified "
-                                + "directory or working directory.");
-                        return;
-                    }
+                File srcSmpFile;
+                try {
+                    srcSmpFile = op.getFile(splitExp);
+                } catch (IOException ex) {
+                    ErrorDialog.show("Cannot find file (" + op.filename
+                            + ") in the specified "
+                            + "directory or working directory.");
+                    return;
                 }
 
                 // Destination smp file

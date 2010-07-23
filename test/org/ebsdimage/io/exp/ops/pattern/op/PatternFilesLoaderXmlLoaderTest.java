@@ -17,24 +17,25 @@
  */
 package org.ebsdimage.io.exp.ops.pattern.op;
 
-import static org.ebsdimage.io.exp.ops.pattern.op.PatternFileLoaderXmlTags.ATTR_FILEDIR;
-import static org.ebsdimage.io.exp.ops.pattern.op.PatternFileLoaderXmlTags.ATTR_FILENAME;
-import static org.ebsdimage.io.exp.ops.pattern.op.PatternFileLoaderXmlTags.TAG_NAME;
-import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_INDEX;
+import static org.ebsdimage.io.exp.ops.pattern.op.PatternFilesLoaderXmlTags.TAG_FILE;
+import static org.ebsdimage.io.exp.ops.pattern.op.PatternFilesLoaderXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_SIZE;
+import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_START_INDEX;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 
-import org.ebsdimage.core.exp.ops.pattern.op.PatternFileLoader;
+import org.ebsdimage.core.exp.ops.pattern.op.PatternFilesLoader;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
 
 import rmlshared.io.FileUtil;
 
-public class PatternFileLoaderXmlLoaderTest {
+public class PatternFilesLoaderXmlLoaderTest {
 
     private Element element;
+
     private File filepath;
 
 
@@ -43,27 +44,27 @@ public class PatternFileLoaderXmlLoaderTest {
     public void setUp() throws Exception {
         filepath = FileUtil.getFile("org/ebsdimage/testdata/patternloader.bmp");
 
-        if (filepath == null)
-            throw new RuntimeException(
-                    "File \"org/ebsdimage/testdata/patternloader.bmp\" "
-                            + "cannot be found.");
-
         element = new Element(TAG_NAME);
-        element.setAttribute(ATTR_INDEX, Integer.toString(45));
-        element.setAttribute(ATTR_FILEDIR, filepath.getParent());
-        element.setAttribute(ATTR_FILENAME, filepath.getName());
+        element.setAttribute(ATTR_START_INDEX, Integer.toString(45));
+        element.setAttribute(ATTR_SIZE, Integer.toString(2));
+        element.addContent(new Element(TAG_FILE).setText(filepath.getAbsolutePath()));
+        element.addContent(new Element(TAG_FILE).setText(filepath.getAbsolutePath()));
     }
 
 
 
     @Test
     public void testLoad() {
-        PatternFileLoader op = new PatternFileLoaderXmlLoader().load(element);
+        PatternFilesLoader op = new PatternFilesLoaderXmlLoader().load(element);
 
         assertEquals(TAG_NAME, op.getName());
-        assertEquals(45, op.index);
-        assertEquals(filepath.getParent(), op.filedir);
-        assertEquals(filepath.getName(), op.filename);
+        assertEquals(45, op.startIndex);
+        assertEquals(2, op.size);
+        assertEquals(2, op.getFiles().length);
+        assertEquals(filepath.getAbsolutePath(),
+                op.getFiles()[0].getAbsolutePath());
+        assertEquals(filepath.getAbsolutePath(),
+                op.getFiles()[1].getAbsolutePath());
     }
 
 }

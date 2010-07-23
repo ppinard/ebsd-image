@@ -14,14 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.op;
 
 import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpMockXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_SIZE;
 
-import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOpMock;
-import org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags;
 import org.jdom.Element;
 import org.jdom.IllegalNameException;
 
@@ -36,10 +35,9 @@ public class PatternOpMockXmlLoader implements ObjectXmlLoader {
             throw new IllegalNameException("Tag should be " + TAG_NAME
                     + ", not " + element.getName() + ".");
 
-        int index = JDomUtil.getIntegerFromAttribute(element,
-                PatternOpXmlTags.ATTR_INDEX, PatternOp.DEFAULT_INDEX);
+        int size = JDomUtil.getIntegerFromAttribute(element, ATTR_SIZE);
 
-        return new PatternOpMock(index);
+        return new PatternOpMock(size);
     }
 
 }

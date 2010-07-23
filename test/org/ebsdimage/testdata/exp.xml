@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Exp name="ExpTester" path="" width="2" height="1">
+<Exp name="ExpTester" path="/tmp/exp1" width="2" height="1">
   <ExpMetadata>
     <BeamEnergy units="eV">20000.0</BeamEnergy>
     <Magnification>100.0</Magnification>
@@ -33,10 +33,9 @@
       <PointGroup laueGroup="11" schoenflies="O" hermannMauguin="432" crystalSystem="CUBIC" />
     </Silicon>
   </Phases>
-  <CurrentMapsFileSaver saveAllMaps="true" savePatternMap="true" saveHoughMap="true" savePeaksMap="true" />
+  <CurrentMapsFileSaver saveAllMaps="true" savePatternMap="true" saveHoughMap="true" savePeaksMap="true" saveSolutionOverlay="true" />
   <PatternOp>
-    <PatternOpMock index="0">0</PatternOpMock>
-    <PatternOpMock index="1">1</PatternOpMock>
+    <PatternOpMock startIndex="0" size="2" />
   </PatternOp>
   <PatternPostOps>
     <PatternPostOpsMock>0</PatternPostOpsMock>

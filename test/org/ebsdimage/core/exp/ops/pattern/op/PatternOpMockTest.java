@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.pattern.op;
 
 import static org.junit.Assert.assertEquals;
@@ -23,7 +23,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
-import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -50,8 +49,6 @@ public class PatternOpMockTest {
 
         assertFalse(op.equals(new Object()));
 
-        assertFalse(op.equals(new PatternOpMock(2)));
-
         assertTrue(op.equals(new PatternOpMock()));
     }
 
@@ -66,11 +63,20 @@ public class PatternOpMockTest {
 
     @Test
     public void testLoad() throws IOException {
-        ByteMap map = op.load(null);
+        ByteMap map = op.load(null, 1);
 
         assertEquals(2, map.width);
         assertEquals(2, map.height);
         assertEquals(1, map.pixArray[0]);
+        assertEquals(2, map.pixArray[1]);
+        assertEquals(3, map.pixArray[2]);
+        assertEquals(4, map.pixArray[3]);
+
+        map = op.load(null, 2);
+
+        assertEquals(2, map.width);
+        assertEquals(2, map.height);
+        assertEquals(2, map.pixArray[0]);
         assertEquals(2, map.pixArray[1]);
         assertEquals(3, map.pixArray[2]);
         assertEquals(4, map.pixArray[3]);
@@ -80,22 +86,8 @@ public class PatternOpMockTest {
 
     @Test
     public void testPatternOpMock() throws IOException {
-        assertEquals(PatternOpMock.DEFAULT_INDEX, op.index);
-    }
-
-
-
-    @Test
-    public void testPatternOpMockInt() throws IOException {
-        PatternOp other = new PatternOpMock(2);
-        assertEquals(2, other.index);
-    }
-
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testPatternOpMockIntException() {
-        new PatternOpMock(-1);
+        assertEquals(0, op.startIndex);
+        assertEquals(1, op.size);
     }
 
 }

@@ -29,6 +29,7 @@ import org.ebsdimage.core.exp.CurrentMapsFileSaver;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.ExpMetadata;
 import org.ebsdimage.core.exp.OpResult;
+import org.ebsdimage.core.exp.ops.pattern.op.PatternOpMock;
 import org.ebsdimage.core.run.Operation;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +43,9 @@ import crystallography.core.crystals.ZirconiumAlpha;
 public class BestSolutionTest {
 
     private BestSolution op;
+
     private Solution[] srcSlns;
+
     private Exp exp;
 
 
@@ -55,7 +58,8 @@ public class BestSolutionTest {
                 new Crystal[] { new Silicon(), new IronBCC(),
                         new ZirconiumAlpha() };
         exp =
-                new Exp(1, 1, new ExpMetadata(), phases, new Operation[] {},
+                new Exp(1, 1, new ExpMetadata(), phases,
+                        new Operation[] { new PatternOpMock() },
                         new CurrentMapsFileSaver());
 
         srcSlns =

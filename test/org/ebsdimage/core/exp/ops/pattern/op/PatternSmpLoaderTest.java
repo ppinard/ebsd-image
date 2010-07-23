@@ -33,6 +33,7 @@ import rmlshared.io.FileUtil;
 public class PatternSmpLoaderTest extends TestCase {
 
     private PatternSmpLoader loader;
+
     private File filepath;
 
 
@@ -44,14 +45,14 @@ public class PatternSmpLoaderTest extends TestCase {
             throw new IOException(
                     "File \"org/ebsdimage/testdata/Project19.smp\" not found.");
 
-        loader = new PatternSmpLoader(2, filepath);
+        loader = new PatternSmpLoader(2, 4, filepath);
     }
 
 
 
     @Test
     public void testEqualsObject() {
-        PatternSmpLoader other = new PatternSmpLoader(2, filepath);
+        PatternSmpLoader other = new PatternSmpLoader(2, 4, filepath);
         assertFalse(loader == other);
         assertEquals(loader, other);
     }
@@ -60,7 +61,7 @@ public class PatternSmpLoaderTest extends TestCase {
 
     @Test
     public void testLoad() throws IOException {
-        ByteMap patternMap = loader.load(null);
+        ByteMap patternMap = loader.load(null, 2);
 
         ByteMap expected =
                 (ByteMap) load("org/ebsdimage/testdata/Project19/Project193.jpg");
@@ -71,27 +72,18 @@ public class PatternSmpLoaderTest extends TestCase {
 
 
     @Test
-    public void testPatternSmpLoader() {
-        PatternSmpLoader loader = new PatternSmpLoader();
-        assertEquals("", loader.filedir);
-        assertEquals("", loader.filename);
-        assertEquals(0, loader.index);
-    }
-
-
-
-    @Test
     public void testPatternSmpLoaderIntFile() {
         assertEquals(filepath.getParent(), loader.filedir);
         assertEquals(filepath.getName(), loader.filename);
-        assertEquals(2, loader.index);
+        assertEquals(2, loader.startIndex);
+        assertEquals(4, loader.size);
     }
 
 
 
     @Test(expected = IllegalArgumentException.class)
     public void testPatternSmpLoaderIntFileException() {
-        new PatternSmpLoader(-1, filepath);
+        new PatternSmpLoader(-1, 4, filepath);
     }
 
 
@@ -99,18 +91,11 @@ public class PatternSmpLoaderTest extends TestCase {
     @Test
     public void testPatternSmpLoaderIntString() {
         PatternSmpLoader other =
-                new PatternSmpLoader(2, "", filepath.getName());
+                new PatternSmpLoader(2, 4, "", filepath.getName());
 
-        assertEquals("", other.filedir);
         assertEquals(filepath.getName(), other.filename);
-        assertEquals(2, other.index);
-    }
-
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testPatternSmpLoaderIntStringException() {
-        new PatternSmpLoader(-1, filepath);
+        assertEquals(2, other.startIndex);
+        assertEquals(4, other.size);
     }
 
 
@@ -118,8 +103,9 @@ public class PatternSmpLoaderTest extends TestCase {
     @Test
     public void testToString() {
         String expected =
-                "Pattern Smp Loader [index=2, filedir=" + filepath.getParent()
-                        + ", filename=" + filepath.getName() + "]";
+                "Pattern Smp Loader [startIndex=2, size=4, filedir="
+                        + filepath.getParent() + ", filename="
+                        + filepath.getName() + "]";
         assertEquals(expected, loader.toString());
     }
 

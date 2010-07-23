@@ -106,8 +106,7 @@ public abstract class ExpTester {
     public static ArrayList<Operation> createOperations() {
         ArrayList<Operation> ops = new ArrayList<Operation>();
 
-        ops.add(new PatternOpMock(0));
-        ops.add(new PatternOpMock(1));
+        ops.add(new PatternOpMock(2));
         ops.add(new PatternPostOpsMock());
         ops.add(new PatternResultsOpsMock());
 
@@ -317,10 +316,8 @@ public abstract class ExpTester {
 
 
     @Test
-    public void testGetPatternOps() {
-        assertEquals(2, exp.getPatternOps().length);
-        assertEquals(new PatternOpMock(0), exp.getPatternOps()[0]);
-        assertEquals(new PatternOpMock(1), exp.getPatternOps()[1]);
+    public void testGetPatternOp() {
+        assertEquals(new PatternOpMock(2), exp.getPatternOp());
     }
 
 
@@ -401,7 +398,7 @@ public abstract class ExpTester {
         assertEquals(ByteMap.class, map.getClass());
 
         ByteMap byteMap = (ByteMap) map;
-        assertEquals(20, byteMap.pixArray[0]);
+        assertEquals(18, byteMap.pixArray[0]);
         assertEquals(20, byteMap.pixArray[1]);
 
         // HoughResultsOpsMock
@@ -410,7 +407,7 @@ public abstract class ExpTester {
         assertEquals(RealMap.class, map.getClass());
 
         realMap = (RealMap) map;
-        assertEquals(144, realMap.pixArray[0], 1e-6);
+        assertEquals(132, realMap.pixArray[0], 1e-6);
         assertEquals(144, realMap.pixArray[1], 1e-6);
 
         // DetectionResultsOpsMock
@@ -429,7 +426,7 @@ public abstract class ExpTester {
         assertEquals(RealMap.class, map.getClass());
 
         realMap = (RealMap) map;
-        assertEquals(30, realMap.pixArray[0], 1e-6);
+        assertEquals(26, realMap.pixArray[0], 1e-6);
         assertEquals(30, realMap.pixArray[1], 1e-6);
 
         // IndexingResultsOpsMock

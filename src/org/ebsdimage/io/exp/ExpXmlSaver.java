@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp;
 
 import static org.ebsdimage.core.exp.ExpConstants.*;
@@ -58,7 +58,6 @@ import rmlshared.thread.Reflection;
  * XML saver for an <code>Exp</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class ExpXmlSaver extends RunXmlSaver {
 
@@ -93,28 +92,27 @@ public class ExpXmlSaver extends RunXmlSaver {
         element.setAttribute(ATTR_HEIGHT, Integer.toString(exp.mmap.height));
 
         // Metadata
-        element.addContent(new ExpMetadataXmlSaver().save(exp.mmap
-                .getMetadata()));
+        element.addContent(new ExpMetadataXmlSaver().save(exp.mmap.getMetadata()));
 
         // Phases
         element.addContent(new PhasesMapXmlSaver().save(exp.mmap.getPhases()));
 
         // Save Maps
-        element.addContent(new CurrentMapsFileSaverXmlSaver()
-                .save(exp.currentMapsSaver));
+        element.addContent(new CurrentMapsFileSaverXmlSaver().save(exp.currentMapsSaver));
 
         /* Operations */
         // Pattern Op
         String tagName = PatternOpXmlTags.TAG_NAME;
         String packageName =
                 FileUtil.joinPackageNames(PATTERN_IO_PACKAGE, "op");
-        Operation[] ops = exp.getPatternOps();
-        element.addContent(createOpsElement(ops, tagName, packageName));
+        Operation op = exp.getPatternOp();
+        if (op != null)
+            element.addContent(createOpElement(op, tagName, packageName));
 
         // Pattern Post Ops
         tagName = PatternPostOpsXmlTags.TAG_NAME;
         packageName = FileUtil.joinPackageNames(PATTERN_IO_PACKAGE, "post");
-        ops = exp.getPatternPostOps();
+        Operation[] ops = exp.getPatternPostOps();
         element.addContent(createOpsElement(ops, tagName, packageName));
 
         // Pattern Results Ops
@@ -132,7 +130,7 @@ public class ExpXmlSaver extends RunXmlSaver {
         // Hough Op
         tagName = HoughOpXmlTags.TAG_NAME;
         packageName = FileUtil.joinPackageNames(HOUGH_IO_PACKAGE, "op");
-        Operation op = exp.getHoughOp();
+        op = exp.getHoughOp();
         if (op != null)
             element.addContent(createOpElement(op, tagName, packageName));
 

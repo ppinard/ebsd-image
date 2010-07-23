@@ -14,54 +14,61 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.op;
 
-import static org.ebsdimage.io.exp.ops.pattern.op.PatternFileLoaderXmlTags.ATTR_FILEDIR;
-import static org.ebsdimage.io.exp.ops.pattern.op.PatternFileLoaderXmlTags.ATTR_FILENAME;
-import static org.ebsdimage.io.exp.ops.pattern.op.PatternFileLoaderXmlTags.TAG_NAME;
-import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_INDEX;
+import static org.ebsdimage.io.exp.ops.pattern.op.PatternFilesLoaderXmlTags.TAG_FILE;
+import static org.ebsdimage.io.exp.ops.pattern.op.PatternFilesLoaderXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_SIZE;
+import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_START_INDEX;
 
-import org.ebsdimage.core.exp.ops.pattern.op.PatternFileLoader;
+import java.io.File;
+
+import org.ebsdimage.core.exp.ops.pattern.op.PatternFilesLoader;
 import org.jdom.Element;
 
 import ptpshared.utility.xml.ObjectXml;
 import ptpshared.utility.xml.ObjectXmlSaver;
 
 /**
- * XML saver for a <code>PatternFileLoader</code> operation.
+ * XML saver for a <code>PatternFilesLoader</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
-public class PatternFileLoaderXmlSaver implements ObjectXmlSaver {
+public class PatternFilesLoaderXmlSaver implements ObjectXmlSaver {
 
     /**
      * {@inheritDoc}
      * 
-     * @see #save(PatternFileLoader)
+     * @see #save(PatternFilesLoader)
      */
     @Override
     public Element save(ObjectXml obj) {
-        return save((PatternFileLoader) obj);
+        return save((PatternFilesLoader) obj);
     }
 
 
 
     /**
-     * Saves a <code>PatternFileLoader</code> operation to an XML
+     * Saves a <code>PatternFilesLoader</code> operation to an XML
      * <code>Element</code>.
      * 
      * @param op
-     *            a <code>PatternFileLoader</code> operation
+     *            a <code>PatternFilesLoader</code> operation
      * @return an XML <code>Element</code>
      */
-    public Element save(PatternFileLoader op) {
+    public Element save(PatternFilesLoader op) {
         Element element = new Element(TAG_NAME);
 
-        element.setAttribute(ATTR_INDEX, Integer.toString(op.index));
-        element.setAttribute(ATTR_FILEDIR, op.filedir);
-        element.setAttribute(ATTR_FILENAME, op.filename);
+        element.setAttribute(ATTR_START_INDEX, Integer.toString(op.startIndex));
+        element.setAttribute(ATTR_SIZE, Integer.toString(op.size));
+
+        Element child;
+        for (File file : op.getFiles()) {
+            child = new Element(TAG_FILE);
+            child.setText(file.getAbsolutePath());
+            element.addContent(child);
+        }
 
         return element;
     }

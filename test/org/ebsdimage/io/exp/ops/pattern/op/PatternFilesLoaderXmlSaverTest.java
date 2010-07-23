@@ -17,16 +17,14 @@
  */
 package org.ebsdimage.io.exp.ops.pattern.op;
 
+import static org.ebsdimage.io.exp.ops.pattern.op.PatternFilesLoaderXmlTags.TAG_NAME;
 import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_SIZE;
 import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_START_INDEX;
-import static org.ebsdimage.io.exp.ops.pattern.op.PatternSmpLoaderXmlTags.ATTR_FILEDIR;
-import static org.ebsdimage.io.exp.ops.pattern.op.PatternSmpLoaderXmlTags.ATTR_FILENAME;
-import static org.ebsdimage.io.exp.ops.pattern.op.PatternSmpLoaderXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 
-import org.ebsdimage.core.exp.ops.pattern.op.PatternSmpLoader;
+import org.ebsdimage.core.exp.ops.pattern.op.PatternFilesLoader;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,40 +32,35 @@ import org.junit.Test;
 import ptpshared.utility.xml.JDomUtil;
 import rmlshared.io.FileUtil;
 
-public class PatternSmpLoaderXmlSaverTest {
+public class PatternFilesLoaderXmlSaverTest {
 
-    private PatternSmpLoader op;
+    private PatternFilesLoader op;
 
-    private File filepath;
+    private File[] files;
 
 
 
     @Before
     public void setUp() throws Exception {
-        filepath = FileUtil.getFile("org/ebsdimage/testdata/Project19.smp");
+        files =
+                new File[] {
+                        FileUtil.getFile("org/ebsdimage/testdata/patternloader.bmp"),
+                        FileUtil.getFile("org/ebsdimage/testdata/patternloader.bmp") };
 
-        if (filepath == null)
-            throw new RuntimeException(
-                    "File \"org/ebsdimage/testdata/Project19.smp\" "
-                            + "cannot be found.");
-
-        op = new PatternSmpLoader(45, 4, filepath);
+        op = new PatternFilesLoader(45, files);
     }
 
 
 
     @Test
-    public void testSave() {
-        Element element = new PatternSmpLoaderXmlSaver().save(op);
+    public void testSavePatternFileLoader() {
+        Element element = new PatternFilesLoaderXmlSaver().save(op);
 
         assertEquals(TAG_NAME, element.getName());
         assertEquals(45, JDomUtil.getIntegerFromAttribute(element,
                 ATTR_START_INDEX));
-        assertEquals(4, JDomUtil.getIntegerFromAttribute(element, ATTR_SIZE));
-        assertEquals(filepath.getParent(), JDomUtil.getStringFromAttribute(
-                element, ATTR_FILEDIR));
-        assertEquals(filepath.getName(), JDomUtil.getStringFromAttribute(
-                element, ATTR_FILENAME));
+        assertEquals(2, JDomUtil.getIntegerFromAttribute(element, ATTR_SIZE));
+        assertEquals(2, element.getChildren().size());
     }
 
 }

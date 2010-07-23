@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.ebsdimage.core.EbsdMMap;
-import org.ebsdimage.core.exp.ops.pattern.op.PatternFileLoader;
+import org.ebsdimage.core.exp.ops.pattern.op.PatternFilesLoader;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternSmpLoader;
 import org.ebsdimage.core.run.Operation;
@@ -90,21 +90,16 @@ public class ExpUtil {
      * 
      * @param smpFile
      *            smp file
-     * 
      * @return array of operations
      * @throws IOException
      *             if an error occurs while reading the smp file
      */
-    public static PatternSmpLoader[] createPatternOpsFromSmp(File smpFile)
+    public static PatternSmpLoader createPatternOpFromSmp(File smpFile)
             throws IOException {
         SmpInputStream smp = new SmpInputStream(smpFile);
 
-        PatternSmpLoader[] ops = new PatternSmpLoader[smp.getMapCount()];
-
-        for (int i = 0; i < ops.length; i++)
-            ops[i] = new PatternSmpLoader(i, smpFile);
-
-        return ops;
+        return new PatternSmpLoader(smp.getStartIndex(), smp.getMapCount(),
+                smpFile);
     }
 
 
@@ -118,21 +113,16 @@ public class ExpUtil {
      *            directory where to search for jpg and bmp files
      * @return array of operations
      */
-    public static PatternFileLoader[] createPatternOpsFromDir(File dir) {
+    public static PatternFilesLoader createPatternOpFromDir(File dir) {
         File[] jpgFiles = FileUtil.listFilesOnly(dir, "*.jpg");
         File[] bmpFiles = FileUtil.listFilesOnly(dir, "*.bmp");
 
-        PatternFileLoader[] ops =
-                new PatternFileLoader[jpgFiles.length + bmpFiles.length];
+        File[] files = new File[jpgFiles.length + bmpFiles.length];
 
-        for (int i = 0; i < jpgFiles.length; i++)
-            ops[i] = new PatternFileLoader(i, jpgFiles[i]);
+        System.arraycopy(jpgFiles, 0, files, 0, jpgFiles.length);
+        System.arraycopy(bmpFiles, 0, files, jpgFiles.length, bmpFiles.length);
 
-        for (int i = 0; i < bmpFiles.length; i++)
-            ops[i + jpgFiles.length] =
-                    new PatternFileLoader(i + jpgFiles.length, bmpFiles[i]);
-
-        return ops;
+        return new PatternFilesLoader(0, files);
     }
 
 
@@ -145,7 +135,6 @@ public class ExpUtil {
      * @param splitCount
      *            number of smaller experiments wanted
      * @return array of the smaller experiments
-     * 
      * @throws NullPointerException
      *             if the experiment is null
      * @throws IllegalArgumentException
@@ -157,53 +146,56 @@ public class ExpUtil {
     public static Exp[] splitExp(Exp exp, int splitCount) {
         if (exp == null)
             throw new NullPointerException("Experiment cannot be null.");
-        if (splitCount <= 0)
+        if (splitCount < 1)
             throw new IllegalArgumentException("The split count (" + splitCount
                     + ") must be greater than 0.");
-        if (splitCount > exp.getPatternOps().length)
+        if (splitCount > exp.getPatternOp().size)
             throw new IllegalArgumentException("The split count (" + splitCount
                     + ") cannot be greater than the "
                     + "number of pattern operations in the experiment ("
-                    + exp.getPatternOps().length + ").");
+                    + exp.getPatternOp().size + ").");
 
-        Exp[] exps = new Exp[splitCount];
+        ArrayList<Exp> exps = new ArrayList<Exp>();
 
-        // List all the operations that are not PatternOp
+        // List all the operations except PatternOp
         ArrayList<Operation> otherOps = new ArrayList<Operation>();
         for (Operation op : exp.getAllOperations())
             if (!(op instanceof PatternOp))
                 otherOps.add(op);
 
         // Calculate the number of pattern operation in each split
-        int size =
-                (int) Math.ceil((double) exp.getPatternOps().length
-                        / splitCount);
+        int originalSize = exp.getPatternOp().size;
+        int size = (int) Math.ceil((double) originalSize / splitCount);
 
-        PatternOp[] patternOps;
+        PatternOp patternOp;
         ArrayList<Operation> ops = new ArrayList<Operation>();
-        int min;
-        int max;
+        int startIndex;
+        int endIndex;
+        Exp splitExp;
         for (int n = 0; n < splitCount; n++) {
             // Lower and upper bound of the copy range
-            min = Math.min(n * size, exp.getPatternOps().length);
-            max = Math.min(n * size + size, exp.getPatternOps().length);
+            startIndex = Math.min(n * size, originalSize);
+            endIndex = Math.min(n * size + size, originalSize) - 1;
+
+            if (startIndex > endIndex)
+                continue;
 
             // Pattern operation for this split
-            patternOps = Arrays.copyOfRange(exp.getPatternOps(), min, max);
+            patternOp = exp.getPatternOp().split(startIndex, endIndex);
 
             // Combine pattern operations and other operations
             ops.clear();
             ops.addAll(otherOps);
-            ops.addAll(Arrays.asList(patternOps));
+            ops.add(patternOp);
 
             // Create and add new experiment to the array
-            Exp splitExp =
+            splitExp =
                     new Exp(exp.mmap.duplicate(),
                             ops.toArray(new Operation[0]), exp.currentMapsSaver);
             splitExp.setName(exp.getName() + "_" + n);
-            exps[n] = splitExp;
+            exps.add(splitExp);
         }
 
-        return exps;
+        return exps.toArray(new Exp[0]);
     }
 }

@@ -14,10 +14,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.op;
 
-import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_INDEX;
+import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_SIZE;
+import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_START_INDEX;
 import static org.ebsdimage.io.exp.ops.pattern.op.PatternSmpLoaderXmlTags.ATTR_FILEDIR;
 import static org.ebsdimage.io.exp.ops.pattern.op.PatternSmpLoaderXmlTags.ATTR_FILENAME;
 import static org.ebsdimage.io.exp.ops.pattern.op.PatternSmpLoaderXmlTags.TAG_NAME;
@@ -32,7 +33,6 @@ import ptpshared.utility.xml.ObjectXmlSaver;
  * XML saver for a <code>PatternSmpLoader</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PatternSmpLoaderXmlSaver implements ObjectXmlSaver {
 
@@ -59,7 +59,8 @@ public class PatternSmpLoaderXmlSaver implements ObjectXmlSaver {
     public Element save(PatternSmpLoader op) {
         Element element = new Element(TAG_NAME);
 
-        element.setAttribute(ATTR_INDEX, Integer.toString(op.index));
+        element.setAttribute(ATTR_START_INDEX, Integer.toString(op.startIndex));
+        element.setAttribute(ATTR_SIZE, Integer.toString(op.size));
         element.setAttribute(ATTR_FILEDIR, op.filedir);
         element.setAttribute(ATTR_FILENAME, op.filename);
 

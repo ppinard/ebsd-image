@@ -14,15 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp;
 
 import java.io.File;
 
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.ExpTester;
-import org.ebsdimage.io.exp.ExpLoader;
-import org.ebsdimage.io.exp.ExpSaver;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

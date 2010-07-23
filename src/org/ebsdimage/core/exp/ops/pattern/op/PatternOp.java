@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.pattern.op;
 
 import java.io.IOException;
@@ -25,42 +25,43 @@ import org.ebsdimage.core.run.Operation;
 import rmlimage.core.ByteMap;
 
 /**
- * Superclass of operation to load a pattern. Entry point of the experiment
- * engine.
+ * Superclass of operation to load one or many patterns. Entry point of the
+ * experiment engine.
  * 
  * @author Philippe T. Pinard
  */
 public abstract class PatternOp extends Operation {
 
-    /** Index of the pattern. */
-    public final int index;
+    /** First index of the patterns. */
+    public final int startIndex;
 
-    /** Default value for the index. */
-    public static final int DEFAULT_INDEX = 0;
-
-
-
-    /**
-     * Creates a pattern operation with the default index.
-     */
-    public PatternOp() {
-        index = DEFAULT_INDEX;
-    }
+    /** Number of patterns to load. */
+    public final int size;
 
 
 
     /**
      * Creates a pattern operation with the specified index.
      * 
-     * @param index
-     *            index of the pattern
+     * @param startIndex
+     *            first index of the patterns
+     * @param size
+     *            number of patterns
+     * @throws IllegalArgumentException
+     *             if the start index is less than 0
+     * @throws IllegalArgumentException
+     *             if the size is less than 1
      */
-    public PatternOp(int index) {
-        if (index < 0)
+    public PatternOp(int startIndex, int size) {
+        if (startIndex < 0)
             throw new IllegalArgumentException(
                     "Index cannot be less than zero.");
+        if (size < 1)
+            throw new IllegalArgumentException(
+                    "The size must be equal or greater than 1.");
 
-        this.index = index;
+        this.startIndex = startIndex;
+        this.size = size;
     }
 
 
@@ -75,7 +76,9 @@ public abstract class PatternOp extends Operation {
             return false;
 
         PatternOp other = (PatternOp) obj;
-        if (index != other.index)
+        if (size != other.size)
+            return false;
+        if (startIndex != other.startIndex)
             return false;
 
         return true;
@@ -87,7 +90,8 @@ public abstract class PatternOp extends Operation {
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + index;
+        result = prime * result + size;
+        result = prime * result + startIndex;
         return result;
     }
 
@@ -98,10 +102,26 @@ public abstract class PatternOp extends Operation {
      * 
      * @param exp
      *            experiment executing this method
+     * @param index
+     *            index of the pattern to load
      * @return the pattern map
      * @throws IOException
      *             if an error occurs while loading the pattern
      */
-    public abstract ByteMap load(Exp exp) throws IOException;
+    public abstract ByteMap load(Exp exp, int index) throws IOException;
+
+
+
+    /**
+     * Split the current <code>PattenrOp</code> in a smaller
+     * <code>PattenrOp</code> containing less patterns.
+     * 
+     * @param startIndex
+     *            index of the first pattern in the split
+     * @param endIndex
+     *            index of the last pattern in the split
+     * @return reduced <code>PattenrOp</code>
+     */
+    public abstract PatternOp split(int startIndex, int endIndex);
 
 }

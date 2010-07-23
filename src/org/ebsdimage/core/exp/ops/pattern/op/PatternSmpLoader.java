@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.pattern.op;
 
 import java.io.File;
@@ -29,7 +29,6 @@ import rmlimage.core.ByteMap;
  * Operation to load a pattern from a smp file.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PatternSmpLoader extends PatternOp {
 
@@ -42,72 +41,31 @@ public class PatternSmpLoader extends PatternOp {
 
 
     /**
-     * Creates a new <code>PatternSmpLoader</code> with an empty file directory
-     * and file name.
-     */
-    public PatternSmpLoader() {
-        filename = "";
-        filedir = "";
-    }
-
-
-
-    /**
-     * Creates a new <code>PatternSmpLoader</code> from the specified file
-     * directory and filename.
-     * 
-     * @param index
-     *            index of the pattern in the smp file and the map
-     * @param filedir
-     *            directory of the smp file
-     * @param filename
-     *            file name of the smp file
-     * 
-     * @throws NullPointerException
-     *             if the file directory is null
-     * @throws NullPointerException
-     *             if the file name is null
-     * @throws IllegalArgumentException
-     *             if the extension of the file name is not smp.
-     */
-    public PatternSmpLoader(int index, String filedir, String filename) {
-        super(index);
-
-        if (filedir == null)
-            throw new NullPointerException("File directory cannot be null.");
-        if (filename == null)
-            throw new NullPointerException("File name cannot be null.");
-        if (!filename.endsWith(".smp"))
-            throw new IllegalArgumentException(
-                    "The extension of the file name must be \"smp\"");
-
-        this.filedir = filedir;
-        this.filename = filename;
-    }
-
-
-
-    /**
      * Creates a new <code>PatternSmpLoader</code> from the specified file path.
      * *
      * 
-     * @param index
-     *            index of the pattern to load from the smp file
+     * @param startIndex
+     *            first index of the patterns
+     * @param size
+     *            number of patterns
      * @param filepath
      *            file path of the smp file
      */
-    public PatternSmpLoader(int index, File filepath) {
-        super(index);
+    public PatternSmpLoader(int startIndex, int size, File filepath) {
+        super(startIndex, size);
 
         if (filepath == null)
             throw new NullPointerException("File path cannot be null.");
 
+        // File dir
         String filedir = filepath.getParent();
+
         if (filedir == null)
             this.filedir = "";
         else
             this.filedir = filedir;
 
+        // Filename
         String filename = filepath.getName();
         if (filename == null)
             throw new NullPointerException("File name cannot be null.");
@@ -117,6 +75,32 @@ public class PatternSmpLoader extends PatternOp {
                     "The extension of the file name must be \"smp\"");
 
         this.filename = filename;
+    }
+
+
+
+    /**
+     * Creates a new <code>PatternSmpLoader</code> from the specified file
+     * directory and filename.
+     * 
+     * @param startIndex
+     *            first index of the patterns
+     * @param size
+     *            number of patterns
+     * @param filedir
+     *            directory of the smp file
+     * @param filename
+     *            file name of the smp file
+     * @throws NullPointerException
+     *             if the file directory is null
+     * @throws NullPointerException
+     *             if the file name is null
+     * @throws IllegalArgumentException
+     *             if the extension of the file name is not smp.
+     */
+    public PatternSmpLoader(int startIndex, int size, String filedir,
+            String filename) {
+        this(startIndex, size, new File(filedir, filename));
     }
 
 
@@ -141,6 +125,33 @@ public class PatternSmpLoader extends PatternOp {
 
 
 
+    /**
+     * Searches for the smp file in the specified directory or the working
+     * directory of the experiment. Returns the file or throws an
+     * <code>IOException</code> if the file cannot be found.
+     * 
+     * @param exp
+     *            an experiment
+     * @return file for the smp
+     * @throws IOException
+     *             if the smp file cannot be found
+     */
+    public File getFile(Exp exp) throws IOException {
+        File file = new File(filedir, filename);
+
+        if (!file.exists()) {
+            file = new File(exp.getDir(), filename);
+
+            if (!file.exists())
+                throw new IOException("Cannot find file (" + filename
+                        + ") in the specified directory or working directory.");
+        }
+
+        return file;
+    }
+
+
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -157,23 +168,32 @@ public class PatternSmpLoader extends PatternOp {
      * 
      * @param exp
      *            experiment executing this method
+     * @param index
+     *            index of the pattern to load
      * @return the pattern maps
      * @throws IOException
      *             if an error occurs while opening the smp file
      */
     @Override
-    public ByteMap load(Exp exp) throws IOException {
-        File file = new File(filedir, filename);
-        if (!file.exists()) {
-            file = new File(exp.getDir(), filename);
-
-            if (!file.exists())
-                throw new IOException("Cannot find file (" + filename
-                        + ") in the specified directory or working directory.");
-        }
-
-        /* Load pattern map with index */
+    public ByteMap load(Exp exp, int index) throws IOException {
+        File file = getFile(exp);
         SmpInputStream reader = new SmpInputStream(file);
+
+        // Assert index
+        if (index < startIndex)
+            throw new IllegalArgumentException("Index (" + index
+                    + ") cannot be less than the start index (" + startIndex
+                    + ").");
+        if (index < reader.getStartIndex())
+            throw new IllegalArgumentException("Index (" + index
+                    + ") is less than the start index of the smp file ("
+                    + reader.getStartIndex() + ").");
+        if (index > reader.getEndIndex())
+            throw new IllegalArgumentException("Index (" + index
+                    + ") is greater than the end index of the smp file ("
+                    + reader.getEndIndex() + ").");
+
+        // Read pattern
         ByteMap patternMap = (ByteMap) reader.readMap(index);
         reader.close();
 
@@ -183,9 +203,29 @@ public class PatternSmpLoader extends PatternOp {
 
 
     @Override
-    public String toString() {
-        return "Pattern Smp Loader [index=" + index + ", filedir=" + filedir
-                + ", filename=" + filename + "]";
+    public PatternOp split(int startIndex, int endIndex) {
+        if (startIndex < this.startIndex)
+            throw new IllegalArgumentException("Specified start index ("
+                    + startIndex + ") is less than the index of the"
+                    + " first pattern in this operation (" + this.startIndex
+                    + ").");
+
+        int size = endIndex - startIndex + 1;
+
+        if (size > this.size)
+            throw new IllegalArgumentException("The split size (" + size
+                    + ") is greater than the size of this operation ("
+                    + this.size + ").");
+
+        return new PatternSmpLoader(startIndex, size, filedir, filename);
     }
 
+
+
+    @Override
+    public String toString() {
+        return "Pattern Smp Loader [startIndex=" + startIndex + ", size="
+                + size + ", filedir=" + filedir + ", filename=" + filename
+                + "]";
+    }
 }

@@ -72,8 +72,8 @@ public class Exp extends Run {
     /** <code>MultiMap</code> holding the result and metadata for the experiment. */
     public final EbsdMMap mmap;
 
-    /** List of pattern operations of the experiment. */
-    private ArrayList<PatternOp> patternOps = new ArrayList<PatternOp>();
+    /** Pattern operation of the experiment. */
+    private PatternOp patternOp = null;
 
     /** Runtime variable for the source pattern map. */
     protected ByteMap sourcePatternMap;
@@ -240,6 +240,10 @@ public class Exp extends Run {
         for (Operation op : ops)
             addOperation(op);
 
+        if (patternOp == null)
+            throw new IllegalArgumentException(
+                    "No pattern operation was initialized.");
+
         // Initialize runtime variables
         initRuntimeVariables();
     }
@@ -310,6 +314,10 @@ public class Exp extends Run {
         for (Operation op : ops)
             addOperation(op);
 
+        if (patternOp == null)
+            throw new IllegalArgumentException(
+                    "No pattern operation was initialized.");
+
         // Initialize runtime variables
         initRuntimeVariables();
     }
@@ -339,7 +347,7 @@ public class Exp extends Run {
         if (packageName.startsWith(PATTERN_CORE_PACKAGE)) {
             if (packageName.equals(FileUtil.joinPackageNames(
                     PATTERN_CORE_PACKAGE, "op")))
-                patternOps.add((PatternOp) op);
+                patternOp = (PatternOp) op;
             else if (packageName.equals(FileUtil.joinPackageNames(
                     PATTERN_CORE_PACKAGE, ".post")))
                 patternPostOps.add((PatternPostOps) op);
@@ -461,7 +469,7 @@ public class Exp extends Run {
     public ArrayList<Operation> getAllOperations() {
         ArrayList<Operation> ops = new ArrayList<Operation>();
 
-        ops.addAll(patternOps);
+        ops.add(patternOp);
         ops.addAll(patternPostOps);
         ops.addAll(patternResultsOps);
 
@@ -773,12 +781,12 @@ public class Exp extends Run {
 
 
     /**
-     * Returns the pattern operations of this experiment.
+     * Returns the pattern operation of this experiment.
      * 
-     * @return pattern operations
+     * @return pattern operation
      */
-    public PatternOp[] getPatternOps() {
-        return patternOps.toArray(new PatternOp[patternOps.size()]);
+    public PatternOp getPatternOp() {
+        return patternOp;
     }
 
 
@@ -856,24 +864,21 @@ public class Exp extends Run {
         for (Operation op : ops)
             op.setUp(this);
 
-        // Loop through all the pattern operations
-        int size = patternOps.size();
-        for (int i = 0; i < size; i++) {
+        int size = patternOp.size;
+        int startIndex = patternOp.startIndex;
+        for (int index = startIndex; index < size; index++) {
             // Increment progress
-            progress = (double) i / size;
+            progress = (double) (index - startIndex) / size;
 
             // Interrupt
             if (isInterrupted())
                 break;
 
-            // Current pattern operation
-            PatternOp patternOp = patternOps.get(i);
-
             // Set current index
-            currentIndex = patternOp.index;
+            currentIndex = index;
 
             // Run
-            runOnce(patternOp);
+            runOnce(patternOp, index);
         }
 
         // Flush ops
@@ -897,17 +902,18 @@ public class Exp extends Run {
      * 
      * @param patternOp
      *            current pattern operation
+     * @param index
+     *            index of the pattern to load from the pattern operation
      * @throws IOException
      *             if an error occurs during the run
      */
-    private void runOnce(PatternOp patternOp) throws IOException {
+    private void runOnce(PatternOp patternOp, int index) throws IOException {
         // Pattern Op
         setStatus("--- Pattern Operation ---");
 
-        setStatus("Performing " + patternOp.getName() + " (" + patternOp.index
-                + ")...");
+        setStatus("Performing " + patternOp.getName() + " (" + index + ")...");
 
-        sourcePatternMap = patternOp.load(this);
+        sourcePatternMap = patternOp.load(this, index);
         currentPatternMap = sourcePatternMap.duplicate();
 
         setStatus("Performing " + patternOp.getName() + "... DONE");

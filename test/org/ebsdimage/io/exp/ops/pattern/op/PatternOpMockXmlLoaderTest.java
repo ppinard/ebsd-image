@@ -14,17 +14,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.op;
 
 import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpMockXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_SIZE;
+import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_START_INDEX;
 import static org.junit.Assert.assertEquals;
 
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ops.pattern.op.PatternOpMock;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
-
 
 public class PatternOpMockXmlLoaderTest {
 
@@ -35,15 +36,20 @@ public class PatternOpMockXmlLoaderTest {
     @Before
     public void setUp() throws Exception {
         element = new Element(TAG_NAME);
+
+        element.setAttribute(ATTR_START_INDEX, Integer.toString(0));
+        element.setAttribute(ATTR_SIZE, Integer.toString(1));
     }
 
 
 
     @Test
     public void testLoad() {
-        Operation op = new PatternOpMockXmlLoader().load(element);
+        PatternOpMock op = new PatternOpMockXmlLoader().load(element);
 
         assertEquals(TAG_NAME, op.getName());
+        assertEquals(0, op.startIndex);
+        assertEquals(1, op.size);
     }
 
 }

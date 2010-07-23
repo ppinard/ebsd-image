@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.op;
 
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
@@ -23,16 +23,15 @@ import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
  * Tags for <code>PatternOp</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PatternOpXmlTags {
 
     /** XML tag name for <code>PatternOp</code>. */
     public static final String TAG_NAME = PatternOp.class.getSimpleName();
 
-    /** XML attribute for the pattern's index. */
-    public static final String ATTR_INDEX = "index";
+    /** XML attribute for the index of the first pattern. */
+    public static final String ATTR_START_INDEX = "startIndex";
 
-    /** XML attribute for whether the file path is relative. */
-    public static final String ATTR_IS_RELATIVE = "isRelative";
+    /** XML attribute for the size. */
+    public static final String ATTR_SIZE = "size";
 }

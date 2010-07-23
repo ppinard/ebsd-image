@@ -14,26 +14,22 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.op;
 
-import org.ebsdimage.core.exp.ops.pattern.op.PatternFileLoader;
+import org.ebsdimage.core.exp.ops.pattern.op.PatternFilesLoader;
 
 /**
- * Tags for <code>PatternFileLoader</code>'s XML <code>Element</code>.
+ * Tags for <code>PatternFilesLoader</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
-public class PatternFileLoaderXmlTags {
+public class PatternFilesLoaderXmlTags {
 
-    /** XML tag name for <code>PatternFileLoader</code>. */
+    /** XML tag name for <code>PatternFilesLoader</code>. */
     public static final String TAG_NAME =
-            PatternFileLoader.class.getSimpleName();
+            PatternFilesLoader.class.getSimpleName();
 
-    /** XML attribute for the directory to the pattern file. */
-    public static final String ATTR_FILEDIR = "filedir";
-
-    /** XML attribute for the name to the pattern file. */
-    public static final String ATTR_FILENAME = "filename";
+    /** XML tag for the file elements. */
+    public static final String TAG_FILE = "file";
 }

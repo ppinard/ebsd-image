@@ -14,13 +14,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.op;
 
 import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpMockXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_SIZE;
+import static org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags.ATTR_START_INDEX;
 
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOpMock;
-import org.ebsdimage.io.exp.ops.pattern.op.PatternOpXmlTags;
 import org.jdom.Element;
 
 import ptpshared.utility.xml.ObjectXml;
@@ -38,8 +39,8 @@ public class PatternOpMockXmlSaver implements ObjectXmlSaver {
     public Element save(PatternOpMock op) {
         Element element = new Element(TAG_NAME);
 
-        element.setAttribute(PatternOpXmlTags.ATTR_INDEX, Integer
-                .toString(op.index));
+        element.setAttribute(ATTR_START_INDEX, Integer.toString(op.startIndex));
+        element.setAttribute(ATTR_SIZE, Integer.toString(op.size));
 
         return element;
     }

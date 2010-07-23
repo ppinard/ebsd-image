@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp;
 
 import static org.junit.Assert.assertEquals;
@@ -24,7 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.ebsdimage.core.exp.ops.pattern.op.PatternFileLoader;
+import org.ebsdimage.core.exp.ops.pattern.op.PatternFilesLoader;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOpMock;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternSmpLoader;
 import org.ebsdimage.core.run.Operation;
@@ -50,17 +50,15 @@ public class ExpUtilTest {
 
 
     @Test
-    public void testCreatePatternOpsFromSmp() throws IOException {
+    public void testCreatePatternOpFromSmp() throws IOException {
         File smpFile = FileUtil.getFile("org/ebsdimage/testdata/Project19.smp");
 
-        PatternSmpLoader[] ops = ExpUtil.createPatternOpsFromSmp(smpFile);
+        PatternSmpLoader op = ExpUtil.createPatternOpFromSmp(smpFile);
 
-        assertEquals(4, ops.length);
-        for (int i = 0; i < ops.length; i++) {
-            assertEquals(i, ops[i].index);
-            assertEquals(smpFile.getName(), ops[i].filename);
-            assertEquals(smpFile.getParent(), ops[i].filedir);
-        }
+        assertEquals(0, op.startIndex);
+        assertEquals(4, op.size);
+        assertEquals(smpFile.getParent(), op.filedir);
+        assertEquals(smpFile.getName(), op.filename);
     }
 
 
@@ -69,9 +67,11 @@ public class ExpUtilTest {
     public void testCreatePatternOpsFromDir() {
         File dir = FileUtil.getFile("org/ebsdimage/testdata/Project19/");
 
-        PatternFileLoader[] ops = ExpUtil.createPatternOpsFromDir(dir);
+        PatternFilesLoader op = ExpUtil.createPatternOpFromDir(dir);
 
-        assertEquals(4, ops.length);
+        assertEquals(0, op.startIndex);
+        assertEquals(4, op.size);
+        assertEquals(4, op.getFiles().length);
     }
 
 
@@ -80,88 +80,77 @@ public class ExpUtilTest {
     public void testSplitExp() {
         // Operations
         ArrayList<Operation> ops = ExpTester.createOperations();
-        ops.add(new PatternOpMock(2));
-        ops.add(new PatternOpMock(3));
-        ops.add(new PatternOpMock(4));
-        ops.add(new PatternOpMock(5));
-        ops.add(new PatternOpMock(6));
-        ops.add(new PatternOpMock(7));
+        ops.add(new PatternOpMock(8));
 
         // Experiment
         Exp exp =
-                new Exp(4, 2, ExpTester.createMetadata(), ExpTester
-                        .createPhases(),
+                new Exp(4, 2, ExpTester.createMetadata(),
+                        ExpTester.createPhases(),
                         ops.toArray(new Operation[ops.size()]),
                         new CurrentMapsFileSaver());
-        assertEquals(8, exp.getPatternOps().length);
+        assertEquals(8, exp.getPatternOp().size);
 
         // Split = 1
         Exp[] exps = ExpUtil.splitExp(exp, 1);
         assertEquals(1, exps.length);
-        assertEquals(8, exps[0].getPatternOps().length);
+        assertEquals(8, exps[0].getPatternOp().size);
 
         // Split = 2
         exps = ExpUtil.splitExp(exp, 2);
         assertEquals(2, exps.length);
-        assertEquals(4, exps[0].getPatternOps().length);
-        assertEquals(4, exps[1].getPatternOps().length);
+        assertEquals(4, exps[0].getPatternOp().size);
+        assertEquals(4, exps[1].getPatternOp().size);
 
         // Split = 3
         exps = ExpUtil.splitExp(exp, 3);
         assertEquals(3, exps.length);
-        assertEquals(3, exps[0].getPatternOps().length);
-        assertEquals(3, exps[1].getPatternOps().length);
-        assertEquals(2, exps[2].getPatternOps().length);
+        assertEquals(3, exps[0].getPatternOp().size);
+        assertEquals(3, exps[1].getPatternOp().size);
+        assertEquals(2, exps[2].getPatternOp().size);
 
         // Split = 4
         exps = ExpUtil.splitExp(exp, 4);
         assertEquals(4, exps.length);
-        assertEquals(2, exps[0].getPatternOps().length);
-        assertEquals(2, exps[1].getPatternOps().length);
-        assertEquals(2, exps[2].getPatternOps().length);
-        assertEquals(2, exps[3].getPatternOps().length);
+        assertEquals(2, exps[0].getPatternOp().size);
+        assertEquals(2, exps[1].getPatternOp().size);
+        assertEquals(2, exps[2].getPatternOp().size);
+        assertEquals(2, exps[3].getPatternOp().size);
 
         // Split = 5
         exps = ExpUtil.splitExp(exp, 5);
-        assertEquals(5, exps.length);
-        assertEquals(2, exps[0].getPatternOps().length);
-        assertEquals(2, exps[1].getPatternOps().length);
-        assertEquals(2, exps[2].getPatternOps().length);
-        assertEquals(2, exps[3].getPatternOps().length);
-        assertEquals(0, exps[4].getPatternOps().length);
+        assertEquals(4, exps.length);
+        assertEquals(2, exps[0].getPatternOp().size);
+        assertEquals(2, exps[1].getPatternOp().size);
+        assertEquals(2, exps[2].getPatternOp().size);
+        assertEquals(2, exps[3].getPatternOp().size);
 
         // Split = 6
         exps = ExpUtil.splitExp(exp, 6);
-        assertEquals(6, exps.length);
-        assertEquals(2, exps[0].getPatternOps().length);
-        assertEquals(2, exps[1].getPatternOps().length);
-        assertEquals(2, exps[2].getPatternOps().length);
-        assertEquals(2, exps[3].getPatternOps().length);
-        assertEquals(0, exps[4].getPatternOps().length);
-        assertEquals(0, exps[5].getPatternOps().length);
+        assertEquals(4, exps.length);
+        assertEquals(2, exps[0].getPatternOp().size);
+        assertEquals(2, exps[1].getPatternOp().size);
+        assertEquals(2, exps[2].getPatternOp().size);
+        assertEquals(2, exps[3].getPatternOp().size);
 
         // Split = 7
         exps = ExpUtil.splitExp(exp, 7);
-        assertEquals(7, exps.length);
-        assertEquals(2, exps[0].getPatternOps().length);
-        assertEquals(2, exps[1].getPatternOps().length);
-        assertEquals(2, exps[2].getPatternOps().length);
-        assertEquals(2, exps[3].getPatternOps().length);
-        assertEquals(0, exps[4].getPatternOps().length);
-        assertEquals(0, exps[5].getPatternOps().length);
-        assertEquals(0, exps[6].getPatternOps().length);
+        assertEquals(4, exps.length);
+        assertEquals(2, exps[0].getPatternOp().size);
+        assertEquals(2, exps[1].getPatternOp().size);
+        assertEquals(2, exps[2].getPatternOp().size);
+        assertEquals(2, exps[3].getPatternOp().size);
 
         // Split = 8
         exps = ExpUtil.splitExp(exp, 8);
         assertEquals(8, exps.length);
-        assertEquals(1, exps[0].getPatternOps().length);
-        assertEquals(1, exps[1].getPatternOps().length);
-        assertEquals(1, exps[2].getPatternOps().length);
-        assertEquals(1, exps[3].getPatternOps().length);
-        assertEquals(1, exps[4].getPatternOps().length);
-        assertEquals(1, exps[5].getPatternOps().length);
-        assertEquals(1, exps[6].getPatternOps().length);
-        assertEquals(1, exps[7].getPatternOps().length);
+        assertEquals(1, exps[0].getPatternOp().size);
+        assertEquals(1, exps[1].getPatternOp().size);
+        assertEquals(1, exps[2].getPatternOp().size);
+        assertEquals(1, exps[3].getPatternOp().size);
+        assertEquals(1, exps[4].getPatternOp().size);
+        assertEquals(1, exps[5].getPatternOp().size);
+        assertEquals(1, exps[6].getPatternOp().size);
+        assertEquals(1, exps[7].getPatternOp().size);
     }
 
 
@@ -173,11 +162,11 @@ public class ExpUtilTest {
 
         // Experiment
         Exp exp =
-                new Exp(4, 2, ExpTester.createMetadata(), ExpTester
-                        .createPhases(),
+                new Exp(4, 2, ExpTester.createMetadata(),
+                        ExpTester.createPhases(),
                         ops.toArray(new Operation[ops.size()]),
                         new CurrentMapsFileSaver());
-        assertEquals(2, exp.getPatternOps().length);
+        assertEquals(2, exp.getPatternOp().size);
 
         ExpUtil.splitExp(exp, 3);
     }
