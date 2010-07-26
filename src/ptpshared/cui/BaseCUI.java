@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.cui;
 
 import java.util.logging.Logger;
@@ -29,9 +29,7 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
 /**
  * Abstract class to create a command line interface.
  * 
- * 
  * @author Philippe T. Pinard
- * 
  */
 public abstract class BaseCUI {
 
@@ -69,13 +67,7 @@ public abstract class BaseCUI {
     /**
      * Prints the help of the program.
      */
-    protected void printHelp() {
-        HelpFormatter formatter = new HelpFormatter();
-
-        String header = "ExpRun -- Load, run and save an experiment";
-        formatter.printHelp("ExpRun [options] <xmlFile>", header, getOptions(),
-                "");
-    }
+    protected abstract void printHelp();
 
 
 

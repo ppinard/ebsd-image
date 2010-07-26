@@ -113,7 +113,7 @@ public abstract class PatternOp extends Operation {
 
 
     /**
-     * Split the current <code>PattenrOp</code> in a smaller
+     * Extracts the current <code>PattenrOp</code> in a smaller
      * <code>PattenrOp</code> containing less patterns.
      * 
      * @param startIndex
@@ -122,6 +122,6 @@ public abstract class PatternOp extends Operation {
      *            index of the last pattern in the split
      * @return reduced <code>PattenrOp</code>
      */
-    public abstract PatternOp split(int startIndex, int endIndex);
+    public abstract PatternOp extract(int startIndex, int endIndex);
 
 }

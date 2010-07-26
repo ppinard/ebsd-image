@@ -176,12 +176,12 @@ public class ExpSplit extends BaseCUI {
 
                 // Start and end index
                 int startIndex = op.startIndex;
-                int endIndex = op.size - 1;
+                int endIndex = op.startIndex + op.size - 1;
 
                 // Source smp file
                 File srcSmpFile;
                 try {
-                    srcSmpFile = op.getFile(splitExp);
+                    srcSmpFile = op.getFile(dir);
                 } catch (IOException ex) {
                     ErrorDialog.show("Cannot find file (" + op.filename
                             + ") in the specified "

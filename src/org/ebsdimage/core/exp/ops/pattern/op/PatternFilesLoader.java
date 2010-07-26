@@ -195,7 +195,7 @@ public class PatternFilesLoader extends PatternOp {
 
 
     @Override
-    public PatternOp split(int startIndex, int endIndex) {
+    public PatternOp extract(int startIndex, int endIndex) {
         if (startIndex < this.startIndex)
             throw new IllegalArgumentException("Specified start index ("
                     + startIndex + ") is less than the index of the"

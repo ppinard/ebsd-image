@@ -130,17 +130,17 @@ public class PatternSmpLoader extends PatternOp {
      * directory of the experiment. Returns the file or throws an
      * <code>IOException</code> if the file cannot be found.
      * 
-     * @param exp
-     *            an experiment
+     * @param dir
+     *            other directory to look for the smp file
      * @return file for the smp
      * @throws IOException
      *             if the smp file cannot be found
      */
-    public File getFile(Exp exp) throws IOException {
+    public File getFile(File dir) throws IOException {
         File file = new File(filedir, filename);
 
         if (!file.exists()) {
-            file = new File(exp.getDir(), filename);
+            file = new File(dir, filename);
 
             if (!file.exists())
                 throw new IOException("Cannot find file (" + filename
@@ -176,7 +176,7 @@ public class PatternSmpLoader extends PatternOp {
      */
     @Override
     public ByteMap load(Exp exp, int index) throws IOException {
-        File file = getFile(exp);
+        File file = getFile(exp.getDir());
         SmpInputStream reader = new SmpInputStream(file);
 
         // Assert index
@@ -203,7 +203,7 @@ public class PatternSmpLoader extends PatternOp {
 
 
     @Override
-    public PatternOp split(int startIndex, int endIndex) {
+    public PatternOp extract(int startIndex, int endIndex) {
         if (startIndex < this.startIndex)
             throw new IllegalArgumentException("Specified start index ("
                     + startIndex + ") is less than the index of the"

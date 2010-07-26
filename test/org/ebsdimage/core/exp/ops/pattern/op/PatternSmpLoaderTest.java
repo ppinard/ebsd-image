@@ -24,6 +24,8 @@ import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.TestCase;
+import org.ebsdimage.core.exp.Exp;
+import org.ebsdimage.core.exp.ExpTester;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,6 +38,8 @@ public class PatternSmpLoaderTest extends TestCase {
 
     private File filepath;
 
+    private Exp exp;
+
 
 
     @Before
@@ -44,6 +48,8 @@ public class PatternSmpLoaderTest extends TestCase {
         if (filepath == null)
             throw new IOException(
                     "File \"org/ebsdimage/testdata/Project19.smp\" not found.");
+
+        exp = ExpTester.createExp();
 
         loader = new PatternSmpLoader(2, 4, filepath);
     }
@@ -61,7 +67,7 @@ public class PatternSmpLoaderTest extends TestCase {
 
     @Test
     public void testLoad() throws IOException {
-        ByteMap patternMap = loader.load(null, 2);
+        ByteMap patternMap = loader.load(exp, 2);
 
         ByteMap expected =
                 (ByteMap) load("org/ebsdimage/testdata/Project19/Project193.jpg");

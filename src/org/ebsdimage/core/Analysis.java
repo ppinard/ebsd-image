@@ -21,6 +21,7 @@ import static java.lang.Math.PI;
 import static org.ebsdimage.core.HoughMap.DELTA_R;
 import static org.ebsdimage.core.HoughMap.DELTA_THETA;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import rmlimage.core.IdentMap;
@@ -131,11 +132,24 @@ public class Analysis {
             }
         }
 
-        HoughPoint points = new HoughPoint(nbObjects);
+        // Calculate rhos and thetas
+        ArrayList<Float> rhos = new ArrayList<Float>();
+        ArrayList<Float> thetas = new ArrayList<Float>();
 
         for (n = 0; n < nbObjects; n++) {
-            points.rho[n] = (float) (massRho[n + 1] / area[n + 1]);
-            points.theta[n] = (float) (massTheta[n + 1] / area[n + 1]);
+            if (area[n + 1] == 0.0)
+                continue;
+
+            rhos.add((float) (massRho[n + 1] / area[n + 1]));
+            thetas.add((float) (massTheta[n + 1] / area[n + 1]));
+        }
+
+        // Create Hough points
+        HoughPoint points = new HoughPoint(nbObjects);
+
+        for (n = 0; n < rhos.size(); n++) {
+            points.rho[n] = rhos.get(n);
+            points.theta[n] = thetas.get(n);
         }
 
         return points;

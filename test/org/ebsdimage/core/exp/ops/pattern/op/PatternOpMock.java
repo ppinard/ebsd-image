@@ -52,7 +52,7 @@ public class PatternOpMock extends PatternOp {
 
 
     @Override
-    public PatternOp split(int startIndex, int endIndex) {
+    public PatternOp extract(int startIndex, int endIndex) {
         return new PatternOpMock(endIndex - startIndex + 1);
     }
 

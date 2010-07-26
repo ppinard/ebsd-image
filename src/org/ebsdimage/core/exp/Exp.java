@@ -866,7 +866,7 @@ public class Exp extends Run {
 
         int size = patternOp.size;
         int startIndex = patternOp.startIndex;
-        for (int index = startIndex; index < size; index++) {
+        for (int index = startIndex; index < startIndex + size; index++) {
             // Increment progress
             progress = (double) (index - startIndex) / size;
 

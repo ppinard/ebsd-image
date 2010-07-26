@@ -101,14 +101,14 @@ public class Difference extends DetectionResultsOps {
         // ========= Calculate results ===========
 
         OpResult average =
-                new OpResult("Area Average", average(diff), RealMap.class);
+                new OpResult("Difference Average", average(diff), RealMap.class);
         OpResult stddev =
-                new OpResult("Area Standard Deviation",
+                new OpResult("Difference Standard Deviation",
                         standardDeviation(diff), RealMap.class);
         OpResult min =
-                new OpResult("Area Min", (byte) min(diff), ByteMap.class);
+                new OpResult("Difference Min", (byte) min(diff), ByteMap.class);
         OpResult max =
-                new OpResult("Area Max", (byte) max(diff), ByteMap.class);
+                new OpResult("Difference Max", (byte) max(diff), ByteMap.class);
 
         return new OpResult[] { average, stddev, min, max };
     }

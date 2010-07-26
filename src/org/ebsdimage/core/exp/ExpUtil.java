@@ -181,7 +181,7 @@ public class ExpUtil {
                 continue;
 
             // Pattern operation for this split
-            patternOp = exp.getPatternOp().split(startIndex, endIndex);
+            patternOp = exp.getPatternOp().extract(startIndex, endIndex);
 
             // Combine pattern operations and other operations
             ops.clear();
