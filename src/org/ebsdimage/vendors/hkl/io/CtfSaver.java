@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.hkl.io;
 
 import static java.lang.Math.toDegrees;
@@ -38,7 +38,6 @@ import crystallography.core.UnitCell;
  * Export a <code>HklMMap</code> back to a ctf file.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class CtfSaver implements Saver {
 
@@ -116,16 +115,33 @@ public class CtfSaver implements Saver {
      * @return a line
      */
     private String createDataLine(HklMMap mmap, int index) {
-        int phase = (mmap.getPhasesMap().pixArray[index] & 0xff);
+        // Position
         double x = (index % mmap.width) * mmap.pixelWidth * 1e6;
         double y = (index / mmap.width) * mmap.pixelHeight * 1e6;
-        int bands = (mmap.getBandCountMap().pixArray[index] & 0xff);
-        int error = (mmap.getErrorMap().pixArray[index] & 0xff);
-        double[] e = mmap.getRotation(index).toEuler().positive();
+
+        // Phase
+        int phase = (mmap.getPhasesMap().pixArray[index] & 0xff);
+
+        double[] e;
+        double mad;
+        int error;
+        if (phase > 0) {
+            e = mmap.getRotation(index).toEuler().positive();
+            mad = mmap.getMeanAngularDeviationMap().pixArray[index];
+            error = (mmap.getErrorMap().pixArray[index] & 0xff);
+        } else {
+            e = new double[] { 0.0, 0.0, 0.0 };
+            mad = 0.0;
+            error = 6;
+        }
+
         double e1 = toDegrees(e[0]);
         double e2 = toDegrees(e[1]);
         double e3 = toDegrees(e[2]);
-        double mad = mmap.getMeanAngularDeviationMap().pixArray[index];
+
+        // Quality metrics
+        int bands = (mmap.getBandCountMap().pixArray[index] & 0xff);
+
         int bc = (mmap.getBandContrastMap().pixArray[index] & 0xff);
         int bs = (mmap.getBandSlopeMap().pixArray[index] & 0xff);
 

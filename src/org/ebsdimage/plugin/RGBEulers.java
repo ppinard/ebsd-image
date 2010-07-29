@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.plugin;
 
 import org.ebsdimage.core.Conversion;
@@ -33,7 +33,6 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
  * Plug-in to convert the Euler maps into a RGB Eulers map.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class RGBEulers extends PlugIn {
 
@@ -41,7 +40,6 @@ public class RGBEulers extends PlugIn {
      * Dialog to select an EBSD multimap from those loaded in the GUI.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class Dialog extends BasicDialog {
 

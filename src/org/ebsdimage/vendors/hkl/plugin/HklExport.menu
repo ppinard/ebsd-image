@@ -1,0 +1,5 @@
+menu=PlugIns/EBSD/Export to HKL
+#icon=org/ebsdimage/vendors/hkl/plugin/HklExport.png
+tooltip=Export multimap to HKL ctf file
+plugin=org.ebsdimage.vendors.hkl.plugin.HklExport
+workerthread=true
