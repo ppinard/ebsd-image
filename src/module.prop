@@ -17,6 +17,7 @@ menu=org/ebsdimage/plugin/Exp.menu
 menu=org/ebsdimage/plugin/RGBEulers.menu
 menu=org/ebsdimage/plugin/MicronBar.menu
 menu=org/ebsdimage/plugin/SmpCreation.menu
+menu=org/ebsdimage/plugin/SmpViewer.menu
 
 menu=org/ebsdimage/vendors/hkl/plugin/HklImport.menu
 menu=org/ebsdimage/vendors/hkl/plugin/HklExport.menu

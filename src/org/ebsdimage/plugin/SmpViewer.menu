@@ -1,0 +1,5 @@
+menu=PlugIns/EBSD/Smp Viewer
+#icon=org/ebsdimage/plugin/RGBEulers_(24x24).png
+tooltip=View a pattern from an smp
+plugin=org.ebsdimage.plugin.SmpViewer
+workerthread=false
