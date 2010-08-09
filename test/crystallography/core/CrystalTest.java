@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import static org.junit.Assert.assertEquals;
@@ -27,9 +27,13 @@ import org.junit.Test;
 public class CrystalTest {
 
     private String name;
+
     private Crystal crystal;
+
     private UnitCell unitCell;
+
     private AtomSites atomSites;
+
     private PointGroup pointGroup;
 
 
@@ -148,7 +152,7 @@ public class CrystalTest {
 
     @Test
     public void testToString() {
-        assertEquals("Crystal [name=silicon]", crystal.toString());
+        assertEquals("silicon", crystal.toString());
     }
 
 

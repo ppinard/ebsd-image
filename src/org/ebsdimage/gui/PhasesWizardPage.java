@@ -31,11 +31,11 @@ import javax.swing.JScrollPane;
 import net.miginfocom.swing.MigLayout;
 import ptpshared.gui.GuiUtil;
 import ptpshared.gui.WizardPage;
-import rmlshared.enums.YesNo;
 import rmlshared.gui.*;
 import rmlshared.io.FileUtil;
 import rmlshared.thread.PlugIn;
 import crystallography.core.Crystal;
+import crystallography.io.CifLoader;
 import crystallography.io.CrystalSaver;
 import crystallography.io.CrystalUtil;
 
@@ -43,7 +43,6 @@ import crystallography.io.CrystalUtil;
  * Wizard page to setup the phases.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PhasesWizardPage extends WizardPage {
 
@@ -51,7 +50,6 @@ public class PhasesWizardPage extends WizardPage {
      * Action to add a phase.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class Add extends PlugIn {
         @Override
@@ -69,20 +67,16 @@ public class PhasesWizardPage extends WizardPage {
 
     }
 
-
-
     /**
      * Action to add all phases.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class AddAll extends PlugIn {
         @Override
         protected void xRun() {
             Object[] items =
-                    ((DefaultListModel) existingPhasesList.getModel())
-                            .toArray();
+                    ((DefaultListModel) existingPhasesList.getModel()).toArray();
 
             DefaultListModel model =
                     (DefaultListModel) currentPhasesList.getModel();
@@ -93,13 +87,26 @@ public class PhasesWizardPage extends WizardPage {
 
     }
 
+    /**
+     * Removes all phases from the current list.
+     * 
+     * @author Philippe T. Pinard
+     */
+    private class Clear extends PlugIn {
+        @Override
+        protected void xRun() {
+            DefaultListModel model =
+                    (DefaultListModel) currentPhasesList.getModel();
 
+            for (Object obj : model.toArray())
+                model.removeElement(obj);
+        }
+    }
 
     /**
      * Action to move a phase down one level.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class Down extends PlugIn {
         @Override
@@ -122,18 +129,35 @@ public class PhasesWizardPage extends WizardPage {
 
     }
 
-
-
     /**
      * Action to edit a new phase.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class Edit extends New {
+        @Override
+        protected void save(Crystal crystal) {
+            File crystalFile = new File(phasesDirField.getFile(), crystal.name);
+            crystalFile = FileUtil.setExtension(crystalFile, "xml");
+
+            try {
+                new CrystalSaver().save(crystal, crystalFile);
+            } catch (IOException e) {
+                ErrorDialog.show("This error occured while saving the XML file for the phase: "
+                        + e.getMessage());
+                return;
+            }
+
+            refresh();
+        }
+
+
 
         @Override
         protected void xRun() {
+            if (!checkPhaseDir())
+                return;
+
             // Get the selected crystal
             Crystal crystal = (Crystal) existingPhasesList.getSelectedValue();
             if (crystal == null)
@@ -146,151 +170,176 @@ public class PhasesWizardPage extends WizardPage {
             Crystal newCrystal = dialog.getCrystal();
 
             // Save crystal
-            YesNo answer =
-                    YesNoDialog.show("Do you want to save the modifications?",
-                            YesNo.YES);
-            if (answer == YesNo.YES) {
-                File file = new File(phasesDirField.getFile(), crystal.name);
-                file = FileUtil.setExtension(file, "xml");
-
-                save(newCrystal, file);
-                refresh();
-            } else {
-                // Remove selected crystal
-                DefaultListModel model =
-                        (DefaultListModel) existingPhasesList.getModel();
-                model.removeElementAt(existingPhasesList.getSelectedIndex());
-
-                // Add new crystal to the existing list
-                model.addElement(newCrystal);
-            }
+            save(newCrystal);
         }
 
     }
 
+    /**
+     * Action to import a phase from a cif file.
+     * 
+     * @author Philippe T. Pinard
+     */
+    private class Import extends New {
+        @Override
+        protected void xRun() {
+            if (!checkPhaseDir())
+                return;
 
+            // Get cif file
+            FileDialog.setFilter(FileDialog.addFilter("*.cif"));
+            FileDialog.setMultipleSelection(false);
+            FileDialog.setTitle("Select cif file");
+            FileDialog.setFileSelectionMode(FileDialog.FILES_ONLY);
+
+            if (FileDialog.showOpenDialog() == FileDialog.CANCEL)
+                return;
+
+            File file = FileDialog.getSelectedFile();
+
+            // Load cif
+            Crystal crystal;
+            try {
+                crystal = new CifLoader().load(file);
+            } catch (IOException e) {
+                ErrorDialog.show(e.getMessage());
+                return;
+            }
+
+            // Open new phase dialog to check crystal
+            NewPhaseDialog dialog = new NewPhaseDialog(crystal);
+
+            if (dialog.show() == NewPhaseDialog.CANCEL)
+                return;
+
+            crystal = dialog.getCrystal();
+
+            // Save crystal
+            save(crystal);
+        }
+
+    }
 
     /**
      * Action to create a new phase.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class New extends PlugIn {
+
         /**
-         * Saves the specified crystal with the specify file.
+         * Checks if the crystal file already exists in the phases' directory.
          * 
-         * @param crystal
-         *            crystal to save
-         * @param file
-         *            location where to save the crystal
+         * @param crystalFile
+         *            crystal file to be saved
+         * @return <code>true</code> if the crystal file can be saved,
+         *         <code>false</code> if it cannot be saved (i.e. the phases'
+         *         directory already contains a file with the same name
          */
-        protected void save(Crystal crystal, File file) {
-            if (phasesDirField.getFileBFR() != null) {
-                saveAskReplace(crystal, file);
-            } else {
-                saveNewLocation(crystal);
-            }
+        protected boolean checkPhaseAlreadyExists(File crystalFile) {
+            if (crystalFile.exists()) {
+                ErrorDialog.show("The file ("
+                        + crystalFile.getAbsolutePath()
+                        + ") already exists. Please choose a different name for the crystal.");
+                return false;
+            } else
+                return true;
         }
 
 
 
         /**
-         * Saves the crystal even if a file already exists.
+         * Checks if the phases' directory is specified.
          * 
-         * @param crystal
-         *            crystal to save
-         * @param file
-         *            location where to save the crystal
+         * @return <code>true</code> if it is specified, <code>false</code>
+         *         otherwise
          */
-        protected void saveAndReplace(Crystal crystal, File file) {
-            try {
-                new CrystalSaver().save(crystal, file);
-            } catch (IOException e) {
-                ErrorDialog.show("Cannot save crystal, because: "
-                        + e.getMessage());
-            }
+        protected boolean checkPhaseDir() {
+            if (phasesDirField.getFile() == null) {
+                ErrorDialog.show("Please select a phases' directory.");
+                return false;
+            } else
+                return true;
         }
 
 
 
         /**
-         * Saves crystal. Checks if the specified file already exists and asks
-         * the user whether to replace it or specify a new location.
+         * Run the plugin:
+         * <ul>
+         * <li>Check if the phases' directory is defined</li>
+         * <li>Display the new phase dialog</li>
+         * <li>Saves the crystal.</li>
+         * </ul>
+         * If a crystal is specified the phase dialog fields are filled with the
+         * values of the crystal
          * 
          * @param crystal
-         *            crystal to save
-         * @param file
-         *            location where to save the crystal
+         *            crystal to be displayed in the phase dialog. Can be null
          */
-        protected void saveAskReplace(Crystal crystal, File file) {
-            if (file.exists()) {
-                if (YesNoDialog.show("File (" + file.toString()
-                        + ") already exists. "
-                        + "Do you want to replace the file?", YesNo.YES) == YesNo.YES)
-                    saveAndReplace(crystal, file);
-                else
-                    saveNewLocation(crystal);
-            } else {
-                saveAndReplace(crystal, file);
-            }
-        }
-
-
-
-        /**
-         * Asks the user for a new location where to save the crystal and calls @
-         * #saveAndReplace(Crystal, File)} to save the crystal.
-         * 
-         * @param crystal
-         *            crystal to save
-         */
-        protected void saveNewLocation(Crystal crystal) {
-            FileDialog.setFileSelectionMode(FileDialog.DIRECTORIES_ONLY);
-
-            if (FileDialog.showSaveDialog("Phases directory") == FileDialog.CANCEL)
+        protected void run(Crystal crystal) {
+            if (!checkPhaseDir())
                 return;
 
-            File dir = FileDialog.getSelectedFile();
-            saveAndReplace(crystal, new File(dir, crystal.name));
+            // Create crystal
+            NewPhaseDialog dialog;
+            if (crystal == null)
+                dialog = new NewPhaseDialog();
+            else
+                dialog = new NewPhaseDialog(crystal);
+
+            if (dialog.show() == NewPhaseDialog.CANCEL)
+                return;
+
+            crystal = dialog.getCrystal();
+
+            // Save crystal
+            save(crystal);
+        }
+
+
+
+        /**
+         * Saves the crystal in the phases' directory. The method makes sure
+         * that the crystal file doesn't already exists. If so, the phase dialog
+         * is displayed again to allow the user to change the name of the
+         * crystal.
+         * 
+         * @param crystal
+         *            crystal to save
+         */
+        protected void save(Crystal crystal) {
+            File crystalFile = new File(phasesDirField.getFile(), crystal.name);
+            crystalFile = FileUtil.setExtension(crystalFile, "xml");
+
+            if (!checkPhaseAlreadyExists(crystalFile)) {
+                run(crystal);
+                return;
+            }
+
+            try {
+                new CrystalSaver().save(crystal, crystalFile);
+            } catch (IOException e) {
+                ErrorDialog.show("This error occured while saving the XML file for the phase: "
+                        + e.getMessage());
+                return;
+            }
+
+            refresh();
         }
 
 
 
         @Override
         protected void xRun() {
-            NewPhaseDialog dialog = new NewPhaseDialog();
-            if (dialog.show() == NewPhaseDialog.CANCEL)
-                return;
-
-            Crystal crystal = dialog.getCrystal();
-
-            // Save crystal
-            YesNo answer =
-                    YesNoDialog.show("Do you want to save the new crystal?",
-                            YesNo.YES);
-            if (answer == YesNo.YES) {
-                File file = new File(phasesDirField.getFile(), crystal.name);
-                file = FileUtil.setExtension(file, "xml");
-
-                save(crystal, file);
-                refresh();
-            } else {
-                // Add it to the user list
-                DefaultListModel model =
-                        (DefaultListModel) existingPhasesList.getModel();
-                model.addElement(crystal);
-            }
+            run(null);
         }
     }
-
-
 
     /**
      * Listener to change the existing phases based on the phases directory.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class PhasesDirListener implements MouseListener {
 
@@ -325,13 +374,10 @@ public class PhasesWizardPage extends WizardPage {
 
     }
 
-
-
     /**
      * Action to remove a phase.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class Remove extends PlugIn {
         @Override
@@ -348,32 +394,10 @@ public class PhasesWizardPage extends WizardPage {
         }
     }
 
-
-
-    /**
-     * Removes all phases from the current list.
-     * 
-     * @author Philippe T. Pinard
-     * 
-     */
-    private class Clear extends PlugIn {
-        @Override
-        protected void xRun() {
-            DefaultListModel model =
-                    (DefaultListModel) currentPhasesList.getModel();
-
-            for (Object obj : model.toArray())
-                model.removeElement(obj);
-        }
-    }
-
-
-
     /**
      * Action to move a phase up one level.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class Up extends PlugIn {
         @Override
@@ -394,42 +418,44 @@ public class PhasesWizardPage extends WizardPage {
         }
     }
 
-
+    /** Icon for the add all button. */
+    private static final ImageIcon ADD_ALL_ICON =
+            GuiUtil.loadIcon("ptpshared/data/icon/list-add-all_(22x22).png");
 
     /** Icon for the add button. */
     private static final ImageIcon ADD_ICON =
             GuiUtil.loadIcon("ptpshared/data/icon/list-add_(22x22).png");
 
-    /** Icon for the add all button. */
-    private static final ImageIcon ADD_ALL_ICON =
-            GuiUtil.loadIcon("ptpshared/data/icon/list-add-all_(22x22).png");
-
-    /** Icon for the remove button. */
-    private static final ImageIcon REMOVE_ICON =
-            GuiUtil.loadIcon("ptpshared/data/icon/list-remove_(22x22).png");
-
     /** Icon for the clear button. */
     private static final ImageIcon CLEAR_ICON =
             GuiUtil.loadIcon("ptpshared/data/icon/list-clear_(22x22).png");
-
-    /** Icon for the up button. */
-    private static final ImageIcon UP_ICON =
-            GuiUtil.loadIcon("ptpshared/data/icon/go-up_(22x22).png");
 
     /** Icon for the down button. */
     private static final ImageIcon DOWN_ICON =
             GuiUtil.loadIcon("ptpshared/data/icon/go-down_(22x22).png");
 
-    /** Icon for the new button. */
-    private static final ImageIcon NEW_ICON =
-            GuiUtil.loadIcon("ptpshared/data/icon/document-new_(22x22).png");
-
     /** Icon for the edit button. */
     private static final ImageIcon EDIT_ICON =
             GuiUtil.loadIcon("ptpshared/data/icon/document-edit_(22x22).png");
 
+    /** Icon for the import button. */
+    private static final ImageIcon IMPORT_ICON =
+            GuiUtil.loadIcon("ptpshared/data/icon/import-generic_(22x22).png");
+
     /** Map key for the phases. */
     public static final String KEY_PHASES = "phases";
+
+    /** Icon for the new button. */
+    private static final ImageIcon NEW_ICON =
+            GuiUtil.loadIcon("ptpshared/data/icon/document-new_(22x22).png");
+
+    /** Icon for the remove button. */
+    private static final ImageIcon REMOVE_ICON =
+            GuiUtil.loadIcon("ptpshared/data/icon/list-remove_(22x22).png");
+
+    /** Icon for the up button. */
+    private static final ImageIcon UP_ICON =
+            GuiUtil.loadIcon("ptpshared/data/icon/go-up_(22x22).png");
 
 
 
@@ -442,43 +468,44 @@ public class PhasesWizardPage extends WizardPage {
         return "Phases";
     }
 
-
-
-    /** Field for the directory containing the phases definition. */
-    private FileNameField phasesDirField;
-
-    /** Current list of phases. */
-    private JList currentPhasesList;
-
-    /** Button to move up one level a phase in the current list. */
-    private Button upButton;
-
-    /** Button to move down one level a phase in the current list. */
-    private Button downButton;
-
-    /** Button to remove a phase from the current list. */
-    private Button removeButton;
-
-    /** Button to remove all phases from the current list. */
-    private Button clearButton;
-
-    /** Existing list of phases. */
-    private JList existingPhasesList;
+    /** Button to add all phases from the existing list to the current list. */
+    private Button addAllButton;
 
     /** Button to add a phase from the existing list to the current list. */
     private Button addButton;
 
-    /** Button to add all phases from the existing list to the current list. */
-    private Button addAllButton;
+    /** Button to remove all phases from the current list. */
+    private Button clearButton;
 
-    /** Button to create a new phase. */
-    private Button newButton;
+    /** Current list of phases. */
+    private JList currentPhasesList;
+
+    /** Button to move down one level a phase in the current list. */
+    private Button downButton;
 
     /** Button to edit a phase. */
     private Button editButton;
 
+    /** Existing list of phases. */
+    private JList existingPhasesList;
+
+    /** Button to import a phase from a cif file. */
+    private Button importButton;
+
     /** Minimum number of phases that needs to be defined. */
     private int minimumPhasesCount = 0;
+
+    /** Button to create a new phase. */
+    private Button newButton;
+
+    /** Field for the directory containing the phases definition. */
+    private FileNameField phasesDirField;
+
+    /** Button to remove a phase from the current list. */
+    private Button removeButton;
+
+    /** Button to move up one level a phase in the current list. */
+    private Button upButton;
 
 
 
@@ -539,7 +566,7 @@ public class PhasesWizardPage extends WizardPage {
         addButton = new Button(ADD_ICON);
         addButton.setToolTipText("Add selected phase to current list");
         addButton.setPlugIn(new Add());
-        phasesSelectionPanel.add(addButton, "skip, split 4, align right");
+        phasesSelectionPanel.add(addButton, "skip, split 5, align right");
 
         addAllButton = new Button(ADD_ALL_ICON);
         addAllButton.setToolTipText("Add all existing phases to current list");
@@ -554,7 +581,12 @@ public class PhasesWizardPage extends WizardPage {
         editButton = new Button(EDIT_ICON);
         editButton.setToolTipText("Edit selected phase");
         editButton.setPlugIn(new Edit());
-        phasesSelectionPanel.add(editButton, "wrap");
+        phasesSelectionPanel.add(editButton);
+
+        importButton = new Button(IMPORT_ICON);
+        importButton.setToolTipText("Import a phase from a cif file");
+        importButton.setPlugIn(new Import());
+        phasesSelectionPanel.add(importButton, "wrap");
 
         add(phasesDirectoryPanel);
         add(phasesSelectionPanel);

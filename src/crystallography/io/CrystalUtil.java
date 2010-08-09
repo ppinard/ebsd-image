@@ -14,11 +14,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.io;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
@@ -27,7 +28,6 @@ import crystallography.core.Crystal;
  * Utilities related to <code>Crystal</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class CrystalUtil {
 
@@ -36,7 +36,6 @@ public class CrystalUtil {
      * 
      * @param dir
      *            directory to search for crystals
-     * 
      * @return list of crystals
      */
     public static Crystal[] listCrystals(File dir) {
@@ -46,6 +45,7 @@ public class CrystalUtil {
         ArrayList<Crystal> crystals = new ArrayList<Crystal>();
 
         File[] crystalFiles = FileUtil.listFilesOnly(dir, "*.xml");
+        Arrays.sort(crystalFiles);
 
         CrystalLoader loader = new CrystalLoader();
         for (File crystalFile : crystalFiles) {

@@ -46,10 +46,9 @@ import rmlshared.gui.FileNameField;
  */
 public class StartWizardPage extends WizardPage {
 
-    @SuppressWarnings("unchecked")
     @Override
-    public WizardPanelNavResult allowNext(String stepName, Map settings,
-            Wizard wizard) {
+    public WizardPanelNavResult allowNext(String stepName,
+            @SuppressWarnings("rawtypes") Map settings, Wizard wizard) {
 
         put(AcqMetadataWizardPage.KEY_LOADED, 0);
         put(PatternWizardPage.KEY_LOADED, 0);

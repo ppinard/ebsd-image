@@ -30,9 +30,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
  * distinguished, only the non centro-symmetric point groups are defined. Each
  * point group consists of its Schoenflies symbol, its Hermann-Mauguin symbol,
  * its Laue group and an array of all the rotation operations associated with
- * it.
- * 
- * <b>References:</b>
+ * it. <b>References:</b>
  * <ul>
  * <li>International Crystallography Tables</li>
  * <li>Cayron, Cyril. ARPGE, 2010</li>
@@ -40,7 +38,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
  * </ul>
  * 
  * @author Philippe T. Pinard
- * 
  */
 public enum PointGroup implements ObjectXml, Labeled {
 
@@ -123,6 +120,41 @@ public enum PointGroup implements ObjectXml, Labeled {
     }
 
 
+
+    /**
+     * Return the point group from the specified space group number (1 to 230).
+     * 
+     * @param spaceGroup
+     *            space group number
+     * @return point group of the space group
+     */
+    public static PointGroup fromSpaceGroup(int spaceGroup) {
+        if (spaceGroup >= 1 && spaceGroup <= 2)
+            return PG1;
+        else if (spaceGroup >= 3 && spaceGroup <= 24)
+            return PG2;
+        else if (spaceGroup >= 25 && spaceGroup <= 74)
+            return PG222;
+        else if (spaceGroup >= 75 && spaceGroup <= 88)
+            return PG4;
+        else if (spaceGroup >= 89 && spaceGroup <= 142)
+            return PG422;
+        else if (spaceGroup >= 143 && spaceGroup <= 148)
+            return PG3;
+        else if (spaceGroup >= 149 && spaceGroup <= 167)
+            return PG32;
+        else if (spaceGroup >= 168 && spaceGroup <= 176)
+            return PG6;
+        else if (spaceGroup >= 177 && spaceGroup <= 194)
+            return PG622;
+        else if (spaceGroup >= 195 && spaceGroup <= 206)
+            return PG23;
+        else if (spaceGroup >= 207 && spaceGroup <= 230)
+            return PG432;
+        else
+            throw new IllegalArgumentException("Invalid space group ("
+                    + spaceGroup + "), must be between [1,230].");
+    }
 
     /** Point group symbol as defined by the Schoenflies convention. */
     @NonNull

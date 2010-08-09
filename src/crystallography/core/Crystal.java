@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import net.jcip.annotations.Immutable;
@@ -77,7 +77,6 @@ public class Crystal implements ObjectXml {
      *             if the point group is null
      * @throws IllegalArgumentException
      *             if the name is an empty string
-     * 
      */
     public Crystal(String name, UnitCell unitCell, AtomSites atomSites,
             PointGroup pointGroup) {
@@ -109,11 +108,9 @@ public class Crystal implements ObjectXml {
      *            other <code>Crystal</code> to check equality
      * @param precision
      *            level of precision
-     * 
      * @see AtomSites#equals(AtomSites, double)
      * @see UnitCell#equals(UnitCell, double)
      * @return whether the two <code>Crystal</code> are almost equal
-     * 
      * @throws IllegalArgumentException
      *             if the precision is less than 0.0
      * @throws IllegalArgumentException
@@ -152,7 +149,6 @@ public class Crystal implements ObjectXml {
      * 
      * @param obj
      *            other <code>Crystal</code> to check equality
-     * 
      * @return whether the two <code>Crystal</code> are equal
      */
     @Override
@@ -205,7 +201,7 @@ public class Crystal implements ObjectXml {
      */
     @Override
     public String toString() {
-        return "Crystal [name=" + name + "]";
+        return name;
     }
 
 }
