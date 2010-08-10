@@ -1,5 +1,5 @@
 menu=PlugIns/EBSD/Import from TSL
-icon=org/ebsdimage/vendors/tsl/plugin/TslImport.png
+icon=org/ebsdimage/vendors/tsl/plugin/import-tsl_(22x22).png
 tooltip=Import data from TSL ang file
 plugin=org.ebsdimage.vendors.tsl.plugin.TslImport
 workerthread=true
