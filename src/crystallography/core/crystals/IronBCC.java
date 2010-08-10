@@ -19,7 +19,7 @@ package crystallography.core.crystals;
 
 import crystallography.core.AtomSitesFactory;
 import crystallography.core.Crystal;
-import crystallography.core.PointGroup;
+import crystallography.core.LaueGroup;
 import crystallography.core.UnitCellFactory;
 
 /**
@@ -36,6 +36,6 @@ public class IronBCC extends Crystal {
      */
     public IronBCC() {
         super("Iron BCC", UnitCellFactory.cubic(2.87), AtomSitesFactory
-                .atomSitesBCC(26), PointGroup.PG432);
+                .atomSitesBCC(26), LaueGroup.LGm3m);
     }
 }

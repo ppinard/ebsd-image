@@ -11,6 +11,6 @@
       <Position x="0.33333" y="0.66666" z="0.5" />
     </AtomSite>
   </AtomSites>
-  <PointGroup laueGroup="9" schoenflies="D6" hermannMauguin="622" crystalSystem="HEXAGONAL" />
+  <LaueGroup index="9" symbol="6/mmm" crystalSystem="HEXAGONAL" />
 </Crystal>
 

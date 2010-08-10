@@ -14,10 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.io;
 
-import static crystallography.io.PointGroupXmlTags.*;
+import static crystallography.io.LaueGroupXmlTags.ATTR_CRYSTAL_SYSTEM;
+import static crystallography.io.LaueGroupXmlTags.ATTR_INDEX;
+import static crystallography.io.LaueGroupXmlTags.ATTR_SYMBOL;
+import static crystallography.io.LaueGroupXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
 import org.jdom.Element;
@@ -26,9 +29,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import crystallography.core.CrystalSystem;
-import crystallography.core.PointGroup;
+import crystallography.core.LaueGroup;
 
-public class PointGroupXmlLoaderTest {
+public class LaueGroupXmlLoaderTest {
 
     private Element element;
 
@@ -38,23 +41,21 @@ public class PointGroupXmlLoaderTest {
     public void setUp() throws Exception {
         element = new Element(TAG_NAME);
 
-        element.setAttribute(ATTR_LAUE_GROUP, Integer.toString(1));
-        element.setAttribute(ATTR_HM, "1");
-        element.setAttribute(ATTR_SCHOENFLIES, "C1");
-        element.setAttribute(ATTR_CRYSTAL_SYSTEM, CrystalSystem.TRICLINIC
-                .toString());
+        element.setAttribute(ATTR_INDEX, Integer.toString(1));
+        element.setAttribute(ATTR_SYMBOL, "1");
+        element.setAttribute(ATTR_CRYSTAL_SYSTEM,
+                CrystalSystem.TRICLINIC.toString());
     }
 
 
 
     @Test
     public void testLoad() {
-        PointGroup pg = new PointGroupXmlLoader().load(element);
-        PointGroup expected = PointGroup.PG1;
+        LaueGroup pg = new LaueGroupXmlLoader().load(element);
+        LaueGroup expected = LaueGroup.LG1;
 
-        assertEquals(expected.laueGroup, pg.laueGroup);
-        assertEquals(expected.hmSymbol, pg.hmSymbol);
-        assertEquals(expected.schoenfliesSymbol, pg.schoenfliesSymbol);
+        assertEquals(expected.index, pg.index);
+        assertEquals(expected.symbol, pg.symbol);
         assertEquals(expected.crystalSystem, pg.crystalSystem);
     }
 
@@ -62,25 +63,26 @@ public class PointGroupXmlLoaderTest {
 
     @Test(expected = IllegalNameException.class)
     public void testLoadExceptionElementName() {
-        new PointGroupXmlLoader().load(new Element("Incorrect"));
+        new LaueGroupXmlLoader().load(new Element("Incorrect"));
     }
 
 
 
     @Test(expected = IllegalArgumentException.class)
     public void testLoadExceptionHMSymbol() {
-        element.setAttribute(ATTR_HM, "2");
+        element.setAttribute(ATTR_SYMBOL, "2");
 
-        new PointGroupXmlLoader().load(element);
+        new LaueGroupXmlLoader().load(element);
     }
 
 
 
     @Test(expected = IllegalArgumentException.class)
     public void testLoadExceptionSchoenfliesSymbol() {
-        element.setAttribute(ATTR_SCHOENFLIES, "C2");
+        element.setAttribute(ATTR_CRYSTAL_SYSTEM,
+                CrystalSystem.CUBIC.toString());
 
-        new PointGroupXmlLoader().load(element);
+        new LaueGroupXmlLoader().load(element);
     }
 
 }

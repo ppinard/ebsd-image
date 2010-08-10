@@ -19,7 +19,7 @@ package crystallography.core.crystals;
 
 import crystallography.core.AtomSitesFactory;
 import crystallography.core.Crystal;
-import crystallography.core.PointGroup;
+import crystallography.core.LaueGroup;
 import crystallography.core.UnitCellFactory;
 
 /**
@@ -36,6 +36,6 @@ public class Silicon extends Crystal {
      */
     public Silicon() {
         super("Silicon", UnitCellFactory.cubic(5.43), AtomSitesFactory
-                .atomSitesFCC(14), PointGroup.PG432);
+                .atomSitesFCC(14), LaueGroup.LGm3m);
     }
 }

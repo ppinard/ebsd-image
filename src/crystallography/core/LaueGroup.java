@@ -25,12 +25,11 @@ import rmlshared.util.Labeled;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
- * Defines a crystallographic point group. Since in diffraction patterns,
+ * Defines a crystallographic Laue group. Since in diffraction patterns,
  * centro-symmetric and non centro-symmetric point groups cannot be
- * distinguished, only the non centro-symmetric point groups are defined. Each
- * point group consists of its Schoenflies symbol, its Hermann-Mauguin symbol,
- * its Laue group and an array of all the rotation operations associated with
- * it. <b>References:</b>
+ * distinguished. Therefore only the Laue group is required. Each Laue group
+ * consists of its Schoenflies symbol, its Hermann-Mauguin symbol and an array
+ * of all the rotation operations associated with it. <b>References:</b>
  * <ul>
  * <li>International Crystallography Tables</li>
  * <li>Cayron, Cyril. ARPGE, 2010</li>
@@ -39,81 +38,81 @@ import edu.umd.cs.findbugs.annotations.NonNull;
  * 
  * @author Philippe T. Pinard
  */
-public enum PointGroup implements ObjectXml, Labeled {
+public enum LaueGroup implements ObjectXml, Labeled {
 
-    /** 1st <code>PointGroup</code> (1 or C1). */
-    PG1(1, "1", "C1", TRICLINIC, new Operator[] { O1 }),
+    /** 1st <code>LaueGroup</code> (1 or -1). */
+    LG1(1, "1", TRICLINIC, new Operator[] { O1 }),
 
-    /** 2nd <code>PointGroup</code> (2 or C2). */
-    PG2(2, "2", "C2", MONOCLINIC, new Operator[] { O1, O2_Y }),
+    /** 2nd <code>LaueGroup</code> (2, m or 2/m). */
+    LG2m(2, "2/m", MONOCLINIC, new Operator[] { O1, O2_Y }),
 
-    /** 3rd <code>PointGroup</code> (222 or D2). */
-    PG222(3, "222", "D2", ORTHORHOMBIC, new Operator[] { O1, O2_Y, O2_X, O2_Z }),
+    /** 3rd <code>LaueGroup</code> (222, mm2 or mmm). */
+    LGmmm(3, "mmm", ORTHORHOMBIC, new Operator[] { O1, O2_Y, O2_X, O2_Z }),
 
-    /** 10th <code>PointGroup</code> (23 or T). */
-    PG23(10, "23", "T", CUBIC, new Operator[] { O1, O3P_XYZ, O3N_XYZ,
-            O3P_XNYNZ, O3N_XNYNZ, O3P_NXYNZ, O3N_NXYNZ, O3P_NXNYZ, O3N_NXNYZ,
-            O2_Z, O2_Y, O2_X }),
+    /** 10th <code>LaueGroup</code> (23 or m-3). */
+    LGm3(10, "m3", CUBIC, new Operator[] { O1, O3P_XYZ, O3N_XYZ, O3P_XNYNZ,
+            O3N_XNYNZ, O3P_NXYNZ, O3N_NXYNZ, O3P_NXNYZ, O3N_NXNYZ, O2_Z, O2_Y,
+            O2_X }),
 
-    /** 4th <code>PointGroup</code> (3 or C3). */
-    PG3(4, "3", "C3", TRIGONAL, new Operator[] { O1, H3P_Z, H3N_Z }),
+    /** 4th <code>LaueGroup</code> (3 or -3). */
+    LG3(4, "3", TRIGONAL, new Operator[] { O1, H3P_Z, H3N_Z }),
 
-    /** 5th <code>PointGroup</code> (32 or D3). */
-    PG32(5, "32", "D3", TRIGONAL, new Operator[] { O1, H3P_Z, H3N_Z, H2_XY,
-            H2_XNY, O2_Y }),
+    /** 5th <code>LaueGroup</code> (32, 3m or -3m). */
+    LG3m(5, "3m", TRIGONAL, new Operator[] { O1, H3P_Z, H3N_Z, H2_XY, H2_XNY,
+            O2_Y }),
 
-    /** 6th <code>PointGroup</code> (4 or C4). */
-    PG4(6, "4", "C4", TETRAGONAL, new Operator[] { O1, O2_Z, O4P_Z, O4N_Z }),
+    /** 6th <code>LaueGroup</code> (4, -4 or 4/m). */
+    LG4m(6, "4/m", TETRAGONAL, new Operator[] { O1, O2_Z, O4P_Z, O4N_Z }),
 
-    /** 7th <code>PointGroup</code> (422 or D4). */
-    PG422(7, "422", "D4", TETRAGONAL, new Operator[] { O1, O2_Y, O2_X, O2_Z,
+    /** 7th <code>LaueGroup</code> (422, 4mm, 42m or 4/mmm). */
+    LG4mmm(7, "4/mmm", TETRAGONAL, new Operator[] { O1, O2_Y, O2_X, O2_Z,
             O4P_Z, O4N_Z, O2_XY, O2_XNY }),
 
-    /** 11th <code>PointGroup</code> (432 or O). */
-    PG432(11, "432", "O", CUBIC, new Operator[] { O1, O3P_XYZ, O3N_XYZ,
-            O3P_XNYNZ, O3N_XNYNZ, O3P_NXYNZ, O3N_NXYNZ, O3P_NXNYZ, O3N_NXNYZ,
-            O2_Z, O2_Y, O2_X, O2_XY, O2_XNY, O2_XZ, O2_NXZ, O2_YZ, O2_YNZ,
-            O4P_Z, O4N_Z, O4P_Y, O4N_Y, O4P_X, O4N_X }),
+    /** 11th <code>LaueGroup</code> (432, 43m or m3m). */
+    LGm3m(11, "m3m", CUBIC, new Operator[] { O1, O3P_XYZ, O3N_XYZ, O3P_XNYNZ,
+            O3N_XNYNZ, O3P_NXYNZ, O3N_NXYNZ, O3P_NXNYZ, O3N_NXNYZ, O2_Z, O2_Y,
+            O2_X, O2_XY, O2_XNY, O2_XZ, O2_NXZ, O2_YZ, O2_YNZ, O4P_Z, O4N_Z,
+            O4P_Y, O4N_Y, O4P_X, O4N_X }),
 
-    /** 8th <code>PointGroup</code> (6 or C6). */
-    PG6(8, "6", "C6", HEXAGONAL, new Operator[] { O1, H3P_Z, H3N_Z, H6P_Z,
-            H6N_Z, O2_Z }),
+    /** 8th <code>LaueGroup</code> (6, -6 or 6/m). */
+    LG6m(8, "6/m", HEXAGONAL, new Operator[] { O1, H3P_Z, H3N_Z, H6P_Z, H6N_Z,
+            O2_Z }),
 
-    /** 9th <code>PointGroup</code> (622 or D6). */
-    PG622(9, "622", "D6", HEXAGONAL, new Operator[] { O1, H3P_Z, H3N_Z, H6P_Z,
+    /** 9th <code>LaueGroup</code> (622, 6mm, 62m or 6/mmm). */
+    LG6mmm(9, "6/mmm", HEXAGONAL, new Operator[] { O1, H3P_Z, H3N_Z, H6P_Z,
             H6N_Z, O2_Z, H2_X2Y, H2_2XY, O2_X, H2_XY, O2_Y, H2_XNY });
 
     /**
-     * Returns the <code>PointGroup</code> corresponding to the specified Laue
+     * Returns the <code>LaueGroup</code> corresponding to the specified Laue
      * group index.
      * 
      * @param laueGroup
      *            Laue group index from 1 to 11
-     * @return a <code>PointGroup</code>
+     * @return a <code>LaueGroup</code>
      */
-    public static PointGroup fromLaueGroup(int laueGroup) {
+    public static LaueGroup fromIndex(int laueGroup) {
         if (laueGroup == 1)
-            return PG1;
+            return LG1;
         else if (laueGroup == 2)
-            return PG2;
+            return LG2m;
         else if (laueGroup == 3)
-            return PG222;
+            return LGmmm;
         else if (laueGroup == 4)
-            return PG3;
+            return LG3;
         else if (laueGroup == 5)
-            return PG32;
+            return LG3m;
         else if (laueGroup == 6)
-            return PG4;
+            return LG4m;
         else if (laueGroup == 7)
-            return PG422;
+            return LG4mmm;
         else if (laueGroup == 8)
-            return PG6;
+            return LG6m;
         else if (laueGroup == 9)
-            return PG622;
+            return LG6mmm;
         else if (laueGroup == 10)
-            return PG23;
+            return LGm3;
         else if (laueGroup == 11)
-            return PG432;
+            return LGm3m;
         else
             throw new IllegalArgumentException("Invalid Laue group ("
                     + laueGroup + "), must be between [1,11].");
@@ -122,50 +121,46 @@ public enum PointGroup implements ObjectXml, Labeled {
 
 
     /**
-     * Return the point group from the specified space group number (1 to 230).
+     * Return the Laue group from the specified space group number (1 to 230).
      * 
      * @param spaceGroup
      *            space group number
      * @return point group of the space group
      */
-    public static PointGroup fromSpaceGroup(int spaceGroup) {
+    public static LaueGroup fromSpaceGroup(int spaceGroup) {
         if (spaceGroup >= 1 && spaceGroup <= 2)
-            return PG1;
+            return LG1;
         else if (spaceGroup >= 3 && spaceGroup <= 24)
-            return PG2;
+            return LG2m;
         else if (spaceGroup >= 25 && spaceGroup <= 74)
-            return PG222;
+            return LGmmm;
         else if (spaceGroup >= 75 && spaceGroup <= 88)
-            return PG4;
+            return LG4m;
         else if (spaceGroup >= 89 && spaceGroup <= 142)
-            return PG422;
+            return LG4mmm;
         else if (spaceGroup >= 143 && spaceGroup <= 148)
-            return PG3;
+            return LG3;
         else if (spaceGroup >= 149 && spaceGroup <= 167)
-            return PG32;
+            return LG3m;
         else if (spaceGroup >= 168 && spaceGroup <= 176)
-            return PG6;
+            return LG6m;
         else if (spaceGroup >= 177 && spaceGroup <= 194)
-            return PG622;
+            return LG6mmm;
         else if (spaceGroup >= 195 && spaceGroup <= 206)
-            return PG23;
+            return LGm3;
         else if (spaceGroup >= 207 && spaceGroup <= 230)
-            return PG432;
+            return LGm3m;
         else
             throw new IllegalArgumentException("Invalid space group ("
                     + spaceGroup + "), must be between [1,230].");
     }
 
-    /** Point group symbol as defined by the Schoenflies convention. */
+    /** Laue group symbol. */
     @NonNull
-    public final String schoenfliesSymbol;
-
-    /** Point group symbol as defined by the Hermann-Mauguin convention. */
-    @NonNull
-    public final String hmSymbol;
+    public final String symbol;
 
     /** Laue group index. */
-    public final int laueGroup;
+    public final int index;
 
     /** Crystal system. */
     @NonNull
@@ -178,26 +173,22 @@ public enum PointGroup implements ObjectXml, Labeled {
 
 
     /**
-     * Creates a new <code>PointGroup</code>. Private constructor, the static
+     * Creates a new <code>LaueGroup</code>. Private constructor, the static
      * method should be used instead.
      * 
-     * @param schoenfliesSymbol
-     *            point group symbol using the Schoenflies convention
-     * @param hmSymbol
-     *            point group symbol using the Hermann-Mauguin convention
-     * @param laueGroup
-     *            index of the point group's Laue group
+     * @param index
+     *            index of the Laue group
+     * @param symbol
+     *            Laue group symbol
      * @param crystalSystem
      *            crystal system
      * @param operators
      *            list of symmetry operators
      */
-    private PointGroup(int laueGroup, String hmSymbol,
-            String schoenfliesSymbol, CrystalSystem crystalSystem,
+    private LaueGroup(int index, String symbol, CrystalSystem crystalSystem,
             Operator[] operators) {
-        this.schoenfliesSymbol = schoenfliesSymbol;
-        this.hmSymbol = hmSymbol;
-        this.laueGroup = laueGroup;
+        this.index = index;
+        this.symbol = symbol;
         this.crystalSystem = crystalSystem;
         this.operators = operators;
     }
@@ -223,7 +214,7 @@ public enum PointGroup implements ObjectXml, Labeled {
 
     @Override
     public String getLabel() {
-        return hmSymbol + " / " + schoenfliesSymbol;
+        return symbol;
     }
 
 }

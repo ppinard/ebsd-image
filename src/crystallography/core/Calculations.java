@@ -436,7 +436,7 @@ public class Calculations {
      * @return reduced rotation
      */
     @CheckReturnValue
-    public static Quaternion reduce(Quaternion q, PointGroup pg) {
+    public static Quaternion reduce(Quaternion q, LaueGroup pg) {
         Quaternion equiv = q.duplicate();
 
         for (Quaternion op : pg.getOperators()) {

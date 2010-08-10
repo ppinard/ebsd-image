@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.gui;
 
 import java.util.HashMap;
@@ -29,7 +29,6 @@ import rmlshared.gui.ErrorDialog;
  * Abstract template for the experiment's wizard page.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public abstract class WizardPage extends org.netbeans.spi.wizard.WizardPage {
 
@@ -38,20 +37,18 @@ public abstract class WizardPage extends org.netbeans.spi.wizard.WizardPage {
 
 
 
-    @SuppressWarnings("unchecked")
     @Override
-    public WizardPanelNavResult allowFinish(String stepName, Map settings,
-            Wizard wizard) {
+    public WizardPanelNavResult allowFinish(String stepName,
+            @SuppressWarnings("rawtypes") Map settings, Wizard wizard) {
         return (isCorrect(true)) ? WizardPanelNavResult.PROCEED
                 : WizardPanelNavResult.REMAIN_ON_PAGE;
     }
 
 
 
-    @SuppressWarnings("unchecked")
     @Override
-    public WizardPanelNavResult allowNext(String stepName, Map settings,
-            Wizard wizard) {
+    public WizardPanelNavResult allowNext(String stepName,
+            @SuppressWarnings("rawtypes") Map settings, Wizard wizard) {
         return (isCorrect(true)) ? WizardPanelNavResult.PROCEED
                 : WizardPanelNavResult.REMAIN_ON_PAGE;
     }
@@ -64,10 +61,8 @@ public abstract class WizardPage extends org.netbeans.spi.wizard.WizardPage {
      * 
      * @param key
      *            key associated with the value to be returned
-     * 
      * @throws NullPointerException
      *             if the key is null
-     * 
      * @return the value associated with the specified key
      */
     public Object get(String key) {
@@ -114,7 +109,6 @@ public abstract class WizardPage extends org.netbeans.spi.wizard.WizardPage {
      *            key with which the specified value is to be associated.
      * @param value
      *            value to be associated with the specified key.
-     * 
      * @throws NullPointerException
      *             if the key is null
      */
@@ -138,10 +132,8 @@ public abstract class WizardPage extends org.netbeans.spi.wizard.WizardPage {
      * 
      * @param hashMap
      *            <code>HashMap</code> for all the wizard pages
-     * 
      * @throws NullPointerException
      *             if the hashMap is null
-     * 
      * @see #put
      * @see #get
      */

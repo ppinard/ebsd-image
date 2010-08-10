@@ -22,7 +22,7 @@
           <Position x="0.5" y="0.5" z="0.0" />
         </AtomSite>
       </AtomSites>
-      <PointGroup laueGroup="11" schoenflies="O" hermannMauguin="432" crystalSystem="CUBIC" />
+      <LaueGroup index="11" symbol="m3m" crystalSystem="CUBIC" />
     </Crystal>
   </Phases>
 </PhasesMap>

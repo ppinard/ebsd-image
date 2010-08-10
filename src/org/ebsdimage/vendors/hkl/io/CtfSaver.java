@@ -221,7 +221,7 @@ public class CtfSaver implements Saver {
                     + formatDouble(toDegrees(u.alpha)) + ";"
                     + formatDouble(toDegrees(u.beta)) + ";"
                     + formatDouble(toDegrees(u.gamma)) + "\t" + crystal.name
-                    + "\t" + crystal.pointGroup.laueGroup + "\t" + 0 + "\n");
+                    + "\t" + crystal.laueGroup.index + "\t" + 0 + "\n");
             // NOTE: Space group is set to 0 (no bug reported)
         }
 

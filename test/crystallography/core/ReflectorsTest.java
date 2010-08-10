@@ -53,11 +53,11 @@ public class ReflectorsTest {
 
         // Crystal
         Crystal crystalFCC =
-                new Crystal("FCC", unitCellFCC, atomsFCC, PointGroup.PG432);
+                new Crystal("FCC", unitCellFCC, atomsFCC, LaueGroup.LGm3m);
         Crystal crystalBCC =
-                new Crystal("BCC", unitCellBCC, atomsBCC, PointGroup.PG432);
+                new Crystal("BCC", unitCellBCC, atomsBCC, LaueGroup.LGm3m);
         Crystal crystalHCP =
-                new Crystal("HCP", unitCellHCP, atomsHCP, PointGroup.PG622);
+                new Crystal("HCP", unitCellHCP, atomsHCP, LaueGroup.LG6mmm);
 
         // Scattering factors
         scatter = new ElectronScatteringFactors();

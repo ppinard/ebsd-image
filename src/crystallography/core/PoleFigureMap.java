@@ -93,7 +93,7 @@ public class PoleFigureMap extends RealMap {
      *            a rotation
      */
     public void drawRotation(Quaternion rotation) {
-        for (Quaternion op : crystal.pointGroup.getOperators()) {
+        for (Quaternion op : crystal.laueGroup.getOperators()) {
             Quaternion equiv = rotation.multiply(op);
 
             Vector3D out = QuaternionMath.rotate(pole, equiv);

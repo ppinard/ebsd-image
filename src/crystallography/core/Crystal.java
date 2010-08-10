@@ -26,12 +26,12 @@ import edu.umd.cs.findbugs.annotations.NonNull;
  * <ul>
  * <li>a {@link UnitCell}</li>
  * <li>an {@link AtomSites}</li>
- * <li>a {@link PointGroup}</li>
+ * <li>a {@link LaueGroup}</li>
  * </ul>
  * . A name is also associated to the crystal for identification. The name, unit
- * cell, atom sites and point group can be accessed via the public final
+ * cell, atom sites and Laue group can be accessed via the public final
  * variables <code>name</code>, <code>unitCell</code>, <code>atoms</code> and
- * <code>pointGroup</code> respectively.
+ * <code>laueGroup</code> respectively.
  * 
  * @author Philippe T. Pinard
  */
@@ -50,9 +50,9 @@ public class Crystal implements ObjectXml {
     @NonNull
     public final AtomSites atoms;
 
-    /** Point group of the crystal. */
+    /** Laue group of the crystal. */
     @NonNull
-    public final PointGroup pointGroup;
+    public final LaueGroup laueGroup;
 
 
 
@@ -65,8 +65,8 @@ public class Crystal implements ObjectXml {
      *            <code>UnitCell</code> of the crystal
      * @param atomSites
      *            <code>AtomSites</code> of the crystal
-     * @param pointGroup
-     *            <code>PointGroup</code> of the crystal
+     * @param laueGroup
+     *            <code>LaueGroup</code> of the crystal
      * @throws NullPointerException
      *             if the name is null
      * @throws NullPointerException
@@ -74,12 +74,12 @@ public class Crystal implements ObjectXml {
      * @throws NullPointerException
      *             if the atom sites is null
      * @throws NullPointerException
-     *             if the point group is null
+     *             if the Laue group is null
      * @throws IllegalArgumentException
      *             if the name is an empty string
      */
     public Crystal(String name, UnitCell unitCell, AtomSites atomSites,
-            PointGroup pointGroup) {
+            LaueGroup laueGroup) {
         if (name == null)
             throw new NullPointerException("The crystal name cannot be null.");
         if (name.length() == 0)
@@ -89,13 +89,13 @@ public class Crystal implements ObjectXml {
             throw new NullPointerException("The unit cell cannot be null.");
         if (atomSites == null)
             throw new NullPointerException("The atom sites cannot be null.");
-        if (pointGroup == null)
-            throw new NullPointerException("The point group cannot be null.");
+        if (laueGroup == null)
+            throw new NullPointerException("The Laue group cannot be null.");
 
         this.name = name;
         this.unitCell = unitCell;
         atoms = atomSites;
-        this.pointGroup = pointGroup;
+        this.laueGroup = laueGroup;
     }
 
 
@@ -135,7 +135,7 @@ public class Crystal implements ObjectXml {
             return false;
         if (!(atoms.equals(other.atoms, precision)))
             return false;
-        if (!(pointGroup.equals(other.pointGroup)))
+        if (!(laueGroup.equals(other.laueGroup)))
             return false;
 
         return true;
@@ -167,7 +167,7 @@ public class Crystal implements ObjectXml {
             return false;
         if (!atoms.equals(other.atoms))
             return false;
-        if (!(pointGroup.equals(other.pointGroup)))
+        if (!(laueGroup.equals(other.laueGroup)))
             return false;
 
         return true;
@@ -187,7 +187,7 @@ public class Crystal implements ObjectXml {
         result = prime * result + atoms.hashCode();
         result = prime * result + name.hashCode();
         result = prime * result + unitCell.hashCode();
-        result = prime * result + pointGroup.hashCode();
+        result = prime * result + laueGroup.hashCode();
         return result;
     }
 

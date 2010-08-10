@@ -19,7 +19,7 @@ package crystallography.core.crystals;
 
 import crystallography.core.AtomSitesFactory;
 import crystallography.core.Crystal;
-import crystallography.core.PointGroup;
+import crystallography.core.LaueGroup;
 import crystallography.core.UnitCellFactory;
 
 /**
@@ -36,6 +36,6 @@ public class ZirconiumAlpha extends Crystal {
      */
     public ZirconiumAlpha() {
         super("Zirconium Alpha", UnitCellFactory.hexagonal(3.2, 5.15),
-                AtomSitesFactory.atomSitesHCP(40), PointGroup.PG622);
+                AtomSitesFactory.atomSitesHCP(40), LaueGroup.LG6mmm);
     }
 }

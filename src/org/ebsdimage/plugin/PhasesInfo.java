@@ -293,9 +293,9 @@ public class PhasesInfo extends PlugIn {
         private void refresh() {
             Crystal phase = phases.get(phaseCBox.getSelectedItem());
 
-            crystalSystemLabel.setText(phase.pointGroup.crystalSystem
+            crystalSystemLabel.setText(phase.laueGroup.crystalSystem
                     .getLabel());
-            symmetryLabel.setText(phase.pointGroup.getLabel());
+            symmetryLabel.setText(phase.laueGroup.getLabel());
 
             aLabel.setText(Double.toString(phase.unitCell.a));
             bLabel.setText(Double.toString(phase.unitCell.b));

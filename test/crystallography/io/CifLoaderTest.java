@@ -13,7 +13,7 @@ import org.junit.Test;
 import rmlshared.io.FileUtil;
 import crystallography.core.AtomSite;
 import crystallography.core.Crystal;
-import crystallography.core.PointGroup;
+import crystallography.core.LaueGroup;
 
 public class CifLoaderTest {
 
@@ -55,7 +55,7 @@ public class CifLoaderTest {
         assertTrue(atoms.get(14).equals(8)); // Si
         assertTrue(atoms.get(8).equals(24)); // O
 
-        assertEquals(PointGroup.PG222, crystal.pointGroup);
+        assertEquals(LaueGroup.LGmmm, crystal.laueGroup);
     }
 
 }

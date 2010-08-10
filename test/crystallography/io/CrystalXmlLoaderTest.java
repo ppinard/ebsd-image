@@ -35,7 +35,7 @@ public class CrystalXmlLoaderTest {
     private Element element;
     private UnitCell unitCell;
     private AtomSites atoms;
-    private PointGroup pointGroup;
+    private LaueGroup pointGroup;
 
 
 
@@ -53,8 +53,8 @@ public class CrystalXmlLoaderTest {
         atoms.add(new AtomSite(14, 0.4, 0.5, 0.6));
         element.addContent(new AtomSitesXmlSaver().save(atoms));
 
-        pointGroup = PointGroup.PG1;
-        element.addContent(new PointGroupXmlSaver().save(pointGroup));
+        pointGroup = LaueGroup.LG1;
+        element.addContent(new LaueGroupXmlSaver().save(pointGroup));
     }
 
 
@@ -66,7 +66,7 @@ public class CrystalXmlLoaderTest {
         assertEquals("crystal1", crystal.name);
         assertTrue(unitCell.equals(crystal.unitCell, 1e-7));
         assertTrue(atoms.equals(crystal.atoms, 1e-7));
-        assertTrue(pointGroup.equals(crystal.pointGroup));
+        assertTrue(pointGroup.equals(crystal.laueGroup));
     }
 
 
@@ -81,7 +81,7 @@ public class CrystalXmlLoaderTest {
         assertTrue(UnitCellFactory.cubic(5.43).equals(crystal.unitCell, 1e-7));
         assertTrue(AtomSitesFactory.atomSitesFCC(14)
                 .equals(crystal.atoms, 1e-7));
-        assertEquals(PointGroup.PG432, crystal.pointGroup);
+        assertEquals(LaueGroup.LGm3m, crystal.laueGroup);
     }
 
 
@@ -105,7 +105,7 @@ public class CrystalXmlLoaderTest {
         assertEquals("SiliconMod", crystal.name);
         assertTrue(new Silicon().unitCell.equals(crystal.unitCell, 1e-7));
         assertTrue(atoms.equals(crystal.atoms, 1e-7));
-        assertEquals(new Silicon().pointGroup, crystal.pointGroup);
+        assertEquals(new Silicon().laueGroup, crystal.laueGroup);
     }
 
 
@@ -115,14 +115,14 @@ public class CrystalXmlLoaderTest {
         Element element = new Element(Silicon.class.getSimpleName());
         element.setAttribute(ATTR_NAME, "SiliconMod");
         element.addContent(new UnitCellXmlSaver().save(unitCell));
-        element.addContent(new PointGroupXmlSaver().save(PointGroup.PG1));
+        element.addContent(new LaueGroupXmlSaver().save(LaueGroup.LG1));
 
         Crystal crystal = new CrystalXmlLoader().load(element);
 
         assertEquals("SiliconMod", crystal.name);
         assertTrue(unitCell.equals(crystal.unitCell, 1e-7));
         assertTrue(new Silicon().atoms.equals(crystal.atoms, 1e-7));
-        assertEquals(PointGroup.PG1, crystal.pointGroup);
+        assertEquals(LaueGroup.LG1, crystal.laueGroup);
     }
 
 
@@ -131,14 +131,14 @@ public class CrystalXmlLoaderTest {
     public void testLoadSpecificCrystalWithModPointGroup() {
         Element element = new Element(Silicon.class.getSimpleName());
         element.setAttribute(ATTR_NAME, "SiliconMod");
-        PointGroup pg = PointGroup.PG23;
-        element.addContent(new PointGroupXmlSaver().save(pg));
+        LaueGroup pg = LaueGroup.LGm3;
+        element.addContent(new LaueGroupXmlSaver().save(pg));
 
         Crystal crystal = new CrystalXmlLoader().load(element);
 
         assertEquals("SiliconMod", crystal.name);
         assertTrue(new Silicon().unitCell.equals(crystal.unitCell, 1e-7));
         assertTrue(new Silicon().atoms.equals(crystal.atoms, 1e-7));
-        assertEquals(pg, crystal.pointGroup);
+        assertEquals(pg, crystal.laueGroup);
     }
 }

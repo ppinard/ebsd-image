@@ -49,7 +49,7 @@ public class CrystalXmlSaver implements ObjectXmlSaver {
 
         element.addContent(new UnitCellXmlSaver().save(crystal.unitCell));
         element.addContent(new AtomSitesXmlSaver().save(crystal.atoms));
-        element.addContent(new PointGroupXmlSaver().save(crystal.pointGroup));
+        element.addContent(new LaueGroupXmlSaver().save(crystal.laueGroup));
 
         return element;
     }

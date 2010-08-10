@@ -17,7 +17,7 @@
  */
 package org.ebsdimage.gui;
 
-import static crystallography.core.PointGroup.*;
+import static crystallography.core.LaueGroup.*;
 import static java.lang.Math.toDegrees;
 import static java.lang.Math.toRadians;
 
@@ -245,7 +245,7 @@ public class NewPhaseDialog extends BasicDialog {
     private ComboBox<CrystalSystem> crystalSystemCBox;
 
     /** Combo box for the symmetry. */
-    private ComboBox<PointGroup> symmetryCBox;
+    private ComboBox<LaueGroup> symmetryCBox;
 
     /** Field for the lattice constant a. */
     private DoubleField aField;
@@ -296,7 +296,7 @@ public class NewPhaseDialog extends BasicDialog {
      */
     public NewPhaseDialog() {
         this(new Crystal("Untitled", new UnitCell(1, 1, 1, 1, 1, 1),
-                new AtomSites(), PointGroup.PG1));
+                new AtomSites(), LaueGroup.LG1));
     }
 
 
@@ -320,13 +320,13 @@ public class NewPhaseDialog extends BasicDialog {
 
         crystalSystemPanel.add("Crystal system");
         crystalSystemCBox = new ComboBox<CrystalSystem>(CrystalSystem.values());
-        crystalSystemCBox.setSelectedItem(crystal.pointGroup.crystalSystem);
+        crystalSystemCBox.setSelectedItem(crystal.laueGroup.crystalSystem);
         crystalSystemCBox.addActionListener(new CrystalSystemCBoxListener());
         crystalSystemPanel.add(crystalSystemCBox, "wrap");
 
         crystalSystemPanel.add("Symmetry");
-        symmetryCBox = new ComboBox<PointGroup>(PointGroup.values());
-        symmetryCBox.setSelectedItem(crystal.pointGroup);
+        symmetryCBox = new ComboBox<LaueGroup>(LaueGroup.values());
+        symmetryCBox.setSelectedItem(crystal.laueGroup);
         crystalSystemPanel.add(symmetryCBox, "wrap");
 
         // Build the Unit Cell subpanel
@@ -526,7 +526,7 @@ public class NewPhaseDialog extends BasicDialog {
             gammaField.setEnabled(true);
 
             symmetryCBox.removeAllItems();
-            symmetryCBox.addGeneric(PG1);
+            symmetryCBox.addGeneric(LG1);
 
             break;
         case MONOCLINIC:
@@ -540,7 +540,7 @@ public class NewPhaseDialog extends BasicDialog {
             gammaField.setValue(90);
 
             symmetryCBox.removeAllItems();
-            symmetryCBox.addGeneric(PG2);
+            symmetryCBox.addGeneric(LG2m);
 
             break;
         case ORTHORHOMBIC:
@@ -556,7 +556,7 @@ public class NewPhaseDialog extends BasicDialog {
             gammaField.setValue(90);
 
             symmetryCBox.removeAllItems();
-            symmetryCBox.addGeneric(PG222);
+            symmetryCBox.addGeneric(LGmmm);
 
             break;
         case TRIGONAL:
@@ -573,8 +573,8 @@ public class NewPhaseDialog extends BasicDialog {
             gammaField.setValue(Double.NaN);
 
             symmetryCBox.removeAllItems();
-            symmetryCBox.addGeneric(PG3);
-            symmetryCBox.addGeneric(PG32);
+            symmetryCBox.addGeneric(LG3);
+            symmetryCBox.addGeneric(LG3m);
 
             break;
         case TETRAGONAL:
@@ -591,8 +591,8 @@ public class NewPhaseDialog extends BasicDialog {
             gammaField.setValue(90);
 
             symmetryCBox.removeAllItems();
-            symmetryCBox.addGeneric(PG4);
-            symmetryCBox.addGeneric(PG422);
+            symmetryCBox.addGeneric(LG4m);
+            symmetryCBox.addGeneric(LG4mmm);
 
             break;
         case HEXAGONAL:
@@ -609,8 +609,8 @@ public class NewPhaseDialog extends BasicDialog {
             gammaField.setValue(120);
 
             symmetryCBox.removeAllItems();
-            symmetryCBox.addGeneric(PG6);
-            symmetryCBox.addGeneric(PG622);
+            symmetryCBox.addGeneric(LG6m);
+            symmetryCBox.addGeneric(LG6mmm);
 
             break;
         case CUBIC:
@@ -628,8 +628,8 @@ public class NewPhaseDialog extends BasicDialog {
             gammaField.setValue(90);
 
             symmetryCBox.removeAllItems();
-            symmetryCBox.addGeneric(PG23);
-            symmetryCBox.addGeneric(PG432);
+            symmetryCBox.addGeneric(LGm3);
+            symmetryCBox.addGeneric(LGm3m);
 
             break;
         default:

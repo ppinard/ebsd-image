@@ -34,7 +34,7 @@ public class CrystalTest {
 
     private AtomSites atomSites;
 
-    private PointGroup pointGroup;
+    private LaueGroup pointGroup;
 
 
 
@@ -43,7 +43,7 @@ public class CrystalTest {
         name = "silicon";
         unitCell = UnitCellFactory.cubic(2.0);
         atomSites = AtomSitesFactory.atomSitesFCC(14);
-        pointGroup = PointGroup.PG432;
+        pointGroup = LaueGroup.LGm3m;
 
         crystal = new Crystal(name, unitCell, atomSites, pointGroup);
     }
@@ -114,7 +114,7 @@ public class CrystalTest {
                 pointGroup)));
 
         assertFalse(crystal.equals(new Crystal(name, unitCell, atomSites,
-                PointGroup.PG23)));
+                LaueGroup.LGm3)));
 
         assertTrue(crystal.equals(new Crystal(name, unitCell, atomSites,
                 pointGroup)));
@@ -140,7 +140,7 @@ public class CrystalTest {
                 pointGroup), 1e-3));
 
         assertFalse(crystal.equals(new Crystal(name, unitCell, atomSites,
-                PointGroup.PG23), 1e-3));
+                LaueGroup.LGm3), 1e-3));
 
         Crystal other =
                 new Crystal(name, UnitCellFactory.cubic(2.002), atomSites,

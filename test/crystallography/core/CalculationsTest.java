@@ -965,7 +965,7 @@ public class CalculationsTest {
                         0.667, 0.333);
         Quaternion q = new Quaternion(m, 1e-3);
 
-        Quaternion out = Calculations.reduce(q, PointGroup.PG432);
+        Quaternion out = Calculations.reduce(q, LaueGroup.LGm3m);
 
         AxisAngle aa = out.toAxisAngle();
         assertEquals(60.0 / 180 * PI, aa.angle, 1e-3);

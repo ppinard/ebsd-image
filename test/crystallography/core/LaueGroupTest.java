@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import static org.junit.Assert.assertEquals;
@@ -24,15 +24,14 @@ import org.junit.Test;
 
 import ptpshared.core.math.Quaternion;
 
-public class PointGroupTest {
+public class LaueGroupTest {
 
     @Test
     public void testPG1() {
-        PointGroup pg = PointGroup.PG1;
+        LaueGroup pg = LaueGroup.LG1;
         assertEquals(1, pg.getOperators().length);
-        assertEquals("1", pg.hmSymbol);
-        assertEquals("C1", pg.schoenfliesSymbol);
-        assertEquals(1, pg.laueGroup);
+        assertEquals("1", pg.symbol);
+        assertEquals(1, pg.index);
         assertEquals(CrystalSystem.TRICLINIC, pg.crystalSystem);
         allOperationsUnique(pg.getOperators());
     }
@@ -41,11 +40,10 @@ public class PointGroupTest {
 
     @Test
     public void testPG2() {
-        PointGroup pg = PointGroup.PG2;
+        LaueGroup pg = LaueGroup.LG2m;
         assertEquals(2, pg.getOperators().length);
-        assertEquals("2", pg.hmSymbol);
-        assertEquals("C2", pg.schoenfliesSymbol);
-        assertEquals(2, pg.laueGroup);
+        assertEquals("2/m", pg.symbol);
+        assertEquals(2, pg.index);
         assertEquals(CrystalSystem.MONOCLINIC, pg.crystalSystem);
         allOperationsUnique(pg.getOperators());
     }
@@ -54,11 +52,10 @@ public class PointGroupTest {
 
     @Test
     public void testPG222() {
-        PointGroup pg = PointGroup.PG222;
+        LaueGroup pg = LaueGroup.LGmmm;
         assertEquals(4, pg.getOperators().length);
-        assertEquals("222", pg.hmSymbol);
-        assertEquals("D2", pg.schoenfliesSymbol);
-        assertEquals(3, pg.laueGroup);
+        assertEquals("mmm", pg.symbol);
+        assertEquals(3, pg.index);
         assertEquals(CrystalSystem.ORTHORHOMBIC, pg.crystalSystem);
         allOperationsUnique(pg.getOperators());
     }
@@ -67,11 +64,10 @@ public class PointGroupTest {
 
     @Test
     public void testPG3() {
-        PointGroup pg = PointGroup.PG3;
+        LaueGroup pg = LaueGroup.LG3;
         assertEquals(3, pg.getOperators().length);
-        assertEquals("3", pg.hmSymbol);
-        assertEquals("C3", pg.schoenfliesSymbol);
-        assertEquals(4, pg.laueGroup);
+        assertEquals("3", pg.symbol);
+        assertEquals(4, pg.index);
         assertEquals(CrystalSystem.TRIGONAL, pg.crystalSystem);
         allOperationsUnique(pg.getOperators());
     }
@@ -80,11 +76,10 @@ public class PointGroupTest {
 
     @Test
     public void testPG32() {
-        PointGroup pg = PointGroup.PG32;
+        LaueGroup pg = LaueGroup.LG3m;
         assertEquals(6, pg.getOperators().length);
-        assertEquals("32", pg.hmSymbol);
-        assertEquals("D3", pg.schoenfliesSymbol);
-        assertEquals(5, pg.laueGroup);
+        assertEquals("3m", pg.symbol);
+        assertEquals(5, pg.index);
         assertEquals(CrystalSystem.TRIGONAL, pg.crystalSystem);
         allOperationsUnique(pg.getOperators());
     }
@@ -93,11 +88,10 @@ public class PointGroupTest {
 
     @Test
     public void testPG4() {
-        PointGroup pg = PointGroup.PG4;
+        LaueGroup pg = LaueGroup.LG4m;
         assertEquals(4, pg.getOperators().length);
-        assertEquals("4", pg.hmSymbol);
-        assertEquals("C4", pg.schoenfliesSymbol);
-        assertEquals(6, pg.laueGroup);
+        assertEquals("4/m", pg.symbol);
+        assertEquals(6, pg.index);
         assertEquals(CrystalSystem.TETRAGONAL, pg.crystalSystem);
         allOperationsUnique(pg.getOperators());
     }
@@ -106,11 +100,10 @@ public class PointGroupTest {
 
     @Test
     public void testPG422() {
-        PointGroup pg = PointGroup.PG422;
+        LaueGroup pg = LaueGroup.LG4mmm;
         assertEquals(8, pg.getOperators().length);
-        assertEquals("422", pg.hmSymbol);
-        assertEquals("D4", pg.schoenfliesSymbol);
-        assertEquals(7, pg.laueGroup);
+        assertEquals("4/mmm", pg.symbol);
+        assertEquals(7, pg.index);
         assertEquals(CrystalSystem.TETRAGONAL, pg.crystalSystem);
         allOperationsUnique(pg.getOperators());
     }
@@ -119,11 +112,10 @@ public class PointGroupTest {
 
     @Test
     public void testPG6() {
-        PointGroup pg = PointGroup.PG6;
+        LaueGroup pg = LaueGroup.LG6m;
         assertEquals(6, pg.getOperators().length);
-        assertEquals("6", pg.hmSymbol);
-        assertEquals("C6", pg.schoenfliesSymbol);
-        assertEquals(8, pg.laueGroup);
+        assertEquals("6/m", pg.symbol);
+        assertEquals(8, pg.index);
         assertEquals(CrystalSystem.HEXAGONAL, pg.crystalSystem);
         allOperationsUnique(pg.getOperators());
     }
@@ -132,11 +124,10 @@ public class PointGroupTest {
 
     @Test
     public void testPG622() {
-        PointGroup pg = PointGroup.PG622;
+        LaueGroup pg = LaueGroup.LG6mmm;
         assertEquals(12, pg.getOperators().length);
-        assertEquals("622", pg.hmSymbol);
-        assertEquals("D6", pg.schoenfliesSymbol);
-        assertEquals(9, pg.laueGroup);
+        assertEquals("6/mmm", pg.symbol);
+        assertEquals(9, pg.index);
         assertEquals(CrystalSystem.HEXAGONAL, pg.crystalSystem);
         allOperationsUnique(pg.getOperators());
     }
@@ -145,11 +136,10 @@ public class PointGroupTest {
 
     @Test
     public void testPG23() {
-        PointGroup pg = PointGroup.PG23;
+        LaueGroup pg = LaueGroup.LGm3;
         assertEquals(12, pg.getOperators().length);
-        assertEquals("23", pg.hmSymbol);
-        assertEquals("T", pg.schoenfliesSymbol);
-        assertEquals(10, pg.laueGroup);
+        assertEquals("m3", pg.symbol);
+        assertEquals(10, pg.index);
         assertEquals(CrystalSystem.CUBIC, pg.crystalSystem);
         allOperationsUnique(pg.getOperators());
     }
@@ -158,11 +148,10 @@ public class PointGroupTest {
 
     @Test
     public void testPG432() {
-        PointGroup pg = PointGroup.PG432;
+        LaueGroup pg = LaueGroup.LGm3m;
         assertEquals(24, pg.getOperators().length);
-        assertEquals("432", pg.hmSymbol);
-        assertEquals("O", pg.schoenfliesSymbol);
-        assertEquals(11, pg.laueGroup);
+        assertEquals("m3m", pg.symbol);
+        assertEquals(11, pg.index);
         assertEquals(CrystalSystem.CUBIC, pg.crystalSystem);
         allOperationsUnique(pg.getOperators());
     }
@@ -171,31 +160,31 @@ public class PointGroupTest {
 
     @Test
     public void testFromLaueGroup() {
-        assertEquals(PointGroup.PG1, PointGroup.fromLaueGroup(1));
-        assertEquals(PointGroup.PG2, PointGroup.fromLaueGroup(2));
-        assertEquals(PointGroup.PG222, PointGroup.fromLaueGroup(3));
-        assertEquals(PointGroup.PG3, PointGroup.fromLaueGroup(4));
-        assertEquals(PointGroup.PG32, PointGroup.fromLaueGroup(5));
-        assertEquals(PointGroup.PG4, PointGroup.fromLaueGroup(6));
-        assertEquals(PointGroup.PG422, PointGroup.fromLaueGroup(7));
-        assertEquals(PointGroup.PG6, PointGroup.fromLaueGroup(8));
-        assertEquals(PointGroup.PG622, PointGroup.fromLaueGroup(9));
-        assertEquals(PointGroup.PG23, PointGroup.fromLaueGroup(10));
-        assertEquals(PointGroup.PG432, PointGroup.fromLaueGroup(11));
+        assertEquals(LaueGroup.LG1, LaueGroup.fromIndex(1));
+        assertEquals(LaueGroup.LG2m, LaueGroup.fromIndex(2));
+        assertEquals(LaueGroup.LGmmm, LaueGroup.fromIndex(3));
+        assertEquals(LaueGroup.LG3, LaueGroup.fromIndex(4));
+        assertEquals(LaueGroup.LG3m, LaueGroup.fromIndex(5));
+        assertEquals(LaueGroup.LG4m, LaueGroup.fromIndex(6));
+        assertEquals(LaueGroup.LG4mmm, LaueGroup.fromIndex(7));
+        assertEquals(LaueGroup.LG6m, LaueGroup.fromIndex(8));
+        assertEquals(LaueGroup.LG6mmm, LaueGroup.fromIndex(9));
+        assertEquals(LaueGroup.LGm3, LaueGroup.fromIndex(10));
+        assertEquals(LaueGroup.LGm3m, LaueGroup.fromIndex(11));
     }
 
 
 
     @Test(expected = IllegalArgumentException.class)
     public void testFromLaueGroupException1() {
-        PointGroup.fromLaueGroup(0);
+        LaueGroup.fromIndex(0);
     }
 
 
 
     @Test(expected = IllegalArgumentException.class)
     public void testFromLaueGroupException2() {
-        PointGroup.fromLaueGroup(12);
+        LaueGroup.fromIndex(12);
     }
 
 

@@ -33,20 +33,20 @@ import rmlshared.gui.Panel;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 
 /**
- * Plug-in to convert the Euler maps into a RGB Eulers map.
+ * Plug-in to load a pattern from a SMP file.
  * 
  * @author Philippe T. Pinard
  */
 public class SmpViewer extends PlugIn {
 
     /**
-     * Dialog to select an EBSD multimap from those loaded in the GUI.
+     * Dialog to select the SMP file and the index of the pattern to load.
      * 
      * @author Philippe T. Pinard
      */
     private class Dialog extends BasicDialog {
 
-        /** File name browswer for the smp file. */
+        /** File name browser for the SMP file. */
         private FileNameField smpFilenameField;
 
         /** Index number. */
@@ -55,7 +55,7 @@ public class SmpViewer extends PlugIn {
 
 
         /**
-         * Creates a new dialog to select an EBSD multimap.
+         * Creates a new dialog.
          */
         public Dialog() {
             super("Smp viewer");
@@ -91,7 +91,7 @@ public class SmpViewer extends PlugIn {
         /**
          * Returns the index of the pattern.
          * 
-         * @return
+         * @return index of the pattern
          */
         public int getIndex() {
             return indexField.getValueBFR();
@@ -102,11 +102,12 @@ public class SmpViewer extends PlugIn {
 
 
     /**
-     * Performs the conversion from an <code>EbsdMMap</code> to a
-     * <code>RGBMap</code> and adds the later in the multimap.
+     * Loads a pattern from the smp file. A dialog is displayed to select the
+     * SMP file and the index of the pattern.
      * 
      * @return the resultant <code>RGBMap</code>
      * @throws IOException
+     *             if an error occurs while loading the pattern
      */
     @CheckForNull
     private ByteMap getPattern() throws IOException {

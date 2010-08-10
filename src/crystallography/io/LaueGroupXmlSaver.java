@@ -14,50 +14,51 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.io;
 
-import static crystallography.io.PointGroupXmlTags.*;
+import static crystallography.io.LaueGroupXmlTags.ATTR_CRYSTAL_SYSTEM;
+import static crystallography.io.LaueGroupXmlTags.ATTR_INDEX;
+import static crystallography.io.LaueGroupXmlTags.ATTR_SYMBOL;
+import static crystallography.io.LaueGroupXmlTags.TAG_NAME;
 
 import org.jdom.Element;
 
 import ptpshared.utility.xml.ObjectXml;
 import ptpshared.utility.xml.ObjectXmlSaver;
-import crystallography.core.PointGroup;
+import crystallography.core.LaueGroup;
 
 /**
- * XML saver for <code>PointGroup</code>.
+ * XML saver for <code>LaueGroup</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
-public class PointGroupXmlSaver implements ObjectXmlSaver {
+public class LaueGroupXmlSaver implements ObjectXmlSaver {
 
     /**
      * {@inheritDoc}
      * 
-     * @see #save(PointGroup)
+     * @see #save(LaueGroup)
      */
     @Override
     public Element save(ObjectXml obj) {
-        return save((PointGroup) obj);
+        return save((LaueGroup) obj);
     }
 
 
 
     /**
-     * Saves a <code>PointGroup</code> to an XML <code>Element</code>.
+     * Saves a <code>LaueGroup</code> to an XML <code>Element</code>.
      * 
      * @param pg
-     *            a <code>PointGroup</code>
+     *            a <code>LaueGroup</code>
      * @return an XML <code>Element</code>
      */
-    public Element save(PointGroup pg) {
+    public Element save(LaueGroup pg) {
         Element element = new Element(TAG_NAME);
 
-        element.setAttribute(ATTR_LAUE_GROUP, Integer.toString(pg.laueGroup));
-        element.setAttribute(ATTR_SCHOENFLIES, pg.schoenfliesSymbol);
-        element.setAttribute(ATTR_HM, pg.hmSymbol);
+        element.setAttribute(ATTR_INDEX, Integer.toString(pg.index));
+        element.setAttribute(ATTR_SYMBOL, pg.symbol);
         element.setAttribute(ATTR_CRYSTAL_SYSTEM, pg.crystalSystem.toString());
 
         return element;

@@ -229,7 +229,7 @@ public class Indexing implements Monitorable {
                             latticeOrientation(expPair, possibility);
                     rotation =
                             Calculations.reduce(rotation,
-                                    refls.crystal.pointGroup);
+                                    refls.crystal.laueGroup);
                     String key = crystalName + rotation.hashCode(1e-6);
                     if (solutions.containsKey(key))
                         continue;
