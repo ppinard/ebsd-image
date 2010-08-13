@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.core.math;
 
 import static java.lang.Math.PI;
@@ -26,13 +26,12 @@ import ptpshared.utility.xml.ObjectXml;
  * Represents a rotation using set of 3 Euler angles (in radians) as defined by
  * the Bunge convention. The Bunge convention stipulates:
  * <ul>
- * <li>First rotation around the z-axis</li>
+ * <li>First rotation around the x-axis</li>
  * <li>Second rotation around the z-axis</li>
- * <li>Third rotation around the new z-axis</li>
+ * <li>Third rotation around the new x-axis</li>
  * </ul>
- * 
  * Also by convention, the angle of rotation for the first and third angle are
- * between ]-PI,PI] and the second angle between [0, PI[.
+ * between ]-PI,PI] and the second angle between [0, PI].
  * <p/>
  * <b>References:</b>
  * <ul>
@@ -92,8 +91,6 @@ public class Eulers implements ObjectXml {
         return theta1ToBunge(theta3);
     }
 
-
-
     /** First rotation angle about the x-axis (in radians). */
     public final double theta1;
 
@@ -148,7 +145,6 @@ public class Eulers implements ObjectXml {
      * @param precision
      *            level of precision
      * @return whether the two <code>Eulers</code> are almost equal
-     * 
      * @throws IllegalArgumentException
      *             if the precision is less than 0.0
      * @throws IllegalArgumentException
@@ -184,7 +180,6 @@ public class Eulers implements ObjectXml {
      * 
      * @param obj
      *            other <code>Eulers</code> to check equality
-     * 
      * @return whether the two <code>Eulers</code> are equal
      */
     @Override
@@ -197,14 +192,11 @@ public class Eulers implements ObjectXml {
             return false;
 
         Eulers other = (Eulers) obj;
-        if (Double.doubleToLongBits(theta1) != Double
-                .doubleToLongBits(other.theta1))
+        if (Double.doubleToLongBits(theta1) != Double.doubleToLongBits(other.theta1))
             return false;
-        if (Double.doubleToLongBits(theta2) != Double
-                .doubleToLongBits(other.theta2))
+        if (Double.doubleToLongBits(theta2) != Double.doubleToLongBits(other.theta2))
             return false;
-        if (Double.doubleToLongBits(theta3) != Double
-                .doubleToLongBits(other.theta3))
+        if (Double.doubleToLongBits(theta3) != Double.doubleToLongBits(other.theta3))
             return false;
         return true;
     }

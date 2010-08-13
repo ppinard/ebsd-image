@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 
-import rmlimage.core.EightBitMap;
+import rmlimage.core.ByteMap;
 import rmlimage.core.LUT;
 import rmlimage.core.Map;
 import rmlimage.core.Pixel;
@@ -35,9 +35,8 @@ import crystallography.core.Crystal;
  * <code>pixArray</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
-public class PhasesMap extends EightBitMap {
+public class PhasesMap extends ByteMap {
 
     /**
      * Returns a color look-up table for the different phases. Each phase is
@@ -80,8 +79,6 @@ public class PhasesMap extends EightBitMap {
         return lut;
     }
 
-
-
     /** Defined phases. */
     private Crystal[] phases;
 
@@ -116,12 +113,10 @@ public class PhasesMap extends EightBitMap {
      *            pixels in the map
      * @param phases
      *            phases of the map
-     * 
      * @throws NullPointerException
      *             if the phases array is null
      * @throws IllegalArgumentException
      *             if the map is invalid
-     * 
      * @see #validate()
      */
     public PhasesMap(int width, int height, byte[] pixArray, Crystal[] phases) {
@@ -149,12 +144,10 @@ public class PhasesMap extends EightBitMap {
      *            height of the map
      * @param phases
      *            phases of the map
-     * 
      * @throws NullPointerException
      *             if the phases array is null
      * @throws IllegalArgumentException
      *             if the map is invalid
-     * 
      * @see #validate()
      */
     public PhasesMap(int width, int height, Crystal[] phases) {
@@ -222,12 +215,10 @@ public class PhasesMap extends EightBitMap {
      *            other <code>PhasesMap</code> to check equality
      * @param precision
      *            level of precision
-     * 
      * @throws IllegalArgumentException
      *             if the precision is less than 0.0
      * @throws IllegalArgumentException
      *             if the precision is not a number (NaN)
-     * 
      * @see Crystal#equals(Crystal, double)
      */
     public void assertEquals(PhasesMap other, double precision) {
@@ -280,10 +271,10 @@ public class PhasesMap extends EightBitMap {
      * 
      * @param color
      *            the color index
-     * 
      * @throws IllegalArgumentException
      *             if <code>color</code> is < 0 or > 255.
      */
+    @Override
     public void clear(int color) {
         if (color < 0 || color > 255)
             throw new IllegalArgumentException("color (" + color
@@ -342,7 +333,6 @@ public class PhasesMap extends EightBitMap {
      * @param index
      *            index of the pixel
      * @return a <code>PhasePixel</code>
-     * 
      * @throws IllegalArgumentException
      *             if the index is out of range
      */
@@ -391,12 +381,10 @@ public class PhasesMap extends EightBitMap {
      * 
      * @param phases
      *            new phases
-     * 
      * @throws NullPointerException
      *             if the phases array is null
      * @throws IllegalArgumentException
      *             if the new phases array is invalid
-     * 
      * @see #validate()
      */
     public void setPhases(Crystal[] phases) {
@@ -431,12 +419,10 @@ public class PhasesMap extends EightBitMap {
      *            index of the pixel
      * @param value
      *            new value
-     * 
      * @throws IllegalArgumentException
      *             if the index is out of range
      * @throws IllegalArgumentException
      *             if the new value is invalid
-     * 
      * @see #validate()
      */
     @Override
@@ -478,12 +464,10 @@ public class PhasesMap extends EightBitMap {
      *            position in y
      * @param value
      *            new value
-     * 
      * @throws IllegalArgumentException
      *             if the index is out of range
      * @throws IllegalArgumentException
      *             if the new value is invalid
-     * 
      * @see #validate()
      */
     @Override
