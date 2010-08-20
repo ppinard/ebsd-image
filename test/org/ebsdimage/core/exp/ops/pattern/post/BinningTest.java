@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.pattern.post;
 
 import static org.junit.Assert.assertEquals;
@@ -42,14 +42,14 @@ public class BinningTest extends TestCase {
     @Test
     public void testBinning() {
         Binning tmpBinning = new Binning();
-        assertEquals(Binning.DEFAULT_BINNING_SIZE, tmpBinning.size);
+        assertEquals(Binning.DEFAULT_BINNING_FACTOR, tmpBinning.factor);
     }
 
 
 
     @Test
     public void testBinningInt() {
-        assertEquals(2, binning.size);
+        assertEquals(2, binning.factor);
     }
 
 
@@ -86,7 +86,7 @@ public class BinningTest extends TestCase {
 
     @Test
     public void testToString() {
-        assertEquals(binning.toString(), "Binning [binning size=2]");
+        assertEquals(binning.toString(), "Binning [binning factor=2]");
     }
 
 }

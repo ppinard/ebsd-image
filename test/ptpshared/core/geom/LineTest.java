@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.core.geom;
 
 import static org.junit.Assert.assertEquals;
@@ -73,6 +73,76 @@ public class LineTest {
         Line line = new Line(Double.POSITIVE_INFINITY, 2.0);
         assertEquals(Double.POSITIVE_INFINITY, line.m, 1e-7);
         assertEquals(2.0, line.k, 1e-7);
+    }
+
+
+
+    @Test
+    public void testLineLine2D() {
+        int w = 21;
+        int h = 11;
+        Line line;
+        Line expected;
+
+        // Horizontal at origin
+        expected = new Line(0.0, 0.0);
+        line = new Line(new Line2D.Double(-2.1, 5, 23.1, 5), w, h);
+        assertTrue(expected.equals(line, 1e-6));
+
+        // Horizontal above origin
+        expected = new Line(0.0, 0.1);
+        line = new Line(new Line2D.Double(-2.1, 2.9, 23.1, 2.9), w, h);
+        assertTrue(expected.equals(line, 1e-6));
+
+        // Horizontal below origin
+        expected = new Line(0.0, -0.2);
+        line = new Line(new Line2D.Double(-2.1, 9.2, 23.1, 9.2), w, h);
+        assertTrue(expected.equals(line, 1e-6));
+
+        // Vertical at origin
+        expected = new Line(Double.POSITIVE_INFINITY, 0.0);
+        line = new Line(new Line2D.Double(10, -1.1, 10, 12.1), w, h);
+        assertTrue(expected.equals(line, 1e-6));
+
+        // Vertical right of the origin
+        expected = new Line(Double.POSITIVE_INFINITY, 0.2);
+        line = new Line(new Line2D.Double(14.2, -1.1, 14.2, 12.1), w, h);
+        assertTrue(expected.equals(line, 1e-6));
+
+        // Vertical left of the origin
+        expected = new Line(Double.POSITIVE_INFINITY, -0.2);
+        line = new Line(new Line2D.Double(5.8, -1.1, 5.8, 12.1), w, h);
+        assertTrue(expected.equals(line, 1e-6));
+
+        // Oblique bottom-right corner to top-left corner
+        expected = new Line(1.0, 0.0);
+        line = new Line(new Line2D.Double(2.9, 12.1, 16.1, -1.1), w, h);
+        assertTrue(expected.equals(line, 1e-6));
+
+        // Oblique top-right corner to bottom-left corner
+        expected = new Line(-1.0, 0.0);
+        line = new Line(new Line2D.Double(3.9, -1.1, 17.1, 12.1), w, h);
+        assertTrue(expected.equals(line, 1e-6));
+
+        // Oblique (|m| < 1) bottom-right corner to top-left corner
+        expected = new Line(0.1, 0.0);
+        line = new Line(new Line2D.Double(-2.1, 6.21, 23.1, 3.69), w, h);
+        assertTrue(expected.equals(line, 1e-6));
+
+        // Oblique (|m| < 1) top-right corner to bottom-left corner
+        expected = new Line(-0.1, 0.0);
+        line = new Line(new Line2D.Double(-2.1, 3.79, 23.1, 6.31), w, h);
+        assertTrue(expected.equals(line, 1e-6));
+
+        // Oblique (k != 0) bottom-right corner to top-left corner
+        expected = new Line(1.0, -0.2);
+        line = new Line(new Line2D.Double(7.1, 12.1, 20.3, -1.1), w, h);
+        assertTrue(expected.equals(line, 1e-6));
+
+        // Oblique (k != 0) top-right corner to bottom-left corner
+        expected = new Line(-1.0, 0.2);
+        line = new Line(new Line2D.Double(8.1, -1.1, 21.3, 12.1), w, h);
+        assertTrue(expected.equals(line, 1e-6));
     }
 
 

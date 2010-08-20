@@ -30,7 +30,6 @@ import rmlshared.gui.Panel;
  * GUI Dialog for the <code>Binning</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class BinningDialog extends OperationDialog {
 
@@ -46,12 +45,12 @@ public class BinningDialog extends OperationDialog {
         super("Binning");
 
         binningSizeField =
-                new PowerOfTwoIntField("Binning Size",
-                        Binning.DEFAULT_BINNING_SIZE);
+                new PowerOfTwoIntField("Binning Factor",
+                        Binning.DEFAULT_BINNING_FACTOR);
 
         Panel panel = new Panel();
 
-        panel.add(new JLabel("Binning size"));
+        panel.add(new JLabel("Binning factor"));
         panel.add(binningSizeField);
 
         setMainComponent(panel);

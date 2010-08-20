@@ -48,7 +48,7 @@ public class BinningXmlLoaderTest {
         Binning op = new BinningXmlLoader().load(element);
 
         assertEquals(TAG_NAME, op.getName());
-        assertEquals(4, op.size);
+        assertEquals(4, op.factor);
     }
 
 }

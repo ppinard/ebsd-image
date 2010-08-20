@@ -56,7 +56,7 @@ public class BinningXmlSaver implements ObjectXmlSaver {
     public Element save(Binning op) {
         Element element = new Element(TAG_NAME);
 
-        element.setAttribute(ATTR_SIZE, Integer.toString(op.size));
+        element.setAttribute(ATTR_SIZE, Integer.toString(op.factor));
 
         return element;
     }

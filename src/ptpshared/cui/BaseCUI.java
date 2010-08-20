@@ -23,6 +23,7 @@ import org.apache.commons.cli.*;
 
 import ptpshared.utility.LoggerUtil;
 import rmlshared.cui.Console;
+import rmlshared.cui.ErrorDialog;
 import rmlshared.cui.MessageDialog;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 
@@ -120,5 +121,93 @@ public abstract class BaseCUI {
         }
 
         return cmdLine;
+    }
+
+
+
+    /**
+     * Returns an integer value from an option of the command line. Returns -1
+     * if the option doesn't exist.
+     * 
+     * @param cmdLine
+     *            command line (parsed arguments)
+     * @param option
+     *            name of the option
+     * @return integer value
+     */
+    protected int getInteger(CommandLine cmdLine, String option) {
+        if (!cmdLine.hasOption(option)) {
+            ErrorDialog.show("No " + option + " is specified.");
+            return -1;
+        }
+
+        if (cmdLine.getOptionValue(option) == null) {
+            ErrorDialog.show("Please specify a " + option + ".");
+            return -1;
+        }
+
+        int value;
+
+        try {
+            value = Integer.parseInt(cmdLine.getOptionValue(option));
+            MessageDialog.show(option + ": " + value);
+        } catch (NumberFormatException ex) {
+            ErrorDialog.show(option + " is not an integer value.");
+            value = -1;
+        }
+
+        return value;
+    }
+
+
+
+    /**
+     * Returns a double value from an option of the command line. Returns NaN if
+     * the option doesn't exist.
+     * 
+     * @param cmdLine
+     *            command line (parsed arguments)
+     * @param option
+     *            name of the option
+     * @return double value
+     */
+    protected double getDouble(CommandLine cmdLine, String option) {
+        if (!cmdLine.hasOption(option)) {
+            ErrorDialog.show("No " + option + " is specified.");
+            return Double.NaN;
+        }
+
+        if (cmdLine.getOptionValue(option) == null) {
+            ErrorDialog.show("Please specify a " + option + ".");
+            return Double.NaN;
+        }
+
+        double value;
+
+        try {
+            value = Double.parseDouble(cmdLine.getOptionValue(option));
+            MessageDialog.show(option + ": " + value);
+        } catch (NumberFormatException ex) {
+            ErrorDialog.show(option + " is not a double value.");
+            value = Double.NaN;
+        }
+
+        return value;
+    }
+
+
+
+    /**
+     * Returns if the option is part of the arguments. In other words, if it is
+     * <code>true</code>.
+     * 
+     * @param cmdLine
+     *            command line (parsed arguments)
+     * @param option
+     *            name of the option
+     * @return boolean value
+     */
+    protected boolean getBoolean(CommandLine cmdLine, String option) {
+        return cmdLine.hasOption(option);
     }
 }

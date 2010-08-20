@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 import net.jcip.annotations.Immutable;
 import ptpshared.core.math.Vector3D;
 import rmlshared.geom.LineUtil;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
 
 /**
  * Represents a 2D line using a slope and intercept. This is a more general
@@ -71,6 +72,40 @@ public class Line {
 
         this.m = m;
         this.k = k;
+    }
+
+
+
+    /**
+     * Creates a new <code>Line</code> from a <code>Line2D</code> of
+     * java.awt.geom.
+     * 
+     * @param line2D
+     *            a 2D line
+     * @param width
+     *            width of the image containing the line
+     * @param height
+     *            height of the image containing the line
+     */
+    public Line(Line2D.Double line2D, int width, int height) {
+        // Flip y axis
+        line2D.y1 = height - 1 - line2D.y1;
+        line2D.y2 = height - 1 - line2D.y2;
+
+        // Translate the origin from the upper left corner to the center of the
+        // image
+        LineUtil.translate(line2D, -width / 2, -height / 2);
+
+        m = LineUtil.getSlope(line2D);
+
+        if (Double.isInfinite(m)) {
+            // Vertical line
+            assert line2D.x1 == line2D.x2;
+            k = line2D.x1 / width;
+        } else
+            // Horizontal and oblique line
+            k = LineUtil.getOrdinate(line2D) / width;
+
     }
 
 
@@ -186,6 +221,7 @@ public class Line {
      *            height of the image
      * @return <code>Line2D</code> containing the two points
      */
+    @CheckForNull
     public Line2D.Double toLine2D(int width, int height) {
         Line2D.Double line2D = getLine2D(width);
 

@@ -21,6 +21,7 @@ import org.ebsdimage.core.exp.Exp;
 
 import rmlimage.core.ByteMap;
 import rmlimage.core.Transform;
+import rmlshared.math.IntUtil;
 
 /**
  * Operation to reduce the size of the pattern map.
@@ -30,34 +31,37 @@ import rmlimage.core.Transform;
 public class Binning extends PatternPostOps {
 
     /** Binning size, i.e. reduction factor. */
-    public final int size;
+    public final int factor;
 
     /** Default binning size. */
-    public static final int DEFAULT_BINNING_SIZE = 1;
+    public static final int DEFAULT_BINNING_FACTOR = 1;
 
 
 
     /**
-     * Creates a new binning operation with the default binning size.
+     * Creates a new binning operation with the default binning factor.
      */
     public Binning() {
-        this(DEFAULT_BINNING_SIZE);
+        this(DEFAULT_BINNING_FACTOR);
     }
 
 
 
     /**
-     * Creates a new binning operation from the specified binning size.
+     * Creates a new binning operation from the specified binning factor.
      * 
-     * @param size
-     *            binning size
+     * @param factor
+     *            binning factor (must be a power of two)
      */
-    public Binning(int size) {
-        if (size <= 0)
-            throw new IllegalArgumentException("Binning size (" + size
+    public Binning(int factor) {
+        if (factor <= 0)
+            throw new IllegalArgumentException("Binning size (" + factor
                     + ") must be > " + 0 + '.');
+        if (!IntUtil.isPowerOfTwo(factor))
+            throw new IllegalArgumentException(
+                    "The factor must be a power of two.");
 
-        this.size = size;
+        this.factor = factor;
     }
 
 
@@ -72,7 +76,7 @@ public class Binning extends PatternPostOps {
             return false;
 
         Binning other = (Binning) obj;
-        if (size != other.size)
+        if (factor != other.factor)
             return false;
 
         return true;
@@ -84,7 +88,7 @@ public class Binning extends PatternPostOps {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + size;
+        result = prime * result + factor;
         return result;
     }
 
@@ -102,7 +106,7 @@ public class Binning extends PatternPostOps {
      */
     @Override
     public ByteMap process(Exp exp, ByteMap srcMap) {
-        ByteMap destMap = Transform.binning(srcMap, size, size);
+        ByteMap destMap = Transform.binning(srcMap, factor, factor);
 
         // Apply properties of srcMap
         destMap.setProperties(srcMap);
@@ -114,7 +118,7 @@ public class Binning extends PatternPostOps {
 
     @Override
     public String toString() {
-        return "Binning [binning size=" + size + "]";
+        return "Binning [binning factor=" + factor + "]";
     }
 
 }

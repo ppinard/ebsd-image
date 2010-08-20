@@ -51,7 +51,7 @@ public class BinningXmlLoader implements ObjectXmlLoader {
                     + TAG_NAME + " not " + element.getName() + ".");
 
         int size = JDomUtil.getIntegerFromAttribute(element, ATTR_SIZE,
-                Binning.DEFAULT_BINNING_SIZE);
+                Binning.DEFAULT_BINNING_FACTOR);
         return new Binning(size);
     }
 

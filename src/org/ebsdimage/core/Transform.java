@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static java.lang.Math.ceil;
@@ -31,7 +31,6 @@ import rmlshared.ui.Monitorable;
  * Transformation of one map into another.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Transform implements Monitorable {
 
@@ -42,7 +41,6 @@ public class Transform implements Monitorable {
      *            <code>ByteMap</code> to do the transform of.
      * @param deltaTheta
      *            angle increment (in radians).
-     * 
      * @return the Hough transform.
      */
     public static HoughMap hough(ByteMap byteMap, double deltaTheta) {
@@ -51,8 +49,6 @@ public class Transform implements Monitorable {
 
     /** Progress value. */
     protected double progress = 0;
-
-
 
     /** Flag indicating if the operation should be interrupted. */
     private boolean isInterrupted = false;
@@ -96,9 +92,7 @@ public class Transform implements Monitorable {
      *            <code>ByteMap</code> to do the transform of
      * @param deltaTheta
      *            angle increment (in radians)
-     * 
      * @return the Hough transform
-     * 
      * @see #getTaskProgress()
      * @see #getTaskStatus()
      */
@@ -119,7 +113,7 @@ public class Transform implements Monitorable {
      *            input Hough map
      * @return the Hough transform
      */
-    private HoughMap doHough(ByteMap byteMap, HoughMap houghMap) {
+    public HoughMap doHough(ByteMap byteMap, HoughMap houghMap) {
         // Discussed on 2009-12-06 whether the properties of the pattern should
         // follow in the hough map. It was agreed that it will for now unless a
         // counter-argument is found.
