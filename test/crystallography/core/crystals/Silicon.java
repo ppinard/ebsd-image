@@ -14,28 +14,27 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core.crystals;
 
 import crystallography.core.AtomSitesFactory;
 import crystallography.core.Crystal;
-import crystallography.core.LaueGroup;
+import crystallography.core.SpaceGroups;
 import crystallography.core.UnitCellFactory;
 
 /**
- * Zirconium Alpha crystal.
+ * Silicon crystal.
  * 
  * @author Philippe T. Pinard
- * 
  */
-public class ZirconiumAlpha extends Crystal {
+public class Silicon extends Crystal {
 
     /**
-     * Creates a new <code>Crystal</code> for pure zirconium alpha (HCP,
-     * <code>a=3.2 angstroms</code> and <code>c=5.15 angstroms</code>).
+     * Creates a new <code>Crystal</code> for pure silicon (FCC,
+     * <code>a=5.43 angstroms</code>).
      */
-    public ZirconiumAlpha() {
-        super("Zirconium Alpha", UnitCellFactory.hexagonal(3.2, 5.15),
-                AtomSitesFactory.atomSitesHCP(40), LaueGroup.LG6mmm);
+    public Silicon() {
+        super("Silicon", UnitCellFactory.cubic(5.43),
+                AtomSitesFactory.atomSitesFCC(14), SpaceGroups.fromIndex(216));
     }
 }

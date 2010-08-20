@@ -14,10 +14,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.io;
 
 import static crystallography.io.CrystalXmlTags.ATTR_NAME;
+import static crystallography.io.CrystalXmlTags.TAG_NAME;
 
 import org.jdom.Element;
 
@@ -29,7 +30,6 @@ import crystallography.core.Crystal;
  * XML saver for <code>Crystal</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class CrystalXmlSaver implements ObjectXmlSaver {
 
@@ -43,13 +43,13 @@ public class CrystalXmlSaver implements ObjectXmlSaver {
      * @return an XML <code>Element</code>
      */
     public Element save(Crystal crystal) {
-        Element element = new Element(crystal.getClass().getSimpleName());
+        Element element = new Element(TAG_NAME);
 
         element.setAttribute(ATTR_NAME, crystal.name.toString());
 
         element.addContent(new UnitCellXmlSaver().save(crystal.unitCell));
         element.addContent(new AtomSitesXmlSaver().save(crystal.atoms));
-        element.addContent(new LaueGroupXmlSaver().save(crystal.laueGroup));
+        element.addContent(new SpaceGroupXmlSaver().save(crystal.spaceGroup));
 
         return element;
     }

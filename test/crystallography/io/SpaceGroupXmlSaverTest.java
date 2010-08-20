@@ -17,10 +17,8 @@
  */
 package crystallography.io;
 
-import static crystallography.io.LaueGroupXmlTags.ATTR_CRYSTAL_SYSTEM;
-import static crystallography.io.LaueGroupXmlTags.ATTR_INDEX;
-import static crystallography.io.LaueGroupXmlTags.ATTR_SYMBOL;
-import static crystallography.io.LaueGroupXmlTags.TAG_NAME;
+import static crystallography.io.SpaceGroupXmlTags.ATTR_INDEX;
+import static crystallography.io.SpaceGroupXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
 import org.jdom.Element;
@@ -29,25 +27,25 @@ import org.junit.Test;
 
 import ptpshared.utility.xml.JDomUtil;
 import ptpshared.utility.xml.ObjectXml;
-import crystallography.core.CrystalSystem;
-import crystallography.core.LaueGroup;
+import crystallography.core.SpaceGroup;
+import crystallography.core.SpaceGroups;
 
-public class LaueGroupXmlSaverTest {
+public class SpaceGroupXmlSaverTest {
 
-    private LaueGroup pg;
+    private SpaceGroup sg;
 
 
 
     @Before
     public void setUp() throws Exception {
-        pg = LaueGroup.LG1;
+        sg = SpaceGroups.SG1;
     }
 
 
 
     @Test
     public void testSaveObjectXml() {
-        Element element = new LaueGroupXmlSaver().save((ObjectXml) pg);
+        Element element = new SpaceGroupXmlSaver().save((ObjectXml) sg);
         testElement(element);
     }
 
@@ -55,7 +53,7 @@ public class LaueGroupXmlSaverTest {
 
     @Test
     public void testSavePointGroup() {
-        Element element = new LaueGroupXmlSaver().save(pg);
+        Element element = new SpaceGroupXmlSaver().save(sg);
         testElement(element);
     }
 
@@ -64,10 +62,5 @@ public class LaueGroupXmlSaverTest {
     private void testElement(Element element) {
         assertEquals(TAG_NAME, element.getName());
         assertEquals(1, JDomUtil.getIntegerFromAttribute(element, ATTR_INDEX));
-        assertEquals(pg.symbol,
-                JDomUtil.getStringFromAttribute(element, ATTR_SYMBOL));
-        assertEquals(pg.crystalSystem,
-                CrystalSystem.valueOf(JDomUtil.getStringFromAttribute(element,
-                        ATTR_CRYSTAL_SYSTEM)));
     }
 }

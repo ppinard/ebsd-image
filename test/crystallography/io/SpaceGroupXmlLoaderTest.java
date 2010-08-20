@@ -17,10 +17,8 @@
  */
 package crystallography.io;
 
-import static crystallography.io.LaueGroupXmlTags.ATTR_CRYSTAL_SYSTEM;
-import static crystallography.io.LaueGroupXmlTags.ATTR_INDEX;
-import static crystallography.io.LaueGroupXmlTags.ATTR_SYMBOL;
-import static crystallography.io.LaueGroupXmlTags.TAG_NAME;
+import static crystallography.io.SpaceGroupXmlTags.ATTR_INDEX;
+import static crystallography.io.SpaceGroupXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
 import org.jdom.Element;
@@ -28,10 +26,10 @@ import org.jdom.IllegalNameException;
 import org.junit.Before;
 import org.junit.Test;
 
-import crystallography.core.CrystalSystem;
-import crystallography.core.LaueGroup;
+import crystallography.core.SpaceGroup;
+import crystallography.core.SpaceGroups;
 
-public class LaueGroupXmlLoaderTest {
+public class SpaceGroupXmlLoaderTest {
 
     private Element element;
 
@@ -42,47 +40,34 @@ public class LaueGroupXmlLoaderTest {
         element = new Element(TAG_NAME);
 
         element.setAttribute(ATTR_INDEX, Integer.toString(1));
-        element.setAttribute(ATTR_SYMBOL, "1");
-        element.setAttribute(ATTR_CRYSTAL_SYSTEM,
-                CrystalSystem.TRICLINIC.toString());
     }
 
 
 
     @Test
     public void testLoad() {
-        LaueGroup pg = new LaueGroupXmlLoader().load(element);
-        LaueGroup expected = LaueGroup.LG1;
+        SpaceGroup sg = new SpaceGroupXmlLoader().load(element);
+        SpaceGroup expected = SpaceGroups.SG1;
 
-        assertEquals(expected.index, pg.index);
-        assertEquals(expected.symbol, pg.symbol);
-        assertEquals(expected.crystalSystem, pg.crystalSystem);
+        assertEquals(expected.index, sg.index);
+        assertEquals(expected.symbol, sg.symbol);
+        assertEquals(expected.crystalSystem, sg.crystalSystem);
     }
 
 
 
     @Test(expected = IllegalNameException.class)
     public void testLoadExceptionElementName() {
-        new LaueGroupXmlLoader().load(new Element("Incorrect"));
+        new SpaceGroupXmlLoader().load(new Element("Incorrect"));
     }
 
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void testLoadExceptionHMSymbol() {
-        element.setAttribute(ATTR_SYMBOL, "2");
+    public void testLoadExceptionIndex() {
+        element.setAttribute(ATTR_INDEX, "231");
 
-        new LaueGroupXmlLoader().load(element);
-    }
-
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testLoadExceptionSchoenfliesSymbol() {
-        element.setAttribute(ATTR_CRYSTAL_SYSTEM,
-                CrystalSystem.CUBIC.toString());
-
-        new LaueGroupXmlLoader().load(element);
+        new SpaceGroupXmlLoader().load(element);
     }
 
 }

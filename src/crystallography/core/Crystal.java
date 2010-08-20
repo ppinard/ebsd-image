@@ -50,9 +50,9 @@ public class Crystal implements ObjectXml {
     @NonNull
     public final AtomSites atoms;
 
-    /** Laue group of the crystal. */
+    /** Space group of the crystal. */
     @NonNull
-    public final LaueGroup laueGroup;
+    public final SpaceGroup spaceGroup;
 
 
 
@@ -65,8 +65,8 @@ public class Crystal implements ObjectXml {
      *            <code>UnitCell</code> of the crystal
      * @param atomSites
      *            <code>AtomSites</code> of the crystal
-     * @param laueGroup
-     *            <code>LaueGroup</code> of the crystal
+     * @param spaceGroup
+     *            <code>SpaceGroup</code> of the crystal
      * @throws NullPointerException
      *             if the name is null
      * @throws NullPointerException
@@ -74,12 +74,12 @@ public class Crystal implements ObjectXml {
      * @throws NullPointerException
      *             if the atom sites is null
      * @throws NullPointerException
-     *             if the Laue group is null
+     *             if the space group is null
      * @throws IllegalArgumentException
      *             if the name is an empty string
      */
     public Crystal(String name, UnitCell unitCell, AtomSites atomSites,
-            LaueGroup laueGroup) {
+            SpaceGroup spaceGroup) {
         if (name == null)
             throw new NullPointerException("The crystal name cannot be null.");
         if (name.length() == 0)
@@ -89,13 +89,13 @@ public class Crystal implements ObjectXml {
             throw new NullPointerException("The unit cell cannot be null.");
         if (atomSites == null)
             throw new NullPointerException("The atom sites cannot be null.");
-        if (laueGroup == null)
-            throw new NullPointerException("The Laue group cannot be null.");
+        if (spaceGroup == null)
+            throw new NullPointerException("The space group cannot be null.");
 
         this.name = name;
         this.unitCell = unitCell;
-        atoms = atomSites;
-        this.laueGroup = laueGroup;
+        atoms = Calculations.equivalentPositions(atomSites, spaceGroup);
+        this.spaceGroup = spaceGroup;
     }
 
 
@@ -135,7 +135,7 @@ public class Crystal implements ObjectXml {
             return false;
         if (!(atoms.equals(other.atoms, precision)))
             return false;
-        if (!(laueGroup.equals(other.laueGroup)))
+        if (!(spaceGroup.equals(other.spaceGroup)))
             return false;
 
         return true;
@@ -167,7 +167,7 @@ public class Crystal implements ObjectXml {
             return false;
         if (!atoms.equals(other.atoms))
             return false;
-        if (!(laueGroup.equals(other.laueGroup)))
+        if (!(spaceGroup.equals(other.spaceGroup)))
             return false;
 
         return true;
@@ -187,7 +187,7 @@ public class Crystal implements ObjectXml {
         result = prime * result + atoms.hashCode();
         result = prime * result + name.hashCode();
         result = prime * result + unitCell.hashCode();
-        result = prime * result + laueGroup.hashCode();
+        result = prime * result + spaceGroup.hashCode();
         return result;
     }
 

@@ -17,24 +17,18 @@
  */
 package crystallography.io;
 
-import crystallography.core.LaueGroup;
+import crystallography.core.SpaceGroup;
 
 /**
- * Tags for <code>LaueGroup</code>'s XML <code>Element</code>.
+ * Tags for <code>SpaceGroup</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
  */
-public class LaueGroupXmlTags {
+public class SpaceGroupXmlTags {
 
-    /** XML tag name for <code>LaueGroup</code>. */
-    public static final String TAG_NAME = LaueGroup.class.getSimpleName();
-
-    /** XML attribute for the symbol. */
-    public static final String ATTR_SYMBOL = "symbol";
+    /** XML tag name for <code>SpaceGroup</code>. */
+    public static final String TAG_NAME = SpaceGroup.class.getSimpleName();
 
     /** XML attribute for the index. */
     public static final String ATTR_INDEX = "index";
-
-    /** XML attribute for the crystal system. */
-    public static final String ATTR_CRYSTAL_SYSTEM = "crystalSystem";
 }

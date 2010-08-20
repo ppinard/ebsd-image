@@ -13,7 +13,7 @@ import org.junit.Test;
 import rmlshared.io.FileUtil;
 import crystallography.core.AtomSite;
 import crystallography.core.Crystal;
-import crystallography.core.LaueGroup;
+import crystallography.core.SpaceGroups;
 
 public class CifLoaderTest {
 
@@ -42,7 +42,7 @@ public class CifLoaderTest {
         assertEquals(91, Math.toDegrees(crystal.unitCell.beta), 1e-3);
         assertEquals(92, Math.toDegrees(crystal.unitCell.gamma), 1e-3);
 
-        assertEquals(41, crystal.atoms.size());
+        assertEquals(164, crystal.atoms.size());
 
         HashMap<Integer, Integer> atoms = new HashMap<Integer, Integer>();
         for (AtomSite atom : crystal.atoms)
@@ -51,11 +51,11 @@ public class CifLoaderTest {
             else
                 atoms.put(atom.atomicNumber, 1);
 
-        assertTrue(atoms.get(12).equals(9)); // Mg
-        assertTrue(atoms.get(14).equals(8)); // Si
-        assertTrue(atoms.get(8).equals(24)); // O
+        assertTrue(atoms.get(12).equals(36)); // Mg
+        assertTrue(atoms.get(14).equals(32)); // Si
+        assertTrue(atoms.get(8).equals(96)); // O
 
-        assertEquals(LaueGroup.LGmmm, crystal.laueGroup);
+        assertEquals(SpaceGroups.SG62, crystal.spaceGroup);
     }
 
 }

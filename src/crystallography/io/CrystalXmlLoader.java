@@ -25,11 +25,7 @@ import org.jdom.IllegalNameException;
 
 import ptpshared.utility.xml.JDomUtil;
 import ptpshared.utility.xml.ObjectXmlLoader;
-import rmlshared.thread.Reflection;
-import crystallography.core.AtomSites;
-import crystallography.core.Crystal;
-import crystallography.core.LaueGroup;
-import crystallography.core.UnitCell;
+import crystallography.core.*;
 
 /**
  * XML loader for <code>Crystal</code>.
@@ -54,83 +50,39 @@ public class CrystalXmlLoader implements ObjectXmlLoader {
      */
     @Override
     public Crystal load(Element element) {
-        String className = element.getName();
+        if (!element.getName().equals(TAG_NAME))
+            throw new IllegalNameException("Name of the element should be "
+                    + TAG_NAME + " not " + element.getName() + ".");
 
-        String name;
-        UnitCell unitCell;
-        AtomSites atoms;
-        LaueGroup laueGroup;
+        String name = JDomUtil.getStringFromAttribute(element, ATTR_NAME);
 
-        if (className.equals(TAG_NAME)) { // Generic crystal
-            name = JDomUtil.getStringFromAttribute(element, ATTR_NAME);
+        UnitCell unitCell =
+                new UnitCellXmlLoader().load(JDomUtil.getChild(element,
+                        UnitCellXmlTags.TAG_NAME));
 
-            unitCell =
-                    new UnitCellXmlLoader().load(JDomUtil.getChild(element,
-                            UnitCellXmlTags.TAG_NAME));
+        AtomSites atoms =
+                new AtomSitesXmlLoader().load(JDomUtil.getChild(element,
+                        AtomSitesXmlTags.TAG_NAME));
 
-            atoms =
-                    new AtomSitesXmlLoader().load(JDomUtil.getChild(element,
-                            AtomSitesXmlTags.TAG_NAME));
+        SpaceGroup sg;
+        Element child = element.getChild(SpaceGroupXmlTags.TAG_NAME);
+        if (child != null) {
+            sg = new SpaceGroupXmlLoader().load(child);
+        } else { // Old crystal file with only Point group
+            child = element.getChild("PointGroup");
 
-            Element child = element.getChild(LaueGroupXmlTags.TAG_NAME);
-            if (child == null)
-                child = element.getChild("PointGroup");
             if (child == null)
                 throw new IllegalArgumentException(
-                        "Element must have a child Laue Group.");
-            laueGroup = new LaueGroupXmlLoader().load(child);
-        } else { // Specific crystal (already defined)
-            String classPath =
-                    "crystallography.core.crystals" + "." + className;
+                        "Crystal must have a space group.");
 
-            // Temporary load crystal
-            Crystal tmpCrystal;
-            try {
-                tmpCrystal = (Crystal) Reflection.newInstance(classPath);
-            } catch (IllegalArgumentException ex) {
-                throw new IllegalNameException(
-                        "No crystal with element's name (" + className
-                                + ") was found.");
-            }
+            // Open Laue group
+            int index = JDomUtil.getIntegerFromAttribute(child, "laueGroup");
+            LaueGroup lg = LaueGroup.fromIndex(index);
 
-            // Override tmpCrystal name, unit cell or atom sites if they are
-            // specified
-
-            // If given, use name from XML element; if not, use name from
-            // tmpCrystal
-            if (JDomUtil.hasAttribute(element, ATTR_NAME))
-                name = JDomUtil.getStringFromAttribute(element, ATTR_NAME);
-            else
-                name = tmpCrystal.name;
-
-            // If given, use unit cell from XML element; if not, use unit cell
-            // from tmpCrystal
-            if (JDomUtil.hasChild(element, UnitCellXmlTags.TAG_NAME))
-                unitCell =
-                        new UnitCellXmlLoader().load(JDomUtil.getChild(element,
-                                UnitCellXmlTags.TAG_NAME));
-            else
-                unitCell = tmpCrystal.unitCell;
-
-            // If given, use atom sites from XML element; if not, use atom sites
-            // from tmpCrystal
-            if (JDomUtil.hasChild(element, AtomSitesXmlTags.TAG_NAME))
-                atoms =
-                        new AtomSitesXmlLoader().load(JDomUtil.getChild(
-                                element, AtomSitesXmlTags.TAG_NAME));
-            else
-                atoms = tmpCrystal.atoms;
-
-            // If given, use Laue group from XML element; if not, use Laue
-            // group from tmpCrystal
-            if (JDomUtil.hasChild(element, LaueGroupXmlTags.TAG_NAME))
-                laueGroup =
-                        new LaueGroupXmlLoader().load(JDomUtil.getChild(
-                                element, LaueGroupXmlTags.TAG_NAME));
-            else
-                laueGroup = tmpCrystal.laueGroup;
+            // Select the first space group of the list
+            sg = SpaceGroups.list(lg)[0];
         }
 
-        return new Crystal(name, unitCell, atoms, laueGroup);
+        return new Crystal(name, unitCell, atoms, sg);
     }
 }

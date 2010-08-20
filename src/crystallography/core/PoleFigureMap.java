@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import static java.lang.Math.*;
@@ -28,15 +28,12 @@ import rmlimage.module.real.core.RealMap;
  * Stereographic pole figure. Draw rotation(s) on a stereographic pole figure.
  * The <code>PoleFigureMap</code> extends a <code>RealMap</code>, therefore it
  * can be saved and loaded as a <code>RealMap</code> as well as used in any
- * <code>RealMap</code> operations.
- * 
- * <b>References:</b>
+ * <code>RealMap</code> operations. <b>References:</b>
  * <ul>
  * <li>Orilib</li>
  * </ul>
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PoleFigureMap extends RealMap {
 
@@ -93,7 +90,7 @@ public class PoleFigureMap extends RealMap {
      *            a rotation
      */
     public void drawRotation(Quaternion rotation) {
-        for (Quaternion op : crystal.laueGroup.getOperators()) {
+        for (Quaternion op : crystal.spaceGroup.getOperators()) {
             Quaternion equiv = rotation.multiply(op);
 
             Vector3D out = QuaternionMath.rotate(pole, equiv);

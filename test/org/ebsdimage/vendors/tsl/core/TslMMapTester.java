@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.tsl.core;
 
 import static org.junit.Assert.assertEquals;
@@ -27,8 +27,6 @@ import org.ebsdimage.TestCase;
 import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.PhasesMap;
 import org.ebsdimage.io.PhasesMapLoader;
-import org.ebsdimage.vendors.tsl.core.TslMMap;
-import org.ebsdimage.vendors.tsl.core.TslMetadata;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,7 +40,9 @@ import crystallography.io.CrystalLoader;
 public abstract class TslMMapTester extends TestCase {
 
     protected TslMMap mmap;
+
     protected Crystal wcPhase;
+
     protected Crystal nickelPhase;
 
 
@@ -50,11 +50,9 @@ public abstract class TslMMapTester extends TestCase {
     @Before
     public void setUp() throws Exception {
         wcPhase =
-                new CrystalLoader().load(FileUtil
-                        .getFile("org/ebsdimage/vendors/tsl/testdata/WC.xml"));
+                new CrystalLoader().load(FileUtil.getFile("org/ebsdimage/vendors/tsl/testdata/WC.xml"));
         nickelPhase =
-                new CrystalLoader().load(FileUtil
-                        .getFile("org/ebsdimage/vendors/tsl/testdata/Nickel.xml"));
+                new CrystalLoader().load(FileUtil.getFile("org/ebsdimage/vendors/tsl/testdata/Nickel.xml"));
     }
 
 
@@ -265,8 +263,7 @@ public abstract class TslMMapTester extends TestCase {
         PhasesMap phasesMap = mmap.getPhasesMap();
 
         PhasesMap expectedPhasesMap =
-                new PhasesMapLoader().load(FileUtil
-                        .getFile("org/ebsdimage/vendors/tsl/testdata/Phases.bmp"));
+                new PhasesMapLoader().load(FileUtil.getFile("org/ebsdimage/vendors/tsl/testdata/Phases.bmp"));
 
         phasesMap.assertEquals(expectedPhasesMap);
 

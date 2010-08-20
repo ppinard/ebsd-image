@@ -14,7 +14,7 @@
           <Position x="0.33333" y="0.66666" z="0.5" />
         </AtomSite>
       </AtomSites>
-      <LaueGroup index="9" symbol="6/mmm" crystalSystem="HEXAGONAL" />
+      <SpaceGroup index="194" />
     </Crystal>
     <Crystal name="Nickel" id="2">
       <UnitCell a="3.52" b="3.52" c="3.52" dimUnits="angstrom" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="1.5707963267948966" angleUnits="rad" />
@@ -36,7 +36,7 @@
           <Position x="0.5" y="0.5" z="0.0" />
         </AtomSite>
       </AtomSites>
-      <LaueGroup index="11" symbol="m3m" crystalSystem="CUBIC" />
+      <SpaceGroup index="208" />
     </Crystal>
   </Phases>
 </PhasesMap>

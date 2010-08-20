@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.io;
 
 import static crystallography.io.CrystalXmlTags.ATTR_NAME;
@@ -62,14 +62,15 @@ public class CrystalXmlSaverTest {
 
 
     private void testElement(Element element) {
-        assertEquals(IronBCC.class.getSimpleName(), element.getName());
-        assertEquals(crystal.name, JDomUtil.getStringFromAttribute(element,
-                ATTR_NAME));
-        UnitCell unitCell = new UnitCellXmlLoader().load(JDomUtil.getChild(
-                element, UnitCellXmlTags.TAG_NAME));
+        assertEquals(crystal.name,
+                JDomUtil.getStringFromAttribute(element, ATTR_NAME));
+        UnitCell unitCell =
+                new UnitCellXmlLoader().load(JDomUtil.getChild(element,
+                        UnitCellXmlTags.TAG_NAME));
         assertTrue(crystal.unitCell.equals(unitCell, 1e-7));
-        AtomSites atoms = new AtomSitesXmlLoader().load(JDomUtil.getChild(
-                element, AtomSitesXmlTags.TAG_NAME));
+        AtomSites atoms =
+                new AtomSitesXmlLoader().load(JDomUtil.getChild(element,
+                        AtomSitesXmlTags.TAG_NAME));
         assertTrue(crystal.atoms.equals(atoms, 1e-7));
     }
 

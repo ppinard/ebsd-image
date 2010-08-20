@@ -17,8 +17,8 @@
  */
 package crystallography.core;
 
+import static crystallography.core.Constants.*;
 import static crystallography.core.CrystalSystem.*;
-import static crystallography.core.Operator.*;
 import ptpshared.core.math.Quaternion;
 import ptpshared.utility.xml.ObjectXml;
 import rmlshared.util.Labeled;
@@ -41,45 +41,45 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 public enum LaueGroup implements ObjectXml, Labeled {
 
     /** 1st <code>LaueGroup</code> (1 or -1). */
-    LG1(1, "1", TRICLINIC, new Operator[] { O1 }),
+    LG1(1, "1", TRICLINIC, new Quaternion[] { O1 }),
 
     /** 2nd <code>LaueGroup</code> (2, m or 2/m). */
-    LG2m(2, "2/m", MONOCLINIC, new Operator[] { O1, O2_Y }),
+    LG2m(2, "2/m", MONOCLINIC, new Quaternion[] { O1, O2_Y }),
 
     /** 3rd <code>LaueGroup</code> (222, mm2 or mmm). */
-    LGmmm(3, "mmm", ORTHORHOMBIC, new Operator[] { O1, O2_Y, O2_X, O2_Z }),
+    LGmmm(3, "mmm", ORTHORHOMBIC, new Quaternion[] { O1, O2_Y, O2_X, O2_Z }),
 
     /** 10th <code>LaueGroup</code> (23 or m-3). */
-    LGm3(10, "m3", CUBIC, new Operator[] { O1, O3P_XYZ, O3N_XYZ, O3P_XNYNZ,
+    LGm3(10, "m3", CUBIC, new Quaternion[] { O1, O3P_XYZ, O3N_XYZ, O3P_XNYNZ,
             O3N_XNYNZ, O3P_NXYNZ, O3N_NXYNZ, O3P_NXNYZ, O3N_NXNYZ, O2_Z, O2_Y,
             O2_X }),
 
     /** 4th <code>LaueGroup</code> (3 or -3). */
-    LG3(4, "3", TRIGONAL, new Operator[] { O1, H3P_Z, H3N_Z }),
+    LG3(4, "3", TRIGONAL, new Quaternion[] { O1, H3P_Z, H3N_Z }),
 
     /** 5th <code>LaueGroup</code> (32, 3m or -3m). */
-    LG3m(5, "3m", TRIGONAL, new Operator[] { O1, H3P_Z, H3N_Z, H2_XY, H2_XNY,
+    LG3m(5, "3m", TRIGONAL, new Quaternion[] { O1, H3P_Z, H3N_Z, H2_XY, H2_XNY,
             O2_Y }),
 
     /** 6th <code>LaueGroup</code> (4, -4 or 4/m). */
-    LG4m(6, "4/m", TETRAGONAL, new Operator[] { O1, O2_Z, O4P_Z, O4N_Z }),
+    LG4m(6, "4/m", TETRAGONAL, new Quaternion[] { O1, O2_Z, O4P_Z, O4N_Z }),
 
     /** 7th <code>LaueGroup</code> (422, 4mm, 42m or 4/mmm). */
-    LG4mmm(7, "4/mmm", TETRAGONAL, new Operator[] { O1, O2_Y, O2_X, O2_Z,
+    LG4mmm(7, "4/mmm", TETRAGONAL, new Quaternion[] { O1, O2_Y, O2_X, O2_Z,
             O4P_Z, O4N_Z, O2_XY, O2_XNY }),
 
     /** 11th <code>LaueGroup</code> (432, 43m or m3m). */
-    LGm3m(11, "m3m", CUBIC, new Operator[] { O1, O3P_XYZ, O3N_XYZ, O3P_XNYNZ,
+    LGm3m(11, "m3m", CUBIC, new Quaternion[] { O1, O3P_XYZ, O3N_XYZ, O3P_XNYNZ,
             O3N_XNYNZ, O3P_NXYNZ, O3N_NXYNZ, O3P_NXNYZ, O3N_NXNYZ, O2_Z, O2_Y,
             O2_X, O2_XY, O2_XNY, O2_XZ, O2_NXZ, O2_YZ, O2_YNZ, O4P_Z, O4N_Z,
             O4P_Y, O4N_Y, O4P_X, O4N_X }),
 
     /** 8th <code>LaueGroup</code> (6, -6 or 6/m). */
-    LG6m(8, "6/m", HEXAGONAL, new Operator[] { O1, H3P_Z, H3N_Z, H6P_Z, H6N_Z,
-            O2_Z }),
+    LG6m(8, "6/m", HEXAGONAL, new Quaternion[] { O1, H3P_Z, H3N_Z, H6P_Z,
+            H6N_Z, O2_Z }),
 
     /** 9th <code>LaueGroup</code> (622, 6mm, 62m or 6/mmm). */
-    LG6mmm(9, "6/mmm", HEXAGONAL, new Operator[] { O1, H3P_Z, H3N_Z, H6P_Z,
+    LG6mmm(9, "6/mmm", HEXAGONAL, new Quaternion[] { O1, H3P_Z, H3N_Z, H6P_Z,
             H6N_Z, O2_Z, H2_X2Y, H2_2XY, O2_X, H2_XY, O2_Y, H2_XNY });
 
     /**
@@ -118,43 +118,6 @@ public enum LaueGroup implements ObjectXml, Labeled {
                     + laueGroup + "), must be between [1,11].");
     }
 
-
-
-    /**
-     * Return the Laue group from the specified space group number (1 to 230).
-     * 
-     * @param spaceGroup
-     *            space group number
-     * @return point group of the space group
-     */
-    public static LaueGroup fromSpaceGroup(int spaceGroup) {
-        if (spaceGroup >= 1 && spaceGroup <= 2)
-            return LG1;
-        else if (spaceGroup >= 3 && spaceGroup <= 24)
-            return LG2m;
-        else if (spaceGroup >= 25 && spaceGroup <= 74)
-            return LGmmm;
-        else if (spaceGroup >= 75 && spaceGroup <= 88)
-            return LG4m;
-        else if (spaceGroup >= 89 && spaceGroup <= 142)
-            return LG4mmm;
-        else if (spaceGroup >= 143 && spaceGroup <= 148)
-            return LG3;
-        else if (spaceGroup >= 149 && spaceGroup <= 167)
-            return LG3m;
-        else if (spaceGroup >= 168 && spaceGroup <= 176)
-            return LG6m;
-        else if (spaceGroup >= 177 && spaceGroup <= 194)
-            return LG6mmm;
-        else if (spaceGroup >= 195 && spaceGroup <= 206)
-            return LGm3;
-        else if (spaceGroup >= 207 && spaceGroup <= 230)
-            return LGm3m;
-        else
-            throw new IllegalArgumentException("Invalid space group ("
-                    + spaceGroup + "), must be between [1,230].");
-    }
-
     /** Laue group symbol. */
     @NonNull
     public final String symbol;
@@ -168,7 +131,7 @@ public enum LaueGroup implements ObjectXml, Labeled {
 
     /** List of symmetry operators associated with the point group. */
     @NonNull
-    private final Operator[] operators;
+    private final Quaternion[] operators;
 
 
 
@@ -186,11 +149,11 @@ public enum LaueGroup implements ObjectXml, Labeled {
      *            list of symmetry operators
      */
     private LaueGroup(int index, String symbol, CrystalSystem crystalSystem,
-            Operator[] operators) {
+            Quaternion[] operators) {
         this.index = index;
         this.symbol = symbol;
         this.crystalSystem = crystalSystem;
-        this.operators = operators;
+        this.operators = operators.clone();
     }
 
 
@@ -202,12 +165,7 @@ public enum LaueGroup implements ObjectXml, Labeled {
      * @return list of symmetry operators
      */
     public Quaternion[] getOperators() {
-        Quaternion[] rotations = new Quaternion[operators.length];
-
-        for (int i = 0; i < rotations.length; i++)
-            rotations[i] = operators[i].v;
-
-        return rotations;
+        return operators;
     }
 
 

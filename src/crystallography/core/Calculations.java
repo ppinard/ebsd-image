@@ -208,6 +208,39 @@ public class Calculations {
 
 
     /**
+     * Applies the space group symmetry on the specified atom positions and
+     * returns all the possible equivalent atom positions.
+     * 
+     * @param atomSites
+     *            positions of atoms
+     * @param spaceGroup
+     *            space group
+     * @return all possible atom positions
+     */
+    @CheckReturnValue
+    public static AtomSites equivalentPositions(AtomSites atomSites,
+            SpaceGroup spaceGroup) {
+        AtomSites newAtomSites = new AtomSites();
+
+        AtomSite newAtom;
+        for (AtomSite atom : atomSites) {
+            for (Generator generator : spaceGroup.getGenerators()) {
+                newAtom = generator.apply(atom);
+
+                try {
+                    newAtomSites.add(newAtom);
+                } catch (AtomSitePositionException ex) {
+                    continue;
+                }
+            }
+        }
+
+        return newAtomSites;
+    }
+
+
+
+    /**
      * Returns the form factor (F) for a given plane, set of atoms and
      * scattering factors.
      * 
@@ -431,21 +464,38 @@ public class Calculations {
      * 
      * @param q
      *            a rotation
-     * @param pg
-     *            a point group
+     * @param lg
+     *            a Laue group
      * @return reduced rotation
      */
     @CheckReturnValue
-    public static Quaternion reduce(Quaternion q, LaueGroup pg) {
+    public static Quaternion reduce(Quaternion q, LaueGroup lg) {
         Quaternion equiv = q.duplicate();
 
-        for (Quaternion op : pg.getOperators()) {
+        for (Quaternion op : lg.getOperators()) {
             Quaternion out = q.multiply(op);
             if (out.scalar > equiv.scalar)
                 equiv = out;
         }
 
         return equiv;
+    }
+
+
+
+    /**
+     * Reduce a rotation to its fundamental group based on the given point
+     * group.
+     * 
+     * @param q
+     *            a rotation
+     * @param sg
+     *            a space group
+     * @return reduced rotation
+     */
+    @CheckReturnValue
+    public static Quaternion reduce(Quaternion q, SpaceGroup sg) {
+        return reduce(q, sg.laueGroup);
     }
 
 

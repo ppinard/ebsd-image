@@ -222,7 +222,17 @@ public class NewPhaseDialog extends BasicDialog {
     private class CrystalSystemCBoxListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            refresh();
+            refreshLaueGroup();
+        }
+    }
+
+    /**
+     * Listener of the Laue group combo box.
+     */
+    private class LaueGroupCBoxListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            refreshSpaceGroup();
         }
     }
 
@@ -244,8 +254,11 @@ public class NewPhaseDialog extends BasicDialog {
     /** Combo box for the crystal system. */
     private ComboBox<CrystalSystem> crystalSystemCBox;
 
-    /** Combo box for the symmetry. */
-    private ComboBox<LaueGroup> symmetryCBox;
+    /** Combo box for the Laue group. */
+    private ComboBox<LaueGroup> laueGroupCBox;
+
+    /** Combo box for the space group. */
+    private ComboBox<String> spaceGroupCBox;
 
     /** Field for the lattice constant a. */
     private DoubleField aField;
@@ -296,7 +309,7 @@ public class NewPhaseDialog extends BasicDialog {
      */
     public NewPhaseDialog() {
         this(new Crystal("Untitled", new UnitCell(1, 1, 1, 1, 1, 1),
-                new AtomSites(), LaueGroup.LG1));
+                new AtomSites(), SpaceGroups.SG1));
     }
 
 
@@ -320,14 +333,20 @@ public class NewPhaseDialog extends BasicDialog {
 
         crystalSystemPanel.add("Crystal system");
         crystalSystemCBox = new ComboBox<CrystalSystem>(CrystalSystem.values());
-        crystalSystemCBox.setSelectedItem(crystal.laueGroup.crystalSystem);
+        crystalSystemCBox.setSelectedItem(crystal.spaceGroup.crystalSystem);
         crystalSystemCBox.addActionListener(new CrystalSystemCBoxListener());
         crystalSystemPanel.add(crystalSystemCBox, "wrap");
 
-        crystalSystemPanel.add("Symmetry");
-        symmetryCBox = new ComboBox<LaueGroup>(LaueGroup.values());
-        symmetryCBox.setSelectedItem(crystal.laueGroup);
-        crystalSystemPanel.add(symmetryCBox, "wrap");
+        crystalSystemPanel.add("Laue group");
+        laueGroupCBox = new ComboBox<LaueGroup>(LaueGroup.values());
+        laueGroupCBox.setSelectedItem(crystal.spaceGroup.laueGroup);
+        laueGroupCBox.addActionListener(new LaueGroupCBoxListener());
+        crystalSystemPanel.add(laueGroupCBox, "wrap");
+
+        crystalSystemPanel.add("Space group");
+        spaceGroupCBox = new ComboBox<String>();
+        spaceGroupCBox.setSelectedItem(crystal.spaceGroup);
+        crystalSystemPanel.add(spaceGroupCBox, "wrap");
 
         // Build the Unit Cell subpanel
         Panel unitCellPanel = new Panel(new MigLayout());
@@ -376,7 +395,8 @@ public class NewPhaseDialog extends BasicDialog {
         unitCellPanel.add("\u00b0"); // deg
 
         Panel atomSitesPanel = new Panel(new MigLayout());
-        atomSitesPanel.setBorder(new TitledBorder("Atom Sites"));
+        atomSitesPanel.setBorder(new TitledBorder(
+                "Atom Sites (General Positions)"));
 
         AtomSiteTableModel model = new AtomSiteTableModel();
         for (AtomSite atom : crystal.atoms)
@@ -426,7 +446,7 @@ public class NewPhaseDialog extends BasicDialog {
 
         setMainComponent(cPanel);
 
-        refresh();
+        refreshLaueGroup();
     }
 
 
@@ -449,7 +469,18 @@ public class NewPhaseDialog extends BasicDialog {
      */
     protected Crystal getCrystal() {
         return new Crystal(nameField.getText(), getUnitCell(), getAtomSites(),
-                symmetryCBox.getSelectedItemBFR());
+                getSpaceGroup());
+    }
+
+
+
+    /**
+     * Returns the selected space group.
+     * 
+     * @return space group
+     */
+    private SpaceGroup getSpaceGroup() {
+        return SpaceGroups.fromSymbol(spaceGroupCBox.getSelectedItemBFR());
     }
 
 
@@ -511,10 +542,13 @@ public class NewPhaseDialog extends BasicDialog {
 
 
     /**
-     * Refresh the display of the dialog based on the crystal symmetry combo box
-     * selection.
+     * Refreshes the display of the dialog based on the crystal symmetry combo
+     * box selection.
      */
-    private void refresh() {
+    private void refreshLaueGroup() {
+        if (crystalSystemCBox.getSelectedItem() == null)
+            return;
+
         switch (crystalSystemCBox.getSelectedItem()) {
         case TRICLINIC:
             aField.setEnabled(true);
@@ -525,8 +559,8 @@ public class NewPhaseDialog extends BasicDialog {
             betaField.setEnabled(true);
             gammaField.setEnabled(true);
 
-            symmetryCBox.removeAllItems();
-            symmetryCBox.addGeneric(LG1);
+            laueGroupCBox.removeAllItems();
+            laueGroupCBox.addGeneric(LG1);
 
             break;
         case MONOCLINIC:
@@ -539,8 +573,8 @@ public class NewPhaseDialog extends BasicDialog {
             gammaField.setEnabled(false);
             gammaField.setValue(90);
 
-            symmetryCBox.removeAllItems();
-            symmetryCBox.addGeneric(LG2m);
+            laueGroupCBox.removeAllItems();
+            laueGroupCBox.addGeneric(LG2m);
 
             break;
         case ORTHORHOMBIC:
@@ -555,8 +589,8 @@ public class NewPhaseDialog extends BasicDialog {
             gammaField.setEnabled(false);
             gammaField.setValue(90);
 
-            symmetryCBox.removeAllItems();
-            symmetryCBox.addGeneric(LGmmm);
+            laueGroupCBox.removeAllItems();
+            laueGroupCBox.addGeneric(LGmmm);
 
             break;
         case TRIGONAL:
@@ -572,9 +606,9 @@ public class NewPhaseDialog extends BasicDialog {
             gammaField.setEnabled(false);
             gammaField.setValue(Double.NaN);
 
-            symmetryCBox.removeAllItems();
-            symmetryCBox.addGeneric(LG3);
-            symmetryCBox.addGeneric(LG3m);
+            laueGroupCBox.removeAllItems();
+            laueGroupCBox.addGeneric(LG3);
+            laueGroupCBox.addGeneric(LG3m);
 
             break;
         case TETRAGONAL:
@@ -590,9 +624,9 @@ public class NewPhaseDialog extends BasicDialog {
             gammaField.setEnabled(false);
             gammaField.setValue(90);
 
-            symmetryCBox.removeAllItems();
-            symmetryCBox.addGeneric(LG4m);
-            symmetryCBox.addGeneric(LG4mmm);
+            laueGroupCBox.removeAllItems();
+            laueGroupCBox.addGeneric(LG4m);
+            laueGroupCBox.addGeneric(LG4mmm);
 
             break;
         case HEXAGONAL:
@@ -608,9 +642,9 @@ public class NewPhaseDialog extends BasicDialog {
             gammaField.setEnabled(false);
             gammaField.setValue(120);
 
-            symmetryCBox.removeAllItems();
-            symmetryCBox.addGeneric(LG6m);
-            symmetryCBox.addGeneric(LG6mmm);
+            laueGroupCBox.removeAllItems();
+            laueGroupCBox.addGeneric(LG6m);
+            laueGroupCBox.addGeneric(LG6mmm);
 
             break;
         case CUBIC:
@@ -627,15 +661,32 @@ public class NewPhaseDialog extends BasicDialog {
             gammaField.setEnabled(false);
             gammaField.setValue(90);
 
-            symmetryCBox.removeAllItems();
-            symmetryCBox.addGeneric(LGm3);
-            symmetryCBox.addGeneric(LGm3m);
+            laueGroupCBox.removeAllItems();
+            laueGroupCBox.addGeneric(LGm3);
+            laueGroupCBox.addGeneric(LGm3m);
 
             break;
         default:
             throw new RuntimeException("Unknown crystal system ("
                     + crystalSystemCBox.getSelectedItem() + ")");
         }
+
+        refreshSpaceGroup();
     }
 
+
+
+    /**
+     * Refreshes the space group combo box.
+     */
+    private void refreshSpaceGroup() {
+        if (laueGroupCBox.getSelectedItem() == null)
+            return;
+
+        spaceGroupCBox.removeAllItems();
+
+        SpaceGroup[] sgs = SpaceGroups.list(laueGroupCBox.getSelectedItem());
+        for (SpaceGroup sg : sgs)
+            spaceGroupCBox.addGeneric(sg.symbol);
+    }
 }

@@ -19,14 +19,13 @@ package crystallography.core.crystals;
 
 import crystallography.core.AtomSitesFactory;
 import crystallography.core.Crystal;
-import crystallography.core.LaueGroup;
+import crystallography.core.SpaceGroups;
 import crystallography.core.UnitCellFactory;
 
 /**
  * Iron BCC crystal.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class IronBCC extends Crystal {
 
@@ -35,7 +34,7 @@ public class IronBCC extends Crystal {
      * <code>a=2.87 angstroms</code>).
      */
     public IronBCC() {
-        super("Iron BCC", UnitCellFactory.cubic(2.87), AtomSitesFactory
-                .atomSitesBCC(26), LaueGroup.LGm3m);
+        super("Iron BCC", UnitCellFactory.cubic(2.87),
+                AtomSitesFactory.atomSitesBCC(26), SpaceGroups.fromIndex(229));
     }
 }

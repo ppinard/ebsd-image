@@ -32,9 +32,9 @@ public class CrystalTest {
 
     private UnitCell unitCell;
 
-    private AtomSites atomSites;
+    private AtomSites atoms;
 
-    private LaueGroup pointGroup;
+    private SpaceGroup sg;
 
 
 
@@ -42,10 +42,10 @@ public class CrystalTest {
     public void setUp() throws Exception {
         name = "silicon";
         unitCell = UnitCellFactory.cubic(2.0);
-        atomSites = AtomSitesFactory.atomSitesFCC(14);
-        pointGroup = LaueGroup.LGm3m;
+        atoms = AtomSitesFactory.atomSitesFCC(14);
+        sg = SpaceGroups.SG216;
 
-        crystal = new Crystal(name, unitCell, atomSites, pointGroup);
+        crystal = new Crystal(name, unitCell, atoms, sg);
     }
 
 
@@ -61,35 +61,35 @@ public class CrystalTest {
 
     @Test(expected = NullPointerException.class)
     public void testCrystalException1() {
-        new Crystal(null, unitCell, atomSites, pointGroup);
+        new Crystal(null, unitCell, atoms, sg);
     }
 
 
 
     @Test(expected = IllegalArgumentException.class)
     public void testCrystalException2() {
-        new Crystal("", unitCell, atomSites, pointGroup);
+        new Crystal("", unitCell, atoms, sg);
     }
 
 
 
     @Test(expected = NullPointerException.class)
     public void testCrystalException3() {
-        new Crystal(name, null, atomSites, pointGroup);
+        new Crystal(name, null, atoms, sg);
     }
 
 
 
     @Test(expected = NullPointerException.class)
     public void testCrystalException4() {
-        new Crystal(name, unitCell, null, pointGroup);
+        new Crystal(name, unitCell, null, sg);
     }
 
 
 
     @Test(expected = NullPointerException.class)
     public void testCrystalException5() {
-        new Crystal(name, unitCell, atomSites, null);
+        new Crystal(name, unitCell, atoms, null);
     }
 
 
@@ -102,22 +102,19 @@ public class CrystalTest {
 
         assertFalse(crystal.equals(new Object()));
 
-        assertFalse(crystal.equals(new Crystal("other", unitCell, atomSites,
-                pointGroup)));
+        assertFalse(crystal.equals(new Crystal("other", unitCell, atoms, sg)));
 
         UnitCell otherUnitCell = UnitCellFactory.cubic(3.0);
-        assertFalse(crystal.equals(new Crystal(name, otherUnitCell, atomSites,
-                pointGroup)));
+        assertFalse(crystal.equals(new Crystal(name, otherUnitCell, atoms, sg)));
 
         AtomSites otherAtomSites = AtomSitesFactory.atomSitesFCC(15);
         assertFalse(crystal.equals(new Crystal(name, unitCell, otherAtomSites,
-                pointGroup)));
+                sg)));
 
-        assertFalse(crystal.equals(new Crystal(name, unitCell, atomSites,
-                LaueGroup.LGm3)));
+        assertFalse(crystal.equals(new Crystal(name, unitCell, atoms,
+                SpaceGroups.SG215)));
 
-        assertTrue(crystal.equals(new Crystal(name, unitCell, atomSites,
-                pointGroup)));
+        assertTrue(crystal.equals(new Crystal(name, unitCell, atoms, sg)));
     }
 
 
@@ -128,23 +125,22 @@ public class CrystalTest {
 
         assertFalse(crystal.equals(null, 1e-3));
 
-        assertFalse(crystal.equals(new Crystal("other", unitCell, atomSites,
-                pointGroup), 1e-3));
+        assertFalse(crystal.equals(new Crystal("other", unitCell, atoms, sg),
+                1e-3));
 
         UnitCell otherUnitCell = UnitCellFactory.cubic(2.002);
-        assertFalse(crystal.equals(new Crystal(name, otherUnitCell, atomSites,
-                pointGroup), 1e-3));
+        assertFalse(crystal.equals(new Crystal(name, otherUnitCell, atoms, sg),
+                1e-3));
 
         AtomSites otherAtomSites = AtomSitesFactory.atomSitesFCC(15);
         assertFalse(crystal.equals(new Crystal(name, unitCell, otherAtomSites,
-                pointGroup), 1e-3));
+                sg), 1e-3));
 
-        assertFalse(crystal.equals(new Crystal(name, unitCell, atomSites,
-                LaueGroup.LGm3), 1e-3));
+        assertFalse(crystal.equals(new Crystal(name, unitCell, atoms,
+                SpaceGroups.SG215), 1e-3));
 
         Crystal other =
-                new Crystal(name, UnitCellFactory.cubic(2.002), atomSites,
-                        pointGroup);
+                new Crystal(name, UnitCellFactory.cubic(2.002), atoms, sg);
         assertTrue(crystal.equals(other, 1e-2));
     }
 
@@ -159,7 +155,7 @@ public class CrystalTest {
 
     @Test
     public void testHashCode() {
-        Crystal other = new Crystal(name, unitCell, atomSites, pointGroup);
+        Crystal other = new Crystal(name, unitCell, atoms, sg);
         assertEquals(crystal.hashCode(), other.hashCode());
     }
 }

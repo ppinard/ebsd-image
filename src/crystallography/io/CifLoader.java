@@ -339,11 +339,11 @@ public class CifLoader implements Loader, Monitorable {
         }
 
         // Point group
-        int spaceGroup =
+        int index =
                 Integer.parseInt((String) data.get("_space_group_IT_number"));
-        LaueGroup pg = LaueGroup.fromSpaceGroup(spaceGroup);
+        SpaceGroup sg = SpaceGroups.fromIndex(index);
 
-        return new Crystal(name, unitCell, atomSites, pg);
+        return new Crystal(name, unitCell, atomSites, sg);
     }
 
 

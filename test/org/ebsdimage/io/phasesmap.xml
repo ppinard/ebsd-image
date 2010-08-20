@@ -22,7 +22,7 @@
           <Position x="0.5" y="0.5" z="0.0" />
         </AtomSite>
       </AtomSites>
-      <LaueGroup index="11" symbol="m3m" crystalSystem="CUBIC" />
+      <SpaceGroup index="216" />
     </Crystal>
     <Crystal name="Iron BCC" id="2">
       <UnitCell a="2.87" b="2.87" c="2.87" dimUnits="angstrom" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="1.5707963267948966" angleUnits="rad" />
@@ -36,7 +36,7 @@
           <Position x="0.5" y="0.5" z="0.5" />
         </AtomSite>
       </AtomSites>
-      <LaueGroup index="11" symbol="m3m" crystalSystem="CUBIC" />
+      <SpaceGroup index="229" />
     </Crystal>
   </Phases>
 </PhasesMap>

@@ -17,49 +17,45 @@
  */
 package crystallography.io;
 
-import static crystallography.io.LaueGroupXmlTags.ATTR_CRYSTAL_SYSTEM;
-import static crystallography.io.LaueGroupXmlTags.ATTR_INDEX;
-import static crystallography.io.LaueGroupXmlTags.ATTR_SYMBOL;
-import static crystallography.io.LaueGroupXmlTags.TAG_NAME;
+import static crystallography.io.SpaceGroupXmlTags.ATTR_INDEX;
+import static crystallography.io.SpaceGroupXmlTags.TAG_NAME;
 
 import org.jdom.Element;
 
 import ptpshared.utility.xml.ObjectXml;
 import ptpshared.utility.xml.ObjectXmlSaver;
-import crystallography.core.LaueGroup;
+import crystallography.core.SpaceGroup;
 
 /**
- * XML saver for <code>LaueGroup</code>.
+ * XML saver for <code>SpaceGroup</code>.
  * 
  * @author Philippe T. Pinard
  */
-public class LaueGroupXmlSaver implements ObjectXmlSaver {
+public class SpaceGroupXmlSaver implements ObjectXmlSaver {
 
     /**
      * {@inheritDoc}
      * 
-     * @see #save(LaueGroup)
+     * @see #save(SpaceGroup)
      */
     @Override
     public Element save(ObjectXml obj) {
-        return save((LaueGroup) obj);
+        return save((SpaceGroup) obj);
     }
 
 
 
     /**
-     * Saves a <code>LaueGroup</code> to an XML <code>Element</code>.
+     * Saves a <code>SpaceGroup</code> to an XML <code>Element</code>.
      * 
-     * @param pg
-     *            a <code>LaueGroup</code>
+     * @param sg
+     *            a <code>SpaceGroup</code>
      * @return an XML <code>Element</code>
      */
-    public Element save(LaueGroup pg) {
+    public Element save(SpaceGroup sg) {
         Element element = new Element(TAG_NAME);
 
-        element.setAttribute(ATTR_INDEX, Integer.toString(pg.index));
-        element.setAttribute(ATTR_SYMBOL, pg.symbol);
-        element.setAttribute(ATTR_CRYSTAL_SYSTEM, pg.crystalSystem.toString());
+        element.setAttribute(ATTR_INDEX, Integer.toString(sg.index));
 
         return element;
     }

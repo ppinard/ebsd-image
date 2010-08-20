@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import static java.lang.Math.abs;
@@ -32,7 +32,9 @@ import crystallography.core.crystals.Silicon;
 public class ReflectorsTest {
 
     private Reflectors reflsFCC;
+
     private Reflectors reflsBCC;
+
     private Reflectors reflsHCP;
 
     private ElectronScatteringFactors scatter;
@@ -53,11 +55,11 @@ public class ReflectorsTest {
 
         // Crystal
         Crystal crystalFCC =
-                new Crystal("FCC", unitCellFCC, atomsFCC, LaueGroup.LGm3m);
+                new Crystal("FCC", unitCellFCC, atomsFCC, SpaceGroups.SG216);
         Crystal crystalBCC =
-                new Crystal("BCC", unitCellBCC, atomsBCC, LaueGroup.LGm3m);
+                new Crystal("BCC", unitCellBCC, atomsBCC, SpaceGroups.SG229);
         Crystal crystalHCP =
-                new Crystal("HCP", unitCellHCP, atomsHCP, LaueGroup.LG6mmm);
+                new Crystal("HCP", unitCellHCP, atomsHCP, SpaceGroups.SG168);
 
         // Scattering factors
         scatter = new ElectronScatteringFactors();
@@ -108,13 +110,13 @@ public class ReflectorsTest {
         Reflector refl;
 
         refl = reflsHCP.get(new Plane(0, 0, 2));
-        assertEquals(0.0099153044364262422, refl.intensity, 1e-7);
+        assertEquals(0.0223094348195904, refl.intensity, 1e-7);
 
         refl = reflsHCP.get(new Plane(1, 0, -1));
-        assertEquals(0.0059739159485949992, refl.intensity, 1e-7);
+        assertEquals(0.00796522126479333, refl.intensity, 1e-7);
 
         refl = reflsHCP.get(new Plane(2, -1, 0));
-        assertEquals(0.002165252452505663, refl.intensity, 1e-7);
+        assertEquals(0.004871818018137741, refl.intensity, 1e-7);
     }
 
 
@@ -156,13 +158,13 @@ public class ReflectorsTest {
         Reflector refl;
 
         refl = reflsHCP.get(new Plane(0, 0, 2));
-        assertEquals(1.0, refl.normalizedIntensity, 1e-7);
+        assertEquals(0.5870027442721996, refl.normalizedIntensity, 1e-7);
 
         refl = reflsHCP.get(new Plane(1, 0, -1));
-        assertEquals(0.60249445560626358, refl.normalizedIntensity, 1e-7);
+        assertEquals(0.20957979191091056, refl.normalizedIntensity, 1e-7);
 
         refl = reflsHCP.get(new Plane(2, -1, 0));
-        assertEquals(0.21837478278035422, refl.normalizedIntensity, 1e-7);
+        assertEquals(0.1281865967791338, refl.normalizedIntensity, 1e-7);
     }
 
 
@@ -325,7 +327,7 @@ public class ReflectorsTest {
     public void testReflectors() {
         assertEquals(17, reflsFCC.size());
         assertEquals(31, reflsBCC.size());
-        assertEquals(53, reflsHCP.size());
+        assertEquals(38, reflsHCP.size());
     }
 
 

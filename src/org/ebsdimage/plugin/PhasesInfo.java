@@ -50,7 +50,6 @@ import crystallography.core.Crystal;
  * <code>PhasesMap</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PhasesInfo extends PlugIn {
 
@@ -58,7 +57,6 @@ public class PhasesInfo extends PlugIn {
      * Dialog to display the information about the phases.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private static class Dialog extends BasicDialog {
 
@@ -66,7 +64,6 @@ public class PhasesInfo extends PlugIn {
          * Table model for the atom site.
          * 
          * @author Philippe T. Pinard
-         * 
          */
         private static class AtomSiteTableModel extends AbstractTableModel {
             /** Column names. */
@@ -146,8 +143,6 @@ public class PhasesInfo extends PlugIn {
 
         }
 
-
-
         /**
          * Listener of the crystal system combo box.
          */
@@ -158,8 +153,6 @@ public class PhasesInfo extends PlugIn {
             }
         }
 
-
-
         /** HashMap to access the phases information by their name. */
         private HashMap<String, Crystal> phases;
 
@@ -169,8 +162,11 @@ public class PhasesInfo extends PlugIn {
         /** Label for the crystal system. */
         private JLabel crystalSystemLabel;
 
-        /** Label for the symmetry. */
-        private JLabel symmetryLabel;
+        /** Label for the Laue group. */
+        private JLabel laueGroupLabel;
+
+        /** Label for the space group. */
+        private JLabel spaceGroupLabel;
 
         /** Label for the lattice constant a. */
         private JLabel aLabel;
@@ -229,9 +225,13 @@ public class PhasesInfo extends PlugIn {
             crystalSystemLabel = new JLabel();
             panel.add(crystalSystemLabel, "wrap");
 
-            panel.add("Symmetry:");
-            symmetryLabel = new JLabel();
-            panel.add(symmetryLabel, "wrap");
+            panel.add("Laue group:");
+            laueGroupLabel = new JLabel();
+            panel.add(laueGroupLabel, "wrap");
+
+            panel.add("Space group:");
+            spaceGroupLabel = new JLabel();
+            panel.add(spaceGroupLabel, "wrap");
 
             // Build the Unit Cell subpanel
             Panel unitCellPanel = new Panel(new MigLayout());
@@ -293,18 +293,16 @@ public class PhasesInfo extends PlugIn {
         private void refresh() {
             Crystal phase = phases.get(phaseCBox.getSelectedItem());
 
-            crystalSystemLabel.setText(phase.laueGroup.crystalSystem
-                    .getLabel());
-            symmetryLabel.setText(phase.laueGroup.getLabel());
+            crystalSystemLabel.setText(phase.spaceGroup.crystalSystem.getLabel());
+            laueGroupLabel.setText(phase.spaceGroup.laueGroup.getLabel());
+            spaceGroupLabel.setText(phase.spaceGroup.symbol);
 
             aLabel.setText(Double.toString(phase.unitCell.a));
             bLabel.setText(Double.toString(phase.unitCell.b));
             cLabel.setText(Double.toString(phase.unitCell.c));
-            alphaLabel
-                    .setText(Double.toString(toDegrees(phase.unitCell.alpha)));
+            alphaLabel.setText(Double.toString(toDegrees(phase.unitCell.alpha)));
             betaLabel.setText(Double.toString(toDegrees(phase.unitCell.beta)));
-            gammaLabel
-                    .setText(Double.toString(toDegrees(phase.unitCell.gamma)));
+            gammaLabel.setText(Double.toString(toDegrees(phase.unitCell.gamma)));
 
             AtomSiteTableModel model =
                     (AtomSiteTableModel) atomSiteTable.getModel();

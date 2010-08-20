@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import java.util.ArrayList;
@@ -134,7 +134,7 @@ public class AtomSites extends ArrayList<AtomSite> implements ObjectXml {
      */
     private void assertNewItem(AtomSite item) {
         for (AtomSite atom : this)
-            if (atom.position.equals(item.position, 1e-7))
+            if (atom.position.equals(item.position, 1e-5))
                 throw new AtomSitePositionException("Position already exists");
     }
 
@@ -168,7 +168,6 @@ public class AtomSites extends ArrayList<AtomSite> implements ObjectXml {
      *            level of precision
      * @return <code>true</code> if this list contains the specified atom site,
      *         <code>false</code> otherwise
-     * 
      * @throws IllegalArgumentException
      *             if the precision is less than 0.0
      * @throws IllegalArgumentException
@@ -182,17 +181,14 @@ public class AtomSites extends ArrayList<AtomSite> implements ObjectXml {
 
     /**
      * Checks if this <code>AtomSites</code> is almost equal to the specified
-     * one with the given precision.
-     * 
-     * The method uses {@link AtomSite#equals} to check the
-     * <code>AtomSite</code> inside the array list;
+     * one with the given precision. The method uses {@link AtomSite#equals} to
+     * check the <code>AtomSite</code> inside the array list;
      * 
      * @param other
      *            other <code>AtomSite</code> to check equality
      * @param precision
      *            level of precision
      * @return whether the two <code>AtomSite</code> are almost equal
-     * 
      * @throws IllegalArgumentException
      *             if the precision is less than 0.0
      * @throws IllegalArgumentException
@@ -237,7 +233,6 @@ public class AtomSites extends ArrayList<AtomSite> implements ObjectXml {
      *            level of precision
      * @return the index of the specified atom site, or -1 if no atom site is
      *         found
-     * 
      * @throws IllegalArgumentException
      *             if the precision is less than 0.0
      * @throws IllegalArgumentException

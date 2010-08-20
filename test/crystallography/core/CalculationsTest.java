@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import static java.lang.Math.*;
@@ -37,23 +37,35 @@ import ptpshared.core.math.Vector3D;
 public class CalculationsTest {
 
     private UnitCell cubic;
+
     private UnitCell tetragonal;
+
     private UnitCell orthorhombic;
+
     private UnitCell trigonal;
+
     private UnitCell hexagonal;
+
     private UnitCell monoclinic;
+
     private UnitCell triclinic;
 
     private ArrayList<Plane> planes;
 
     private UnitCell unitCell1;
+
     private AtomSite atom1;
+
     private AtomSite atom2;
+
     private AtomSite atom3;
 
     private UnitCell unitCell2;
+
     private AtomSite atom4;
+
     private AtomSite atom5;
+
     private AtomSite atom6;
 
     private UnitCell unitCell3;
@@ -63,7 +75,9 @@ public class CalculationsTest {
     private XrayScatteringFactors scatter;
 
     private AtomSites atomsfcc;
+
     private AtomSites atomsbcc;
+
     private AtomSites atomshcp;
 
 
@@ -268,8 +282,8 @@ public class CalculationsTest {
         // Wikipedia
         assertEquals(0.12031075249234069,
                 Calculations.electronWavelength(10e3), 1e-7);
-        assertEquals(0.020538907051308845, Calculations
-                .electronWavelength(200e3), 1e-7);
+        assertEquals(0.020538907051308845,
+                Calculations.electronWavelength(200e3), 1e-7);
     }
 
 
@@ -367,8 +381,7 @@ public class CalculationsTest {
             for (Plane plane2 : planes) {
                 // Interplanar angle from Calculations.interplanarAngle()
                 double angle =
-                        Calculations
-                                .interplanarAngle(plane1, plane2, hexagonal);
+                        Calculations.interplanarAngle(plane1, plane2, hexagonal);
 
                 // Calculation using equation
                 double h1 = plane1.get(0);
@@ -383,14 +396,13 @@ public class CalculationsTest {
 
                 double cosangle =
                         (h1 * h2 + k1 * k2 + 0.5 * (h1 * k2 + h2 * k1) + (3 * pow(
-                                a, 2))
-                                / (4 * pow(c, 2)) * l1 * l2)
+                                a, 2)) / (4 * pow(c, 2)) * l1 * l2)
                                 / sqrt((pow(h1, 2) + pow(k1, 2) + h1 * k1 + (3 * pow(
-                                        a, 2))
-                                        / (4 * pow(c, 2)) * pow(l1, 2))
+                                        a, 2)) / (4 * pow(c, 2)) * pow(l1, 2))
                                         * (pow(h2, 2) + pow(k2, 2) + h2 * k2 + (3 * pow(
                                                 a, 2))
-                                                / (4 * pow(c, 2)) * pow(l2, 2)));
+                                                / (4 * pow(c, 2))
+                                                * pow(l2, 2)));
                 double expected = acos(cosangle);
 
                 // Test
@@ -503,8 +515,7 @@ public class CalculationsTest {
                 double cosangle =
                         ((h1 * h2 + k1 * k2) / pow(a, 2) + l1 * l2 / pow(c, 2))
                                 / sqrt(((pow(h1, 2) + pow(k1, 2)) / pow(a, 2) + pow(
-                                        l1, 2)
-                                        / pow(c, 2))
+                                        l1, 2) / pow(c, 2))
                                         * ((pow(h2, 2) + pow(k2, 2))
                                                 / pow(a, 2) + pow(l2, 2)
                                                 / pow(c, 2)));
@@ -523,8 +534,7 @@ public class CalculationsTest {
             for (Plane plane2 : planes) {
                 // Interplanar angle from Calculations.interplanarAngle()
                 double angle =
-                        Calculations
-                                .interplanarAngle(plane1, plane2, triclinic);
+                        Calculations.interplanarAngle(plane1, plane2, triclinic);
 
                 // Calculation using equation
                 double h1 = plane1.get(0);
@@ -975,4 +985,16 @@ public class CalculationsTest {
         assertEquals(sqrt(3) / 3.0, abs(aa.axis.get(2)), 1e-3);
     }
 
+
+
+    @Test
+    public void testEquivalentPositions() {
+        AtomSites atoms = new AtomSites();
+        atoms.add(new AtomSite(14, 0.0, 0.0, 0.0));
+        AtomSites results =
+                Calculations.equivalentPositions(atoms, SpaceGroups.SG216);
+
+        assertEquals(4, results.size());
+        assertEquals(atomsfcc, results);
+    }
 }

@@ -10,7 +10,7 @@
     <Calibration patternCenterH="0.1" patternCenterV="0.2" detectorDistance="0.3" />
   </ExpMetadata>
   <Phases>
-    <Silicon name="Silicon" id="1">
+    <Crystal name="Silicon" id="1">
       <UnitCell a="5.43" b="5.43" c="5.43" dimUnits="angstrom" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="1.5707963267948966" angleUnits="rad" />
       <AtomSites>
         <AtomSite>
@@ -30,8 +30,8 @@
           <Position x="0.5" y="0.5" z="0.0" />
         </AtomSite>
       </AtomSites>
-      <LaueGroup index="11" symbol="m3m" crystalSystem="CUBIC" />
-    </Silicon>
+      <SpaceGroup index="216" />
+    </Crystal>
   </Phases>
   <CurrentMapsFileSaver saveAllMaps="true" savePatternMap="true" saveHoughMap="true" savePeaksMap="true" saveSolutionOverlay="true" />
   <PatternOp>
