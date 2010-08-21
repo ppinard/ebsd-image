@@ -34,7 +34,6 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
  * {@link Edit#crop(HoughMap, double)}.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HoughCrop extends PlugIn {
 
@@ -43,7 +42,6 @@ public class HoughCrop extends PlugIn {
      * <code>HoughMap</code>.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private static class Dialog extends BasicDialog {
 
@@ -65,7 +63,7 @@ public class HoughCrop extends PlugIn {
             ColumnPanel cPanel = new ColumnPanel(3);
 
             cPanel.add("Positive \u03c1:");
-            rhoField = new DoubleField("Rho", map.width / 2);
+            rhoField = new DoubleField("Rho", map.getR(0, map.height / 4));
             rhoField.setRange(0.1, map.rMax);
             cPanel.add(rhoField);
             cPanel.add("px");
