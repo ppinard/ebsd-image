@@ -21,7 +21,7 @@ import java.io.IOException;
 
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.sim.Sim;
-import org.ebsdimage.core.sim.ops.patternsim.op.PatternSimOp;
+import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
 
 /**
  * Superclass of operation to save the output(s).

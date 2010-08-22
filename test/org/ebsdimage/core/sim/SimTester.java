@@ -21,7 +21,7 @@ import java.io.File;
 
 import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.run.Operation;
-import org.ebsdimage.core.sim.ops.patternsim.op.PatternFilledBand;
+import org.ebsdimage.core.sim.ops.patternsim.PatternFilledBand;
 
 import ptpshared.core.math.Eulers;
 import ptpshared.core.math.Quaternion;

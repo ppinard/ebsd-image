@@ -21,7 +21,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.core.sim.Sim;
-import org.ebsdimage.core.sim.ops.patternsim.op.PatternSimOp;
+import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
 
 import rmlimage.core.ByteMap;
 import rmlimage.io.IO;

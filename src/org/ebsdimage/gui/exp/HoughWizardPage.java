@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp;
 
 import java.io.IOException;
@@ -25,12 +25,10 @@ import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.ExpConstants;
 import org.ebsdimage.core.run.Operation;
 
-
 /**
  * Wizard page for the Hough operations.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HoughWizardPage extends OperationWizardPage {
 
@@ -82,12 +80,9 @@ public class HoughWizardPage extends OperationWizardPage {
         if (!super.isCorrect(buffer))
             return false;
 
-        int opCount =
-                ((DefaultListModel) opPanel.userList.getModel()).getSize();
-        int postCount =
-                ((DefaultListModel) postPanel.userList.getModel()).getSize();
-        int resultsCount =
-                ((DefaultListModel) resultsPanel.userList.getModel()).getSize();
+        int opCount = (opPanel.getUserListModel()).size();
+        int postCount = (postPanel.getUserListModel()).size();
+        int resultsCount = (resultsPanel.getUserListModel()).size();
 
         if (opCount == 0 && postCount > 0) {
             showErrorDialog("An operation is required to have post operations.");
@@ -125,25 +120,24 @@ public class HoughWizardPage extends OperationWizardPage {
                 return;
 
         // Pre
-        DefaultListModel model =
-                (DefaultListModel) prePanel.userList.getModel();
+        DefaultListModel model = prePanel.getUserListModel();
         model.clear();
         for (Operation op : exp.getHoughPreOps())
             model.addElement(op);
 
         // Op
-        model = (DefaultListModel) opPanel.userList.getModel();
+        model = opPanel.getUserListModel();
         model.clear();
         model.addElement(exp.getHoughOp());
 
         // Post
-        model = (DefaultListModel) postPanel.userList.getModel();
+        model = postPanel.getUserListModel();
         model.clear();
         for (Operation op : exp.getHoughPostOps())
             model.addElement(op);
 
         // Results
-        model = (DefaultListModel) resultsPanel.userList.getModel();
+        model = resultsPanel.getUserListModel();
         model.clear();
         for (Operation op : exp.getHoughResultsOps())
             model.addElement(op);

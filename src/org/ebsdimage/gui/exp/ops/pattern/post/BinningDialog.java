@@ -21,7 +21,7 @@ import javax.swing.JLabel;
 
 import org.ebsdimage.core.exp.ops.pattern.post.Binning;
 import org.ebsdimage.core.run.Operation;
-import org.ebsdimage.gui.exp.ops.OperationDialog;
+import org.ebsdimage.gui.run.ops.OperationDialog;
 
 import ptpshared.gui.PowerOfTwoIntField;
 import rmlshared.gui.Panel;

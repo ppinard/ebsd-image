@@ -22,6 +22,7 @@ import static ptpshared.io.FileUtil.joinPackageNames;
 import java.io.IOException;
 
 import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.gui.run.ops.MultipleChoicePanel;
 
 import net.miginfocom.swing.MigLayout;
 

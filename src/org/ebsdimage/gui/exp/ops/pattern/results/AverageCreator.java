@@ -19,7 +19,7 @@ package org.ebsdimage.gui.exp.ops.pattern.results;
 
 import org.ebsdimage.core.exp.ops.pattern.results.Average;
 import org.ebsdimage.core.run.Operation;
-import org.ebsdimage.gui.exp.ops.OperationCreator;
+import org.ebsdimage.gui.run.ops.OperationCreator;
 
 /**
  * GUI creator for the <code>Average</code> operation.

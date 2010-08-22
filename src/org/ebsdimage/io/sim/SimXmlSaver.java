@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.sim;
 
 import static org.ebsdimage.core.sim.SimConstants.OUTPUT_IO_PACKAGE;
@@ -30,7 +30,7 @@ import org.ebsdimage.core.sim.Sim;
 import org.ebsdimage.io.CameraXmlSaver;
 import org.ebsdimage.io.run.RunXmlSaver;
 import org.ebsdimage.io.sim.ops.output.OutputOpsXmlTags;
-import org.ebsdimage.io.sim.ops.patternsim.op.PatternSimOpXmlTags;
+import org.ebsdimage.io.sim.ops.patternsim.PatternSimOpXmlTags;
 import org.jdom.Element;
 
 import ptpshared.core.math.Quaternion;
@@ -46,15 +46,14 @@ import crystallography.io.CrystalXmlSaver;
  * XML saver for a <code>Sim</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class SimXmlSaver extends RunXmlSaver {
 
     @Override
     protected ObjectXmlSaver getOperationSaver(Operation op, String packageName) {
         String opName = op.getName();
-        String classLoaderName = FileUtil.joinPackageNames(packageName, opName
-                + "XmlSaver");
+        String classLoaderName =
+                FileUtil.joinPackageNames(packageName, opName + "XmlSaver");
         return (ObjectXmlSaver) Reflection.newInstance(classLoaderName);
     }
 
@@ -180,8 +179,7 @@ public class SimXmlSaver extends RunXmlSaver {
     private void saveOperations(Element element, Sim sim) {
         // Pattern Simulation Op
         String tagName = PatternSimOpXmlTags.TAG_NAME;
-        String packageName = FileUtil.joinPackageNames(PATTERNSIM_IO_PACKAGE,
-                "op");
+        String packageName = PATTERNSIM_IO_PACKAGE;
         Operation op = sim.getPatternSimOp();
         if (op != null)
             element.addContent(createOpElement(op, tagName, packageName));

@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.logging.Logger;
 
 import org.ebsdimage.core.sim.Energy;
-import org.ebsdimage.core.sim.ops.patternsim.op.PatternBandCenter;
+import org.ebsdimage.core.sim.ops.patternsim.PatternBandCenter;
 import org.junit.Before;
 import org.junit.Test;
 

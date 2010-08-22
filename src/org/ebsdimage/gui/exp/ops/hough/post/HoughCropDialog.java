@@ -20,7 +20,7 @@ package org.ebsdimage.gui.exp.ops.hough.post;
 import javax.swing.JLabel;
 
 import org.ebsdimage.core.exp.ops.hough.post.HoughCrop;
-import org.ebsdimage.gui.exp.ops.OperationDialog;
+import org.ebsdimage.gui.run.ops.OperationDialog;
 
 import rmlshared.gui.IntField;
 import rmlshared.gui.Panel;

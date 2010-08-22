@@ -25,8 +25,8 @@ import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.run.Run;
 import org.ebsdimage.core.sim.ops.output.OutputOps;
-import org.ebsdimage.core.sim.ops.patternsim.op.PatternFilledBand;
-import org.ebsdimage.core.sim.ops.patternsim.op.PatternSimOp;
+import org.ebsdimage.core.sim.ops.patternsim.PatternFilledBand;
+import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
 
 import ptpshared.core.math.Quaternion;
 import rmlshared.ui.Monitorable;
@@ -468,7 +468,7 @@ public class Sim extends Run implements Monitorable {
                 for (Energy energy : energies) {
                     for (Quaternion rotation : rotations) {
                         // Increment progress
-                        progress = index / size;
+                        progress = (double) index / (double) size;
 
                         // Interrupt
                         if (isInterrupted())

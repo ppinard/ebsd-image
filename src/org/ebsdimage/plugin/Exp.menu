@@ -1,4 +1,4 @@
-menu=PlugIns/EBSD/Experiment
+menu=PlugIns/EBSD/Analysis engine
 icon=org/ebsdimage/plugin/Exp_(24x24).png
 tooltip=Run an experiment
 plugin=org.ebsdimage.plugin.Exp

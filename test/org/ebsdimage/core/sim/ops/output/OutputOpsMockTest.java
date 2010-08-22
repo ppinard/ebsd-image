@@ -21,8 +21,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
-import org.ebsdimage.core.sim.ops.patternsim.op.PatternSimOp;
-import org.ebsdimage.core.sim.ops.patternsim.op.PatternSimOpMock;
+import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
+import org.ebsdimage.core.sim.ops.patternsim.PatternSimOpMock;
 import org.junit.Before;
 import org.junit.Test;
 

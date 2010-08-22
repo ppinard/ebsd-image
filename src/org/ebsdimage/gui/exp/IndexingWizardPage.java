@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp;
 
 import java.io.IOException;
@@ -25,12 +25,10 @@ import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.ExpConstants;
 import org.ebsdimage.core.run.Operation;
 
-
 /**
  * Wizard page for the detection operations.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class IndexingWizardPage extends OperationWizardPage {
 
@@ -91,25 +89,24 @@ public class IndexingWizardPage extends OperationWizardPage {
                 return;
 
         // Pre
-        DefaultListModel model =
-                (DefaultListModel) prePanel.userList.getModel();
+        DefaultListModel model = prePanel.getUserListModel();
         model.clear();
         for (Operation op : exp.getIndexingPreOps())
             model.addElement(op);
 
         // Op
-        model = (DefaultListModel) opPanel.userList.getModel();
+        model = opPanel.getUserListModel();
         model.clear();
         model.addElement(exp.getIndexingOp());
 
         // Post
-        model = (DefaultListModel) postPanel.userList.getModel();
+        model = postPanel.getUserListModel();
         model.clear();
         for (Operation op : exp.getIndexingPostOps())
             model.addElement(op);
 
         // Results
-        model = (DefaultListModel) resultsPanel.userList.getModel();
+        model = resultsPanel.getUserListModel();
         model.clear();
         for (Operation op : exp.getIndexingResultsOps())
             model.addElement(op);
@@ -126,14 +123,10 @@ public class IndexingWizardPage extends OperationWizardPage {
 
         int previousOpCount =
                 ((Operation[]) get(IdentificationWizardPage.KEY_IDENTIFICATION_OP)).length;
-        int preCount =
-                ((DefaultListModel) prePanel.userList.getModel()).getSize();
-        int opCount =
-                ((DefaultListModel) opPanel.userList.getModel()).getSize();
-        int postCount =
-                ((DefaultListModel) postPanel.userList.getModel()).getSize();
-        int resultsCount =
-                ((DefaultListModel) resultsPanel.userList.getModel()).getSize();
+        int preCount = (prePanel.getUserListModel()).size();
+        int opCount = (opPanel.getUserListModel()).size();
+        int postCount = (postPanel.getUserListModel()).size();
+        int resultsCount = (resultsPanel.getUserListModel()).size();
 
         if (previousOpCount == 0)
             if (preCount > 0 || opCount > 0 || postCount > 0

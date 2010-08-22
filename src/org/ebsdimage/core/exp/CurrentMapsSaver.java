@@ -25,7 +25,7 @@ import org.ebsdimage.core.HoughPeakIntensityComparator;
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.sim.Energy;
-import org.ebsdimage.core.sim.ops.patternsim.op.PatternBandCenter;
+import org.ebsdimage.core.sim.ops.patternsim.PatternBandCenter;
 
 import ptpshared.utility.xml.ObjectXml;
 import rmlimage.core.*;

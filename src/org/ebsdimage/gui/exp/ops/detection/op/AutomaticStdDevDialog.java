@@ -19,7 +19,7 @@ package org.ebsdimage.gui.exp.ops.detection.op;
 
 import org.ebsdimage.core.exp.ops.detection.op.AutomaticStdDev;
 import org.ebsdimage.core.run.Operation;
-import org.ebsdimage.gui.exp.ops.OperationDialog;
+import org.ebsdimage.gui.run.ops.OperationDialog;
 
 import rmlshared.gui.ColumnPanel;
 import rmlshared.gui.DoubleField;

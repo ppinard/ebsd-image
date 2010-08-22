@@ -1,0 +1,5 @@
+menu=PlugIns/EBSD/Simulation engine
+icon=org/ebsdimage/plugin/Sim_(24x24).png
+tooltip=Run a simulation
+plugin=org.ebsdimage.plugin.Sim
+workerthread=true

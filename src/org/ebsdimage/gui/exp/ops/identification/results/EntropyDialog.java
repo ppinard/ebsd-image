@@ -19,7 +19,7 @@ package org.ebsdimage.gui.exp.ops.identification.results;
 
 import org.ebsdimage.core.exp.ops.identification.results.Entropy;
 import org.ebsdimage.core.run.Operation;
-import org.ebsdimage.gui.exp.ops.OperationDialog;
+import org.ebsdimage.gui.run.ops.OperationDialog;
 
 import rmlshared.gui.ColumnPanel;
 import rmlshared.gui.ErrorDialog;

@@ -8,7 +8,7 @@ import org.ebsdimage.core.exp.ExpMMap;
 import org.ebsdimage.core.exp.ExpMetadata;
 import org.ebsdimage.core.run.Run;
 import org.ebsdimage.core.sim.Sim;
-import org.ebsdimage.core.sim.ops.patternsim.op.PatternSimOp;
+import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
 import org.ebsdimage.io.SmpOutputStream;
 import org.ebsdimage.io.exp.ExpMMapSaver;
 
@@ -93,8 +93,8 @@ public class ExpMMapSmpFile extends OutputOps {
         double magnification = 1;
         double tiltAngle = 0.0;
         double workingDistance = Double.NaN;
-        double pixelWidth = 1.0;
-        double pixelHeight = 1.0;
+        double pixelWidth = 1.0e-6;
+        double pixelHeight = 1.0e-6;
         Quaternion sampleRotation = Quaternion.IDENTITY;
         Camera calibration = sim.getCameras()[0];
 

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.sim;
 
 import ptpshared.io.FileUtil;
@@ -23,7 +23,6 @@ import ptpshared.io.FileUtil;
  * Constants used to access the simulation's operations.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class SimConstants {
 
@@ -33,6 +32,9 @@ public class SimConstants {
     /** Package name for the operations' io. */
     public static final String OPS_IO_PACKAGE = "org.ebsdimage.io.sim.ops";
 
+    /** Package name for the operations' gui. */
+    public static final String OPS_GUI_PACKAGE = "org.ebsdimage.gui.sim.ops";
+
     /** Package name for the pattern simulation's core operations. */
     public static final String PATTERNSIM_CORE_PACKAGE =
             FileUtil.joinPackageNames(OPS_CORE_PACKAGE, "patternsim");
@@ -41,12 +43,19 @@ public class SimConstants {
     public static final String PATTERNSIM_IO_PACKAGE =
             FileUtil.joinPackageNames(OPS_IO_PACKAGE, "patternsim");
 
+    /** Package name for the pattern simulation's gui operations. */
+    public static final String PATTERNSIM_GUI_PACKAGE =
+            FileUtil.joinPackageNames(OPS_GUI_PACKAGE, "patternsim");
+
     /** Package name for the output' core operations. */
-    public static final String OUTPUT_CORE_PACKAGE =
-            FileUtil.joinPackageNames(OPS_CORE_PACKAGE, "output");
+    public static final String OUTPUT_CORE_PACKAGE = FileUtil.joinPackageNames(
+            OPS_CORE_PACKAGE, "output");
 
     /** Package name for the output' io operations. */
-    public static final String OUTPUT_IO_PACKAGE =
-            FileUtil.joinPackageNames(OPS_IO_PACKAGE, "output");
+    public static final String OUTPUT_IO_PACKAGE = FileUtil.joinPackageNames(
+            OPS_IO_PACKAGE, "output");
 
+    /** Package name for the output' gui operations. */
+    public static final String OUTPUT_GUI_PACKAGE = FileUtil.joinPackageNames(
+            OPS_GUI_PACKAGE, "output");
 }

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.sim;
 
 import static java.lang.Math.abs;
@@ -65,7 +65,6 @@ public class Energy implements ObjectXml {
      * @param precision
      *            level of precision
      * @return whether the two <code>Energy</code> are almost equal
-     * 
      * @throws IllegalArgumentException
      *             if the precision is less than 0.0
      * @throws IllegalArgumentException
@@ -97,7 +96,6 @@ public class Energy implements ObjectXml {
      * 
      * @param obj
      *            other <code>Energy</code> to check equality
-     * 
      * @return whether the two <code>Energy</code> are equal
      */
     @Override
@@ -109,8 +107,7 @@ public class Energy implements ObjectXml {
         if (getClass() != obj.getClass())
             return false;
         Energy other = (Energy) obj;
-        if (Double.doubleToLongBits(value) != Double
-                .doubleToLongBits(other.value))
+        if (Double.doubleToLongBits(value) != Double.doubleToLongBits(other.value))
             return false;
         return true;
     }
@@ -153,7 +150,7 @@ public class Energy implements ObjectXml {
      */
     @Override
     public String toString() {
-        return "Energy [" + value + " eV]";
+        return value + " eV";
     }
 
 }

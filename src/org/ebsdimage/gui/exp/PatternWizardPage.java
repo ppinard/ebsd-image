@@ -29,7 +29,6 @@ import org.ebsdimage.core.run.Operation;
  * Wizard page for the pattern operations.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PatternWizardPage extends OperationWizardPage {
 
@@ -99,14 +98,13 @@ public class PatternWizardPage extends OperationWizardPage {
                 return;
 
         // Post
-        DefaultListModel model =
-                (DefaultListModel) postPanel.userList.getModel();
+        DefaultListModel model = postPanel.getUserListModel();
         model.clear();
         for (Operation op : exp.getPatternPostOps())
             model.addElement(op);
 
         // Results
-        model = (DefaultListModel) resultsPanel.userList.getModel();
+        model = resultsPanel.getUserListModel();
         model.clear();
         for (Operation op : exp.getPatternResultsOps())
             model.addElement(op);

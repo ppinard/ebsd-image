@@ -20,7 +20,7 @@ package org.ebsdimage.core.sim.ops.output;
 import java.io.IOException;
 
 import org.ebsdimage.core.sim.Sim;
-import org.ebsdimage.core.sim.ops.patternsim.op.PatternSimOp;
+import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
 
 public class OutputOpsMock extends OutputOps {
 

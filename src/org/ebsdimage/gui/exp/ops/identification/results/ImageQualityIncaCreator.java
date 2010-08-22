@@ -19,7 +19,7 @@ package org.ebsdimage.gui.exp.ops.identification.results;
 
 import org.ebsdimage.core.exp.ops.identification.results.ImageQualityInca;
 import org.ebsdimage.core.run.Operation;
-import org.ebsdimage.gui.exp.ops.OperationCreator;
+import org.ebsdimage.gui.run.ops.OperationCreator;
 
 /**
  * GUI creator for the <code>ImageQualityInca</code> operation.

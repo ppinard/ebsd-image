@@ -120,7 +120,8 @@ public class StartWizardPage extends WizardPage {
 
         // Welcome
         String text =
-                "<html>In EBSD-Image, the procedure of going from diffraction "
+                "<html>This is the wizard for the analysis engine. "
+                        + "In EBSD-Image, the procedure of going from diffraction "
                         + "patterns to indexed solutions is called an experiment. "
                         + "All the parameters and operations of an experiment are "
                         + "setup using this wizard. "
@@ -135,7 +136,7 @@ public class StartWizardPage extends WizardPage {
                         + "<br/><br/>"
                         + "For further information on this wizard, please refer to "
                         + "the \"How to run an experiment\" quick-start guide on "
-                        + "our wiki (http://ebsd-image.sourceforge.net/wiki/HowToRunAnExperiment)."
+                        + "our wiki (http://ebsd-image.org/wiki/HowToRunAnExperiment)."
                         + "</html>";
         add(new JLabel(text), "grow, wrap 40");
 

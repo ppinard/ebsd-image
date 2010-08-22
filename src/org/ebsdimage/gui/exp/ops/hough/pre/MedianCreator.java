@@ -19,7 +19,7 @@ package org.ebsdimage.gui.exp.ops.hough.pre;
 
 import org.ebsdimage.core.exp.ops.hough.pre.Median;
 import org.ebsdimage.core.run.Operation;
-import org.ebsdimage.gui.exp.ops.OperationCreator;
+import org.ebsdimage.gui.run.ops.OperationCreator;
 
 import rmlshared.gui.OkCancelDialog;
 

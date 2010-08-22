@@ -19,7 +19,7 @@ package org.ebsdimage.gui.exp.ops.hough.results;
 
 import org.ebsdimage.core.exp.ops.hough.results.Range;
 import org.ebsdimage.core.run.Operation;
-import org.ebsdimage.gui.exp.ops.OperationCreator;
+import org.ebsdimage.gui.run.ops.OperationCreator;
 
 /**
  * GUI creator for the <code>Range</code> operation.

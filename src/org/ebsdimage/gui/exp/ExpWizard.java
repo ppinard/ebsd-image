@@ -65,7 +65,7 @@ public class ExpWizard extends Wizard {
         setTitle("Experiment");
 
         BufferedImage image =
-                ImageIO.read(getURL("org/ebsdimage/gui/exp/sidepanel.png"));
+                ImageIO.read(getURL("org/ebsdimage/gui/sidepanel.png"));
         setSidePanelBackground(image);
 
         setPreferredWidth(800);

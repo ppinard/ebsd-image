@@ -22,7 +22,8 @@ import java.io.IOException;
 import javax.swing.DefaultListModel;
 
 import org.ebsdimage.core.run.Operation;
-import org.ebsdimage.gui.exp.ops.OperationCreator;
+import org.ebsdimage.gui.run.ops.OperationChoicePanel;
+import org.ebsdimage.gui.run.ops.OperationCreator;
 
 import rmlshared.gui.Button;
 import rmlshared.thread.PlugIn;

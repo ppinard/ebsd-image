@@ -2,7 +2,7 @@ package org.ebsdimage.gui.exp.ops.detection.results;
 
 import org.ebsdimage.core.exp.ops.detection.results.Count;
 import org.ebsdimage.core.run.Operation;
-import org.ebsdimage.gui.exp.ops.OperationCreator;
+import org.ebsdimage.gui.run.ops.OperationCreator;
 
 /**
  * GUI creator for the <code>Count</code> operation.

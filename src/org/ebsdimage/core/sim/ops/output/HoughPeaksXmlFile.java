@@ -24,7 +24,7 @@ import org.ebsdimage.core.HoughMath;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.sim.Band;
 import org.ebsdimage.core.sim.Sim;
-import org.ebsdimage.core.sim.ops.patternsim.op.PatternSimOp;
+import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
 import org.ebsdimage.io.HoughPeakXmlSaver;
 import org.ebsdimage.io.HoughPeakXmlTags;
 import org.jdom.Element;

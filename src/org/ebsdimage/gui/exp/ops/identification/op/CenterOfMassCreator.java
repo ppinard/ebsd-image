@@ -19,7 +19,7 @@ package org.ebsdimage.gui.exp.ops.identification.op;
 
 import org.ebsdimage.core.exp.ops.identification.op.CenterOfMass;
 import org.ebsdimage.core.run.Operation;
-import org.ebsdimage.gui.exp.ops.OperationCreator;
+import org.ebsdimage.gui.run.ops.OperationCreator;
 
 import rmlshared.gui.OkCancelDialog;
 

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.sim;
 
 import static org.ebsdimage.core.sim.SimConstants.OUTPUT_IO_PACKAGE;
@@ -36,12 +36,11 @@ import org.ebsdimage.io.CameraXmlLoader;
 import org.ebsdimage.io.CameraXmlTags;
 import org.ebsdimage.io.run.RunXmlLoader;
 import org.ebsdimage.io.sim.ops.output.OutputOpsXmlTags;
-import org.ebsdimage.io.sim.ops.patternsim.op.PatternSimOpXmlTags;
+import org.ebsdimage.io.sim.ops.patternsim.PatternSimOpXmlTags;
 import org.jdom.Element;
 import org.jdom.IllegalNameException;
 
 import ptpshared.core.math.Quaternion;
-import ptpshared.io.FileUtil;
 import ptpshared.io.math.QuaternionXmlLoader;
 import ptpshared.io.math.QuaternionXmlTags;
 import ptpshared.utility.xml.JDomUtil;
@@ -55,7 +54,6 @@ import crystallography.io.CrystalXmlTags;
  * XML loader for a <code>Sim</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class SimXmlLoader extends RunXmlLoader {
 
@@ -86,7 +84,7 @@ public class SimXmlLoader extends RunXmlLoader {
 
         // Name
         String name =
-                JDomUtil.getStringFromAttribute(element, ATTR_NAME,
+                JDomUtil.getStringFromAttributeDefault(element, ATTR_NAME,
                         Run.DEFAULT_NAME);
 
         // Path
@@ -129,8 +127,7 @@ public class SimXmlLoader extends RunXmlLoader {
 
         // Pattern Sim Op
         String tagName = PatternSimOpXmlTags.TAG_NAME;
-        String packageName =
-                FileUtil.joinPackageNames(PATTERNSIM_IO_PACKAGE, "op");
+        String packageName = PATTERNSIM_IO_PACKAGE;
         ops.add(loadOperation(element, tagName, packageName));
 
         // Output Ops
