@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.tsl.io;
 
 import static org.junit.Assert.assertFalse;
@@ -23,9 +23,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 
 import org.ebsdimage.vendors.tsl.core.TslMMapTester;
-import org.ebsdimage.vendors.tsl.io.TslMMapLoader;
 import org.junit.Test;
-
 
 public class TslMMapLoaderTest extends TslMMapTester {
 
@@ -43,8 +41,7 @@ public class TslMMapLoaderTest extends TslMMapTester {
     @Test
     public void testIsTslMMap() {
         assertTrue(TslMMapLoader.isTslMMap(file));
-        assertFalse(TslMMapLoader
-                .isTslMMap(getFile("org/ebsdimage/vendors/tsl/testdata/WC.xml")));
+        assertFalse(TslMMapLoader.isTslMMap(getFile("org/ebsdimage/vendors/tsl/testdata/WC.xml")));
     }
 
 }

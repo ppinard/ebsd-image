@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.indexing.op;
 
 import static org.ebsdimage.io.exp.ops.indexing.op.KriegerLassen1994XmlTags.ATTR_MAX_INDEX;
@@ -31,7 +31,6 @@ import ptpshared.utility.xml.ObjectXmlSaver;
  * XML saver for a <code>KriegerLassen1994</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class KriegerLassen1994XmlSaver implements ObjectXmlSaver {
 

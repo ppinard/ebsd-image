@@ -14,12 +14,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.indexing.pre;
 
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.exp.ops.indexing.pre.IndexingPreOps;
 
 public class IndexingPreOpsMock extends IndexingPreOps {
 
@@ -28,7 +27,8 @@ public class IndexingPreOpsMock extends IndexingPreOps {
         HoughPeak[] destPeaks = new HoughPeak[srcPeaks.length];
 
         for (int i = 0; i < srcPeaks.length; i++)
-            destPeaks[i] = new HoughPeak(srcPeaks[i].rho + 1, srcPeaks[i].theta);
+            destPeaks[i] =
+                    new HoughPeak(srcPeaks[i].rho + 1, srcPeaks[i].theta);
 
         return destPeaks;
     }

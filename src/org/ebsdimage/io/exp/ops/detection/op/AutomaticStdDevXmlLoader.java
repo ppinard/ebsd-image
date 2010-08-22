@@ -31,7 +31,6 @@ import ptpshared.utility.xml.ObjectXmlLoader;
  * XML loader for an <code>AutomaticStdDev</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class AutomaticStdDevXmlLoader implements ObjectXmlLoader {
 

@@ -32,7 +32,6 @@ import rmlshared.gui.Panel;
  * GUI Dialog for the <code>RadialNoise</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class RadialNoiseDialog extends OperationDialog {
 
@@ -130,8 +129,8 @@ public class RadialNoiseDialog extends OperationDialog {
     public Operation getOperation() {
         return new RadialNoise(xField.getValueBFR(), yField.getValueBFR(),
                 stdDevXField.getValueBFR(), stdDevYField.getValueBFR(),
-                initialNoiseStdDevField.getValueBFR(), finalNoiseStdDevField
-                        .getValueBFR());
+                initialNoiseStdDevField.getValueBFR(),
+                finalNoiseStdDevField.getValueBFR());
     }
 
 

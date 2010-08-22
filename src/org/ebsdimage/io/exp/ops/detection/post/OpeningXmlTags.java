@@ -23,7 +23,6 @@ import org.ebsdimage.core.exp.ops.detection.post.Opening;
  * Tags for <code>Opening</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class OpeningXmlTags {
 

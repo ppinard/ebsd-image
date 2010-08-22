@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp.ops.detection.op;
 
 import org.ebsdimage.core.exp.ops.detection.op.AutomaticTopHat;
@@ -27,7 +27,6 @@ import rmlshared.gui.OkCancelDialog;
  * GUI creator for the <code>AutomaticTopHat</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class AutomaticTopHatCreator implements OperationCreator {
 

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.tsl.plugin;
 
 import java.io.File;
@@ -34,7 +34,6 @@ import crystallography.core.Crystal;
  * Import an ang file by converting it to a multimap.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class TslImport extends PlugIn implements Monitorable {
 

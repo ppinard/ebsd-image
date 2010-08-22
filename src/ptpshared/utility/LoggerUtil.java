@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.utility;
 
 import java.util.logging.Filter;
@@ -25,7 +25,6 @@ import java.util.logging.Logger;
  * Utilities to use in conjunction with <code>java.util.logging</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class LoggerUtil {
 
@@ -37,6 +36,7 @@ public class LoggerUtil {
      */
     public static void turnOffLogger(Logger logger) {
         logger.setFilter(new Filter() {
+            @Override
             public boolean isLoggable(LogRecord record) {
                 return false;
             }

@@ -31,8 +31,11 @@ import crystallography.core.crystals.Silicon;
 public class SolutionTest {
 
     private Solution solution;
+
     private Crystal crystal;
+
     private Quaternion rotation;
+
     private double fit;
 
 

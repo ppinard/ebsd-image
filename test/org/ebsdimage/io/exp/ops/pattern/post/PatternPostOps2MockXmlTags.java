@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.post;
 
 import org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps2Mock;
@@ -22,8 +22,8 @@ import org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps2Mock;
 public class PatternPostOps2MockXmlTags {
 
     /** XML tag name for PatternPostOps2Mock */
-    public static final String TAG_NAME = PatternPostOps2Mock.class
-            .getSimpleName();
+    public static final String TAG_NAME =
+            PatternPostOps2Mock.class.getSimpleName();
 
     /** XML attribute for the variable var */
     public static final String ATTR_VAR = "var";

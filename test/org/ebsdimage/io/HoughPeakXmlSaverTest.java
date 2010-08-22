@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io;
 
 import static org.ebsdimage.io.HoughPeakXmlTags.ATTR_MAXINTENSITY;
@@ -24,7 +24,6 @@ import static org.ebsdimage.io.HoughPeakXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
 import org.ebsdimage.core.HoughPeak;
-import org.ebsdimage.io.HoughPeakXmlSaver;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,8 +52,9 @@ public class HoughPeakXmlSaverTest {
                 1e-7);
         assertEquals(0.1, JDomUtil.getDoubleFromAttribute(element, ATTR_THETA),
                 1e-7);
-        assertEquals(4.0, JDomUtil.getDoubleFromAttribute(element,
-                ATTR_MAXINTENSITY), 1e-7);
+        assertEquals(4.0,
+                JDomUtil.getDoubleFromAttribute(element, ATTR_MAXINTENSITY),
+                1e-7);
     }
 
 }

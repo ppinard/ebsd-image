@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.utility;
 
 /**
@@ -22,7 +22,6 @@ package ptpshared.utility;
  * temporary information/data until the <code>Cache</code> is flushed.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public interface Buffer {
     /**

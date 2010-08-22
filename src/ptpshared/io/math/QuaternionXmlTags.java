@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.io.math;
 
 import ptpshared.core.math.Quaternion;
@@ -23,7 +23,6 @@ import ptpshared.core.math.Quaternion;
  * Tags for <code>Quaternion</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class QuaternionXmlTags {
 

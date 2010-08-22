@@ -29,7 +29,6 @@ import rmlshared.gui.Panel;
  * GUI Dialog for the <code>HoughCrop</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HoughCropDialog extends OperationDialog {
 

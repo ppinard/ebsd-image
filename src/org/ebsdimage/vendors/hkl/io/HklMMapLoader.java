@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.hkl.io;
 
 import java.io.File;
@@ -54,10 +54,10 @@ public class HklMMapLoader extends EbsdMMapLoader {
     @Override
     protected HklMMap createMap(int version, int width, int height,
             HashMap<String, Map> mapList, Document metadata) {
-    
+
         if (version != 1)
             throw new IllegalArgumentException("Invalid version: " + version);
-    
+
         Element element = metadata.getRootElement();
         HklMetadata data = new HklMetadataXmlLoader().load(element);
 

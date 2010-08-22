@@ -14,15 +14,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.hkl.io;
 
 import java.io.File;
 
 import org.ebsdimage.vendors.hkl.core.HklMMapTester;
-import org.ebsdimage.vendors.hkl.io.HklMMapLoader;
-
-
 
 public class HklMMapLoaderTest extends HklMMapTester {
 

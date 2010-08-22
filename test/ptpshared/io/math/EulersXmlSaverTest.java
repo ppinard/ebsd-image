@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.io.math;
 
 import static org.junit.Assert.assertEquals;
@@ -28,7 +28,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ptpshared.core.math.Eulers;
-import ptpshared.io.math.EulersXmlSaver;
 import ptpshared.utility.xml.JDomUtil;
 import ptpshared.utility.xml.UnitsXmlTags;
 
@@ -56,8 +55,8 @@ public class EulersXmlSaverTest {
                 JDomUtil.getDoubleFromAttribute(element, ATTR_THETA2), 1e-7);
         assertEquals(0.3,
                 JDomUtil.getDoubleFromAttribute(element, ATTR_THETA3), 1e-7);
-        assertEquals(UnitsXmlTags.RAD, JDomUtil.getStringFromAttribute(element,
-                UnitsXmlTags.ATTR));
+        assertEquals(UnitsXmlTags.RAD,
+                JDomUtil.getStringFromAttribute(element, UnitsXmlTags.ATTR));
     }
 
 }

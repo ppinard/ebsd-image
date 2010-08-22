@@ -20,6 +20,7 @@ package org.ebsdimage.io;
 import java.awt.Dimension;
 import java.io.*;
 
+import rmlimage.core.Map;
 import rmlimage.io.MapLoader;
 import rmlimage.module.integer.core.IntMap;
 import rmlshared.io.FileUtil;
@@ -39,18 +40,21 @@ public class RawLoader extends MapLoader {
 
 
 
+    @Override
     public double getTaskProgress() {
         return progress;
     }
 
 
 
+    @Override
     public Object load(File file) throws IOException {
         return load(file, (IntMap) null);
     }
 
 
 
+    @Override
     public Object load(File file, Object arg) throws IOException {
         if (!(arg instanceof IntMap))
             arg = null;
@@ -152,7 +156,7 @@ public class RawLoader extends MapLoader {
         in.close();
 
         map.setFile(file);
-        map.setChanged(IntMap.MAP_CHANGED);
+        map.setChanged(Map.MAP_CHANGED);
 
         loadProperties(map); // Load the properties if anu
 

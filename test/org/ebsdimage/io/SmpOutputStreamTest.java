@@ -14,24 +14,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io;
-
 
 import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.TestCase;
-import org.ebsdimage.io.SmpInputStream;
-import org.ebsdimage.io.SmpOutputStream;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import rmlshared.io.FileUtil;
-
 import rmlimage.core.BinMap;
 import rmlimage.core.ByteMap;
+import rmlshared.io.FileUtil;
 
 public class SmpOutputStreamTest extends TestCase {
 
@@ -61,11 +57,14 @@ public class SmpOutputStreamTest extends TestCase {
         SmpOutputStream outStream = new SmpOutputStream(file);
         ByteMap lena = (ByteMap) load("org/ebsdimage/io/Lena.bmp");
         outStream.writeMap(lena);
-        ByteMap lena90 = (ByteMap) load("org/ebsdimage/io/Lena_Rotate90deg.bmp");
+        ByteMap lena90 =
+                (ByteMap) load("org/ebsdimage/io/Lena_Rotate90deg.bmp");
         outStream.writeMap(lena90);
-        ByteMap lena180 = (ByteMap)load("org/ebsdimage/io/Lena_Rotate180deg.bmp");
+        ByteMap lena180 =
+                (ByteMap) load("org/ebsdimage/io/Lena_Rotate180deg.bmp");
         outStream.writeMap(lena180);
-        ByteMap lena270 = (ByteMap)load("org/ebsdimage/io/Lena_Rotate270deg.bmp");
+        ByteMap lena270 =
+                (ByteMap) load("org/ebsdimage/io/Lena_Rotate270deg.bmp");
         outStream.writeMap(lena270);
         outStream.close();
 

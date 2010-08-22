@@ -14,15 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.sim;
 
 import java.io.File;
 
 import org.ebsdimage.core.sim.SimsGenerator;
 import org.ebsdimage.core.sim.SimsGeneratorTester;
-import org.ebsdimage.io.sim.SimsGeneratorLoader;
-import org.ebsdimage.io.sim.SimsGeneratorSaver;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

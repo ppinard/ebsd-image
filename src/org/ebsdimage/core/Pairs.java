@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static java.lang.Math.abs;
@@ -31,7 +31,6 @@ import java.util.Iterator;
  * Comparator to sort a list of pairs by their direction cosine.
  * 
  * @author Philippe T. Pinard
- * 
  */
 class DirectionCosineComparator implements Comparator<Pair>, Serializable {
 
@@ -54,7 +53,6 @@ class DirectionCosineComparator implements Comparator<Pair>, Serializable {
  * search methods.
  * 
  * @author Philippe T. Pinard
- * 
  * @param <E>
  */
 public abstract class Pairs<E extends Pair> implements Iterable<E> {
@@ -76,7 +74,6 @@ public abstract class Pairs<E extends Pair> implements Iterable<E> {
      *            how far the match(es) should be from the desired direction
      *            cosine
      * @return closest matches
-     * 
      * @throws IllegalArgumentException
      *             if the precision is less than 0.0
      * @throws IllegalArgumentException
@@ -101,7 +98,6 @@ public abstract class Pairs<E extends Pair> implements Iterable<E> {
      *            how far the match(es) should be from the desired direction
      *            cosine
      * @return closest matches
-     * 
      * @throws IllegalArgumentException
      *             if the precision is less than 0.0
      * @throws IllegalArgumentException
@@ -110,7 +106,6 @@ public abstract class Pairs<E extends Pair> implements Iterable<E> {
      *             if the direction cosine is not a number (NaN)
      * @throws IllegalArgumentException
      *             if the direction cosine is infinite
-     * 
      * @see {@link #findClosestMatches(double, double)}
      */
     protected ArrayList<E> findClosestMatchesArrayList(double directionCosine,
@@ -154,7 +149,6 @@ public abstract class Pairs<E extends Pair> implements Iterable<E> {
      * @param index
      *            index of the pair
      * @return pair
-     * 
      * @throws IllegalArgumentException
      *             if the index is out of range
      */

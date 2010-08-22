@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.core.math;
 
 import static java.lang.Math.PI;
@@ -30,10 +30,12 @@ public class QuaternionMathTest {
     public void testMisorientation() {
         // From A.D. Rollett, Misorientations and Grain Boundaries, Lectures
         // Slides, 2007
-        Matrix3D gA = new Matrix3D(-0.577, 0.707, 0.408, -0.577, -0.707, 0.408,
-                0.577, 0, 0.817);
-        Matrix3D gB = new Matrix3D(0.577, -0.707, 0.408, 0.577, 0.707, 0.408,
-                -0.577, 0, 0.817);
+        Matrix3D gA =
+                new Matrix3D(-0.577, 0.707, 0.408, -0.577, -0.707, 0.408,
+                        0.577, 0, 0.817);
+        Matrix3D gB =
+                new Matrix3D(0.577, -0.707, 0.408, 0.577, 0.707, 0.408, -0.577,
+                        0, 0.817);
 
         Quaternion qA = new Quaternion(gA, 1e-3);
         Quaternion qB = new Quaternion(gB, 1e-3);
@@ -41,8 +43,9 @@ public class QuaternionMathTest {
         Quaternion qOut = QuaternionMath.misorientation(qA, qB);
 
         Matrix3D mOut = qOut.toSO3matrix();
-        Matrix3D expected = new Matrix3D(-0.667, 0.333, 0.667, 0.333, -0.667,
-                0.667, 0.667, 0.667, 0.333);
+        Matrix3D expected =
+                new Matrix3D(-0.667, 0.333, 0.667, 0.333, -0.667, 0.667, 0.667,
+                        0.667, 0.333);
         assertTrue(mOut.equals(expected, 1e-2));
     }
 
@@ -78,8 +81,8 @@ public class QuaternionMathTest {
         q2 = new Quaternion(new Eulers(0.60, 0.80, 0.152));
         Quaternion q3 = new Quaternion(new Eulers(0.150, 0, 0.12));
 
-        Vector3D vq1q2q3 = QuaternionMath.rotate(v, q3.multiply(q2)
-                .multiply(q1));
+        Vector3D vq1q2q3 =
+                QuaternionMath.rotate(v, q3.multiply(q2).multiply(q1));
 
         // Order of rotation q1, q2 then q3
         Vector3D expected_vq1q2q3 = QuaternionMath.rotate(v, q1, q2, q3);

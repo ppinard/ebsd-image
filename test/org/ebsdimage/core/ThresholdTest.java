@@ -39,9 +39,7 @@ public class ThresholdTest extends TestCase {
     public void testAutomaticTopHat() throws IOException {
         // Do the operation
         HoughMap houghMap =
-                new HoughMapLoader()
-                        .load(FileUtil
-                                .getFile("org/ebsdimage/testdata/houghmap_cropped.bmp"));
+                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap_cropped.bmp"));
 
         BinMap destMap = Threshold.automaticTopHat(houghMap);
 
@@ -63,9 +61,7 @@ public class ThresholdTest extends TestCase {
     public void testAutomaticStdDev() throws IOException {
         // Do the operation
         HoughMap houghMap =
-                new HoughMapLoader()
-                        .load(FileUtil
-                                .getFile("org/ebsdimage/testdata/houghmap_cropped.bmp"));
+                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap_cropped.bmp"));
         BinMap destMap = Threshold.automaticStdDev(houghMap, 1.5);
 
         // Test the pixArray

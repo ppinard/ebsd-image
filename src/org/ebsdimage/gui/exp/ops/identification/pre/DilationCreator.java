@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp.ops.identification.pre;
 
 import org.ebsdimage.core.exp.ops.identification.pre.Dilation;
@@ -27,7 +27,6 @@ import rmlshared.gui.OkCancelDialog;
  * GUI creator for the <code>Dilation</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class DilationCreator implements OperationCreator {
 

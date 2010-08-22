@@ -20,7 +20,6 @@ package org.ebsdimage.core.exp.ops.detection.post;
 import static org.junit.Assert.assertEquals;
 
 import org.ebsdimage.TestCase;
-import org.ebsdimage.core.exp.ops.detection.post.CleanEdge;
 import org.junit.Before;
 import org.junit.Test;
 

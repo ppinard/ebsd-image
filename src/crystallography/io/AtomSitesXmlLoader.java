@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.io;
 
 import static crystallography.io.AtomSitesXmlTags.TAG_NAME;
@@ -32,7 +32,6 @@ import crystallography.core.AtomSites;
  * XML loader for <code>AtomSites</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class AtomSitesXmlLoader implements ObjectXmlLoader {
 

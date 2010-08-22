@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.detection.pre;
 
 import org.ebsdimage.core.exp.ops.detection.pre.InversionDivision;
@@ -23,11 +23,10 @@ import org.ebsdimage.core.exp.ops.detection.pre.InversionDivision;
  * Tags for <code>InversionDivision</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class InversionDivisionXmlTags {
 
     /** XML tag name for <code>InversionDivision</code>. */
-    public static final String TAG_NAME = InversionDivision.class
-            .getSimpleName();
+    public static final String TAG_NAME =
+            InversionDivision.class.getSimpleName();
 }

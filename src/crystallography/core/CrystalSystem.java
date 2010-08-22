@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import rmlshared.util.Labeled;
@@ -23,7 +23,6 @@ import rmlshared.util.Labeled;
  * Enumeration of the 7 crystal systems.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public enum CrystalSystem implements Labeled {
 

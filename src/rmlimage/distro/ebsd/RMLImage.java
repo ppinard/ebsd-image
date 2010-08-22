@@ -31,7 +31,6 @@ import rmlshared.util.Preferences;
  * Main entry class to RML-Image GUI.
  * 
  * @author Marin Lagac&eacute;
- * 
  */
 public class RMLImage extends rmlimage.gui.RMLImage {
 
@@ -39,17 +38,20 @@ public class RMLImage extends rmlimage.gui.RMLImage {
     protected void autoExec() {
     }
 
-    
+
+
     @Override
     public PlugIn getAbout() {
         return PlugInBuilder.newInstance("org.ebsdimage.plugin.About");
     }
 
-    
+
+
     @Override
     public String getAppName() {
         return "EBSD-Image";
     }
+
 
 
     @Override
@@ -83,12 +85,8 @@ public class RMLImage extends rmlimage.gui.RMLImage {
 
     /*
      * public static void main(String args[]) { if (args.length == 0) args = new
-     * String[] { "ebsd" };
-     * 
-     * //System.out.println("Before main"); rmlimage.RMLImage.main(args);
-     * //System.out.println("After main");
-     * 
-     * }
+     * String[] { "ebsd" }; //System.out.println("Before main");
+     * rmlimage.RMLImage.main(args); //System.out.println("After main"); }
      */
 
     @Override

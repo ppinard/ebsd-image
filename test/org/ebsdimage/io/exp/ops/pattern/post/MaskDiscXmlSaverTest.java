@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.post;
 
 import static org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlTags.ATTR_CENTROIDX;
@@ -24,11 +24,9 @@ import static org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
 import org.ebsdimage.core.exp.ops.pattern.post.MaskDisc;
-import org.ebsdimage.io.exp.ops.pattern.post.MaskDiscXmlSaver;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
-
 
 import ptpshared.utility.xml.JDomUtil;
 
@@ -50,10 +48,10 @@ public class MaskDiscXmlSaverTest {
         Element element = new MaskDiscXmlSaver().save(op);
 
         assertEquals(TAG_NAME, element.getName());
-        assertEquals(10, JDomUtil.getIntegerFromAttribute(element,
-                ATTR_CENTROIDX));
-        assertEquals(11, JDomUtil.getIntegerFromAttribute(element,
-                ATTR_CENTROIDY));
+        assertEquals(10,
+                JDomUtil.getIntegerFromAttribute(element, ATTR_CENTROIDX));
+        assertEquals(11,
+                JDomUtil.getIntegerFromAttribute(element, ATTR_CENTROIDY));
         assertEquals(8, JDomUtil.getIntegerFromAttribute(element, ATTR_RADIUS));
     }
 

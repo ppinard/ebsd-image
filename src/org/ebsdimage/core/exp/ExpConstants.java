@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp;
 
 import ptpshared.io.FileUtil;
@@ -23,7 +23,6 @@ import ptpshared.io.FileUtil;
  * Constants used to access the experiment's operations.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class ExpConstants {
 
@@ -49,16 +48,16 @@ public class ExpConstants {
             FileUtil.joinPackageNames(OPS_GUI_PACKAGE, "detection");
 
     /** Package name for the hough's core operations. */
-    public static final String HOUGH_CORE_PACKAGE =
-            FileUtil.joinPackageNames(OPS_CORE_PACKAGE, "hough");
+    public static final String HOUGH_CORE_PACKAGE = FileUtil.joinPackageNames(
+            OPS_CORE_PACKAGE, "hough");
 
     /** Package name for the hough's io operations. */
-    public static final String HOUGH_IO_PACKAGE =
-            FileUtil.joinPackageNames(OPS_IO_PACKAGE, "hough");
+    public static final String HOUGH_IO_PACKAGE = FileUtil.joinPackageNames(
+            OPS_IO_PACKAGE, "hough");
 
     /** Package name for the hough's gui operations. */
-    public static final String HOUGH_GUI_PACKAGE =
-            FileUtil.joinPackageNames(OPS_GUI_PACKAGE, "hough");
+    public static final String HOUGH_GUI_PACKAGE = FileUtil.joinPackageNames(
+            OPS_GUI_PACKAGE, "hough");
 
     /** Package name for the identification's core operations. */
     public static final String IDENTIFICATION_CORE_PACKAGE =
@@ -77,8 +76,8 @@ public class ExpConstants {
             FileUtil.joinPackageNames(OPS_CORE_PACKAGE, "indexing");
 
     /** Package name for the indexing's io operations. */
-    public static final String INDEXING_IO_PACKAGE =
-            FileUtil.joinPackageNames(OPS_IO_PACKAGE, "indexing");
+    public static final String INDEXING_IO_PACKAGE = FileUtil.joinPackageNames(
+            OPS_IO_PACKAGE, "indexing");
 
     /** Package name for the indexing's gui operations. */
     public static final String INDEXING_GUI_PACKAGE =
@@ -89,11 +88,11 @@ public class ExpConstants {
             FileUtil.joinPackageNames(OPS_CORE_PACKAGE, "pattern");
 
     /** Package name for the patterns' io operations. */
-    public static final String PATTERN_IO_PACKAGE =
-            FileUtil.joinPackageNames(OPS_IO_PACKAGE, "pattern");
+    public static final String PATTERN_IO_PACKAGE = FileUtil.joinPackageNames(
+            OPS_IO_PACKAGE, "pattern");
 
     /** Package name for the patterns' gui operations. */
-    public static final String PATTERN_GUI_PACKAGE =
-            FileUtil.joinPackageNames(OPS_GUI_PACKAGE, "pattern");
+    public static final String PATTERN_GUI_PACKAGE = FileUtil.joinPackageNames(
+            OPS_GUI_PACKAGE, "pattern");
 
 }

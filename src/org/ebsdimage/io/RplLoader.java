@@ -26,18 +26,21 @@ import rmlshared.util.Properties;
 
 public class RplLoader implements Loader {
 
+    @Override
     public double getTaskProgress() {
         return 0;
     }
 
 
 
+    @Override
     public Object load(File file) throws IOException {
         return load(file, new Properties());
     }
 
 
 
+    @Override
     public Object load(File file, Object arg) throws IOException {
         if (arg == null)
             return load(file, (Properties) arg);

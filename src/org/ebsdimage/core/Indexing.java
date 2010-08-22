@@ -35,7 +35,6 @@ import crystallography.core.Reflectors;
  * Indexing of Hough peaks to find possible solutions.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Indexing implements Monitorable {
 
@@ -50,7 +49,6 @@ public class Indexing implements Monitorable {
      * @param calibration
      *            calibration
      * @return array of solution
-     * 
      * @throws NullPointerException
      *             if the reflectors array is null
      * @throws NullPointerException
@@ -66,8 +64,6 @@ public class Indexing implements Monitorable {
             Camera calibration) {
         return new Indexing().doIndex(reflsArray, peaks, calibration);
     }
-
-
 
     /** Progress value. */
     protected double progress = 0.0;
@@ -113,8 +109,8 @@ public class Indexing implements Monitorable {
 
             // Negative refl
             tmpAngularDev =
-                    Vector3DMath.angle(exp, QuaternionMath.rotate(u.negate(),
-                            rotation));
+                    Vector3DMath.angle(exp,
+                            QuaternionMath.rotate(u.negate(), rotation));
 
             if (tmpAngularDev < angularDev)
                 angularDev = tmpAngularDev;
@@ -140,7 +136,6 @@ public class Indexing implements Monitorable {
      * @param calibration
      *            calibration
      * @return array of solution
-     * 
      * @throws NullPointerException
      *             if the reflectors array is null
      * @throws NullPointerException
@@ -151,7 +146,6 @@ public class Indexing implements Monitorable {
      *             if no reflectors (phase) is defined
      * @throws IllegalArgumentException
      *             if there is less than 3 Hough peaks defined
-     * 
      * @see Reflectors
      * @see HoughPeak
      * @see Camera
@@ -296,8 +290,8 @@ public class Indexing implements Monitorable {
             Vector3D u = refl.plane.toVector3D();
 
             double tmpFit =
-                    abs(Vector3DMath.directionCosine(exp, QuaternionMath
-                            .rotate(u, rotation)));
+                    abs(Vector3DMath.directionCosine(exp,
+                            QuaternionMath.rotate(u, rotation)));
 
             if (tmpFit > fit)
                 fit = tmpFit;

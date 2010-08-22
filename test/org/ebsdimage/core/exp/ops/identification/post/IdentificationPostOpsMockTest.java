@@ -14,21 +14,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.identification.post;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.ebsdimage.core.HoughPeak;
-import org.ebsdimage.core.exp.ops.identification.post.IdentificationPostOps;
 import org.junit.Before;
 import org.junit.Test;
-
 
 public class IdentificationPostOpsMockTest {
 
     private IdentificationPostOps op;
+
     private HoughPeak[] srcPeaks;
 
 
@@ -37,8 +36,9 @@ public class IdentificationPostOpsMockTest {
     public void setUp() throws Exception {
         op = new IdentificationPostOpsMock();
 
-        srcPeaks = new HoughPeak[] { new HoughPeak(7.0, 0.0),
-                new HoughPeak(11.0, 1.0), new HoughPeak(15.0, 0.0) };
+        srcPeaks =
+                new HoughPeak[] { new HoughPeak(7.0, 0.0),
+                        new HoughPeak(11.0, 1.0), new HoughPeak(15.0, 0.0) };
     }
 
 

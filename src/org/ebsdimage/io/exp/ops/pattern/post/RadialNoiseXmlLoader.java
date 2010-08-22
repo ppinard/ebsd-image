@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.post;
 
 import static org.ebsdimage.io.exp.ops.pattern.post.RadialNoiseXmlTags.*;
@@ -32,7 +32,6 @@ import ptpshared.utility.xml.UnitsXmlTags;
  * XML loader for a <code>RadialNoise</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class RadialNoiseXmlLoader implements ObjectXmlLoader {
 
@@ -58,19 +57,25 @@ public class RadialNoiseXmlLoader implements ObjectXmlLoader {
             throw new BadUnitException("Unit for the dimensions should be "
                     + UnitsXmlTags.PX);
 
-        int x = JDomUtil.getIntegerFromAttribute(element, ATTR_X,
-                RadialNoise.DEFAULT_X);
-        int y = JDomUtil.getIntegerFromAttribute(element, ATTR_Y,
-                RadialNoise.DEFAULT_Y);
-        double stdDevX = JDomUtil.getDoubleFromAttribute(element, ATTR_STDDEVX,
-                RadialNoise.DEFAULT_STDDEV_X);
-        double stdDevY = JDomUtil.getDoubleFromAttribute(element, ATTR_STDDEVY,
-                RadialNoise.DEFAULT_STDDEV_Y);
-        double initialNoiseStdDev = JDomUtil.getDoubleFromAttribute(element,
-                ATTR_INITIALNOISESTDDEV,
-                RadialNoise.DEFALT_INITIAL_NOISE_STDDEV);
-        double finalNoiseStdDev = JDomUtil.getDoubleFromAttribute(element,
-                ATTR_FINALNOISESTDDEV, RadialNoise.DEFALT_FINAL_NOISE_STDDEV);
+        int x =
+                JDomUtil.getIntegerFromAttribute(element, ATTR_X,
+                        RadialNoise.DEFAULT_X);
+        int y =
+                JDomUtil.getIntegerFromAttribute(element, ATTR_Y,
+                        RadialNoise.DEFAULT_Y);
+        double stdDevX =
+                JDomUtil.getDoubleFromAttribute(element, ATTR_STDDEVX,
+                        RadialNoise.DEFAULT_STDDEV_X);
+        double stdDevY =
+                JDomUtil.getDoubleFromAttribute(element, ATTR_STDDEVY,
+                        RadialNoise.DEFAULT_STDDEV_Y);
+        double initialNoiseStdDev =
+                JDomUtil.getDoubleFromAttribute(element,
+                        ATTR_INITIALNOISESTDDEV,
+                        RadialNoise.DEFALT_INITIAL_NOISE_STDDEV);
+        double finalNoiseStdDev =
+                JDomUtil.getDoubleFromAttribute(element, ATTR_FINALNOISESTDDEV,
+                        RadialNoise.DEFALT_FINAL_NOISE_STDDEV);
 
         return new RadialNoise(x, y, stdDevX, stdDevY, initialNoiseStdDev,
                 finalNoiseStdDev);

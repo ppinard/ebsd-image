@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import static java.lang.Math.PI;
@@ -48,14 +48,11 @@ public class UnitCellTest {
 
         assertFalse(unitCell.equals(new Object()));
 
-        assertFalse(unitCell
-                .equals(new UnitCell(99.0, 2.0, 3.0, 1.1, 2.1, 3.1)));
+        assertFalse(unitCell.equals(new UnitCell(99.0, 2.0, 3.0, 1.1, 2.1, 3.1)));
 
-        assertFalse(unitCell
-                .equals(new UnitCell(1.0, 99.0, 3.0, 1.1, 2.1, 3.1)));
+        assertFalse(unitCell.equals(new UnitCell(1.0, 99.0, 3.0, 1.1, 2.1, 3.1)));
 
-        assertFalse(unitCell
-                .equals(new UnitCell(1.0, 2.0, 99.0, 1.1, 2.1, 3.1)));
+        assertFalse(unitCell.equals(new UnitCell(1.0, 2.0, 99.0, 1.1, 2.1, 3.1)));
 
         assertFalse(unitCell.equals(new UnitCell(1.0, 2.0, 3.0, 1, 2.1, 3.1)));
 
@@ -139,8 +136,7 @@ public class UnitCellTest {
         Matrix3D expectedMetricalMatrix =
                 new Matrix3D(24.1474, -12.0737, 0.0, -12.0737, 24.1474, 0.0,
                         0.0, 0.0, 29.2573);
-        assertTrue(hexagonal.metricalMatrix
-                .equals(expectedMetricalMatrix, 1e-4));
+        assertTrue(hexagonal.metricalMatrix.equals(expectedMetricalMatrix, 1e-4));
     }
 
 }

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.utility.sql;
 
 import static org.junit.Assert.assertEquals;
@@ -29,7 +29,9 @@ public class TableTest {
     private Table table1;
 
     private Column column1;
+
     private Column column2;
+
     private Column column3;
 
 
@@ -40,8 +42,9 @@ public class TableTest {
 
         column1 = ColumnFactory.columnText("col1", false);
         column2 = ColumnFactory.columnText("col2", true, "default");
-        column3 = ColumnFactory.columnInteger("col3", true, false, false,
-                false, false);
+        column3 =
+                ColumnFactory.columnInteger("col3", true, false, false, false,
+                        false);
     }
 
 
@@ -137,8 +140,9 @@ public class TableTest {
         table1.addColumn(column2);
         table1.addColumn(column3);
 
-        String expected = "CREATE TABLE table1(col1 TEXT, col2 TEXT NOT NULL "
-                + "DEFAULT default, col3 INT UNSIGNED)";
+        String expected =
+                "CREATE TABLE table1(col1 TEXT, col2 TEXT NOT NULL "
+                        + "DEFAULT default, col3 INT UNSIGNED)";
 
         assertEquals(expected, table1.toString());
     }

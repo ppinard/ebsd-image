@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.core.math;
 
 import static java.lang.Math.sqrt;
@@ -28,6 +28,7 @@ import org.junit.Test;
 public class AxisAngleTest {
 
     private AxisAngle axisAngle1;
+
     private AxisAngle axisAngle2;
 
 
@@ -128,15 +129,16 @@ public class AxisAngleTest {
 
     @Test
     public void testHashCode() {
-        assertEquals(new AxisAngle(0.5, 1, 2, 3).hashCode(), axisAngle1
-                .hashCode());
+        assertEquals(new AxisAngle(0.5, 1, 2, 3).hashCode(),
+                axisAngle1.hashCode());
     }
 
 
 
     @Test
     public void testToString() {
-        String expected = "AxisAngle [angle=28.64788975654116, axis=(0.2672612419124244;0.5345224838248488;0.8017837257372732)]";
+        String expected =
+                "AxisAngle [angle=28.64788975654116, axis=(0.2672612419124244;0.5345224838248488;0.8017837257372732)]";
         assertEquals(expected, axisAngle1.toString());
     }
 

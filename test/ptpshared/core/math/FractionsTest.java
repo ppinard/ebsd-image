@@ -14,23 +14,21 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.core.math;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import ptpshared.core.math.Fractions;
-
 public class FractionsTest {
 
-  @Test
-  public void testGCD() {
-    assertEquals(Fractions.gcd(12, 18), 6);
-    assertEquals(Fractions.gcd(-4, 14), 2);
-    assertEquals(Fractions.gcd(9, 28), 1);
-    assertEquals(Fractions.gcd(42, 56), 14);
-  }
+    @Test
+    public void testGCD() {
+        assertEquals(Fractions.gcd(12, 18), 6);
+        assertEquals(Fractions.gcd(-4, 14), 2);
+        assertEquals(Fractions.gcd(9, 28), 1);
+        assertEquals(Fractions.gcd(42, 56), 14);
+    }
 
 }

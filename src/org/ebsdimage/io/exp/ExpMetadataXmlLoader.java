@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp;
 
 import static org.ebsdimage.io.exp.ExpMetadataXmlTags.TAG_NAME;
@@ -32,7 +32,6 @@ import ptpshared.utility.BadUnitException;
  * XML loader for <code>ExpMetadata</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class ExpMetadataXmlLoader extends EbsdMetadataXmlLoader {
 

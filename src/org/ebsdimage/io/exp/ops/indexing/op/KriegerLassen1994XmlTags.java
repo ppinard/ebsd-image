@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.indexing.op;
 
 import org.ebsdimage.core.exp.ops.indexing.op.KriegerLassen1994;
@@ -23,7 +23,6 @@ import org.ebsdimage.core.exp.ops.indexing.op.KriegerLassen1994;
  * Tags for <code>KriegerLassen1994</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class KriegerLassen1994XmlTags {
     /** XML tag name for <code>KriegerLassen1994</code>. */

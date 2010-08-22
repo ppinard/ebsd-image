@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.utility;
 
 import java.util.ArrayList;
@@ -31,7 +31,6 @@ import java.util.Set;
  * </ul>
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class MultipleLoop {
 
@@ -113,7 +112,8 @@ public class MultipleLoop {
      *         combinations
      */
     public ArrayList<HashMap<String, Object>> getCombinations() {
-        ArrayList<HashMap<String, Object>> combinations = new ArrayList<HashMap<String, Object>>();
+        ArrayList<HashMap<String, Object>> combinations =
+                new ArrayList<HashMap<String, Object>>();
 
         for (int i = 0; i < all.size(); i++) {
             HashMap<String, Object> map = new HashMap<String, Object>();
@@ -164,7 +164,6 @@ public class MultipleLoop {
      *            old values
      * @param b
      *            new values
-     * 
      * @return old values combined with new values
      */
     private ArrayList<Object[]> outer(ArrayList<Object[]> a, Object[] b) {

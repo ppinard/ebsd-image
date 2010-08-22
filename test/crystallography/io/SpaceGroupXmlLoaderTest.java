@@ -27,7 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import crystallography.core.SpaceGroup;
-import crystallography.core.SpaceGroups;
+import crystallography.core.SpaceGroups1;
 
 public class SpaceGroupXmlLoaderTest {
 
@@ -47,7 +47,7 @@ public class SpaceGroupXmlLoaderTest {
     @Test
     public void testLoad() {
         SpaceGroup sg = new SpaceGroupXmlLoader().load(element);
-        SpaceGroup expected = SpaceGroups.SG1;
+        SpaceGroup expected = SpaceGroups1.SG1;
 
         assertEquals(expected.index, sg.index);
         assertEquals(expected.symbol, sg.symbol);

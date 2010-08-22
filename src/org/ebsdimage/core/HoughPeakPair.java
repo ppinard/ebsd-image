@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static java.lang.Math.abs;
@@ -26,7 +26,6 @@ import ptpshared.core.math.Vector3DMath;
  * Pair of Hough peaks.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HoughPeakPair extends Pair {
 
@@ -51,7 +50,6 @@ public class HoughPeakPair extends Pair {
      *            second Hough peak
      * @param normal1
      *            normal of the second Hough peak
-     * 
      * @throws NullPointerException
      *             if a normal is null
      * @throws NullPointerException

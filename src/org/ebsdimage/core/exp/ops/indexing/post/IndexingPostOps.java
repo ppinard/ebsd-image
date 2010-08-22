@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.indexing.post;
 
 import org.ebsdimage.core.Solution;
@@ -25,7 +25,6 @@ import org.ebsdimage.core.run.Operation;
  * Superclass of operation to process the indexing solutions after the indexing.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public abstract class IndexingPostOps extends Operation {
 

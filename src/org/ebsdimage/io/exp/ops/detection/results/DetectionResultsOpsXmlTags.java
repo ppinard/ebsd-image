@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.detection.results;
 
 import org.ebsdimage.core.exp.ops.detection.results.DetectionResultsOps;
@@ -23,10 +23,9 @@ import org.ebsdimage.core.exp.ops.detection.results.DetectionResultsOps;
  * Tags for <code>DetectionResultsOps</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class DetectionResultsOpsXmlTags {
     /** XML tag name for <code>DetectionResultsOps</code>. */
-    public static final String TAG_NAME = DetectionResultsOps.class
-            .getSimpleName();
+    public static final String TAG_NAME =
+            DetectionResultsOps.class.getSimpleName();
 }

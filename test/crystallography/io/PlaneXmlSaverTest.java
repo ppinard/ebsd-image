@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.io;
 
 import static crystallography.io.PlaneXmlTags.ATTR_H;
@@ -27,11 +27,9 @@ import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
 
-import crystallography.core.Plane;
-import crystallography.io.PlaneXmlSaver;
-
 import ptpshared.utility.xml.JDomUtil;
 import ptpshared.utility.xml.ObjectXml;
+import crystallography.core.Plane;
 
 public class PlaneXmlSaverTest {
 

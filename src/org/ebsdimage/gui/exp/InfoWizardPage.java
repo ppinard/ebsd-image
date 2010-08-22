@@ -14,16 +14,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp;
 
 import javax.swing.JLabel;
 
-import org.ebsdimage.core.exp.Exp;
+import net.miginfocom.swing.MigLayout;
+
+import org.ebsdimage.core.run.Run;
 
 import ptpshared.gui.WizardPage;
-
-import net.miginfocom.swing.MigLayout;
 import rmlshared.gui.FileNameField;
 import rmlshared.gui.TextField;
 
@@ -31,7 +31,6 @@ import rmlshared.gui.TextField;
  * Template for the info's wizard page.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class InfoWizardPage extends WizardPage {
 
@@ -52,8 +51,6 @@ public class InfoWizardPage extends WizardPage {
         return "Info";
     }
 
-
-
     /** Field for the experiment's name. */
     private TextField nameField;
 
@@ -72,7 +69,7 @@ public class InfoWizardPage extends WizardPage {
         // Name
         add(new JLabel("Name"));
 
-        nameField = new TextField("NAME", 32, Exp.DEFAULT_NAME);
+        nameField = new TextField("NAME", 32, Run.DEFAULT_NAME);
         add(nameField, "wrap 20");
 
         // Create the working directory field label
@@ -80,7 +77,7 @@ public class InfoWizardPage extends WizardPage {
 
         workingDirField = new FileNameField("DIR", 32, false);
         workingDirField.setFileSelectionMode(FileNameField.DIRECTORIES_ONLY);
-        workingDirField.setFile(Exp.DEFAULT_DIR);
+        workingDirField.setFile(Run.DEFAULT_DIR);
         add(workingDirField);
         add(workingDirField.getBrowseButton(), "wrap");
     }

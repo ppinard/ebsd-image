@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.hkl.io;
 
 import static org.ebsdimage.vendors.hkl.io.HklMetadataXmlTags.PROJECT_NAME_TAG;
@@ -31,7 +31,6 @@ import ptpshared.utility.xml.ObjectXml;
  * XML saver for <code>HklMetadata</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HklMetadataXmlSaver extends EbsdMetadataXmlSaver {
 

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import rmlimage.core.Pixel;
@@ -23,7 +23,6 @@ import rmlimage.core.Pixel;
  * Representation of a pixel in a <code>HoughMap<</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HoughPixel extends Pixel {
     /** Rho position. */

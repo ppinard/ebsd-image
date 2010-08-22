@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.identification.op;
 
 import org.ebsdimage.core.HoughMap;
@@ -28,7 +28,6 @@ import rmlimage.core.BinMap;
  * Superclass of operation to perform the peak identification from a peaks map.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public abstract class IdentificationOp extends Operation {
 

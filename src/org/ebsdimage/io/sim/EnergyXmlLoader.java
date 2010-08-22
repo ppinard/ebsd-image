@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.sim;
 
 import static org.ebsdimage.io.sim.EnergyXmlTags.ATTR_VALUE;
@@ -33,7 +33,6 @@ import ptpshared.utility.xml.UnitsXmlTags;
  * XML loader for an <code>Energy</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class EnergyXmlLoader implements ObjectXmlLoader {
 

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import static java.lang.Math.abs;
@@ -36,7 +36,6 @@ import edu.umd.cs.findbugs.annotations.CheckReturnValue;
  * {@link Vector3D} using the method {@link #toVector3D}.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Plane extends BaseVector implements ObjectXml {
 
@@ -49,7 +48,6 @@ public class Plane extends BaseVector implements ObjectXml {
      *            second index
      * @param l
      *            third index
-     * 
      * @throws InvalidPlaneException
      *             if the indices are all equal to zero
      */
@@ -71,8 +69,8 @@ public class Plane extends BaseVector implements ObjectXml {
      *             if the indices are all equal to zero
      */
     public Plane(Vector3D vector) {
-        this(vector.get(0).intValue(), vector.get(1).intValue(), vector.get(2)
-                .intValue());
+        this(vector.get(0).intValue(), vector.get(1).intValue(),
+                vector.get(2).intValue());
     }
 
 
@@ -109,7 +107,6 @@ public class Plane extends BaseVector implements ObjectXml {
      * 
      * @param other
      *            plane
-     * 
      * @return dot product
      */
     public Integer dot(Plane other) {
@@ -141,7 +138,6 @@ public class Plane extends BaseVector implements ObjectXml {
      * 
      * @param obj
      *            other <code>Plane</code> to check equality
-     * 
      * @return whether the two <code>Plane</code> are equal
      */
     @Override
@@ -221,8 +217,9 @@ public class Plane extends BaseVector implements ObjectXml {
 
         BaseVector simplifiedVector = div(commonDenominator);
 
-        return new Plane(simplifiedVector.get(0).intValue(), simplifiedVector
-                .get(1).intValue(), simplifiedVector.get(2).intValue());
+        return new Plane(simplifiedVector.get(0).intValue(),
+                simplifiedVector.get(1).intValue(),
+                simplifiedVector.get(2).intValue());
     }
 
 

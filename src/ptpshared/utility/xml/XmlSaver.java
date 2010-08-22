@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.utility.xml;
 
 import java.io.File;
@@ -26,7 +26,6 @@ import rmlshared.io.Saver;
  * Abstract class to save an <code>ObjectXml</code> to an XML file.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public abstract class XmlSaver implements Saver {
 

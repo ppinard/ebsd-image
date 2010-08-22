@@ -30,7 +30,6 @@ import rmlshared.gui.Panel;
  * GUI Dialog for the <code>Smoothing</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class SmoothingDialog extends OperationDialog {
 

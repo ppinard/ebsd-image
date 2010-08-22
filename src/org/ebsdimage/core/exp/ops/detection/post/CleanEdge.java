@@ -19,10 +19,7 @@ package org.ebsdimage.core.exp.ops.detection.post;
 
 import org.ebsdimage.core.exp.Exp;
 
-import rmlimage.core.BinMap;
-import rmlimage.core.Conversion;
-import rmlimage.core.IdentMap;
-import rmlimage.core.Identification;
+import rmlimage.core.*;
 import rmlimage.core.Identification.Edge;
 
 /**
@@ -30,7 +27,6 @@ import rmlimage.core.Identification.Edge;
  * operation is to remove double peaks that appear on the left and right edges.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class CleanEdge extends DetectionPostOps {
 

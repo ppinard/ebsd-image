@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.indexing.results;
 
 import org.ebsdimage.core.exp.ops.indexing.results.IndexingResultsOps;
@@ -23,10 +23,9 @@ import org.ebsdimage.core.exp.ops.indexing.results.IndexingResultsOps;
  * Tags for <code>IndexingResultsOps</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class IndexingResultsOpsXmlTags {
     /** XML tag name for <code>IndexingResultsOps</code>. */
-    public static final String TAG_NAME = IndexingResultsOps.class
-            .getSimpleName();
+    public static final String TAG_NAME =
+            IndexingResultsOps.class.getSimpleName();
 }

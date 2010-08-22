@@ -31,7 +31,6 @@ import rmlimage.utility.MicronBar;
  * Utilities applying on <code>EbsdMMap</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class EbsdMMapUtil {
 

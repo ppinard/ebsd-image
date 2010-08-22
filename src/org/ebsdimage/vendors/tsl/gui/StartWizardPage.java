@@ -14,23 +14,22 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.tsl.gui;
 
 import javax.swing.JLabel;
 
+import net.miginfocom.swing.MigLayout;
+
 import org.ebsdimage.vendors.tsl.io.AngLoader;
 
-import net.miginfocom.swing.MigLayout;
 import ptpshared.gui.WizardPage;
-import rmlimage.gui.FileDialog;
 import rmlshared.gui.FileNameField;
 
 /**
  * First page for the import wizard.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class StartWizardPage extends WizardPage {
 
@@ -47,8 +46,6 @@ public class StartWizardPage extends WizardPage {
     public static String getDescription() {
         return "Start";
     }
-
-
 
     /** Field for the ang file. */
     private FileNameField angFileField;
@@ -74,7 +71,7 @@ public class StartWizardPage extends WizardPage {
         add(new JLabel("Ang file"));
         angFileField = new FileNameField("Ang file", 32, false);
         angFileField.setFileSelectionMode(FileNameField.FILES_ONLY);
-        FileDialog.addFilter("*.ang");
+        rmlshared.gui.FileDialog.addFilter("*.ang");
         angFileField.setFileFilter("*.ang");
         add(angFileField);
         add(angFileField.getBrowseButton(), "wrap");

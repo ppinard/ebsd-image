@@ -22,7 +22,6 @@ import java.io.IOException;
 
 import org.ebsdimage.io.SmpCreator;
 
-import rmlimage.gui.FileDialog;
 import rmlimage.plugin.PlugIn;
 import rmlshared.enums.YesNo;
 import rmlshared.ui.Monitorable;
@@ -30,8 +29,7 @@ import rmlshared.ui.Monitorable;
 /**
  * Plug-in to create a SMP file from images in a directory.
  * 
- * @author ppinard
- * 
+ * @author Philippe T. Pinard
  */
 public class SmpCreation extends PlugIn implements Monitorable {
 
@@ -62,16 +60,15 @@ public class SmpCreation extends PlugIn implements Monitorable {
 
     @Override
     public void xRun() throws IOException {
-        FileDialog.setFileSelectionMode(FileDialog.DIRECTORIES_ONLY);
-        if (FileDialog
-                .showOpenDialog("Select directory holding files to process") == FileDialog.CANCEL)
+        rmlshared.gui.FileDialog.setFileSelectionMode(rmlshared.gui.FileDialog.DIRECTORIES_ONLY);
+        if (rmlshared.gui.FileDialog.showOpenDialog("Select directory holding files to process") == rmlshared.gui.FileDialog.CANCEL)
             return;
-        File directory = FileDialog.getSelectedFile();
+        File directory = rmlshared.gui.FileDialog.getSelectedFile();
 
-        FileDialog.setFilter("*.smp");
-        if (FileDialog.showSaveDialog("Specify SMP file name") == FileDialog.CANCEL)
+        rmlshared.gui.FileDialog.setFilter("*.smp");
+        if (rmlshared.gui.FileDialog.showSaveDialog("Specify SMP file name") == rmlshared.gui.FileDialog.CANCEL)
             return;
-        File smpFile = FileDialog.getSelectedFile();
+        File smpFile = rmlshared.gui.FileDialog.getSelectedFile();
 
         if (smpFile.exists()) {
             YesNo answer =

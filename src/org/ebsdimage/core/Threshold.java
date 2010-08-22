@@ -19,10 +19,7 @@ package org.ebsdimage.core;
 
 import java.io.File;
 
-import rmlimage.core.BinMap;
-import rmlimage.core.ByteMap;
-import rmlimage.core.Constants;
-import rmlimage.core.MathMorph;
+import rmlimage.core.*;
 import rmlshared.io.FileUtil;
 
 /**
@@ -186,13 +183,13 @@ public class Threshold {
      * The procedure used can be described by the following code::
      * 
      * <pre>
-     * //Do the tophat
+     * // Do the tophat
      * ByteMap dup = houghMap.duplicate();
      * MathMorph.opening(dup, 5);
      * ByteMap topHat = new ByteMap(houghMap.width, houghMap.height);
      * MapMath.subtraction(houghMap, dup, topHat);
      * 
-     * //Calculate the threshold
+     * // Calculate the threshold
      * int minError = Threshold.minErrorThreshold(topHat);
      * int kapur = Threshold.kapurThreshold(topHat);
      * int threshold = (minError + kapur) / 2;
@@ -307,6 +304,6 @@ public class Threshold {
         dest.setProperty(Constants.MIN_THRESHOLD, phaseId);
         dest.setProperty(Constants.MAX_THRESHOLD, phaseId);
 
-        dest.setChanged(BinMap.MAP_CHANGED);
+        dest.setChanged(Map.MAP_CHANGED);
     }
 }

@@ -31,7 +31,6 @@ import rmlshared.io.FileUtil;
 
 /**
  * <code>EbsdMMap</code> holding all the data from an HLK acquisition.
- * 
  * <p/>
  * On top of the map defined in {@link EbsdMMap}, an <code>HklMMap</code> holds:
  * <ul>
@@ -51,7 +50,6 @@ import rmlshared.io.FileUtil;
  * </ul>
  * 
  * @author Philippe T. Pinard
- * 
  * @see EbsdMMap
  * @see EbsdMetadata
  * @see HklMetadata

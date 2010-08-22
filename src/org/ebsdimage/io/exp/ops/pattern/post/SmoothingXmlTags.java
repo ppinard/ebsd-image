@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.post;
 
 import org.ebsdimage.core.exp.ops.pattern.post.Smoothing;
@@ -23,7 +23,6 @@ import org.ebsdimage.core.exp.ops.pattern.post.Smoothing;
  * Tags for <code>Smoothing</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class SmoothingXmlTags {
     /** XML tag name for <code>Smoothing</code>. */

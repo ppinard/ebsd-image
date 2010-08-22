@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.hkl.plugin;
 
 import java.io.File;
@@ -36,7 +36,6 @@ import crystallography.core.Crystal;
  * Import a ctf file by converting it to a multimap.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HklImport extends PlugIn implements Monitorable {
 

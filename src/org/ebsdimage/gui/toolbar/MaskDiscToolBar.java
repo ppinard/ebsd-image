@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.toolbar;
 
 import rmlimage.gui.toolbar.BinMapToolBar;
@@ -24,7 +24,6 @@ import rmlshared.thread.WorkerThread;
  * Tool bar for the <code>MaskDisc</code> map.
  * 
  * @author Marin Lagac&eacute;
- * 
  */
 public class MaskDiscToolBar extends BinMapToolBar {
 

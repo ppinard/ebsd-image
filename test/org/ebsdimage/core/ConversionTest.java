@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static java.lang.Math.toRadians;
@@ -49,8 +49,7 @@ public class ConversionTest extends TestCase {
     @Test
     // Test call to handler
     public void testToByteMaMapHoughMap() {
-        rmlimage.core.Conversion
-                .addHandler(org.ebsdimage.core.Conversion.class);
+        rmlimage.core.Conversion.addHandler(org.ebsdimage.core.Conversion.class);
 
         // Create a HoughMap
         ByteMap pattern = (ByteMap) load("org/ebsdimage/testdata/pattern.bmp");
@@ -60,10 +59,10 @@ public class ConversionTest extends TestCase {
 
         assertEquals(houghMap.width, byteMap.width);
         assertEquals(houghMap.height, byteMap.height);
-        assertEquals(Double.doubleToLongBits(houghMap.deltaR), byteMap
-                .getProperty(HoughMap.DELTA_R, -1l));
-        assertEquals(Double.doubleToLongBits(houghMap.deltaTheta), byteMap
-                .getProperty(HoughMap.DELTA_THETA, -1l));
+        assertEquals(Double.doubleToLongBits(houghMap.deltaR),
+                byteMap.getProperty(HoughMap.DELTA_R, -1l));
+        assertEquals(Double.doubleToLongBits(houghMap.deltaTheta),
+                byteMap.getProperty(HoughMap.DELTA_THETA, -1l));
 
         // If the pixArray are different
         byte[] bytePixArray = byteMap.pixArray;
@@ -90,10 +89,10 @@ public class ConversionTest extends TestCase {
 
         assertEquals(houghMap.width, byteMap.width);
         assertEquals(houghMap.height, byteMap.height);
-        assertEquals(Double.doubleToLongBits(houghMap.deltaR), byteMap
-                .getProperty(HoughMap.DELTA_R, -1l));
-        assertEquals(Double.doubleToLongBits(houghMap.deltaTheta), byteMap
-                .getProperty(HoughMap.DELTA_THETA, -1l));
+        assertEquals(Double.doubleToLongBits(houghMap.deltaR),
+                byteMap.getProperty(HoughMap.DELTA_R, -1l));
+        assertEquals(Double.doubleToLongBits(houghMap.deltaTheta),
+                byteMap.getProperty(HoughMap.DELTA_THETA, -1l));
 
         // If the pixArray are different
         byte[] bytePixArray = byteMap.pixArray;
@@ -112,8 +111,7 @@ public class ConversionTest extends TestCase {
 
     @Test
     public void testToByteMapMapPhasesMap() {
-        rmlimage.core.Conversion
-                .addHandler(org.ebsdimage.core.Conversion.class);
+        rmlimage.core.Conversion.addHandler(org.ebsdimage.core.Conversion.class);
 
         PhasesMap map = createPhasesMap();
 
@@ -179,24 +177,24 @@ public class ConversionTest extends TestCase {
 
         RealMap q0Map = new RealMap(2, 2);
         q0Map.pixArray[0] = 1.0f;
-        mapList.put(ExpMMap.Q0, q0Map);
+        mapList.put(EbsdMMap.Q0, q0Map);
 
         RealMap q1Map = new RealMap(2, 2);
         q1Map.pixArray[1] = 1.0f;
-        mapList.put(ExpMMap.Q1, q1Map);
+        mapList.put(EbsdMMap.Q1, q1Map);
 
         RealMap q2Map = new RealMap(2, 2);
         q2Map.pixArray[2] = 1.0f;
-        mapList.put(ExpMMap.Q2, q2Map);
+        mapList.put(EbsdMMap.Q2, q2Map);
 
         RealMap q3Map = new RealMap(2, 2);
         q3Map.pixArray[3] = 1.0f;
-        mapList.put(ExpMMap.Q3, q3Map);
+        mapList.put(EbsdMMap.Q3, q3Map);
 
         PhasesMap phasesMap =
                 new PhasesMap(2, 2, new byte[] { 0, 1, 2, 1 }, new Crystal[] {
                         new Silicon(), new IronBCC() });
-        mapList.put(ExpMMap.PHASES, phasesMap);
+        mapList.put(EbsdMMap.PHASES, phasesMap);
 
         ExpMMap mmap = new ExpMMap(2, 2, mapList, new ExpMetadata());
 

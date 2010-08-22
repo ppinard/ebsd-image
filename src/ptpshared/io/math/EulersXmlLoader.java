@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.io.math;
 
 import static ptpshared.io.math.EulersXmlTags.ATTR_THETA1;
@@ -36,7 +36,6 @@ import ptpshared.utility.xml.UnitsXmlTags;
  * XML loader for <code>Eulers</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class EulersXmlLoader implements ObjectXmlLoader {
 
@@ -61,9 +60,9 @@ public class EulersXmlLoader implements ObjectXmlLoader {
             throw new BadUnitException("Unit for euler angles should be " + RAD);
 
         return new Eulers(
-                JDomUtil.getDoubleFromAttribute(element, ATTR_THETA1), JDomUtil
-                        .getDoubleFromAttribute(element, ATTR_THETA2), JDomUtil
-                        .getDoubleFromAttribute(element, ATTR_THETA3));
+                JDomUtil.getDoubleFromAttribute(element, ATTR_THETA1),
+                JDomUtil.getDoubleFromAttribute(element, ATTR_THETA2),
+                JDomUtil.getDoubleFromAttribute(element, ATTR_THETA3));
     }
 
 }

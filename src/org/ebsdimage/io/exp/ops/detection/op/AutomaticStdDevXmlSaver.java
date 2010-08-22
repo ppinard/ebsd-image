@@ -30,7 +30,6 @@ import ptpshared.utility.xml.ObjectXmlSaver;
  * XML saver for an <code>AutomaticStdDev</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class AutomaticStdDevXmlSaver implements ObjectXmlSaver {
 

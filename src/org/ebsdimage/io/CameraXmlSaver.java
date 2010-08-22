@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io;
 
 import static org.ebsdimage.io.CameraXmlTags.ATTR_DD;
@@ -32,7 +32,6 @@ import ptpshared.utility.xml.ObjectXmlSaver;
  * XML saver for <code>Camera</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class CameraXmlSaver implements ObjectXmlSaver {
 

@@ -1,3 +1,20 @@
+/*
+ * EBSD-Image
+ * Copyright (C) 2010 Philippe T. Pinard
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.ebsdimage.vendors.hkl.gui;
 
 import java.io.File;
@@ -20,7 +37,7 @@ import rmlshared.io.WildcardFileFilter;
 /**
  * Multimap stitcher for HKL EBSD multimaps.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class HklMMapStitcher extends rmlimage.module.multi.gui.MultiMapStitcher {
 
@@ -140,18 +157,19 @@ public class HklMMapStitcher extends rmlimage.module.multi.gui.MultiMapStitcher 
         smpStitcher = new SmpStitcher(smpTesserae, mmap.width, mmap.height);
 
         // Ask where to save the zip
-        FileDialog.setTitle("Saving EBSD multimap");
-        FileDialog.setFilter(new WildcardFileFilter("*.zip"));
-        FileDialog.setMultipleSelection(false);
-        FileDialog.setFileSelectionMode(FileDialog.FILES_AND_DIRECTORIES);
-        FileDialog.setSelectedFile(mmap.getFile());
+        rmlshared.gui.FileDialog.setTitle("Saving EBSD multimap");
+        rmlshared.gui.FileDialog.setFilter(new WildcardFileFilter("*.zip"));
+        rmlshared.gui.FileDialog.setMultipleSelection(false);
+        rmlshared.gui.FileDialog.setFileSelectionMode(rmlshared.gui.FileDialog.FILES_AND_DIRECTORIES);
+        rmlshared.gui.FileDialog.setSelectedFile(mmap.getFile());
 
-        if (FileDialog.showSaveDialog() == FileDialog.CANCEL)
+        if (FileDialog.showSaveDialog() == rmlshared.gui.FileDialog.CANCEL)
             return mmap;
 
         // Saving multimap
         File mmapFile =
-                FileUtil.setExtension(FileDialog.getSelectedFile(), "zip");
+                FileUtil.setExtension(
+                        rmlshared.gui.FileDialog.getSelectedFile(), "zip");
         mmap.setFile(mmapFile);
         new HklMMapSaver().save(mmap, mmapFile);
 

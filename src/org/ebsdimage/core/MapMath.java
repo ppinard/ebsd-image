@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import rmlimage.core.BinMap;
@@ -25,7 +25,6 @@ import rmlimage.core.handler.MapMathHandler;
  * Mathematical operations EBSD specific maps (e.g. Phases map).
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class MapMath implements MapMathHandler {
 
@@ -45,7 +44,6 @@ public class MapMath implements MapMathHandler {
      *            source <code>PhasesMap</code>
      * @param dest
      *            <code>PhasesMap</code> to put the result into
-     * 
      * @throws NullPointerException
      *             if a source map or destination is null
      * @throws IllegalArgumentException
@@ -107,7 +105,6 @@ public class MapMath implements MapMathHandler {
      *            source <code>BinMap</code> (i.e. mask)
      * @param dest
      *            <code>PhasesMap</code> to put the result into
-     * 
      * @throws NullPointerException
      *             if a source map or destination is null
      * @throws IllegalArgumentException

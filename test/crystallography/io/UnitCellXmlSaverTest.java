@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.io;
 
 import static crystallography.io.UnitCellXmlTags.*;
@@ -24,12 +24,10 @@ import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
 
-import crystallography.core.UnitCell;
-import crystallography.io.UnitCellXmlSaver;
-
 import ptpshared.utility.xml.JDomUtil;
 import ptpshared.utility.xml.ObjectXml;
 import ptpshared.utility.xml.UnitsXmlTags;
+import crystallography.core.UnitCell;
 
 public class UnitCellXmlSaverTest {
 
@@ -68,15 +66,15 @@ public class UnitCellXmlSaverTest {
                 1e-7);
         assertEquals(3.0, JDomUtil.getDoubleFromAttribute(element, ATTR_C),
                 1e-7);
-        assertEquals(UnitsXmlTags.ANGSTROM, JDomUtil.getStringFromAttribute(
-                element, ATTR_DIM_UNITS));
+        assertEquals(UnitsXmlTags.ANGSTROM,
+                JDomUtil.getStringFromAttribute(element, ATTR_DIM_UNITS));
         assertEquals(1.1, JDomUtil.getDoubleFromAttribute(element, ATTR_ALPHA),
                 1e-7);
         assertEquals(2.1, JDomUtil.getDoubleFromAttribute(element, ATTR_BETA),
                 1e-7);
         assertEquals(3.1, JDomUtil.getDoubleFromAttribute(element, ATTR_GAMMA),
                 1e-7);
-        assertEquals(UnitsXmlTags.RAD, JDomUtil.getStringFromAttribute(element,
-                ATTR_ANGLE_UNITS));
+        assertEquals(UnitsXmlTags.RAD,
+                JDomUtil.getStringFromAttribute(element, ATTR_ANGLE_UNITS));
     }
 }

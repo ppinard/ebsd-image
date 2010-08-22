@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.io;
 
 import static crystallography.io.AtomSitesXmlTags.TAG_NAME;
@@ -28,13 +28,13 @@ import org.junit.Test;
 
 import crystallography.core.AtomSite;
 import crystallography.core.AtomSites;
-import crystallography.io.AtomSiteXmlSaver;
-import crystallography.io.AtomSitesXmlLoader;
 
 public class AtomSitesXmlLoaderTest {
 
     private Element element;
+
     private AtomSite atom1;
+
     private AtomSite atom2;
 
 

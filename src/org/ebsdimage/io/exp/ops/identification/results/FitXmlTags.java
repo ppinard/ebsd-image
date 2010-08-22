@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.identification.results;
 
 import org.ebsdimage.core.exp.ops.identification.results.Fit;
@@ -23,7 +23,6 @@ import org.ebsdimage.core.exp.ops.identification.results.Fit;
  * Tags for <code>Fit</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class FitXmlTags {
 

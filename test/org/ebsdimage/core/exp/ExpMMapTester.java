@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp;
 
 import static java.lang.Math.toRadians;
@@ -26,9 +26,9 @@ import java.io.IOException;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.Camera;
+import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.PhasesMap;
 import org.ebsdimage.io.PhasesMapLoader;
-import org.ebsdimage.vendors.tsl.core.TslMMap;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,7 +43,9 @@ import crystallography.core.crystals.Silicon;
 public abstract class ExpMMapTester extends TestCase {
 
     protected ExpMMap mmap;
+
     protected Crystal siliconPhase;
+
     protected Crystal ironPhase;
 
 
@@ -145,11 +147,11 @@ public abstract class ExpMMapTester extends TestCase {
         assertEquals(5, maps.length);
 
         // Test the presence of the Maps
-        assertTrue(other.contains(TslMMap.Q0));
-        assertTrue(other.contains(TslMMap.Q1));
-        assertTrue(other.contains(TslMMap.Q2));
-        assertTrue(other.contains(TslMMap.Q3));
-        assertTrue(other.contains(TslMMap.PHASES));
+        assertTrue(other.contains(EbsdMMap.Q0));
+        assertTrue(other.contains(EbsdMMap.Q1));
+        assertTrue(other.contains(EbsdMMap.Q2));
+        assertTrue(other.contains(EbsdMMap.Q3));
+        assertTrue(other.contains(EbsdMMap.PHASES));
     }
 
 
@@ -207,8 +209,7 @@ public abstract class ExpMMapTester extends TestCase {
         PhasesMap phasesMap = mmap.getPhasesMap();
 
         PhasesMap expectedPhasesMap =
-                new PhasesMapLoader().load(FileUtil
-                        .getFile("org/ebsdimage/testdata/Phases.bmp"));
+                new PhasesMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/Phases.bmp"));
 
         phasesMap.assertEquals(expectedPhasesMap);
 

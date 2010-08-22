@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.core.math;
 
 import static java.lang.Math.PI;
@@ -34,7 +34,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
  * <code>axis</code> and <code>angle</code> respectively.
  * 
  * @author Philippe T. Pinard
- * 
  */
 @Immutable
 public class AxisAngle {
@@ -117,7 +116,6 @@ public class AxisAngle {
      * @param precision
      *            level of precision
      * @return whether the two <code>AxisAngle</code> are almost equal
-     * 
      * @throws IllegalArgumentException
      *             if the precision is less than 0.0
      * @throws IllegalArgumentException
@@ -152,7 +150,6 @@ public class AxisAngle {
      * 
      * @param obj
      *            other <code>AxisAnle</code> to check equality
-     * 
      * @return whether the two <code>AxisAnle</code> are equal
      */
     @Override
@@ -165,8 +162,7 @@ public class AxisAngle {
             return false;
 
         AxisAngle other = (AxisAngle) obj;
-        if (Double.doubleToLongBits(angle) != Double
-                .doubleToLongBits(other.angle))
+        if (Double.doubleToLongBits(angle) != Double.doubleToLongBits(other.angle))
             return false;
         if (!axis.equals(other.axis))
             return false;

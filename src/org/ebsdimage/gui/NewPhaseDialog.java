@@ -309,7 +309,7 @@ public class NewPhaseDialog extends BasicDialog {
      */
     public NewPhaseDialog() {
         this(new Crystal("Untitled", new UnitCell(1, 1, 1, 1, 1, 1),
-                new AtomSites(), SpaceGroups.SG1));
+                new AtomSites(), SpaceGroups1.SG1));
     }
 
 

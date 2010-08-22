@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.io.math;
 
 import static ptpshared.io.math.QuaternionXmlTags.*;
@@ -29,7 +29,6 @@ import ptpshared.utility.xml.ObjectXmlSaver;
  * Saves <code>Quaternion</code> object.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class QuaternionXmlSaver implements ObjectXmlSaver {
 

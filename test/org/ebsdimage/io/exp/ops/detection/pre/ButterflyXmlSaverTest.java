@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.detection.pre;
 
 import static org.ebsdimage.io.exp.ops.detection.pre.ButterflyXmlTags.ATTR_FLATTEN_LOWERLIMIT;
@@ -24,11 +24,9 @@ import static org.ebsdimage.io.exp.ops.detection.pre.ButterflyXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
 import org.ebsdimage.core.exp.ops.detection.pre.Butterfly;
-import org.ebsdimage.io.exp.ops.detection.pre.ButterflyXmlSaver;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
-
 
 import ptpshared.utility.xml.JDomUtil;
 
@@ -50,8 +48,8 @@ public class ButterflyXmlSaverTest {
         Element element = new ButterflyXmlSaver().save(op);
 
         assertEquals(TAG_NAME, element.getName());
-        assertEquals(9, JDomUtil.getIntegerFromAttribute(element,
-                ATTR_KERNELSIZE));
+        assertEquals(9,
+                JDomUtil.getIntegerFromAttribute(element, ATTR_KERNELSIZE));
         assertEquals(-50.3, JDomUtil.getDoubleFromAttribute(element,
                 ATTR_FLATTEN_LOWERLIMIT), 1e-5);
         assertEquals(50.3, JDomUtil.getDoubleFromAttribute(element,

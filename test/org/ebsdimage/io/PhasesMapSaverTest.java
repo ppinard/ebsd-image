@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io;
 
 import static org.ebsdimage.io.PhasesMapXmlTags.TAG_NAME;
@@ -26,16 +26,15 @@ import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.core.PhasesMap;
-import org.ebsdimage.io.PhasesMapSaver;
 import org.jdom.Element;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import rmlshared.io.FileUtil;
 import ptpshared.utility.xml.JDomUtil;
 import rmlimage.core.ByteMap;
 import rmlimage.io.BasicBmpLoader;
+import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
 import crystallography.core.crystals.IronBCC;
 import crystallography.core.crystals.Silicon;
@@ -43,7 +42,9 @@ import crystallography.core.crystals.Silicon;
 public class PhasesMapSaverTest {
 
     private PhasesMapSaver saver;
+
     private PhasesMap map;
+
     private File file;
 
 

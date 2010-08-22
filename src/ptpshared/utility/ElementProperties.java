@@ -14,14 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.utility;
 
 /**
  * Periodic table's elements information.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class ElementProperties {
 
@@ -46,7 +45,6 @@ public class ElementProperties {
      * @param symbol
      *            element's symbol (two letters, e.g. Al)
      * @return atomic number
-     * 
      * @throws IllegalArgumentException
      *             if the atomic number for the specified symbol cannot be found
      */
@@ -66,7 +64,6 @@ public class ElementProperties {
      * @param atomicNumber
      *            atomic number of the element
      * @return element's symbol
-     * 
      * @throws IllegalArgumentException
      *             if the atomic number is invalid
      */
@@ -83,22 +80,24 @@ public class ElementProperties {
         return ELEMENT_SYMBOLS[index];
     }
 
-    
+
+
     /**
-     * Checks if the specified symbol is a valid atomic symbol.
-     * Leading and trailing whitespaces will be removed before comparison.
-     * The comparison is case insensitive
-     *
-     * @param   symbol  atomic symbol to check
-     *
-     * @return  <code>true</code> if the symbol is valid
-     *          or <code>false</code> if it is not
+     * Checks if the specified symbol is a valid atomic symbol. Leading and
+     * trailing whitespaces will be removed before comparison. The comparison is
+     * case insensitive
+     * 
+     * @param symbol
+     *            atomic symbol to check
+     * @return <code>true</code> if the symbol is valid or <code>false</code> if
+     *         it is not
      */
     public static boolean isCorrect(String symbol) {
         for (String s : ELEMENT_SYMBOLS) {
-            if (symbol.equalsIgnoreCase(s))  return true;
+            if (symbol.equalsIgnoreCase(s))
+                return true;
         }
-        
+
         return false;
     }
 

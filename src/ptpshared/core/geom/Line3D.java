@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.core.geom;
 
 import ptpshared.core.math.Vector3D;
@@ -24,7 +24,6 @@ import ptpshared.core.math.Vector3D;
  * point and pointing in the vector direction.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Line3D {
 

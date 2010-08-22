@@ -40,8 +40,7 @@ public class CtfLoaderTest extends HklMMapTester {
         file = getFile("org/ebsdimage/vendors/hkl/testdata/Project19.ctf");
 
         Crystal copperPhase =
-                new CrystalLoader()
-                        .load(getFile("org/ebsdimage/vendors/hkl/testdata/Copper.xml"));
+                new CrystalLoader().load(getFile("org/ebsdimage/vendors/hkl/testdata/Copper.xml"));
 
         mmap =
                 new CtfLoader().load(file,

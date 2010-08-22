@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp.ops.indexing.results;
 
 import org.ebsdimage.core.exp.ops.indexing.results.BestSolution;
@@ -25,7 +25,6 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
  * GUI creator for the <code>BestSolution</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class BestSolutionCreator implements OperationCreator {
 

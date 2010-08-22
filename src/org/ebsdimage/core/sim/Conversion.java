@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.sim;
 
 import ptpshared.core.math.Matrix3D;
@@ -24,7 +24,6 @@ import ptpshared.core.math.Quaternion;
  * Conversion of a rotation between different coordinates system.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Conversion {
 

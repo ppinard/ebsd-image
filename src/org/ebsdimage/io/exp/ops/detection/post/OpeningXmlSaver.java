@@ -29,7 +29,6 @@ import ptpshared.utility.xml.ObjectXmlSaver;
  * XML saver for an <code>Opening</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class OpeningXmlSaver implements ObjectXmlSaver {
 

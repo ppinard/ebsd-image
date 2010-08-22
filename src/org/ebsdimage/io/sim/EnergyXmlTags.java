@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.sim;
 
 import org.ebsdimage.core.sim.Energy;
@@ -23,7 +23,6 @@ import org.ebsdimage.core.sim.Energy;
  * Tags for <code>Energy</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class EnergyXmlTags {
     /** XML tag name for <code>Energy</code>. */

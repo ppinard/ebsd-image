@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.run;
 
 import java.util.Arrays;
@@ -32,7 +32,6 @@ import ptpshared.utility.xml.ObjectXmlSaver;
  * Abstract XML saver for a <code>RunsGenerator</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public abstract class RunsGeneratorXmlSaver implements ObjectXmlSaver {
 
@@ -71,8 +70,8 @@ public abstract class RunsGeneratorXmlSaver implements ObjectXmlSaver {
         HashMap<String, String[]> sortedItems = new HashMap<String, String[]>();
 
         // Sort keys so that the order of the operation is respected
-        String[] keys = items.keySet().toArray(
-                new String[items.keySet().size()]);
+        String[] keys =
+                items.keySet().toArray(new String[items.keySet().size()]);
         Arrays.sort(keys);
 
         for (String key : keys) {
@@ -80,8 +79,8 @@ public abstract class RunsGeneratorXmlSaver implements ObjectXmlSaver {
             Operation op = items.get(key)[0];
 
             // Get superclass (class with suffix Ops)
-            String opsName = op.getClass().getSuperclass().getPackage()
-                    .getName();
+            String opsName =
+                    op.getClass().getSuperclass().getPackage().getName();
 
             // Increment sortedOps HashMap
             if (!(sortedItems.containsKey(opsName))) {
@@ -118,8 +117,7 @@ public abstract class RunsGeneratorXmlSaver implements ObjectXmlSaver {
                     Element child = saveOperation(op);
 
                     // Add order
-                    child.setText(Integer.toString(RunsGenerator
-                            .getOrderFromKey(key)));
+                    child.setText(Integer.toString(RunsGenerator.getOrderFromKey(key)));
 
                     // Append child element
                     parent.addContent(child);

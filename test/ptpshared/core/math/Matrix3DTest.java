@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.core.math;
 
 import static java.lang.Math.sqrt;
@@ -29,24 +29,29 @@ import org.junit.Test;
 public class Matrix3DTest {
 
     private Matrix3D m1;
+
     private Matrix3D m2;
+
     private Matrix3D m3;
 
     private Matrix3D mso1;
+
     private Matrix3D mso2;
 
 
 
     @Before
     public void setUp() throws Exception {
-        m1 = new Matrix3D(new double[][] { { 1, 2, 3 }, { 4, 5, 6 },
-                { 7, 8, 9 } });
+        m1 =
+                new Matrix3D(new double[][] { { 1, 2, 3 }, { 4, 5, 6 },
+                        { 7, 8, 9 } });
         m2 = new Matrix3D(2, 2, 2, 3, 3, 3, 4, 4, 4);
         m3 = new Matrix3D(1, 2, 3, 0, 1, 4, 5, 6, 0);
 
         // Special orthogonal
-        mso1 = new Matrix3D(1, 0, 0, 0, sqrt(3) / 2, 1.0 / 2, 0, -1.0 / 2,
-                sqrt(3) / 2);
+        mso1 =
+                new Matrix3D(1, 0, 0, 0, sqrt(3) / 2, 1.0 / 2, 0, -1.0 / 2,
+                        sqrt(3) / 2);
         mso2 = new Matrix3D(0.36, 0.48, -0.8, -0.8, 0.6, 0, 0.48, 0.64, 0.6);
     }
 
@@ -159,16 +164,16 @@ public class Matrix3DTest {
 
     @Test
     public void testHashCode() {
-        assertEquals(new Matrix3D(1, 2, 3, 4, 5, 6, 7, 8, 9).hashCode(), m1
-                .hashCode());
+        assertEquals(new Matrix3D(1, 2, 3, 4, 5, 6, 7, 8, 9).hashCode(),
+                m1.hashCode());
     }
 
 
 
     @Test
     public void testInverse() {
-        Matrix3D expectedInverse = new Matrix3D(-24, 18, 5, 20, -15, -4, -5, 4,
-                1);
+        Matrix3D expectedInverse =
+                new Matrix3D(-24, 18, 5, 20, -15, -4, -5, 4, 1);
         assertTrue(m3.inverse().equals(expectedInverse, 1e-7));
     }
 
@@ -311,7 +316,8 @@ public class Matrix3DTest {
     @Test
     public void testMultiplyMatrix3D() {
         Matrix3D m1m2 = m1.multiply(m2);
-        Matrix3D expectedm1m2 = new Matrix3D(20, 20, 20, 47, 47, 47, 74, 74, 74);
+        Matrix3D expectedm1m2 =
+                new Matrix3D(20, 20, 20, 47, 47, 47, 74, 74, 74);
         assertTrue(m1m2.equals(expectedm1m2, 1e-7));
     }
 
@@ -328,8 +334,8 @@ public class Matrix3DTest {
 
     @Test
     public void testToString() {
-        assertEquals("1.0, 2.0, 3.0\n4.0, 5.0, 6.0\n7.0, 8.0, 9.0", m1
-                .toString());
+        assertEquals("1.0, 2.0, 3.0\n4.0, 5.0, 6.0\n7.0, 8.0, 9.0",
+                m1.toString());
     }
 
 

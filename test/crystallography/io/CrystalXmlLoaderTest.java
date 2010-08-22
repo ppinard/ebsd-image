@@ -54,7 +54,7 @@ public class CrystalXmlLoaderTest {
         atoms.add(new AtomSite(14, 0.4, 0.5, 0.6));
         element.addContent(new AtomSitesXmlSaver().save(atoms));
 
-        sg = SpaceGroups.SG1;
+        sg = SpaceGroups1.SG1;
         element.addContent(new SpaceGroupXmlSaver().save(sg));
     }
 

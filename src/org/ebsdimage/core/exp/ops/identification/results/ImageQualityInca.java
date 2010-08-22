@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.identification.results;
 
 import org.ebsdimage.core.HoughPeak;
@@ -46,7 +46,6 @@ public class ImageQualityInca extends IdentificationResultsOps {
      * @param peaks
      *            Hough peaks
      * @return one entry with the image quality quality (INCA) index
-     * 
      * @see QualityIndex#imageQualityInca(HoughPeak[])
      */
     @Override

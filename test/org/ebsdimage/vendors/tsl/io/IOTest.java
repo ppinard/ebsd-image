@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.tsl.io;
 
 import static org.junit.Assert.assertNotNull;
@@ -46,8 +46,7 @@ public class IOTest extends TestCase {
     @Test
     public void testGetSaverTslMMap() throws IOException {
         TslMMap mmap =
-                new TslMMapLoader()
-                        .load(getFile("org/ebsdimage/vendors/tsl/testdata/scan1.zip"));
+                new TslMMapLoader().load(getFile("org/ebsdimage/vendors/tsl/testdata/scan1.zip"));
 
         Saver saver = handler.getSaver(mmap);
         assertNotNull(saver);
@@ -59,8 +58,7 @@ public class IOTest extends TestCase {
     @Test
     public void testGetSaverTslMMap2() throws IOException {
         TslMMap mmap =
-                new TslMMapLoader()
-                        .load(getFile("org/ebsdimage/vendors/tsl/testdata/scan1.zip"));
+                new TslMMapLoader().load(getFile("org/ebsdimage/vendors/tsl/testdata/scan1.zip"));
 
         rmlimage.io.IO.addHandler(org.ebsdimage.vendors.tsl.io.IO.class);
         Saver saver = rmlimage.io.IO.getSaver(mmap);
@@ -73,8 +71,7 @@ public class IOTest extends TestCase {
     @Test
     public void testGetLoaderTslMMap() throws IOException {
         Loader loader =
-                handler
-                        .getLoader(getFile("org/ebsdimage/vendors/tsl/testdata/scan1.zip"));
+                handler.getLoader(getFile("org/ebsdimage/vendors/tsl/testdata/scan1.zip"));
         assertNotNull(loader);
         assertTrue(loader instanceof TslMMapLoader);
 
@@ -87,8 +84,7 @@ public class IOTest extends TestCase {
     public void testGetLoaderTslMMa2() throws IOException {
         rmlimage.io.IO.addHandler(org.ebsdimage.vendors.tsl.io.IO.class);
         Loader loader =
-                rmlimage.io.IO
-                        .getLoader(getFile("org/ebsdimage/vendors/tsl/testdata/scan1.zip"));
+                rmlimage.io.IO.getLoader(getFile("org/ebsdimage/vendors/tsl/testdata/scan1.zip"));
         assertNotNull(loader);
         assertTrue(loader instanceof TslMMapLoader);
     }

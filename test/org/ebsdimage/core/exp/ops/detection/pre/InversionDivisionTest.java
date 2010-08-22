@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.detection.pre;
 
 import static org.junit.Assert.assertEquals;
@@ -44,12 +44,9 @@ public class InversionDivisionTest {
     @Test
     public void testProcess() throws IOException {
         HoughMap srcMap =
-                new HoughMapLoader().load(FileUtil
-                        .getFile("org/ebsdimage/testdata/houghmap.bmp"));
+                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
         HoughMap expectedMap =
-                new HoughMapLoader()
-                        .load(FileUtil
-                                .getFile("org/ebsdimage/testdata/inversion_division_op.bmp"));
+                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/inversion_division_op.bmp"));
 
         HoughMap destMap = invDiv.process(null, srcMap);
 

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.io;
 
 import static crystallography.io.PlaneXmlTags.ATTR_H;
@@ -32,7 +32,6 @@ import crystallography.core.Plane;
  * XML saver for <code>Plane</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PlaneXmlSaver implements ObjectXmlSaver {
 

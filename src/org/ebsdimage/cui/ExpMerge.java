@@ -41,7 +41,6 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
  * using <code>ExpSplit</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class ExpMerge extends BaseCUI {
 
@@ -249,7 +248,6 @@ public class ExpMerge extends BaseCUI {
      * 
      * @param dir
      *            base directory
-     * 
      * @return experiment multimap files
      */
     private File[] listExpMMapFiles(File dir) {

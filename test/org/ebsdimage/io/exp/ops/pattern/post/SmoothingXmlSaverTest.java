@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.post;
 
 import static org.ebsdimage.io.exp.ops.pattern.post.SmoothingXmlTags.ATTR_KERNELSIZE;
@@ -22,11 +22,9 @@ import static org.ebsdimage.io.exp.ops.pattern.post.SmoothingXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
 import org.ebsdimage.core.exp.ops.pattern.post.Smoothing;
-import org.ebsdimage.io.exp.ops.pattern.post.SmoothingXmlSaver;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
-
 
 import ptpshared.utility.xml.JDomUtil;
 
@@ -48,8 +46,8 @@ public class SmoothingXmlSaverTest {
         Element element = new SmoothingXmlSaver().save(op);
 
         assertEquals(TAG_NAME, element.getName());
-        assertEquals(3, JDomUtil.getIntegerFromAttribute(element,
-                ATTR_KERNELSIZE));
+        assertEquals(3,
+                JDomUtil.getIntegerFromAttribute(element, ATTR_KERNELSIZE));
     }
 
 }

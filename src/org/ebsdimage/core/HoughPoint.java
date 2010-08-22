@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import rmlimage.core.Result;
@@ -24,7 +24,6 @@ import rmlimage.core.Result;
  * array of positions of the peaks (rho and theta).
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HoughPoint extends Result {
 
@@ -43,9 +42,8 @@ public class HoughPoint extends Result {
 
 
     /**
-     * Creates a new <code>Centroid</code> containing a number of centroids.
-     * 
-     * The units for the rho values are in pixels and for the theta values in
+     * Creates a new <code>Centroid</code> containing a number of centroids. The
+     * units for the rho values are in pixels and for the theta values in
      * radians.
      * 
      * @param nbValues

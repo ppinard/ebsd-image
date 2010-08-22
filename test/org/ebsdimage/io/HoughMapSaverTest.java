@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io;
 
 import static java.lang.Math.PI;
@@ -25,8 +25,6 @@ import java.io.IOException;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.Transform;
-import org.ebsdimage.io.HoughMapLoader;
-import org.ebsdimage.io.HoughMapSaver;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,6 +35,7 @@ import rmlshared.io.FileUtil;
 public class HoughMapSaverTest {
 
     private File file;
+
     private HoughMapSaver saver;
 
 
@@ -69,8 +68,7 @@ public class HoughMapSaverTest {
     @Test
     public void testSaveHoughMapFile() throws IOException {
         ByteMap original =
-                (ByteMap) rmlimage.io.IO.load(FileUtil
-                        .getFile("org/ebsdimage/io/Lena.bmp"));
+                (ByteMap) rmlimage.io.IO.load(FileUtil.getFile("org/ebsdimage/io/Lena.bmp"));
         HoughMap map = Transform.hough(original, 1.5 / 180 * PI);
 
         saver.save(map, file);

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static java.lang.Math.toDegrees;
@@ -27,7 +27,6 @@ import ptpshared.core.math.Vector3DMath;
  * them.
  * 
  * @author Philippe T. Pinard
- * 
  */
 @Immutable
 public abstract class Pair {
@@ -52,7 +51,6 @@ public abstract class Pair {
      *            second normal
      * @param directionCosine
      *            direction cosine between the two normals
-     * 
      * @throws NullPointerException
      *             if a normal is null
      * @throws IllegalArgumentException

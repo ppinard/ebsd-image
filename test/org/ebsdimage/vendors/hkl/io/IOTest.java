@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.hkl.io;
 
 import static org.junit.Assert.assertNotNull;
@@ -46,8 +46,7 @@ public class IOTest {
     @Test
     public void testGetLoaderHklMMap() throws IOException {
         Loader loader =
-                handler.getLoader(FileUtil
-                        .getFile("org/ebsdimage/vendors/hkl/testdata/Project19.zip"));
+                handler.getLoader(FileUtil.getFile("org/ebsdimage/vendors/hkl/testdata/Project19.zip"));
         assertNotNull(loader);
         assertTrue(loader instanceof HklMMapLoader);
 
@@ -60,8 +59,7 @@ public class IOTest {
     public void testGetLoaderHklMMap2() throws IOException {
         rmlimage.io.IO.addHandler(org.ebsdimage.vendors.hkl.io.IO.class);
         Loader loader =
-                rmlimage.io.IO.getLoader(FileUtil
-                        .getFile("org/ebsdimage/vendors/hkl/testdata/Project19.zip"));
+                rmlimage.io.IO.getLoader(FileUtil.getFile("org/ebsdimage/vendors/hkl/testdata/Project19.zip"));
         assertNotNull(loader);
         assertTrue(loader instanceof HklMMapLoader);
     }
@@ -71,8 +69,7 @@ public class IOTest {
     @Test
     public void testGetSaverHklMMap() throws IOException {
         HklMMap mmap =
-                new HklMMapLoader().load(FileUtil
-                        .getFile("org/ebsdimage/vendors/hkl/testdata/Project19.zip"));
+                new HklMMapLoader().load(FileUtil.getFile("org/ebsdimage/vendors/hkl/testdata/Project19.zip"));
 
         Saver saver = handler.getSaver(mmap);
         assertNotNull(saver);
@@ -84,8 +81,7 @@ public class IOTest {
     @Test
     public void testGetSaverHklMMap2() throws IOException {
         HklMMap mmap =
-                new HklMMapLoader().load(FileUtil
-                        .getFile("org/ebsdimage/vendors/hkl/testdata/Project19.zip"));
+                new HklMMapLoader().load(FileUtil.getFile("org/ebsdimage/vendors/hkl/testdata/Project19.zip"));
 
         rmlimage.io.IO.addHandler(org.ebsdimage.vendors.hkl.io.IO.class);
         Saver saver = rmlimage.io.IO.getSaver(mmap);

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.run;
 
 import java.io.File;
@@ -30,7 +30,6 @@ import rmlshared.ui.Monitorable;
  * Abstract class for <code>Exp</code> and <code>Sim</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public abstract class Run implements ObjectXml, Monitorable {
 

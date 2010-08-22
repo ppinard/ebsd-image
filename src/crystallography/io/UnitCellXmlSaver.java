@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.io;
 
 import static crystallography.io.UnitCellXmlTags.*;
@@ -30,7 +30,6 @@ import crystallography.core.UnitCell;
  * XML saver for <code>UnitCell</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class UnitCellXmlSaver implements ObjectXmlSaver {
 

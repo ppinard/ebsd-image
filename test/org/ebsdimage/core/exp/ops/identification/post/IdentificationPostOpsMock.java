@@ -14,12 +14,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.identification.post;
 
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.exp.ops.identification.post.IdentificationPostOps;
 
 public class IdentificationPostOpsMock extends IdentificationPostOps {
 
@@ -28,7 +27,8 @@ public class IdentificationPostOpsMock extends IdentificationPostOps {
         HoughPeak[] destPeaks = new HoughPeak[srcPeaks.length];
 
         for (int i = 0; i < srcPeaks.length; i++)
-            destPeaks[i] = new HoughPeak(srcPeaks[i].rho * 2, srcPeaks[i].theta);
+            destPeaks[i] =
+                    new HoughPeak(srcPeaks[i].rho * 2, srcPeaks[i].theta);
 
         return destPeaks;
     }

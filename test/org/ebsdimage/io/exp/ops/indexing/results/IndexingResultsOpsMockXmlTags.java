@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.indexing.results;
 
 import org.ebsdimage.core.exp.ops.indexing.results.IndexingResultsOpsMock;
@@ -22,6 +22,6 @@ import org.ebsdimage.core.exp.ops.indexing.results.IndexingResultsOpsMock;
 public class IndexingResultsOpsMockXmlTags {
 
     /** XML tag name for IndexingResultsOpsMock */
-    public static final String TAG_NAME = IndexingResultsOpsMock.class
-            .getSimpleName();
+    public static final String TAG_NAME =
+            IndexingResultsOpsMock.class.getSimpleName();
 }

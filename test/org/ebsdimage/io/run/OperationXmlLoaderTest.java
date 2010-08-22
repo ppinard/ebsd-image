@@ -14,12 +14,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.run;
 
 import static org.junit.Assert.assertEquals;
 
-import org.ebsdimage.io.run.OperationXmlLoader;
 import org.jdom.Element;
 import org.junit.Test;
 

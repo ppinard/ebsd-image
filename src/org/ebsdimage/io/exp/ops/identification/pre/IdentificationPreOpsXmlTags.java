@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.identification.pre;
 
 import org.ebsdimage.core.exp.ops.identification.pre.IdentificationPreOps;
@@ -23,10 +23,9 @@ import org.ebsdimage.core.exp.ops.identification.pre.IdentificationPreOps;
  * Tags for <code>IdentificationPreOps</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class IdentificationPreOpsXmlTags {
     /** XML tag name for <code>IdentificationPreOps</code>. */
-    public static final String TAG_NAME = IdentificationPreOps.class
-            .getSimpleName();
+    public static final String TAG_NAME =
+            IdentificationPreOps.class.getSimpleName();
 }

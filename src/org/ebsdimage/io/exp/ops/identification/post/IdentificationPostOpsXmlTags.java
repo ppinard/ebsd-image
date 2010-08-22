@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.identification.post;
 
 import org.ebsdimage.core.exp.ops.identification.post.IdentificationPostOps;
@@ -23,10 +23,9 @@ import org.ebsdimage.core.exp.ops.identification.post.IdentificationPostOps;
  * Tags for <code>IdentificationPostOps</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class IdentificationPostOpsXmlTags {
     /** XML tag name for <code>IdentificationPostOps</code>. */
-    public static final String TAG_NAME = IdentificationPostOps.class
-            .getSimpleName();
+    public static final String TAG_NAME =
+            IdentificationPostOps.class.getSimpleName();
 }

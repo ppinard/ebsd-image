@@ -26,10 +26,7 @@ import org.ebsdimage.vendors.hkl.io.CtfSaver;
 import rmlimage.core.Map;
 import rmlimage.gui.BasicDialog;
 import rmlimage.plugin.PlugIn;
-import rmlshared.gui.ColumnPanel;
-import rmlshared.gui.ComboBox;
-import rmlshared.gui.FileDialog;
-import rmlshared.gui.Panel;
+import rmlshared.gui.*;
 import rmlshared.io.FileUtil;
 import rmlshared.ui.Monitorable;
 
@@ -109,7 +106,7 @@ public class HklExport extends PlugIn implements Monitorable {
 
         // Ask which HKL multimap to save
         Dialog dialog = new Dialog();
-        if (dialog.show() == Dialog.CANCEL)
+        if (dialog.show() == OkCancelDialog.CANCEL)
             return;
 
         // Select multimap

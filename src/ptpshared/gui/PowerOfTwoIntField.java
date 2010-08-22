@@ -1,3 +1,20 @@
+/*
+ * EBSD-Image
+ * Copyright (C) 2010 Philippe T. Pinard
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package ptpshared.gui;
 
 import rmlimage.core.OperationNotSupportedException;
@@ -8,8 +25,7 @@ import rmlshared.math.IntUtil;
 /**
  * Integer spinner field when only power of two values can be inputed.
  * 
- * @author ppinard
- * 
+ * @author Philippe T. Pinard
  */
 public class PowerOfTwoIntField extends IntField {
 
@@ -20,7 +36,6 @@ public class PowerOfTwoIntField extends IntField {
      *            name of the field
      * @param deFault
      *            default value
-     * 
      * @throws IllegalArgumentException
      *             if the default value is not a power of two
      */
@@ -39,7 +54,6 @@ public class PowerOfTwoIntField extends IntField {
      *            size of the field
      * @param deFault
      *            default value
-     * 
      * @throws IllegalArgumentException
      *             if the default value is not a power of two
      */

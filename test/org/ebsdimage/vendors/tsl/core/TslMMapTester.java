@@ -25,6 +25,7 @@ import java.io.IOException;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.Camera;
+import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.PhasesMap;
 import org.ebsdimage.io.PhasesMapLoader;
 import org.junit.Before;
@@ -356,11 +357,11 @@ public abstract class TslMMapTester extends TestCase {
         assertEquals(10, maps.length);
 
         // Test the presence of the Maps
-        assertTrue(mmap.contains(TslMMap.Q0));
-        assertTrue(mmap.contains(TslMMap.Q1));
-        assertTrue(mmap.contains(TslMMap.Q2));
-        assertTrue(mmap.contains(TslMMap.Q3));
-        assertTrue(mmap.contains(TslMMap.PHASES));
+        assertTrue(mmap.contains(EbsdMMap.Q0));
+        assertTrue(mmap.contains(EbsdMMap.Q1));
+        assertTrue(mmap.contains(EbsdMMap.Q2));
+        assertTrue(mmap.contains(EbsdMMap.Q3));
+        assertTrue(mmap.contains(EbsdMMap.PHASES));
         assertTrue(mmap.contains(TslMMap.EULER1));
         assertTrue(mmap.contains(TslMMap.EULER2));
         assertTrue(mmap.contains(TslMMap.EULER3));
@@ -394,11 +395,11 @@ public abstract class TslMMapTester extends TestCase {
         assertEquals(10, maps.length);
 
         // Test the presence of the Maps
-        assertTrue(other.contains(TslMMap.Q0));
-        assertTrue(other.contains(TslMMap.Q1));
-        assertTrue(other.contains(TslMMap.Q2));
-        assertTrue(other.contains(TslMMap.Q3));
-        assertTrue(other.contains(TslMMap.PHASES));
+        assertTrue(other.contains(EbsdMMap.Q0));
+        assertTrue(other.contains(EbsdMMap.Q1));
+        assertTrue(other.contains(EbsdMMap.Q2));
+        assertTrue(other.contains(EbsdMMap.Q3));
+        assertTrue(other.contains(EbsdMMap.PHASES));
         assertTrue(other.contains(TslMMap.EULER1));
         assertTrue(other.contains(TslMMap.EULER2));
         assertTrue(other.contains(TslMMap.EULER3));

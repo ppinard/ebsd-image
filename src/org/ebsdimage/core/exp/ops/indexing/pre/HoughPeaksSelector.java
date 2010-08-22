@@ -30,7 +30,6 @@ import org.ebsdimage.core.exp.Exp;
  * Operation to select the number of Hough Peaks for the indexing operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HoughPeaksSelector extends IndexingPreOps {
 
@@ -39,8 +38,6 @@ public class HoughPeaksSelector extends IndexingPreOps {
         return "Hough Peaks Selector [minimum=" + minimum + ", maximum="
                 + maximum + "]";
     }
-
-
 
     /** Minimum number of Hough peaks. */
     public final int minimum;
@@ -75,7 +72,6 @@ public class HoughPeaksSelector extends IndexingPreOps {
      *            minimum number of Hough peaks to consider during the indexing
      * @param maximum
      *            maximum number of Hough peaks to consider during the indexing
-     * 
      * @throws IllegalArgumentException
      *             if the minimum number of Hough peaks is less than zero
      * @throws IllegalArgumentException

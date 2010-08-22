@@ -35,7 +35,6 @@ import ptpshared.utility.xml.UnitsXmlTags;
  * XML loader for a <code>MaskDisc</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class MaskDiscXmlLoader implements ObjectXmlLoader {
 

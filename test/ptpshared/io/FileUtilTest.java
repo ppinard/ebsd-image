@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.io;
 
 import static org.junit.Assert.assertEquals;
@@ -68,8 +68,8 @@ public class FileUtilTest {
 
     @Test
     public void testGetJarFiles() throws IOException {
-        JarFile[] jarFiles = FileUtil
-                .getJarFiles(getFile("ptpshared/testdata/"));
+        JarFile[] jarFiles =
+                FileUtil.getJarFiles(getFile("ptpshared/testdata/"));
         assertEquals(1, jarFiles.length);
         assertEquals("test.jar", new File(jarFiles[0].getName()).getName());
     }

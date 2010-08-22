@@ -21,7 +21,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.sim.Energy;
-import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
 import org.junit.Before;
 import org.junit.Test;
 

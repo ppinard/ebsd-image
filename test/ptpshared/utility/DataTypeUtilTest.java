@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.utility;
 
 import static org.junit.Assert.assertFalse;
@@ -24,49 +24,49 @@ import org.junit.Test;
 
 public class DataTypeUtilTest {
 
-  @Test
-  public void testIsBoolean() {
-    assertTrue(DataTypeUtil.isBoolean("true"));
-    assertTrue(DataTypeUtil.isBoolean("TRUE"));
-    assertTrue(DataTypeUtil.isBoolean("yes"));
-    assertTrue(DataTypeUtil.isBoolean("yEs"));
-    assertTrue(DataTypeUtil.isBoolean("false"));
-    assertTrue(DataTypeUtil.isBoolean("FALsE"));
-    assertTrue(DataTypeUtil.isBoolean("no"));
-    assertTrue(DataTypeUtil.isBoolean("NO"));
+    @Test
+    public void testIsBoolean() {
+        assertTrue(DataTypeUtil.isBoolean("true"));
+        assertTrue(DataTypeUtil.isBoolean("TRUE"));
+        assertTrue(DataTypeUtil.isBoolean("yes"));
+        assertTrue(DataTypeUtil.isBoolean("yEs"));
+        assertTrue(DataTypeUtil.isBoolean("false"));
+        assertTrue(DataTypeUtil.isBoolean("FALsE"));
+        assertTrue(DataTypeUtil.isBoolean("no"));
+        assertTrue(DataTypeUtil.isBoolean("NO"));
 
-    assertFalse(DataTypeUtil.isBoolean("abc"));
-    assertFalse(DataTypeUtil.isBoolean("1"));
-    assertFalse(DataTypeUtil.isBoolean("1.04"));
-  }
-
-
-
-  @Test
-  public void testIsDouble() {
-    assertTrue(DataTypeUtil.isDouble("1"));
-    assertTrue(DataTypeUtil.isDouble("1232523523"));
-    assertTrue(DataTypeUtil.isDouble("-1"));
-    assertTrue(DataTypeUtil.isDouble("-1232523523"));
-    assertTrue(DataTypeUtil.isDouble("1.023421"));
-    assertTrue(DataTypeUtil.isDouble("-1.023421"));
-
-    assertFalse(DataTypeUtil.isDouble("abc"));
-    assertFalse(DataTypeUtil.isDouble("1.01.01.0"));
-  }
+        assertFalse(DataTypeUtil.isBoolean("abc"));
+        assertFalse(DataTypeUtil.isBoolean("1"));
+        assertFalse(DataTypeUtil.isBoolean("1.04"));
+    }
 
 
 
-  @Test
-  public void testIsInteger() {
-    assertTrue(DataTypeUtil.isInteger("1"));
-    assertTrue(DataTypeUtil.isInteger("1232523523"));
-    assertTrue(DataTypeUtil.isInteger("-1"));
-    assertTrue(DataTypeUtil.isInteger("-1232523523"));
+    @Test
+    public void testIsDouble() {
+        assertTrue(DataTypeUtil.isDouble("1"));
+        assertTrue(DataTypeUtil.isDouble("1232523523"));
+        assertTrue(DataTypeUtil.isDouble("-1"));
+        assertTrue(DataTypeUtil.isDouble("-1232523523"));
+        assertTrue(DataTypeUtil.isDouble("1.023421"));
+        assertTrue(DataTypeUtil.isDouble("-1.023421"));
 
-    assertFalse(DataTypeUtil.isInteger("1.0"));
-    assertFalse(DataTypeUtil.isInteger("1.045436"));
-    assertFalse(DataTypeUtil.isInteger("abc"));
-  }
+        assertFalse(DataTypeUtil.isDouble("abc"));
+        assertFalse(DataTypeUtil.isDouble("1.01.01.0"));
+    }
+
+
+
+    @Test
+    public void testIsInteger() {
+        assertTrue(DataTypeUtil.isInteger("1"));
+        assertTrue(DataTypeUtil.isInteger("1232523523"));
+        assertTrue(DataTypeUtil.isInteger("-1"));
+        assertTrue(DataTypeUtil.isInteger("-1232523523"));
+
+        assertFalse(DataTypeUtil.isInteger("1.0"));
+        assertFalse(DataTypeUtil.isInteger("1.045436"));
+        assertFalse(DataTypeUtil.isInteger("abc"));
+    }
 
 }

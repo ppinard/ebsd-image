@@ -14,27 +14,25 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp;
 
 import static ptpshared.io.FileUtil.joinPackageNames;
 
 import java.io.IOException;
 
+import net.miginfocom.swing.MigLayout;
+
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.MultipleChoicePanel;
 
-import net.miginfocom.swing.MigLayout;
-
 import ptpshared.gui.WizardPage;
-
 import rmlshared.util.ArrayList;
 
 /**
  * Template for the experiment's wizard page.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class OperationWizardPage extends WizardPage {
 
@@ -65,7 +63,6 @@ public class OperationWizardPage extends WizardPage {
      *            if <code>true</code> the post-operations panel is displayed
      * @param results
      *            if <code>true</code> the results-operations panel is displayed
-     * 
      * @throws IOException
      *             if an error occurs
      */
@@ -103,7 +100,6 @@ public class OperationWizardPage extends WizardPage {
      * 
      * @param opsDialogPackage
      *            root package for the operations
-     * 
      * @throws IOException
      *             if an error occurs
      */

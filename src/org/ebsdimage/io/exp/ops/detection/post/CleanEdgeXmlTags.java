@@ -23,7 +23,6 @@ import org.ebsdimage.core.exp.ops.detection.post.CleanEdge;
  * Tags for <code>CleanEdge</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class CleanEdgeXmlTags {
 

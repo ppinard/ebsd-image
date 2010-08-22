@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.cui;
 
 import java.io.File;
@@ -39,7 +39,6 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
  * Command line interface to run an experiment.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class ExpRun extends BaseCUI {
 
@@ -54,8 +53,6 @@ public class ExpRun extends BaseCUI {
     public static void main(String[] args) throws IOException {
         new ExpRun().parse(args);
     }
-
-
 
     /** Command line progress bar. */
     private ProgressBar progressBar;

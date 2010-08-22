@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui;
 
 import java.util.Arrays;
@@ -24,10 +24,11 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import net.miginfocom.swing.MigLayout;
+
 import org.ebsdimage.core.PhasesMap;
 import org.ebsdimage.core.Threshold;
 
-import net.miginfocom.swing.MigLayout;
 import rmlimage.RMLImage;
 import rmlimage.core.BinMap;
 import rmlimage.gui.MapWindow;
@@ -40,7 +41,6 @@ import crystallography.core.Crystal;
  * thresholded.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class ThresholdPanel extends JPanel {
 
@@ -113,13 +113,10 @@ public class ThresholdPanel extends JPanel {
         return this;
     }
 
-
-
     /**
      * Listener of okay and cancel buttons.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class ActionListener implements java.awt.event.ActionListener {
         @Override
@@ -134,8 +131,7 @@ public class ThresholdPanel extends JPanel {
 
             // Remove the threshold panel from the image panel
             MapWindow window =
-                    ((MultiDesktop) rmlimage.plugin.PlugIn.getDesktop())
-                            .getWindow(phasesMap);
+                    ((MultiDesktop) rmlimage.plugin.PlugIn.getDesktop()).getWindow(phasesMap);
             window.removeComponent(getPanel());
 
             // Needed to resume the threshold macro

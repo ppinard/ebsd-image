@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.io;
 
 import static crystallography.io.AtomSiteXmlTags.ATTR_ATOMICNUMBER;
@@ -67,8 +67,10 @@ public class AtomSiteXmlSaverTest {
         assertEquals(13, JDomUtil.getIntegerFromAttribute(element,
                 CHILD_ELEMENT, ATTR_ATOMICNUMBER));
 
-        Vector3D position = new Vector3DXmlLoader().load(JDomUtil.getChild(
-                element, CHILD_POSITION), CHILD_POSITION);
+        Vector3D position =
+                new Vector3DXmlLoader().load(
+                        JDomUtil.getChild(element, CHILD_POSITION),
+                        CHILD_POSITION);
         assertEquals(0.1, position.get(0), 1e-7);
         assertEquals(0.2, position.get(1), 1e-7);
         assertEquals(0.3, position.get(2), 1e-7);

@@ -46,8 +46,9 @@ public class AutomaticStdDevXmlSaverTest {
         Element element = new AutomaticStdDevXmlSaver().save(op);
 
         assertEquals(TAG_NAME, element.getName());
-        assertEquals(1.5, JDomUtil.getDoubleFromAttribute(element,
-                ATTR_SIGMAFACTOR), 1e-6);
+        assertEquals(1.5,
+                JDomUtil.getDoubleFromAttribute(element, ATTR_SIGMAFACTOR),
+                1e-6);
     }
 
 }

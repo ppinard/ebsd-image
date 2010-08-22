@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.hough.pre;
 
 import static org.ebsdimage.io.exp.ops.hough.pre.MedianXmlTags.TAG_NAME;
@@ -29,7 +29,6 @@ import ptpshared.utility.xml.ObjectXmlLoader;
  * XML loader for a <code>Median</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class MedianXmlLoader implements ObjectXmlLoader {
 

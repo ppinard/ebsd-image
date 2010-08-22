@@ -32,7 +32,6 @@ import rmlshared.gui.Panel;
  * GUI Dialog for the <code>SelectHoughPeaks</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HoughPeaksSelectorDialog extends OperationDialog {
 
@@ -103,8 +102,8 @@ public class HoughPeaksSelectorDialog extends OperationDialog {
 
     @Override
     public Operation getOperation() {
-        return new HoughPeaksSelector(minimumField.getValueBFR(), maximumField
-                .getValueBFR());
+        return new HoughPeaksSelector(minimumField.getValueBFR(),
+                maximumField.getValueBFR());
     }
 
 

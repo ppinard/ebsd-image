@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.post;
 
 import static org.ebsdimage.io.exp.ops.pattern.post.NoiseXmlTags.ATTR_STDDEV;
@@ -22,7 +22,6 @@ import static org.ebsdimage.io.exp.ops.pattern.post.NoiseXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
 import org.ebsdimage.core.exp.ops.pattern.post.Noise;
-import org.ebsdimage.io.exp.ops.pattern.post.NoiseXmlSaver;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,8 +46,8 @@ public class NoiseXmlSaverTest {
         Element element = new NoiseXmlSaver().save(op);
 
         assertEquals(TAG_NAME, element.getName());
-        assertEquals(25.0, JDomUtil
-                .getDoubleFromAttribute(element, ATTR_STDDEV), 1e-7);
+        assertEquals(25.0,
+                JDomUtil.getDoubleFromAttribute(element, ATTR_STDDEV), 1e-7);
     }
 
 }

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.tsl.gui;
 
 import static rmlshared.io.FileUtil.getURL;
@@ -33,7 +33,6 @@ import crystallography.core.Crystal;
  * Wizard to import HKL data.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class TslImportWizard extends Wizard {
 
@@ -159,8 +158,7 @@ public class TslImportWizard extends Wizard {
      */
     public Quaternion getSampleRotation() {
         Quaternion calibration =
-                (Quaternion) results
-                        .get(MissingDataWizardPage.KEY_SAMPLE_ROTATION);
+                (Quaternion) results.get(MissingDataWizardPage.KEY_SAMPLE_ROTATION);
 
         if (calibration == null)
             throw new NullPointerException(
@@ -195,7 +193,8 @@ public class TslImportWizard extends Wizard {
      * @return phases
      */
     public Crystal[] getPhases() {
-        Crystal[] phases = (Crystal[]) results.get(PhasesWizardPage.KEY_PHASES);
+        Crystal[] phases =
+                (Crystal[]) results.get(org.ebsdimage.gui.PhasesWizardPage.KEY_PHASES);
 
         if (phases == null)
             throw new NullPointerException(

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io;
 
 import org.ebsdimage.core.PhasesMap;
@@ -23,7 +23,6 @@ import org.ebsdimage.core.PhasesMap;
  * Tags for <code>PhasesMap</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PhasesMapXmlTags {
 

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import static java.lang.Math.PI;
@@ -22,8 +22,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import crystallography.core.ElectronScatteringFactors;
 
 public class ElectronScatteringFactorsTest {
 

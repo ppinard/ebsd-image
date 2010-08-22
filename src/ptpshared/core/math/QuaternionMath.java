@@ -30,7 +30,6 @@ import edu.umd.cs.findbugs.annotations.CheckReturnValue;
  * Common operations on quaternions and rotations.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class QuaternionMath {
 
@@ -44,7 +43,6 @@ public class QuaternionMath {
      *            a quaternion
      * @param q2
      *            a quaternion
-     * 
      * @return misorientation
      */
     @CheckReturnValue
@@ -64,7 +62,6 @@ public class QuaternionMath {
      *            a vector to be rotated
      * @param qrotations
      *            a list of quaternions defining rotations
-     * 
      * @return rotated vector
      */
     @CheckReturnValue
@@ -125,7 +122,6 @@ public class QuaternionMath {
      *            first vector
      * @param v2
      *            second vector
-     * 
      * @return quaternion representing the rotation between <code>v1</code> and
      *         <code>v2</code>
      */
@@ -135,8 +131,7 @@ public class QuaternionMath {
         double scalar = v1.norm() * v2.norm() + v1.dot(v2);
 
         if (scalar < 1e-7) // Vectors are 180 deg apart
-            return new Quaternion(0, -v1.get(2), v1.get(1), v1.get(0))
-                    .normalize();
+            return new Quaternion(0, -v1.get(2), v1.get(1), v1.get(0)).normalize();
 
         return new Quaternion(scalar, axis).normalize();
     }
@@ -155,7 +150,6 @@ public class QuaternionMath {
      * 
      * @param seed
      *            seed for the random number generator
-     * 
      * @return a random rotation quaternion
      */
     @CheckReturnValue

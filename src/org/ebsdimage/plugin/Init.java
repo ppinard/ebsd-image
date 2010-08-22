@@ -14,16 +14,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.plugin;
 
-import rmlimage.gui.FileDialog;
 
 /**
  * Init class for plugins.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Init extends rmlimage.module.Init {
 
@@ -36,14 +34,12 @@ public class Init extends rmlimage.module.Init {
     @Override
     public void postGUI() {
         if (rmlimage.module.Module.DEBUG)
-            System.out
-                    .println("Running postGUI initialisation of the EBSD module");
+            System.out.println("Running postGUI initialisation of the EBSD module");
 
-        rmlimage.plugin.builtin.ManualThresholding
-                .addHandler(org.ebsdimage.plugin.PhaseThresholding.class);
+        rmlimage.plugin.builtin.ManualThresholding.addHandler(org.ebsdimage.plugin.PhaseThresholding.class);
 
         // Adds the hmp and smp filters to the FileDialog
-        FileDialog.addFilter("*.smp");
+        rmlshared.gui.FileDialog.addFilter("*.smp");
     }
 
 }

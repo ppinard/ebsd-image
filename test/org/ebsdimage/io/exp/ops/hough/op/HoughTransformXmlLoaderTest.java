@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.hough.op;
 
 import static org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlTags.ATTR_RESOLUTION;
@@ -22,11 +22,9 @@ import static org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
 import org.ebsdimage.core.exp.ops.hough.op.HoughTransform;
-import org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlLoader;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
-
 
 public class HoughTransformXmlLoaderTest {
 

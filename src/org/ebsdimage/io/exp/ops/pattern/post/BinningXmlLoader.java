@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.post;
 
 import static org.ebsdimage.io.exp.ops.pattern.post.BinningXmlTags.ATTR_SIZE;
@@ -31,7 +31,6 @@ import ptpshared.utility.xml.ObjectXmlLoader;
  * XML loader for a <code>Binning</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class BinningXmlLoader implements ObjectXmlLoader {
 
@@ -50,8 +49,9 @@ public class BinningXmlLoader implements ObjectXmlLoader {
             throw new IllegalNameException("Name of the element should be "
                     + TAG_NAME + " not " + element.getName() + ".");
 
-        int size = JDomUtil.getIntegerFromAttribute(element, ATTR_SIZE,
-                Binning.DEFAULT_BINNING_FACTOR);
+        int size =
+                JDomUtil.getIntegerFromAttribute(element, ATTR_SIZE,
+                        Binning.DEFAULT_BINNING_FACTOR);
         return new Binning(size);
     }
 

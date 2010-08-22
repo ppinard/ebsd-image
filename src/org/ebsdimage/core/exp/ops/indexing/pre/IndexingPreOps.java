@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.indexing.pre;
 
 import org.ebsdimage.core.HoughPeak;
@@ -24,7 +24,6 @@ import org.ebsdimage.core.run.Operation;
 /**
  * Superclass of operation to process the Hough peaks before the indexing
  * operation.
- * 
  * 
  * @author Philippe T. Pinard
  */

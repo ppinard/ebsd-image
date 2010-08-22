@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.detection.pre;
 
 import static org.ebsdimage.io.exp.ops.detection.pre.ButterflyXmlTags.ATTR_FLATTEN_LOWERLIMIT;
@@ -33,7 +33,6 @@ import ptpshared.utility.xml.ObjectXmlLoader;
  * XML loader for a <code>Butterfly</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class ButterflyXmlLoader implements ObjectXmlLoader {
 
@@ -53,14 +52,17 @@ public class ButterflyXmlLoader implements ObjectXmlLoader {
             throw new IllegalNameException("Name of the element should be "
                     + TAG_NAME + " not " + element.getName() + ".");
 
-        int kernelSize = JDomUtil.getIntegerFromAttribute(element,
-                ATTR_KERNELSIZE, Butterfly.DEFAULT_KERNEL_SIZE);
-        float flattenLowerLimit = (float) JDomUtil.getDoubleFromAttribute(
-                element, ATTR_FLATTEN_LOWERLIMIT,
-                Butterfly.DEFAULT_FLATTEN_LOWER_LIMIT);
-        float flattenUpperLimit = (float) JDomUtil.getDoubleFromAttribute(
-                element, ATTR_FLATTEN_UPPERLIMIT,
-                Butterfly.DEFAULT_FLATTEN_UPPER_LIMIT);
+        int kernelSize =
+                JDomUtil.getIntegerFromAttribute(element, ATTR_KERNELSIZE,
+                        Butterfly.DEFAULT_KERNEL_SIZE);
+        float flattenLowerLimit =
+                (float) JDomUtil.getDoubleFromAttribute(element,
+                        ATTR_FLATTEN_LOWERLIMIT,
+                        Butterfly.DEFAULT_FLATTEN_LOWER_LIMIT);
+        float flattenUpperLimit =
+                (float) JDomUtil.getDoubleFromAttribute(element,
+                        ATTR_FLATTEN_UPPERLIMIT,
+                        Butterfly.DEFAULT_FLATTEN_UPPER_LIMIT);
 
         return new Butterfly(kernelSize, flattenLowerLimit, flattenUpperLimit);
     }

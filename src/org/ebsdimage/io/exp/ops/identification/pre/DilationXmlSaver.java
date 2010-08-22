@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.identification.pre;
 
 import static org.ebsdimage.io.exp.ops.identification.pre.DilationXmlTags.TAG_NAME;
@@ -29,7 +29,6 @@ import ptpshared.utility.xml.ObjectXmlSaver;
  * XML saver for a <code>Dilation</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class DilationXmlSaver implements ObjectXmlSaver {
 

@@ -14,20 +14,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp;
 
 import java.io.File;
 
 import org.ebsdimage.core.exp.ExpTester;
-import org.ebsdimage.io.exp.ExpLoader;
 import org.junit.Before;
 
 import rmlshared.io.FileUtil;
 
 public class ExpLoaderTest extends ExpTester {
 
-    private static File file = FileUtil.getFile("org/ebsdimage/testdata/exp.xml");
+    private static File file =
+            FileUtil.getFile("org/ebsdimage/testdata/exp.xml");
 
 
 

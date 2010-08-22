@@ -14,23 +14,22 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.hkl.gui;
 
 import javax.swing.JLabel;
 
+import net.miginfocom.swing.MigLayout;
+
 import org.ebsdimage.vendors.hkl.io.CtfLoader;
 
-import net.miginfocom.swing.MigLayout;
 import ptpshared.gui.WizardPage;
-import rmlimage.gui.FileDialog;
 import rmlshared.gui.FileNameField;
 
 /**
  * First page for the import wizard.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class StartWizardPage extends WizardPage {
 
@@ -47,8 +46,6 @@ public class StartWizardPage extends WizardPage {
     public static String getDescription() {
         return "Start";
     }
-
-
 
     /** Field for the ctf file. */
     private FileNameField ctfFileField;
@@ -75,7 +72,7 @@ public class StartWizardPage extends WizardPage {
         add(new JLabel("Ctf file"));
         ctfFileField = new FileNameField("Ctf file", 32, false);
         ctfFileField.setFileSelectionMode(FileNameField.FILES_ONLY);
-        FileDialog.addFilter("*.ctf");
+        rmlshared.gui.FileDialog.addFilter("*.ctf");
         ctfFileField.setFileFilter("*.ctf");
         add(ctfFileField);
         add(ctfFileField.getBrowseButton(), "wrap");

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.hough.op;
 
 import static org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlTags.ATTR_RESOLUTION;
@@ -22,11 +22,9 @@ import static org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
 import org.ebsdimage.core.exp.ops.hough.op.HoughTransform;
-import org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlSaver;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
-
 
 import ptpshared.utility.xml.JDomUtil;
 
@@ -48,8 +46,8 @@ public class HoughTransformXmlSaverTest {
         Element element = new HoughTransformXmlSaver().save(op);
 
         assertEquals(TAG_NAME, element.getName());
-        assertEquals(2.0, JDomUtil.getDoubleFromAttribute(element,
-                ATTR_RESOLUTION), 1e-7);
+        assertEquals(2.0,
+                JDomUtil.getDoubleFromAttribute(element, ATTR_RESOLUTION), 1e-7);
     }
 
 }

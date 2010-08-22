@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.io.math;
 
 import static ptpshared.io.math.Vector3DXmlTags.ATTR_X;
@@ -33,7 +33,6 @@ import ptpshared.utility.xml.ObjectXmlLoader;
  * XML loader for <code>Vector3D</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Vector3DXmlLoader implements ObjectXmlLoader {
 
@@ -70,8 +69,8 @@ public class Vector3DXmlLoader implements ObjectXmlLoader {
                     + tagName + " not " + element.getName() + ".");
 
         return new Vector3D(JDomUtil.getDoubleFromAttribute(element, ATTR_X),
-                JDomUtil.getDoubleFromAttribute(element, ATTR_Y), JDomUtil
-                        .getDoubleFromAttribute(element, ATTR_Z));
+                JDomUtil.getDoubleFromAttribute(element, ATTR_Y),
+                JDomUtil.getDoubleFromAttribute(element, ATTR_Z));
     }
 
 }

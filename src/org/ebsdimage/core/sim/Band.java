@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.sim;
 
 import static java.lang.Math.abs;
@@ -67,8 +67,9 @@ public class Band extends Reflector {
         super(reflector, reflector.normalizedIntensity);
 
         // Slope and intercept as of a PC = (0.0, 0.0).
-        Line tmpLine = Calculations.getLineFromPlane(plane.toVector3D(),
-                camera.detectorDistance, rotation);
+        Line tmpLine =
+                Calculations.getLineFromPlane(plane.toVector3D(),
+                        camera.detectorDistance, rotation);
 
         // Exception for line parallel to camera's plane
         if (tmpLine.m == Double.POSITIVE_INFINITY
@@ -78,8 +79,9 @@ public class Band extends Reflector {
                             + "It cannot be calculated.");
 
         // Half widths
-        halfWidths = Calculations.getBandHalfWidths(planeSpacing, tmpLine,
-                camera.detectorDistance, energy);
+        halfWidths =
+                Calculations.getBandHalfWidths(planeSpacing, tmpLine,
+                        camera.detectorDistance, energy);
 
         // Slope and intercept translated to the correct PC.
         double newK;
@@ -87,8 +89,9 @@ public class Band extends Reflector {
             newK = tmpLine.k + camera.patternCenterH;
         else
             // Horizontal and oblique
-            newK = tmpLine.k - tmpLine.m * camera.patternCenterH
-                    + camera.patternCenterV;
+            newK =
+                    tmpLine.k - tmpLine.m * camera.patternCenterH
+                            + camera.patternCenterV;
 
         line = new Line(tmpLine.m, newK);
 
@@ -111,7 +114,6 @@ public class Band extends Reflector {
      * @param precision
      *            level of precision
      * @return whether the two <code>Band</code> are almost equal
-     * 
      * @throws IllegalArgumentException
      *             if the precision is less than 0.0
      * @throws IllegalArgumentException
@@ -146,7 +148,6 @@ public class Band extends Reflector {
      * 
      * @param obj
      *            other <code>Band</code> to check equality
-     * 
      * @return whether the two <code>Band</code> are equal
      */
     @Override
@@ -159,8 +160,7 @@ public class Band extends Reflector {
             return false;
 
         Band other = (Band) obj;
-        if (Double.doubleToLongBits(width) != Double
-                .doubleToLongBits(other.width))
+        if (Double.doubleToLongBits(width) != Double.doubleToLongBits(other.width))
             return false;
 
         return true;

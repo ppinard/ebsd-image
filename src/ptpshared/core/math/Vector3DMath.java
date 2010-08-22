@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.core.math;
 
 import static ptpshared.core.math.Math.acos;
@@ -23,7 +23,6 @@ import static ptpshared.core.math.Math.acos;
  * Operations on vectors.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Vector3DMath {
 
@@ -35,7 +34,6 @@ public class Vector3DMath {
      *            the first vector
      * @param v2
      *            the second vector
-     * 
      * @return angle in radians
      */
     public static double angle(Vector3D v1, Vector3D v2) {
@@ -67,7 +65,6 @@ public class Vector3DMath {
      *            the first vector
      * @param v2
      *            the second vector
-     * 
      * @return direction cosine
      */
     public static double directionCosine(Vector3D v1, Vector3D v2) {
@@ -87,7 +84,6 @@ public class Vector3DMath {
      *            the second vector
      * @param v3
      *            the third vector
-     * 
      * @return triple product
      */
     public static double tripleProduct(Vector3D v1, Vector3D v2, Vector3D v3) {

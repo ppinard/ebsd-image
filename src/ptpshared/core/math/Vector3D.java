@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.core.math;
 
 import ptpshared.utility.xml.ObjectXml;
@@ -25,7 +25,6 @@ import edu.umd.cs.findbugs.annotations.CheckReturnValue;
  * from {@link BaseVector} as well as the cross product.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Vector3D extends BaseVector implements ObjectXml {
 

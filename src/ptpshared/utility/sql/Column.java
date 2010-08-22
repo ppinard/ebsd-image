@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.utility.sql;
 
 import java.util.logging.Logger;
@@ -24,7 +24,6 @@ import java.util.logging.Logger;
  * {@link #toString()} to output the SQL command to create this column.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Column {
 
@@ -33,9 +32,7 @@ public class Column {
      * 
      * @param type
      *            string of the time.
-     * 
      * @return column type
-     * 
      * @throws RuntimeException
      *             if the type is invalid
      */
@@ -57,8 +54,6 @@ public class Column {
         else
             throw new RuntimeException("The type (" + type + ") is invalid.");
     }
-
-
 
     /** If <code>true</code>, auto increment the value of the column. */
     public final boolean autoIncrement;
@@ -165,7 +160,6 @@ public class Column {
      * 
      * @param obj
      *            other column
-     * 
      * @return whether the <code>Column</code> is equal to the supplied
      *         <code>Object</code>
      */
@@ -230,7 +224,8 @@ public class Column {
 
 
     /**
-     * Formats the value of a column. Adds <code>'</code> if the column type is TEXT.
+     * Formats the value of a column. Adds <code>'</code> if the column type is
+     * TEXT.
      * 
      * @param value
      *            value to be formatted

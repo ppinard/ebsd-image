@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.hkl.gui;
 
 import java.awt.event.ActionEvent;
@@ -32,7 +32,6 @@ import rmlshared.gui.RadioButton;
  * Wizard page to import or not diffraction patterns.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PatternsWizardPage extends WizardPage {
 
@@ -45,8 +44,6 @@ public class PatternsWizardPage extends WizardPage {
             userPatternsFileFiled.setEnabled(userPatternsRButton.isSelected());
         }
     }
-
-
 
     /** Map key for the patterns folder. */
     public static final String KEY_PATTERNS_FOLDER = "patternsFolder";
@@ -64,8 +61,6 @@ public class PatternsWizardPage extends WizardPage {
     public static String getDescription() {
         return "Diffraction Patterns";
     }
-
-
 
     /** Do not import patterns radio button. */
     private RadioButton noPatternsRButton;
@@ -106,8 +101,7 @@ public class PatternsWizardPage extends WizardPage {
         add(userPatternsRButton, "wrap");
 
         userPatternsFileFiled = new FileNameField("Pattern file", true);
-        userPatternsFileFiled
-                .setFileSelectionMode(FileNameField.DIRECTORIES_ONLY);
+        userPatternsFileFiled.setFileSelectionMode(FileNameField.DIRECTORIES_ONLY);
         add(userPatternsFileFiled, "gapleft 35, growx, pushx, wrap");
 
         // Used to manage only one radio button being selected at a time

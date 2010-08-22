@@ -32,7 +32,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
  * functions such as the dot product and the normalization are also implemented.
  * 
  * @author Philippe T. Pinard
- * 
  */
 @Immutable
 public abstract class BaseVector {
@@ -93,7 +92,6 @@ public abstract class BaseVector {
      * 
      * @param scalar
      *            scalar value
-     * 
      * @return resultant vector
      */
     @CheckReturnValue
@@ -111,7 +109,6 @@ public abstract class BaseVector {
      * 
      * @param other
      *            other vector of the same size
-     * 
      * @return dot product
      */
     public Number dot(BaseVector other) {
@@ -151,7 +148,6 @@ public abstract class BaseVector {
      * @param precision
      *            level of precision
      * @return whether the two vectors are almost equal
-     * 
      * @throws IllegalArgumentException
      *             if the precision is less than 0.0
      * @throws IllegalArgumentException
@@ -184,7 +180,6 @@ public abstract class BaseVector {
      * 
      * @param obj
      *            other vector to check equality
-     * 
      * @return whether the two vectors are equal
      */
     @Override
@@ -261,7 +256,6 @@ public abstract class BaseVector {
      * 
      * @param scalar
      *            scalar value
-     * 
      * @return resultant vector
      */
     @CheckReturnValue

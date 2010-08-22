@@ -35,7 +35,6 @@ import rmlshared.thread.WorkerThread;
  * Tool bar for the <code>PhasesMap</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PhasesMapToolBar extends MapToolBar {
 

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.post;
 
 import static org.ebsdimage.io.exp.ops.pattern.post.SmoothingXmlTags.ATTR_KERNELSIZE;
@@ -31,7 +31,6 @@ import ptpshared.utility.xml.ObjectXmlLoader;
  * XML loader for a <code>Smoothing</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class SmoothingXmlLoader implements ObjectXmlLoader {
 
@@ -51,8 +50,9 @@ public class SmoothingXmlLoader implements ObjectXmlLoader {
             throw new IllegalNameException("Name of the element should be "
                     + TAG_NAME + " not " + element.getName() + ".");
 
-        int kernelSize = JDomUtil.getIntegerFromAttribute(element,
-                ATTR_KERNELSIZE, Smoothing.DEFAULT_KERNEL_SIZE);
+        int kernelSize =
+                JDomUtil.getIntegerFromAttribute(element, ATTR_KERNELSIZE,
+                        Smoothing.DEFAULT_KERNEL_SIZE);
 
         return new Smoothing(kernelSize);
     }

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io;
 
 import static org.ebsdimage.io.PhasesMapXmlTags.HEADER;
@@ -40,7 +40,6 @@ import crystallography.core.Crystal;
  * Loader for <code>PhasesMap</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PhasesMapLoader extends MapLoader {
 
@@ -118,8 +117,6 @@ public class PhasesMapLoader extends MapLoader {
         if (message.length() > 0)
             throw new IOException(message);
     }
-
-
 
     /** Bmp loader. */
     private BasicBmpLoader loader = new BasicBmpLoader();

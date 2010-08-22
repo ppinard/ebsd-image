@@ -19,7 +19,6 @@ package org.ebsdimage.core;
 
 import java.util.ArrayList;
 
-import rmlimage.core.EightBitMap;
 import rmlimage.core.Map;
 import rmlimage.core.ROI;
 import rmlimage.core.handler.EditHandler;
@@ -113,7 +112,7 @@ public class Edit implements EditHandler {
 
         dest.setPhases(phases.toArray(new Crystal[0]));
 
-        dest.setChanged(EightBitMap.MAP_CHANGED);
+        dest.setChanged(Map.MAP_CHANGED);
     }
 
 

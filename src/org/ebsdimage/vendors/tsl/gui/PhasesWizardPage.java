@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.tsl.gui;
 
 import java.io.File;
@@ -24,12 +24,10 @@ import javax.swing.JLabel;
 
 import org.ebsdimage.vendors.tsl.io.AngLoader;
 
-
 /**
  * Wizard page to create phases based on the information in the ang file.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PhasesWizardPage extends org.ebsdimage.gui.PhasesWizardPage {
 
@@ -41,8 +39,6 @@ public class PhasesWizardPage extends org.ebsdimage.gui.PhasesWizardPage {
     public static String getDescription() {
         return "Phases";
     }
-
-
 
     /** Field for the description of phases in the ang file. */
     private JLabel descField;

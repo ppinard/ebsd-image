@@ -31,6 +31,7 @@ import crystallography.core.crystals.Silicon;
 public class IndexingResultsOpsMockTest {
 
     private IndexingResultsOps op;
+
     private Solution[] srcSlns;
 
 

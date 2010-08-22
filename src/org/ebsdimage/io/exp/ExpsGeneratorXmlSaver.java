@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp;
 
 import static org.ebsdimage.core.exp.ExpConstants.OPS_CORE_PACKAGE;
@@ -33,16 +33,15 @@ import rmlshared.thread.Reflection;
  * XML saver for <code>Exp</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class ExpsGeneratorXmlSaver extends RunsGeneratorXmlSaver {
 
     @Override
     protected ObjectXmlSaver getOperationSaver(Operation op) {
-        String opName = op.getClass().getName().replaceFirst(OPS_CORE_PACKAGE,
-                "");
-        String classLoaderName = FileUtil.joinPackageNames(OPS_IO_PACKAGE,
-                opName + "XmlSaver");
+        String opName =
+                op.getClass().getName().replaceFirst(OPS_CORE_PACKAGE, "");
+        String classLoaderName =
+                FileUtil.joinPackageNames(OPS_IO_PACKAGE, opName + "XmlSaver");
         return (ObjectXmlSaver) Reflection.newInstance(classLoaderName);
     }
 

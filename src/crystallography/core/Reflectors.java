@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import static java.util.Arrays.sort;
@@ -29,7 +29,6 @@ import net.jcip.annotations.Immutable;
  * Comparator for <code>Reflector</code> according to their intensity.
  * 
  * @author Philippe T. Pinard
- * 
  */
 class IntensityComparator implements Comparator<Reflector>, Serializable {
 
@@ -51,7 +50,6 @@ class IntensityComparator implements Comparator<Reflector>, Serializable {
  * Comparator for <code>Reflector</code> according to their plane spacing.
  * 
  * @author Philippe T. Pinard
- * 
  */
 class PlaneSpacingComparator implements Comparator<Reflector>, Serializable {
 
@@ -79,15 +77,12 @@ class PlaneSpacingComparator implements Comparator<Reflector>, Serializable {
  * will be {3,3,3) and {-3,-3,-3). The diffraction intensity of the plane is
  * calculated using the specified scattering factors (either
  * {@link ElectronScatteringFactors} or {@link XrayScatteringFactors}). The
- * X-rays scattering factors are more robust.
- * 
- * <b>References:</b>
+ * X-rays scattering factors are more robust. <b>References:</b>
  * <ul>
  * <li>Lecture notes from Raynald Gauvin, McGill University, 2007</li>
  * </ul>
  * 
  * @author Philippe T. Pinard
- * 
  */
 @Immutable
 public class Reflectors implements Iterable<Reflector> {
@@ -111,7 +106,6 @@ public class Reflectors implements Iterable<Reflector> {
      *            scattering factors
      * @param maxIndex
      *            maximum index of the planes to compute
-     * 
      * @throws NullPointerException
      *             if the crystal is null
      * @throws NullPointerException
@@ -196,7 +190,6 @@ public class Reflectors implements Iterable<Reflector> {
      * 
      * @param index
      *            index of a reflector in the array.
-     * 
      * @return a <code>Reflector</code>
      */
     public Reflector get(int index) {

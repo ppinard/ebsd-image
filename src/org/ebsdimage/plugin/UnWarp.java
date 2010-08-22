@@ -43,6 +43,7 @@ import rmlshared.enums.YesNo;
 import rmlshared.geom.shape.String2D;
 import rmlshared.gui.ColumnPanel;
 import rmlshared.gui.FileNameField;
+import rmlshared.gui.OkCancelDialog;
 import rmlshared.io.FileUtil;
 import rmlshared.ui.Monitorable;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
@@ -52,7 +53,6 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
  * unwarping maps are created using Lispix.
  * 
  * @author Marin Lagac&eacute;
- * 
  */
 public class UnWarp extends PlugIn implements Monitorable {
 
@@ -62,7 +62,6 @@ public class UnWarp extends PlugIn implements Monitorable {
      * unwarping maps.
      * 
      * @author Marin Lagac&eacute;
-     * 
      */
     private class Dialog extends BasicDialog {
 
@@ -90,20 +89,17 @@ public class UnWarp extends PlugIn implements Monitorable {
 
             // Create the src dir field
             srcDirField = new FileNameField("Source Directory", true);
-            srcDirField
-                    .setFileSelectionMode(FileNameField.FILES_AND_DIRECTORIES);
+            srcDirField.setFileSelectionMode(FileNameField.FILES_AND_DIRECTORIES);
             cPanel.add("Source Directory: ", srcDirField);
 
             // Create the dest dir field
             destDirField = new FileNameField("Destination Directory", true);
-            destDirField
-                    .setFileSelectionMode(FileNameField.FILES_AND_DIRECTORIES);
+            destDirField.setFileSelectionMode(FileNameField.FILES_AND_DIRECTORIES);
             cPanel.add("Destination Directory: ", destDirField);
 
             // Create the wapr dir field
             warpDirField = new FileNameField("Warp Maps Directory", true);
-            warpDirField
-                    .setFileSelectionMode(FileNameField.FILES_AND_DIRECTORIES);
+            warpDirField.setFileSelectionMode(FileNameField.FILES_AND_DIRECTORIES);
             cPanel.add("Warp Maps Directory: ", warpDirField);
 
             setMainComponent(cPanel);
@@ -178,8 +174,6 @@ public class UnWarp extends PlugIn implements Monitorable {
 
     }
 
-
-
     /** Cached grayMap. */
     private BufferedImage buffGrayMap = null;
 
@@ -248,9 +242,7 @@ public class UnWarp extends PlugIn implements Monitorable {
 
         // Paste the unwarped map to the lower right corner
         // and add the label
-        Edit
-                .copy(destMap, destMap.getROI(), map, map.width / 2,
-                        map.height / 2);
+        Edit.copy(destMap, destMap.getROI(), map, map.width / 2, map.height / 2);
         str = new String2D("DEST");
         str.setFont("default", String2D.Style.BOLD, 16);
         str.setColor(Color.RED);
@@ -564,7 +556,7 @@ public class UnWarp extends PlugIn implements Monitorable {
     @Override
     public void xRun() throws IOException {
         Dialog dialog = new Dialog();
-        if (dialog.show() == Dialog.CANCEL)
+        if (dialog.show() == OkCancelDialog.CANCEL)
             return;
 
         // Get the src and dest directories

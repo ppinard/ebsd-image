@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io;
 
 import static java.lang.Math.toRadians;
@@ -25,7 +25,6 @@ import java.io.IOException;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.Transform;
-import org.ebsdimage.io.HoughMapLoader;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,6 +34,7 @@ import rmlshared.io.FileUtil;
 public class HoughMapLoaderTest {
 
     private HoughMapLoader loader;
+
     private File file;
 
 
@@ -58,8 +58,7 @@ public class HoughMapLoaderTest {
 
     private void testHoughMap(HoughMap map) throws IOException {
         ByteMap original =
-                (ByteMap) rmlimage.io.IO.load(FileUtil
-                        .getFile("org/ebsdimage/testdata/pattern.bmp"));
+                (ByteMap) rmlimage.io.IO.load(FileUtil.getFile("org/ebsdimage/testdata/pattern.bmp"));
         HoughMap other = Transform.hough(original, toRadians(1.0));
 
         assertEquals(other.width, map.width);

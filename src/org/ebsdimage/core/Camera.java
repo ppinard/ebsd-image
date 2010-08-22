@@ -116,7 +116,6 @@ public class Camera implements ObjectXml {
      * @param precision
      *            level of precision
      * @return whether the two <code>Camera</code> are almost equal
-     * 
      * @throws IllegalArgumentException
      *             if the precision is less than 0.0
      * @throws IllegalArgumentException
@@ -152,7 +151,6 @@ public class Camera implements ObjectXml {
      * 
      * @param obj
      *            other <code>Camera</code> to check equality
-     * 
      * @return whether the two <code>Camera</code> are equal
      */
     @Override
@@ -164,14 +162,11 @@ public class Camera implements ObjectXml {
         if (getClass() != obj.getClass())
             return false;
         Camera other = (Camera) obj;
-        if (Double.doubleToLongBits(detectorDistance) != Double
-                .doubleToLongBits(other.detectorDistance))
+        if (Double.doubleToLongBits(detectorDistance) != Double.doubleToLongBits(other.detectorDistance))
             return false;
-        if (Double.doubleToLongBits(patternCenterH) != Double
-                .doubleToLongBits(other.patternCenterH))
+        if (Double.doubleToLongBits(patternCenterH) != Double.doubleToLongBits(other.patternCenterH))
             return false;
-        if (Double.doubleToLongBits(patternCenterV) != Double
-                .doubleToLongBits(other.patternCenterV))
+        if (Double.doubleToLongBits(patternCenterV) != Double.doubleToLongBits(other.patternCenterV))
             return false;
         return true;
     }

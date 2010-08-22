@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io;
 
 import static org.ebsdimage.io.HoughPeakXmlTags.*;
@@ -30,7 +30,6 @@ import ptpshared.utility.xml.UnitsXmlTags;
  * XML saver for <code>HoughPeak</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HoughPeakXmlSaver implements ObjectXmlSaver {
 
@@ -59,9 +58,7 @@ public class HoughPeakXmlSaver implements ObjectXmlSaver {
         element.setAttribute(ATTR_RHO, Double.toString(peak.rho));
         element.setAttribute(ATTR_THETA, Double.toString(peak.theta));
         element.setAttribute(ATTR_THETA_UNITS, UnitsXmlTags.RAD);
-        element
-                .setAttribute(ATTR_MAXINTENSITY, Double
-                        .toString(peak.intensity));
+        element.setAttribute(ATTR_MAXINTENSITY, Double.toString(peak.intensity));
 
         return element;
     }

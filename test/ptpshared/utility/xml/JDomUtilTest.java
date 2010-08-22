@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.utility.xml;
 
 import static org.junit.Assert.assertEquals;
@@ -37,10 +37,15 @@ import rmlshared.util.Properties;
 public class JDomUtilTest {
 
     private Element element1;
+
     private Element element2;
+
     private Element element3;
+
     private Element element4;
+
     private Element element5;
+
     private Element element6;
 
     private File tmpFile;
@@ -198,16 +203,19 @@ public class JDomUtilTest {
     public void testGetBooleanFromAttributeElementStringStringBoolean() {
         boolean value;
 
-        value = JDomUtil.getBooleanFromAttribute(element5, "child4", "attr1",
-                false);
+        value =
+                JDomUtil.getBooleanFromAttribute(element5, "child4", "attr1",
+                        false);
         assertEquals(true, value);
 
-        value = JDomUtil.getBooleanFromAttribute(element5, "child4", "attr99",
-                true);
+        value =
+                JDomUtil.getBooleanFromAttribute(element5, "child4", "attr99",
+                        true);
         assertEquals(true, value);
 
-        value = JDomUtil.getBooleanFromAttribute(element5, "child99", "attr1",
-                true);
+        value =
+                JDomUtil.getBooleanFromAttribute(element5, "child99", "attr1",
+                        true);
         assertEquals(true, value);
     }
 
@@ -288,8 +296,8 @@ public class JDomUtilTest {
 
     @Test
     public void testGetDoubleFromAttributeElementStringString() {
-        double value = JDomUtil.getDoubleFromAttribute(element5, "child1",
-                "attr1");
+        double value =
+                JDomUtil.getDoubleFromAttribute(element5, "child1", "attr1");
         assertEquals(1.5234, value, 1e-7);
     }
 
@@ -299,16 +307,19 @@ public class JDomUtilTest {
     public void testGetDoubleFromAttributeElementStringStringDouble() {
         double value;
 
-        value = JDomUtil.getDoubleFromAttribute(element5, "child1", "attr1",
-                1235.6);
+        value =
+                JDomUtil.getDoubleFromAttribute(element5, "child1", "attr1",
+                        1235.6);
         assertEquals(1.5234, value, 1e-7);
 
-        value = JDomUtil.getDoubleFromAttribute(element5, "child1", "attr99",
-                1235.6);
+        value =
+                JDomUtil.getDoubleFromAttribute(element5, "child1", "attr99",
+                        1235.6);
         assertEquals(1235.6, value, 1e-7);
 
-        value = JDomUtil.getDoubleFromAttribute(element5, "child99", "attr1",
-                1235.6);
+        value =
+                JDomUtil.getDoubleFromAttribute(element5, "child99", "attr1",
+                        1235.6);
         assertEquals(1235.6, value, 1e-7);
     }
 
@@ -373,8 +384,8 @@ public class JDomUtilTest {
 
     @Test
     public void testGetIntegerFromAttributeElementStringString() {
-        int value = JDomUtil.getIntegerFromAttribute(element5, "child2",
-                "attr1");
+        int value =
+                JDomUtil.getIntegerFromAttribute(element5, "child2", "attr1");
         assertEquals(99, value, 1e-7);
     }
 
@@ -405,16 +416,19 @@ public class JDomUtilTest {
     public void testGetIntegerFromAttributeElementStringStringInt() {
         int value;
 
-        value = JDomUtil.getIntegerFromAttribute(element5, "child2", "attr1",
-                1235);
+        value =
+                JDomUtil.getIntegerFromAttribute(element5, "child2", "attr1",
+                        1235);
         assertEquals(99, value, 1e-7);
 
-        value = JDomUtil.getIntegerFromAttribute(element5, "child2", "attr99",
-                1235);
+        value =
+                JDomUtil.getIntegerFromAttribute(element5, "child2", "attr99",
+                        1235);
         assertEquals(1235, value, 1e-7);
 
-        value = JDomUtil.getIntegerFromAttribute(element5, "child99", "attr1",
-                1235);
+        value =
+                JDomUtil.getIntegerFromAttribute(element5, "child99", "attr1",
+                        1235);
         assertEquals(1235, value, 1e-7);
     }
 
@@ -424,12 +438,13 @@ public class JDomUtilTest {
     public void testGetStringFromAttributeElementDefaultStringStringString() {
         String value;
 
-        value = JDomUtil
-                .getStringFromAttributeDefault(element3, "attr1", "def");
+        value =
+                JDomUtil.getStringFromAttributeDefault(element3, "attr1", "def");
         assertEquals("abc", value);
 
-        value = JDomUtil.getStringFromAttributeDefault(element3, "attr99",
-                "def");
+        value =
+                JDomUtil.getStringFromAttributeDefault(element3, "attr99",
+                        "def");
         assertEquals("def", value);
     }
 
@@ -439,16 +454,19 @@ public class JDomUtilTest {
     public void testGetStringFromAttributeElementDefaultStringStringStringString() {
         String value;
 
-        value = JDomUtil.getStringFromAttributeDefault(element5, "child3",
-                "attr1", "def");
+        value =
+                JDomUtil.getStringFromAttributeDefault(element5, "child3",
+                        "attr1", "def");
         assertEquals("abc", value);
 
-        value = JDomUtil.getStringFromAttributeDefault(element5, "child3",
-                "attr99", "def");
+        value =
+                JDomUtil.getStringFromAttributeDefault(element5, "child3",
+                        "attr99", "def");
         assertEquals("def", value);
 
-        value = JDomUtil.getStringFromAttributeDefault(element5, "child99",
-                "attr1", "def");
+        value =
+                JDomUtil.getStringFromAttributeDefault(element5, "child99",
+                        "attr1", "def");
         assertEquals("def", value);
     }
 
@@ -471,8 +489,8 @@ public class JDomUtilTest {
 
     @Test
     public void testGetStringFromAttributeElementStringString() {
-        String value = JDomUtil.getStringFromAttribute(element5, "child3",
-                "attr1");
+        String value =
+                JDomUtil.getStringFromAttribute(element5, "child3", "attr1");
         assertEquals("abc", value);
     }
 
@@ -517,10 +535,10 @@ public class JDomUtilTest {
         assertTrue(JDomUtil.hasChild(element, "child2"));
         assertEquals("text1", element.getChild("child1").getText());
         assertEquals("text2", element.getChild("child2").getText());
-        assertEquals("a", JDomUtil.getStringFromAttribute(element, "child1",
-                "attr"));
-        assertEquals("b", JDomUtil.getStringFromAttribute(element, "child2",
-                "attr"));
+        assertEquals("a",
+                JDomUtil.getStringFromAttribute(element, "child1", "attr"));
+        assertEquals("b",
+                JDomUtil.getStringFromAttribute(element, "child2", "attr"));
     }
 
 

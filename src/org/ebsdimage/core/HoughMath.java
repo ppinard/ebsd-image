@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static java.lang.Math.PI;
@@ -34,7 +34,6 @@ import rmlshared.math.Stats;
  * Miscellaneous calculations in Hough space.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HoughMath {
 
@@ -65,9 +64,10 @@ public class HoughMath {
 
             for (HoughPeak peak2 : peaks2)
                 distance =
-                        Math.min(distance, Math.pow(peak1.theta - peak2.theta,
-                                2)
-                                + Math.pow(peak1.rho - peak2.rho, 2));
+                        Math.min(
+                                distance,
+                                Math.pow(peak1.theta - peak2.theta, 2)
+                                        + Math.pow(peak1.rho - peak2.rho, 2));
 
             distances[i] = distance;
         }
@@ -78,9 +78,7 @@ public class HoughMath {
 
 
     /**
-     * Converts a Hough peak into the slope and intercept of a line.
-     * 
-     * Equations:
+     * Converts a Hough peak into the slope and intercept of a line. Equations:
      * <ul>
      * <li><code>m = -cos(theta) / sin(theta)</code></li>
      * <li><code>k = rho / sin(theta)</code></li>
@@ -121,17 +119,14 @@ public class HoughMath {
             Vector3D cameraPosition) {
         Line3D line0 = HoughMath.houghSpaceToLine(peak).toLine3D(LinePlane.XZ);
 
-        return line0.vector.cross(line0.point.minus(cameraPosition))
-                .normalize();
+        return line0.vector.cross(line0.point.minus(cameraPosition)).normalize();
 
     }
 
 
 
     /**
-     * Converts the slope and intercept of a line to a Hough peak.
-     * 
-     * Equations:
+     * Converts the slope and intercept of a line to a Hough peak. Equations:
      * <ul>
      * <li><code>theta = -arccot(m)</code></li>
      * <li><code>rho = k * sin(theta)</code></li>

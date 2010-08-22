@@ -25,7 +25,7 @@ import rmlimage.core.MathMorph;
 /**
  * Operation to remove small false peaks in the peaks map.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class Opening extends DetectionPostOps {
 

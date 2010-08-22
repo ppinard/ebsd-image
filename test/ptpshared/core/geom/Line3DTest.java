@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.core.geom;
 
 import static org.junit.Assert.assertEquals;
@@ -27,7 +27,9 @@ import ptpshared.core.math.Vector3D;
 public class Line3DTest {
 
     private Vector3D vector;
+
     private Vector3D point;
+
     private Line3D line;
 
 

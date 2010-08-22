@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.run.ops;
 
 import rmlshared.gui.BasicDialog;
@@ -23,7 +23,6 @@ import rmlshared.gui.BasicDialog;
  * Abstract class for all the operation dialogs.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public abstract class OperationDialog extends BasicDialog implements
         OperationCreator {

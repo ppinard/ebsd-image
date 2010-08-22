@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.indexing.pre;
 
 import org.ebsdimage.core.exp.ops.indexing.pre.IndexingPreOpsMock;
@@ -22,6 +22,6 @@ import org.ebsdimage.core.exp.ops.indexing.pre.IndexingPreOpsMock;
 public class IndexingPreOpsMockXmlTags {
 
     /** XML tag name for IndexingPreOpsMock */
-    public static final String TAG_NAME = IndexingPreOpsMock.class
-            .getSimpleName();
+    public static final String TAG_NAME =
+            IndexingPreOpsMock.class.getSimpleName();
 }

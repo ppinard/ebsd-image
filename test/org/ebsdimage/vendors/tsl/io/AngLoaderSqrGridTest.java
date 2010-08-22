@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.tsl.io;
 
 import static org.junit.Assert.assertEquals;
@@ -28,7 +28,6 @@ import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.EbsdMetadata;
 import org.ebsdimage.vendors.tsl.core.TslMMapTester;
 import org.ebsdimage.vendors.tsl.core.TslMetadata;
-import org.ebsdimage.vendors.tsl.io.AngLoader;
 import org.junit.Test;
 
 import ptpshared.core.math.Quaternion;
@@ -45,11 +44,9 @@ public class AngLoaderSqrGridTest extends TslMMapTester {
         file = getFile("org/ebsdimage/vendors/tsl/testdata/scan1.ang");
 
         Crystal nickel =
-                new CrystalLoader()
-                        .load(getFile("org/ebsdimage/vendors/tsl/testdata/Nickel.xml"));
+                new CrystalLoader().load(getFile("org/ebsdimage/vendors/tsl/testdata/Nickel.xml"));
         Crystal wc =
-                new CrystalLoader()
-                        .load(getFile("org/ebsdimage/vendors/tsl/testdata/WC.xml"));
+                new CrystalLoader().load(getFile("org/ebsdimage/vendors/tsl/testdata/WC.xml"));
 
         mmap =
                 new AngLoader().load(file, EbsdMetadata.DEFAULT_BEAM_ENERGY,
@@ -96,8 +93,7 @@ public class AngLoaderSqrGridTest extends TslMMapTester {
     @Test
     public void testIsAng() {
         assertTrue(AngLoader.isAng(file));
-        assertFalse(AngLoader
-                .isAng(getFile("org/ebsdimage/vendors/tsl/testdata/WC.xml")));
+        assertFalse(AngLoader.isAng(getFile("org/ebsdimage/vendors/tsl/testdata/WC.xml")));
     }
 
 }

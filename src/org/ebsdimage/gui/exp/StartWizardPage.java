@@ -34,7 +34,6 @@ import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPanelNavResult;
 
 import ptpshared.gui.WizardPage;
-import rmlimage.gui.FileDialog;
 import rmlimage.io.IO;
 import rmlshared.gui.CheckBox;
 import rmlshared.gui.FileNameField;
@@ -146,7 +145,7 @@ public class StartWizardPage extends WizardPage {
 
         metadataFileField = new FileNameField("METADATA_FILE", 32, true);
         metadataFileField.setFileSelectionMode(FileNameField.FILES_ONLY);
-        FileDialog.addFilter("*.zip");
+        rmlshared.gui.FileDialog.addFilter("*.zip");
         metadataFileField.setFileFilter("*.zip");
         metadataFileField.setEnabled(false);
         add(metadataFileField, "gapleft 35, wrap");
@@ -157,7 +156,7 @@ public class StartWizardPage extends WizardPage {
 
         opsFileField = new FileNameField("OPS_FILE", 32, true);
         opsFileField.setFileSelectionMode(FileNameField.FILES_ONLY);
-        FileDialog.addFilter("*.xml");
+        rmlshared.gui.FileDialog.addFilter("*.xml");
         opsFileField.setFileFilter("*.xml");
         opsFileField.setEnabled(false);
         add(opsFileField, "gapleft 35, wrap");

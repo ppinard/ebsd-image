@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.io;
 
 import crystallography.core.Crystal;
@@ -23,7 +23,6 @@ import crystallography.core.Crystal;
  * Tags for <code>Crystal</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class CrystalXmlTags {
 

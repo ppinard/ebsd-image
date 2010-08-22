@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.core.math;
 
 import static java.lang.Math.sqrt;
@@ -23,7 +23,6 @@ import static java.lang.Math.sqrt;
  * Physical constants.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Constants {
 

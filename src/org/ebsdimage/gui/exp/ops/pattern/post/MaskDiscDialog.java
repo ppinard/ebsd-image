@@ -31,7 +31,6 @@ import rmlshared.gui.Panel;
  * GUI Dialog for the <code>MaskDisc</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class MaskDiscDialog extends OperationDialog {
 
@@ -92,8 +91,8 @@ public class MaskDiscDialog extends OperationDialog {
 
     @Override
     public Operation getOperation() {
-        return new MaskDisc(centroidXField.getValueBFR(), centroidYField
-                .getValueBFR(), radiusField.getValueBFR());
+        return new MaskDisc(centroidXField.getValueBFR(),
+                centroidYField.getValueBFR(), radiusField.getValueBFR());
     }
 
 

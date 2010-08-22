@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import static org.junit.Assert.assertEquals;
@@ -29,8 +29,11 @@ import ptpshared.core.math.Vector3D;
 public class AtomSiteTest {
 
     private AtomSite atom1;
+
     private AtomSite atom2;
+
     private AtomSite atom3;
+
     private AtomSite atom4;
 
 
@@ -192,8 +195,8 @@ public class AtomSiteTest {
 
     @Test
     public void testHashCode() {
-        assertEquals(atom1.hashCode(), new AtomSite(13, 0.0, 0.5, 1.5)
-                .hashCode());
+        assertEquals(atom1.hashCode(),
+                new AtomSite(13, 0.0, 0.5, 1.5).hashCode());
     }
 
 

@@ -14,11 +14,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.pattern.post;
 
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps;
 
 import rmlimage.core.ByteMap;
 

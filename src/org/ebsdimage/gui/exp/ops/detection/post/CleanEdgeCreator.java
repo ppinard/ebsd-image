@@ -27,7 +27,6 @@ import rmlshared.gui.OkCancelDialog;
  * GUI creator for the <code>CleanEdge</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class CleanEdgeCreator implements OperationCreator {
 

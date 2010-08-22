@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.tsl.gui;
 
 import static java.lang.Math.toRadians;
@@ -22,9 +22,10 @@ import static java.lang.Math.toRadians;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import net.miginfocom.swing.MigLayout;
+
 import org.ebsdimage.core.EbsdMetadata;
 
-import net.miginfocom.swing.MigLayout;
 import ptpshared.core.math.Eulers;
 import ptpshared.core.math.Quaternion;
 import ptpshared.gui.WizardPage;
@@ -37,7 +38,6 @@ import rmlshared.gui.Panel;
  * Wizard page for the missing data.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class MissingDataWizardPage extends WizardPage {
 
@@ -51,8 +51,6 @@ public class MissingDataWizardPage extends WizardPage {
         }
     }
 
-
-
     /**
      * Listener to enable/disable the magnification field.
      */
@@ -62,8 +60,6 @@ public class MissingDataWizardPage extends WizardPage {
             magField.setEnabled(!magCBox.isSelected());
         }
     }
-
-
 
     /**
      * Listener to enable/disable the sample rotation fields.
@@ -78,8 +74,6 @@ public class MissingDataWizardPage extends WizardPage {
         }
     }
 
-
-
     /**
      * Listener to enable/disable the tilt angle field.
      */
@@ -89,8 +83,6 @@ public class MissingDataWizardPage extends WizardPage {
             tiltField.setEnabled(!tiltCBox.isSelected());
         }
     }
-
-
 
     /** Map key for the beam energy. */
     public static final String KEY_BEAM_ENERGY = "beamEnergy";
@@ -114,8 +106,6 @@ public class MissingDataWizardPage extends WizardPage {
     public static String getDescription() {
         return "Missing Data";
     }
-
-
 
     /** Beam energy field. */
     private DoubleField energyField;
@@ -269,8 +259,8 @@ public class MissingDataWizardPage extends WizardPage {
 
             try {
                 rotation =
-                        new Quaternion(new Eulers(toRadians(theta1Field
-                                .getValue()),
+                        new Quaternion(new Eulers(
+                                toRadians(theta1Field.getValue()),
                                 toRadians(theta2Field.getValue()),
                                 toRadians(theta3Field.getValue())));
             } catch (Exception e) {

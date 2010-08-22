@@ -14,38 +14,37 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io;
 
 import static org.junit.Assert.assertEquals;
-
 
 import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.TestCase;
-import org.ebsdimage.io.SmpInputStream;
-import org.ebsdimage.io.SmpOutputStream;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import rmlshared.io.FileUtil;
-
 import rmlimage.core.BinMap;
 import rmlimage.core.ByteMap;
+import rmlshared.io.FileUtil;
 
 public class SmpInputStreamTest extends TestCase {
 
     private File file;
+
     private SmpInputStream inStream;
+
 
 
     @Test
     public void getEndIndex() {
         assertEquals(1003, inStream.getEndIndex());
     }
-    
+
+
 
     @Test
     public void getMapCount() {
@@ -73,18 +72,21 @@ public class SmpInputStreamTest extends TestCase {
         assertEquals(256, inStream.getMapWidth());
     }
 
-    
+
+
     @Test
     public void getStartIndex() {
         assertEquals(1000, inStream.getStartIndex());
     }
 
 
+
     @Test
     // Read maps unordered
     public void readMap() throws IOException {
         ByteMap map = (ByteMap) inStream.readMap(1002);
-        ByteMap expected = (ByteMap)load("org/ebsdimage/io/Lena_Rotate180deg.bmp");
+        ByteMap expected =
+                (ByteMap) load("org/ebsdimage/io/Lena_Rotate180deg.bmp");
         map.assertEquals(expected);
 
         map = (ByteMap) inStream.readMap(1000);
@@ -107,7 +109,8 @@ public class SmpInputStreamTest extends TestCase {
     public void readMap2() throws IOException {
         ByteMap map = new ByteMap(256, 256);
         inStream.readMap(1002, map);
-        ByteMap expected = (ByteMap)load("org/ebsdimage/io/Lena_Rotate180deg.bmp");
+        ByteMap expected =
+                (ByteMap) load("org/ebsdimage/io/Lena_Rotate180deg.bmp");
         map.assertEquals(expected);
 
         inStream.readMap(1000, map);
@@ -150,11 +153,14 @@ public class SmpInputStreamTest extends TestCase {
         SmpOutputStream outStream = new SmpOutputStream(file, 1000);
         ByteMap lena = (ByteMap) load("org/ebsdimage/io/Lena.bmp");
         outStream.writeMap(lena);
-        ByteMap lena90 = (ByteMap) load("org/ebsdimage/io/Lena_Rotate90deg.bmp");
+        ByteMap lena90 =
+                (ByteMap) load("org/ebsdimage/io/Lena_Rotate90deg.bmp");
         outStream.writeMap(lena90);
-        ByteMap lena180 = (ByteMap)load("org/ebsdimage/io/Lena_Rotate180deg.bmp");
+        ByteMap lena180 =
+                (ByteMap) load("org/ebsdimage/io/Lena_Rotate180deg.bmp");
         outStream.writeMap(lena180);
-        ByteMap lena270 = (ByteMap)load("org/ebsdimage/io/Lena_Rotate270deg.bmp");
+        ByteMap lena270 =
+                (ByteMap) load("org/ebsdimage/io/Lena_Rotate270deg.bmp");
         outStream.writeMap(lena270);
         outStream.close();
 

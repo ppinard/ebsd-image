@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import static java.lang.Math.PI;
@@ -23,14 +23,11 @@ import static java.lang.Math.PI;
  * Factory to create the 7 crystal system's unit cell.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class UnitCellFactory {
 
     /**
-     * Returns a cubic unit cell.
-     * 
-     * * a = b = c * alpha = beta = gamma = pi/2
+     * Returns a cubic unit cell. * a = b = c * alpha = beta = gamma = pi/2
      * 
      * @param a
      *            unit cell parameter in angstroms
@@ -43,9 +40,8 @@ public class UnitCellFactory {
 
 
     /**
-     * Returns a hexagonal unit cell.
-     * 
-     * * a = b * alpha = beta = pi/2, gamma == 2pi/3
+     * Returns a hexagonal unit cell. * a = b * alpha = beta = pi/2, gamma ==
+     * 2pi/3
      * 
      * @param a
      *            unit cell parameter in angstroms
@@ -79,9 +75,8 @@ public class UnitCellFactory {
 
 
     /**
-     * Returns a orthorhombic unit cell.
-     * 
-     * * a != b != c * alpha = beta = gamma = pi/2
+     * Returns a orthorhombic unit cell. * a != b != c * alpha = beta = gamma =
+     * pi/2
      * 
      * @param a
      *            unit cell parameter in angstroms
@@ -98,9 +93,7 @@ public class UnitCellFactory {
 
 
     /**
-     * Returns a tetragonal unit cell.
-     * 
-     * * a = b * alpha = beta = gamma = pi/2
+     * Returns a tetragonal unit cell. * a = b * alpha = beta = gamma = pi/2
      * 
      * @param a
      *            unit cell parameter in angstroms
@@ -115,9 +108,7 @@ public class UnitCellFactory {
 
 
     /**
-     * Returns a triclinic unit cell.
-     * 
-     * * a != b != c * alpha != beta != gamma
+     * Returns a triclinic unit cell. * a != b != c * alpha != beta != gamma
      * 
      * @param a
      *            unit cell parameter in angstroms
@@ -141,9 +132,7 @@ public class UnitCellFactory {
 
 
     /**
-     * Returns a trigonal unit cell.
-     * 
-     * * a = b = c * alpha = beta = gamma
+     * Returns a trigonal unit cell. * a = b = c * alpha = beta = gamma
      * 
      * @param a
      *            unit cell parameter in angstroms

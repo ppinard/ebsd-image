@@ -23,7 +23,6 @@ import org.ebsdimage.core.exp.ops.detection.op.AutomaticStdDev;
  * Tags for <code>AutomaticStdDev</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class AutomaticStdDevXmlTags {
 

@@ -32,6 +32,7 @@ import crystallography.core.crystals.Silicon;
 public class IndexingOpMockTest {
 
     private IndexingOp op;
+
     private HoughPeak[] srcPeaks;
 
 

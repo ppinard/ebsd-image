@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp;
 
 import static java.lang.Math.toRadians;
@@ -26,10 +26,9 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashMap;
 
 import org.ebsdimage.core.Camera;
+import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.EbsdMetadata;
 import org.ebsdimage.core.PhasesMap;
-import org.ebsdimage.core.exp.ExpMMap;
-import org.ebsdimage.core.exp.ExpMetadata;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,11 +43,17 @@ import crystallography.core.crystals.Silicon;
 public class ExpMMapTest {
 
     private ExpMMap mmap;
+
     private ExpMetadata metadata;
+
     private RealMap q0Map;
+
     private RealMap q1Map;
+
     private RealMap q2Map;
+
     private RealMap q3Map;
+
     private PhasesMap phasesMap;
 
 
@@ -63,24 +68,24 @@ public class ExpMMapTest {
 
         q0Map = new RealMap(2, 2);
         q0Map.pixArray[0] = 1.0f;
-        mapList.put(ExpMMap.Q0, q0Map);
+        mapList.put(EbsdMMap.Q0, q0Map);
 
         q1Map = new RealMap(2, 2);
         q1Map.pixArray[1] = 1.0f;
-        mapList.put(ExpMMap.Q1, q1Map);
+        mapList.put(EbsdMMap.Q1, q1Map);
 
         q2Map = new RealMap(2, 2);
         q2Map.pixArray[2] = 1.0f;
-        mapList.put(ExpMMap.Q2, q2Map);
+        mapList.put(EbsdMMap.Q2, q2Map);
 
         q3Map = new RealMap(2, 2);
         q3Map.pixArray[3] = 1.0f;
-        mapList.put(ExpMMap.Q3, q3Map);
+        mapList.put(EbsdMMap.Q3, q3Map);
 
         phasesMap =
                 new PhasesMap(2, 2, new byte[] { 0, 1, 2, 1 }, new Crystal[] {
                         new Silicon(), new IronBCC() });
-        mapList.put(ExpMMap.PHASES, phasesMap);
+        mapList.put(EbsdMMap.PHASES, phasesMap);
 
         mmap = new ExpMMap(2, 2, mapList, metadata);
     }
@@ -139,11 +144,11 @@ public class ExpMMapTest {
     public void testExpMMapExceptionPhasesIncorrectType() {
         HashMap<String, Map> mapList = new HashMap<String, Map>();
 
-        mapList.put(ExpMMap.Q0, q0Map);
-        mapList.put(ExpMMap.Q1, q1Map);
-        mapList.put(ExpMMap.Q2, q2Map);
-        mapList.put(ExpMMap.Q3, q3Map);
-        mapList.put(ExpMMap.PHASES, new ByteMap(2, 2));
+        mapList.put(EbsdMMap.Q0, q0Map);
+        mapList.put(EbsdMMap.Q1, q1Map);
+        mapList.put(EbsdMMap.Q2, q2Map);
+        mapList.put(EbsdMMap.Q3, q3Map);
+        mapList.put(EbsdMMap.PHASES, new ByteMap(2, 2));
 
         mmap = new ExpMMap(2, 2, mapList, metadata);
     }
@@ -154,10 +159,10 @@ public class ExpMMapTest {
     public void testExpMMapExceptionPhasesMissing() {
         HashMap<String, Map> mapList = new HashMap<String, Map>();
 
-        mapList.put(ExpMMap.Q0, q0Map);
-        mapList.put(ExpMMap.Q1, q1Map);
-        mapList.put(ExpMMap.Q2, q2Map);
-        mapList.put(ExpMMap.Q3, q3Map);
+        mapList.put(EbsdMMap.Q0, q0Map);
+        mapList.put(EbsdMMap.Q1, q1Map);
+        mapList.put(EbsdMMap.Q2, q2Map);
+        mapList.put(EbsdMMap.Q3, q3Map);
 
         mmap = new ExpMMap(2, 2, mapList, metadata);
     }
@@ -168,11 +173,11 @@ public class ExpMMapTest {
     public void testExpMMapExceptionQ0IncorrectType() {
         HashMap<String, Map> mapList = new HashMap<String, Map>();
 
-        mapList.put(ExpMMap.Q0, new ByteMap(2, 2));
-        mapList.put(ExpMMap.Q1, q1Map);
-        mapList.put(ExpMMap.Q2, q2Map);
-        mapList.put(ExpMMap.Q3, q3Map);
-        mapList.put(ExpMMap.PHASES, phasesMap);
+        mapList.put(EbsdMMap.Q0, new ByteMap(2, 2));
+        mapList.put(EbsdMMap.Q1, q1Map);
+        mapList.put(EbsdMMap.Q2, q2Map);
+        mapList.put(EbsdMMap.Q3, q3Map);
+        mapList.put(EbsdMMap.PHASES, phasesMap);
 
         mmap = new ExpMMap(2, 2, mapList, metadata);
     }
@@ -183,10 +188,10 @@ public class ExpMMapTest {
     public void testExpMMapExceptionQ0Missing() {
         HashMap<String, Map> mapList = new HashMap<String, Map>();
 
-        mapList.put(ExpMMap.Q1, q1Map);
-        mapList.put(ExpMMap.Q2, q2Map);
-        mapList.put(ExpMMap.Q3, q3Map);
-        mapList.put(ExpMMap.PHASES, phasesMap);
+        mapList.put(EbsdMMap.Q1, q1Map);
+        mapList.put(EbsdMMap.Q2, q2Map);
+        mapList.put(EbsdMMap.Q3, q3Map);
+        mapList.put(EbsdMMap.PHASES, phasesMap);
 
         mmap = new ExpMMap(2, 2, mapList, metadata);
     }
@@ -197,11 +202,11 @@ public class ExpMMapTest {
     public void testExpMMapExceptionQ1IncorrectType() {
         HashMap<String, Map> mapList = new HashMap<String, Map>();
 
-        mapList.put(ExpMMap.Q0, q0Map);
-        mapList.put(ExpMMap.Q1, new ByteMap(2, 2));
-        mapList.put(ExpMMap.Q2, q2Map);
-        mapList.put(ExpMMap.Q3, q3Map);
-        mapList.put(ExpMMap.PHASES, phasesMap);
+        mapList.put(EbsdMMap.Q0, q0Map);
+        mapList.put(EbsdMMap.Q1, new ByteMap(2, 2));
+        mapList.put(EbsdMMap.Q2, q2Map);
+        mapList.put(EbsdMMap.Q3, q3Map);
+        mapList.put(EbsdMMap.PHASES, phasesMap);
 
         mmap = new ExpMMap(2, 2, mapList, metadata);
     }
@@ -212,10 +217,10 @@ public class ExpMMapTest {
     public void testExpMMapExceptionQ1Missing() {
         HashMap<String, Map> mapList = new HashMap<String, Map>();
 
-        mapList.put(ExpMMap.Q0, q0Map);
-        mapList.put(ExpMMap.Q2, q2Map);
-        mapList.put(ExpMMap.Q3, q3Map);
-        mapList.put(ExpMMap.PHASES, phasesMap);
+        mapList.put(EbsdMMap.Q0, q0Map);
+        mapList.put(EbsdMMap.Q2, q2Map);
+        mapList.put(EbsdMMap.Q3, q3Map);
+        mapList.put(EbsdMMap.PHASES, phasesMap);
 
         mmap = new ExpMMap(2, 2, mapList, metadata);
     }
@@ -226,11 +231,11 @@ public class ExpMMapTest {
     public void testExpMMapExceptionQ2IncorrectType() {
         HashMap<String, Map> mapList = new HashMap<String, Map>();
 
-        mapList.put(ExpMMap.Q0, q0Map);
-        mapList.put(ExpMMap.Q1, q1Map);
-        mapList.put(ExpMMap.Q2, new ByteMap(2, 2));
-        mapList.put(ExpMMap.Q3, q3Map);
-        mapList.put(ExpMMap.PHASES, phasesMap);
+        mapList.put(EbsdMMap.Q0, q0Map);
+        mapList.put(EbsdMMap.Q1, q1Map);
+        mapList.put(EbsdMMap.Q2, new ByteMap(2, 2));
+        mapList.put(EbsdMMap.Q3, q3Map);
+        mapList.put(EbsdMMap.PHASES, phasesMap);
 
         mmap = new ExpMMap(2, 2, mapList, metadata);
     }
@@ -241,10 +246,10 @@ public class ExpMMapTest {
     public void testExpMMapExceptionQ2Missing() {
         HashMap<String, Map> mapList = new HashMap<String, Map>();
 
-        mapList.put(ExpMMap.Q0, q0Map);
-        mapList.put(ExpMMap.Q1, q1Map);
-        mapList.put(ExpMMap.Q3, q3Map);
-        mapList.put(ExpMMap.PHASES, phasesMap);
+        mapList.put(EbsdMMap.Q0, q0Map);
+        mapList.put(EbsdMMap.Q1, q1Map);
+        mapList.put(EbsdMMap.Q3, q3Map);
+        mapList.put(EbsdMMap.PHASES, phasesMap);
 
         mmap = new ExpMMap(2, 2, mapList, metadata);
     }
@@ -255,11 +260,11 @@ public class ExpMMapTest {
     public void testExpMMapExceptionQ3IncorrectType() {
         HashMap<String, Map> mapList = new HashMap<String, Map>();
 
-        mapList.put(ExpMMap.Q0, q0Map);
-        mapList.put(ExpMMap.Q1, q1Map);
-        mapList.put(ExpMMap.Q2, q2Map);
-        mapList.put(ExpMMap.Q3, new ByteMap(2, 2));
-        mapList.put(ExpMMap.PHASES, phasesMap);
+        mapList.put(EbsdMMap.Q0, q0Map);
+        mapList.put(EbsdMMap.Q1, q1Map);
+        mapList.put(EbsdMMap.Q2, q2Map);
+        mapList.put(EbsdMMap.Q3, new ByteMap(2, 2));
+        mapList.put(EbsdMMap.PHASES, phasesMap);
 
         mmap = new ExpMMap(2, 2, mapList, metadata);
     }
@@ -270,10 +275,10 @@ public class ExpMMapTest {
     public void testExpMMapExceptionQ3Missing() {
         HashMap<String, Map> mapList = new HashMap<String, Map>();
 
-        mapList.put(ExpMMap.Q0, q0Map);
-        mapList.put(ExpMMap.Q1, q1Map);
-        mapList.put(ExpMMap.Q2, q2Map);
-        mapList.put(ExpMMap.PHASES, phasesMap);
+        mapList.put(EbsdMMap.Q0, q0Map);
+        mapList.put(EbsdMMap.Q1, q1Map);
+        mapList.put(EbsdMMap.Q2, q2Map);
+        mapList.put(EbsdMMap.PHASES, phasesMap);
 
         mmap = new ExpMMap(2, 2, mapList, metadata);
     }
@@ -429,6 +434,6 @@ public class ExpMMapTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testRemoveStringException() {
-        mmap.remove(ExpMMap.Q0);
+        mmap.remove(EbsdMMap.Q0);
     }
 }

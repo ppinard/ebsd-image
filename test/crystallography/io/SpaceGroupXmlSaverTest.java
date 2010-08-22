@@ -28,7 +28,7 @@ import org.junit.Test;
 import ptpshared.utility.xml.JDomUtil;
 import ptpshared.utility.xml.ObjectXml;
 import crystallography.core.SpaceGroup;
-import crystallography.core.SpaceGroups;
+import crystallography.core.SpaceGroups1;
 
 public class SpaceGroupXmlSaverTest {
 
@@ -38,7 +38,7 @@ public class SpaceGroupXmlSaverTest {
 
     @Before
     public void setUp() throws Exception {
-        sg = SpaceGroups.SG1;
+        sg = SpaceGroups1.SG1;
     }
 
 

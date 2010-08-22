@@ -14,14 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.utility.sql;
 
 /**
  * Factory to create SQL command of various types.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class ColumnFactory {
 
@@ -33,12 +32,11 @@ public class ColumnFactory {
      *            name of the column
      * @param defaultValue
      *            default value
-     * 
      * @return BOOLEAN column
      */
     public static Column columnBoolean(String name, boolean defaultValue) {
-        return new Column(ColumnType.BOOLEAN, name, false, false, true, Boolean
-                .toString(defaultValue).toUpperCase(), false, false);
+        return new Column(ColumnType.BOOLEAN, name, false, false, true,
+                Boolean.toString(defaultValue).toUpperCase(), false, false);
     }
 
 
@@ -55,7 +53,6 @@ public class ColumnFactory {
      *            name of the column
      * @param notNull
      *            if <code>true</code>, force that the column must not be null
-     * 
      * @return DATETIME column
      */
     public static Column columnDateTime(String name, boolean notNull) {
@@ -79,7 +76,6 @@ public class ColumnFactory {
      *            if <code>true</code>, force that the column must not be null
      * @param defaultValue
      *            default value
-     * 
      * @return DATETIME column
      */
     public static Column columnDateTime(String name, boolean notNull,
@@ -107,7 +103,6 @@ public class ColumnFactory {
      *            if <code>true</code>, show the zeros preceding a number
      * @param notNull
      *            if <code>true</code>, force that the column must not be null
-     * 
      * @return FLOAT column
      */
     public static Column columnFloat(String name, boolean unsigned,
@@ -137,7 +132,6 @@ public class ColumnFactory {
      *            if <code>true</code>, force that the column must not be null
      * @param defaultValue
      *            default value
-     * 
      * @return FLOAT column
      */
     public static Column columnFloat(String name, boolean unsigned,
@@ -166,7 +160,6 @@ public class ColumnFactory {
      *            if <code>true</code>, make the column a primary key
      * @param autoIncrement
      *            if <code>true</code>, auto increment the value of the column
-     * 
      * @return INTEGER column
      */
     public static Column columnInteger(String name, boolean unsigned,
@@ -198,7 +191,6 @@ public class ColumnFactory {
      *            if <code>true</code>, make the column a primary key
      * @param autoIncrement
      *            if <code>true</code>, auto increment the value of the column
-     * 
      * @return INTEGER column
      */
     public static Column columnInteger(String name, boolean unsigned,
@@ -222,7 +214,6 @@ public class ColumnFactory {
      *            name of the column
      * @param notNull
      *            if <code>true</code>, force that the column must not be null
-     * 
      * @return TEXT column
      */
     public static Column columnText(String name, boolean notNull) {
@@ -246,7 +237,6 @@ public class ColumnFactory {
      *            if <code>true</code>, force that the column must not be null
      * @param defaultValue
      *            default value
-     * 
      * @return TEXT column
      */
     public static Column columnText(String name, boolean notNull,
@@ -271,7 +261,6 @@ public class ColumnFactory {
      *            if <code>true</code>, make the column a primary key
      * @param autoIncrement
      *            if <code>true</code>, auto increment the value of the column
-     * 
      * @return TINYINT column
      */
     public static Column columnTinyInt(String name, boolean notNull,
@@ -298,7 +287,6 @@ public class ColumnFactory {
      *            if <code>true</code>, make the column a primary key
      * @param autoIncrement
      *            if <code>true</code>, auto increment the value of the column
-     * 
      * @return TINYINT column
      */
     public static Column columnTinyInt(String name, boolean notNull,

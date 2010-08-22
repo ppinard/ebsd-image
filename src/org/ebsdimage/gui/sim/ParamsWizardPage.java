@@ -1,3 +1,20 @@
+/*
+ * EBSD-Image
+ * Copyright (C) 2010 Philippe T. Pinard
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.ebsdimage.gui.sim;
 
 import java.awt.Dimension;
@@ -37,7 +54,7 @@ public class ParamsWizardPage extends WizardPage {
     /**
      * Dialog to create a new camera.
      * 
-     * @author ppinard
+     * @author Philippe T. Pinard
      */
     private class CameraDialog extends OkCancelDialog {
 
@@ -98,7 +115,7 @@ public class ParamsWizardPage extends WizardPage {
     /**
      * Panel for the camera parameters.
      * 
-     * @author ppinard
+     * @author Philippe T. Pinard
      */
     private class CameraPanel extends ParamsPanel {
 
@@ -168,7 +185,7 @@ public class ParamsWizardPage extends WizardPage {
     /**
      * Dialog to create a new energy.
      * 
-     * @author ppinard
+     * @author Philippe T. Pinard
      */
     private class EnergyDialog extends OkCancelDialog {
 
@@ -210,7 +227,7 @@ public class ParamsWizardPage extends WizardPage {
     /**
      * Panel for the energy parameters.
      * 
-     * @author ppinard
+     * @author Philippe T. Pinard
      */
     private class EnergyPanel extends ParamsPanel {
 
@@ -280,7 +297,7 @@ public class ParamsWizardPage extends WizardPage {
     /**
      * Panel for the parameters.
      * 
-     * @author ppinard
+     * @author Philippe T. Pinard
      */
     private abstract class ParamsPanel extends JPanel {
 
@@ -302,7 +319,7 @@ public class ParamsWizardPage extends WizardPage {
         /**
          * Removes a parameter from list.
          * 
-         * @author ppinard
+         * @author Philippe T. Pinard
          */
         private class Remove extends PlugIn {
             @Override
@@ -403,14 +420,14 @@ public class ParamsWizardPage extends WizardPage {
     /**
      * Panel for the pattern simulation operation.
      * 
-     * @author ppinard
+     * @author Philippe T. Pinard
      */
     private class PatternSimOpPanel extends JPanel {
 
         /**
          * Action to select an pattern simulation operation.
          * 
-         * @author ppinard
+         * @author Philippe T. Pinard
          */
         private class Select extends PlugIn {
 
@@ -495,7 +512,7 @@ public class ParamsWizardPage extends WizardPage {
     /**
      * Dialog to create random rotations.
      * 
-     * @author ppinard
+     * @author Philippe T. Pinard
      */
     private class RandomRotationsDialog extends OkCancelDialog {
         /** Field for the number of random rotations to create. */
@@ -543,7 +560,7 @@ public class ParamsWizardPage extends WizardPage {
     /**
      * Dialog to create a new rotation.
      * 
-     * @author ppinard
+     * @author Philippe T. Pinard
      */
     private class RotationDialog extends OkCancelDialog {
 
@@ -612,7 +629,7 @@ public class ParamsWizardPage extends WizardPage {
     /**
      * Panel for the rotation parameters.
      * 
-     * @author ppinard
+     * @author Philippe T. Pinard
      */
     private class RotationPanel extends ParamsPanel {
 

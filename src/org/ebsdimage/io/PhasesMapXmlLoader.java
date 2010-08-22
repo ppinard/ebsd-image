@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io;
 
 import static org.ebsdimage.io.PhasesMapXmlTags.ATTR_ID;
@@ -33,7 +33,6 @@ import crystallography.io.CrystalXmlLoader;
  * XML loader for the phases of a <code>PhasesMap</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PhasesMapXmlLoader {
 

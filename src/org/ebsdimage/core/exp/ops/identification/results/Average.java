@@ -34,10 +34,10 @@ public class Average extends IdentificationResultsOps {
     /** Maximum number of peaks to consider in the calculations. */
     public final int max;
 
-
-
     /** Default value of the maximum number of peaks. */
     public static final int DEFAULT_MAX = -1;
+
+
 
     /**
      * Creates a new <code>Average</code> result operation where an unlimited
@@ -46,6 +46,8 @@ public class Average extends IdentificationResultsOps {
     public Average() {
         this(DEFAULT_MAX);
     }
+
+
 
     /**
      * Creates a new <code>Average</code> result operation.

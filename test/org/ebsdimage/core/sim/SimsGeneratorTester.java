@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.sim;
 
 import static org.junit.Assert.assertEquals;
@@ -48,20 +48,14 @@ public abstract class SimsGeneratorTester {
 
         OutputOpsMock op;
         op =
-                (OutputOpsMock) generator
-                        .getCombinations()
-                        .get(0)
-                        .get(
-                                "0001:"
-                                        + "org.ebsdimage.core.sim.ops.output.OutputOpsMock");
+                (OutputOpsMock) generator.getCombinations().get(0).get(
+                        "0001:"
+                                + "org.ebsdimage.core.sim.ops.output.OutputOpsMock");
         assertEquals("OutputOpsMock []", op.toString());
         op =
-                (OutputOpsMock) generator
-                        .getCombinations()
-                        .get(1)
-                        .get(
-                                "0001:"
-                                        + "org.ebsdimage.core.sim.ops.output.OutputOpsMock");
+                (OutputOpsMock) generator.getCombinations().get(1).get(
+                        "0001:"
+                                + "org.ebsdimage.core.sim.ops.output.OutputOpsMock");
         assertEquals("OutputOpsMock []", op.toString());
     }
 

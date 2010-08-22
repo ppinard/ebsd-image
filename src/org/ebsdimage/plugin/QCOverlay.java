@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.plugin;
 
 import static org.ebsdimage.core.HoughMap.DELTA_R;
@@ -34,6 +34,7 @@ import rmlimage.plugin.PlugIn;
 import rmlshared.gui.ColumnPanel;
 import rmlshared.gui.ComboBox;
 import rmlshared.gui.IntField;
+import rmlshared.gui.OkCancelDialog;
 
 /**
  * Plug-in to overlay the peaks on the pattern map. From a <code>BinMap</code>
@@ -41,7 +42,6 @@ import rmlshared.gui.IntField;
  * lines on the pattern map.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class QCOverlay extends PlugIn {
 
@@ -49,7 +49,6 @@ public class QCOverlay extends PlugIn {
      * Dialog to select the pattern map and the color of the overlay lines.
      * 
      * @author Marin Lagac&eacute;
-     * 
      */
     private class Dialog extends BasicDialog {
         /** Combo box to select the pattern map. */
@@ -163,7 +162,7 @@ public class QCOverlay extends PlugIn {
         }
 
         Dialog dialog = new Dialog();
-        if (dialog.show() != Dialog.OK)
+        if (dialog.show() != OkCancelDialog.OK)
             return false;
 
         ByteMap byteMap = dialog.getByteMap();

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.sim;
 
 import static org.ebsdimage.io.sim.SimsGeneratorXmlTags.TAG_NAME;
@@ -25,7 +25,6 @@ import org.ebsdimage.core.sim.ops.output.OutputOpsMock;
 import org.ebsdimage.io.sim.ops.output.OutputOps2MockXmlSaver;
 import org.ebsdimage.io.sim.ops.output.OutputOpsMockXmlSaver;
 import org.jdom.Element;
-
 
 public abstract class SimsGeneratorXmlTester extends SimsGeneratorTester {
 

@@ -14,18 +14,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.identification.results;
 
 import static org.ebsdimage.io.exp.ops.identification.results.ImageQualityIncaXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
 import org.ebsdimage.core.exp.ops.identification.results.ImageQualityInca;
-import org.ebsdimage.io.exp.ops.identification.results.ImageQualityIncaXmlLoader;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
-
 
 public class ImageQualityIncaXmlLoaderTest {
 

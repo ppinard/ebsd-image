@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp;
 
 import java.io.IOException;
@@ -33,13 +33,11 @@ import rmlshared.thread.PlugIn;
  * operation.
  * 
  * @author Marin Lagac&eacute;
- * 
  */
 public class SingleChoicePanel extends OperationChoicePanel {
 
     /**
      * Action to add an operation. Only one operation can be added.
-     * 
      */
     private class Add extends PlugIn {
         @Override
@@ -67,13 +65,10 @@ public class SingleChoicePanel extends OperationChoicePanel {
 
     }
 
-
-
     /**
      * Removes all operations from the selected list of operations.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class Clear extends PlugIn {
         @Override
@@ -85,13 +80,10 @@ public class SingleChoicePanel extends OperationChoicePanel {
         }
     }
 
-
-
     /**
      * Removes an operation from the selected list of operations.
      * 
      * @author Marin Lagac&eacute;
-     * 
      */
     private class Remove extends PlugIn {
         @Override
@@ -112,7 +104,6 @@ public class SingleChoicePanel extends OperationChoicePanel {
      *            title of the panel
      * @param packageName
      *            name of the package for the operations
-     * 
      * @throws IOException
      *             if an error occurs while listing the operations
      */
@@ -165,8 +156,7 @@ public class SingleChoicePanel extends OperationChoicePanel {
     @Override
     protected Button getRemoveButton() {
         Button removeButton = new Button(REMOVE_ICON);
-        removeButton
-                .setToolTipText("Remove selected operation from current list");
+        removeButton.setToolTipText("Remove selected operation from current list");
         removeButton.setPlugIn(new Remove());
         return removeButton;
     }

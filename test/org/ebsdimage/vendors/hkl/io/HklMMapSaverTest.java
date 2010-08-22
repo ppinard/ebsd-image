@@ -33,8 +33,8 @@ import crystallography.io.CrystalLoader;
 
 public class HklMMapSaverTest extends HklMMapTester {
 
-    private static File zipFile =
-            new File(FileUtil.getTempDirFile(), "Project19.zip");
+    private static File zipFile = new File(FileUtil.getTempDirFile(),
+            "Project19.zip");
 
 
 
@@ -44,8 +44,7 @@ public class HklMMapSaverTest extends HklMMapTester {
         File file = getFile("org/ebsdimage/vendors/hkl/testdata/Project19.ctf");
 
         Crystal copperPhase =
-                new CrystalLoader()
-                        .load(getFile("org/ebsdimage/vendors/hkl/testdata/Copper.xml"));
+                new CrystalLoader().load(getFile("org/ebsdimage/vendors/hkl/testdata/Copper.xml"));
 
         HklMMap tempMMap =
                 new CtfLoader().load(file,

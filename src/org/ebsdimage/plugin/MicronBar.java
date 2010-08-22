@@ -24,17 +24,13 @@ import rmlimage.core.Map;
 import rmlimage.gui.BasicDialog;
 import rmlimage.gui.PlugIn;
 import rmlimage.module.multi.core.BasicMultiMap;
-import rmlshared.gui.ColumnPanel;
-import rmlshared.gui.ComboBox;
-import rmlshared.gui.IntField;
-import rmlshared.gui.Panel;
+import rmlshared.gui.*;
 
 /**
  * Plug-in to paste a micron bar on all the maps inside an <code>EbsdMMap</code>
  * .
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class MicronBar extends PlugIn {
 
@@ -42,7 +38,6 @@ public class MicronBar extends PlugIn {
      * Dialog to select an EBSD multimap from those loaded in the GUI.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class Dialog extends BasicDialog {
 
@@ -121,7 +116,7 @@ public class MicronBar extends PlugIn {
             return null;
 
         Dialog dialog = new Dialog();
-        if (dialog.show() != Dialog.OK)
+        if (dialog.show() != OkCancelDialog.OK)
             return null;
 
         EbsdMMap mmap = dialog.getSelectedMap();

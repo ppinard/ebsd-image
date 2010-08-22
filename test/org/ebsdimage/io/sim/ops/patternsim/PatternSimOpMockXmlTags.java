@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.sim.ops.patternsim;
 
 import org.ebsdimage.core.sim.ops.patternsim.PatternSimOpMock;
@@ -22,6 +22,6 @@ import org.ebsdimage.core.sim.ops.patternsim.PatternSimOpMock;
 public class PatternSimOpMockXmlTags {
 
     /** XML tag name for PatternSimOpMock */
-    public static final String TAG_NAME = PatternSimOpMock.class
-            .getSimpleName();
+    public static final String TAG_NAME =
+            PatternSimOpMock.class.getSimpleName();
 }

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.tsl.io;
 
 import static org.ebsdimage.vendors.tsl.io.TslMetadataXmlTags.TAG_NAME;
@@ -29,7 +29,6 @@ import ptpshared.utility.xml.ObjectXml;
  * XML saver for <code>TslMetadata</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class TslMetadataXmlSaver extends EbsdMetadataXmlSaver {
     /**

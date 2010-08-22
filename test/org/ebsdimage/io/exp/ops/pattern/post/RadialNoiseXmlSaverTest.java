@@ -14,18 +14,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.post;
 
 import static org.ebsdimage.io.exp.ops.pattern.post.RadialNoiseXmlTags.*;
 import static org.junit.Assert.assertEquals;
 
 import org.ebsdimage.core.exp.ops.pattern.post.RadialNoise;
-import org.ebsdimage.io.exp.ops.pattern.post.RadialNoiseXmlSaver;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
-
 
 import ptpshared.utility.xml.JDomUtil;
 
@@ -49,14 +47,16 @@ public class RadialNoiseXmlSaverTest {
         assertEquals(TAG_NAME, element.getName());
         assertEquals(2, JDomUtil.getIntegerFromAttribute(element, ATTR_X));
         assertEquals(3, JDomUtil.getIntegerFromAttribute(element, ATTR_Y));
-        assertEquals(4.0, JDomUtil
-                .getDoubleFromAttribute(element, ATTR_STDDEVX), 1e-7);
-        assertEquals(5.0, JDomUtil
-                .getDoubleFromAttribute(element, ATTR_STDDEVY), 1e-7);
+        assertEquals(4.0,
+                JDomUtil.getDoubleFromAttribute(element, ATTR_STDDEVX), 1e-7);
+        assertEquals(5.0,
+                JDomUtil.getDoubleFromAttribute(element, ATTR_STDDEVY), 1e-7);
         assertEquals(6.0, JDomUtil.getDoubleFromAttribute(element,
                 ATTR_INITIALNOISESTDDEV), 1e-7);
-        assertEquals(7.0, JDomUtil.getDoubleFromAttribute(element,
-                ATTR_FINALNOISESTDDEV), 1e-7);
+        assertEquals(
+                7.0,
+                JDomUtil.getDoubleFromAttribute(element, ATTR_FINALNOISESTDDEV),
+                1e-7);
     }
 
 }

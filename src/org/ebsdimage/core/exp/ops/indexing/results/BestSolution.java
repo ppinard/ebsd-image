@@ -30,7 +30,6 @@ import crystallography.core.Crystal;
  * Operation to save the best solution.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class BestSolution extends IndexingResultsOps {
 

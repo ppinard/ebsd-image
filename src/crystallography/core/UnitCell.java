@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import static java.lang.Math.PI;
@@ -39,7 +39,6 @@ import ptpshared.utility.xml.ObjectXml;
  * <li>the metrical matrix</li>
  * </ul>
  * All these results can be access via public final variables.
- * 
  * <b>References:</b>
  * <ul>
  * <li>Mathematical Crystallography</li>
@@ -203,7 +202,6 @@ public class UnitCell implements ObjectXml {
      * 
      * @param obj
      *            other <code>UnitCell</code> to check equality
-     * 
      * @return whether the two <code>UnitCell</code> are equal
      */
     @Override
@@ -218,18 +216,15 @@ public class UnitCell implements ObjectXml {
         UnitCell other = (UnitCell) obj;
         if (Double.doubleToLongBits(a) != Double.doubleToLongBits(other.a))
             return false;
-        if (Double.doubleToLongBits(alpha) != Double
-                .doubleToLongBits(other.alpha))
+        if (Double.doubleToLongBits(alpha) != Double.doubleToLongBits(other.alpha))
             return false;
         if (Double.doubleToLongBits(b) != Double.doubleToLongBits(other.b))
             return false;
-        if (Double.doubleToLongBits(beta) != Double
-                .doubleToLongBits(other.beta))
+        if (Double.doubleToLongBits(beta) != Double.doubleToLongBits(other.beta))
             return false;
         if (Double.doubleToLongBits(c) != Double.doubleToLongBits(other.c))
             return false;
-        if (Double.doubleToLongBits(gamma) != Double
-                .doubleToLongBits(other.gamma))
+        if (Double.doubleToLongBits(gamma) != Double.doubleToLongBits(other.gamma))
             return false;
 
         return true;
@@ -246,7 +241,6 @@ public class UnitCell implements ObjectXml {
      * @param precision
      *            level of precision
      * @return whether the two <code>UnitCell</code> are almost equal
-     * 
      * @throws IllegalArgumentException
      *             if the precision is less than 0.0
      * @throws IllegalArgumentException

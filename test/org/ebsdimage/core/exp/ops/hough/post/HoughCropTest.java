@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.hough.post;
 
 import static org.junit.Assert.assertEquals;
@@ -69,11 +69,9 @@ public class HoughCropTest {
     @Test
     public void testProcess() throws IOException {
         HoughMap srcMap =
-                new HoughMapLoader().load(FileUtil
-                        .getFile("org/ebsdimage/testdata/houghmap.bmp"));
+                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
         HoughMap expectedMap =
-                new HoughMapLoader().load(FileUtil
-                        .getFile("org/ebsdimage/testdata/hough_crop_op.bmp"));
+                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/hough_crop_op.bmp"));
 
         HoughMap destMap = houghCrop.process(null, srcMap);
 

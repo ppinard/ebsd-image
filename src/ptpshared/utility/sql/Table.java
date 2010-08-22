@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.utility.sql;
 
 import java.util.ArrayList;
@@ -25,7 +25,6 @@ import java.util.ArrayList;
  * command to create this table.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Table {
 
@@ -70,7 +69,6 @@ public class Table {
      * 
      * @param column
      *            a <code>Column</code>
-     * 
      * @return <code>true</code> if the column exists
      */
     public boolean existsColumn(Column column) {
@@ -84,7 +82,6 @@ public class Table {
      * 
      * @param columnName
      *            name of the column
-     * 
      * @return <code>true</code> if the column exists
      */
     public boolean existsColumn(String columnName) {
@@ -103,7 +100,6 @@ public class Table {
      * @param columnName
      *            name of the column
      * @return a <code>Column</code>
-     * 
      * @throws IllegalArgumentException
      *             if the column doesn't exist
      */

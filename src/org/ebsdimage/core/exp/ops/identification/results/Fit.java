@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.identification.results;
 
 import java.io.File;
@@ -43,8 +43,6 @@ public class Fit extends IdentificationResultsOps {
     public String toString() {
         return "Fit [filepath=" + filepath + "]";
     }
-
-
 
     /** File path of the XML file containing the theoretical Hough peaks. */
     public final File filepath;
@@ -85,7 +83,6 @@ public class Fit extends IdentificationResultsOps {
      * @param peaks
      *            experimental Hough peaks
      * @return one entry with the fit value
-     * 
      * @see HoughMath#fit(HoughPeak[], HoughPeak[])
      */
     @Override

@@ -26,7 +26,6 @@ import org.ebsdimage.io.FileUtil;
  * Utilities used to get operations for a <code>Run</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class RunUtil {
     /**

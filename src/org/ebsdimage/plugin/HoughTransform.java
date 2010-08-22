@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.plugin;
 
 import static java.lang.Math.toRadians;
@@ -30,6 +30,7 @@ import rmlimage.gui.BasicDialog;
 import rmlimage.plugin.PlugIn;
 import rmlshared.gui.ColumnPanel;
 import rmlshared.gui.DoubleField;
+import rmlshared.gui.OkCancelDialog;
 import rmlshared.ui.Monitorable;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 
@@ -37,7 +38,6 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
  * Plug-in for performing the Hough transform.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HoughTransform extends PlugIn implements Monitorable {
 
@@ -45,7 +45,6 @@ public class HoughTransform extends PlugIn implements Monitorable {
      * Dialog to specify the resolution of the Hough transform.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class Dialog extends BasicDialog {
 
@@ -75,10 +74,8 @@ public class HoughTransform extends PlugIn implements Monitorable {
             /*
              * deltaR = new DoubleField("\u2206r", 1); deltaR.setRange(0.1,
              * 100); deltaR.setIncrementalStep(0.5); deltaR.setDecimalCount(1);
-             * panel.add("\u2206r : ", deltaR); panel.add("pix");
-             * 
-             * forceSquared = new CheckBox();
-             * forceSquared.setName("Force squared");
+             * panel.add("\u2206r : ", deltaR); panel.add("pix"); forceSquared =
+             * new CheckBox(); forceSquared.setName("Force squared");
              * //showMapsCBox.setSelected(true); panel.add(forceSquared);
              * panel.add("Force squared");
              */
@@ -111,25 +108,14 @@ public class HoughTransform extends PlugIn implements Monitorable {
          */
         /*
          * private class Listener implements FieldListener { public void
-         * decrementPerformed(Field source);
-         * 
-         * public void enterPressed(Field source);
-         * 
-         * public void focusGained(Field source) { }
-         * 
-         * public void focusLost(Field source);
-         * 
-         * public void incrementPerformed(Field source);
-         * 
-         * private void refresh(Field source) { if (source == deltaTheta) {
-         * double dTheta = deltaTheta.getValue(); double width =
-         * HoughMap.calculateWidth(thetaMin, thetaMax, dTheta);
-         * 
-         * }
+         * decrementPerformed(Field source); public void enterPressed(Field
+         * source); public void focusGained(Field source) { } public void
+         * focusLost(Field source); public void incrementPerformed(Field
+         * source); private void refresh(Field source) { if (source ==
+         * deltaTheta) { double dTheta = deltaTheta.getValue(); double width =
+         * HoughMap.calculateWidth(thetaMin, thetaMax, dTheta); }
          */
     }
-
-
 
     /** Transform operation. */
     private Transform transform; // For progress monitoring
@@ -163,7 +149,7 @@ public class HoughTransform extends PlugIn implements Monitorable {
         ByteMap byteMap = (ByteMap) map;
 
         Dialog dialog = new Dialog();
-        if (dialog.show() == Dialog.CANCEL)
+        if (dialog.show() == OkCancelDialog.CANCEL)
             return null;
 
         double deltaTheta = dialog.getDeltaTheta();

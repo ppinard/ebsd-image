@@ -24,6 +24,7 @@ import static org.ebsdimage.io.sim.ops.patternsim.PatternSimOpXmlTags.ATTR_SCATT
 import static org.ebsdimage.io.sim.ops.patternsim.PatternSimOpXmlTags.ATTR_WIDTH;
 
 import org.ebsdimage.core.sim.ops.patternsim.PatternBandCenter;
+import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
 import org.jdom.Element;
 import org.jdom.IllegalNameException;
 
@@ -62,17 +63,17 @@ public class PatternBandCenterXmlLoader implements ObjectXmlLoader {
 
         int width =
                 JDomUtil.getIntegerFromAttribute(element, ATTR_WIDTH,
-                        PatternBandCenter.DEFAULT_WIDTH);
+                        PatternSimOp.DEFAULT_WIDTH);
         int height =
                 JDomUtil.getIntegerFromAttribute(element, ATTR_HEIGHT,
-                        PatternBandCenter.DEFAULT_HEIGHT);
+                        PatternSimOp.DEFAULT_HEIGHT);
         int maxIndex =
                 JDomUtil.getIntegerFromAttribute(element, ATTR_MAXINDEX,
-                        PatternBandCenter.DEFAULT_MAX_INDEX);
+                        PatternSimOp.DEFAULT_MAX_INDEX);
         ScatteringFactorsEnum scatterType =
                 ScatteringFactorsEnum.valueOf(JDomUtil.getStringFromAttributeDefault(
                         element, ATTR_SCATTER_TYPE,
-                        PatternBandCenter.DEFAULT_SCATTER_TYPE.toString()));
+                        PatternSimOp.DEFAULT_SCATTER_TYPE.toString()));
 
         return new PatternBandCenter(width, height, maxIndex, scatterType);
     }

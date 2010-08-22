@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.results;
 
 import org.ebsdimage.core.exp.ops.pattern.results.StandardDeviation;
@@ -23,11 +23,10 @@ import org.ebsdimage.core.exp.ops.pattern.results.StandardDeviation;
  * Tags for <code>StandardDeviation</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class StandardDeviationXmlTags {
 
     /** XML tag name for <code>StandardDeviation</code>. */
-    public static final String TAG_NAME = StandardDeviation.class
-            .getSimpleName();
+    public static final String TAG_NAME =
+            StandardDeviation.class.getSimpleName();
 }

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.detection.results;
 
 import org.ebsdimage.core.exp.ops.detection.results.DetectionResultsOpsMock;
@@ -22,6 +22,6 @@ import org.ebsdimage.core.exp.ops.detection.results.DetectionResultsOpsMock;
 public class DetectionResultsOpsMockXmlTags {
 
     /** XML tag name for DetectionResultsOpsMock */
-    public static final String TAG_NAME = DetectionResultsOpsMock.class
-            .getSimpleName();
+    public static final String TAG_NAME =
+            DetectionResultsOpsMock.class.getSimpleName();
 }

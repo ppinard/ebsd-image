@@ -23,7 +23,6 @@ import org.ebsdimage.core.exp.ops.pattern.post.MaskDisc;
  * Tags for <code>MaskDisc</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class MaskDiscXmlTags {
 

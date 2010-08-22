@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.plugin;
 
 import org.ebsdimage.core.PhasesMap;
@@ -29,7 +29,6 @@ import rmlimage.plugin.builtin.ManualThresholdingHandler;
  * <code>PhasesMap</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PhaseThresholding implements ManualThresholdingHandler {
 

@@ -42,7 +42,6 @@ import rmlshared.gui.Panel;
  * Template for the acquisition metadata wizard page.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class AcqMetadataWizardPage extends WizardPage {
 
@@ -59,8 +58,6 @@ public class AcqMetadataWizardPage extends WizardPage {
         }
     }
 
-
-
     /**
      * Listener to enable/disable the energy field.
      */
@@ -71,8 +68,6 @@ public class AcqMetadataWizardPage extends WizardPage {
         }
     }
 
-
-
     /**
      * Listener to enable/disable the magnification field.
      */
@@ -82,8 +77,6 @@ public class AcqMetadataWizardPage extends WizardPage {
             magField.setEnabled(!magCBox.isSelected());
         }
     }
-
-
 
     /**
      * Listener to enable/disable the sample rotation fields.
@@ -98,8 +91,6 @@ public class AcqMetadataWizardPage extends WizardPage {
         }
     }
 
-
-
     /**
      * Listener to enable/disable the tilt angle field.
      */
@@ -109,8 +100,6 @@ public class AcqMetadataWizardPage extends WizardPage {
             tiltField.setEnabled(!tiltCBox.isSelected());
         }
     }
-
-
 
     /**
      * Listener to enable/disable the working distance field.
@@ -122,8 +111,6 @@ public class AcqMetadataWizardPage extends WizardPage {
         }
     }
 
-
-
     /**
      * Listener to enable/disable the horizontal step size field.
      */
@@ -134,8 +121,6 @@ public class AcqMetadataWizardPage extends WizardPage {
         }
     }
 
-
-
     /**
      * Listener to enable/disable the vertical step size field.
      */
@@ -145,8 +130,6 @@ public class AcqMetadataWizardPage extends WizardPage {
             yStepField.setEnabled(!yStepCBox.isSelected());
         }
     }
-
-
 
     /** Map key for the metadata. */
     public static final String KEY_METADATA = "metadata";
@@ -167,8 +150,6 @@ public class AcqMetadataWizardPage extends WizardPage {
     public static String getDescription() {
         return "Acquisition Metadata";
     }
-
-
 
     /** Beam energy field. */
     private DoubleField energyField;

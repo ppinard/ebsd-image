@@ -47,10 +47,10 @@ public class DoublePeaksCleanUpXmlSaverTest {
         Element element = new DoublePeaksCleanUpXmlSaver().save(op);
 
         assertEquals(TAG_NAME, element.getName());
-        assertEquals(2, JDomUtil.getIntegerFromAttribute(element,
-                ATTR_SPACING_RHO));
-        assertEquals(3, JDomUtil.getIntegerFromAttribute(element,
-                ATTR_SPACING_THETA));
+        assertEquals(2,
+                JDomUtil.getIntegerFromAttribute(element, ATTR_SPACING_RHO));
+        assertEquals(3,
+                JDomUtil.getIntegerFromAttribute(element, ATTR_SPACING_THETA));
     }
 
 }

@@ -22,10 +22,10 @@ import org.ebsdimage.core.HoughMap;
 
 import rmlimage.core.Map;
 import rmlimage.gui.PlugIn;
-import rmlimage.gui.RMLImage;
 import rmlshared.gui.BasicDialog;
 import rmlshared.gui.ColumnPanel;
 import rmlshared.gui.DoubleField;
+import rmlshared.gui.OkCancelDialog;
 import rmlshared.io.FileUtil;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 
@@ -106,14 +106,14 @@ public class HoughCrop extends PlugIn {
 
         Dialog dialog = new Dialog(srcMap);
 
-        if (dialog.show() != Dialog.OK)
+        if (dialog.show() != OkCancelDialog.OK)
             return null;
 
         HoughMap cropMap = Edit.crop(srcMap, dialog.getRho());
 
         cropMap.setFile(FileUtil.append(srcMap.getFile(), "(Crop)"));
 
-        RMLImage.add(cropMap);
+        rmlimage.RMLImage.add(cropMap);
 
         return cropMap;
     }

@@ -24,7 +24,6 @@ import crystallography.core.Crystal;
  * Solution from the indexing.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Solution {
 
@@ -49,7 +48,6 @@ public class Solution {
      *            lattice orientation
      * @param fit
      *            goodness of a solution
-     * 
      * @throws IllegalArgumentException
      *             if the fit is less than 0 or greater than 1
      */

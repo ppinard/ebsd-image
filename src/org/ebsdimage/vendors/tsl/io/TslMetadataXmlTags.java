@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.tsl.io;
 
 import org.ebsdimage.vendors.tsl.core.TslMetadata;
@@ -23,7 +23,6 @@ import org.ebsdimage.vendors.tsl.core.TslMetadata;
  * Tags for <code>TslMetadata</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class TslMetadataXmlTags {
 

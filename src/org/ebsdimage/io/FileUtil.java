@@ -33,7 +33,6 @@ import rmlshared.util.ArrayList;
  * Miscellaneous utilities to deal with files, jars and class path.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class FileUtil {
 
@@ -80,8 +79,7 @@ public class FileUtil {
             if (isFile(houghMapURL)) {
                 // It is $rootDir/org/ebsdimage/core/HoughMap.class
                 File rootDir =
-                        getFile(houghMapURL).getParentFile().getParentFile()
-                                .getParentFile().getParentFile();
+                        getFile(houghMapURL).getParentFile().getParentFile().getParentFile().getParentFile();
                 // System.out.println(rootDir);
                 return getClassesInPath(rootDir, packageName);
             } else

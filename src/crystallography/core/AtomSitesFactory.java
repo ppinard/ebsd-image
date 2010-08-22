@@ -14,14 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 /**
  * Factory to create <code>AtomSites</code> for common unit cell.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class AtomSitesFactory {
 
@@ -30,7 +29,6 @@ public class AtomSitesFactory {
      * 
      * @param atomicNumber
      *            atomic number of the atoms
-     * 
      * @return BCC <code>AtomSites</code>
      */
     public static AtomSites atomSitesBCC(int atomicNumber) {
@@ -49,7 +47,6 @@ public class AtomSitesFactory {
      * 
      * @param atomicNumber
      *            atomic number of the atoms
-     * 
      * @return FCC <code>AtomSites</code>
      */
     public static AtomSites atomSitesFCC(int atomicNumber) {
@@ -71,7 +68,6 @@ public class AtomSitesFactory {
      * 
      * @param atomicNumber
      *            atomic number of the atoms
-     * 
      * @return HCP <code>AtomSites</code>
      */
     public static AtomSites atomSitesHCP(int atomicNumber) {
@@ -91,7 +87,6 @@ public class AtomSitesFactory {
      * 
      * @param atomicNumber
      *            atomic number of the atoms
-     * 
      * @return single atom <code>AtomSites</code>
      */
     public static AtomSites atomSitesSingleAtom(int atomicNumber) {

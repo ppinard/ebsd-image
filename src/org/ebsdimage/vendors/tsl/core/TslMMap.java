@@ -28,7 +28,6 @@ import rmlimage.module.real.core.RealMap;
 
 /**
  * <code>EbsdMMap</code> holding all the data from a TSL acquisition.
- * 
  * <p/>
  * On top of the map defined in {@link EbsdMMap}, a <code>TslMMap</code> holds:
  * <ul>
@@ -41,7 +40,6 @@ import rmlimage.module.real.core.RealMap;
  * and the same metadata as {@link EbsdMetadata}.
  * 
  * @author Philippe T. Pinard
- * 
  * @see EbsdMMap
  * @see EbsdMetadata
  * @see TslMetadata

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.run;
 
 import org.ebsdimage.core.run.Operation;
@@ -26,7 +26,6 @@ import ptpshared.utility.xml.ObjectXmlSaver;
  * Abstract XML saver for a <code>Run</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public abstract class RunXmlSaver implements ObjectXmlSaver {
 

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.run;
 
 import java.util.*;
@@ -30,7 +30,6 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
  * Abstract XML loader for a <code>RunXmlLoader</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public abstract class RunXmlLoader implements ObjectXmlLoader {
 

@@ -18,7 +18,6 @@
 package org.ebsdimage.core.sim.ops.patternsim;
 
 import org.ebsdimage.core.sim.Band;
-import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
 
 import rmlimage.module.real.core.RealMap;
 

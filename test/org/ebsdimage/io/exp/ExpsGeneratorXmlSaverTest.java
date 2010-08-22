@@ -14,15 +14,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp;
 
 import org.ebsdimage.core.exp.ExpsGenerator;
-import org.ebsdimage.io.exp.ExpsGeneratorXmlLoader;
-import org.ebsdimage.io.exp.ExpsGeneratorXmlSaver;
 import org.jdom.Element;
 import org.junit.Before;
-
 
 public class ExpsGeneratorXmlSaverTest extends ExpsGeneratorXmlTester {
 

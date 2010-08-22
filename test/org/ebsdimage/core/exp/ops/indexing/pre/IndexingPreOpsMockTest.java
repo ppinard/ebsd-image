@@ -14,21 +14,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.indexing.pre;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.ebsdimage.core.HoughPeak;
-import org.ebsdimage.core.exp.ops.indexing.pre.IndexingPreOps;
 import org.junit.Before;
 import org.junit.Test;
-
 
 public class IndexingPreOpsMockTest {
 
     private IndexingPreOps op;
+
     private HoughPeak[] srcPeaks;
 
 
@@ -37,8 +36,9 @@ public class IndexingPreOpsMockTest {
     public void setUp() throws Exception {
         op = new IndexingPreOpsMock();
 
-        srcPeaks = new HoughPeak[] { new HoughPeak(14.0, 0.0),
-                new HoughPeak(22.0, 1.0), new HoughPeak(30.0, 0.0) };
+        srcPeaks =
+                new HoughPeak[] { new HoughPeak(14.0, 0.0),
+                        new HoughPeak(22.0, 1.0), new HoughPeak(30.0, 0.0) };
     }
 
 

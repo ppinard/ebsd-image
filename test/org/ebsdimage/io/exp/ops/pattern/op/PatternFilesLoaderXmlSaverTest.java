@@ -57,8 +57,8 @@ public class PatternFilesLoaderXmlSaverTest {
         Element element = new PatternFilesLoaderXmlSaver().save(op);
 
         assertEquals(TAG_NAME, element.getName());
-        assertEquals(45, JDomUtil.getIntegerFromAttribute(element,
-                ATTR_START_INDEX));
+        assertEquals(45,
+                JDomUtil.getIntegerFromAttribute(element, ATTR_START_INDEX));
         assertEquals(2, JDomUtil.getIntegerFromAttribute(element, ATTR_SIZE));
         assertEquals(2, element.getChildren().size());
     }

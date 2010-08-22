@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp;
 
 import rmlimage.core.Map;
@@ -23,7 +23,6 @@ import rmlimage.core.Map;
  * Result obtained from an operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class OpResult {
 

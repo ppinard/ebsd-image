@@ -29,7 +29,6 @@ import rmlshared.gui.*;
  * GUI Dialog for the <code>Butterfly</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class ButterflyDialog extends OperationDialog {
 

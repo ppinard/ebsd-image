@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import static java.lang.Math.PI;
@@ -83,8 +83,8 @@ public class UnitCellFactoryTest {
 
     @Test
     public void testMonoclinic() {
-        UnitCell monoclinic = UnitCellFactory.monoclinic(1.0, 2.0, 3.0,
-                55.0 / 180 * PI);
+        UnitCell monoclinic =
+                UnitCellFactory.monoclinic(1.0, 2.0, 3.0, 55.0 / 180 * PI);
 
         assertEquals(monoclinic.a, 1.0, 1e-7);
         assertEquals(monoclinic.b, 2.0, 1e-7);
@@ -166,8 +166,9 @@ public class UnitCellFactoryTest {
 
     @Test
     public void testTriclinic() {
-        UnitCell triclinic = UnitCellFactory.triclinic(1.0, 2.0, 3.0,
-                75.0 / 180 * PI, 55.0 / 180 * PI, 35.0 / 180 * PI);
+        UnitCell triclinic =
+                UnitCellFactory.triclinic(1.0, 2.0, 3.0, 75.0 / 180 * PI,
+                        55.0 / 180 * PI, 35.0 / 180 * PI);
 
         assertEquals(triclinic.a, 1.0, 1e-7);
         assertEquals(triclinic.b, 2.0, 1e-7);

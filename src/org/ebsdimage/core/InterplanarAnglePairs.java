@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static crystallography.core.Calculations.interplanarDirectionCosine;
@@ -30,7 +30,6 @@ import crystallography.core.UnitCell;
  * Store many <code>InterplanarAnglePairs</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class InterplanarAnglePairs extends Pairs<InterplanarAnglePair> {
 
@@ -39,10 +38,8 @@ public class InterplanarAnglePairs extends Pairs<InterplanarAnglePair> {
      * 
      * @param refls
      *            reflectors of a phase
-     * 
      * @throws NullPointerException
      *             if the reflectors is null
-     * 
      * @see Reflectors
      */
     public InterplanarAnglePairs(Reflectors refls) {

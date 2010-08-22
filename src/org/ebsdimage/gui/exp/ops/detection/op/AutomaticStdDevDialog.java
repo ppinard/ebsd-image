@@ -28,7 +28,6 @@ import rmlshared.gui.DoubleField;
  * GUI dialog for the <code>AutomaticStdDev</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class AutomaticStdDevDialog extends OperationDialog {
 

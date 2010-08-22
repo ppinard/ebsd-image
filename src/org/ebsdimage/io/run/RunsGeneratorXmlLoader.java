@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.run;
 
 import org.ebsdimage.core.run.Operation;
@@ -27,7 +27,6 @@ import ptpshared.utility.xml.ObjectXmlLoader;
  * Abstract XML loader for an <code>RunsGenerator</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public abstract class RunsGeneratorXmlLoader implements ObjectXmlLoader {
 
@@ -49,8 +48,9 @@ public abstract class RunsGeneratorXmlLoader implements ObjectXmlLoader {
             for (Object obj2 : parent.getChildren()) {
                 Element child = (Element) obj2;
 
-                Operation op = (Operation) getOperationLoader(child,
-                        packageName).load(child);
+                Operation op =
+                        (Operation) getOperationLoader(child, packageName).load(
+                                child);
                 int order = OperationXmlLoader.getOrder(child);
 
                 generator.addItem(order, op);

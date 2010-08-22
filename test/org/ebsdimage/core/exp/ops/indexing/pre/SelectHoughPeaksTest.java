@@ -14,14 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.indexing.pre;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.ebsdimage.core.HoughPeak;
-import org.ebsdimage.core.exp.ops.indexing.pre.HoughPeaksSelector;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,6 +29,7 @@ import rmlshared.util.Arrays;
 public class SelectHoughPeaksTest {
 
     private HoughPeaksSelector op;
+
     private HoughPeak[] srcPeaks;
 
 

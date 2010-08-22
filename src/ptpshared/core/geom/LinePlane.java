@@ -21,7 +21,6 @@ package ptpshared.core.geom;
  * Enumeration of Cartesian planes.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public enum LinePlane {
     /** XY plane. */

@@ -23,7 +23,6 @@ import javax.swing.JLabel;
 
 import net.miginfocom.swing.MigLayout;
 import ptpshared.gui.WizardPage;
-import rmlimage.gui.FileDialog;
 import rmlshared.gui.CheckBox;
 import rmlshared.gui.FileNameField;
 import rmlshared.io.FileUtil;
@@ -41,6 +40,8 @@ public class OutputWizardPage extends WizardPage {
     /** Map key for whether to display the multimap in the GUI. */
     public static final String KEY_DISPLAY_GUI = "displayGUI";
 
+
+
     /**
      * Returns a description of this page.
      * 
@@ -50,13 +51,13 @@ public class OutputWizardPage extends WizardPage {
         return "Output";
     }
 
-
-
     /** Field for the output file. */
     private FileNameField outputFileField;
 
     /** Check box to display the MMap after being loaded. */
     private CheckBox displayCBox;
+
+
 
     /**
      * Creates a new <code>OutputWizardPage</code>.
@@ -66,7 +67,7 @@ public class OutputWizardPage extends WizardPage {
 
         add(new JLabel("Multimap output file"));
         outputFileField = new FileNameField("OUTPUTFILE", 32, false);
-        FileDialog.addFilter("*.zip");
+        rmlshared.gui.FileDialog.addFilter("*.zip");
         outputFileField.setFileFilter("*.zip");
         outputFileField.setExtension("zip");
         add(outputFileField);

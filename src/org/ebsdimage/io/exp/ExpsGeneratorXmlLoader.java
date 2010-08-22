@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp;
 
 import static org.ebsdimage.core.exp.ExpConstants.OPS_IO_PACKAGE;
@@ -33,7 +33,6 @@ import rmlshared.thread.Reflection;
  * XML loader for <code>ExpsGenerator</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class ExpsGeneratorXmlLoader extends RunsGeneratorXmlLoader {
 
@@ -65,8 +64,9 @@ public class ExpsGeneratorXmlLoader extends RunsGeneratorXmlLoader {
     protected ObjectXmlLoader getOperationLoader(Element child,
             String packageName) {
         String childName = child.getName();
-        String classLoaderName = FileUtil.joinPackageNames(OPS_IO_PACKAGE,
-                packageName, childName + "XmlLoader");
+        String classLoaderName =
+                FileUtil.joinPackageNames(OPS_IO_PACKAGE, packageName,
+                        childName + "XmlLoader");
         return (ObjectXmlLoader) Reflection.newInstance(classLoaderName);
     }
 

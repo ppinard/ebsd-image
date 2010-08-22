@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io;
 
 import static org.ebsdimage.io.EbsdMetadataXmlTags.*;
@@ -30,7 +30,6 @@ import ptpshared.utility.xml.UnitsXmlTags;
  * XML saver for <code>EbsdMetadata</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public abstract class EbsdMetadataXmlSaver implements ObjectXmlSaver {
 
@@ -67,10 +66,10 @@ public abstract class EbsdMetadataXmlSaver implements ObjectXmlSaver {
         element.addContent(child);
 
         child = new Element(TAG_PIXEL_DIMENSION);
-        child.setAttribute(ATTR_PIXEL_WIDTH, Double
-                .toString(metadata.pixelWidth));
-        child.setAttribute(ATTR_PIXEL_HEIGHT, Double
-                .toString(metadata.pixelHeight));
+        child.setAttribute(ATTR_PIXEL_WIDTH,
+                Double.toString(metadata.pixelWidth));
+        child.setAttribute(ATTR_PIXEL_HEIGHT,
+                Double.toString(metadata.pixelHeight));
         child.setAttribute(UnitsXmlTags.ATTR, UnitsXmlTags.M);
         element.addContent(child);
 

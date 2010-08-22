@@ -26,6 +26,7 @@ import rmlimage.gui.BasicDialog;
 import rmlimage.gui.PlugIn;
 import rmlshared.gui.ColumnPanel;
 import rmlshared.gui.ComboBox;
+import rmlshared.gui.OkCancelDialog;
 import rmlshared.gui.Panel;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 
@@ -92,7 +93,7 @@ public class RGBEulers extends PlugIn {
             return null;
 
         Dialog dialog = new Dialog();
-        if (dialog.show() != Dialog.OK)
+        if (dialog.show() != OkCancelDialog.OK)
             return null;
 
         EbsdMMap mmap = dialog.getSelectedMap();

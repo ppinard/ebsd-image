@@ -33,7 +33,6 @@ import rmlshared.gui.Panel;
  * GUI Dialog for the <code>HoughTransform</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HoughTransformDialog extends OperationDialog {
 

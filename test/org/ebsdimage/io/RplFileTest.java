@@ -14,19 +14,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io;
 
 import static org.junit.Assert.assertEquals;
-
 
 import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.TestCase;
-import org.ebsdimage.io.RplFile;
 import org.junit.Test;
-
 
 public class RplFileTest extends TestCase {
 

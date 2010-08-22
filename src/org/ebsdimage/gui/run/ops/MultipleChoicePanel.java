@@ -31,7 +31,6 @@ import rmlshared.thread.PlugIn;
  * operations.
  * 
  * @author Marin Lagac&eacute;
- * 
  */
 public class MultipleChoicePanel extends OperationChoicePanel {
 
@@ -39,7 +38,6 @@ public class MultipleChoicePanel extends OperationChoicePanel {
      * Action to add an operation.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class Add extends PlugIn {
         @Override
@@ -63,13 +61,10 @@ public class MultipleChoicePanel extends OperationChoicePanel {
         }
     }
 
-
-
     /**
      * Action to add all operations.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class AddAll extends PlugIn {
         @Override
@@ -96,13 +91,10 @@ public class MultipleChoicePanel extends OperationChoicePanel {
         }
     }
 
-
-
     /**
      * Removes all operations from the selected list of operations.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class Clear extends PlugIn {
         @Override
@@ -114,13 +106,10 @@ public class MultipleChoicePanel extends OperationChoicePanel {
         }
     }
 
-
-
     /**
      * Moves an operation down one level in the selected operations' list.
      * 
      * @author Marin Lagac&eacute;
-     * 
      */
     private class Down extends PlugIn {
         @Override
@@ -142,13 +131,10 @@ public class MultipleChoicePanel extends OperationChoicePanel {
 
     }
 
-
-
     /**
      * Removes an operation from the selected list of operations.
      * 
      * @author Marin Lagac&eacute;
-     * 
      */
     private class Remove extends PlugIn {
         @Override
@@ -164,13 +150,10 @@ public class MultipleChoicePanel extends OperationChoicePanel {
         }
     }
 
-
-
     /**
      * Moves an operation up one level in the selected operations' list.
      * 
      * @author Marin Lagac&eacute;
-     * 
      */
     private class Up extends PlugIn {
         @Override
@@ -200,7 +183,6 @@ public class MultipleChoicePanel extends OperationChoicePanel {
      *            title of the panel
      * @param packageName
      *            name of the package for the operations
-     * 
      * @throws IOException
      *             if an error occurs while listing the operations
      */
@@ -255,8 +237,7 @@ public class MultipleChoicePanel extends OperationChoicePanel {
     @Override
     protected Button getRemoveButton() {
         Button removeButton = new Button(REMOVE_ICON);
-        removeButton
-                .setToolTipText("Remove selected operation from current list");
+        removeButton.setToolTipText("Remove selected operation from current list");
         removeButton.setPlugIn(new Remove());
         return removeButton;
     }

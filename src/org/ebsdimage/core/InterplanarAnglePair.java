@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import ptpshared.core.math.Vector3D;
@@ -24,7 +24,6 @@ import crystallography.core.Reflector;
  * Pair of interplanar angles between two theoretical planes.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class InterplanarAnglePair extends Pair {
 
@@ -37,7 +36,6 @@ public class InterplanarAnglePair extends Pair {
      *            second reflector
      * @param directionCosine
      *            direction cosine between the two reflectors' plane
-     * 
      * @throws NullPointerException
      *             if a normal is null
      * @throws IllegalArgumentException
@@ -62,7 +60,6 @@ public class InterplanarAnglePair extends Pair {
      *            second normal
      * @param directionCosine
      *            direction cosine between the two normals
-     * 
      * @throws NullPointerException
      *             if a normal is null
      * @throws IllegalArgumentException

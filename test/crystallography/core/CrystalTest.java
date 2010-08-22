@@ -43,7 +43,7 @@ public class CrystalTest {
         name = "silicon";
         unitCell = UnitCellFactory.cubic(2.0);
         atoms = AtomSitesFactory.atomSitesFCC(14);
-        sg = SpaceGroups.SG216;
+        sg = SpaceGroups2.SG216;
 
         crystal = new Crystal(name, unitCell, atoms, sg);
     }
@@ -112,7 +112,7 @@ public class CrystalTest {
                 sg)));
 
         assertFalse(crystal.equals(new Crystal(name, unitCell, atoms,
-                SpaceGroups.SG215)));
+                SpaceGroups2.SG215)));
 
         assertTrue(crystal.equals(new Crystal(name, unitCell, atoms, sg)));
     }
@@ -137,7 +137,7 @@ public class CrystalTest {
                 sg), 1e-3));
 
         assertFalse(crystal.equals(new Crystal(name, unitCell, atoms,
-                SpaceGroups.SG215), 1e-3));
+                SpaceGroups2.SG215), 1e-3));
 
         Crystal other =
                 new Crystal(name, UnitCellFactory.cubic(2.002), atoms, sg);

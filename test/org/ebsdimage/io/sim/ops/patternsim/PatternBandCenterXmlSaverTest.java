@@ -25,7 +25,6 @@ import static org.ebsdimage.io.sim.ops.patternsim.PatternSimOpXmlTags.ATTR_WIDTH
 import static org.junit.Assert.assertEquals;
 
 import org.ebsdimage.core.sim.ops.patternsim.PatternBandCenter;
-import org.ebsdimage.io.sim.ops.patternsim.PatternBandCenterXmlSaver;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;

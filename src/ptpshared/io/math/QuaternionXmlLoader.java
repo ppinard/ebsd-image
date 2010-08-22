@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.io.math;
 
 import static ptpshared.io.math.QuaternionXmlTags.*;
@@ -30,7 +30,6 @@ import ptpshared.utility.xml.ObjectXmlLoader;
  * XML loader for <code>Quaternion</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class QuaternionXmlLoader implements ObjectXmlLoader {
 
@@ -68,10 +67,10 @@ public class QuaternionXmlLoader implements ObjectXmlLoader {
                     + tagName + " not " + element.getName() + ".");
 
         return new Quaternion(
-                JDomUtil.getDoubleFromAttribute(element, ATTR_Q0), JDomUtil
-                        .getDoubleFromAttribute(element, ATTR_Q1), JDomUtil
-                        .getDoubleFromAttribute(element, ATTR_Q2), JDomUtil
-                        .getDoubleFromAttribute(element, ATTR_Q3));
+                JDomUtil.getDoubleFromAttribute(element, ATTR_Q0),
+                JDomUtil.getDoubleFromAttribute(element, ATTR_Q1),
+                JDomUtil.getDoubleFromAttribute(element, ATTR_Q2),
+                JDomUtil.getDoubleFromAttribute(element, ATTR_Q3));
 
     }
 

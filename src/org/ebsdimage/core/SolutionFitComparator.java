@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import java.io.Serializable;
@@ -24,7 +24,6 @@ import java.util.Comparator;
  * Comparator to sort the solution by their fit.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class SolutionFitComparator implements Comparator<Solution>,
         Serializable {

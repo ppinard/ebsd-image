@@ -164,7 +164,7 @@ public class PhasesWizardPage extends WizardPage {
                 return;
 
             NewPhaseDialog dialog = new NewPhaseDialog(crystal);
-            if (dialog.show() == NewPhaseDialog.CANCEL)
+            if (dialog.show() == OkCancelDialog.CANCEL)
                 return;
 
             Crystal newCrystal = dialog.getCrystal();
@@ -209,7 +209,7 @@ public class PhasesWizardPage extends WizardPage {
             // Open new phase dialog to check crystal
             NewPhaseDialog dialog = new NewPhaseDialog(crystal);
 
-            if (dialog.show() == NewPhaseDialog.CANCEL)
+            if (dialog.show() == OkCancelDialog.CANCEL)
                 return;
 
             crystal = dialog.getCrystal();
@@ -288,7 +288,7 @@ public class PhasesWizardPage extends WizardPage {
             else
                 dialog = new NewPhaseDialog(crystal);
 
-            if (dialog.show() == NewPhaseDialog.CANCEL)
+            if (dialog.show() == OkCancelDialog.CANCEL)
                 return;
 
             crystal = dialog.getCrystal();

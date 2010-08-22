@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.indexing.pre;
 
 import static org.ebsdimage.io.exp.ops.indexing.pre.HoughPeaksSelectorXmlTags.ATTR_MAXIMUM;
@@ -23,7 +23,6 @@ import static org.ebsdimage.io.exp.ops.indexing.pre.HoughPeaksSelectorXmlTags.TA
 import static org.junit.Assert.assertEquals;
 
 import org.ebsdimage.core.exp.ops.indexing.pre.HoughPeaksSelector;
-import org.ebsdimage.io.exp.ops.indexing.pre.HoughPeaksSelectorXmlSaver;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,10 +62,10 @@ public class SelectHoughPeaksXmlSaverTest {
     private void testElement(Element element) {
         assertEquals(TAG_NAME, element.getName());
 
-        assertEquals(op.minimum, JDomUtil.getIntegerFromAttribute(element,
-                ATTR_MINIMUM));
-        assertEquals(op.maximum, JDomUtil.getIntegerFromAttribute(element,
-                ATTR_MAXIMUM));
+        assertEquals(op.minimum,
+                JDomUtil.getIntegerFromAttribute(element, ATTR_MINIMUM));
+        assertEquals(op.maximum,
+                JDomUtil.getIntegerFromAttribute(element, ATTR_MAXIMUM));
     }
 
 }

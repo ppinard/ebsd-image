@@ -23,7 +23,6 @@ import javax.swing.JLabel;
 
 import net.miginfocom.swing.MigLayout;
 import ptpshared.gui.WizardPage;
-import rmlimage.gui.FileDialog;
 import rmlshared.gui.CheckBox;
 import rmlshared.gui.FileNameField;
 import rmlshared.io.FileUtil;
@@ -68,7 +67,7 @@ public class OutputWizardPage extends WizardPage {
 
         add(new JLabel("Multimap output file"));
         outputFileField = new FileNameField("OUTPUTFILE", 32, false);
-        FileDialog.addFilter("*.zip");
+        rmlshared.gui.FileDialog.addFilter("*.zip");
         outputFileField.setFileFilter("*.zip");
         outputFileField.setExtension("zip");
         add(outputFileField);

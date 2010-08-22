@@ -28,7 +28,6 @@ import rmlimage.core.ByteMap;
  * Noise generator.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Noise {
 
@@ -57,7 +56,6 @@ public class Noise {
      * @param finalNoiseStdDev
      *            final noise level
      * @return map with noise
-     * 
      * @throws IllegalArgumentException
      *             if stdDevX <= 0
      * @throws IllegalArgumentException
@@ -99,7 +97,6 @@ public class Noise {
      *            seed to use to initialize the internal pseudo-random number
      *            generator.
      * @return map with noise
-     * 
      * @throws IllegalArgumentException
      *             if stdDevX <= 0
      * @throws IllegalArgumentException

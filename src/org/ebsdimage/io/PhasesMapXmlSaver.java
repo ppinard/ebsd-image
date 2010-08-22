@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io;
 
 import static org.ebsdimage.io.PhasesMapXmlTags.ATTR_ID;
@@ -29,7 +29,6 @@ import crystallography.io.CrystalXmlSaver;
  * XML saver for <code>PhasesMap</code>'s defined phases.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PhasesMapXmlSaver {
 

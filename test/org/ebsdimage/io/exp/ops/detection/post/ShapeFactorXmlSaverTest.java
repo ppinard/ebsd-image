@@ -47,8 +47,9 @@ public class ShapeFactorXmlSaverTest {
         Element element = new ShapeFactorXmlSaver().save(op);
 
         assertEquals(TAG_NAME, element.getName());
-        assertEquals(1.5, JDomUtil.getDoubleFromAttribute(element,
-                ATTR_ASPECT_RATIO), 1e-6);
+        assertEquals(1.5,
+                JDomUtil.getDoubleFromAttribute(element, ATTR_ASPECT_RATIO),
+                1e-6);
     }
 
 
@@ -58,8 +59,9 @@ public class ShapeFactorXmlSaverTest {
         Element element = new ShapeFactorXmlSaver().save(op);
 
         assertEquals(TAG_NAME, element.getName());
-        assertEquals(1.5, JDomUtil.getDoubleFromAttribute(element,
-                ATTR_ASPECT_RATIO), 1e-6);
+        assertEquals(1.5,
+                JDomUtil.getDoubleFromAttribute(element, ATTR_ASPECT_RATIO),
+                1e-6);
     }
 
 }

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io;
 
 import static org.junit.Assert.assertNotNull;
@@ -51,8 +51,7 @@ public class IOTest extends TestCase {
     @Test
     public void testGetLoaderHoughMap() throws IOException {
         Loader loader =
-                handler.getLoader(FileUtil
-                        .getFile("org/ebsdimage/testdata/houghmap.bmp"));
+                handler.getLoader(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
         assertNotNull(loader);
         assertTrue(loader instanceof HoughMapLoader);
 
@@ -65,8 +64,7 @@ public class IOTest extends TestCase {
     public void testGetLoaderHoughMap2() throws IOException {
         rmlimage.io.IO.addHandler(org.ebsdimage.io.IO.class);
         Loader loader =
-                rmlimage.io.IO.getLoader(FileUtil
-                        .getFile("org/ebsdimage/testdata/houghmap.bmp"));
+                rmlimage.io.IO.getLoader(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
         assertNotNull(loader);
         assertTrue(loader instanceof HoughMapLoader);
     }
@@ -89,8 +87,7 @@ public class IOTest extends TestCase {
     public void testGetLoaderPhasesMap2() throws IOException {
         rmlimage.io.IO.addHandler(org.ebsdimage.io.IO.class);
         Loader loader =
-                rmlimage.io.IO.getLoader(FileUtil
-                        .getFile("org/ebsdimage/io/phasesmap.bmp"));
+                rmlimage.io.IO.getLoader(FileUtil.getFile("org/ebsdimage/io/phasesmap.bmp"));
         assertNotNull(loader);
         assertTrue(loader instanceof PhasesMapLoader);
 
@@ -101,9 +98,7 @@ public class IOTest extends TestCase {
     @Test
     public void testGetLoaderExpMMap() throws IOException {
         Loader loader =
-                handler
-                        .getLoader(FileUtil
-                                .getFile("org/ebsdimage/testdata/expmmap.zip"));
+                handler.getLoader(FileUtil.getFile("org/ebsdimage/testdata/expmmap.zip"));
         assertNotNull(loader);
         assertTrue(loader instanceof ExpMMapLoader);
 
@@ -116,8 +111,7 @@ public class IOTest extends TestCase {
     public void testGetLoaderExpMMap2() throws IOException {
         rmlimage.io.IO.addHandler(org.ebsdimage.io.IO.class);
         Loader loader =
-                rmlimage.io.IO.getLoader(FileUtil
-                        .getFile("org/ebsdimage/testdata/expmmap.zip"));
+                rmlimage.io.IO.getLoader(FileUtil.getFile("org/ebsdimage/testdata/expmmap.zip"));
         assertNotNull(loader);
         assertTrue(loader instanceof ExpMMapLoader);
 
@@ -128,8 +122,7 @@ public class IOTest extends TestCase {
     @Test
     public void testGetSaverHoughMap() throws IOException {
         HoughMap houghMap =
-                new HoughMapLoader().load(FileUtil
-                        .getFile("org/ebsdimage/testdata/houghmap.bmp"));
+                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
 
         Saver saver = handler.getSaver(houghMap);
         assertNotNull(saver);
@@ -142,8 +135,7 @@ public class IOTest extends TestCase {
     // Test call to handler
     public void testGetSaverHoughMap2() throws IOException {
         HoughMap houghMap =
-                new HoughMapLoader().load(FileUtil
-                        .getFile("org/ebsdimage/testdata/houghmap.bmp"));
+                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
 
         rmlimage.io.IO.addHandler(org.ebsdimage.io.IO.class);
         Saver saver = rmlimage.io.IO.getSaver(houghMap);

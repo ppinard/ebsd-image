@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.plugin;
 
 import static org.junit.Assert.assertEquals;
@@ -24,7 +24,6 @@ import java.io.IOException;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.io.RawLoader;
-import org.ebsdimage.plugin.UnWarp;
 import org.junit.Test;
 
 import rmlimage.core.ByteMap;
@@ -61,7 +60,8 @@ public class UnWarpTest {
         new UnWarp().unwarp(srcMap, xWarpMap, yWarpMap, destMap);
 
         // Load the expected map
-        ByteMap xpctMap = (ByteMap) TestCase.load("org/ebsdimage/plugin/UnWarpDest.bmp");
+        ByteMap xpctMap =
+                (ByteMap) TestCase.load("org/ebsdimage/plugin/UnWarpDest.bmp");
 
         destMap.assertEquals(xpctMap);
     }

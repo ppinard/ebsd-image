@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp;
 
 import static org.junit.Assert.assertFalse;
@@ -23,7 +23,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 
 import org.ebsdimage.core.exp.ExpMMapTester;
-import org.ebsdimage.io.exp.ExpMMapLoader;
 import org.junit.Test;
 
 import rmlshared.io.FileUtil;
@@ -44,8 +43,7 @@ public class ExpMMapLoaderTest extends ExpMMapTester {
     @Test
     public void testIsExpMMap() {
         assertTrue(ExpMMapLoader.isExpMMap(file));
-        assertFalse(ExpMMapLoader.isExpMMap(FileUtil
-                .getFile("org/ebsdimage/testdata/houghmap.bmp")));
+        assertFalse(ExpMMapLoader.isExpMMap(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp")));
     }
 
 }

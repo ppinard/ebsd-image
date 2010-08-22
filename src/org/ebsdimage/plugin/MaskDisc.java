@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.plugin;
 
 import rmlimage.RMLImage;
@@ -25,12 +25,12 @@ import rmlimage.plugin.PlugIn;
 import rmlshared.gui.ColumnPanel;
 import rmlshared.gui.ErrorDialog;
 import rmlshared.gui.IntField;
+import rmlshared.gui.OkCancelDialog;
 
 /**
  * Plug-in to create a mask disc.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class MaskDisc extends PlugIn {
 
@@ -58,25 +58,23 @@ public class MaskDisc extends PlugIn {
         }
 
         Dialog dialog = new Dialog(map);
-        if (dialog.show() != Dialog.OK)
+        if (dialog.show() != OkCancelDialog.OK)
             return null;
 
         BinMap maskDisc =
-                new org.ebsdimage.core.MaskDisc(map.width, map.height, dialog
-                        .getCenterX(), dialog.getCenterY(), dialog.getRadius());
+                new org.ebsdimage.core.MaskDisc(map.width, map.height,
+                        dialog.getCenterX(), dialog.getCenterY(),
+                        dialog.getRadius());
 
         RMLImage.add(maskDisc);
 
         return maskDisc;
     }
 
-
-
     /**
      * Dialog to specify the position and size of the disc.
      * 
      * @author Philippe T. Pinard
-     * 
      */
     private class Dialog extends BasicDialog {
 

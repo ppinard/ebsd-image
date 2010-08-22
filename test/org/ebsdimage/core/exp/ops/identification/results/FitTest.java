@@ -32,6 +32,7 @@ import rmlshared.io.FileUtil;
 public class FitTest {
 
     private Fit fit;
+
     private File filepath;
 
 

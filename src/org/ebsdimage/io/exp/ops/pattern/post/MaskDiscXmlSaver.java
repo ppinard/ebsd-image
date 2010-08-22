@@ -33,7 +33,6 @@ import ptpshared.utility.xml.UnitsXmlTags;
  * XML saver for a <code>MaskDisc</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class MaskDiscXmlSaver implements ObjectXmlSaver {
 

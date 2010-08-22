@@ -27,6 +27,7 @@ import java.awt.geom.Point2D;
 
 import rmlimage.core.BasicDrawing;
 import rmlimage.core.ByteMap;
+import rmlimage.core.Map;
 import rmlshared.geom.LineUtil;
 
 /**
@@ -262,6 +263,6 @@ public class Drawing {
             }
         }
 
-        map.setChanged(ByteMap.MAP_CHANGED);
+        map.setChanged(Map.MAP_CHANGED);
     }
 }

@@ -43,8 +43,8 @@ public class Matrix3D {
     public static final Matrix3D ZERO = new Matrix3D(0, 0, 0, 0, 0, 0, 0, 0, 0);
 
     /** Identity matrix. */
-    public static final Matrix3D IDENTITY =
-            new Matrix3D(1, 0, 0, 0, 1, 0, 0, 0, 1);
+    public static final Matrix3D IDENTITY = new Matrix3D(1, 0, 0, 0, 1, 0, 0,
+            0, 1);
 
     /** Array that holds the actual data. */
     @NonNull

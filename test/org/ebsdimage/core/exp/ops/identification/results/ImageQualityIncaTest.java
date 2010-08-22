@@ -27,9 +27,13 @@ import org.junit.Test;
 public class ImageQualityIncaTest {
 
     private ImageQualityInca iq;
+
     private HoughPeak[] peaks;
+
     private HoughPeak peak1;
+
     private HoughPeak peak2;
+
     private HoughPeak peak3;
 
 

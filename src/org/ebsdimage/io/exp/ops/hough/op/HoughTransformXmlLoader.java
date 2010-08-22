@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.hough.op;
 
 import static org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlTags.ATTR_RESOLUTION;
@@ -33,7 +33,6 @@ import ptpshared.utility.xml.UnitsXmlTags;
  * XML loader for a <code>HoughTransform</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HoughTransformXmlLoader implements ObjectXmlLoader {
 
@@ -59,8 +58,9 @@ public class HoughTransformXmlLoader implements ObjectXmlLoader {
             throw new BadUnitException("Unit for the resolution should be "
                     + UnitsXmlTags.RAD);
 
-        double resolution = JDomUtil.getDoubleFromAttribute(element,
-                ATTR_RESOLUTION, HoughTransform.DEFAULT_RESOLUTION);
+        double resolution =
+                JDomUtil.getDoubleFromAttribute(element, ATTR_RESOLUTION,
+                        HoughTransform.DEFAULT_RESOLUTION);
 
         return new HoughTransform(resolution);
     }

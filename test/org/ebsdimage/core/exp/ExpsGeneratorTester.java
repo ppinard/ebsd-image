@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp;
 
 import static org.junit.Assert.assertEquals;
@@ -52,25 +52,16 @@ public abstract class ExpsGeneratorTester {
 
         PatternPostOps2Mock op;
         op =
-                (PatternPostOps2Mock) generator
-                        .getCombinations()
-                        .get(0)
-                        .get(
-                                "0001:org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps2Mock");
+                (PatternPostOps2Mock) generator.getCombinations().get(0).get(
+                        "0001:org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps2Mock");
         assertEquals(1, op.var);
         op =
-                (PatternPostOps2Mock) generator
-                        .getCombinations()
-                        .get(1)
-                        .get(
-                                "0001:org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps2Mock");
+                (PatternPostOps2Mock) generator.getCombinations().get(1).get(
+                        "0001:org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps2Mock");
         assertEquals(4, op.var);
         op =
-                (PatternPostOps2Mock) generator
-                        .getCombinations()
-                        .get(2)
-                        .get(
-                                "0001:org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps2Mock");
+                (PatternPostOps2Mock) generator.getCombinations().get(2).get(
+                        "0001:org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps2Mock");
         assertEquals(8, op.var);
     }
 

@@ -191,7 +191,8 @@ public class SimWizard extends Wizard {
      * @return phases
      */
     public Crystal[] getPhases() {
-        Crystal[] phases = (Crystal[]) results.get(PhasesWizardPage.KEY_PHASES);
+        Crystal[] phases =
+                (Crystal[]) results.get(org.ebsdimage.gui.PhasesWizardPage.KEY_PHASES);
 
         if (phases == null)
             throw new NullPointerException(

@@ -35,17 +35,15 @@ import crystallography.io.CrystalLoader;
 
 public class CtfSaverTest extends HklMMapTester {
 
-    private static File file =
-            new File(FileUtil.getTempDirFile(), "Project19.ctf");
+    private static File file = new File(FileUtil.getTempDirFile(),
+            "Project19.ctf");
 
 
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         HklMMap old =
-                new HklMMapLoader()
-                        .load(FileUtil
-                                .getFile("org/ebsdimage/vendors/hkl/testdata/Project19.zip"));
+                new HklMMapLoader().load(FileUtil.getFile("org/ebsdimage/vendors/hkl/testdata/Project19.zip"));
 
         new CtfSaver().save(old, file);
     }
@@ -64,8 +62,7 @@ public class CtfSaverTest extends HklMMapTester {
 
     public CtfSaverTest() throws Exception {
         Crystal copperPhase =
-                new CrystalLoader()
-                        .load(getFile("org/ebsdimage/vendors/hkl/testdata/Copper.xml"));
+                new CrystalLoader().load(getFile("org/ebsdimage/vendors/hkl/testdata/Copper.xml"));
 
         mmap =
                 new CtfLoader().load(file,

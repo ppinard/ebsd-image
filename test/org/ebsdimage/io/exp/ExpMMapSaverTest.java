@@ -14,15 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp;
 
 import java.io.File;
 
 import org.ebsdimage.core.exp.ExpMMap;
 import org.ebsdimage.core.exp.ExpMMapTester;
-import org.ebsdimage.io.exp.ExpMMapLoader;
-import org.ebsdimage.io.exp.ExpMMapSaver;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -31,8 +29,8 @@ import rmlshared.io.FileUtil;
 
 public class ExpMMapSaverTest extends ExpMMapTester {
 
-    private static File zipFile =
-            new File(FileUtil.getTempDirFile(), "expmmap.zip");
+    private static File zipFile = new File(FileUtil.getTempDirFile(),
+            "expmmap.zip");
 
 
 

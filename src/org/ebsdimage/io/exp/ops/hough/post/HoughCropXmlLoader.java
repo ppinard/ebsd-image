@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.hough.post;
 
 import static org.ebsdimage.io.exp.ops.hough.post.HoughCropXmlTags.ATTR_RADIUS;
@@ -33,7 +33,6 @@ import ptpshared.utility.xml.UnitsXmlTags;
  * XML loader for a <code>HoughCrop</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HoughCropXmlLoader implements ObjectXmlLoader {
 
@@ -59,8 +58,9 @@ public class HoughCropXmlLoader implements ObjectXmlLoader {
             throw new BadUnitException("Unit for the radius should be "
                     + UnitsXmlTags.PX);
 
-        int radius = JDomUtil.getIntegerFromAttribute(element, ATTR_RADIUS,
-                HoughCrop.DEFAULT_RADIUS);
+        int radius =
+                JDomUtil.getIntegerFromAttribute(element, ATTR_RADIUS,
+                        HoughCrop.DEFAULT_RADIUS);
 
         return new HoughCrop(radius);
     }

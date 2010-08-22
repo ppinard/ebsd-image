@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.core.math;
 
 import static java.lang.Math.PI;
@@ -32,7 +32,9 @@ import org.junit.Test;
 public class QuaternionTest {
 
     private Quaternion q1;
+
     private Quaternion q2;
+
     private Quaternion q3;
 
 
@@ -54,10 +56,12 @@ public class QuaternionTest {
         Quaternion expected_conjugate = new Quaternion(4, -2, -1, -1);
         assertEquals(q.conjugate(), expected_conjugate);
 
-        q = new Quaternion(0.21566554640687682, 0.10783277320343841, 0,
-                0.9704949588309457);
-        expected_conjugate = new Quaternion(0.21566554640687682,
-                -0.10783277320343841, 0, -0.9704949588309457);
+        q =
+                new Quaternion(0.21566554640687682, 0.10783277320343841, 0,
+                        0.9704949588309457);
+        expected_conjugate =
+                new Quaternion(0.21566554640687682, -0.10783277320343841, 0,
+                        -0.9704949588309457);
         assertTrue(q.conjugate().equals(expected_conjugate, 1e-7));
     }
 
@@ -81,8 +85,9 @@ public class QuaternionTest {
 
     @Test
     public void testDivQuaternion() {
-        Quaternion expected = new Quaternion(5.196152422706632,
-                1.1547005383792515, 0.57735026918962584, -1.1547005383792519);
+        Quaternion expected =
+                new Quaternion(5.196152422706632, 1.1547005383792515,
+                        0.57735026918962584, -1.1547005383792519);
         Quaternion division = q1.div(q2);
         assertTrue(division.equals(expected, 1e-7));
     }
@@ -176,8 +181,9 @@ public class QuaternionTest {
         // Test for validity
         // http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/arithmetic/index.htm
         Quaternion q = new Quaternion(4, 3, -1, 2);
-        Quaternion expected = new Quaternion(0.7302967433402214,
-                -0.5477225575051661, 0.18257418583505536, -0.3651483716701107);
+        Quaternion expected =
+                new Quaternion(0.7302967433402214, -0.5477225575051661,
+                        0.18257418583505536, -0.3651483716701107);
         assertTrue(q.invert().equals(expected, 1e-7));
 
         assertTrue(q.normalize().invert().equals(expected, 1e-7));
@@ -192,8 +198,9 @@ public class QuaternionTest {
         Quaternion q = new Quaternion(4, 2, 1, 1);
         assertFalse(q.isNormalized());
 
-        q = new Quaternion(0.21566554640687682, 0.10783277320343841, 0,
-                0.9704949588309457);
+        q =
+                new Quaternion(0.21566554640687682, 0.10783277320343841, 0,
+                        0.9704949588309457);
         assertTrue(q.isNormalized());
     }
 
@@ -270,8 +277,9 @@ public class QuaternionTest {
         // Test for validity
         // http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/arithmetic/index.htm
         Quaternion q = new Quaternion(4, 2, -1, 1);
-        Quaternion expected = new Quaternion(0.8528028654224417,
-                0.42640143271122083, -0.21320071635561041, 0.21320071635561041);
+        Quaternion expected =
+                new Quaternion(0.8528028654224417, 0.42640143271122083,
+                        -0.21320071635561041, 0.21320071635561041);
         assertTrue(q.normalize().equals(expected, 1e-7));
     }
 
@@ -391,7 +399,8 @@ public class QuaternionTest {
 
         Quaternion q1 = new Quaternion(new AxisAngle(35 / 180.0 * PI, 0, 0, 1));
         Quaternion q2 = new Quaternion(new AxisAngle(27 / 180.0 * PI, 1, 0, 0));
-        Quaternion q3 = new Quaternion(new AxisAngle(102 / 180.0 * PI, 0, 0, 1));
+        Quaternion q3 =
+                new Quaternion(new AxisAngle(102 / 180.0 * PI, 0, 0, 1));
         expected = q1.multiply(q2).multiply(q3);
         assertTrue(q.equals(expected, 1e-7));
     }
@@ -406,8 +415,8 @@ public class QuaternionTest {
         // Test calculation
         Matrix3D m = new Matrix3D(1, 0, 0, 0, 0, -1, 0, 1, 0);
         Quaternion q = new Quaternion(m);
-        Quaternion expected = new Quaternion(sqrt(2) / 2.0, -sqrt(2) / 2.0, 0,
-                0);
+        Quaternion expected =
+                new Quaternion(sqrt(2) / 2.0, -sqrt(2) / 2.0, 0, 0);
         assertTrue(q.equals(expected, 1e-7));
 
         // Test back-conversion
@@ -498,7 +507,7 @@ public class QuaternionTest {
     public void testToString() {
         assertEquals("[[1.0; -2.0; 3.0; 4.0]]", q1.toString());
         assertEquals("[[-0.0; 1.0; -1.0; -1.0]]", q2.toString());
-        assertEquals("[[0.7071067811865476; 0.7071067811865476; 0.0; 0.0]]", q3
-                .toString());
+        assertEquals("[[0.7071067811865476; 0.7071067811865476; 0.0; 0.0]]",
+                q3.toString());
     }
 }

@@ -14,24 +14,22 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.sqrt;
 import static org.junit.Assert.assertEquals;
 
-import org.ebsdimage.core.Camera;
-import org.ebsdimage.core.HoughPeak;
-import org.ebsdimage.core.HoughPeakPair;
-import org.ebsdimage.core.HoughPeakPairs;
 import org.junit.Before;
 import org.junit.Test;
 
 public class HoughPeakPairsTest {
 
     private Camera camera;
+
     private HoughPeak[] peaks;
+
     private HoughPeakPairs pairs;
 
 
@@ -40,8 +38,10 @@ public class HoughPeakPairsTest {
     public void setUp() throws Exception {
         camera = new Camera(0.0, 0.0, 0.5);
 
-        peaks = new HoughPeak[] { new HoughPeak(1.0, PI / 2, 10e3),
-                new HoughPeak(1.0, PI / 4, 9e3), new HoughPeak(1.0, PI / 3, 1) };
+        peaks =
+                new HoughPeak[] { new HoughPeak(1.0, PI / 2, 10e3),
+                        new HoughPeak(1.0, PI / 4, 9e3),
+                        new HoughPeak(1.0, PI / 3, 1) };
 
         pairs = new HoughPeakPairs(peaks, camera);
     }
@@ -55,8 +55,8 @@ public class HoughPeakPairsTest {
 
         Camera camera = new Camera(0.0, 0.0, 10e3);
 
-        HoughPeak[] peaks = new HoughPeak[] { new HoughPeak(1.0, 0),
-                new HoughPeak(-1.0, 0) };
+        HoughPeak[] peaks =
+                new HoughPeak[] { new HoughPeak(1.0, 0), new HoughPeak(-1.0, 0) };
 
         HoughPeakPairs pairs = new HoughPeakPairs(peaks, camera);
 
@@ -73,8 +73,9 @@ public class HoughPeakPairsTest {
 
         Camera camera = new Camera(0.0, 0.0, 10e3);
 
-        HoughPeak[] peaks = new HoughPeak[] { new HoughPeak(1.0, PI / 2),
-                new HoughPeak(-1.0, PI / 2) };
+        HoughPeak[] peaks =
+                new HoughPeak[] { new HoughPeak(1.0, PI / 2),
+                        new HoughPeak(-1.0, PI / 2) };
 
         HoughPeakPairs pairs = new HoughPeakPairs(peaks, camera);
 
@@ -91,8 +92,9 @@ public class HoughPeakPairsTest {
 
         Camera camera = new Camera(0.0, 0.0, 10e3);
 
-        HoughPeak[] peaks = new HoughPeak[] { new HoughPeak(1.0, PI / 2),
-                new HoughPeak(1.0, PI / 4) };
+        HoughPeak[] peaks =
+                new HoughPeak[] { new HoughPeak(1.0, PI / 2),
+                        new HoughPeak(1.0, PI / 4) };
 
         HoughPeakPairs pairs = new HoughPeakPairs(peaks, camera);
 

@@ -32,6 +32,7 @@ import rmlimage.gui.BasicDialog;
 import rmlimage.plugin.PlugIn;
 import rmlshared.gui.ColumnPanel;
 import rmlshared.gui.DoubleField;
+import rmlshared.gui.OkCancelDialog;
 import rmlshared.gui.RadioButton;
 
 /**
@@ -47,8 +48,7 @@ public class Thresholding extends PlugIn {
      * Dialog to select the sigma factor for the automatic std. dev.
      * thresholding.
      * 
-     * @author ppinard
-     * 
+     * @author Philippe T. Pinard
      */
     private static class StdDevDialog extends BasicDialog {
 
@@ -85,13 +85,10 @@ public class Thresholding extends PlugIn {
         }
     }
 
-
-
     /**
      * Dialog to select the thresholding.
      * 
      * @author Marin Lagac&eacute;
-     * 
      */
     private class Dialog extends BasicDialog {
 
@@ -154,13 +151,10 @@ public class Thresholding extends PlugIn {
 
     }
 
-
-
     /**
      * Two types of thresholding.
      * 
      * @author Marin Lagac&eacute;
-     * 
      */
     private enum Method {
         /** Top hat thresholding. */
@@ -190,7 +184,7 @@ public class Thresholding extends PlugIn {
         HoughMap houghMap = (HoughMap) map;
 
         Dialog dialog = new Dialog();
-        if (dialog.show() == Dialog.CANCEL)
+        if (dialog.show() == OkCancelDialog.CANCEL)
             return null;
 
         // Do the thresholding according to the method chosen
@@ -207,7 +201,7 @@ public class Thresholding extends PlugIn {
 
         case STDDEV:
             StdDevDialog stdDevDialog = new StdDevDialog();
-            if (stdDevDialog.show() != BasicDialog.OK)
+            if (stdDevDialog.show() != OkCancelDialog.OK)
                 return null;
 
             // Perform inversion division
@@ -220,8 +214,8 @@ public class Thresholding extends PlugIn {
 
             // Thresholding
             binMap =
-                    Threshold.automaticStdDev(houghMap, stdDevDialog
-                            .getSigmaFactor());
+                    Threshold.automaticStdDev(houghMap,
+                            stdDevDialog.getSigmaFactor());
 
             // Remove small peaks
             MathMorph.opening(binMap, 2, 8);

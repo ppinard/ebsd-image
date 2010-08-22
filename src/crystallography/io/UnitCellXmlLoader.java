@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.io;
 
 import static crystallography.io.UnitCellXmlTags.*;
@@ -33,7 +33,6 @@ import crystallography.core.UnitCell;
  * XML loader for <code>UnitCell</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class UnitCellXmlLoader implements ObjectXmlLoader {
 
@@ -63,10 +62,10 @@ public class UnitCellXmlLoader implements ObjectXmlLoader {
                     + RAD);
 
         return new UnitCell(JDomUtil.getDoubleFromAttribute(element, ATTR_A),
-                JDomUtil.getDoubleFromAttribute(element, ATTR_B), JDomUtil
-                        .getDoubleFromAttribute(element, ATTR_C), JDomUtil
-                        .getDoubleFromAttribute(element, ATTR_ALPHA), JDomUtil
-                        .getDoubleFromAttribute(element, ATTR_BETA), JDomUtil
-                        .getDoubleFromAttribute(element, ATTR_GAMMA));
+                JDomUtil.getDoubleFromAttribute(element, ATTR_B),
+                JDomUtil.getDoubleFromAttribute(element, ATTR_C),
+                JDomUtil.getDoubleFromAttribute(element, ATTR_ALPHA),
+                JDomUtil.getDoubleFromAttribute(element, ATTR_BETA),
+                JDomUtil.getDoubleFromAttribute(element, ATTR_GAMMA));
     }
 }

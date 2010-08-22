@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.utility.sql;
 
 import java.sql.*;
@@ -26,7 +26,6 @@ import java.util.HashMap;
  * Connection to a MySQL database. Wrapper over the JDBC MySQL connection.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class MySQLDatabase {
 
@@ -72,7 +71,6 @@ public class MySQLDatabase {
      * 
      * @param conn
      *            a SQL connection
-     * 
      * @throws RuntimeException
      *             if the connection cannot be established
      */
@@ -108,7 +106,6 @@ public class MySQLDatabase {
      *            username of the database
      * @param password
      *            password of the database
-     * 
      * @throws RuntimeException
      *             if the connection cannot be established
      */
@@ -141,7 +138,6 @@ public class MySQLDatabase {
      * 
      * @param table
      *            <code>Table</code> to be added.
-     * 
      * @throws IllegalArgumentException
      *             if a table with the same name already exists
      * @throws RuntimeException
@@ -168,7 +164,6 @@ public class MySQLDatabase {
      * 
      * @param name
      *            name of the table to be dropped
-     * 
      * @throws IllegalArgumentException
      *             if no table with the specified name exists in the database
      * @throws RuntimeException
@@ -195,7 +190,6 @@ public class MySQLDatabase {
      * 
      * @param table
      *            <code>Table</code> to be dropped
-     * 
      * @throws IllegalArgumentException
      *             if no table with the specified name exists in the database
      * @throws RuntimeException
@@ -213,7 +207,6 @@ public class MySQLDatabase {
      * @param name
      *            name of the table
      * @return a <code>Table</code> object
-     * 
      * @throws IllegalArgumentException
      *             if no table with the specified name exists in the database
      * @throws RuntimeException
@@ -328,7 +321,6 @@ public class MySQLDatabase {
      * @param values
      *            list of the values of the new row
      * @return id of the newly inserted row
-     * 
      * @throws IllegalArgumentException
      *             if the table doesn't exist in the database
      * @throws IllegalArgumentException
@@ -362,7 +354,6 @@ public class MySQLDatabase {
      *            <code>HashMap</code> where the keys are the name of the
      *            columns and the values are the values to be inserted
      * @return id of the newly inserted row
-     * 
      * @throws IllegalArgumentException
      *             if the table doesn't exist in the database
      * @throws IllegalArgumentException
@@ -434,7 +425,6 @@ public class MySQLDatabase {
      * 
      * @param name
      *            name of the table
-     * 
      * @return <code>true</code> if the table exists
      */
     public boolean isTable(String name) {

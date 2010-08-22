@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.hkl.gui;
 
 import static rmlshared.io.FileUtil.getURL;
@@ -35,7 +35,6 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
  * Wizard to import HKL data.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HklImportWizard extends Wizard {
 
@@ -143,8 +142,7 @@ public class HklImportWizard extends Wizard {
      */
     public double getWorkingDistance() {
         Double workingDistance =
-                (Double) results
-                        .get(MissingDataWizardPage.KEY_WORKING_DISTANCE);
+                (Double) results.get(MissingDataWizardPage.KEY_WORKING_DISTANCE);
 
         if (workingDistance == null)
             throw new NullPointerException(
@@ -199,7 +197,8 @@ public class HklImportWizard extends Wizard {
      * @return phases
      */
     public Crystal[] getPhases() {
-        Crystal[] phases = (Crystal[]) results.get(PhasesWizardPage.KEY_PHASES);
+        Crystal[] phases =
+                (Crystal[]) results.get(org.ebsdimage.gui.PhasesWizardPage.KEY_PHASES);
 
         if (phases == null)
             throw new NullPointerException(

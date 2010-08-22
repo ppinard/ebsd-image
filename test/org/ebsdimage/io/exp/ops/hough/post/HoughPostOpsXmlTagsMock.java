@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.hough.post;
 
 import org.ebsdimage.core.exp.ops.hough.post.HoughPostOpsMock;
@@ -22,6 +22,6 @@ import org.ebsdimage.core.exp.ops.hough.post.HoughPostOpsMock;
 public class HoughPostOpsXmlTagsMock {
 
     /** XML tag name for HoughPostOpsMock */
-    public static final String TAG_NAME = HoughPostOpsMock.class
-            .getSimpleName();
+    public static final String TAG_NAME =
+            HoughPostOpsMock.class.getSimpleName();
 }

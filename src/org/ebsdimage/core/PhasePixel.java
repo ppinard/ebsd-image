@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import rmlimage.core.Pixel;
@@ -24,7 +24,6 @@ import crystallography.core.Crystal;
  * Representation of a pixel in a <code>PhasesMap</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PhasePixel extends Pixel {
 
@@ -43,7 +42,6 @@ public class PhasePixel extends Pixel {
      *            id of the phase
      * @param phase
      *            crystal representing the phase
-     * 
      * @throws IllegalArgumentException
      *             if the id is outside [0, 255].
      * @throws NullPointerException

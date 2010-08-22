@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.sim.ops.output;
 
 import org.ebsdimage.core.sim.ops.output.OutputOps;
@@ -23,7 +23,6 @@ import org.ebsdimage.core.sim.ops.output.OutputOps;
  * Tags for <code>OutputOps</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class OutputOpsXmlTags {
     /** XML tag name for <code>OutputOps</code>. */

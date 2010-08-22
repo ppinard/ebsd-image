@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import static org.junit.Assert.assertEquals;
@@ -30,6 +30,7 @@ import ptpshared.core.math.Vector3D;
 public class PlaneTest {
 
     private Plane plane1;
+
     private Plane plane2;
 
 

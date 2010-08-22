@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package ptpshared.core.math;
 
 import static java.lang.Math.PI;
@@ -28,7 +28,9 @@ import org.junit.Test;
 public class EulersTest {
 
     private Eulers e1;
+
     private Eulers e2;
+
     private Eulers e3;
 
 
@@ -175,7 +177,8 @@ public class EulersTest {
 
     @Test
     public void testToStringDegs() {
-        String expected = "(5.729577951308232, 11.459155902616464, 17.188733853924695)";
+        String expected =
+                "(5.729577951308232, 11.459155902616464, 17.188733853924695)";
         assertEquals(expected, e1.toStringDegs());
     }
 

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp;
 
 import static java.lang.Math.PI;
@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.ebsdimage.core.Camera;
-import org.ebsdimage.core.exp.ExpMetadata;
+import org.ebsdimage.core.EbsdMetadata;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,13 +32,21 @@ import ptpshared.core.math.Quaternion;
 public class ExpMetadataTest {
 
     private ExpMetadata metadata;
+
     private double beamEnergy;
+
     private double magnification;
+
     private double tiltAngle;
+
     private double workingDistance;
+
     private double pixelWidth;
+
     private double pixelHeight;
+
     private Quaternion sampleRotation;
+
     private Camera calibration;
 
 
@@ -81,17 +89,17 @@ public class ExpMetadataTest {
     public void testExpMetadata() {
         ExpMetadata other = new ExpMetadata();
 
-        assertEquals(ExpMetadata.DEFAULT_BEAM_ENERGY, other.beamEnergy, 1e-6);
-        assertEquals(ExpMetadata.DEFAULT_MAGNIFICATION, other.magnification,
+        assertEquals(EbsdMetadata.DEFAULT_BEAM_ENERGY, other.beamEnergy, 1e-6);
+        assertEquals(EbsdMetadata.DEFAULT_MAGNIFICATION, other.magnification,
                 1e-6);
-        assertEquals(ExpMetadata.DEFAULT_TILT_ANGLE, other.tiltAngle, 1e-6);
-        assertEquals(ExpMetadata.DEFAULT_WORKING_DISTANCE,
+        assertEquals(EbsdMetadata.DEFAULT_TILT_ANGLE, other.tiltAngle, 1e-6);
+        assertEquals(EbsdMetadata.DEFAULT_WORKING_DISTANCE,
                 other.workingDistance, 1e-6);
-        assertEquals(ExpMetadata.DEFAULT_PIXEL_WIDTH, other.pixelWidth, 1e-6);
-        assertEquals(ExpMetadata.DEFAULT_PIXEL_HEIGHT, other.pixelHeight, 1e-6);
-        assertTrue(ExpMetadata.DEFAULT_SAMPLE_ROTATION.equals(
+        assertEquals(EbsdMetadata.DEFAULT_PIXEL_WIDTH, other.pixelWidth, 1e-6);
+        assertEquals(EbsdMetadata.DEFAULT_PIXEL_HEIGHT, other.pixelHeight, 1e-6);
+        assertTrue(EbsdMetadata.DEFAULT_SAMPLE_ROTATION.equals(
                 other.sampleRotation, 1e-6));
-        assertTrue(ExpMetadata.DEFAULT_CALIBRATION.equals(other.calibration,
+        assertTrue(EbsdMetadata.DEFAULT_CALIBRATION.equals(other.calibration,
                 1e-6));
     }
 

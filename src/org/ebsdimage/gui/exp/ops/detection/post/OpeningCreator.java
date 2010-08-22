@@ -27,7 +27,6 @@ import rmlshared.gui.OkCancelDialog;
  * GUI creator for the <code>Opening</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class OpeningCreator implements OperationCreator {
 

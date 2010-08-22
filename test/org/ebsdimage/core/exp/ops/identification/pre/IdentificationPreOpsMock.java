@@ -14,11 +14,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.identification.pre;
 
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.exp.ops.identification.pre.IdentificationPreOps;
 
 import rmlimage.core.BinMap;
 

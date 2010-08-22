@@ -14,14 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.sim;
 
 import static java.lang.Math.PI;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.ebsdimage.core.sim.Calculations;
 import org.junit.Test;
 
 import ptpshared.core.geom.Line;
@@ -108,20 +107,23 @@ public class CalculationsTest {
         Line expected;
 
         plane = new Plane(1, 0, 0);
-        line = Calculations.getLineFromPlane(plane.toVector3D(),
-                detectorDistance, rotation);
+        line =
+                Calculations.getLineFromPlane(plane.toVector3D(),
+                        detectorDistance, rotation);
         expected = new Line(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
         assertTrue(line.equals(expected, 1e-7));
 
         plane = new Plane(0, 1, 0);
-        line = Calculations.getLineFromPlane(plane.toVector3D(),
-                detectorDistance, rotation);
+        line =
+                Calculations.getLineFromPlane(plane.toVector3D(),
+                        detectorDistance, rotation);
         expected = new Line(Double.POSITIVE_INFINITY, 0.0);
         assertTrue(line.equals(expected, 1e-7));
 
         plane = new Plane(0, 0, 1);
-        line = Calculations.getLineFromPlane(plane.toVector3D(),
-                detectorDistance, rotation);
+        line =
+                Calculations.getLineFromPlane(plane.toVector3D(),
+                        detectorDistance, rotation);
         expected = new Line(0.0, 0.0);
         assertTrue(line.equals(expected, 1e-7));
     }
@@ -137,14 +139,14 @@ public class CalculationsTest {
         double[] halfWidths;
 
         line = new Line(0.0, 0.0);
-        halfWidths = Calculations.getBandHalfWidths(planeSpacing, line, dd,
-                energy);
+        halfWidths =
+                Calculations.getBandHalfWidths(planeSpacing, line, dd, energy);
         assertEquals(0.0139204, halfWidths[0], 1e-7);
         assertEquals(0.0139204, halfWidths[1], 1e-7);
 
         line = new Line(Double.POSITIVE_INFINITY, 0.0);
-        halfWidths = Calculations.getBandHalfWidths(planeSpacing, line, dd,
-                energy);
+        halfWidths =
+                Calculations.getBandHalfWidths(planeSpacing, line, dd, energy);
         assertEquals(0.0139204, halfWidths[0], 1e-7);
         assertEquals(0.0139204, halfWidths[1], 1e-7);
     }

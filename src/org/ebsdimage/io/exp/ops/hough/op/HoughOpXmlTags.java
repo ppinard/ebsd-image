@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.hough.op;
 
 import org.ebsdimage.core.exp.ops.hough.op.HoughOp;
@@ -23,7 +23,6 @@ import org.ebsdimage.core.exp.ops.hough.op.HoughOp;
  * Tags for <code>HoughOp</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HoughOpXmlTags {
     /** XML tag name for <code>HoughOp</code>. */

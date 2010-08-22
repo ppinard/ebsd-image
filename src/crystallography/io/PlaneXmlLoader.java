@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.io;
 
 import static crystallography.io.PlaneXmlTags.ATTR_H;
@@ -33,7 +33,6 @@ import crystallography.core.Plane;
  * XML loader for <code>Plane</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PlaneXmlLoader implements ObjectXmlLoader {
 
@@ -53,8 +52,8 @@ public class PlaneXmlLoader implements ObjectXmlLoader {
                     + TAG_NAME + " not " + element.getName() + ".");
 
         return new Plane(JDomUtil.getIntegerFromAttribute(element, ATTR_H),
-                JDomUtil.getIntegerFromAttribute(element, ATTR_K), JDomUtil
-                        .getIntegerFromAttribute(element, ATTR_L));
+                JDomUtil.getIntegerFromAttribute(element, ATTR_K),
+                JDomUtil.getIntegerFromAttribute(element, ATTR_L));
     }
 
 }

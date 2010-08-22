@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.post;
 
 import static org.ebsdimage.io.exp.ops.pattern.post.NoiseXmlTags.ATTR_STDDEV;
@@ -31,7 +31,6 @@ import ptpshared.utility.xml.ObjectXmlLoader;
  * XML loader for a <code>Noise</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class NoiseXmlLoader implements ObjectXmlLoader {
 
@@ -50,8 +49,9 @@ public class NoiseXmlLoader implements ObjectXmlLoader {
             throw new IllegalNameException("Name of the element should be "
                     + TAG_NAME + " not " + element.getName() + ".");
 
-        double stdDev = JDomUtil.getDoubleFromAttribute(element, ATTR_STDDEV,
-                Noise.DEFAULT_STDDEV);
+        double stdDev =
+                JDomUtil.getDoubleFromAttribute(element, ATTR_STDDEV,
+                        Noise.DEFAULT_STDDEV);
 
         return new Noise(stdDev);
     }

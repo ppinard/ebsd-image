@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp;
 
 import java.awt.event.ActionEvent;
@@ -24,11 +24,11 @@ import java.io.File;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 
+import net.miginfocom.swing.MigLayout;
+
 import org.ebsdimage.core.EbsdMMap;
 
-import net.miginfocom.swing.MigLayout;
 import ptpshared.gui.WizardPage;
-import rmlimage.gui.FileDialog;
 import rmlshared.gui.FileNameField;
 import rmlshared.gui.IntField;
 import rmlshared.gui.RadioButton;
@@ -37,7 +37,6 @@ import rmlshared.gui.RadioButton;
  * Template for the patterns wizard page.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PatternsWizardPage extends WizardPage {
 
@@ -58,8 +57,6 @@ public class PatternsWizardPage extends WizardPage {
             patternFileField.setEnabled(patternFileRButton.isSelected());
         }
     }
-
-
 
     /**
      * Map key to store if the data has been previously loaded. It prevents
@@ -92,8 +89,6 @@ public class PatternsWizardPage extends WizardPage {
     public static String getDescription() {
         return "Patterns";
     }
-
-
 
     /** Radio button for the smp file selection. */
     private RadioButton smpFileRButton;
@@ -141,7 +136,7 @@ public class PatternsWizardPage extends WizardPage {
         add(new JLabel("File"), "gapleft 35");
         smpFileField = new FileNameField("smp file", 25, true);
         smpFileField.setFileSelectionMode(FileNameField.FILES_ONLY);
-        FileDialog.addFilter("*.smp");
+        rmlshared.gui.FileDialog.addFilter("*.smp");
         smpFileField.setFileFilter("*.smp");
         add(smpFileField, "growx, pushx, wrap");
 
@@ -181,7 +176,7 @@ public class PatternsWizardPage extends WizardPage {
         add(new JLabel("File"), "gapleft 35");
         patternFileField = new FileNameField("single pattern", 25, true);
         patternFileField.setFileSelectionMode(FileNameField.FILES_ONLY);
-        FileDialog.setFilter("*.jpg");
+        rmlshared.gui.FileDialog.setFilter("*.jpg");
         patternFileField.setFileFilter("*.jpg");
         add(patternFileField, "growx, pushx");
 

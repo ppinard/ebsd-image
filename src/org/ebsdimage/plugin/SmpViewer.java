@@ -26,10 +26,7 @@ import rmlimage.core.ByteMap;
 import rmlimage.gui.BasicDialog;
 import rmlimage.gui.PlugIn;
 import rmlshared.cui.ErrorDialog;
-import rmlshared.gui.ColumnPanel;
-import rmlshared.gui.FileNameField;
-import rmlshared.gui.IntField;
-import rmlshared.gui.Panel;
+import rmlshared.gui.*;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 
 /**
@@ -113,7 +110,7 @@ public class SmpViewer extends PlugIn {
     private ByteMap getPattern() throws IOException {
         Dialog dialog = new Dialog();
 
-        if (dialog.show() == Dialog.CANCEL)
+        if (dialog.show() == OkCancelDialog.CANCEL)
             return null;
 
         File smpFile = dialog.getSmpFile();

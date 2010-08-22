@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static java.lang.Math.PI;
@@ -22,8 +22,6 @@ import static java.lang.Math.sin;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.ebsdimage.core.HoughMath;
-import org.ebsdimage.core.HoughPeak;
 import org.junit.Test;
 
 import ptpshared.core.geom.Line;
@@ -33,12 +31,14 @@ public class HoughMathTest {
     @Test
     public void testFit1() {
         // Peaks1
-        HoughPeak[] peaks1 = new HoughPeak[] { new HoughPeak(1, 2),
-                new HoughPeak(5, 1.5), new HoughPeak(8, 1) };
+        HoughPeak[] peaks1 =
+                new HoughPeak[] { new HoughPeak(1, 2), new HoughPeak(5, 1.5),
+                        new HoughPeak(8, 1) };
 
         // Peak2
-        HoughPeak[] peaks2 = new HoughPeak[] { new HoughPeak(5, 1.5),
-                new HoughPeak(1, 2), new HoughPeak(8, 1) };
+        HoughPeak[] peaks2 =
+                new HoughPeak[] { new HoughPeak(5, 1.5), new HoughPeak(1, 2),
+                        new HoughPeak(8, 1) };
 
         assertEquals(0.0, HoughMath.fit(peaks1, peaks2), 1e-6);
     }
@@ -48,12 +48,14 @@ public class HoughMathTest {
     @Test
     public void testFit2() {
         // Peaks1
-        HoughPeak[] peaks1 = new HoughPeak[] { new HoughPeak(1, 2),
-                new HoughPeak(5, 1.5), new HoughPeak(8, 1) };
+        HoughPeak[] peaks1 =
+                new HoughPeak[] { new HoughPeak(1, 2), new HoughPeak(5, 1.5),
+                        new HoughPeak(8, 1) };
 
         // Peak2
-        HoughPeak[] peaks2 = new HoughPeak[] { new HoughPeak(5, 1.5),
-                new HoughPeak(1, 3), new HoughPeak(8, 2) };
+        HoughPeak[] peaks2 =
+                new HoughPeak[] { new HoughPeak(5, 1.5), new HoughPeak(1, 3),
+                        new HoughPeak(8, 2) };
 
         assertEquals(2.0 / 3.0, HoughMath.fit(peaks1, peaks2), 1e-6);
     }
@@ -63,12 +65,14 @@ public class HoughMathTest {
     @Test
     public void testFit3() {
         // Peaks1
-        HoughPeak[] peaks1 = new HoughPeak[] { new HoughPeak(1, 2),
-                new HoughPeak(5, 1.5), new HoughPeak(8, 1) };
+        HoughPeak[] peaks1 =
+                new HoughPeak[] { new HoughPeak(1, 2), new HoughPeak(5, 1.5),
+                        new HoughPeak(8, 1) };
 
         // Peak2
-        HoughPeak[] peaks2 = new HoughPeak[] { new HoughPeak(50, 3),
-                new HoughPeak(10, 0), new HoughPeak(80, 1) };
+        HoughPeak[] peaks2 =
+                new HoughPeak[] { new HoughPeak(50, 3), new HoughPeak(10, 0),
+                        new HoughPeak(80, 1) };
 
         assertEquals(39.0833333, HoughMath.fit(peaks1, peaks2), 1e-6);
     }

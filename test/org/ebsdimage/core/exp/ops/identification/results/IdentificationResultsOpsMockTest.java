@@ -14,21 +14,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.identification.results;
 
 import static org.junit.Assert.assertEquals;
 
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.OpResult;
-import org.ebsdimage.core.exp.ops.identification.results.IdentificationResultsOps;
 import org.junit.Before;
 import org.junit.Test;
-
 
 public class IdentificationResultsOpsMockTest {
 
     private IdentificationResultsOps op;
+
     private HoughPeak[] srcPeaks;
 
 

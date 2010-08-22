@@ -202,7 +202,7 @@ public class Wizard {
         UIManager.put("wizard.sidebar.image", image);
 
         // Create wizard
-        wizard = WizardPage.createWizard(title, pages);
+        wizard = org.netbeans.spi.wizard.WizardPage.createWizard(title, pages);
 
         // Show and wait until wizard closes
         Object result = new Show().invokeAndWait();

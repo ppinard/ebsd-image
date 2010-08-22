@@ -29,7 +29,6 @@ import ptpshared.utility.xml.ObjectXmlSaver;
  * XML saver for a <code>CleanEdge</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class CleanEdgeXmlSaver implements ObjectXmlSaver {
 

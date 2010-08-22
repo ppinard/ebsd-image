@@ -32,7 +32,6 @@ import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPanelNavResult;
 
 import ptpshared.gui.WizardPage;
-import rmlimage.gui.FileDialog;
 import rmlshared.gui.CheckBox;
 import rmlshared.gui.FileNameField;
 
@@ -106,7 +105,7 @@ public class StartWizardPage extends WizardPage {
 
         paramsFileField = new FileNameField("OPS_FILE", 32, true);
         paramsFileField.setFileSelectionMode(FileNameField.FILES_ONLY);
-        FileDialog.addFilter("*.xml");
+        rmlshared.gui.FileDialog.addFilter("*.xml");
         paramsFileField.setFileFilter("*.xml");
         paramsFileField.setEnabled(false);
         add(paramsFileField, "gapleft 35, wrap");

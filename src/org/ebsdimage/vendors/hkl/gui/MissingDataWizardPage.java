@@ -14,16 +14,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.hkl.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import net.miginfocom.swing.MigLayout;
+
 import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.EbsdMetadata;
 
-import net.miginfocom.swing.MigLayout;
 import ptpshared.gui.WizardPage;
 import rmlshared.gui.CheckBox;
 import rmlshared.gui.DoubleField;
@@ -34,7 +35,6 @@ import rmlshared.gui.Panel;
  * Wizard page for the missing data.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class MissingDataWizardPage extends WizardPage {
     /**
@@ -50,8 +50,6 @@ public class MissingDataWizardPage extends WizardPage {
         }
     }
 
-
-
     /**
      * Listener to enable/disable the working distance field.
      */
@@ -61,8 +59,6 @@ public class MissingDataWizardPage extends WizardPage {
             wdField.setEnabled(!wdCBox.isSelected());
         }
     }
-
-
 
     /** Map key for the calibration. */
     public static final String KEY_CALIBRATION = "calibration";
@@ -80,8 +76,6 @@ public class MissingDataWizardPage extends WizardPage {
     public static String getDescription() {
         return "Missing Data";
     }
-
-
 
     /** Field for the missing working distance. */
     private DoubleField wdField;

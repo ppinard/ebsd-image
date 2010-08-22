@@ -117,8 +117,8 @@ public class HoughCrop extends HoughPostOps {
             // pattern map or the minimum between half the pattern map's height
             // or half the pattern map's width
             radius =
-                    patternMap.getProperty(MaskDisc.KEY_RADIUS, min(
-                            patternMap.width / 2, patternMap.height / 2));
+                    patternMap.getProperty(MaskDisc.KEY_RADIUS,
+                            min(patternMap.width / 2, patternMap.height / 2));
 
             // Decrease the radius by how much its value is negative
             // e.g radius = -1 => radius = maskdisc.radius

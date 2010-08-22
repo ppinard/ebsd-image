@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.indexing.op;
 
 import org.ebsdimage.core.exp.ops.indexing.op.IndexingOp;
@@ -23,7 +23,6 @@ import org.ebsdimage.core.exp.ops.indexing.op.IndexingOp;
  * Tags for <code>IndexingOp</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class IndexingOpXmlTags {
     /** XML tag name for <code>IndexingOp</code>. */

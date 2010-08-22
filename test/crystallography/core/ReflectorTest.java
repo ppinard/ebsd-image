@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import static org.junit.Assert.assertEquals;
@@ -29,6 +29,7 @@ import crystallography.core.crystals.Silicon;
 public class ReflectorTest {
 
     private Reflector refl;
+
     private Plane plane;
 
 
@@ -57,8 +58,8 @@ public class ReflectorTest {
 
     @Test
     public void testHasCode() {
-        assertEquals(new Reflector(plane, 3.0, 0.03512).hashCode(), refl
-                .hashCode());
+        assertEquals(new Reflector(plane, 3.0, 0.03512).hashCode(),
+                refl.hashCode());
     }
 
 
@@ -96,8 +97,8 @@ public class ReflectorTest {
         Crystal crystal = new Silicon();
         Plane plane = new Plane(1, 1, 1);
 
-        Reflector other = new Reflector(plane, crystal,
-                new XrayScatteringFactors());
+        Reflector other =
+                new Reflector(plane, crystal, new XrayScatteringFactors());
 
         assertEquals(plane, other.plane);
         assertEquals(3.13501196, other.planeSpacing, 1e-7);

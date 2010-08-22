@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.sim.ops.output;
 
 import org.ebsdimage.core.sim.ops.output.HoughPeaksXmlFile;
@@ -23,11 +23,10 @@ import org.ebsdimage.core.sim.ops.output.HoughPeaksXmlFile;
  * Tags for <code>HoughPeaksXmlFile</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HoughPeaksXmlFileXmlTags {
 
     /** XML tag name for <code>HoughPeaksXmlFile</code>. */
-    public static final String TAG_NAME = HoughPeaksXmlFile.class
-            .getSimpleName();
+    public static final String TAG_NAME =
+            HoughPeaksXmlFile.class.getSimpleName();
 }

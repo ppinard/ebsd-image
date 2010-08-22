@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.detection.pre;
 
 import org.ebsdimage.core.exp.ops.detection.pre.DetectionPreOps;
@@ -23,7 +23,6 @@ import org.ebsdimage.core.exp.ops.detection.pre.DetectionPreOps;
  * Tags for <code>DetectionPreOps</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class DetectionPreOpsXmlTags {
     /** XML tag name for <code>DetectionPreOps</code>. */

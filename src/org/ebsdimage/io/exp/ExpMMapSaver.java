@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp;
 
 import org.ebsdimage.core.exp.ExpMMap;
@@ -26,7 +26,6 @@ import org.ebsdimage.io.EbsdMetadataXmlSaver;
  * readable zip file.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class ExpMMapSaver extends EbsdMMapSaver {
 
@@ -41,12 +40,12 @@ public class ExpMMapSaver extends EbsdMMapSaver {
     protected EbsdMetadataXmlSaver getMetadataSaver() {
         return new ExpMetadataXmlSaver();
     }
-    
-    
+
+
+
     @Override
     protected int getVersion() {
         return 1;
     }
-    
 
 }

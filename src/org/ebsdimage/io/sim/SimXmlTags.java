@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.sim;
 
 import org.ebsdimage.core.sim.Sim;
@@ -23,7 +23,6 @@ import org.ebsdimage.core.sim.Sim;
  * Tags for <code>Sim</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class SimXmlTags {
     /** XML tag name for <code>Sim</code>. */

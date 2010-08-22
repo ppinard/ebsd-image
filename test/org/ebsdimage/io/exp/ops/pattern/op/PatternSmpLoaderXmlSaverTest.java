@@ -61,13 +61,13 @@ public class PatternSmpLoaderXmlSaverTest {
         Element element = new PatternSmpLoaderXmlSaver().save(op);
 
         assertEquals(TAG_NAME, element.getName());
-        assertEquals(45, JDomUtil.getIntegerFromAttribute(element,
-                ATTR_START_INDEX));
+        assertEquals(45,
+                JDomUtil.getIntegerFromAttribute(element, ATTR_START_INDEX));
         assertEquals(4, JDomUtil.getIntegerFromAttribute(element, ATTR_SIZE));
-        assertEquals(filepath.getParent(), JDomUtil.getStringFromAttribute(
-                element, ATTR_FILEDIR));
-        assertEquals(filepath.getName(), JDomUtil.getStringFromAttribute(
-                element, ATTR_FILENAME));
+        assertEquals(filepath.getParent(),
+                JDomUtil.getStringFromAttribute(element, ATTR_FILEDIR));
+        assertEquals(filepath.getName(),
+                JDomUtil.getStringFromAttribute(element, ATTR_FILENAME));
     }
 
 }

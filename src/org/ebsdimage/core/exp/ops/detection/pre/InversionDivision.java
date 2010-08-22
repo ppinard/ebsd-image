@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.detection.pre;
 
 import org.ebsdimage.core.Conversion;
@@ -48,7 +48,6 @@ public class InversionDivision extends DetectionPreOps {
      * @param srcMap
      *            input Hough map
      * @return output Hough map
-     * 
      * @see MapMath#notOp(ByteMap)
      * @see MapMath#division(ByteMap, ByteMap, ByteMap)
      */

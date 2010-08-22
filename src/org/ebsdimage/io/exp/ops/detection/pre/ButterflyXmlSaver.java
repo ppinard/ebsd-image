@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.detection.pre;
 
 import static org.ebsdimage.io.exp.ops.detection.pre.ButterflyXmlTags.ATTR_FLATTEN_LOWERLIMIT;
@@ -32,7 +32,6 @@ import ptpshared.utility.xml.ObjectXmlSaver;
  * XML saver for a <code>Butterfly</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class ButterflyXmlSaver implements ObjectXmlSaver {
 
@@ -59,10 +58,10 @@ public class ButterflyXmlSaver implements ObjectXmlSaver {
         Element element = new Element(TAG_NAME);
 
         element.setAttribute(ATTR_KERNELSIZE, Integer.toString(op.kernelSize));
-        element.setAttribute(ATTR_FLATTEN_LOWERLIMIT, Float
-                .toString(op.flattenLowerLimit));
-        element.setAttribute(ATTR_FLATTEN_UPPERLIMIT, Float
-                .toString(op.flattenUpperLimit));
+        element.setAttribute(ATTR_FLATTEN_LOWERLIMIT,
+                Float.toString(op.flattenLowerLimit));
+        element.setAttribute(ATTR_FLATTEN_UPPERLIMIT,
+                Float.toString(op.flattenUpperLimit));
 
         return element;
     }

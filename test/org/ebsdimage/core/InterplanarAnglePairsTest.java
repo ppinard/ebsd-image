@@ -14,14 +14,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.ebsdimage.core.InterplanarAnglePair;
-import org.ebsdimage.core.InterplanarAnglePairs;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,7 +31,9 @@ import crystallography.core.crystals.Silicon;
 public class InterplanarAnglePairsTest {
 
     private InterplanarAnglePairs pairs;
+
     private Reflectors refls;
+
     private Crystal crystal;
 
 

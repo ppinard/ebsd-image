@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.post;
 
 import static org.ebsdimage.io.exp.ops.pattern.post.BinningXmlTags.ATTR_SIZE;
@@ -30,7 +30,6 @@ import ptpshared.utility.xml.ObjectXmlSaver;
  * XML saver for a <code>Binning</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class BinningXmlSaver implements ObjectXmlSaver {
 

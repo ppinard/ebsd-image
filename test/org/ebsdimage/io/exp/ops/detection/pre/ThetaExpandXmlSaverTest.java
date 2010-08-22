@@ -46,8 +46,8 @@ public class ThetaExpandXmlSaverTest {
         Element element = new ThetaExpandXmlSaver().save(op);
 
         assertEquals(TAG_NAME, element.getName());
-        assertEquals(1.5, JDomUtil.getDoubleFromAttribute(element,
-                ATTR_INCREMENT), 1e-6);
+        assertEquals(1.5,
+                JDomUtil.getDoubleFromAttribute(element, ATTR_INCREMENT), 1e-6);
     }
 
 }

@@ -14,24 +14,26 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.identification.results;
 
 import static org.junit.Assert.assertEquals;
 
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.OpResult;
-import org.ebsdimage.core.exp.ops.identification.results.Count;
 import org.junit.Before;
 import org.junit.Test;
-
 
 public class CountTest {
 
     private Count count;
+
     private HoughPeak[] peaks;
+
     private HoughPeak peak1;
+
     private HoughPeak peak2;
+
     private HoughPeak peak3;
 
 

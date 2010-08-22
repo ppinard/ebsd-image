@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import net.jcip.annotations.Immutable;
@@ -32,7 +32,6 @@ import net.jcip.annotations.Immutable;
  * <code>intensity</code> and <code>normalizedIntensity</code> respectively.
  * 
  * @author Philippe T. Pinard
- * 
  */
 @Immutable
 public class Reflector {
@@ -63,7 +62,6 @@ public class Reflector {
      *            crystal containing the plane
      * @param scatter
      *            scattering coefficient to calculate the diffraction intensity
-     * 
      * @throws NullPointerException
      *             if the plane is null
      * @throws IllegalArgumentException
@@ -111,7 +109,6 @@ public class Reflector {
      *            diffraction intensity
      * @param normalizedIntensity
      *            normalized diffraction intensity
-     * 
      * @throws NullPointerException
      *             if the plane is null
      * @throws IllegalArgumentException
@@ -151,7 +148,6 @@ public class Reflector {
      *            old <code>Reflector</code>
      * @param normalizedIntensity
      *            updated normalized diffraction intensity
-     * 
      * @throws NullPointerException
      *             if the plane is null
      * @throws IllegalArgumentException
@@ -173,7 +169,6 @@ public class Reflector {
      * 
      * @param obj
      *            other <code>Reflector</code> to check equality
-     * 
      * @return whether the planes of the two <code>Reflector</code> are equal
      */
     @Override
@@ -200,7 +195,6 @@ public class Reflector {
      * 
      * @param plane
      *            <code>Plane</code> to check equality
-     * 
      * @return whether the planes are equal
      */
     public boolean equals(Plane plane) {

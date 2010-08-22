@@ -29,7 +29,6 @@ import ptpshared.utility.xml.ObjectXmlLoader;
  * XML loader for a <code>CleanEdge</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class CleanEdgeXmlLoader implements ObjectXmlLoader {
 

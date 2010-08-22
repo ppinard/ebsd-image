@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.core;
 
 import java.util.HashMap;
@@ -23,7 +23,6 @@ import java.util.HashMap;
  * Abstract class for the scattering factors.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public abstract class ScatteringFactors {
 

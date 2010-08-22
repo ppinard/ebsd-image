@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.sim;
 
 import static org.junit.Assert.assertEquals;
@@ -22,8 +22,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.ebsdimage.core.Camera;
-import org.ebsdimage.core.sim.Band;
-import org.ebsdimage.core.sim.BandException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,12 +36,19 @@ import crystallography.core.crystals.Silicon;
 public class BandTest {
 
     private Plane plane;
+
     private Crystal crystal;
+
     private XrayScatteringFactors scatter;
+
     private Reflector refl;
+
     private Quaternion rotation;
+
     private Camera camera;
+
     private double energy;
+
     private Band band;
 
 

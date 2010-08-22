@@ -14,15 +14,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static java.lang.Math.PI;
 import static org.junit.Assert.assertEquals;
 
-import org.ebsdimage.core.HoughMath;
-import org.ebsdimage.core.HoughPeak;
-import org.ebsdimage.core.HoughPeakPair;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,9 +29,13 @@ import ptpshared.core.math.Vector3D;
 public class HoughPeakPairTest {
 
     private HoughPeak peak0;
+
     private HoughPeak peak1;
+
     private Vector3D normal0;
+
     private Vector3D normal1;
+
     private HoughPeakPair pair;
 
 

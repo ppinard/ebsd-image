@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.gui.exp;
 
 import java.awt.event.ActionEvent;
@@ -32,7 +32,6 @@ import rmlshared.gui.RadioButton;
  * Template for the output wizard page.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class OutputWizardPage extends WizardPage {
 
@@ -45,8 +44,6 @@ public class OutputWizardPage extends WizardPage {
             previewIndexField.setEnabled(previewRButton.isSelected());
         }
     }
-
-
 
     /** Map key whether to run the experiment. */
     public static final String KEY_RUN = "output.run";
@@ -70,8 +67,6 @@ public class OutputWizardPage extends WizardPage {
     public static String getDescription() {
         return "Output";
     }
-
-
 
     /** Radio button to run the experiment in preview mode. */
     private RadioButton previewRButton;

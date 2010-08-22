@@ -64,9 +64,7 @@ public class AutomaticStdDevTest {
     @Test
     public void testIdentify() throws IOException {
         HoughMap srcMap =
-                new HoughMapLoader()
-                        .load(FileUtil
-                                .getFile("org/ebsdimage/testdata/houghmap_cropped.bmp"));
+                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap_cropped.bmp"));
         BinMap peaksMap = autoStdDev.detect(null, srcMap);
 
         // Remove small objects for comparison

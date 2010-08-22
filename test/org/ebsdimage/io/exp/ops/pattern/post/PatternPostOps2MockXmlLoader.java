@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.pattern.post;
 
 import static org.ebsdimage.io.exp.ops.pattern.post.PatternPostOps2MockXmlTags.ATTR_VAR;
@@ -35,8 +35,9 @@ public class PatternPostOps2MockXmlLoader implements ObjectXmlLoader {
             throw new IllegalNameException("Tag should be " + TAG_NAME
                     + ", not " + element.getName() + ".");
 
-        int var = JDomUtil.getIntegerFromAttribute(element, ATTR_VAR,
-                PatternPostOps2Mock.defaultVar);
+        int var =
+                JDomUtil.getIntegerFromAttribute(element, ATTR_VAR,
+                        PatternPostOps2Mock.defaultVar);
 
         return new PatternPostOps2Mock(var);
     }

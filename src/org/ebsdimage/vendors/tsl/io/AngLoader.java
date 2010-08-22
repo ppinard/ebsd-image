@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import org.ebsdimage.core.Camera;
+import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.PhasesMap;
 import org.ebsdimage.vendors.tsl.core.TslMMap;
 import org.ebsdimage.vendors.tsl.core.TslMetadata;
@@ -818,11 +819,11 @@ public class AngLoader implements Monitorable {
         // Set the maps
         HashMap<String, Map> mapList = new HashMap<String, Map>();
 
-        mapList.put(TslMMap.Q0, q0Map);
-        mapList.put(TslMMap.Q1, q1Map);
-        mapList.put(TslMMap.Q2, q2Map);
-        mapList.put(TslMMap.Q3, q3Map);
-        mapList.put(TslMMap.PHASES, new PhasesMap(width, height, phasesArray,
+        mapList.put(EbsdMMap.Q0, q0Map);
+        mapList.put(EbsdMMap.Q1, q1Map);
+        mapList.put(EbsdMMap.Q2, q2Map);
+        mapList.put(EbsdMMap.Q3, q3Map);
+        mapList.put(EbsdMMap.PHASES, new PhasesMap(width, height, phasesArray,
                 phases));
 
         mapList.put(TslMMap.EULER1, euler1Map);
@@ -960,11 +961,11 @@ public class AngLoader implements Monitorable {
         // Set the maps
         HashMap<String, Map> mapList = new HashMap<String, Map>();
 
-        mapList.put(TslMMap.Q0, q0Map);
-        mapList.put(TslMMap.Q1, q1Map);
-        mapList.put(TslMMap.Q2, q2Map);
-        mapList.put(TslMMap.Q3, q3Map);
-        mapList.put(TslMMap.PHASES, new PhasesMap(width, height, phasesArray,
+        mapList.put(EbsdMMap.Q0, q0Map);
+        mapList.put(EbsdMMap.Q1, q1Map);
+        mapList.put(EbsdMMap.Q2, q2Map);
+        mapList.put(EbsdMMap.Q3, q3Map);
+        mapList.put(EbsdMMap.PHASES, new PhasesMap(width, height, phasesArray,
                 phases));
 
         mapList.put(TslMMap.EULER1, euler1Map);

@@ -14,15 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.tsl.io;
 
 import java.io.File;
 
 import org.ebsdimage.vendors.tsl.core.TslMMap;
 import org.ebsdimage.vendors.tsl.core.TslMMapTester;
-import org.ebsdimage.vendors.tsl.io.TslMMapLoader;
-import org.ebsdimage.vendors.tsl.io.TslMMapSaver;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -31,8 +29,8 @@ import rmlshared.io.FileUtil;
 
 public class TslMMapSaverTest extends TslMMapTester {
 
-    private static File zipFile =
-            new File(FileUtil.getTempDirFile(), "scan1.zip");
+    private static File zipFile = new File(FileUtil.getTempDirFile(),
+            "scan1.zip");
 
 
 

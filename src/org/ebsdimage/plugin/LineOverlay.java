@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.plugin;
 
 import java.awt.geom.Line2D;
@@ -28,6 +28,7 @@ import rmlimage.core.Map;
 import rmlimage.gui.*;
 import rmlshared.geom.LineUtil;
 import rmlshared.gui.ComboBox;
+import rmlshared.gui.OkCancelDialog;
 import rmlshared.gui.Panel;
 import rmlshared.gui.ToggleButton;
 import rmlshared.gui.mouse.LinePointer;
@@ -37,7 +38,6 @@ import rmlshared.gui.mouse.LinePointer;
  * cursor over the Hough map and see the corresponding line in the pattern map.
  * 
  * @author Marin Lagac&eacute;
- * 
  */
 public class LineOverlay extends PlugIn {
 
@@ -45,7 +45,6 @@ public class LineOverlay extends PlugIn {
      * Dialog to select the pattern map.
      * 
      * @author Marin Lagac&eacute;
-     * 
      */
     private class Dialog extends BasicDialog {
 
@@ -82,13 +81,10 @@ public class LineOverlay extends PlugIn {
 
     }
 
-
-
     /**
      * Listener to check for the source window closing.
      * 
      * @author Marin Lagac&eacute;
-     * 
      */
     private class InternalFrameListener extends
             javax.swing.event.InternalFrameAdapter {
@@ -98,13 +94,10 @@ public class LineOverlay extends PlugIn {
         }
     }
 
-
-
     /**
      * Listener to track the mouse motion on the map.
      * 
      * @author Marin Lagac&eacute;
-     * 
      */
     private class MapMouseMotionListener extends MapMouseMotionAdapter {
         @Override
@@ -137,13 +130,10 @@ public class LineOverlay extends PlugIn {
 
     }
 
-
-
     /**
      * Listener to listen for scrolling and scale changes.
      * 
      * @author Marin Lagac&eacute;
-     * 
      */
     private class ViewListener extends MapWindowAdapter {
         @Override
@@ -158,8 +148,6 @@ public class LineOverlay extends PlugIn {
             destinationWindow.setViewPosition(x, y, 0, 0);
         }
     }
-
-
 
     /** Button to active the line overlay. */
     private ToggleButton toggleButton;
@@ -253,7 +241,7 @@ public class LineOverlay extends PlugIn {
         }
 
         Dialog dialog = new Dialog();
-        if (dialog.show() == Dialog.CANCEL) {
+        if (dialog.show() == OkCancelDialog.CANCEL) {
             toggleButton.setSelected(false);
             return;
         }

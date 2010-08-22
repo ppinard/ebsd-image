@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import rmlimage.core.Result;
@@ -23,7 +23,6 @@ import rmlimage.core.Result;
  * Results consisting of maximum values.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class Maximum extends Result {
 

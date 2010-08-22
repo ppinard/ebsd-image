@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp;
 
 import static org.ebsdimage.io.exp.ExpsGeneratorXmlTags.TAG_NAME;
@@ -26,7 +26,6 @@ import org.ebsdimage.io.exp.ops.pattern.post.PatternPostOps2MockXmlSaver;
 import org.ebsdimage.io.exp.ops.pattern.post.PatternPostOpsMockXmlSaver;
 import org.jdom.Element;
 
-
 public abstract class ExpsGeneratorXmlTester extends ExpsGeneratorTester {
 
     public static Element createElement() {
@@ -35,8 +34,8 @@ public abstract class ExpsGeneratorXmlTester extends ExpsGeneratorTester {
         Element child;
 
         parent = new Element("pattern.post");
-        child = new PatternPostOps2MockXmlSaver()
-                .save(new PatternPostOps2Mock());
+        child =
+                new PatternPostOps2MockXmlSaver().save(new PatternPostOps2Mock());
         child.setText(Integer.toString(1));
         parent.addContent(child);
 
@@ -44,18 +43,20 @@ public abstract class ExpsGeneratorXmlTester extends ExpsGeneratorTester {
         child.setText(Integer.toString(2));
         parent.addContent(child);
 
-        child = new PatternPostOps2MockXmlSaver()
-                .save(new PatternPostOps2Mock());
+        child =
+                new PatternPostOps2MockXmlSaver().save(new PatternPostOps2Mock());
         child.setText(Integer.toString(3));
         parent.addContent(child);
 
-        child = new PatternPostOps2MockXmlSaver().save(new PatternPostOps2Mock(
-                4));
+        child =
+                new PatternPostOps2MockXmlSaver().save(new PatternPostOps2Mock(
+                        4));
         child.setText(Integer.toString(1));
         parent.addContent(child);
 
-        child = new PatternPostOps2MockXmlSaver().save(new PatternPostOps2Mock(
-                8));
+        child =
+                new PatternPostOps2MockXmlSaver().save(new PatternPostOps2Mock(
+                        8));
         child.setText(Integer.toString(1));
         parent.addContent(child);
 

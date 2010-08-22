@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package crystallography.io;
 
 import static crystallography.io.AtomSiteXmlTags.ATTR_ATOMICNUMBER;
@@ -33,7 +33,6 @@ import crystallography.core.AtomSite;
  * XML saver for <code>AtomSite</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class AtomSiteXmlSaver implements ObjectXmlSaver {
 
@@ -48,8 +47,8 @@ public class AtomSiteXmlSaver implements ObjectXmlSaver {
         Element element = new Element(TAG_NAME);
 
         Element childElement = new Element(CHILD_ELEMENT);
-        childElement.setAttribute(ATTR_ATOMICNUMBER, Integer
-                .toString(atom.atomicNumber));
+        childElement.setAttribute(ATTR_ATOMICNUMBER,
+                Integer.toString(atom.atomicNumber));
         element.addContent(childElement);
 
         Element childPosition = new Vector3DXmlSaver().save(atom.position);

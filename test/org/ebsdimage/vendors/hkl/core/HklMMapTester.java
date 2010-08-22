@@ -25,6 +25,7 @@ import java.io.IOException;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.Camera;
+import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.PhasesMap;
 import org.ebsdimage.io.PhasesMapLoader;
 import org.junit.Before;
@@ -41,6 +42,7 @@ import crystallography.io.CrystalLoader;
 public abstract class HklMMapTester extends TestCase {
 
     protected HklMMap mmap;
+
     protected Crystal copperPhase;
 
 
@@ -48,8 +50,7 @@ public abstract class HklMMapTester extends TestCase {
     @Before
     public void setUp() throws Exception {
         copperPhase =
-                new CrystalLoader()
-                        .load(getFile("org/ebsdimage/vendors/hkl/testdata/Copper.xml"));
+                new CrystalLoader().load(getFile("org/ebsdimage/vendors/hkl/testdata/Copper.xml"));
     }
 
 
@@ -227,9 +228,7 @@ public abstract class HklMMapTester extends TestCase {
         PhasesMap phasesMap = mmap.getPhasesMap();
 
         PhasesMap expectedPhasesMap =
-                new PhasesMapLoader()
-                        .load(FileUtil
-                                .getFile("org/ebsdimage/vendors/hkl/testdata/Phases.bmp"));
+                new PhasesMapLoader().load(FileUtil.getFile("org/ebsdimage/vendors/hkl/testdata/Phases.bmp"));
 
         phasesMap.assertEquals(expectedPhasesMap);
 
@@ -307,10 +306,10 @@ public abstract class HklMMapTester extends TestCase {
         assertEquals(13, maps.length);
 
         // Test the presence of the Maps
-        assertTrue(mmap.contains(HklMMap.Q0));
-        assertTrue(mmap.contains(HklMMap.Q1));
-        assertTrue(mmap.contains(HklMMap.Q2));
-        assertTrue(mmap.contains(HklMMap.Q3));
+        assertTrue(mmap.contains(EbsdMMap.Q0));
+        assertTrue(mmap.contains(EbsdMMap.Q1));
+        assertTrue(mmap.contains(EbsdMMap.Q2));
+        assertTrue(mmap.contains(EbsdMMap.Q3));
         assertTrue(mmap.contains(HklMMap.BAND_CONTRAST));
         assertTrue(mmap.contains(HklMMap.BAND_COUNT));
         assertTrue(mmap.contains(HklMMap.BAND_SLOPE));
@@ -319,7 +318,7 @@ public abstract class HklMMapTester extends TestCase {
         assertTrue(mmap.contains(HklMMap.EULER2));
         assertTrue(mmap.contains(HklMMap.EULER3));
         assertTrue(mmap.contains(HklMMap.MEAN_ANGULAR_DEVIATION));
-        assertTrue(mmap.contains(HklMMap.PHASES));
+        assertTrue(mmap.contains(EbsdMMap.PHASES));
     }
 
 }

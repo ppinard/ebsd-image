@@ -992,7 +992,7 @@ public class CalculationsTest {
         AtomSites atoms = new AtomSites();
         atoms.add(new AtomSite(14, 0.0, 0.0, 0.0));
         AtomSites results =
-                Calculations.equivalentPositions(atoms, SpaceGroups.SG216);
+                Calculations.equivalentPositions(atoms, SpaceGroups2.SG216);
 
         assertEquals(4, results.size());
         assertEquals(atomsfcc, results);

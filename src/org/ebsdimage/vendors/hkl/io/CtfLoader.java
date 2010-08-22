@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.ebsdimage.core.Camera;
+import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.PhasesMap;
 import org.ebsdimage.vendors.hkl.core.HklMMap;
 import org.ebsdimage.vendors.hkl.core.HklMetadata;
@@ -814,11 +815,11 @@ public class CtfLoader implements Monitorable {
 
         // Set the maps
         HashMap<String, Map> mapList = new HashMap<String, Map>();
-        mapList.put(HklMMap.Q0, q0Map);
-        mapList.put(HklMMap.Q1, q1Map);
-        mapList.put(HklMMap.Q2, q2Map);
-        mapList.put(HklMMap.Q3, q3Map);
-        mapList.put(HklMMap.PHASES, new PhasesMap(width, height, phasesArray,
+        mapList.put(EbsdMMap.Q0, q0Map);
+        mapList.put(EbsdMMap.Q1, q1Map);
+        mapList.put(EbsdMMap.Q2, q2Map);
+        mapList.put(EbsdMMap.Q3, q3Map);
+        mapList.put(EbsdMMap.PHASES, new PhasesMap(width, height, phasesArray,
                 phases));
 
         mapList.put(HklMMap.BAND_COUNT, bandsMap);

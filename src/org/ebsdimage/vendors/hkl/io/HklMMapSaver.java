@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.hkl.io;
 
 import org.ebsdimage.io.EbsdMMapSaver;
@@ -26,7 +26,6 @@ import org.ebsdimage.vendors.hkl.core.HklMMap;
  * readable zip file.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HklMMapSaver extends EbsdMMapSaver {
 
@@ -43,9 +42,10 @@ public class HklMMapSaver extends EbsdMMapSaver {
     }
 
 
+
     @Override
     protected int getVersion() {
         return 1;
     }
-    
+
 }

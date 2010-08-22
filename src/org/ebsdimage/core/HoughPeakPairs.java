@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core;
 
 import static java.util.Arrays.sort;
@@ -28,7 +28,6 @@ import ptpshared.core.math.Vector3D;
  * Store many <code>HoughPeakPairs</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HoughPeakPairs extends Pairs<HoughPeakPair> {
 
@@ -41,7 +40,6 @@ public class HoughPeakPairs extends Pairs<HoughPeakPair> {
      *            Hough peaks
      * @param calibration
      *            calibration
-     * 
      * @throws NullPointerException
      *             if the Hough peaks are null
      * @throws NullPointerException

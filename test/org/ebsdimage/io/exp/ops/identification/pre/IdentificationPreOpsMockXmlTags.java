@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.identification.pre;
 
 import org.ebsdimage.core.exp.ops.identification.pre.IdentificationPreOpsMock;
@@ -22,6 +22,6 @@ import org.ebsdimage.core.exp.ops.identification.pre.IdentificationPreOpsMock;
 public class IdentificationPreOpsMockXmlTags {
 
     /** XML tag name for IdentificationPreOpsMock */
-    public static final String TAG_NAME = IdentificationPreOpsMock.class
-            .getSimpleName();
+    public static final String TAG_NAME =
+            IdentificationPreOpsMock.class.getSimpleName();
 }

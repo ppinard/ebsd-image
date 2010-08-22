@@ -14,19 +14,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-
 
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.TestCase;
-import org.ebsdimage.io.RawLoader;
 import org.junit.Test;
 
 import rmlimage.core.ByteMap;
@@ -50,8 +48,8 @@ public class RawLoaderTest extends TestCase {
         // Load the IntMap and convert it to a ByteMap for easier comparison
         File srcFile = getFile("org/ebsdimage/io/warp-y-map.raw");
         IntMap intMap = (IntMap) new RawLoader().load(srcFile);
-        ByteMap byteMap = rmlimage.module.integer.core.Conversion
-                .toByteMap(intMap);
+        ByteMap byteMap =
+                rmlimage.module.integer.core.Conversion.toByteMap(intMap);
 
         // Load the expected map
         ByteMap xpctMap = (ByteMap) load("org/ebsdimage/io/warp-y-map.bmp");
@@ -66,9 +64,9 @@ public class RawLoaderTest extends TestCase {
         // Load the IntMap and convert it to a ByteMap for easier comparison
         File srcFile = getFile("org/ebsdimage/io/warp-y-map.raw");
         IntMap intMap = new IntMap(168, 128);
-        IntMap map = (IntMap) new RawLoader().load(srcFile, intMap);
-        ByteMap byteMap = rmlimage.module.integer.core.Conversion
-                .toByteMap(intMap);
+        IntMap map = new RawLoader().load(srcFile, intMap);
+        ByteMap byteMap =
+                rmlimage.module.integer.core.Conversion.toByteMap(intMap);
 
         // Check the IntMap returned is the same as the one sent as an argument
         assertSame(intMap, map);

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.tsl.io;
 
 import org.ebsdimage.io.EbsdMMapSaver;
@@ -26,7 +26,6 @@ import org.ebsdimage.vendors.tsl.core.TslMMap;
  * readable zip file.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class TslMMapSaver extends EbsdMMapSaver {
 
@@ -42,10 +41,11 @@ public class TslMMapSaver extends EbsdMMapSaver {
         return new TslMetadataXmlSaver();
     }
 
-    
+
+
     @Override
     protected int getVersion() {
         return 1;
     }
-    
+
 }

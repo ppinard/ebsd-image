@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.indexing.pre;
 
 import static org.ebsdimage.io.exp.ops.indexing.pre.HoughPeaksSelectorXmlTags.ATTR_MAXIMUM;
@@ -32,7 +32,6 @@ import ptpshared.utility.xml.ObjectXmlLoader;
  * XML loader for a <code>HoughPeaksSelector</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HoughPeaksSelectorXmlLoader implements ObjectXmlLoader {
 

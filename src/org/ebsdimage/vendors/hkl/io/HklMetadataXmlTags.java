@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.vendors.hkl.io;
 
 import org.ebsdimage.vendors.hkl.core.HklMetadata;
@@ -23,7 +23,6 @@ import org.ebsdimage.vendors.hkl.core.HklMetadata;
  * Tags for <code>HklMetadata</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HklMetadataXmlTags {
     /** XML tag name for <code>HklMetadata</code>. */
