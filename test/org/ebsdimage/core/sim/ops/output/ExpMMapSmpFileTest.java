@@ -108,8 +108,8 @@ public class ExpMMapSmpFileTest {
         assertEquals(1, mmap.magnification, 1e-6);
         assertEquals(0, mmap.tiltAngle, 1e-6);
         assertEquals(Double.NaN, mmap.workingDistance, 1e-6);
-        assertEquals(1, mmap.pixelWidth, 1e-6);
-        assertEquals(1, mmap.pixelHeight, 1e-6);
+        assertEquals(1, mmap.pixelWidth * 1e6, 1e-6);
+        assertEquals(1, mmap.pixelHeight * 1e6, 1e-6);
         assertTrue(Quaternion.IDENTITY.equals(mmap.sampleRotation, 1e-6));
         assertTrue(new Camera(0.1, 0.2, 0.3).equals(mmap.calibration, 1e-6));
 
