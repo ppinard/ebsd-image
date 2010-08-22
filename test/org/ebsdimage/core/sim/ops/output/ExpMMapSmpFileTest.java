@@ -64,7 +64,9 @@ public class ExpMMapSmpFileTest {
     @Before
     public void setUp() throws Exception {
         tmpPath = new File(FileUtil.getTempDirFile(), "expmmapsmp");
-        tmpPath.mkdirs();
+        if (!tmpPath.mkdirs())
+            throw new IOException("Directory (" + tmpPath
+                    + ") could not be created.");
 
         op = new ExpMMapSmpFile();
 

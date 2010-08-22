@@ -21,7 +21,6 @@ import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 
-import net.jcip.annotations.Immutable;
 import rmlimage.core.ByteMap;
 import rmlimage.core.ROI;
 import rmlimage.module.stitch.Tessera;
@@ -32,7 +31,6 @@ import rmlshared.ui.Monitorable;
  * 
  * @author Philippe T. Pinard
  */
-@Immutable
 public class SmpStitcher implements Monitorable {
 
     /** Progress tracking variable. */

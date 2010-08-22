@@ -41,7 +41,7 @@ public class SmpViewer extends PlugIn {
      * 
      * @author Philippe T. Pinard
      */
-    private class Dialog extends BasicDialog {
+    private static class Dialog extends BasicDialog {
 
         /** File name browser for the SMP file. */
         private FileNameField smpFilenameField;

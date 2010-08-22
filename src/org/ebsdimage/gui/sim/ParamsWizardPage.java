@@ -56,7 +56,7 @@ public class ParamsWizardPage extends WizardPage {
      * 
      * @author Philippe T. Pinard
      */
-    private class CameraDialog extends OkCancelDialog {
+    private static class CameraDialog extends OkCancelDialog {
 
         /** Field for the detector distance. */
         private DoubleField ddField;
@@ -187,7 +187,7 @@ public class ParamsWizardPage extends WizardPage {
      * 
      * @author Philippe T. Pinard
      */
-    private class EnergyDialog extends OkCancelDialog {
+    private static class EnergyDialog extends OkCancelDialog {
 
         /** Field for the value of the energy. */
         private DoubleField energyField;
@@ -422,7 +422,7 @@ public class ParamsWizardPage extends WizardPage {
      * 
      * @author Philippe T. Pinard
      */
-    private class PatternSimOpPanel extends JPanel {
+    private static class PatternSimOpPanel extends JPanel {
 
         /**
          * Action to select an pattern simulation operation.
@@ -514,7 +514,7 @@ public class ParamsWizardPage extends WizardPage {
      * 
      * @author Philippe T. Pinard
      */
-    private class RandomRotationsDialog extends OkCancelDialog {
+    private static class RandomRotationsDialog extends OkCancelDialog {
         /** Field for the number of random rotations to create. */
         private IntField countField;
 
@@ -562,7 +562,7 @@ public class ParamsWizardPage extends WizardPage {
      * 
      * @author Philippe T. Pinard
      */
-    private class RotationDialog extends OkCancelDialog {
+    private static class RotationDialog extends OkCancelDialog {
 
         /** Field for the first Euler angle. */
         private DoubleField theta1Field;
