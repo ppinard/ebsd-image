@@ -2,184 +2,167 @@
 
 <project name="RML-Image EBSD" basedir="." default="help">
 
-<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-<taskdef name="deb" classname="com.googlecode.ant_deb_task.Deb"/>
-<taskdef name="desktopentry" 
-         classname="com.googlecode.ant_deb_task.DesktopEntry"/>
-<taskdef name="jarbundler" 
-        classname="net.sourceforge.jarbundler.JarBundler" />
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+  <taskdef name="deb" classname="com.googlecode.ant_deb_task.Deb" />
+  <taskdef name="desktopentry" classname="com.googlecode.ant_deb_task.DesktopEntry" />
+  <taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" />
 
   <!-- Read the local properties -->
-<fail message="property.file not defined" unless="property.file"/>
-<property environment="env"/>
-<property file="${property.file}"/>
+  <fail message="property.file not defined" unless="property.file" />
+  <property environment="env" />
+  <property file="${property.file}" />
 
-<!-- Check if the properties needed are defined-->
-<fail message="rmlimage.dir not defined" unless="rmlimage.dir"/>
-<echo message="rmlimage.dir = ${rmlimage.dir}"/>
-<fail message="rmlimage.src.dir not defined" unless="rmlimage.src.dir"/>
-<fail message="ebsd-image.dir not defined" unless="ebsd-image.dir"/>
+  <!-- Check if the properties needed are defined-->
+  <fail message="rmlimage.dir not defined" unless="rmlimage.dir" />
+  <echo message="rmlimage.dir = ${rmlimage.dir}" />
+  <fail message="rmlimage.src.dir not defined" unless="rmlimage.src.dir" />
+  <fail message="ebsd-image.dir not defined" unless="ebsd-image.dir" />
 
   <!-- Read the version -->
-<property file="${ebsd-image.src.dir}/version.props"/>  
-<fail message="version not defined" unless="version"/>
+  <property file="${ebsd-image.src.dir}/version.props" />
+  <fail message="version not defined" unless="version" />
 
-<property name="tmp.dir" location="${java.io.tmpdir}"/>
-<echo message="tmp.dir = ${tmp.dir}"/>
+  <property name="tmp.dir" location="${java.io.tmpdir}" />
+  <echo message="tmp.dir = ${tmp.dir}" />
 
-<fail message="class.dir not defined" unless="class.dir"/>
-<echo message="class.dir = ${class.dir}"/>
+  <fail message="class.dir not defined" unless="class.dir" />
+  <echo message="class.dir = ${class.dir}" />
 
-<fail message="build.dir not defined" unless="build.dir"/>
-<echo message="build.dir = ${build.dir}"/>
-<property name="modules.dir" location="${build.dir}/module"/>
+  <fail message="build.dir not defined" unless="build.dir" />
+  <echo message="build.dir = ${build.dir}" />
+  <property name="modules.dir" location="${build.dir}/module" />
 
-<fail message="dest.dir not defined" unless="dest.dir"/>
-<echo message="dest.dir = ${dest.dir}"/>
+  <fail message="dest.dir not defined" unless="dest.dir" />
+  <echo message="dest.dir = ${dest.dir}" />
 
-<property name="distro" value="ebsd"/>    
+  <property name="distro" value="ebsd" />
 
-<!-- <fail message="nsis.flags should not be set." if="nsis.flags"/> -->
-<property name="nsis.flags" value="/DEBSD /DSLIDESHOW"/>
-
-
-<property name="deb.dir" value="${tmp.dir}/deb"/>
-<property name="debian.version" value="1"/>
-
-<property name="app.name" value="EBSD-Image"/>
+  <!-- <fail message="nsis.flags should not be set." if="nsis.flags"/> -->
+  <property name="nsis.flags" value="/DEBSD /DSLIDESHOW" />
 
 
+  <property name="deb.dir" value="${tmp.dir}/deb" />
+  <property name="debian.version" value="1" />
 
-
-<target name="all" depends="deb,nsis-all" 
-        description="Builds the deb, IzPack and NSIS installers"/>
+  <property name="app.name" value="EBSD-Image" />
 
 
 
-        
-<!--Builds the whole structure for the core distro in the build directory -->
-<target name="build" description="Builds the full distro">
 
-  <property name="splashscreen.dir" value="${ebsd-image.dir}/install"/>
-  <ant dir="${rmlimage.src.dir}/rmlimage/distro/basic" target="build"/>
-  <rename src="${build.dir}/rml-image.jar" dest="${build.dir}/${app.name}.jar"/>
-  
-        <!-- Build the modules -->
-  <ant dir="${rmlimage.src.dir}/rmlimage/module/slideshow" target="build"/>
-  <ant dir="${rmlimage.src.dir}/rmlimage/module/complex" target="build"/>
-  <ant dir="${rmlimage.src.dir}/rmlimage/module/real" target="build"/>
-  <ant dir="${rmlimage.src.dir}/rmlimage/module/integer" target="build"/>
-  <ant dir="${rmlimage.src.dir}/rmlimage/module/multi" target="build"/>
-  <ant dir="${rmlimage.src.dir}/rmlimage/module/stitch" target="build"/>
-  <ant dir="${ebsd-image.dir}/src" target="build"/>
-  
-        <!-- Build EBSD doc 
+  <target name="all" depends="deb,nsis-all" description="Builds the deb, IzPack and NSIS installers" />
+
+
+
+
+  <!--Builds the whole structure for the core distro in the build directory -->
+  <target name="build" description="Builds the full distro">
+
+    <property name="splashscreen.dir" value="${ebsd-image.dir}/install" />
+    <ant dir="${rmlimage.src.dir}/rmlimage/distro/basic" target="build" />
+    <rename src="${build.dir}/rml-image.jar" dest="${build.dir}/${app.name}.jar" />
+
+    <!-- Build the modules -->
+    <ant dir="${rmlimage.src.dir}/rmlimage/module/slideshow" target="build" />
+    <ant dir="${rmlimage.src.dir}/rmlimage/module/complex" target="build" />
+    <ant dir="${rmlimage.src.dir}/rmlimage/module/real" target="build" />
+    <ant dir="${rmlimage.src.dir}/rmlimage/module/integer" target="build" />
+    <ant dir="${rmlimage.src.dir}/rmlimage/module/multi" target="build" />
+    <ant dir="${rmlimage.src.dir}/rmlimage/module/stitch" target="build" />
+    <ant dir="${ebsd-image.dir}/src" target="build" />
+
+    <!-- Build EBSD doc 
   <ant antfile="${rmlimage.dir}/Doc/build.xml" target="ebsd-pdf"/> -->
-</target>
+  </target>
 
 
 
 
 
-<target name="clean" description="Deletes all temporary files and directories">
-  <delete dir="${class.dir}"/>
-  <delete dir="${build.dir}"/>
-</target>
+  <target name="clean" description="Deletes all temporary files and directories">
+    <delete dir="${class.dir}" />
+    <delete dir="${build.dir}" />
+    <delete dir="${dest.dir}" />
+    <delete dir="${doc.dir}" />
+  </target>
 
 
 
 
 
-<target name="compile" description="Compiles the distro with all the modules">
-  <ant dir="${rmlimage.src.dir}/rmlimage/distro/basic" target="compile"/>
-  <ant dir="${rmlimage.src.dir}/rmlimage/module/slideshow" target="compile"/>
-  <ant dir="${rmlimage.src.dir}/rmlimage/module/complex" target="compile"/>
-  <ant dir="${rmlimage.src.dir}/rmlimage/module/real" target="compile"/>
-  <ant dir="${rmlimage.src.dir}/rmlimage/module/integer" target="compile"/>
-  <ant dir="${rmlimage.src.dir}/rmlimage/module/multi" target="compile"/>
-  <ant dir="${rmlimage.src.dir}/rmlimage/module/stitch" target="compile"/>
-  <ant dir="${ebsd-image.dir}/src" target="compile"/>  
-</target>
+  <target name="compile" description="Compiles the distro with all the modules">
+    <ant dir="${rmlimage.src.dir}/rmlimage/distro/basic" target="compile" />
+    <ant dir="${rmlimage.src.dir}/rmlimage/module/slideshow" target="compile" />
+    <ant dir="${rmlimage.src.dir}/rmlimage/module/complex" target="compile" />
+    <ant dir="${rmlimage.src.dir}/rmlimage/module/real" target="compile" />
+    <ant dir="${rmlimage.src.dir}/rmlimage/module/integer" target="compile" />
+    <ant dir="${rmlimage.src.dir}/rmlimage/module/multi" target="compile" />
+    <ant dir="${rmlimage.src.dir}/rmlimage/module/stitch" target="compile" />
+    <ant dir="${ebsd-image.dir}/src" target="compile" />
+  </target>
 
 
-        
 
-<target name="deb" depends="build" 
-        description="Builds the deb package for the full distro">
+
+  <target name="deb" depends="build" description="Builds the deb package for the full distro">
+    <mkdir dir="${dest.dir}" />
 
     <!-- Create the startup script -->
-  <echo file="${tmp.dir}/ebsd-image">
+    <echo file="${tmp.dir}/ebsd-image">
 #!/bin/sh
 java -jar /usr/share/ebsd-image/EBSD-Image.jar
   </echo>
-  
+
     <!-- Create the desktop shortcut -->
-  <desktopentry toFile="${tmp.dir}/ebsd-image.desktop"
-                name="EBSD-Image"
-                comment="EBSD Image Analysis Freeware"
-                exec="/usr/bin/ebsd-image"
-                path="/usr/share/ebsd-image/"
-                icon="/usr/share/ebsd-image/EBSD-Image_32x32.png"
-                categories="Graphics"/>
-  
-      <!-- Create the manpage -->
-  <copy file="${ebsd-image.dir}/install/manpage" 
-        tofile="${tmp.dir}/ebsd-image.1"/>
-  <tstamp>
-     <format property="date" pattern="d-MMMM-yyyy" locale="en,US"/>
-   </tstamp>
-  <replace file="${tmp.dir}/ebsd-image.1">  
-    <replacefilter token="$VERSION" value="${version}"/>
-    <replacefilter token="$DATE" value="${date}"/>
-  </replace>  
-  <gzip src="${tmp.dir}/ebsd-image.1" 
-        destfile="${tmp.dir}/ebsd-image.1.gz"/>
-  
-      <!-- Build the deb package -->
-  <deb package="ebsd-image" section="graphics" todir="${dest.dir}"
-       depends="sun-java6-jre" recommends="sun-java6-fonts"
-       preinst="${ebsd-image.dir}/install/preinst"
-       postinst="${ebsd-image.dir}/install/postinst"
-       prerm="${ebsd-image.dir}/install/prerm">
-    <version upstream="${version}" debian="${debian.version}"/>
-    <maintainer name="Philippe T. Pinard" email="philppe.pinard@mail.mcgill.ca"/>
-    <description synopsis="EBSD Image Analysis Freeware">
+    <desktopentry toFile="${tmp.dir}/ebsd-image.desktop" name="EBSD-Image" comment="EBSD Image Analysis Freeware" exec="/usr/bin/ebsd-image" path="/usr/share/ebsd-image/" icon="/usr/share/ebsd-image/EBSD-Image_32x32.png" categories="Graphics" />
+
+    <!-- Create the manpage -->
+    <copy file="${ebsd-image.dir}/install/manpage" tofile="${tmp.dir}/ebsd-image.1" />
+    <tstamp>
+      <format property="date" pattern="d-MMMM-yyyy" locale="en,US" />
+    </tstamp>
+    <replace file="${tmp.dir}/ebsd-image.1">
+      <replacefilter token="$VERSION" value="${version}" />
+      <replacefilter token="$DATE" value="${date}" />
+    </replace>
+    <gzip src="${tmp.dir}/ebsd-image.1" destfile="${tmp.dir}/ebsd-image.1.gz" />
+
+    <!-- Build the deb package -->
+    <deb package="ebsd-image" section="graphics" todir="${dest.dir}" depends="sun-java6-jre" recommends="sun-java6-fonts" preinst="${ebsd-image.dir}/install/preinst" postinst="${ebsd-image.dir}/install/postinst" prerm="${ebsd-image.dir}/install/prerm">
+      <version upstream="${version}" debian="${debian.version}" />
+      <maintainer name="Philippe T. Pinard" email="philppe.pinard@mail.mcgill.ca" />
+      <description synopsis="EBSD Image Analysis Freeware">
 Software to analyze electron backscattered diffraction (EBSD) 
 patterns obtained in a scanning electron microscope (SEM).
     </description>
-    <tarfileset file="${tmp.dir}/ebsd-image" prefix="usr/bin"
-                filemode="755"/>
-    <tarfileset dir="${build.dir}" prefix="usr/share/ebsd-image"/>
-    <tarfileset file="${tmp.dir}/ebsd-image.desktop" 
-                prefix="usr/share/applications"/>
-    <tarfileset dir="${ebsd-image.dir}/install" includes="EBSD-Image_32x32.png"
-                prefix="usr/share/ebsd-image"/>
-    <tarfileset file="${tmp.dir}/ebsd-image.1.gz"
-                prefix="usr/man/man1"/>
-  </deb>
-  
-        <!-- Cleanup -->
-  <delete file="${tmp.dir}/ebsd-image"/>
-  <delete file="${tmp.dir}/ebsd-image.desktop"/>
-  <delete file="${tmp.dir}/ebsd-image.1"/>
-  <delete file="${tmp.dir}/ebsd-image.1.gz"/>
-  
-  <echo message="ebsd-image_${version}-1_all.deb created in ${dest.dir}"/>
-</target>
-  
+      <tarfileset file="${tmp.dir}/ebsd-image" prefix="usr/bin" filemode="755" />
+      <tarfileset dir="${build.dir}" prefix="usr/share/ebsd-image" />
+      <tarfileset file="${tmp.dir}/ebsd-image.desktop" prefix="usr/share/applications" />
+      <tarfileset dir="${ebsd-image.dir}/install" includes="EBSD-Image_32x32.png" prefix="usr/share/ebsd-image" />
+      <tarfileset file="${tmp.dir}/ebsd-image.1.gz" prefix="usr/man/man1" />
+    </deb>
+
+    <!-- Cleanup -->
+    <delete file="${tmp.dir}/ebsd-image" />
+    <delete file="${tmp.dir}/ebsd-image.desktop" />
+    <delete file="${tmp.dir}/ebsd-image.1" />
+    <delete file="${tmp.dir}/ebsd-image.1.gz" />
+
+    <echo message="ebsd-image_${version}-1_all.deb created in ${dest.dir}" />
+  </target>
 
 
 
 
 
-<target name="help" description="Shows a help screen">
-  <echo>Build script for the EBSD distro.
+
+  <target name="help" description="Shows a help screen">
+    <echo>Build script for the EBSD distro.
 The code is compiled to class.dir (${class.dir}).
 The distro is built in build.dir (${build.dir}).
 To avoid compiling the javadoc, set the properties "nojavadoc" or "nodoc".
 To avoid compiling the manuals in pdf, set the properties "nopdf" or "nodoc".
 Use ant -p to get a listing of all the available targets.</echo>
-</target>
+  </target>
 
 
 
@@ -188,297 +171,298 @@ Use ant -p to get a listing of all the available targets.</echo>
 
 
 
-<target name="javadoc" description="Builds the javadoc for the core classes"
-        depends="compile">
-  <ant dir="${rmlimage.src.dir}/rmlimage/distro/core" target="javadoc"/>
-  <ant dir="${rmlimage.src.dir}/rmlimage/module/real" target="javadoc"/>
-  <ant dir="${rmlimage.src.dir}/rmlimage/module/complex" target="javadoc"/>
-  <ant dir="${rmlimage.src.dir}/rmlimage/module/integer" target="javadoc"/>
-  <ant dir="${rmlimage.src.dir}/rmlimage/module/multi" target="javadoc"/>
-  <ant dir="${ebsd-image.dir}/src" target="javadoc"/>
-</target>
+  <target name="javadoc" description="Builds the javadoc for the core classes" depends="compile">
+    <ant dir="${rmlimage.src.dir}/rmlimage/distro/core" target="javadoc" />
+    <ant dir="${rmlimage.src.dir}/rmlimage/module/real" target="javadoc" />
+    <ant dir="${rmlimage.src.dir}/rmlimage/module/complex" target="javadoc" />
+    <ant dir="${rmlimage.src.dir}/rmlimage/module/integer" target="javadoc" />
+    <ant dir="${rmlimage.src.dir}/rmlimage/module/multi" target="javadoc" />
+    <ant dir="${ebsd-image.dir}/src" target="javadoc" />
+  </target>
 
 
 
-<target name="mac" description="Build the Mac installer" depends="build">
-  <mkdir dir="${dest.dir}"/>
+  <target name="mac" description="Build the Mac installer" depends="build">
+    <mkdir dir="${dest.dir}" />
 
-  <delete dir="${tmp.dir}/mac"/>
-  <mkdir dir="${tmp.dir}/mac"/>
-  <copy todir="${tmp.dir}/mac">
-    <fileset dir="${build.dir}"/>
-    <mapper type="flatten"/>
-  </copy>
+    <delete dir="${tmp.dir}/mac" />
+    <mkdir dir="${tmp.dir}/mac" />
+    <copy todir="${tmp.dir}/mac">
+      <fileset dir="${build.dir}" />
+      <mapper type="flatten" />
+    </copy>
 
-  <jarbundler name="EBSD-Image" mainclass="rmlimage.loader.Loader"
-              bundleid="rmlimage.loader.Loader" version="${version}"
-              build="${version}" infostring="${version}" jvmversion="1.6+"
-              icon="${ebsd-image.dir}/install/EBSD-Image.icns"
-              dir="${dest.dir}"
-              stubfile="${ebsd-image.dir}/install/JavaApplicationStub">
-    <jarfileset dir="${tmp.dir}/mac" includes="**/*.jar"/>
-  </jarbundler>
-  <delete dir="${tmp.dir}/mac"/>
-  
-  <tar basedir="${dest.dir}" includes="EBSD-Image.app/**"
-       destfile="${dest.dir}/EBSD-Image_v${version}_Mac.tgz"
-       compression="gzip"/>
-  <delete dir="${dest.dir}/EBSD-Image.app"/>
-  <echo message="EBSD-Image_v${version}_Mac.tgz created in ${dest.dir}"/>
-</target>
-    
+    <jarbundler name="EBSD-Image" mainclass="rmlimage.loader.Loader" bundleid="rmlimage.loader.Loader" version="${version}" build="${version}" infostring="${version}" jvmversion="1.6+" icon="${ebsd-image.dir}/install/EBSD-Image.icns" dir="${dest.dir}" stubfile="${ebsd-image.dir}/install/JavaApplicationStub">
+      <jarfileset dir="${tmp.dir}/mac" includes="**/*.jar" />
+    </jarbundler>
+    <delete dir="${tmp.dir}/mac" />
+
+    <tar basedir="${dest.dir}" includes="EBSD-Image.app/**" destfile="${dest.dir}/EBSD-Image_v${version}_Mac.tgz" compression="gzip" />
+    <delete dir="${dest.dir}/EBSD-Image.app" />
+    <echo message="EBSD-Image_v${version}_Mac.tgz created in ${dest.dir}" />
+  </target>
 
 
 
-<target name="osFamily" description="Finds the OS used">
-  <condition property="unix">
-    <os family="unix"/>
-  </condition>
-  <condition property="windows">
-    <os family="windows"/>
-  </condition>
-</target>
+
+  <target name="osFamily" description="Finds the OS used">
+    <condition property="unix">
+      <os family="unix" />
+    </condition>
+    <condition property="windows">
+      <os family="windows" />
+    </condition>
+  </target>
 
 
 
 
 
-<target name="nsis-all" 
-        depends="nsis-update,nsis-full"
-        description="Builds the all the NSIS installers"/>
-            <!-- The update distros must be build before the full ones
+  <target name="nsis-all" depends="nsis-update,nsis-full" description="Builds the all the NSIS installers" />
+  <!-- The update distros must be build before the full ones
                  because the full will copy the jre to the build dir -->
 
 
 
-<target name="nsis-full" depends="build"
-        description="Builds the full NSIS installer">
-  <property name="splashscreen.dir" value="${ebsd-image.dir}/install"/>
-  <property name="license.dir" value="${ebsd-image.dir}/install"/>
-  <property name="icon.dir" value="${ebsd-image.dir}/install"/>
-  <property name="http.prefix" value="http://ebsd-image.sourceforge.net"/>
-  <ant dir="${rmlimage.src.dir}/rmlimage/distro" target="nsis-full"/>
-</target>
+  <target name="nsis-full" depends="build" description="Builds the full NSIS installer">
+    <property name="splashscreen.dir" value="${ebsd-image.dir}/install" />
+    <property name="license.dir" value="${ebsd-image.dir}/install" />
+    <property name="icon.dir" value="${ebsd-image.dir}/install" />
+    <property name="http.prefix" value="http://ebsd-image.sourceforge.net" />
+    <mkdir dir="${dest.dir}" />
+    <ant dir="${rmlimage.src.dir}/rmlimage/distro" target="nsis-full" />
+  </target>
 
 
 
-<target name="nsis-update" depends="build"
-        description="Builds the update NSIS installer">
-  <property name="splashscreen.dir" value="${ebsd-image.dir}/install"/>
-  <property name="license.dir" value="${ebsd-image.dir}/install"/>
-  <property name="icon.dir" value="${ebsd-image.dir}/install"/>
-  <property name="http.prefix" value="http://ebsd-image.sourceforge.net"/>
-  <ant dir="${rmlimage.src.dir}/rmlimage/distro" target="nsis-update"/>
-</target>
+  <target name="nsis-update" depends="build" description="Builds the update NSIS installer">
+    <property name="splashscreen.dir" value="${ebsd-image.dir}/install" />
+    <property name="license.dir" value="${ebsd-image.dir}/install" />
+    <property name="icon.dir" value="${ebsd-image.dir}/install" />
+    <property name="http.prefix" value="http://ebsd-image.sourceforge.net" />
+    <mkdir dir="${dest.dir}" />
+    <ant dir="${rmlimage.src.dir}/rmlimage/distro" target="nsis-update" />
+  </target>
 
 
 
-<target name="publish-all">
-  <antcall target="clean"/>
-  <antcall target="publish-tar"/>
-  <antcall target="clean"/>
-  <antcall target="publish-windows"/>
-</target>
+  <target name="publish-all">
+    <antcall target="clean" />
+    <antcall target="publish-tar" />
+    <antcall target="clean" />
+    <antcall target="publish-windows" />
+  </target>
 
 
 
-<target name="publish-windows" depends="build,nsis-all"
-        description="Places the Windows installer in the repo">
-  <fail message="user not defined." unless="scp.user"/>
-	
+  <target name="publish-windows" depends="build,nsis-all" description="Places the Windows installer in the repo">
+    <fail message="user not defined." unless="scp.user" />
+
     <!-- Create the ini file -->
-  <property file="${jre.dir}/version.prop"/>
-  <fail message="version not defined." unless="version"/>
-  <fail message="jre.version not found in ${jre.dir}/version.prop" 
-        unless="jre.version"/>    
-  <echo file="${tmp.dir}/${app.name}.ini">
+    <property file="${jre.dir}/version.prop" />
+    <fail message="version not defined." unless="version" />
+    <fail message="jre.version not found in ${jre.dir}/version.prop" unless="jre.version" />
+    <echo file="${tmp.dir}/${app.name}.ini">
   [${app.name}]
   version=${version}
   jre.version=${jre.version}
   </echo>
-  
-  <!-- scp property -->
-  <input addproperty="scp.password" message="SCP password = ">
-    <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
-  </input>
-  <property name="scp.server" value="web.sourceforge.net"/>
-  
-  <!-- Transfert the files to the ftp server -->
-  <scp todir="${scp.user}@${scp.server}:/home/groups/e/eb/ebsd-image/htdocs/repos/windows/${distro}"
-       password="${scp.password}">
-    <fileset dir="${dest.dir}">
-      <include name="${app.name}_v${version}_${distro}*.exe"/>
-    </fileset>
-    <fileset file="${tmp.dir}/${app.name}.ini"/>
-  </scp>
-	
-  <!-- Transfert the files to sf's frs repos -->
-  <scp todir="${scp.user}@${scp.server}:/home/frs/project/e/eb/ebsd-image/v${version}/"
-       password="${scp.password}">
-    <fileset dir="${dest.dir}">
-      <include name="${app.name}_v${version}_${distro}*.exe"/>
-    </fileset>
-  </scp>
-  
-  <delete file="${tmp.dir}/${app.name}.ini"/>
-</target>
 
-
-
- 
-<target name="publish-deb" description="Publish the deb file in the repo" 
-        depends="deb">
-  <fail message="user not defined." unless="scp.user"/>
-
-      <!-- Copy the deb to put in the repo-->
-  <delete dir="${tmp.dir}/repos"/>
-  <copy todir="${tmp.dir}/repos/stable">
-    <fileset dir="${dest.dir}">
-      <include name="ebsd-image*${version}*.deb"/>
-    </fileset>
-  </copy>
-    
-      <!--Build the repos summary file -->
-  <exec dir="${tmp.dir}/repos" executable="dpkg-scanpackages"
-        output="${tmp.dir}/Packages.out" error="${tmp.dir}/Packages.err">
-      <arg value="."/>
-  </exec>
-  <gzip src="${tmp.dir}/Packages.out" 
-        destfile="${tmp.dir}/repos/stable/Packages.gz"/>
-        
-        
-     <!-- Transfer deb files to ftp server -->
-  <input addproperty="scp.password" message="SCP password = ">
-    <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
-  </input>
-    
-  <property name="scp.server" value="web.sourceforge.net"/>
-
-  <scp todir="${scp.user}@${scp.server}:/home/groups/e/eb/ebsd-image/htdocs/repos/debian/stable"
-       password="${scp.password}">
-    <fileset dir="${tmp.dir}/repos/stable"/>
-  </scp>
-  
-  <scp todir="${scp.user}@${scp.server}:/home/frs/project/e/eb/ebsd-image/v${version}/"
-       password="${scp.password}">
-    <fileset dir="${dest.dir}">
-      <include name="ebsd-image*${version}*.deb"/>
-    </fileset>
-  </scp>
-
-        <!-- Cleanup -->
-  <delete file="${tmp.dir}/Packages.out"/>
-  <delete file="${tmp.dir}/Packages.err"/>
-  <delete dir="${tmp.dir}/repos"/>
-  <delete includeemptydirs="true">
-    <fileset dir="${tmp.dir}" includes="deb*.dir/**"/>
-  </delete>   
-</target>
-  
-
-  
-<target name="publish-javadoc" description="Publish the javadoc in the repo"
-        depends="javadoc">
-  <fail message="user not defined." unless="scp.user"/>
-
-  <!-- Transfer javadoc directories to ftp server -->
-  <input addproperty="scp.password" message="SCP password = ">
-    <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
-  </input>
-  <property name="scp.server" value="web.sourceforge.net"/>
-
-  <scp todir="${scp.user}@${scp.server}:/home/groups/e/eb/ebsd-image/htdocs/javadoc/"
-       password="${scp.password}">
-    <fileset dir="${build.dir}/javadoc/" />
-  </scp>
-
-</target>
-
-	
-	
-<target name="publish-mac" description="Publish mac distro in the repo" 
-        depends="mac">
-  <fail message="user not defined." unless="scp.user"/>
-
-  <!-- Transfer mac tarball to sf's frs repos -->
-  <input addproperty="scp.password" message="SCP password = ">
-    <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
-  </input>
-	
-  <property name="scp.server" value="web.sourceforge.net"/>
-
-  <scp todir="${scp.user}@${scp.server}:/home/frs/project/e/eb/ebsd-image/v${version}/"
-       password="${scp.password}">
-    <fileset dir="${dest.dir}">
-      <include name="EBSD-Image_v${version}_Mac.tgz"/>
-    </fileset>
-  </scp>
-</target>
-
-
-  
-<target name="publish-tar" description="Publish tarball in the repo" 
-        depends="tar">
-    <fail message="user not defined." unless="scp.user"/>
-
-    <!-- Transfer tarball to sf's frs repos -->
+    <!-- scp property -->
     <input addproperty="scp.password" message="SCP password = ">
-      <handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
+      <handler classname="org.apache.tools.ant.input.SecureInputHandler" />
     </input>
-      
-    <property name="scp.server" value="web.sourceforge.net"/>
+    <property name="scp.server" value="web.sourceforge.net" />
 
-    <scp todir="${scp.user}@${scp.server}:/home/frs/project/e/eb/ebsd-image/v${version}/"
-         password="${scp.password}">
+    <!-- Transfert the files to the ftp server -->
+    <scp todir="${scp.user}@${scp.server}:/home/groups/e/eb/ebsd-image/htdocs/repos/windows/${distro}" password="${scp.password}">
       <fileset dir="${dest.dir}">
-        <include name="EBSD-Image_v${version}.tgz"/>
+        <include name="${app.name}_v${version}_${distro}*.exe" />
+      </fileset>
+      <fileset file="${tmp.dir}/${app.name}.ini" />
+    </scp>
+
+    <!-- Transfert the files to sf's frs repos -->
+    <scp todir="${scp.user}@${scp.server}:/home/frs/project/e/eb/ebsd-image/v${version}/" password="${scp.password}">
+      <fileset dir="${dest.dir}">
+        <include name="${app.name}_v${version}_${distro}*.exe" />
+      </fileset>
+    </scp>
+
+    <delete file="${tmp.dir}/${app.name}.ini" />
+  </target>
+
+
+
+
+  <target name="publish-deb" description="Publish the deb file in the repo" depends="deb">
+    <fail message="user not defined." unless="scp.user" />
+
+    <!-- Copy the deb to put in the repo-->
+    <delete dir="${tmp.dir}/repos" />
+    <copy todir="${tmp.dir}/repos/stable">
+      <fileset dir="${dest.dir}">
+        <include name="ebsd-image*${version}*.deb" />
+      </fileset>
+    </copy>
+
+    <!--Build the repos summary file -->
+    <exec dir="${tmp.dir}/repos" executable="dpkg-scanpackages" output="${tmp.dir}/Packages.out" error="${tmp.dir}/Packages.err">
+      <arg value="." />
+    </exec>
+    <gzip src="${tmp.dir}/Packages.out" destfile="${tmp.dir}/repos/stable/Packages.gz" />
+
+
+    <!-- Transfer deb files to ftp server -->
+    <input addproperty="scp.password" message="SCP password = ">
+      <handler classname="org.apache.tools.ant.input.SecureInputHandler" />
+    </input>
+
+    <property name="scp.server" value="web.sourceforge.net" />
+
+    <scp todir="${scp.user}@${scp.server}:/home/groups/e/eb/ebsd-image/htdocs/repos/debian/stable" password="${scp.password}">
+      <fileset dir="${tmp.dir}/repos/stable" />
+    </scp>
+
+    <scp todir="${scp.user}@${scp.server}:/home/frs/project/e/eb/ebsd-image/v${version}/" password="${scp.password}">
+      <fileset dir="${dest.dir}">
+        <include name="ebsd-image*${version}*.deb" />
+      </fileset>
+    </scp>
+
+    <!-- Cleanup -->
+    <delete file="${tmp.dir}/Packages.out" />
+    <delete file="${tmp.dir}/Packages.err" />
+    <delete dir="${tmp.dir}/repos" />
+    <delete includeemptydirs="true">
+      <fileset dir="${tmp.dir}" includes="deb*.dir/**" />
+    </delete>
+  </target>
+
+
+
+  <target name="publish-javadoc" description="Publish the javadoc in the repo" depends="javadoc">
+    <fail message="user not defined." unless="scp.user" />
+
+    <!-- Transfer javadoc directories to ftp server -->
+    <input addproperty="scp.password" message="SCP password = ">
+      <handler classname="org.apache.tools.ant.input.SecureInputHandler" />
+    </input>
+    <property name="scp.server" value="web.sourceforge.net" />
+
+    <scp todir="${scp.user}@${scp.server}:/home/groups/e/eb/ebsd-image/htdocs/javadoc/" password="${scp.password}">
+      <fileset dir="${build.dir}/javadoc/" />
+    </scp>
+
+  </target>
+
+
+
+  <target name="publish-mac" description="Publish mac distro in the repo" depends="mac">
+    <fail message="user not defined." unless="scp.user" />
+
+    <!-- Transfer mac tarball to sf's frs repos -->
+    <input addproperty="scp.password" message="SCP password = ">
+      <handler classname="org.apache.tools.ant.input.SecureInputHandler" />
+    </input>
+
+    <property name="scp.server" value="web.sourceforge.net" />
+
+    <scp todir="${scp.user}@${scp.server}:/home/frs/project/e/eb/ebsd-image/v${version}/" password="${scp.password}">
+      <fileset dir="${dest.dir}">
+        <include name="EBSD-Image_v${version}_Mac.tgz" />
       </fileset>
     </scp>
   </target>
-  
-
-
-<target name="tar" depends="build">
-  <tar destfile="${dest.dir}/EBSD-Image_v${version}.tgz"
-       compression="gzip">
-    <tarfileset dir="${build.dir}" prefix="EBSD-Image_${version}"/>
-  </tar>
-  <echo message="EBSD-Image_v${version}.tgz created in ${dest.dir}"/>
-</target>
 
 
 
-<target name="test-targets" 
-        description="Runs all the targets to test if they work properly">
+  <target name="publish-tar" description="Publish tarball in the repo" depends="tar">
+    <fail message="user not defined." unless="scp.user" />
 
-  <antcall target="clean" inheritall="false"/>
-  <antcall target="build" inheritall="false"/>
-  
-  <antcall target="clean" inheritall="false"/>
-  <antcall target="deb" inheritall="false"/>
-  <delete file="${dest.dir}/rml-image-ebsd_${version}-1_all.deb"/>
-    
-  <antcall target="clean" inheritall="false"/>
-  <antcall target="nsis-full" inheritall="false"/>
-  <delete file="${dest.dir}/${app.name}_v${version}_${distro}-full.exe"/>
-  
-  <antcall target="clean" inheritall="false"/>
-  <antcall target="nsis-update" inheritall="false"/>
-  <delete file="${dest.dir}/${app.name}_v${version}_${distro}-update.exe"/>
+    <!-- Transfer tarball to sf's frs repos -->
+    <input addproperty="scp.password" message="SCP password = ">
+      <handler classname="org.apache.tools.ant.input.SecureInputHandler" />
+    </input>
 
-  <antcall target="clean" inheritall="false"/>
-  <antcall target="nsis-all" inheritall="false"/>
-  <delete file="${dest.dir}/${app.name}_v${version}_${distro}-full.exe"/>
-  <delete file="${dest.dir}/${app.name}_v${version}_${distro}-update.exe"/>
+    <property name="scp.server" value="web.sourceforge.net" />
 
-  <antcall target="clean" inheritall="false"/>
-  <antcall target="all" inheritall="false"/>
-  <delete file="${dest.dir}/${app.name}_v${version}_${distro}-full.exe"/>
-  <delete file="${dest.dir}/${app.name}_v${version}_${distro}-update.exe"/>
-  
-  <antcall target="clean" inheritall="false"/>
-  <antcall target="compile" inheritall="false"/>
-</target>
+    <scp todir="${scp.user}@${scp.server}:/home/frs/project/e/eb/ebsd-image/v${version}/" password="${scp.password}">
+      <fileset dir="${dest.dir}">
+        <include name="EBSD-Image_v${version}.tgz" />
+      </fileset>
+    </scp>
+  </target>
+
+  <target name="publish-nightly" description="Publish nightly build (tarball) in the repo" depends="tar-nightly">
+    <fail message="user not defined." unless="scp.user" />
+
+    <!-- Transfer tarball to sf's frs repos -->
+    <input addproperty="scp.password" message="SCP password = ">
+      <handler classname="org.apache.tools.ant.input.SecureInputHandler" />
+    </input>
+
+    <property name="scp.server" value="web.sourceforge.net" />
+
+    <scp todir="${scp.user}@${scp.server}:/home/frs/project/e/eb/ebsd-image/nightly/" password="${scp.password}">
+      <fileset dir="${dest.dir}">
+        <include name="ebsd-image_nightly_build.tgz" />
+      </fileset>
+    </scp>
+  </target>
+
+
+
+  <target name="tar" depends="build">
+    <mkdir dir="${dest.dir}" />
+
+    <tar destfile="${dest.dir}/EBSD-Image_v${version}.tgz" compression="gzip">
+      <tarfileset dir="${build.dir}" prefix="EBSD-Image_${version}" />
+    </tar>
+    <echo message="EBSD-Image_v${version}.tgz created in ${dest.dir}" />
+  </target>
+
+  <target name="tar-nightly" depends="build">
+    <mkdir dir="${dest.dir}" />
+
+    <tar destfile="${dest.dir}/ebsd-image_nightly_build.tgz" compression="gzip">
+      <tarfileset dir="${build.dir}" prefix="ebsd-image_nightly_build" />
+    </tar>
+    <echo message="ebsd-image_nightly_build.tgz created in ${dest.dir}" />
+  </target>
+
+
+
+  <target name="test-targets" description="Runs all the targets to test if they work properly">
+
+    <antcall target="clean" inheritall="false" />
+    <antcall target="build" inheritall="false" />
+
+    <antcall target="clean" inheritall="false" />
+    <antcall target="deb" inheritall="false" />
+    <delete file="${dest.dir}/rml-image-ebsd_${version}-1_all.deb" />
+
+    <antcall target="clean" inheritall="false" />
+    <antcall target="nsis-full" inheritall="false" />
+    <delete file="${dest.dir}/${app.name}_v${version}_${distro}-full.exe" />
+
+    <antcall target="clean" inheritall="false" />
+    <antcall target="nsis-update" inheritall="false" />
+    <delete file="${dest.dir}/${app.name}_v${version}_${distro}-update.exe" />
+
+    <antcall target="clean" inheritall="false" />
+    <antcall target="nsis-all" inheritall="false" />
+    <delete file="${dest.dir}/${app.name}_v${version}_${distro}-full.exe" />
+    <delete file="${dest.dir}/${app.name}_v${version}_${distro}-update.exe" />
+
+    <antcall target="clean" inheritall="false" />
+    <antcall target="all" inheritall="false" />
+    <delete file="${dest.dir}/${app.name}_v${version}_${distro}-full.exe" />
+    <delete file="${dest.dir}/${app.name}_v${version}_${distro}-update.exe" />
+
+    <antcall target="clean" inheritall="false" />
+    <antcall target="compile" inheritall="false" />
+  </target>
 
 
 
