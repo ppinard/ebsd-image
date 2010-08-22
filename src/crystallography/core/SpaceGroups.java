@@ -125,10 +125,8 @@ public final class SpaceGroups implements SpaceGroups1, SpaceGroups2 {
 
 
 
-    /**
-     * Initialises the crystal systems lookup table.
-     */
-    private void initCrystalSystems() {
+    @Override
+    public void initCrystalSystems() {
         crystalSystems.put(TRICLINIC, new HashSet<SpaceGroup>());
         crystalSystems.get(TRICLINIC).addAll(laueGroups.get(LG1));
 
@@ -157,10 +155,8 @@ public final class SpaceGroups implements SpaceGroups1, SpaceGroups2 {
 
 
 
-    /**
-     * Initialises the indexes lookup table.
-     */
-    private void initIndexes() {
+    @Override
+    public void initIndexes() {
         indexes.put(1, SG1);
         indexes.put(2, SG2);
         indexes.put(3, SG3);
@@ -404,10 +400,8 @@ public final class SpaceGroups implements SpaceGroups1, SpaceGroups2 {
 
 
 
-    /**
-     * Initialises the Laue group lookup table.
-     */
-    private void initLaueGroups() {
+    @Override
+    public void initLaueGroups() {
         laueGroups.put(LG1, new HashSet<SpaceGroup>());
         laueGroups.get(LG1).add(SG1);
         laueGroups.get(LG1).add(SG2);
@@ -670,10 +664,8 @@ public final class SpaceGroups implements SpaceGroups1, SpaceGroups2 {
 
 
 
-    /**
-     * Initialises the symbols lookup table.
-     */
-    private void initSymbols() {
+    @Override
+    public void initSymbols() {
         symbols.put("P1", SG1);
         symbols.put("P-1", SG2);
         symbols.put("P2", SG3);

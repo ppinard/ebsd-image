@@ -14,37 +14,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-package org.ebsdimage.io.sim.ops.output;
+ */
+package org.ebsdimage.io.sim.ops.patternsim.op;
 
-import static org.ebsdimage.io.sim.ops.output.PropFileXmlTags.TAG_NAME;
-import static org.junit.Assert.assertEquals;
+import org.ebsdimage.core.sim.ops.patternsim.op.PatternBandEdges;
 
-import org.ebsdimage.core.sim.ops.output.PropFile;
-import org.ebsdimage.io.sim.ops.output.PropFileXmlLoader;
-import org.jdom.Element;
-import org.junit.Before;
-import org.junit.Test;
-
-
-public class PropFileXmlLoaderTest {
-
-    private Element element;
-
-
-
-    @Before
-    public void setUp() throws Exception {
-        element = new Element(TAG_NAME);
-    }
-
-
-
-    @Test
-    public void testLoad() {
-        PropFile op = new PropFileXmlLoader().load(element);
-
-        assertEquals(TAG_NAME, op.getName());
-    }
-
+/**
+ * Tags for <code>PatternBandEdges</code>'s XML <code>Element</code> .
+ * 
+ * @author Philippe T. Pinard
+ */
+public class PatternBandEdgesXmlTags {
+    /** XML tag name for <code>PatternBandEdges</code>. */
+    public static final String TAG_NAME =
+            PatternBandEdges.class.getSimpleName();
 }

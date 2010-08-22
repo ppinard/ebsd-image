@@ -14,47 +14,49 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.sim.ops.patternsim.op;
 
-import static org.ebsdimage.io.sim.PatternXmlTags.ATTR_HEIGHT;
-import static org.ebsdimage.io.sim.PatternXmlTags.ATTR_WIDTH;
-import static org.ebsdimage.io.sim.ops.patternsim.op.PatternFilledBandXrayScatterXmlTags.ATTR_MAX_INDEX;
-import static org.ebsdimage.io.sim.ops.patternsim.op.PatternFilledBandXrayScatterXmlTags.TAG_NAME;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternFilledBandXmlTags.TAG_NAME;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternSimOpXmlTags.ATTR_HEIGHT;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternSimOpXmlTags.ATTR_MAXINDEX;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternSimOpXmlTags.ATTR_SCATTER_TYPE;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternSimOpXmlTags.ATTR_WIDTH;
 import static org.junit.Assert.assertEquals;
 
-import org.ebsdimage.core.sim.ops.patternsim.op.PatternFilledBandXrayScatter;
-import org.ebsdimage.io.sim.ops.patternsim.op.PatternFilledBandXrayScatterXmlSaver;
+import org.ebsdimage.core.sim.ops.patternsim.op.PatternFilledBand;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
 
-
 import ptpshared.utility.xml.JDomUtil;
+import crystallography.core.ScatteringFactorsEnum;
 
-public class PatternFilledBandXrayScatterXmlSaverTest {
+public class PatternFilledBandXmlSaverTest {
 
-    private PatternFilledBandXrayScatter op;
+    private PatternFilledBand op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        op = new PatternFilledBandXrayScatter(336, 256, 5);
+        op = new PatternFilledBand(336, 256, 5, ScatteringFactorsEnum.XRAY);
     }
 
 
 
     @Test
     public void testSavePatternFilledBandXrayScatter() {
-        Element element = new PatternFilledBandXrayScatterXmlSaver().save(op);
+        Element element = new PatternFilledBandXmlSaver().save(op);
 
         assertEquals(TAG_NAME, element.getName());
         assertEquals(336, JDomUtil.getIntegerFromAttribute(element, ATTR_WIDTH));
-        assertEquals(256, JDomUtil
-                .getIntegerFromAttribute(element, ATTR_HEIGHT));
-        assertEquals(5, JDomUtil.getIntegerFromAttribute(element,
-                ATTR_MAX_INDEX));
+        assertEquals(256,
+                JDomUtil.getIntegerFromAttribute(element, ATTR_HEIGHT));
+        assertEquals(5,
+                JDomUtil.getIntegerFromAttribute(element, ATTR_MAXINDEX));
+        assertEquals(ScatteringFactorsEnum.XRAY.toString(),
+                JDomUtil.getStringFromAttribute(element, ATTR_SCATTER_TYPE));
     }
 
 }

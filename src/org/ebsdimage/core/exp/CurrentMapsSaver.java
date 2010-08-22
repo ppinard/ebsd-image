@@ -25,12 +25,12 @@ import org.ebsdimage.core.HoughPeakIntensityComparator;
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.sim.Energy;
-import org.ebsdimage.core.sim.PatternBandCenter;
+import org.ebsdimage.core.sim.ops.patternsim.op.PatternBandCenter;
 
 import ptpshared.utility.xml.ObjectXml;
 import rmlimage.core.*;
 import crystallography.core.Reflectors;
-import crystallography.core.XrayScatteringFactors;
+import crystallography.core.ScatteringFactorsEnum;
 
 /**
  * Interface for saving current maps of an experiment.
@@ -203,15 +203,15 @@ public abstract class CurrentMapsSaver implements ObjectXml {
         int height = patternMap.height;
 
         // Draw simulation pattern
-        Reflectors refls =
-                new Reflectors(sln.phase, new XrayScatteringFactors(), 1);
+        PatternBandCenter pattern =
+                new PatternBandCenter(width, height, 2,
+                        ScatteringFactorsEnum.XRAY);
+        Reflectors refls = pattern.calculateReflectors(sln.phase);
 
-        PatternBandCenter patternBandCenter =
-                new PatternBandCenter(width, height, refls, -1,
-                        exp.mmap.calibration, new Energy(exp.mmap.beamEnergy),
-                        sln.rotation);
+        pattern.simulate(exp.mmap.calibration, refls, new Energy(
+                exp.mmap.beamEnergy), sln.rotation);
 
-        ByteMap simPatternMap = patternBandCenter.getPatternMap();
+        ByteMap simPatternMap = pattern.getPatternMap();
         Contrast.expansion(simPatternMap);
 
         // Combine simulation pattern with source pattern map

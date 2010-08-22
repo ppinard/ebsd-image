@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.indexing.op;
 
 import static org.ebsdimage.io.exp.ops.indexing.op.KriegerLassen1994XmlTags.ATTR_MAX_INDEX;
@@ -22,18 +22,17 @@ import static org.ebsdimage.io.exp.ops.indexing.op.KriegerLassen1994XmlTags.ATTR
 import static org.ebsdimage.io.exp.ops.indexing.op.KriegerLassen1994XmlTags.TAG_NAME;
 
 import org.ebsdimage.core.exp.ops.indexing.op.KriegerLassen1994;
-import org.ebsdimage.core.exp.ops.indexing.op.ScatteringFactorsEnum;
 import org.jdom.Element;
 import org.jdom.IllegalNameException;
 
 import ptpshared.utility.xml.JDomUtil;
 import ptpshared.utility.xml.ObjectXmlLoader;
+import crystallography.core.ScatteringFactorsEnum;
 
 /**
  * XML loader for a <code>KriegerLassen1994</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class KriegerLassen1994XmlLoader implements ObjectXmlLoader {
 
@@ -58,11 +57,9 @@ public class KriegerLassen1994XmlLoader implements ObjectXmlLoader {
                         KriegerLassen1994.DEFAULT_MAX_INDEX);
 
         ScatteringFactorsEnum scatterType =
-                ScatteringFactorsEnum.valueOf(JDomUtil
-                        .getStringFromAttributeDefault(element,
-                                ATTR_SCATTER_TYPE,
-                                KriegerLassen1994.DEFAULT_SCATTER_TYPE
-                                        .toString()));
+                ScatteringFactorsEnum.valueOf(JDomUtil.getStringFromAttributeDefault(
+                        element, ATTR_SCATTER_TYPE,
+                        KriegerLassen1994.DEFAULT_SCATTER_TYPE.toString()));
 
         return new KriegerLassen1994(maxIndex, scatterType);
     }

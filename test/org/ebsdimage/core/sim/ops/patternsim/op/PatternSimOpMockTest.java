@@ -14,29 +14,31 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.sim.ops.patternsim.op;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.sim.Energy;
-import org.ebsdimage.core.sim.Pattern;
-import org.ebsdimage.core.sim.ops.patternsim.op.PatternSimOp;
 import org.junit.Before;
 import org.junit.Test;
 
 import ptpshared.core.math.Quaternion;
-import crystallography.core.Crystal;
+import rmlimage.core.ByteMap;
+import crystallography.core.Reflectors;
 import crystallography.core.crystals.Silicon;
 
 public class PatternSimOpMockTest {
 
     private PatternSimOp op;
+
     private Camera camera;
-    private Crystal crystal;
+
+    private Reflectors reflectors;
+
     private Energy energy;
+
     private Quaternion rotation;
 
 
@@ -45,7 +47,7 @@ public class PatternSimOpMockTest {
     public void setUp() throws Exception {
         op = new PatternSimOpMock();
         camera = new Camera(0, 0, 0.5);
-        crystal = new Silicon();
+        reflectors = op.calculateReflectors(new Silicon());
         energy = new Energy(20e3);
         rotation = Quaternion.IDENTITY;
     }
@@ -54,16 +56,12 @@ public class PatternSimOpMockTest {
 
     @Test
     public void testGetPattern() {
-        op.simulate(null, camera, crystal, energy, rotation);
+        op.simulate(null, camera, reflectors, energy, rotation);
 
-        Pattern pattern = op.getPattern();
+        ByteMap pattern = op.getPatternMap();
         assertEquals(2, pattern.width);
         assertEquals(2, pattern.height);
-        assertEquals(4, pattern.numberReflectors);
-        assertEquals(20e3, pattern.energy.value, 1e-6);
-        assertTrue(pattern.camera.equals(new Camera(0.0, 0.0, 0.5), 1e-6));
-        assertTrue(pattern.rotation.equals(Quaternion.IDENTITY, 1e-6));
-        assertEquals(4, pattern.getBands().length);
+        assertEquals(276, op.getBands().length);
     }
 
 }

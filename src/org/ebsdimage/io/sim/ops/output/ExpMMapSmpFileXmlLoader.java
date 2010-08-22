@@ -14,41 +14,41 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.sim.ops.output;
 
-import static org.ebsdimage.io.sim.ops.output.PropFileXmlTags.TAG_NAME;
+import static org.ebsdimage.io.sim.ops.output.ExpMMapSmpFileXmlTags.TAG_NAME;
 
-import org.ebsdimage.core.sim.ops.output.PropFile;
+import org.ebsdimage.core.sim.ops.output.ExpMMapSmpFile;
 import org.jdom.Element;
 import org.jdom.IllegalNameException;
 
 import ptpshared.utility.xml.ObjectXmlLoader;
 
 /**
- * XML loader for a <code>PropFile</code> operation.
+ * XML loader for a <code>ExpMMapSmpFile</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
-public class PropFileXmlLoader implements ObjectXmlLoader {
+public class ExpMMapSmpFileXmlLoader implements ObjectXmlLoader {
 
     /**
-     * Loads a <code>PropFile</code> operation from an XML <code>Element</code>.
+     * Loads a <code>ExpMMapSmpFile</code> operation from an XML
+     * <code>Element</code>.
      * 
      * @param element
      *            an XML <code>Element</code>
-     * @return a <code>PropFile</code> operation
+     * @return a <code>ExpMMapSmpFile</code> operation
      * @throws IllegalNameException
      *             if the <code>Element</code> tag name is incorrect.
      */
     @Override
-    public PropFile load(Element element) {
+    public ExpMMapSmpFile load(Element element) {
         if (!element.getName().equals(TAG_NAME))
             throw new IllegalNameException("Name of the element should be "
                     + TAG_NAME + " not " + element.getName() + ".");
 
-        return new PropFile();
+        return new ExpMMapSmpFile();
     }
 
 }

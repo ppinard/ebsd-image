@@ -14,37 +14,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.sim.ops.output;
 
-import static org.ebsdimage.io.sim.ops.output.XmlFileXmlTags.TAG_NAME;
-import static org.junit.Assert.assertEquals;
+import org.ebsdimage.core.sim.ops.output.ExpMMapSmpFile;
 
-import org.ebsdimage.core.sim.ops.output.XmlFile;
-import org.ebsdimage.io.sim.ops.output.XmlFileXmlLoader;
-import org.jdom.Element;
-import org.junit.Before;
-import org.junit.Test;
-
-
-public class XmlFileXmlLoaderTest {
-
-    private Element element;
-
-
-
-    @Before
-    public void setUp() throws Exception {
-        element = new Element(TAG_NAME);
-    }
-
-
-
-    @Test
-    public void testLoad() {
-        XmlFile op = new XmlFileXmlLoader().load(element);
-
-        assertEquals(TAG_NAME, op.getName());
-    }
-
+/**
+ * Tags for <code>ExpMMapSmpFile</code>'s XML <code>Element</code>.
+ * 
+ * @author Philippe T. Pinard
+ */
+public class ExpMMapSmpFileXmlTags {
+    /** XML tag name for <code>ExpMMapSmpFile</code>. */
+    public static final String TAG_NAME = ExpMMapSmpFile.class.getSimpleName();
 }

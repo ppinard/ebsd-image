@@ -14,45 +14,45 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.sim.ops.output;
 
-import static org.ebsdimage.io.sim.ops.output.PropFileXmlTags.TAG_NAME;
+import static org.ebsdimage.io.sim.ops.output.ExpMMapSmpFileXmlTags.TAG_NAME;
 
-import org.ebsdimage.core.sim.ops.output.PropFile;
+import org.ebsdimage.core.sim.ops.output.ExpMMapSmpFile;
 import org.jdom.Element;
 
 import ptpshared.utility.xml.ObjectXml;
 import ptpshared.utility.xml.ObjectXmlSaver;
 
 /**
- * XML saver for a <code>PropFile</code> operation.
+ * XML saver for a <code>ExpMMapSmpFile</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
-public class PropFileXmlSaver implements ObjectXmlSaver {
+public class ExpMMapSmpFileXmlSaver implements ObjectXmlSaver {
 
     /**
      * {@inheritDoc}
      * 
-     * @see #save(PropFile)
+     * @see #save(ExpMMapSmpFile)
      */
     @Override
     public Element save(ObjectXml obj) {
-        return save((PropFile) obj);
+        return save((ExpMMapSmpFile) obj);
     }
 
 
 
     /**
-     * Saves a <code>PropFile</code> operation to an XML <code>Element</code>.
+     * Saves a <code>ExpMMapSmpFile</code> operation to an XML
+     * <code>Element</code>.
      * 
      * @param op
-     *            a <code>PropFile</code> operation
+     *            a <code>ExpMMapSmpFile</code> operation
      * @return an XML <code>Element</code>
      */
-    public Element save(PropFile op) {
+    public Element save(ExpMMapSmpFile op) {
         return new Element(TAG_NAME);
     }
 

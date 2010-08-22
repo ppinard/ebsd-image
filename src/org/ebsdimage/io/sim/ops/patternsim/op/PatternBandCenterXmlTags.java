@@ -14,18 +14,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-package org.ebsdimage.io.sim.ops.output;
+ */
+package org.ebsdimage.io.sim.ops.patternsim.op;
 
-import org.ebsdimage.core.sim.ops.output.XmlFile;
+import org.ebsdimage.core.sim.ops.patternsim.op.PatternBandCenter;
 
 /**
- * Tags for <code>XmlFile</code>'s XML <code>Element</code>.
+ * Tags for <code>PatternBandCenter</code>'s XML <code>Element</code> .
  * 
  * @author Philippe T. Pinard
- * 
  */
-public class XmlFileXmlTags {
-    /** XML tag name for <code>XmlFile</code>. */
-    public static final String TAG_NAME = XmlFile.class.getSimpleName();
+public class PatternBandCenterXmlTags {
+    /** XML tag name for <code>PatternBandCenter</code>. */
+    public static final String TAG_NAME =
+            PatternBandCenter.class.getSimpleName();
 }

@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.logging.Logger;
 
 import org.ebsdimage.core.sim.Energy;
-import org.ebsdimage.core.sim.PatternBandCenter;
+import org.ebsdimage.core.sim.ops.patternsim.op.PatternBandCenter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,6 +34,7 @@ import ptpshared.core.math.Quaternion;
 import ptpshared.utility.LoggerUtil;
 import crystallography.core.Reflectors;
 import crystallography.core.ScatteringFactors;
+import crystallography.core.ScatteringFactorsEnum;
 import crystallography.core.XrayScatteringFactors;
 import crystallography.core.crystals.IronBCC;
 import crystallography.core.crystals.Silicon;
@@ -44,12 +45,15 @@ public class IndexingTest {
     private Camera camera;
 
     private Reflectors reflsFCC;
+
     private Reflectors reflsBCC;
+
     private Reflectors reflsHCP;
 
     private Quaternion rotation;
 
     private HoughPeak[] peaks1;
+
     private HoughPeak[] peaks2;
 
 
@@ -69,15 +73,17 @@ public class IndexingTest {
         reflsHCP = new Reflectors(new ZirconiumAlpha(), scatter, 2);
 
         PatternBandCenter pattern =
-                new PatternBandCenter(356, 256, reflsFCC, 25, camera,
-                        new Energy(20e3), rotation);
+                new PatternBandCenter(356, 256, 3, ScatteringFactorsEnum.XRAY);
+        pattern.simulate(camera, reflsFCC, new Energy(20e3), rotation);
+
         peaks1 =
                 Arrays.copyOf(HoughMath.bandsToHoughPeaks(pattern.getBands()),
                         3);
 
         pattern =
-                new PatternBandCenter(356, 256, reflsBCC, 25, camera,
-                        new Energy(20e3), rotation);
+                new PatternBandCenter(356, 256, 3, ScatteringFactorsEnum.XRAY);
+        pattern.simulate(camera, reflsBCC, new Energy(20e3), rotation);
+
         peaks2 =
                 Arrays.copyOf(HoughMath.bandsToHoughPeaks(pattern.getBands()),
                         3);
@@ -101,7 +107,7 @@ public class IndexingTest {
     @Test
     public void testIndex1() throws IOException {
         assertTrue(true);
-        //        
+        //
         // // Find all solutions
         // Solution[] slns =
         // Indexing.index(

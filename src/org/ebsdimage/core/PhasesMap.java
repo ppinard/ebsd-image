@@ -328,6 +328,29 @@ public class PhasesMap extends ByteMap {
 
 
     /**
+     * Returns the id of the specified phase.
+     * 
+     * @param phase
+     *            a phase
+     * @return id
+     * @throws IllegalArgumentException
+     *             if the specified phase doesn't exist in the phases map
+     */
+    public int getPhaseId(Crystal phase) {
+        if (phase == null)
+            return 0;
+
+        for (int i = 0; i < phases.length; i++)
+            if (phase.equals(phases[i], 1e-6))
+                return i + 1;
+
+        throw new IllegalArgumentException("The phase (" + phase.name
+                + ") doesn't exist in the phases map.");
+    }
+
+
+
+    /**
      * Returns a <code>PhasePixel</code> representing the specified pixel.
      * 
      * @param index

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.exp.ops.indexing.op;
 
 import static org.junit.Assert.assertEquals;
@@ -24,9 +24,12 @@ import org.ebsdimage.core.Solution;
 import org.junit.Before;
 import org.junit.Test;
 
+import crystallography.core.ScatteringFactorsEnum;
+
 public class KriegerLassen1994Test {
 
     private KriegerLassen1994 op;
+
     private HoughPeak[] srcPeaks;
 
 

@@ -20,7 +20,6 @@ package org.ebsdimage.gui.exp.ops.indexing.op;
 import javax.swing.JLabel;
 
 import org.ebsdimage.core.exp.ops.indexing.op.KriegerLassen1994;
-import org.ebsdimage.core.exp.ops.indexing.op.ScatteringFactorsEnum;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.exp.ops.OperationDialog;
 
@@ -28,12 +27,12 @@ import rmlshared.gui.ColumnPanel;
 import rmlshared.gui.ComboBox;
 import rmlshared.gui.IntField;
 import rmlshared.gui.Panel;
+import crystallography.core.ScatteringFactorsEnum;
 
 /**
  * GUI Dialog for the <code>KriegerLassen1994</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class KriegerLassen1994Dialog extends OperationDialog {
 
@@ -57,8 +56,8 @@ public class KriegerLassen1994Dialog extends OperationDialog {
         maxIndexField.setRange(1, Integer.MAX_VALUE);
 
         scatterTypeField =
-                new ComboBox<ScatteringFactorsEnum>(ScatteringFactorsEnum
-                        .values());
+                new ComboBox<ScatteringFactorsEnum>(
+                        ScatteringFactorsEnum.values());
         scatterTypeField.setSelectedItem(ScatteringFactorsEnum.XRAY);
 
         Panel panel = new ColumnPanel(2);

@@ -14,14 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.sim.ops.output;
 
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
-import org.ebsdimage.core.sim.ops.output.OutputOps;
+import org.ebsdimage.core.sim.ops.patternsim.op.PatternSimOp;
+import org.ebsdimage.core.sim.ops.patternsim.op.PatternSimOpMock;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,18 +30,21 @@ public class OutputOpsMockTest {
 
     private OutputOps op;
 
+    private PatternSimOp patternSimOp;
+
 
 
     @Before
     public void setUp() throws Exception {
         op = new OutputOpsMock();
+        patternSimOp = new PatternSimOpMock();
     }
 
 
 
     @Test
     public void testSave() throws IOException {
-        op.save(null);
+        op.save(null, patternSimOp);
         assertTrue(true);
     }
 

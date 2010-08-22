@@ -14,30 +14,23 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.sim.ops.patternsim.op;
 
-import org.ebsdimage.core.Camera;
-import org.ebsdimage.core.sim.Energy;
-import org.ebsdimage.core.sim.PatternBandCenter;
-import org.ebsdimage.core.sim.Sim;
-import org.ebsdimage.core.sim.ops.patternsim.op.PatternSimOp;
+import org.ebsdimage.core.sim.Band;
 
-import ptpshared.core.math.Quaternion;
-import crystallography.core.Crystal;
-import crystallography.core.Reflectors;
-import crystallography.core.XrayScatteringFactors;
-import crystallography.core.crystals.Silicon;
+import rmlimage.module.real.core.RealMap;
 
 public class PatternSimOpMock extends PatternSimOp {
 
     @Override
-    public void simulate(Sim sim, Camera camera, Crystal crystal,
-            Energy energy, Quaternion rotation) {
-        Reflectors refls = new Reflectors(new Silicon(),
-                new XrayScatteringFactors(), 1);
-        pattern = new PatternBandCenter(2, 2, refls, 4, camera, energy,
-                rotation);
+    protected RealMap createPatternMap() {
+        return new RealMap(2, 2);
+    }
 
+
+
+    @Override
+    protected void drawBand(RealMap canvas, Band band) {
     }
 }

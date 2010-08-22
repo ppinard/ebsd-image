@@ -32,7 +32,9 @@ import crystallography.core.crystals.ZirconiumAlpha;
 public class PhasesMapTest {
 
     private PhasesMap map;
+
     private Crystal[] phases;
+
     private byte[] pixArray;
 
 
@@ -110,6 +112,15 @@ public class PhasesMapTest {
         assertEquals(2, map.getPhases().length);
         assertEquals(new Silicon(), map.getPhases()[0]);
         assertEquals(new IronBCC(), map.getPhases()[1]);
+    }
+
+
+
+    @Test
+    public void testGetPhaseId() {
+        assertEquals(0, map.getPhaseId(null));
+        assertEquals(1, map.getPhaseId(new Silicon()));
+        assertEquals(2, map.getPhaseId(new IronBCC()));
     }
 
 

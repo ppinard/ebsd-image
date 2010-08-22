@@ -14,19 +14,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.sim.ops.output;
 
 import java.io.IOException;
 
 import org.ebsdimage.core.sim.Sim;
-import org.ebsdimage.core.sim.ops.output.OutputOps;
-
+import org.ebsdimage.core.sim.ops.patternsim.op.PatternSimOp;
 
 public class OutputOpsMock extends OutputOps {
 
     @Override
-    public void save(Sim sim) throws IOException {
+    public void save(Sim sim, PatternSimOp patternSimOp) throws IOException {
     }
 
 }

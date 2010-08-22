@@ -24,8 +24,13 @@ import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.Indexing;
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.exp.Exp;
+import org.ebsdimage.core.run.Run;
 
-import crystallography.core.*;
+import rmlshared.thread.Reflection;
+import crystallography.core.Crystal;
+import crystallography.core.Reflectors;
+import crystallography.core.ScatteringFactors;
+import crystallography.core.ScatteringFactorsEnum;
 
 /**
  * Operation to perform indexing based on the algorithm described in Krieger
@@ -110,24 +115,17 @@ public class KriegerLassen1994 extends IndexingOp {
 
 
     @Override
-    public void setUp(Exp exp) throws IOException {
-        super.setUp(exp);
+    public void setUp(Run run) throws IOException {
+        super.setUp(run);
+
+        Exp exp = (Exp) run;
 
         // Camera
         calibration = exp.mmap.calibration;
 
         // Scattering factors
-        ScatteringFactors scatter;
-        switch (scatterType) {
-        case ELECTRON:
-            scatter = new ElectronScatteringFactors();
-            break;
-        case XRAY:
-            scatter = new XrayScatteringFactors();
-            break;
-        default:
-            throw new IOException("The scattering factor type is unknown.");
-        }
+        ScatteringFactors scatter =
+                (ScatteringFactors) Reflection.newInstance(scatterType.getScatteringFactors());
 
         // Reflectors
         Crystal[] phases = exp.mmap.getPhases();

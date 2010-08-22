@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.sim.ops.output;
 
 import java.io.File;
@@ -23,8 +23,8 @@ import java.io.IOException;
 import org.ebsdimage.core.HoughMath;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.sim.Band;
-import org.ebsdimage.core.sim.Pattern;
 import org.ebsdimage.core.sim.Sim;
+import org.ebsdimage.core.sim.ops.patternsim.op.PatternSimOp;
 import org.ebsdimage.io.HoughPeakXmlSaver;
 import org.ebsdimage.io.HoughPeakXmlTags;
 import org.jdom.Element;
@@ -36,7 +36,6 @@ import ptpshared.utility.xml.JDomUtil;
  * Hough peaks are calculated from the bands of the simulated pattern.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class HoughPeaksXmlFile extends OutputOps {
 
@@ -45,17 +44,17 @@ public class HoughPeaksXmlFile extends OutputOps {
      * 
      * @param sim
      *            simulation executing this method
+     * @param patternSimOp
+     *            pattern simulation operation
      * @throws IOException
      *             if an error occurs while saving
      */
     @Override
-    public void save(Sim sim) throws IOException {
+    public void save(Sim sim, PatternSimOp patternSimOp) throws IOException {
         Element element = new Element(HoughPeakXmlTags.TAG_NAME + "s");
 
-        Pattern pattern = sim.getPatternSimOp().getPattern();
-
         // Convert pattern's bands to Hough peaks
-        Band[] bands = pattern.getBands();
+        Band[] bands = patternSimOp.getBands();
         HoughPeak[] peaks = HoughMath.bandsToHoughPeaks(bands);
 
         // Save Hough peaks
@@ -63,8 +62,9 @@ public class HoughPeaksXmlFile extends OutputOps {
             element.addContent(new HoughPeakXmlSaver().save(peak));
 
         // Save element
-        File file = new File(sim.getDir(), sim.getName() + "_"
-                + sim.getCurrentIndex() + ".xml");
+        File file =
+                new File(sim.getDir(), sim.getName() + "_"
+                        + sim.getCurrentIndex() + ".xml");
         JDomUtil.saveXML(element, file);
     }
 

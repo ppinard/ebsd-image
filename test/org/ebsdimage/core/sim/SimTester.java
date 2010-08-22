@@ -14,28 +14,28 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.sim;
 
 import java.io.File;
 
 import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.run.Operation;
-import org.ebsdimage.core.sim.Energy;
-import org.ebsdimage.core.sim.Sim;
-import org.ebsdimage.core.sim.ops.patternsim.op.PatternFilledBandXrayScatter;
+import org.ebsdimage.core.sim.ops.patternsim.op.PatternFilledBand;
 
 import ptpshared.core.math.Eulers;
 import ptpshared.core.math.Quaternion;
 import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
+import crystallography.core.ScatteringFactorsEnum;
 import crystallography.core.crystals.Silicon;
 
 public abstract class SimTester {
 
     protected Sim sim;
-    public static final File simPath =
-            new File(FileUtil.getTempDirFile(), "sim1");
+
+    public static final File simPath = new File(FileUtil.getTempDirFile(),
+            "sim1");
 
 
 
@@ -62,6 +62,6 @@ public abstract class SimTester {
 
 
     public static Operation createPatternSimOp() {
-        return new PatternFilledBandXrayScatter(335, 255, 1);
+        return new PatternFilledBand(335, 255, 1, ScatteringFactorsEnum.XRAY);
     }
 }

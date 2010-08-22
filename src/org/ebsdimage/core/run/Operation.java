@@ -14,12 +14,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.run;
 
 import java.io.IOException;
-
-import org.ebsdimage.core.exp.Exp;
 
 import net.jcip.annotations.Immutable;
 import ptpshared.utility.xml.ObjectXml;
@@ -62,12 +60,12 @@ public abstract class Operation implements ObjectXml {
     /**
      * Flushes the operation after running an experiment.
      * 
-     * @param exp
-     *            experiment executing this method
+     * @param run
+     *            run executing this method
      * @throws IOException
      *             if an error occurs during the flush
      */
-    public void tearDown(Exp exp) throws IOException {
+    public void tearDown(Run run) throws IOException {
 
     }
 
@@ -102,14 +100,14 @@ public abstract class Operation implements ObjectXml {
 
 
     /**
-     * Initializes the operation before running an experiment.
+     * Initialises the operation before running an experiment.
      * 
-     * @param exp
-     *            experiment executing this method
+     * @param run
+     *            run executing this method
      * @throws IOException
      *             if an error occurs during the initialization
      */
-    public void setUp(Exp exp) throws IOException {
+    public void setUp(Run run) throws IOException {
 
     }
 

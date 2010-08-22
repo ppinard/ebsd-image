@@ -14,23 +14,35 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-package org.ebsdimage.io.sim;
-
-/**
- * Tags for <code>Pattern</code>'s XML <code>Element</code>.
- * 
- * @author Philippe T. Pinard
- * 
  */
-public class PatternXmlTags {
-    /** XML attribute for width. */
-    public static final String ATTR_WIDTH = "width";
+package org.ebsdimage.io.sim.ops.output;
 
-    /** XML attribute for height. */
-    public static final String ATTR_HEIGHT = "height";
+import static org.ebsdimage.io.sim.ops.output.ExpMMapSmpFileXmlTags.TAG_NAME;
+import static org.junit.Assert.assertEquals;
 
-    /** XML attribute for the number of reflectors. */
-    public static final String ATTR_NUMBER_REFLECTORS = "numberReflectors";
+import org.ebsdimage.core.sim.ops.output.ExpMMapSmpFile;
+import org.jdom.Element;
+import org.junit.Before;
+import org.junit.Test;
+
+public class ExpMMapSmpFileXmlLoaderTest {
+
+    private Element element;
+
+
+
+    @Before
+    public void setUp() throws Exception {
+        element = new Element(TAG_NAME);
+    }
+
+
+
+    @Test
+    public void testLoad() {
+        ExpMMapSmpFile op = new ExpMMapSmpFileXmlLoader().load(element);
+
+        assertEquals(TAG_NAME, op.getName());
+    }
 
 }

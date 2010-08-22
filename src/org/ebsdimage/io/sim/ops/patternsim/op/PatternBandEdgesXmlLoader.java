@@ -14,15 +14,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.sim.ops.patternsim.op;
 
-import static org.ebsdimage.io.sim.PatternXmlTags.ATTR_HEIGHT;
-import static org.ebsdimage.io.sim.PatternXmlTags.ATTR_WIDTH;
-import static org.ebsdimage.io.sim.ops.patternsim.op.PatternFilledBandXrayScatterXmlTags.ATTR_MAX_INDEX;
-import static org.ebsdimage.io.sim.ops.patternsim.op.PatternFilledBandXrayScatterXmlTags.TAG_NAME;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternBandEdgesXmlTags.TAG_NAME;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternSimOpXmlTags.ATTR_HEIGHT;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternSimOpXmlTags.ATTR_MAXINDEX;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternSimOpXmlTags.ATTR_SCATTER_TYPE;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternSimOpXmlTags.ATTR_WIDTH;
 
-import org.ebsdimage.core.sim.ops.patternsim.op.PatternFilledBandXrayScatter;
+import org.ebsdimage.core.sim.ops.patternsim.op.PatternBandEdges;
 import org.jdom.Element;
 import org.jdom.IllegalNameException;
 
@@ -30,27 +31,27 @@ import ptpshared.utility.BadUnitException;
 import ptpshared.utility.xml.JDomUtil;
 import ptpshared.utility.xml.ObjectXmlLoader;
 import ptpshared.utility.xml.UnitsXmlTags;
+import crystallography.core.ScatteringFactorsEnum;
 
 /**
- * XML loader for a <code>PatternFilledBandXrayScatter</code> operation.
+ * XML loader for a <code>PatternBandEdges</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
-public class PatternFilledBandXrayScatterXmlLoader implements ObjectXmlLoader {
+public class PatternBandEdgesXmlLoader implements ObjectXmlLoader {
 
     /**
-     * Loads a <code>PatternFilledBandXrayScatter</code> operation from an XML
+     * Loads a <code>PatternBandEdgesXrayScatter</code> operation from an XML
      * <code>Element</code>.
      * 
      * @param element
      *            an XML <code>Element</code>
-     * @return a <code>PatternFilledBandXrayScatter</code> operation
+     * @return a <code>PatternBandEdgesXrayScatter</code> operation
      * @throws IllegalNameException
      *             if the <code>Element</code> tag name is incorrect.
      */
     @Override
-    public PatternFilledBandXrayScatter load(Element element) {
+    public PatternBandEdges load(Element element) {
         if (!element.getName().equals(TAG_NAME))
             throw new IllegalNameException("Name of the element should be "
                     + TAG_NAME + " not " + element.getName() + ".");
@@ -59,14 +60,20 @@ public class PatternFilledBandXrayScatterXmlLoader implements ObjectXmlLoader {
             throw new BadUnitException("The dimenions unit should be "
                     + UnitsXmlTags.PX);
 
-        int width = JDomUtil.getIntegerFromAttribute(element, ATTR_WIDTH,
-                PatternFilledBandXrayScatter.DEFAULT_WIDTH);
-        int height = JDomUtil.getIntegerFromAttribute(element, ATTR_HEIGHT,
-                PatternFilledBandXrayScatter.DEFAULT_HEIGHT);
-        int maxIndice = JDomUtil.getIntegerFromAttribute(element,
-                ATTR_MAX_INDEX, PatternFilledBandXrayScatter.DEFAULT_MAX_INDEX);
+        int width =
+                JDomUtil.getIntegerFromAttribute(element, ATTR_WIDTH,
+                        PatternBandEdges.DEFAULT_WIDTH);
+        int height =
+                JDomUtil.getIntegerFromAttribute(element, ATTR_HEIGHT,
+                        PatternBandEdges.DEFAULT_HEIGHT);
+        int maxIndex =
+                JDomUtil.getIntegerFromAttribute(element, ATTR_MAXINDEX,
+                        PatternBandEdges.DEFAULT_MAX_INDEX);
+        ScatteringFactorsEnum scatterType =
+                ScatteringFactorsEnum.valueOf(JDomUtil.getStringFromAttributeDefault(
+                        element, ATTR_SCATTER_TYPE,
+                        PatternBandEdges.DEFAULT_SCATTER_TYPE.toString()));
 
-        return new PatternFilledBandXrayScatter(width, height, maxIndice);
+        return new PatternBandEdges(width, height, maxIndex, scatterType);
     }
-
 }

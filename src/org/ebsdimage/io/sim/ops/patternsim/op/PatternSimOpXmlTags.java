@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.sim.ops.patternsim.op;
 
 import org.ebsdimage.core.sim.ops.patternsim.op.PatternSimOp;
@@ -23,9 +23,20 @@ import org.ebsdimage.core.sim.ops.patternsim.op.PatternSimOp;
  * Tags for <code>PatternSimOp</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class PatternSimOpXmlTags {
     /** XML tag name for <code>PatternSimOp</code>. */
     public static final String TAG_NAME = PatternSimOp.class.getSimpleName();
+
+    /** XML attribute for the width. */
+    public static final String ATTR_WIDTH = "width";
+
+    /** XML attribute for the height. */
+    public static final String ATTR_HEIGHT = "height";
+
+    /** XML attribute for the maximum index. */
+    public static final String ATTR_MAXINDEX = "maxIndex";
+
+    /** XML attribute for the type of scattering factors. */
+    public static final String ATTR_SCATTER_TYPE = "scatterType";
 }

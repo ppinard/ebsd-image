@@ -3938,4 +3938,32 @@ public interface SpaceGroups2 {
                     new Generator(ROT_mZ_Y_mX, TR_14_14_34),
                     new Generator(ROT_Z_mY_mX, TR_14_34_14),
                     new Generator(ROT_Z_Y_X, TR_34_34_34) });
+
+
+
+    /**
+     * Initialises the crystal systems lookup table.
+     */
+    public void initCrystalSystems();
+
+
+
+    /**
+     * Initialises the indexes lookup table.
+     */
+    public void initIndexes();
+
+
+
+    /**
+     * Initialises the Laue group lookup table.
+     */
+    public void initLaueGroups();
+
+
+
+    /**
+     * Initialises the symbols lookup table.
+     */
+    public void initSymbols();
 }

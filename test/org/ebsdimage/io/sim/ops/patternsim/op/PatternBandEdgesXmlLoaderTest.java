@@ -14,23 +14,24 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.sim.ops.patternsim.op;
 
-import static org.ebsdimage.io.sim.PatternXmlTags.ATTR_HEIGHT;
-import static org.ebsdimage.io.sim.PatternXmlTags.ATTR_WIDTH;
-import static org.ebsdimage.io.sim.ops.patternsim.op.PatternFilledBandXrayScatterXmlTags.ATTR_MAX_INDEX;
-import static org.ebsdimage.io.sim.ops.patternsim.op.PatternFilledBandXrayScatterXmlTags.TAG_NAME;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternBandEdgesXmlTags.TAG_NAME;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternSimOpXmlTags.ATTR_HEIGHT;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternSimOpXmlTags.ATTR_MAXINDEX;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternSimOpXmlTags.ATTR_SCATTER_TYPE;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternSimOpXmlTags.ATTR_WIDTH;
 import static org.junit.Assert.assertEquals;
 
-import org.ebsdimage.core.sim.ops.patternsim.op.PatternFilledBandXrayScatter;
-import org.ebsdimage.io.sim.ops.patternsim.op.PatternFilledBandXrayScatterXmlLoader;
+import org.ebsdimage.core.sim.ops.patternsim.op.PatternBandEdges;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
 
+import crystallography.core.ScatteringFactorsEnum;
 
-public class PatternFilledBandXrayScatterXmlLoaderTest {
+public class PatternBandEdgesXmlLoaderTest {
 
     private Element element;
 
@@ -42,20 +43,22 @@ public class PatternFilledBandXrayScatterXmlLoaderTest {
 
         element.setAttribute(ATTR_WIDTH, Integer.toString(336));
         element.setAttribute(ATTR_HEIGHT, Integer.toString(256));
-        element.setAttribute(ATTR_MAX_INDEX, Integer.toString(5));
+        element.setAttribute(ATTR_MAXINDEX, Integer.toString(5));
+        element.setAttribute(ATTR_SCATTER_TYPE,
+                ScatteringFactorsEnum.XRAY.toString());
     }
 
 
 
     @Test
     public void testLoad() {
-        PatternFilledBandXrayScatter op = new PatternFilledBandXrayScatterXmlLoader()
-                .load(element);
+        PatternBandEdges op = new PatternBandEdgesXmlLoader().load(element);
 
         assertEquals(TAG_NAME, op.getName());
         assertEquals(336, op.width);
         assertEquals(256, op.height);
         assertEquals(5, op.maxIndex);
+        assertEquals(ScatteringFactorsEnum.XRAY, op.scatterType);
     }
 
 }

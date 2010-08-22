@@ -14,37 +14,39 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.sim.ops.output;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.core.sim.Sim;
+import org.ebsdimage.core.sim.ops.patternsim.op.PatternSimOp;
 
 import rmlimage.core.ByteMap;
 import rmlimage.io.IO;
 
 /**
- * Operation to save the simulated pattern as a bmp file.
+ * Operation to save the simulated pattern as a BMP file.
  * 
  * @author Philippe T. Pinard
- * 
  */
 public class BmpFile extends OutputOps {
 
     /**
-     * Saves the simulated pattern as a bmp file.
+     * Saves the simulated pattern as a BMP file.
      * 
      * @param sim
      *            simulation executing this method
+     * @param patternSimOp
+     *            pattern simulation operation
      * @throws IOException
-     *             if an error occurs while saving the bmp file
+     *             if an error occurs while saving the BMP file
      */
     @Override
-    public void save(Sim sim) throws IOException {
+    public void save(Sim sim, PatternSimOp patternSimOp) throws IOException {
         // Get ByteMap
-        ByteMap patternMap = sim.getPatternSimOp().getPattern().getPatternMap();
+        ByteMap patternMap = patternSimOp.getPatternMap();
 
         patternMap.setFile(new File(sim.getDir(), sim.getName() + "_"
                 + sim.getCurrentIndex() + ".bmp"));

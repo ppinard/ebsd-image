@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.indexing.op;
 
 import static org.ebsdimage.io.exp.ops.indexing.op.KriegerLassen1994XmlTags.ATTR_MAX_INDEX;
@@ -23,12 +23,11 @@ import static org.ebsdimage.io.exp.ops.indexing.op.KriegerLassen1994XmlTags.TAG_
 import static org.junit.Assert.assertEquals;
 
 import org.ebsdimage.core.exp.ops.indexing.op.KriegerLassen1994;
-import org.ebsdimage.core.exp.ops.indexing.op.ScatteringFactorsEnum;
-import org.ebsdimage.io.exp.ops.indexing.op.KriegerLassen1994XmlLoader;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
 
+import crystallography.core.ScatteringFactorsEnum;
 
 public class KriegerLassen1994XmlLoaderTest {
 
@@ -40,8 +39,8 @@ public class KriegerLassen1994XmlLoaderTest {
     public void setUp() throws Exception {
         element = new Element(TAG_NAME);
         element.setAttribute(ATTR_MAX_INDEX, Integer.toString(4));
-        element.setAttribute(ATTR_SCATTER_TYPE, ScatteringFactorsEnum.ELECTRON
-                .toString());
+        element.setAttribute(ATTR_SCATTER_TYPE,
+                ScatteringFactorsEnum.ELECTRON.toString());
     }
 
 

@@ -14,15 +14,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.sim.ops.patternsim.op;
 
-import static org.ebsdimage.io.sim.PatternXmlTags.ATTR_HEIGHT;
-import static org.ebsdimage.io.sim.PatternXmlTags.ATTR_WIDTH;
-import static org.ebsdimage.io.sim.ops.patternsim.op.PatternFilledBandXrayScatterXmlTags.ATTR_MAX_INDEX;
-import static org.ebsdimage.io.sim.ops.patternsim.op.PatternFilledBandXrayScatterXmlTags.TAG_NAME;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternBandCenterXmlTags.TAG_NAME;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternSimOpXmlTags.ATTR_HEIGHT;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternSimOpXmlTags.ATTR_MAXINDEX;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternSimOpXmlTags.ATTR_SCATTER_TYPE;
+import static org.ebsdimage.io.sim.ops.patternsim.op.PatternSimOpXmlTags.ATTR_WIDTH;
 
-import org.ebsdimage.core.sim.ops.patternsim.op.PatternFilledBandXrayScatter;
+import org.ebsdimage.core.sim.ops.patternsim.op.PatternBandCenter;
 import org.jdom.Element;
 
 import ptpshared.utility.xml.ObjectXml;
@@ -30,40 +31,40 @@ import ptpshared.utility.xml.ObjectXmlSaver;
 import ptpshared.utility.xml.UnitsXmlTags;
 
 /**
- * XML saver for a <code>PatternFilledBandXrayScatter</code> operation.
+ * XML saver for a <code>PatternBandCenter</code> operation.
  * 
  * @author Philippe T. Pinard
- * 
  */
-public class PatternFilledBandXrayScatterXmlSaver implements ObjectXmlSaver {
+public class PatternBandCenterXmlSaver implements ObjectXmlSaver {
 
     /**
      * {@inheritDoc}
      * 
-     * @see #save(PatternFilledBandXrayScatter)
+     * @see #save(PatternBandCenter)
      */
     @Override
     public Element save(ObjectXml obj) {
-        return save((PatternFilledBandXrayScatter) obj);
+        return save((PatternBandCenter) obj);
     }
 
 
 
     /**
-     * Saves a <code>PatternFilledBandXrayScatter</code> operation to an XML
+     * Saves a <code>PatternBandCenter</code> operation to an XML
      * <code>Element</code>.
      * 
      * @param op
-     *            a <code>PatternFilledBandXrayScatter</code> operation
+     *            a <code>PatternBandCenter</code> operation
      * @return an XML <code>Element</code>
      */
-    public Element save(PatternFilledBandXrayScatter op) {
+    public Element save(PatternBandCenter op) {
         Element element = new Element(TAG_NAME);
 
         element.setAttribute(ATTR_WIDTH, Integer.toString(op.width));
         element.setAttribute(ATTR_HEIGHT, Integer.toString(op.height));
         element.setAttribute(UnitsXmlTags.ATTR, UnitsXmlTags.PX);
-        element.setAttribute(ATTR_MAX_INDEX, Integer.toString(op.maxIndex));
+        element.setAttribute(ATTR_MAXINDEX, Integer.toString(op.maxIndex));
+        element.setAttribute(ATTR_SCATTER_TYPE, op.scatterType.toString());
 
         return element;
     }

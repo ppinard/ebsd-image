@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.io.exp.ops.indexing.op;
 
 import static org.ebsdimage.io.exp.ops.indexing.op.KriegerLassen1994XmlTags.ATTR_MAX_INDEX;
@@ -23,14 +23,13 @@ import static org.ebsdimage.io.exp.ops.indexing.op.KriegerLassen1994XmlTags.TAG_
 import static org.junit.Assert.assertEquals;
 
 import org.ebsdimage.core.exp.ops.indexing.op.KriegerLassen1994;
-import org.ebsdimage.core.exp.ops.indexing.op.ScatteringFactorsEnum;
-import org.ebsdimage.io.exp.ops.indexing.op.KriegerLassen1994XmlSaver;
 import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
 
 import ptpshared.utility.xml.JDomUtil;
 import ptpshared.utility.xml.ObjectXml;
+import crystallography.core.ScatteringFactorsEnum;
 
 public class KriegerLassen1994XmlSaverTest {
 
@@ -63,9 +62,10 @@ public class KriegerLassen1994XmlSaverTest {
 
     private void testElement(Element element) {
         assertEquals(TAG_NAME, element.getName());
-        assertEquals(op.maxIndex, JDomUtil.getIntegerFromAttribute(element,
-                ATTR_MAX_INDEX));
-        assertEquals(op.scatterType, ScatteringFactorsEnum.valueOf(JDomUtil
-                .getStringFromAttribute(element, ATTR_SCATTER_TYPE)));
+        assertEquals(op.maxIndex,
+                JDomUtil.getIntegerFromAttribute(element, ATTR_MAX_INDEX));
+        assertEquals(op.scatterType,
+                ScatteringFactorsEnum.valueOf(JDomUtil.getStringFromAttribute(
+                        element, ATTR_SCATTER_TYPE)));
     }
 }

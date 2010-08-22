@@ -14,14 +14,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.ebsdimage.core.sim.ops.output;
 
 import java.io.IOException;
 
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.sim.Sim;
-
+import org.ebsdimage.core.sim.ops.patternsim.op.PatternSimOp;
 
 /**
  * Superclass of operation to save the output(s).
@@ -31,41 +31,16 @@ import org.ebsdimage.core.sim.Sim;
 public abstract class OutputOps extends Operation {
 
     /**
-     * Initializes the output before running an experiment.
-     * 
-     * @param sim
-     *            simulation executing this method
-     * @throws IOException
-     *             if an error occurs during the initialization
-     */
-    public void init(Sim sim) throws IOException {
-
-    }
-
-
-
-    /**
-     * Flushes the output after running an experiment.
-     * 
-     * @param sim
-     *            simulation executing this method
-     * @throws IOException
-     *             if an error occurs during the flush
-     */
-    public void flush(Sim sim) throws IOException {
-
-    }
-
-
-
-    /**
      * Saves results, operations or parameters of the <code>Sim</code>.
      * 
      * @param sim
      *            simulation executing this method
+     * @param patternSimOp
+     *            pattern simulation operation
      * @throws IOException
      *             if an error occurs while saving
      */
-    public abstract void save(Sim sim) throws IOException;
+    public abstract void save(Sim sim, PatternSimOp patternSimOp)
+            throws IOException;
 
 }
