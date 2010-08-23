@@ -198,6 +198,7 @@ public class ExpMMapSmpFileTest {
         assertEquals(2, smp.getMapHeight());
         assertEquals(0, smp.getStartIndex());
         assertEquals(1, smp.getEndIndex());
+        smp.close();
     }
 
 }
