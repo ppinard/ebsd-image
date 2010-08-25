@@ -162,6 +162,36 @@ public abstract class BaseCUI {
 
 
     /**
+     * Returns a string value from an option of the command line. Returns null
+     * if the option doesn't exist.
+     * 
+     * @param cmdLine
+     *            command line (parsed arguments)
+     * @param option
+     *            name of the option
+     * @return string value
+     */
+    @CheckForNull
+    protected String getString(CommandLine cmdLine, String option) {
+        if (!cmdLine.hasOption(option)) {
+            ErrorDialog.show("No " + option + " is specified.");
+            return null;
+        }
+
+        if (cmdLine.getOptionValue(option) == null) {
+            ErrorDialog.show("Please specify a " + option + ".");
+            return null;
+        }
+
+        String value = cmdLine.getOptionValue(option);
+        MessageDialog.show(option + ": " + value);
+
+        return value;
+    }
+
+
+
+    /**
      * Returns a double value from an option of the command line. Returns NaN if
      * the option doesn't exist.
      * 
