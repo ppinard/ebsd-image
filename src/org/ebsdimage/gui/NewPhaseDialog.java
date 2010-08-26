@@ -258,7 +258,7 @@ public class NewPhaseDialog extends BasicDialog {
     private ComboBox<LaueGroup> laueGroupCBox;
 
     /** Combo box for the space group. */
-    private ComboBox<String> spaceGroupCBox;
+    private ComboBox<SpaceGroup> spaceGroupCBox;
 
     /** Field for the lattice constant a. */
     private DoubleField aField;
@@ -344,8 +344,7 @@ public class NewPhaseDialog extends BasicDialog {
         crystalSystemPanel.add(laueGroupCBox, "wrap");
 
         crystalSystemPanel.add("Space group");
-        spaceGroupCBox = new ComboBox<String>();
-        spaceGroupCBox.setSelectedItem(crystal.spaceGroup);
+        spaceGroupCBox = new ComboBox<SpaceGroup>();
         crystalSystemPanel.add(spaceGroupCBox, "wrap");
 
         // Build the Unit Cell subpanel
@@ -447,6 +446,7 @@ public class NewPhaseDialog extends BasicDialog {
         setMainComponent(cPanel);
 
         refreshLaueGroup();
+        spaceGroupCBox.setSelectedItem(crystal.spaceGroup);
     }
 
 
@@ -480,7 +480,7 @@ public class NewPhaseDialog extends BasicDialog {
      * @return space group
      */
     private SpaceGroup getSpaceGroup() {
-        return SpaceGroups.fromSymbol(spaceGroupCBox.getSelectedItemBFR());
+        return spaceGroupCBox.getSelectedItemBFR();
     }
 
 
@@ -548,6 +548,8 @@ public class NewPhaseDialog extends BasicDialog {
     private void refreshLaueGroup() {
         if (crystalSystemCBox.getSelectedItem() == null)
             return;
+
+        LaueGroup tmpLaueGroup = laueGroupCBox.getSelectedItem();
 
         switch (crystalSystemCBox.getSelectedItem()) {
         case TRICLINIC:
@@ -671,6 +673,8 @@ public class NewPhaseDialog extends BasicDialog {
                     + crystalSystemCBox.getSelectedItem() + ")");
         }
 
+        laueGroupCBox.setSelectedItem(tmpLaueGroup);
+
         refreshSpaceGroup();
     }
 
@@ -683,10 +687,14 @@ public class NewPhaseDialog extends BasicDialog {
         if (laueGroupCBox.getSelectedItem() == null)
             return;
 
+        SpaceGroup tmpSpaceGroup = spaceGroupCBox.getSelectedItem();
+
         spaceGroupCBox.removeAllItems();
 
         SpaceGroup[] sgs = SpaceGroups.list(laueGroupCBox.getSelectedItem());
         for (SpaceGroup sg : sgs)
-            spaceGroupCBox.addGeneric(sg.symbol);
+            spaceGroupCBox.addGeneric(sg);
+
+        spaceGroupCBox.setSelectedItem(tmpSpaceGroup);
     }
 }

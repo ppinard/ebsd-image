@@ -273,7 +273,7 @@ public class CifLoader implements Loader, Monitorable {
             throw new IOException("Y coodinates of atom sites is missing.");
         if (!data.containsKey("_atom_site_fract_z"))
             throw new IOException("Z coodinates of atom sites is missing.");
-        if (!data.containsKey("_space_group_IT_number"))
+        if (!(data.containsKey("_space_group_IT_number") || data.containsKey("_symmetry_Int_Tables_number")))
             throw new IOException("Space group number is missing.");
 
         // Name
@@ -356,8 +356,11 @@ public class CifLoader implements Loader, Monitorable {
         }
 
         // Point group
-        int index =
-                Integer.parseInt((String) data.get("_space_group_IT_number"));
+        String indexStr = (String) data.get("_space_group_IT_number");
+        if (indexStr == null)
+            indexStr = (String) data.get("_symmetry_Int_Tables_number");
+
+        int index = Integer.parseInt(indexStr);
         SpaceGroup sg = SpaceGroups.fromIndex(index);
 
         return new Crystal(name, unitCell, atomSites, sg);
