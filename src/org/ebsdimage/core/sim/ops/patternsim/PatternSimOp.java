@@ -30,7 +30,9 @@ import org.ebsdimage.core.sim.Sim;
 import ptpshared.core.math.Quaternion;
 import rmlimage.core.ByteMap;
 import rmlimage.module.real.core.Contrast;
+import rmlimage.module.real.core.Conversion;
 import rmlimage.module.real.core.RealMap;
+import rmlimage.module.real.core.ThreeSigmaRenderer;
 import rmlshared.thread.Reflection;
 import crystallography.core.*;
 
@@ -288,7 +290,10 @@ public abstract class PatternSimOp extends Operation {
     public void simulate(Sim sim, Camera camera, Reflectors reflectors,
             Energy energy, Quaternion rotation) {
         patternRealMap = drawRealMap(camera, reflectors, energy, rotation);
-        patternMap = Contrast.expansion(patternRealMap);
+
+        // Use 3-sigma rendered
+        patternRealMap.setMapRenderer(new ThreeSigmaRenderer());
+        patternMap = Conversion.toByteMap(patternRealMap);
     }
 
 
