@@ -113,11 +113,11 @@ public class ShapeFactor extends DetectionPostOps {
 
         double aspectRatio;
         ArrayList<Integer> keepObjects = new ArrayList<Integer>();
-        for (int i = 1; i < identMap.getObjectCount(); i++) {
+        for (int i = 0; i < identMap.getObjectCount(); i++) {
             aspectRatio = ferets.max[i] / ferets.min[i];
 
             if (aspectRatio <= this.aspectRatio)
-                keepObjects.add(i);
+                keepObjects.add(i + 1);
         }
 
         Identification.keepObjects(identMap,
