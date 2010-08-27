@@ -72,8 +72,8 @@ public class ExpUtil {
 
             // Create an experiment with the operations
             Exp exp =
-                    new Exp(mmap, ops.toArray(new Operation[ops.size()]),
-                            saveMaps);
+                    new Exp(mmap.duplicate(),
+                            ops.toArray(new Operation[ops.size()]), saveMaps);
 
             exps[i] = exp;
             i++;
@@ -98,8 +98,13 @@ public class ExpUtil {
             throws IOException {
         SmpInputStream smp = new SmpInputStream(smpFile);
 
-        return new PatternSmpLoader(smp.getStartIndex(), smp.getMapCount(),
-                smpFile);
+        PatternSmpLoader op =
+                new PatternSmpLoader(smp.getStartIndex(), smp.getMapCount(),
+                        smpFile);
+
+        smp.close();
+
+        return op;
     }
 
 
