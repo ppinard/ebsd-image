@@ -70,7 +70,7 @@ public class ShapeFactorTest extends TestCase {
         assertEquals(25, Identification.identify(srcMap).getObjectCount());
 
         BinMap destMap = shapeFactor.process(null, srcMap);
-        assertEquals(7, Identification.identify(destMap).getObjectCount());
+        assertEquals(8, Identification.identify(destMap).getObjectCount());
     }
 
 
