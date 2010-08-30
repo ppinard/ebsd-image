@@ -94,6 +94,7 @@ public class Exp extends PlugIn implements Monitorable {
 
         exp = null;
         wizard = new ExpWizard();
+        wizard.setPreferences(getPreferences());
     }
 
 

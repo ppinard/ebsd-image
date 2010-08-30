@@ -63,18 +63,19 @@ public class TslImport extends PlugIn implements Monitorable {
      * @return a <code>HklMMap</code>
      */
     private TslMMap doImport() {
-        TslImportWizard dialog = new TslImportWizard();
+        TslImportWizard wizard = new TslImportWizard();
+        wizard.setPreferences(getPreferences());
 
-        if (!dialog.show())
+        if (!wizard.show())
             return null;
 
         // Load ctf
-        double beamEnergy = dialog.getBeamEnergy();
-        double magnification = dialog.getMagnification();
-        double tiltAngle = dialog.getTiltAngle();
-        Quaternion rotation = dialog.getSampleRotation();
-        Crystal[] phases = dialog.getPhases();
-        File angFile = dialog.getAngFile();
+        double beamEnergy = wizard.getBeamEnergy();
+        double magnification = wizard.getMagnification();
+        double tiltAngle = wizard.getTiltAngle();
+        Quaternion rotation = wizard.getSampleRotation();
+        Crystal[] phases = wizard.getPhases();
+        File angFile = wizard.getAngFile();
 
         angLoader = new AngLoader();
         status = "Loading ang file.";
@@ -91,7 +92,7 @@ public class TslImport extends PlugIn implements Monitorable {
         angLoader = null;
 
         // Save MMap
-        File outputFile = dialog.getOutputFile();
+        File outputFile = wizard.getOutputFile();
 
         mmapSaver = new TslMMapSaver();
         status = "Saving multimap.";
@@ -105,7 +106,7 @@ public class TslImport extends PlugIn implements Monitorable {
         mmapSaver = null;
 
         // Display MMap in the GUI
-        if (dialog.getDisplayGUI())
+        if (wizard.getDisplayGUI())
             add(mmap);
 
         return mmap;

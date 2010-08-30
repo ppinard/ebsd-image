@@ -40,15 +40,13 @@ public class TslImportWizard extends Wizard {
      * Creates a new <code>ImportWizard</code>.
      */
     public TslImportWizard() {
-        super(new WizardPage[] { new StartWizardPage(),
+        super("Import from TSL", new WizardPage[] { new StartWizardPage(),
                 new MissingDataWizardPage(), new PhasesWizardPage(),
                 new OutputWizardPage() });
 
-        setTitle("Import from TSL");
-
         BufferedImage image;
         try {
-            image = ImageIO.read(getURL("org/ebsdimage/gui/exp/sidepanel.png"));
+            image = ImageIO.read(getURL("org/ebsdimage/gui/sidepanel.png"));
         } catch (Exception ex) {
             image = null;
         }

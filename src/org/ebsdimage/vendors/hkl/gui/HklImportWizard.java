@@ -42,15 +42,13 @@ public class HklImportWizard extends Wizard {
      * Creates a new <code>ImportWizard</code>.
      */
     public HklImportWizard() {
-        super(new WizardPage[] { new StartWizardPage(),
+        super("Import from HKL", new WizardPage[] { new StartWizardPage(),
                 new MissingDataWizardPage(), new PhasesWizardPage(),
                 new PatternsWizardPage(), new OutputWizardPage() });
 
-        setTitle("Import from HKL");
-
         BufferedImage image;
         try {
-            image = ImageIO.read(getURL("org/ebsdimage/gui/exp/sidepanel.png"));
+            image = ImageIO.read(getURL("org/ebsdimage/gui/sidepanel.png"));
         } catch (Exception ex) {
             image = null;
         }

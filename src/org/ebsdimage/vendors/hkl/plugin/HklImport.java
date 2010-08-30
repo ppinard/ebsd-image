@@ -68,16 +68,17 @@ public class HklImport extends PlugIn implements Monitorable {
      * @return a <code>HklMMap</code>
      */
     private HklMMap doImport() {
-        HklImportWizard dialog = new HklImportWizard();
+        HklImportWizard wizard = new HklImportWizard();
+        wizard.setPreferences(getPreferences());
 
-        if (!dialog.show())
+        if (!wizard.show())
             return null;
 
         // Load ctf
-        Camera calibration = dialog.getCalibration();
-        double workingDistance = dialog.getWorkingDistance();
-        Crystal[] phases = dialog.getPhases();
-        File ctfFile = dialog.getCtfFile();
+        Camera calibration = wizard.getCalibration();
+        double workingDistance = wizard.getWorkingDistance();
+        Crystal[] phases = wizard.getPhases();
+        File ctfFile = wizard.getCtfFile();
 
         ctfLoader = new CtfLoader();
         status = "Loading ctf file.";
@@ -94,7 +95,7 @@ public class HklImport extends PlugIn implements Monitorable {
         ctfLoader = null;
 
         // Save MMap
-        File outputFile = dialog.getOutputFile();
+        File outputFile = wizard.getOutputFile();
 
         mmapSaver = new HklMMapSaver();
         status = "Saving multimap";
@@ -110,8 +111,8 @@ public class HklImport extends PlugIn implements Monitorable {
         // Load patterns
         status = "Saving patterns in smp";
 
-        if (dialog.getImportPatterns()) {
-            File imagesDir = dialog.getPatternsDir();
+        if (wizard.getImportPatterns()) {
+            File imagesDir = wizard.getPatternsDir();
 
             File[] patternFiles;
             if (imagesDir == null)
@@ -132,7 +133,7 @@ public class HklImport extends PlugIn implements Monitorable {
         smpCreator = null;
 
         // Display MMap in the GUI
-        if (dialog.getDisplayGUI())
+        if (wizard.getDisplayGUI())
             add(mmap);
 
         return mmap;

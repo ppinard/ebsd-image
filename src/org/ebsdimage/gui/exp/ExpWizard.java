@@ -55,14 +55,13 @@ public class ExpWizard extends Wizard {
      *             if an error occurs
      */
     public ExpWizard() throws IOException {
-        super(new WizardPage[] { new StartWizardPage(), new InfoWizardPage(),
+        super("Experiment", new WizardPage[] { new StartWizardPage(), 
+                new InfoWizardPage(),
                 new AcqMetadataWizardPage(), new PhasesWizardPage(),
                 new PatternsWizardPage(), new PatternWizardPage(),
                 new HoughWizardPage(), new DetectionWizardPage(),
                 new IdentificationWizardPage(), new IndexingWizardPage(),
                 new OutputWizardPage() });
-
-        setTitle("Experiment");
 
         BufferedImage image =
                 ImageIO.read(getURL("org/ebsdimage/gui/sidepanel.png"));

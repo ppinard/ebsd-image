@@ -30,13 +30,16 @@ import javax.swing.UIManager;
 import org.netbeans.api.wizard.WizardDisplayer;
 
 import rmlshared.thread.EventThreadDispatcher;
+import rmlshared.ui.PreferenceKeeping;
+import rmlshared.util.Preferences;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
 
 /**
  * A wizard.
  * 
  * @author Philippe T. Pinard
  */
-public class Wizard {
+public class Wizard implements PreferenceKeeping {
 
     /**
      * Event thread to show the wizard.
@@ -47,18 +50,24 @@ public class Wizard {
 
         @Override
         public Object doRun() {
-            return WizardDisplayer.showWizard(wizard, dimensions);
+            Object result = WizardDisplayer.showWizard(wizard, dimensions);
+
+            // Update the preferences (must be done on the event thread)
+            if (result != null)
+                updatePreferences();
+
+            return result;
         }
     }
 
     /** Pages of the wizard. */
-    private WizardPage[] pages;
+    private final WizardPage[] pages;
 
     /** Results from the wizard. */
     protected HashMap<String, Object> results;
 
     /** Title of the wizard window. */
-    private String title = "Wizard";
+    public final String title;
 
     /** Dimensions of the wizard window. */
     private Rectangle dimensions;
@@ -69,6 +78,9 @@ public class Wizard {
     /** Image for side panel background. */
     private BufferedImage image = null;
 
+    /** Preferences associated with the wizard. */
+    private Preferences preferences;
+
 
 
     /**
@@ -77,10 +89,23 @@ public class Wizard {
      * The final dimensions of the wizard window is automatically calculated
      * from the preferred dimensions for each page of the wizard.
      * 
+     * @param title
+     *            title of the wizard
      * @param pages
      *            pages of the wizard
+     * @throws NullPointerException
+     *             if the title is null
+     * @throws IllegalArgumentException
+     *             if less than 1 page is defined
      */
-    public Wizard(WizardPage[] pages) {
+    public Wizard(String title, WizardPage[] pages) {
+        if (title == null)
+            throw new NullPointerException("Title cannot be null.");
+        if (pages.length == 0)
+            throw new IllegalArgumentException(
+                    "At least one page must be defined.");
+
+        this.title = title;
         this.pages = pages.clone();
 
         // Sets the HashMap to hold shared data between the wizard pages
@@ -104,12 +129,43 @@ public class Wizard {
 
 
     /**
-     * Returns the title of the wizard window.
+     * Returns the preferences associated with this <code>Wizard</code>.
      * 
-     * @return title
+     * @return the preferences associated with this <code>Wizard</code> or
+     *         <code>null</code> if no preferences have been associated.
      */
-    public String getTitle() {
-        return title;
+    @Override
+    @CheckForNull
+    public Preferences getPreferences() {
+        return preferences;
+    }
+
+
+
+    /**
+     * Sets the preferences associated with this <code>Wizard</code>. The
+     * preferences will trickle down to all the Wizard's pages and their
+     * components that implement the <code>PreferenceKeeping</code> interface.
+     * 
+     * @param pref
+     *            preferences to associate. Set to <code>null</code> to
+     *            deactivate the preferences
+     * @see rmlshared.util.PreferenceKeeping
+     * @see #updatePreferences
+     */
+    @Override
+    public void setPreferences(Preferences pref) {
+
+        // Set the preference node to the wizard's title
+        if (pref != null) {
+            pref = pref.node(title);
+        }
+
+        // Set the preference on all the wizard's pages
+        for (WizardPage page : pages)
+            page.setPreferences(pref);
+
+        this.preferences = pref;
     }
 
 
@@ -175,23 +231,6 @@ public class Wizard {
 
 
     /**
-     * Sets the title of the wizard window.
-     * 
-     * @param title
-     *            descriptive title
-     * @throws NullPointerException
-     *             if the title is null
-     */
-    public void setTitle(String title) {
-        if (title == null)
-            throw new NullPointerException("Title cannot be null.");
-
-        this.title = title;
-    }
-
-
-
-    /**
      * Displays the wizard.
      * 
      * @return <code>true</code> if the wizard finish properly,
@@ -212,4 +251,25 @@ public class Wizard {
 
         return (result != null);
     }
+
+
+
+    /**
+     * Updates the preferences. The update call will trickle down to all the
+     * Wizard's pages.. This trickling will happen even if no preferences have
+     * been associated with the <code>Wizard</code> as preferences might still
+     * have been associated with some of the pages.
+     * <p>
+     * <b>This method is not thread safe. It should be called on the event
+     * thread.</b>
+     * </p>
+     * 
+     * @see #setPreferences(Preferences)
+     */
+    @Override
+    public void updatePreferences() {
+        for (WizardPage page : pages)
+            page.updatePreferences();
+    }
+
 }

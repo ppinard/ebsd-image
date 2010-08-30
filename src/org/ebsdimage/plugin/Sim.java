@@ -59,6 +59,7 @@ public class Sim extends PlugIn implements Monitorable {
 
         sim = null;
         wizard = new SimWizard();
+        wizard.setPreferences(getPreferences());
     }
 
 

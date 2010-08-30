@@ -49,10 +49,9 @@ public class SimWizard extends Wizard {
      *             if an error occurs
      */
     public SimWizard() throws IOException {
-        super(new WizardPage[] { new StartWizardPage(), new InfoWizardPage(),
+        super("Simulation", new WizardPage[] { new StartWizardPage(), 
+                new InfoWizardPage(),
                 new PhasesWizardPage(), new ParamsWizardPage() });
-
-        setTitle("Simulation");
 
         BufferedImage image =
                 ImageIO.read(getURL("org/ebsdimage/gui/sidepanel.png"));

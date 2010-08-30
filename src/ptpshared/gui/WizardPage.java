@@ -17,6 +17,10 @@
  */
 package ptpshared.gui;
 
+import java.awt.Component;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,16 +28,23 @@ import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPanelNavResult;
 
 import rmlshared.gui.ErrorDialog;
+import rmlshared.ui.PreferenceKeeping;
+import rmlshared.util.Preferences;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
 
 /**
  * Abstract template for the experiment's wizard page.
  * 
  * @author Philippe T. Pinard
  */
-public abstract class WizardPage extends org.netbeans.spi.wizard.WizardPage {
+public abstract class WizardPage extends org.netbeans.spi.wizard.WizardPage
+        implements PreferenceKeeping {
 
     /** Holds data shared between wizard pages. */
     private HashMap<String, Object> results;
+
+    /** Holds the preferences. */
+    private Preferences preferences;
 
 
 
@@ -71,6 +82,53 @@ public abstract class WizardPage extends org.netbeans.spi.wizard.WizardPage {
             throw new NullPointerException("Key cannot be null.");
 
         return results.get(key);
+    }
+
+
+
+    /**
+     * Invokes the child's static getDescription() method to return the page's
+     * description.
+     * 
+     * @return page's description
+     */
+    private String getDescription() {
+        try {
+            Method method =
+                    this.getClass().getDeclaredMethod("getDescription",
+                            new Class[0]);
+            if (!Modifier.isStatic(method.getModifiers()))
+                throw new IllegalArgumentException(
+                        "The getDescription() method is not static");
+
+            return (String) method.invoke(this, new Object[0]);
+        } catch (NoSuchMethodException e) {
+            throw new IllegalArgumentException(
+                    "No getDescription() method found in "
+                            + this.getClass().getName(), e);
+        } catch (IllegalAccessException e) {
+            throw new IllegalArgumentException("Cannot call "
+                    + this.getClass().getName() + ".getDescription()", e);
+        } catch (InvocationTargetException e) {
+            throw new IllegalArgumentException(
+                    "An exception occured during the execution of "
+                            + this.getClass().getName() + ".getDescription()",
+                    e);
+        }
+    }
+
+
+
+    /**
+     * Returns the preferences associated with this <code>WizardPage</code>.
+     * 
+     * @return the preferences associated with this <code>WizardPage</code> or
+     *         <code>null</code> if no preferences have been associated.
+     */
+    @Override
+    @CheckForNull
+    public Preferences getPreferences() {
+        return preferences;
     }
 
 
@@ -146,6 +204,37 @@ public abstract class WizardPage extends org.netbeans.spi.wizard.WizardPage {
 
 
     /**
+     * Sets the preferences associated with this <code>WizardPage</code>. The
+     * preferences will trickle down to all the WizardPage's components that
+     * implement the <code>PreferenceKeeping</code> interface.
+     * 
+     * @param pref
+     *            preferences to associate. Set to <code>null</code> to
+     *            deactivate the preferences
+     * @see rmlshared.util.PreferenceKeeping
+     * @see #updatePreferences
+     */
+    @Override
+    public void setPreferences(Preferences pref) {
+
+        // Set the preference node to the page's name
+        if (pref != null) {
+            pref = pref.node(getDescription());
+        }
+
+        // Set the preference on all the page's components
+        for (Component component : getComponents()) {
+            if (component instanceof PreferenceKeeping) {
+                ((PreferenceKeeping) component).setPreferences(pref);
+            }
+        }
+
+        this.preferences = pref;
+    }
+
+
+
+    /**
      * Displays a error dialog with the specified message.
      * 
      * @param message
@@ -153,6 +242,28 @@ public abstract class WizardPage extends org.netbeans.spi.wizard.WizardPage {
      */
     protected void showErrorDialog(String message) {
         ErrorDialog.show(message);
+    }
+
+
+
+    /**
+     * Updates the preferences. The update call will trickle down to all the
+     * WizardPage's components that implement the <code>PreferenceKeeping</code>
+     * interface. This trickling will happen even if no preferences have been
+     * associated with the <code>WizardPage</code> as preferences might still
+     * have been associated with some of the page's components.
+     * <p>
+     * <b>This method is not thread safe. It should be called on the event
+     * thread.</b>
+     * </p>
+     * 
+     * @see #setPreferences(Preferences)
+     */
+    @Override
+    public void updatePreferences() {
+        for (Component component : getComponents())
+            if (component instanceof PreferenceKeeping)
+                ((PreferenceKeeping) component).updatePreferences();
     }
 
 }
