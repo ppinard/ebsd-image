@@ -1,99 +1,221 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-
-
 <project name="EBSD-Image" basedir="." default="help">
-
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties" />
 
   <!-- Read the local properties -->
-<fail message="property.file not defined" unless="property.file"/>
-<property file="${property.file}"/>
+  <property file="${property.file}" />
 
-<!-- Check if the properties needed are defined-->
-<fail message="ebsd-image.dir not defined" unless="ebsd-image.dir"/>
-<echo message="ebsd-image.dir = ${ebsd-image.dir}"/>
-<fail message="ebsd-image.src.dir not defined" unless="ebsd-image.src.dir"/>
-<fail message="ebsd-image.test.dir not defined" unless="ebsd-image.test.dir"/>
+  <!-- Check if the properties needed are defined-->
+
+  <!-- Temporary directory -->
+  <property name="tmp.dir" location="${java.io.tmpdir}" />
+  <echo message="tmp.dir = ${tmp.dir}" />
+
+  <!-- Directory where the class files will be saved -->
+  <fail message="class.dir not defined" unless="class.dir" />
+  <echo message="class.dir = ${class.dir}" />
+
+  <!-- Directory where to put the built the distro (jar files) -->
+  <fail message="build.dir not defined" unless="build.dir" />
+  <echo message="build.dir = ${build.dir}" />
+
+  <!-- Location where the unit test reports will be saved -->
+  <property name="test.report.dir" location="${tmp.dir}/test-reports" />
+  <echo message="test.report.dir = ${test.report.dir}" />
+
+  <!-- Root directory of the project tree -->
+  <fail message="ebsd-image.dir not defined" unless="ebsd-image.dir" />
+  <echo message="ebsd-image.dir = ${ebsd-image.dir}" />
+
+  <!-- Root directory of the source code -->
+  <fail message="ebsd-image.src.dir not defined" unless="ebsd-image.src.dir" />
+  <echo message="ebsd-image.src.dir = ${ebsd-image.src.dir}" />
+
+  <!-- Root directory of the unit tests -->
+  <fail message="ebsd-image.test.dir not defined"
+        unless="ebsd-image.test.dir" />
+  <echo message="ebsd-image.test.dir = ${ebsd-image.test.dir}" />
+
+  <!-- Directory where RML-Image is installed
+           (on Linux: /usr/share/ebsd-image, 
+            on Windows C:/Program Files/EBSD-Image) -->
+  <fail message="ebsd-image.install.dir not defined"
+        unless="ebsd-image.install.dir" />
+  <echo message="ebsd-image.install.dir = ${ebsd-image.install.dir}" />
+
+  <!-- Full path to the junit jar file -->
+  <fail message="junit.jar not defined" unless="junit.jar" />
+  <echo message="junit.jar = ${junit.jar}" />
+
+  <!-- Directory of the findbugs library -->
+  <fail message="findbugs.lib.dir not defined" unless="findbugs.lib.dir" />
+  <echo message="findbugs.lib.dir = ${findbugs.lib.dir}" />
+
+  <!-- The list of RML-Image jars (main + modules) 
+    and all the needed librairies. -->
+  <path id="ebsd-image.jar.path">
+    <fileset dir="${ebsd-image.install.dir}">
+      <include name="*.jar" />
+      <include name="module/*.jar" />
+      <include name="ext/*.jar" />
+    </fileset>
+    <fileset dir="${findbugs.lib.dir}" />
+  </path>
 
 
 
+  <target name="build"
+          depends="compile"
+          description="Creates a full distribution of EBSD-Image">
+    <!-- Create directories -->
+    <mkdir dir="${build.dir}" />
 
-<target name="build" description="Creates the full ebsd-image.jar file">
-  <ant dir="${ebsd-image.src.dir}" target="build"/>
-</target>
+    <!-- Copy the EBSD-Image installation directory except ebsd-imageM.jar-->
+    <copy todir="${build.dir}">
+      <fileset dir="${ebsd-image.install.dir}">
+        <exclude name="${ebsd-image.install.dir}/module/ebsd-imageM.jar" />
+      </fileset>
+    </copy>
 
+    <!-- Backup the development module.prop file -->
+    <move file="${class.dir}/rmlimage/module.prop"
+          todir="${tmp.dir}"
+          overwrite="true" />
 
+    <!-- Copy the module.prop file to the rmlimage directory -->
+    <copy file="${ebsd-image.src.dir}/module.prop"
+          todir="${class.dir}/rmlimage" />
 
-<target name="build-core" description="Creates the core ebsd-image.jar file">
-  <ant dir="${ebsd-image.src.dir}" target="build"/>
-</target>
+    <!-- Build ebsd-image.jar -->
+    <jar destfile="${build.dir}/module/ebsd-imageM.jar">
+      <fileset dir="${class.dir}">
+        <include name="org/ebsdimage/**" />
+        <include name="rmlimage/module.prop" />
+        <include name="ptpshared/**" />
+        <include name="crystallography/**" />
+      </fileset>
+    </jar>
 
-
-
-<target name="build-experiment" description="Builds the Experiment application">
-  <ant dir="${ebsd-image.src.dir}" target="build-experiment"/>
-</target>
-
-
-
-
-<target name="clean"
-        description="Removes all the temporary files and directories">
-  <ant dir="${ebsd-image.src.dir}" target="clean"/>
-  <ant dir="${ebsd-image.test.dir}" target="clean"/>
-</target>
-
-
-
-
-<target name="compile" description="Compiles the app">
-  <ant dir="${ebsd-image.src.dir}" target="compile"/>
-</target>
-
-        
-
-<target name="compile-core" description="Compiles only the core classes">
-  <ant dir="${ebsd-image.src.dir}" target="compile-core"/>
-</target>
+    <!-- Restore the development module.prop file -->
+    <move file="${tmp.dir}/module.prop" todir="${class.dir}/rmlimage" />
+  </target>
 
 
 
+  <target name="clean"
+          description="Removes all the temporary files and directories created 
+    by the targets build and clean">
+    <delete dir="${class.dir}" />
+    <delete dir="${build.dir}" />
+  </target>
 
 
-<target name="findbugs" description="Runs FindBugs on the source code">
-  <ant dir="${ebsd-image.src.dir}" target="findbugs-xml"/>
-</target>
+
+  <target name="compile" description="Compiles the source code">
+    <!-- Compile the source code -->
+    <mkdir dir="${class.dir}" />
+    <javac srcdir="${ebsd-image.src.dir}"
+           destdir="${class.dir}"
+           source="1.5"
+           failonerror="true"
+           debug="true">
+      <classpath refid="ebsd-image.jar.path" />
+    </javac>
+
+    <!-- Copy the plugin button icon and menu definition files
+             and the support files -->
+    <copy todir="${class.dir}">
+      <fileset dir="${ebsd-image.src.dir}">
+        <include name="**/*.gif" />
+        <include name="**/*.png" />
+        <include name="**/*.menu" />
+        <include name="**/*.csv" />
+      </fileset>
+    </copy>
+
+    <!-- Splices the menu list file into the master one -->
+    <concat destfile="${class.dir}/rmlimage/module.prop" append="true">
+      <filelist dir="${ebsd-image.src.dir}" files="module.prop" />
+    </concat>
+  </target>
 
 
 
-
-<target name="help">
-  <echo>Use ant -p to get a listing of all the available targets.
+  <target name="help">
+    <echo>
+      Ant scripts to compile, test and build EBSD-Image from the source code. 
+      Use ant -p to get a listing of all the available targets.
   </echo>
-</target>
+  </target>
 
 
 
-
-<target name="publish-casir"
-        description="Builds the Experiment application and puts it on Casir">
-  <ant dir="${ebsd-image.src.dir}" target="publish-casir"/>
-</target>
-
-
-
-
-<target name="update-rmlimage"
-        description="Downloads and installs RML-Image EBSD-core-dev to the rmlimage.install.dir directory">
-  <ant dir="${ebsd-image.src.dir}" target="update-rmlimage"/>
-</target>
+  <target name="test"
+          depends="test-copy-support-files,compile,test-compile,test-run"
+          description="Runs the unit tests">
+    <fail message="Some tests failed!!!" if="test.failure" />
+  </target>
 
 
 
+  <!-- Run unit tests -->
+  <target name="test-run">
+    <mkdir dir="${test.report.dir}" />
 
-<target name="test" description="Runs the core tests">
-  <ant dir="${ebsd-image.test.dir}" target="test"/>
-</target>
+    <junit failureproperty="test.failure">
+      <formatter type="brief" usefile="false" />
+      <formatter type="xml" />
+      <batchtest todir="${test.report.dir}">
+        <fileset dir="${class.dir}">
+          <include name="org/ebsdimage/**/*Test.class" />
+          <include name="ptpshared/**/*Test.class" />
+          <include name="crystallography/**/*Test.class" />
+        </fileset>
+      </batchtest>
+      <classpath path="${class.dir}" />
+      <classpath refid="ebsd-image.jar.path" />
+      <classpath location="${junit.jar}" />
+      <sysproperty key="java.util.logging.config.file"
+                   value="${ebsd-image.test.dir}/logging.properties" />
+    </junit>
+  </target>
+
+
+
+  <!-- Compile the unit tests -->
+  <target name="test-compile">
+    <javac srcdir="${ebsd-image.test.dir}"
+           destdir="${class.dir}"
+           source="1.5"
+           failonerror="true"
+           debug="true">
+      <classpath refid="ebsd-image.jar.path" />
+      <classpath location="${junit.jar}" />
+    </javac>
+  </target>
+
+
+
+  <!-- Copies the support files -->
+  <target name="test-copy-support-files">
+    <copy todir="${class.dir}">
+      <fileset dir="${ebsd-image.src.dir}">
+        <exclude name="**/*.java" />
+        <exclude name="**/*.bak" />
+        <exclude name="**/*.xml" />
+        <exclude name="**/*.py" />
+        <exclude name=".bzr/**" />
+      </fileset>
+      <fileset dir="${ebsd-image.test.dir}">
+        <exclude name="**/*.java" />
+        <exclude name="**/*.bak" />
+        <exclude name="**/build.xml" />
+        <exclude name="**/*.py" />
+        <exclude name=".bzr/**" />
+      </fileset>
+    </copy>
+  </target>
 
 
 

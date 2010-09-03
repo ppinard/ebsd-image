@@ -17,76 +17,58 @@
  */
 package org.ebsdimage.core;
 
-import static java.lang.Math.PI;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.logging.Logger;
 
-import org.ebsdimage.core.sim.Energy;
-import org.ebsdimage.core.sim.ops.patternsim.PatternBandCenter;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.core.math.AxisAngle;
-import ptpshared.core.math.Quaternion;
-import ptpshared.utility.LoggerUtil;
-import crystallography.core.Reflectors;
-import crystallography.core.ScatteringFactors;
-import crystallography.core.ScatteringFactorsEnum;
-import crystallography.core.XrayScatteringFactors;
-import crystallography.core.crystals.IronBCC;
-import crystallography.core.crystals.Silicon;
-import crystallography.core.crystals.ZirconiumAlpha;
-
 public class IndexingTest {
 
-    private Camera camera;
+    // private Camera camera;
+    //
+    // private Reflectors reflsFCC;
+    //
+    // private Reflectors reflsBCC;
 
-    private Reflectors reflsFCC;
+    // private Reflectors reflsHCP;
 
-    private Reflectors reflsBCC;
+    // private Quaternion rotation;
 
-    private Reflectors reflsHCP;
+    // private HoughPeak[] peaks1;
 
-    private Quaternion rotation;
-
-    private HoughPeak[] peaks1;
-
-    private HoughPeak[] peaks2;
-
-
+    // private HoughPeak[] peaks2;
 
     // private HoughPeak[] peaks3;
 
     @Before
     public void setUp() throws Exception {
-        LoggerUtil.turnOffLogger(Logger.getLogger("ebsd"));
+        // LoggerUtil.turnOffLogger(Logger.getLogger("ebsd"));
+        //
+        // camera = new Camera(0.0, 0.0, 0.4);
+        // rotation = new Quaternion(new AxisAngle(PI / 3, 1, -1, 1));
+        //
+        // ScatteringFactors scatter = new XrayScatteringFactors();
+        // reflsFCC = new Reflectors(new Silicon(), scatter, 3);
+        // reflsBCC = new Reflectors(new IronBCC(), scatter, 3);
+        // // reflsHCP = new Reflectors(new ZirconiumAlpha(), scatter, 2);
+        //
+        // PatternBandCenter pattern =
+        // new PatternBandCenter(356, 256, 3, ScatteringFactorsEnum.XRAY);
+        // pattern.simulate(camera, reflsFCC, new Energy(20e3), rotation);
 
-        camera = new Camera(0.0, 0.0, 0.4);
-        rotation = new Quaternion(new AxisAngle(PI / 3, 1, -1, 1));
-
-        ScatteringFactors scatter = new XrayScatteringFactors();
-        reflsFCC = new Reflectors(new Silicon(), scatter, 3);
-        reflsBCC = new Reflectors(new IronBCC(), scatter, 3);
-        reflsHCP = new Reflectors(new ZirconiumAlpha(), scatter, 2);
-
-        PatternBandCenter pattern =
-                new PatternBandCenter(356, 256, 3, ScatteringFactorsEnum.XRAY);
-        pattern.simulate(camera, reflsFCC, new Energy(20e3), rotation);
-
-        peaks1 =
-                Arrays.copyOf(HoughMath.bandsToHoughPeaks(pattern.getBands()),
-                        3);
-
-        pattern =
-                new PatternBandCenter(356, 256, 3, ScatteringFactorsEnum.XRAY);
-        pattern.simulate(camera, reflsBCC, new Energy(20e3), rotation);
-
-        peaks2 =
-                Arrays.copyOf(HoughMath.bandsToHoughPeaks(pattern.getBands()),
-                        3);
+        // peaks1 =
+        // Arrays.copyOf(HoughMath.bandsToHoughPeaks(pattern.getBands()),
+        // 3);
+        //
+        // pattern =
+        // new PatternBandCenter(356, 256, 3, ScatteringFactorsEnum.XRAY);
+        // pattern.simulate(camera, reflsBCC, new Energy(20e3), rotation);
+        //
+        // peaks2 =
+        // Arrays.copyOf(HoughMath.bandsToHoughPeaks(pattern.getBands()),
+        // 3);
 
         // pattern =
         // new PatternBandCenter(356, 256, reflsHCP, 25, camera,
