@@ -151,6 +151,26 @@
 
 
 
+  <target name="javadoc"
+          description="Builds the javadoc">
+    <fail message="javadoc not defined" unless="javadoc" />
+
+    <javadoc destdir="${build.dir}/javadoc/ebsd-image"
+             executable="${javadoc}"
+             Public="true">
+      <classpath path="${class.dir}" />
+      <classpath refid="ebsd-image.jar.path" />
+
+      <fileset dir="${ebsd-image.src.dir}" defaultexcludes="yes">
+        <include name="org/ebsdimage/**/*.java" />
+        <include name="ptpshared/**/*.java" />
+        <include name="crystallography/**/*.java" />
+      </fileset>
+    </javadoc>
+  </target>
+
+
+
   <target name="test"
           depends="test-copy-support-files,compile,test-compile,test-run"
           description="Runs the unit tests">
