@@ -211,7 +211,7 @@ public abstract class WizardPage extends org.netbeans.spi.wizard.WizardPage
      * @param pref
      *            preferences to associate. Set to <code>null</code> to
      *            deactivate the preferences
-     * @see rmlshared.util.PreferenceKeeping
+     * @see PreferenceKeeping
      * @see #updatePreferences
      */
     @Override

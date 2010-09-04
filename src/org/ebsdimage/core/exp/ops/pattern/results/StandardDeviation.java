@@ -18,7 +18,6 @@
 package org.ebsdimage.core.exp.ops.pattern.results;
 
 import org.ebsdimage.core.MapStats;
-import org.ebsdimage.core.QualityIndex;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 
@@ -40,7 +39,7 @@ public class StandardDeviation extends PatternResultsOps {
      * @param srcMap
      *            source map
      * @return one entry with the standard deviation quality index
-     * @see QualityIndex#standardDeviation(ByteMap)
+     * @see MapStats#standardDeviation(ByteMap)
      */
     @Override
     public OpResult[] calculate(Exp exp, ByteMap srcMap) {

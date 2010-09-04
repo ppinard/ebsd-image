@@ -19,7 +19,6 @@ package org.ebsdimage.core.exp.ops.hough.results;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.MapStats;
-import org.ebsdimage.core.QualityIndex;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 
@@ -40,7 +39,7 @@ public class Range extends HoughResultsOps {
      * @param srcMap
      *            source Hough map
      * @return one entry with the Hough range quality index
-     * @see QualityIndex#houghRange(HoughMap)
+     * @see MapStats#range(ByteMap)
      */
     @Override
     public OpResult[] calculate(Exp exp, HoughMap srcMap) {
