@@ -35,9 +35,12 @@ import rmlshared.io.CsvReader;
  * values of the fitting coefficients were taken from the International
  * Crystallography Tables. See the methods {@link #getFromPlaneSpacing} and
  * {@link #getFromS} to obtain the scattering factor of a given atomic number
- * and plane spacing. <b>References:</b>
+ * and plane spacing.
+ * <p/>
+ * <b>References:</b>
  * <ul>
- * <li>International Crystallography Tables</li>
+ * <li>International Crystallography Tables, volume C, Tables 6.1.1.4 and
+ * 6.1.1.5</li>
  * </ul>
  * 
  * @author Philippe T. Pinard
