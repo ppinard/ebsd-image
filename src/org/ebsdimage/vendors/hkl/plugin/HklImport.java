@@ -118,8 +118,6 @@ public class HklImport extends PlugIn implements Monitorable {
             File smpFile = FileUtil.setExtension(outputFile, "smp");
             smpCreator = new SmpCreator();
 
-            for (File file : patternFiles)
-                System.out.println(file.toString());
             try {
                 smpCreator.create(smpFile, patternFiles);
             } catch (IOException e) {

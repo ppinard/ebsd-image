@@ -25,10 +25,12 @@ import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 
 import net.miginfocom.swing.MigLayout;
+
+import org.ebsdimage.vendors.hkl.io.Util;
+
 import ptpshared.gui.WizardPage;
 import rmlshared.gui.FileNameField;
 import rmlshared.gui.RadioButton;
-import rmlshared.io.FileUtil;
 
 /**
  * Wizard page to import or not diffraction patterns.
@@ -130,10 +132,7 @@ public class PatternsWizardPage extends WizardPage {
                 File file = (File) get(StartWizardPage.KEY_CTF_FILE);
 
                 if (file != null) {
-                    // The image folder is the ctf filename plus Images
-                    String folder = FileUtil.getBaseName(file) + "Images";
-                    file = new File(file.getParentFile(), folder);
-                    put(KEY_PATTERNS_FOLDER, file);
+                    put(KEY_PATTERNS_FOLDER, Util.getPatternImagesDir(file));
                 } else
                     put(KEY_PATTERNS_FOLDER, null);
             } else if (userPatternsRButton.isSelected()) {
