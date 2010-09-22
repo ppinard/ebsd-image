@@ -26,7 +26,7 @@ import javax.swing.JLabel;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.ebsdimage.vendors.hkl.io.Util;
+import org.ebsdimage.vendors.hkl.io.Utils;
 
 import ptpshared.gui.WizardPage;
 import rmlshared.gui.FileNameField;
@@ -132,7 +132,7 @@ public class PatternsWizardPage extends WizardPage {
                 File file = (File) get(StartWizardPage.KEY_CTF_FILE);
 
                 if (file != null) {
-                    put(KEY_PATTERNS_FOLDER, Util.getPatternImagesDir(file));
+                    put(KEY_PATTERNS_FOLDER, Utils.getPatternImagesDir(file));
                 } else
                     put(KEY_PATTERNS_FOLDER, null);
             } else if (userPatternsRButton.isSelected()) {

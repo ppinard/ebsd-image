@@ -9,7 +9,7 @@ import rmlshared.io.FileUtil;
  * 
  * @author ppinard
  */
-public class Util {
+public class Utils {
 
     /**
      * Returns the directory containing the pattern images based on the

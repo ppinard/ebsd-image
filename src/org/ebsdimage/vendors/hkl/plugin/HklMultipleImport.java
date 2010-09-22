@@ -26,7 +26,7 @@ import org.ebsdimage.vendors.hkl.core.HklMMap;
 import org.ebsdimage.vendors.hkl.gui.HklMultipleImportWizard;
 import org.ebsdimage.vendors.hkl.io.CtfLoader;
 import org.ebsdimage.vendors.hkl.io.HklMMapSaver;
-import org.ebsdimage.vendors.hkl.io.Util;
+import org.ebsdimage.vendors.hkl.io.Utils;
 
 import rmlimage.plugin.PlugIn;
 import rmlshared.io.FileUtil;
@@ -119,7 +119,7 @@ public class HklMultipleImport extends PlugIn implements Monitorable {
 
             if (wizard.getSavePatterns()) {
                 File[] patternFiles =
-                        mmap.getPatternFiles(Util.getPatternImagesDir(ctfFile));
+                        mmap.getPatternFiles(Utils.getPatternImagesDir(ctfFile));
 
                 File smpFile = FileUtil.setExtension(outputFile, "smp");
                 smpCreator = new SmpCreator();
