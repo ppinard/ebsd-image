@@ -35,16 +35,16 @@ import crystallography.core.Crystal;
  * 
  * @author Philippe T. Pinard
  */
-public class HklMultipleImportWizard extends Wizard {
+public class HklBatchImportWizard extends Wizard {
 
     /**
-     * Creates a new <code>HklMultipleImportWizard</code>.
+     * Creates a new <code>HklBatchImportWizard</code>.
      */
-    public HklMultipleImportWizard() {
-        super("Import from HKL", new WizardPage[] {
-                new MultipleStartWizardPage(), new MissingDataWizardPage(),
+    public HklBatchImportWizard() {
+        super("Import from HKL", new WizardPage[] { new StartBatchWizardPage(),
+                new MissingDataWizardPage(),
                 new org.ebsdimage.gui.PhasesWizardPage(),
-                new MultipleOutputWizardPage() });
+                new OutputBatchWizardPage() });
 
         BufferedImage image;
         try {
@@ -86,7 +86,7 @@ public class HklMultipleImportWizard extends Wizard {
      */
     public File[] getCtfFiles() {
         File[] ctfFiles =
-                (File[]) results.get(MultipleStartWizardPage.KEY_CTF_FILES);
+                (File[]) results.get(StartBatchWizardPage.KEY_CTF_FILES);
 
         if (ctfFiles == null)
             throw new NullPointerException(
@@ -104,7 +104,7 @@ public class HklMultipleImportWizard extends Wizard {
      */
     public File getOutputDir() {
         File outputDir =
-                (File) results.get(MultipleOutputWizardPage.KEY_OUTPUT_DIR);
+                (File) results.get(OutputBatchWizardPage.KEY_OUTPUT_DIR);
 
         if (outputDir == null)
             throw new NullPointerException(
@@ -159,7 +159,7 @@ public class HklMultipleImportWizard extends Wizard {
      */
     public boolean getSavePatterns() {
         Boolean answer =
-                (Boolean) results.get(MultipleStartWizardPage.KEY_IMPORT_PATTERNS);
+                (Boolean) results.get(StartBatchWizardPage.KEY_IMPORT_PATTERNS);
 
         if (answer == null)
             throw new NullPointerException(

@@ -21,6 +21,6 @@ menu=org/ebsdimage/plugin/SmpCreation.menu
 menu=org/ebsdimage/plugin/SmpViewer.menu
 
 menu=org/ebsdimage/vendors/hkl/plugin/HklImport.menu
-menu=org/ebsdimage/vendors/hkl/plugin/HklMultipleImport.menu
+menu=org/ebsdimage/vendors/hkl/plugin/HklBatchImport.menu
 menu=org/ebsdimage/vendors/hkl/plugin/HklExport.menu
 menu=org/ebsdimage/vendors/tsl/plugin/TslImport.menu

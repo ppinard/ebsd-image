@@ -39,7 +39,7 @@ import rmlshared.thread.PlugIn;
  * 
  * @author Philippe T. Pinard
  */
-public class MultipleStartWizardPage extends WizardPage {
+public class StartBatchWizardPage extends WizardPage {
 
     /**
      * Action to add CTF(s) files.
@@ -152,9 +152,9 @@ public class MultipleStartWizardPage extends WizardPage {
 
 
     /**
-     * Creates a new <code>StartWizardPage</code>.
+     * Creates a new <code>StartBatchWizardPage</code>.
      */
-    public MultipleStartWizardPage() {
+    public StartBatchWizardPage() {
 
         setLayout(new MigLayout());
 

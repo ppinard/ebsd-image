@@ -1,5 +1,0 @@
-menu=PlugIns/EBSD/Import from HKL (Multiple CTFs)
-icon=org/ebsdimage/vendors/hkl/plugin/import-hkl_(22x22).png
-tooltip=Import data from several HKL CTF files
-plugin=org.ebsdimage.vendors.hkl.plugin.HklMultipleImport
-workerthread=true

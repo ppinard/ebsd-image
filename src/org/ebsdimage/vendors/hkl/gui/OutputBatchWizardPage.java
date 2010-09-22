@@ -32,7 +32,7 @@ import rmlshared.io.FileUtil;
  * 
  * @author Philippe T. Pinard
  */
-public class MultipleOutputWizardPage extends WizardPage {
+public class OutputBatchWizardPage extends WizardPage {
 
     /** Map key for the output file. */
     public static final String KEY_OUTPUT_DIR = "outputDir";
@@ -54,9 +54,9 @@ public class MultipleOutputWizardPage extends WizardPage {
 
 
     /**
-     * Creates a new <code>OutputWizardPage</code>.
+     * Creates a new <code>OutputBatchWizardPage</code>.
      */
-    public MultipleOutputWizardPage() {
+    public OutputBatchWizardPage() {
         setLayout(new MigLayout("", "[][grow, fill][]"));
 
         add(new JLabel("Multimaps output directory"));

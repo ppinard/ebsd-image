@@ -23,7 +23,7 @@ import java.io.IOException;
 import org.ebsdimage.core.Camera;
 import org.ebsdimage.io.SmpCreator;
 import org.ebsdimage.vendors.hkl.core.HklMMap;
-import org.ebsdimage.vendors.hkl.gui.HklMultipleImportWizard;
+import org.ebsdimage.vendors.hkl.gui.HklBatchImportWizard;
 import org.ebsdimage.vendors.hkl.io.CtfLoader;
 import org.ebsdimage.vendors.hkl.io.HklMMapSaver;
 import org.ebsdimage.vendors.hkl.io.Utils;
@@ -38,19 +38,22 @@ import crystallography.core.Crystal;
  * 
  * @author Philippe T. Pinard
  */
-public class HklMultipleImport extends PlugIn implements Monitorable {
+public class HklBatchImport extends PlugIn implements Monitorable {
 
     /** Loader for the ctf file. */
-    private CtfLoader ctfLoader = new CtfLoader();
+    private CtfLoader ctfLoader;
 
     /** Saver for the MMap. */
-    private HklMMapSaver mmapSaver = new HklMMapSaver();
+    private HklMMapSaver mmapSaver;
 
     /** Creator for the smp file. */
-    private SmpCreator smpCreator = new SmpCreator();
+    private SmpCreator smpCreator;
 
-    /** Progress. */
-    private double progress = 0.0;
+    /** Progress: index of current CTF file. */
+    private int index = 0;
+
+    /** Progress: total number of CTF files. */
+    private int total = 1;
 
     /** Progress status. */
     private String status = "";
@@ -60,7 +63,7 @@ public class HklMultipleImport extends PlugIn implements Monitorable {
     /**
      * Creates a new <code>HklImport</code> plug-in.
      */
-    public HklMultipleImport() {
+    public HklBatchImport() {
         setInterruptable(true);
     }
 
@@ -70,7 +73,7 @@ public class HklMultipleImport extends PlugIn implements Monitorable {
      * Displays a dialog and performs the import of the CTF files.
      */
     private void doImport() {
-        HklMultipleImportWizard wizard = new HklMultipleImportWizard();
+        HklBatchImportWizard wizard = new HklBatchImportWizard();
         wizard.setPreferences(getPreferences());
 
         if (!wizard.show())
@@ -83,14 +86,17 @@ public class HklMultipleImport extends PlugIn implements Monitorable {
         File outputDir = wizard.getOutputDir();
 
         File[] ctfFiles = wizard.getCtfFiles();
+        total = ctfFiles.length;
 
         File ctfFile;
         File outputFile;
         for (int i = 0; i < ctfFiles.length; i++) {
-            progress = (double) (i + 1) / ctfFiles.length;
+            // Progress
+            index = i;
 
             // Load ctf
             ctfFile = ctfFiles[i];
+            ctfLoader = new CtfLoader();
             status = "Loading ctf file.";
             HklMMap mmap = null;
 
@@ -101,6 +107,8 @@ public class HklMultipleImport extends PlugIn implements Monitorable {
             } catch (IOException e) {
                 showErrorDialog("While loading the ctf:" + e.getMessage());
             }
+
+            ctfLoader = null;
 
             // Save MMap
             mmapSaver = new HklMMapSaver();
@@ -113,6 +121,8 @@ public class HklMultipleImport extends PlugIn implements Monitorable {
             } catch (IOException e) {
                 showErrorDialog("While saving the multimap:" + e.getMessage());
             }
+
+            mmapSaver = null;
 
             // Load patterns
             status = "Saving patterns in smp";
@@ -132,6 +142,7 @@ public class HklMultipleImport extends PlugIn implements Monitorable {
                 }
             }
 
+            smpCreator = null;
         }
     }
 
@@ -139,6 +150,15 @@ public class HklMultipleImport extends PlugIn implements Monitorable {
 
     @Override
     public double getTaskProgress() {
+        double progress = (double) index / total;
+
+        if (ctfLoader != null)
+            progress += ctfLoader.getTaskProgress() / total;
+        else if (mmapSaver != null)
+            progress += mmapSaver.getTaskProgress() / total;
+        else if (smpCreator != null)
+            progress += smpCreator.getTaskProgress() / total;
+
         return progress;
     }
 
@@ -146,7 +166,12 @@ public class HklMultipleImport extends PlugIn implements Monitorable {
 
     @Override
     public String getTaskStatus() {
-        return status;
+        if (ctfLoader != null)
+            return status + " - " + ctfLoader.getTaskStatus();
+        else if (smpCreator != null)
+            return status + " - " + smpCreator.getTaskStatus();
+        else
+            return status;
     }
 
 
