@@ -19,6 +19,7 @@ package org.ebsdimage.vendors.hkl.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
@@ -27,6 +28,7 @@ import net.miginfocom.swing.MigLayout;
 import ptpshared.gui.WizardPage;
 import rmlshared.gui.FileNameField;
 import rmlshared.gui.RadioButton;
+import rmlshared.io.FileUtil;
 
 /**
  * Wizard page to import or not diffraction patterns.
@@ -45,11 +47,8 @@ public class PatternsWizardPage extends WizardPage {
         }
     }
 
-    /** Map key for the patterns folder. */
+    /** Map key for the patterns' folder. */
     public static final String KEY_PATTERNS_FOLDER = "patternsFolder";
-
-    /** Map key for whether to save the patterns. */
-    public static final String KEY_IMPORT_PATTERNS = "importPatterns";
 
 
 
@@ -126,19 +125,24 @@ public class PatternsWizardPage extends WizardPage {
         }
 
         if (buffer) {
-            if (ctfPatternsRButton.isSelected()
-                    || userPatternsRButton.isSelected())
-                put(KEY_IMPORT_PATTERNS, true);
-            else
-                put(KEY_IMPORT_PATTERNS, false);
+            if (ctfPatternsRButton.isSelected()) {
+                // Get image folder from ctf file
+                File file = (File) get(StartWizardPage.KEY_CTF_FILE);
 
-            if (userPatternsRButton.isSelected())
+                if (file != null) {
+                    // The image folder is the ctf filename plus Images
+                    String folder = FileUtil.getBaseName(file) + "Images";
+                    file = new File(file.getParentFile(), folder);
+                    put(KEY_PATTERNS_FOLDER, file);
+                } else
+                    put(KEY_PATTERNS_FOLDER, null);
+            } else if (userPatternsRButton.isSelected()) {
                 put(KEY_PATTERNS_FOLDER, userPatternsFileFiled.getFile());
-            else
+            } else {
                 put(KEY_PATTERNS_FOLDER, null);
+            }
         }
 
         return true;
     }
-
 }

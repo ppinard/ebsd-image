@@ -161,30 +161,7 @@ public class HklImportWizard extends Wizard {
         File patternsDir =
                 (File) results.get(PatternsWizardPage.KEY_PATTERNS_FOLDER);
 
-        if (patternsDir == null)
-            throw new NullPointerException(
-                    "Could not get pattern directory from wizard.");
-
         return patternsDir;
-    }
-
-
-
-    /**
-     * Returns whether to import the patterns.
-     * 
-     * @return <code>true</code> if the patterns should be imported,
-     *         <code>false</code> otherwise
-     */
-    public boolean getImportPatterns() {
-        Boolean importPatterns =
-                (Boolean) results.get(PatternsWizardPage.KEY_IMPORT_PATTERNS);
-
-        if (importPatterns == null)
-            throw new NullPointerException(
-                    "Could not get the import patterns value from wizard.");
-
-        return importPatterns;
     }
 
 

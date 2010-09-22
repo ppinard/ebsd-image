@@ -111,18 +111,15 @@ public class HklImport extends PlugIn implements Monitorable {
         // Load patterns
         status = "Saving patterns in smp";
 
-        if (wizard.getImportPatterns()) {
-            File imagesDir = wizard.getPatternsDir();
-
-            File[] patternFiles;
-            if (imagesDir == null)
-                patternFiles = mmap.getPatternFiles();
-            else
-                patternFiles = mmap.getPatternFiles(imagesDir);
+        File imagesDir = wizard.getPatternsDir();
+        if (imagesDir != null) {
+            File[] patternFiles = mmap.getPatternFiles(imagesDir);
 
             File smpFile = FileUtil.setExtension(outputFile, "smp");
             smpCreator = new SmpCreator();
 
+            for (File file : patternFiles)
+                System.out.println(file.toString());
             try {
                 smpCreator.create(smpFile, patternFiles);
             } catch (IOException e) {

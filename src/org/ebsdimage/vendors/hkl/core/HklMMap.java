@@ -331,7 +331,7 @@ public class HklMMap extends EbsdMMap {
      *             if the index is out of range
      */
     public File getPatternFile(int index) {
-        File imageDir = new File(projectPath, projectName + "Images/");
+        File imageDir = new File(projectPath, projectName + "Images");
 
         return getPatternFile(index, imageDir);
     }

@@ -594,6 +594,13 @@ public class PhasesWizardPage extends WizardPage {
 
 
 
+    @Override
+    protected void renderingPage() {
+        refresh();
+    }
+
+
+
     /**
      * Returns the phases in the current list.
      * 
