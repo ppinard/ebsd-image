@@ -195,7 +195,7 @@ public class CtfSaver implements Saver {
                 + "Coverage" + "\t" + "100" + "\t" + "Device" + "\t" + "0"
                 + "\t" + "KV" + "\t" + formatDouble(energy) + "\t"
                 + "TiltAngle" + "\t" + formatDouble(tiltAngle) + "\t"
-                + "TiltAngle" + "\t" + "0";
+                + "TiltAxis" + "\t" + "0";
     }
 
 
