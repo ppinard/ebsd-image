@@ -64,16 +64,16 @@ public class DifferenceTest extends TestCase {
         assertEquals(4, results.length);
 
         // Average
-        assertEquals(6.68, results[0].value.doubleValue(), 1e-6);
+        assertEquals(26.666666, results[0].value.doubleValue(), 1e-6);
 
         // Std Dev
-        assertEquals(8.61065231, results[1].value.doubleValue(), 1e-6);
+        assertEquals(21.242645, results[1].value.doubleValue(), 1e-6);
 
         // Min
-        assertEquals(0.0, results[2].value.doubleValue(), 1e-6);
+        assertEquals(7.0, results[2].value.doubleValue(), 1e-6);
 
         // Max
-        assertEquals(26.0, results[3].value.doubleValue(), 1e-6);
+        assertEquals(71.0, results[3].value.doubleValue(), 1e-6);
     }
 
 }

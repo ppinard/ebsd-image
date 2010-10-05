@@ -56,7 +56,7 @@ public class AutomaticTopHatTest {
 
         IdentMap identMap = Identification.identify(peaksMap);
 
-        assertEquals(14, identMap.getObjectCount());
+        assertEquals(9, identMap.getObjectCount());
     }
 
 

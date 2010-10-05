@@ -22,7 +22,7 @@ import static java.lang.Math.toRadians;
 
 import javax.swing.JLabel;
 
-import org.ebsdimage.core.exp.ops.hough.op.HoughTransform;
+import org.ebsdimage.core.exp.ops.hough.op.AutoHoughTransform;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationDialog;
 
@@ -30,45 +30,32 @@ import rmlshared.gui.DoubleField;
 import rmlshared.gui.Panel;
 
 /**
- * GUI Dialog for the <code>HoughTransformDialog</code> operation.
+ * GUI Dialog for the <code>AutoHoughTransform</code> operation.
  * 
  * @author Philippe T. Pinard
  */
-public class HoughTransformDialog extends OperationDialog {
+public class AutoHoughTransformDialog extends OperationDialog {
 
-    /** Field for the theta resolution. */
-    private DoubleField deltaThetaField;
-
-    /** Field for the rho resolution. */
-    private DoubleField deltaRhoField;
+    /** Field for the resolution. */
+    private DoubleField resolutionField;
 
 
 
     /**
-     * Creates a new <code>HoughTransformDialog</code>.
+     * Creates a new <code>AutoHoughTransformDialog</code>.
      */
-    public HoughTransformDialog() {
-        super("Hough Transform");
+    public AutoHoughTransformDialog() {
+        super("Auto Hough Transform");
 
-        deltaThetaField =
-                new DoubleField("deltaTheta",
-                        toDegrees(HoughTransform.DEFAULT_DELTA_THETA));
-        deltaThetaField.setRange(0.1, 90.0);
-
-        deltaRhoField =
-                new DoubleField("deltaRho",
-                        toDegrees(HoughTransform.DEFAULT_DELTA_RHO));
-        deltaRhoField.setRange(0.0001, Double.MAX_VALUE);
+        resolutionField =
+                new DoubleField("Resolution",
+                        toDegrees(AutoHoughTransform.DEFAULT_DELTA_THETA));
+        resolutionField.setRange(0.1, 90.0);
 
         Panel panel = new Panel();
-
         panel.add(new JLabel("Theta resolution"));
-        panel.add(deltaThetaField);
+        panel.add(resolutionField);
         panel.add(new JLabel("\u00b0/px")); // deg
-
-        panel.add(new JLabel("Rho resolution"));
-        panel.add(deltaRhoField);
-        panel.add(new JLabel("px/px")); // deg
 
         setMainComponent(panel);
     }
@@ -78,22 +65,24 @@ public class HoughTransformDialog extends OperationDialog {
     @Override
     public String getDescription() {
         return "Operation to perform a Hough transform. "
-                + "The theta and rho resolution must be specified.";
+                + "The theta resolution must be specified. "
+                + "The rho resolution is automatically calculated with the "
+                + "theta resolution to ensure that most of the peaks have an "
+                + "aspect ratio close to unity.";
     }
 
 
 
     @Override
     public Operation getOperation() {
-        return new HoughTransform(toRadians(deltaThetaField.getValueBFR()),
-                deltaRhoField.getValueBFR());
+        return new AutoHoughTransform(toRadians(resolutionField.getValueBFR()));
     }
 
 
 
     @Override
     public String toString() {
-        return "Hough Transform";
+        return "Auto Hough Transform";
     }
 
 }

@@ -28,7 +28,7 @@ import rmlimage.core.ByteMap;
 public class TransformTest extends TestCase {
 
     @Test
-    public void testHough() {
+    public void testDoHoughByteMapDouble() {
         // Create a HoughMap
         ByteMap pattern = (ByteMap) load("org/ebsdimage/testdata/pattern.bmp");
         pattern.setProperty("test", 1.2345);
@@ -41,17 +41,50 @@ public class TransformTest extends TestCase {
 
         // Check the HoughMap size
         assertEquals(180, houghMap.width);
-        assertEquals(301, houghMap.height);
+        assertEquals(227, houghMap.height);
 
         // Check the HoughMap parameters
-        assertEquals(213.3333, houghMap.rMax, 0.001);
-        assertEquals(-213.3333, houghMap.rMin, 0.001);
-        assertEquals(1.4222, houghMap.deltaR, 0.001);
+        assertEquals(212.628585835, houghMap.rMax, 0.001);
+        assertEquals(-212.628585835, houghMap.rMin, 0.001);
+        assertEquals(1.8816689, houghMap.deltaR, 0.001);
         assertEquals(toRadians(1.0), houghMap.deltaTheta, 0.001);
 
         ByteMap houghByteMap = Conversion.toByteMap(houghMap);
         ByteMap expected =
                 (ByteMap) load("org/ebsdimage/testdata/houghmap.bmp");
+        houghByteMap.assertEquals(expected);
+
+        // Check that the pattern properties are in the hough properties
+        assertEquals(1.2345, houghMap.getProperty("test", Double.NaN), 1e-6);
+    }
+
+
+
+    @Test
+    public void testDoHoughByteMapDoubleDouble() {
+        // Create a HoughMap
+        ByteMap pattern = (ByteMap) load("org/ebsdimage/testdata/pattern.bmp");
+        pattern.setProperty("test", 1.2345);
+
+        HoughMap houghMap = Transform.hough(pattern, toRadians(1.0), 1.0);
+
+        // Check the pattern size
+        assertEquals(336, pattern.width);
+        assertEquals(256, pattern.height);
+
+        // Check the HoughMap size
+        assertEquals(180, houghMap.width);
+        assertEquals(425, houghMap.height);
+
+        // Check the HoughMap parameters
+        assertEquals(212.0, houghMap.rMax, 0.001);
+        assertEquals(-212.0, houghMap.rMin, 0.001);
+        assertEquals(1.0, houghMap.deltaR, 0.001);
+        assertEquals(toRadians(1.0), houghMap.deltaTheta, 0.001);
+
+        ByteMap houghByteMap = Conversion.toByteMap(houghMap);
+        ByteMap expected =
+                (ByteMap) load("org/ebsdimage/testdata/houghmap2.bmp");
         houghByteMap.assertEquals(expected);
 
         // Check that the pattern properties are in the hough properties

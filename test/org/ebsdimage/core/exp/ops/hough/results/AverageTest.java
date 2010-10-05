@@ -48,7 +48,7 @@ public class AverageTest {
                 new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
         OpResult result = average.calculate(null, srcMap)[0];
 
-        assertEquals(102.933424169, result.value.doubleValue(), 1e-7);
+        assertEquals(102.92008196, result.value.doubleValue(), 1e-7);
     }
 
 

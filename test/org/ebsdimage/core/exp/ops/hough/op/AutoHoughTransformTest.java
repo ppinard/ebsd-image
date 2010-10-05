@@ -33,15 +33,15 @@ import org.junit.Test;
 import rmlimage.core.ByteMap;
 import rmlshared.io.FileUtil;
 
-public class HoughTransformTest extends TestCase {
+public class AutoHoughTransformTest extends TestCase {
 
-    private HoughTransform hough;
+    private AutoHoughTransform hough;
 
 
 
     @Before
     public void setUp() throws Exception {
-        hough = new HoughTransform(toRadians(1.0), 1.0);
+        hough = new AutoHoughTransform(toRadians(1.0));
     }
 
 
@@ -56,7 +56,7 @@ public class HoughTransformTest extends TestCase {
 
         assertFalse(hough.equals(new HoughTransform()));
 
-        HoughTransform other = new HoughTransform(toRadians(1.0), 1.0);
+        AutoHoughTransform other = new AutoHoughTransform(toRadians(1.0));
         assertFalse(hough == other);
         assertTrue(hough.equals(other));
     }
@@ -64,33 +64,24 @@ public class HoughTransformTest extends TestCase {
 
 
     @Test
-    public void testHoughTransformOp() {
-        HoughTransform tmpHough = new HoughTransform();
-        assertEquals(HoughTransform.DEFAULT_DELTA_THETA, tmpHough.deltaTheta,
-                1e-7);
-        assertEquals(HoughTransform.DEFAULT_DELTA_RHO, tmpHough.deltaRho, 1e-7);
+    public void testAutoHoughTransformOp() {
+        AutoHoughTransform tmpHough = new AutoHoughTransform();
+        assertEquals(AutoHoughTransform.DEFAULT_DELTA_THETA,
+                tmpHough.deltaTheta, 1e-7);
     }
 
 
 
     @Test
-    public void testHoughTransformOpDouble() {
+    public void testAutoHoughTransformOpDouble() {
         assertEquals(toRadians(1.0), hough.deltaTheta, 1e-7);
-        assertEquals(1.0, hough.deltaRho, 1e-7);
     }
 
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void testHoughTransformOpDoubleException1() {
-        new HoughTransform(-1.0, 1.0);
-    }
-
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testHoughTransformOpDoubleException2() {
-        new HoughTransform(toRadians(1.0), -1.0);
+    public void testAutoHoughTransformOpDoubleException() {
+        new AutoHoughTransform(-1.0);
     }
 
 
@@ -99,7 +90,7 @@ public class HoughTransformTest extends TestCase {
     public void testProcess() throws IOException {
         ByteMap srcMap = (ByteMap) load("org/ebsdimage/testdata/pattern.bmp");
         HoughMap expectedMap =
-                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghtransformop.bmp"));
+                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/autohoughtransformop.bmp"));
 
         HoughMap destMap = hough.transform(null, srcMap);
 
@@ -111,7 +102,7 @@ public class HoughTransformTest extends TestCase {
     @Test
     public void testToString() {
         assertEquals(hough.toString(),
-                "Hough Transform [deltaTheta=1.0 deg/px, deltaRho=1.0 px/px]");
+                "Auto Hough Transform [resolution=1.0 deg/px]");
     }
 
 }

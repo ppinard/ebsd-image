@@ -17,48 +17,48 @@
  */
 package org.ebsdimage.io.exp.ops.hough.op;
 
-import static org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlTags.ATTR_DELTA_RHO;
-import static org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlTags.ATTR_DELTA_THETA;
-import static org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.hough.op.AutoHoughTransformXmlTags.ATTR_DELTA_THETA;
+import static org.ebsdimage.io.exp.ops.hough.op.AutoHoughTransformXmlTags.TAG_NAME;
 
-import org.ebsdimage.core.exp.ops.hough.op.HoughTransform;
+import org.ebsdimage.core.exp.ops.hough.op.AutoHoughTransform;
 import org.jdom.Element;
 
 import ptpshared.utility.xml.ObjectXml;
 import ptpshared.utility.xml.ObjectXmlSaver;
+import ptpshared.utility.xml.UnitsXmlTags;
 
 /**
- * XML saver for a <code>HoughTransform</code> operation.
+ * XML saver for a <code>AutoHoughTransform</code> operation.
  * 
  * @author Philippe T. Pinard
  */
-public class HoughTransformXmlSaver implements ObjectXmlSaver {
+public class AutoHoughTransformXmlSaver implements ObjectXmlSaver {
 
     /**
      * {@inheritDoc}
      * 
-     * @see #save(HoughTransform)
+     * @see #save(AutoHoughTransform)
      */
     @Override
     public Element save(ObjectXml obj) {
-        return save((HoughTransform) obj);
+        return save((AutoHoughTransform) obj);
     }
 
 
 
     /**
-     * Saves a <code>HoughTransform</code> operation to an XML
+     * Saves a <code>AutoHoughTransform</code> operation to an XML
      * <code>Element</code>.
      * 
      * @param op
-     *            a <code>HoughTransform</code> operation
+     *            a <code>AutoHoughTransform</code> operation
      * @return an XML <code>Element</code>
      */
-    public Element save(HoughTransform op) {
+    public Element save(AutoHoughTransform op) {
         Element element = new Element(TAG_NAME);
 
         element.setAttribute(ATTR_DELTA_THETA, Double.toString(op.deltaTheta));
-        element.setAttribute(ATTR_DELTA_RHO, Double.toString(op.deltaRho));
+        element.setAttribute(UnitsXmlTags.ATTR, UnitsXmlTags.RAD);
 
         return element;
     }

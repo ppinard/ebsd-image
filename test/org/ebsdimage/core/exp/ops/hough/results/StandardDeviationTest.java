@@ -48,7 +48,7 @@ public class StandardDeviationTest {
                 new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
         OpResult result = stdDev.calculate(null, srcMap)[0];
 
-        assertEquals(5.60970111, result.value.doubleValue(), 1e-7);
+        assertEquals(5.596094704, result.value.doubleValue(), 1e-7);
     }
 
 

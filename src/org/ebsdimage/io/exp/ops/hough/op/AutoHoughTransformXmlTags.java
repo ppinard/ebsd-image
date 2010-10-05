@@ -17,22 +17,20 @@
  */
 package org.ebsdimage.io.exp.ops.hough.op;
 
-import org.ebsdimage.core.exp.ops.hough.op.HoughTransform;
+import org.ebsdimage.core.exp.ops.hough.op.AutoHoughTransform;
 
 /**
- * Tags for <code>HoughTransform</code>'s XML <code>Element</code>.
+ * Tags for <code>AutoHoughTransform</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
  */
-public class HoughTransformXmlTags {
+public class AutoHoughTransformXmlTags {
 
     /** XML tag name for <code>HoughTransform</code>. */
-    public static final String TAG_NAME = HoughTransform.class.getSimpleName();
+    public static final String TAG_NAME =
+            AutoHoughTransform.class.getSimpleName();
 
-    /** XML attribute for the resolution in theta. */
+    /** XML attribute for the resolution. */
     public static final String ATTR_DELTA_THETA = "deltaTheta";
-
-    /** XML attribute for the resolution in rho. */
-    public static final String ATTR_DELTA_RHO = "deltaRho";
 
 }

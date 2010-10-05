@@ -17,51 +17,52 @@
  */
 package org.ebsdimage.io.exp.ops.hough.op;
 
-import static org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlTags.ATTR_DELTA_RHO;
-import static org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlTags.ATTR_DELTA_THETA;
-import static org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.hough.op.AutoHoughTransformXmlTags.ATTR_DELTA_THETA;
+import static org.ebsdimage.io.exp.ops.hough.op.AutoHoughTransformXmlTags.TAG_NAME;
 
-import org.ebsdimage.core.exp.ops.hough.op.HoughTransform;
+import org.ebsdimage.core.exp.ops.hough.op.AutoHoughTransform;
 import org.jdom.Element;
 import org.jdom.IllegalNameException;
 
 import ptpshared.utility.BadUnitException;
 import ptpshared.utility.xml.JDomUtil;
 import ptpshared.utility.xml.ObjectXmlLoader;
+import ptpshared.utility.xml.UnitsXmlTags;
 
 /**
- * XML loader for a <code>HoughTransform</code> operation.
+ * XML loader for a <code>AutoHoughTransform</code> operation.
  * 
  * @author Philippe T. Pinard
  */
-public class HoughTransformXmlLoader implements ObjectXmlLoader {
+public class AutoHoughTransformXmlLoader implements ObjectXmlLoader {
 
     /**
-     * Loads a <code>HoughTransform</code> operation from an XML
+     * Loads a <code>AutoHoughTransform</code> operation from an XML
      * <code>Element</code>.
      * 
      * @param element
      *            an XML <code>Element</code>
-     * @return a <code>HoughTransform</code> operation
+     * @return a <code>AutoHoughTransform</code> operation
      * @throws IllegalNameException
      *             if the <code>Element</code> tag name is incorrect.
      * @throws BadUnitException
      *             if the resolution unit is incorrect
      */
     @Override
-    public HoughTransform load(Element element) {
+    public AutoHoughTransform load(Element element) {
         if (!element.getName().equals(TAG_NAME))
             throw new IllegalNameException("Name of the element should be "
                     + TAG_NAME + " not " + element.getName() + ".");
+        if (!JDomUtil.getStringFromAttributeDefault(element, UnitsXmlTags.ATTR,
+                UnitsXmlTags.RAD).equals(UnitsXmlTags.RAD))
+            throw new BadUnitException("Unit for the resolution should be "
+                    + UnitsXmlTags.RAD);
 
-        double deltaTheta =
+        double resolution =
                 JDomUtil.getDoubleFromAttribute(element, ATTR_DELTA_THETA,
-                        HoughTransform.DEFAULT_DELTA_THETA);
-        double deltaRho =
-                JDomUtil.getDoubleFromAttribute(element, ATTR_DELTA_RHO,
-                        HoughTransform.DEFAULT_DELTA_RHO);
+                        AutoHoughTransform.DEFAULT_DELTA_THETA);
 
-        return new HoughTransform(deltaTheta, deltaRho);
+        return new AutoHoughTransform(resolution);
     }
 
 }

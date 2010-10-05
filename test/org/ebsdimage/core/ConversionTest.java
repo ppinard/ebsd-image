@@ -157,13 +157,16 @@ public class ConversionTest extends TestCase {
         HoughMap reconvertedHoughMap = Conversion.toHoughMap(byteMap);
 
         assertEquals(180, reconvertedHoughMap.width);
-        assertEquals(301, reconvertedHoughMap.height);
-        assertEquals(-213.3333, reconvertedHoughMap.rMin, 0.001);
-        assertEquals(213.3333, reconvertedHoughMap.rMax, 0.001);
-        assertEquals(1.4222, reconvertedHoughMap.deltaR, 0.001);
+        assertEquals(227, reconvertedHoughMap.height);
+
+        assertEquals(212.628585835, reconvertedHoughMap.rMax, 0.001);
+        assertEquals(-212.628585835, reconvertedHoughMap.rMin, 0.001);
+        assertEquals(1.8816689, reconvertedHoughMap.deltaR, 0.001);
+
         assertEquals(0.0, reconvertedHoughMap.thetaMin, 0.001);
         assertEquals(3.12414, reconvertedHoughMap.thetaMax, 0.001);
-        assertEquals(0.01745, reconvertedHoughMap.deltaTheta, 0.001);
+        assertEquals(toRadians(1.0), reconvertedHoughMap.deltaTheta, 0.001);
+
         assertArrayEquals(reconvertedHoughMap.pixArray, byteMap.pixArray);
     }
 

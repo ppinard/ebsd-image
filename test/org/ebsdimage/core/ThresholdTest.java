@@ -50,9 +50,9 @@ public class ThresholdTest extends TestCase {
 
         // Test the properties
         Properties props = destMap.getProperties();
-        assertEquals(7, props.getProperty(KEY_MINERROR, -1));
-        assertEquals(13, props.getProperty(KEY_KAPUR, -1));
-        assertEquals((7 + 13) / 2, props.getProperty(KEY_THRESHOLD, -1));
+        assertEquals(11, props.getProperty(KEY_MINERROR, -1));
+        assertEquals(26, props.getProperty(KEY_KAPUR, -1));
+        assertEquals((11 + 26) / 2, props.getProperty(KEY_THRESHOLD, -1));
     }
 
 
@@ -73,9 +73,9 @@ public class ThresholdTest extends TestCase {
         Properties props = destMap.getProperties();
         assertEquals("false", props.getProperty(KEY_OVERFLOW, ""));
         assertEquals(1.5, props.getProperty(KEY_SIGMAFACTOR, Double.NaN), 1e-3);
-        assertEquals(118.8344, props.getProperty(KEY_AVERAGE, Double.NaN), 1e-3);
-        assertEquals(4.572028, props.getProperty(KEY_STDDEV, Double.NaN), 1e-3);
-        assertEquals(126, props.getProperty(KEY_THRESHOLD, -1));
+        assertEquals(103.4514, props.getProperty(KEY_AVERAGE, Double.NaN), 1e-3);
+        assertEquals(5.3786, props.getProperty(KEY_STDDEV, Double.NaN), 1e-3);
+        assertEquals(112, props.getProperty(KEY_THRESHOLD, -1));
     }
 
 

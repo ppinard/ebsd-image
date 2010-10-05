@@ -72,7 +72,7 @@ public class AutomaticStdDevTest {
 
         IdentMap identMap = Identification.identify(peaksMap);
 
-        assertEquals(12, identMap.getObjectCount());
+        assertEquals(9, identMap.getObjectCount());
     }
 
 

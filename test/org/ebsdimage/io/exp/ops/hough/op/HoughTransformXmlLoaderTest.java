@@ -17,7 +17,8 @@
  */
 package org.ebsdimage.io.exp.ops.hough.op;
 
-import static org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlTags.ATTR_RESOLUTION;
+import static org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlTags.ATTR_DELTA_RHO;
+import static org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlTags.ATTR_DELTA_THETA;
 import static org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
@@ -36,7 +37,8 @@ public class HoughTransformXmlLoaderTest {
     public void setUp() throws Exception {
         element = new Element(TAG_NAME);
 
-        element.setAttribute(ATTR_RESOLUTION, Double.toString(2.0));
+        element.setAttribute(ATTR_DELTA_THETA, Double.toString(2.0));
+        element.setAttribute(ATTR_DELTA_RHO, Double.toString(1.0));
     }
 
 
@@ -46,7 +48,8 @@ public class HoughTransformXmlLoaderTest {
         HoughTransform op = new HoughTransformXmlLoader().load(element);
 
         assertEquals(TAG_NAME, op.getName());
-        assertEquals(2.0, op.resolution, 1e-7);
+        assertEquals(2.0, op.deltaTheta, 1e-7);
+        assertEquals(1.0, op.deltaRho, 1e-7);
     }
 
 }

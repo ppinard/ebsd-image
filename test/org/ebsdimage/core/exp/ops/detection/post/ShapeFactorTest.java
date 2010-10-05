@@ -67,10 +67,10 @@ public class ShapeFactorTest extends TestCase {
 
     @Test
     public void testProcess() throws Exception {
-        assertEquals(25, Identification.identify(srcMap).getObjectCount());
+        assertEquals(9, Identification.identify(srcMap).getObjectCount());
 
         BinMap destMap = shapeFactor.process(null, srcMap);
-        assertEquals(8, Identification.identify(destMap).getObjectCount());
+        assertEquals(4, Identification.identify(destMap).getObjectCount());
     }
 
 

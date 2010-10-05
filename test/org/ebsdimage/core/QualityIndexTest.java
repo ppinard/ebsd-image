@@ -64,8 +64,8 @@ public class QualityIndexTest extends TestCase {
 
     @Test
     public void testPatternQuality() {
-        assertEquals(0.3565252, QualityIndex.patternQuality(peaks, houghMap),
-                1e-6);
+        assertEquals(0.3573920932,
+                QualityIndex.patternQuality(peaks, houghMap), 1e-6);
     }
 
 

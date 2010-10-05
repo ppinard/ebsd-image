@@ -51,11 +51,11 @@ public class OpeningTest extends TestCase {
     public void testProcess() {
         BinMap srcMap =
                 (BinMap) load(getFile("org/ebsdimage/testdata/automatic_stddev.bmp"));
-        assertEquals(44, Identification.identify(srcMap).getObjectCount());
+        assertEquals(22, Identification.identify(srcMap).getObjectCount());
 
         BinMap destMap = opening.process(null, srcMap);
 
-        assertEquals(31, Identification.identify(destMap).getObjectCount());
+        assertEquals(10, Identification.identify(destMap).getObjectCount());
     }
 
 }

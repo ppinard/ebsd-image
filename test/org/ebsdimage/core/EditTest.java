@@ -21,13 +21,14 @@ import static java.lang.Math.toRadians;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
 import org.ebsdimage.TestCase;
+import org.ebsdimage.io.HoughMapLoader;
 import org.junit.Test;
 
 import rmlimage.core.ByteMap;
-import rmlimage.core.Filter;
 import rmlimage.core.ROI;
 import crystallography.core.Crystal;
 import crystallography.core.crystals.IronBCC;
@@ -68,19 +69,15 @@ public class EditTest extends TestCase {
 
 
     @Test
-    public void testCropHoughMapDouble() {
+    public void testCropHoughMapDouble() throws IOException {
         // Create a HoughMap
-        ByteMap pattern =
-                (ByteMap) load("org/ebsdimage/testdata/pattern_masked.bmp");
-        HoughMap houghMap = Transform.hough(pattern, toRadians(1.0));
-
-        // Apply median on hough
-        Filter.median(houghMap);
+        HoughMap houghMap =
+                new HoughMapLoader().load(getFile("org/ebsdimage/testdata/houghmap.bmp"));
 
         HoughMap croppedMap = Edit.crop(houghMap, 50.0);
         assertEquals(houghMap.width, croppedMap.width);
-        assertEquals(141, croppedMap.height);
-        assertEquals(49.7777, croppedMap.rMax, 0.001);
+        assertEquals(55, croppedMap.height);
+        assertEquals(50.80506, croppedMap.rMax, 0.001);
         assertEquals(houghMap.deltaR, croppedMap.deltaR, 0.001);
 
         ByteMap expected =

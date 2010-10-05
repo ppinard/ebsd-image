@@ -15,47 +15,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.core.exp.ops.detection.post;
+package org.ebsdimage.io.exp.ops.hough.op;
 
+import static org.ebsdimage.io.exp.ops.hough.op.AutoHoughTransformXmlTags.ATTR_DELTA_THETA;
+import static org.ebsdimage.io.exp.ops.hough.op.AutoHoughTransformXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
-import org.ebsdimage.TestCase;
+import org.ebsdimage.core.exp.ops.hough.op.AutoHoughTransform;
+import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
 
-import rmlimage.core.BinMap;
-import rmlimage.core.Identification;
+import ptpshared.utility.xml.JDomUtil;
 
-public class CleanEdgeTest extends TestCase {
+public class AutoHoughTransformXmlSaverTest {
 
-    private CleanEdge cleanEdge;
+    private AutoHoughTransform op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        cleanEdge = new CleanEdge();
+        op = new AutoHoughTransform(2.0);
     }
 
 
 
     @Test
-    public void testToString() {
-        String expected = "Clean Edge";
-        assertEquals(expected, cleanEdge.toString());
-    }
+    public void testSaveHoughTransform() {
+        Element element = new AutoHoughTransformXmlSaver().save(op);
 
-
-
-    @Test
-    public void testProcess() {
-        BinMap srcMap =
-                (BinMap) load(getFile("org/ebsdimage/testdata/automatic_stddev.bmp"));
-        assertEquals(22, Identification.identify(srcMap).getObjectCount());
-
-        BinMap destMap = cleanEdge.process(null, srcMap);
-
-        assertEquals(20, Identification.identify(destMap).getObjectCount());
+        assertEquals(TAG_NAME, element.getName());
+        assertEquals(2.0,
+                JDomUtil.getDoubleFromAttribute(element, ATTR_DELTA_THETA),
+                1e-7);
     }
 
 }

@@ -18,8 +18,11 @@
 package org.ebsdimage.core.exp.ops.identification.post;
 
 import static java.lang.Math.abs;
+import static java.util.Arrays.sort;
+import static ptpshared.utility.Arrays.reverse;
 
 import org.ebsdimage.core.HoughPeak;
+import org.ebsdimage.core.HoughPeakIntensityComparator;
 import org.ebsdimage.core.exp.Exp;
 
 import rmlshared.util.ArrayList;
@@ -154,6 +157,9 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
         HoughPeak peak0;
         HoughPeak peak1;
         boolean same;
+
+        sort(srcPeaks, new HoughPeakIntensityComparator());
+        reverse(srcPeaks);
 
         for (int i = 0; i < srcPeaks.length; i++) {
             peak0 = srcPeaks[i];

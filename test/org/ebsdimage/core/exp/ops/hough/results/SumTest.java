@@ -48,7 +48,7 @@ public class SumTest {
                 new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
         OpResult result = sum.calculate(null, srcMap)[0];
 
-        assertEquals(4910439, result.value.doubleValue(), 1e-7);
+        assertEquals(3716650, result.value.doubleValue(), 1e-7);
     }
 
 

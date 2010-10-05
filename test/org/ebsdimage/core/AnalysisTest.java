@@ -30,10 +30,10 @@ public class AnalysisTest extends TestCase {
     @Test
     public void testGetR() {
         ByteMap map = (ByteMap) load("org/ebsdimage/testdata/houghmap.bmp");
-        assertEquals(139.3777, Analysis.getR(map, 9405), 0.001);
-        assertEquals(28.4444, Analysis.getR(map, 23437), 0.001);
-        assertEquals(133.6888, Analysis.getR(map, 10211), 0.001);
-        assertEquals(-24.1777, Analysis.getR(map, 30143), 0.001);
+        assertEquals(114.7818, Analysis.getR(map, 9405), 0.001);
+        assertEquals(-31.9884, Analysis.getR(map, 23437), 0.001);
+        assertEquals(107.2551, Analysis.getR(map, 10211), 0.001);
+        assertEquals(-101.6101, Analysis.getR(map, 30143), 0.001);
     }
 
 

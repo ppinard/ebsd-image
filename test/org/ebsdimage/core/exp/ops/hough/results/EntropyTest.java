@@ -48,7 +48,7 @@ public class EntropyTest {
                 new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
         OpResult result = entropy.calculate(null, srcMap)[0];
 
-        assertEquals(2.93425675, result.value.doubleValue(), 1e-7);
+        assertEquals(2.926016571945, result.value.doubleValue(), 1e-7);
     }
 
 

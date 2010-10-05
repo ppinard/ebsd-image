@@ -1,11 +1,11 @@
 #RML-Image Property File
-#Wed May 19 21:20:59 EDT 2010
-threshold.min=10
-Hough.dr=4609083938642684951
+#Tue Oct 05 10:01:50 EDT 2010
+threshold.min=18
+Hough.dr=4611153102534928811
 Hough.dtheta=4580687790476533049
-EBSD.threshold.automatic.threshold=10
-Hough.height=141
-EBSD.threshold.automatic.kapur=13
+EBSD.threshold.automatic.threshold=18
+Hough.height=55
+EBSD.threshold.automatic.kapur=26
 threshold.max=255
 Hough.width=180
-EBSD.threshold.automatic.minError=7
+EBSD.threshold.automatic.minError=11

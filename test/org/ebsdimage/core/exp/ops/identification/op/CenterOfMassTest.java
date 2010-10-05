@@ -71,19 +71,19 @@ public class CenterOfMassTest {
         assertEquals(3, destPeaks.length);
 
         // Peak 1
-        assertEquals(88.09204877, destPeaks[0].rho, 1e-6);
-        assertEquals(2.525296303, destPeaks[0].theta, 1e-6);
-        assertEquals(123.0, destPeaks[0].intensity, 1e-6);
+        assertEquals(48.95774459838867, destPeaks[0].rho, 1e-6);
+        assertEquals(2.67545223236084, destPeaks[0].theta, 1e-6);
+        assertEquals(142.0, destPeaks[0].intensity, 1e-6);
 
         // Peak 2
-        assertEquals(87.47055816, destPeaks[1].rho, 1e-6);
-        assertEquals(2.927335805, destPeaks[1].theta, 1e-6);
+        assertEquals(37.75833511352539, destPeaks[1].rho, 1e-6);
+        assertEquals(2.202118158340454, destPeaks[1].theta, 1e-6);
         assertEquals(125.0, destPeaks[1].intensity, 1e-6);
 
         // Peak 3
-        assertEquals(87.46666666, destPeaks[2].rho, 1e-6);
-        assertEquals(1.274090353, destPeaks[2].theta, 1e-6);
-        assertEquals(123.0, destPeaks[2].intensity, 1e-6);
+        assertEquals(29.368501663208008, destPeaks[2].rho, 1e-6);
+        assertEquals(0.5339681506156921, destPeaks[2].theta, 1e-6);
+        assertEquals(121.0, destPeaks[2].intensity, 1e-6);
     }
 
 

@@ -19,10 +19,15 @@ package org.ebsdimage.core;
 
 import static java.lang.Math.ceil;
 import static java.lang.Math.min;
+import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
 import java.util.Arrays;
 
+import org.apache.commons.math.FunctionEvaluationException;
+import org.apache.commons.math.analysis.UnivariateRealFunction;
+
+import ptpshared.core.math.Quad;
 import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
 import rmlshared.ui.Monitorable;
@@ -35,7 +40,201 @@ import rmlshared.ui.Monitorable;
 public class Transform implements Monitorable {
 
     /**
-     * Does a Hough transform with the specified angle increment.
+     * Integrand of the double integral to calculate the delta rho from the
+     * delta theta.
+     * 
+     * @author ppinard
+     */
+    private static class Function implements UnivariateRealFunction {
+
+        /** Width of the band. */
+        public final double b;
+
+        /** Radius of the circular mask. */
+        public final double radius;
+
+
+
+        /**
+         * Creates a new function for the integrand.
+         * 
+         * @param b
+         *            width of the bnad
+         * @param radius
+         *            radius of the circular mask
+         */
+        public Function(double b, double radius) {
+            this.b = b;
+            this.radius = radius;
+        }
+
+
+
+        @Override
+        public double value(double rho) {
+            double value =
+                    b
+                            / (2.0 * Math.atan(b
+                                    / (2.0 * Math.sqrt(radius * radius - rho
+                                            * rho))));
+            return value;
+        }
+    }
+
+    /**
+     * Inside function to perform the double integral.
+     * 
+     * @author ppinard
+     */
+    private static class InFunction implements UnivariateRealFunction {
+
+        /** Radius of the circular mask. */
+        public final double radius;
+
+        /** Lower limit of the integral of rho variable. */
+        public final double rho0;
+
+        /** Upper limit of the integral of rho variable. */
+        public final double rho1;
+
+
+
+        /**
+         * Creates a new function for performing the double integral.
+         * 
+         * @param rho0
+         *            lower limit of the integral of rho variable
+         * @param rho1
+         *            upper limit of the integral of rho variable
+         * @param radius
+         *            radius of the circular mask
+         */
+        public InFunction(double rho0, double rho1, double radius) {
+            this.rho0 = rho0;
+            this.rho1 = rho1;
+            this.radius = radius;
+        }
+
+
+
+        @Override
+        public double value(double b) {
+            try {
+                double value =
+                        new Quad().integrate(new Function(b, radius), rho0,
+                                rho1);
+                return value;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+
+
+    /**
+     * Calculates the resolution in rho (delta R) to ensure that the aspect
+     * ratio of the peaks is close to unity (square peaks). Delta R is
+     * calculated based on the theta resolution and the radius of the circular
+     * mask (greatest circle inscribed inside the diffraction pattern). The
+     * lower and upper limit of the band width are taken to be 1% and 25% of the
+     * radius, respectively. The lower and upper limit of the rho position of
+     * the peaks are taken to be -90\% and 90\% of the radius, respectively.
+     * 
+     * @param radius
+     *            radius of the circular mask
+     * @param deltaTheta
+     *            resolution in theta
+     * @return resolution in rho
+     */
+    public static double calculateDeltaR(double radius, double deltaTheta) {
+        double b0 = 0.01 * radius;
+        double b1 = 0.25 * radius;
+        double r0 = -0.9 * radius;
+        double r1 = Math.abs(r0);
+
+        double value;
+        try {
+            value =
+                    new Quad().integrate(new InFunction(r0, r1, radius), b0, b1);
+        } catch (FunctionEvaluationException e) {
+            throw new RuntimeException(e);
+        }
+        value = value / (b1 - b0) / (r1 - r0) * deltaTheta;
+        return value;
+    }
+
+
+
+    /**
+     * Calculates the resolution in rho (delta R) to ensure that the aspect
+     * ratio of the peaks is close to unity (square peaks). Delta R is
+     * calculated based on the theta resolution, the lower and upper limit of
+     * the band width and the lower and upper limit of the rho position of the
+     * peaks.
+     * 
+     * @param radius
+     *            radius of the circular mask
+     * @param b0
+     *            lower limit of the band width
+     * @param b1
+     *            upper limit of the band width
+     * @param rho0
+     *            lower limit of the position of the peaks
+     * @param rho1
+     *            upper limit of the position of the peaks
+     * @param deltaTheta
+     *            resolution in theta
+     * @return resolution in rho
+     */
+    public static double calculateDeltaR(double radius, double b0, double b1,
+            double rho0, double rho1, double deltaTheta) {
+        if (radius <= 0)
+            throw new IllegalArgumentException("Radius (" + radius
+                    + ") must be greater than zero.");
+        if (b0 <= 0)
+            throw new IllegalArgumentException(
+                    "The lower limit of the band width (" + b0
+                            + ") must be greater than zero.");
+        if (b1 <= 0)
+            throw new IllegalArgumentException(
+                    "The upper limit of the band width (" + b1
+                            + ") must be greater than zero.");
+        if (b0 > b1)
+            throw new IllegalArgumentException(
+                    "The upper limit of the band width (" + b1
+                            + ") must be greater or equal to the lower limit ("
+                            + b0 + ").");
+        if (rho1 > rho0)
+            throw new IllegalArgumentException(
+                    "The upper limit of the peak position (" + rho1
+                            + ") must be greater or equal to the lower limit ("
+                            + rho0 + ").");
+        if (deltaTheta <= 0)
+            throw new IllegalArgumentException("Theta resolution ("
+                    + deltaTheta + ") must be > 0");
+
+        double value;
+
+        try {
+            value =
+                    new Quad().integrate(new InFunction(rho0, rho1, radius),
+                            b0, b1);
+        } catch (FunctionEvaluationException e) {
+            throw new RuntimeException(e);
+        }
+
+        value = value / (b1 - b0) / (rho1 - rho0) * deltaTheta;
+
+        return value;
+    }
+
+
+
+    /**
+     * Does a Hough transform using the specified resolution in theta. The
+     * resolution in rho is automatically calculated to ensure that the aspect
+     * ratio of the peaks is close to unity (square peaks).
      * 
      * @param byteMap
      *            <code>ByteMap</code> to do the transform of.
@@ -47,11 +246,29 @@ public class Transform implements Monitorable {
         return new Transform().doHough(byteMap, deltaTheta);
     }
 
-    /** Progress value. */
-    protected double progress = 0;
+
+
+    /**
+     * Does a Hough transform with the specified resolution in rho and theta.
+     * 
+     * @param byteMap
+     *            <code>ByteMap</code> to do the transform of
+     * @param deltaTheta
+     *            resolution in theta (radians/px)
+     * @param deltaRho
+     *            resolution in rho (px/px)
+     * @return the Hough transform.
+     */
+    public static HoughMap hough(ByteMap byteMap, double deltaTheta,
+            double deltaRho) {
+        return new Transform().doHough(byteMap, deltaTheta, deltaRho);
+    }
 
     /** Flag indicating if the operation should be interrupted. */
     private boolean isInterrupted = false;
+
+    /** Progress value. */
+    protected double progress = 0;
 
 
 
@@ -66,27 +283,48 @@ public class Transform implements Monitorable {
      * @return a empty <code>HoughMap</code>
      */
     protected HoughMap createHoughMap(ByteMap byteMap, double deltaTheta) {
+        // Radius
+        // The radius is either the radius read from the property of the
+        // pattern map or the minimum between half the pattern map's height
+        // or half the pattern map's width
+        int radius =
+                byteMap.getProperty(MaskDisc.KEY_RADIUS,
+                        min(byteMap.width / 2, byteMap.height / 2));
 
-        // Calculate rMax as the half diagonal
-        double rMax =
-                ceil(sqrt(byteMap.width * byteMap.width + byteMap.height
-                        * byteMap.height) / 2);
+        double deltaRho = calculateDeltaR(radius, deltaTheta);
 
-        // Calculate deltaR such as the region of the biggest inscribed
-        // circular mask will give a square HoughMap
-        double biggestCircularDiameter = min(byteMap.width, byteMap.height);
-        int houghMapWidth = HoughMap.calculateWidth(deltaTheta);
-        double deltaR = biggestCircularDiameter / houghMapWidth;
-
-        return new HoughMap(rMax, deltaR, deltaTheta);
+        return createHoughMap(byteMap, deltaTheta, deltaRho);
     }
 
 
 
     /**
-     * Does a Hough transform with the specified angle increment. This is the
-     * same as {@link #hough(ByteMap, double)} but as an instance method. This
-     * method is used to get the progress of the operation.
+     * Returns a <code>HoughMap</code> with the specified resolution in theta
+     * and rho.
+     * 
+     * @param byteMap
+     *            <code>ByteMap</code> to do the transform of
+     * @param deltaTheta
+     *            resolution in theta (radians/px)
+     * @param deltaRho
+     *            resolution in rho (px/px)
+     * @return a empty <code>HoughMap</code>
+     */
+    protected HoughMap createHoughMap(ByteMap byteMap, double deltaTheta,
+            double deltaRho) {
+        double rMax =
+                ceil(sqrt(pow(byteMap.width, 2) + pow(byteMap.height, 2)) / 2);
+        return new HoughMap(rMax, deltaRho, deltaTheta);
+    }
+
+
+
+    /**
+     * Does a Hough transform using the specified resolution in theta. The
+     * resolution in rho is automatically calculated to ensure that the aspect
+     * ratio of the peaks is close to unity (square peaks). This is the same as
+     * {@link #hough(ByteMap, double)} but as an instance method. This method is
+     * used to get the progress of the operation.
      * 
      * @param byteMap
      *            <code>ByteMap</code> to do the transform of
@@ -98,6 +336,28 @@ public class Transform implements Monitorable {
      */
     public HoughMap doHough(ByteMap byteMap, double deltaTheta) {
         return doHough(byteMap, createHoughMap(byteMap, deltaTheta));
+    }
+
+
+
+    /**
+     * Does a Hough transform with the specified resolution in rho and theta.
+     * This is the same as {@link #hough(ByteMap, double, double)} but as an
+     * instance method. This method is used to get the progress of the
+     * operation.
+     * 
+     * @param byteMap
+     *            <code>ByteMap</code> to do the transform of
+     * @param deltaTheta
+     *            resolution in theta (radians/px)
+     * @param deltaRho
+     *            resolution in rho (px/px)
+     * @return the Hough transform
+     * @see #getTaskProgress()
+     * @see #getTaskStatus()
+     */
+    public HoughMap doHough(ByteMap byteMap, double deltaTheta, double deltaRho) {
+        return doHough(byteMap, createHoughMap(byteMap, deltaTheta, deltaRho));
     }
 
 

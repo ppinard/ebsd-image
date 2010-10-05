@@ -17,7 +17,8 @@
  */
 package org.ebsdimage.io.exp.ops.hough.op;
 
-import static org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlTags.ATTR_RESOLUTION;
+import static org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlTags.ATTR_DELTA_RHO;
+import static org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlTags.ATTR_DELTA_THETA;
 import static org.ebsdimage.io.exp.ops.hough.op.HoughTransformXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
 
@@ -36,7 +37,7 @@ public class HoughTransformXmlSaverTest {
 
     @Before
     public void setUp() throws Exception {
-        op = new HoughTransform(2.0);
+        op = new HoughTransform(2.0, 1.0);
     }
 
 
@@ -47,7 +48,10 @@ public class HoughTransformXmlSaverTest {
 
         assertEquals(TAG_NAME, element.getName());
         assertEquals(2.0,
-                JDomUtil.getDoubleFromAttribute(element, ATTR_RESOLUTION), 1e-7);
+                JDomUtil.getDoubleFromAttribute(element, ATTR_DELTA_THETA),
+                1e-7);
+        assertEquals(1.0,
+                JDomUtil.getDoubleFromAttribute(element, ATTR_DELTA_RHO), 1e-7);
     }
 
 }
