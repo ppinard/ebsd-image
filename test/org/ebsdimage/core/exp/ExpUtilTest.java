@@ -22,12 +22,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import org.ebsdimage.core.exp.ops.pattern.op.PatternFilesLoader;
-import org.ebsdimage.core.exp.ops.pattern.op.PatternOpMock;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternSmpLoader;
-import org.ebsdimage.core.run.Operation;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -74,100 +71,4 @@ public class ExpUtilTest {
         assertEquals(4, op.getFiles().length);
     }
 
-
-
-    @Test
-    public void testSplitExp() {
-        // Operations
-        ArrayList<Operation> ops = ExpTester.createOperations();
-        ops.add(new PatternOpMock(8));
-
-        // Experiment
-        Exp exp =
-                new Exp(4, 2, ExpTester.createMetadata(),
-                        ExpTester.createPhases(),
-                        ops.toArray(new Operation[ops.size()]),
-                        new CurrentMapsFileSaver());
-        assertEquals(8, exp.getPatternOp().size);
-
-        // Split = 1
-        Exp[] exps = ExpUtil.splitExp(exp, 1);
-        assertEquals(1, exps.length);
-        assertEquals(8, exps[0].getPatternOp().size);
-
-        // Split = 2
-        exps = ExpUtil.splitExp(exp, 2);
-        assertEquals(2, exps.length);
-        assertEquals(4, exps[0].getPatternOp().size);
-        assertEquals(4, exps[1].getPatternOp().size);
-
-        // Split = 3
-        exps = ExpUtil.splitExp(exp, 3);
-        assertEquals(3, exps.length);
-        assertEquals(3, exps[0].getPatternOp().size);
-        assertEquals(3, exps[1].getPatternOp().size);
-        assertEquals(2, exps[2].getPatternOp().size);
-
-        // Split = 4
-        exps = ExpUtil.splitExp(exp, 4);
-        assertEquals(4, exps.length);
-        assertEquals(2, exps[0].getPatternOp().size);
-        assertEquals(2, exps[1].getPatternOp().size);
-        assertEquals(2, exps[2].getPatternOp().size);
-        assertEquals(2, exps[3].getPatternOp().size);
-
-        // Split = 5
-        exps = ExpUtil.splitExp(exp, 5);
-        assertEquals(4, exps.length);
-        assertEquals(2, exps[0].getPatternOp().size);
-        assertEquals(2, exps[1].getPatternOp().size);
-        assertEquals(2, exps[2].getPatternOp().size);
-        assertEquals(2, exps[3].getPatternOp().size);
-
-        // Split = 6
-        exps = ExpUtil.splitExp(exp, 6);
-        assertEquals(4, exps.length);
-        assertEquals(2, exps[0].getPatternOp().size);
-        assertEquals(2, exps[1].getPatternOp().size);
-        assertEquals(2, exps[2].getPatternOp().size);
-        assertEquals(2, exps[3].getPatternOp().size);
-
-        // Split = 7
-        exps = ExpUtil.splitExp(exp, 7);
-        assertEquals(4, exps.length);
-        assertEquals(2, exps[0].getPatternOp().size);
-        assertEquals(2, exps[1].getPatternOp().size);
-        assertEquals(2, exps[2].getPatternOp().size);
-        assertEquals(2, exps[3].getPatternOp().size);
-
-        // Split = 8
-        exps = ExpUtil.splitExp(exp, 8);
-        assertEquals(8, exps.length);
-        assertEquals(1, exps[0].getPatternOp().size);
-        assertEquals(1, exps[1].getPatternOp().size);
-        assertEquals(1, exps[2].getPatternOp().size);
-        assertEquals(1, exps[3].getPatternOp().size);
-        assertEquals(1, exps[4].getPatternOp().size);
-        assertEquals(1, exps[5].getPatternOp().size);
-        assertEquals(1, exps[6].getPatternOp().size);
-        assertEquals(1, exps[7].getPatternOp().size);
-    }
-
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testSplitExpException() {
-        // Operations
-        ArrayList<Operation> ops = ExpTester.createOperations();
-
-        // Experiment
-        Exp exp =
-                new Exp(4, 2, ExpTester.createMetadata(),
-                        ExpTester.createPhases(),
-                        ops.toArray(new Operation[ops.size()]),
-                        new CurrentMapsFileSaver());
-        assertEquals(2, exp.getPatternOp().size);
-
-        ExpUtil.splitExp(exp, 3);
-    }
 }

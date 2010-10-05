@@ -25,7 +25,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.exp.ExpUtil;
+import org.ebsdimage.core.exp.ExpSplitter;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternSmpLoader;
 import org.ebsdimage.io.SmpCreator;
 import org.ebsdimage.io.exp.ExpLoader;
@@ -121,30 +121,26 @@ public class ExpSplit extends BaseCUI {
         MessageDialog.show("Loading experiment... DONE");
 
         // Split
-        MessageDialog.show("Splitting experiment...");
+        ExpSplitter splitter = new ExpSplitter(exp, splitCount);
 
-        Exp[] exps;
-        try {
-            exps = ExpUtil.splitExp(exp, splitCount);
-        } catch (Exception ex) {
-            ErrorDialog.show(ex.getMessage());
-            return;
-        }
-
-        MessageDialog.show("Splitting experiment... DONE");
-
-        // Save experiment in directory
-        MessageDialog.show("Saving smaller experiments...");
-
-        File splitExpDir;
         Exp splitExp;
+        File splitExpDir;
         ExpSaver saver = new ExpSaver();
         SmpCreator smpCreator = new SmpCreator();
+        int index = 0;
+        while (splitter.hasNext()) {
+            MessageDialog.show("Splitting experiment " + index + "...");
 
-        for (int i = 0; i < exps.length; i++) {
-            MessageDialog.show("Saving split experiment " + (i + 1) + "...");
+            try {
+                splitExp = splitter.next();
+            } catch (Exception ex) {
+                ErrorDialog.show(ex.getMessage());
+                return;
+            }
 
-            splitExp = exps[i];
+            MessageDialog.show("Splitting experiment " + index + "... DONE");
+
+            MessageDialog.show("Saving experiment " + index + "...");
 
             // Experiment directory
             splitExpDir = new File(dir, splitExp.getName());
@@ -164,12 +160,11 @@ public class ExpSplit extends BaseCUI {
             splitExpFile = FileUtil.setExtension(splitExpFile, "xml");
             saver.save(splitExp, splitExpFile);
 
-            MessageDialog.show("Saving split experiment " + (i + 1)
-                    + "... DONE");
+            MessageDialog.show("Saving split experiment " + index + "... DONE");
 
-            // Smp split
+            // SMP split
             if (splitExp.getPatternOp() instanceof PatternSmpLoader) {
-                MessageDialog.show("Saving split smp " + (i + 1) + "...");
+                MessageDialog.show("Saving split SMP " + index + "...");
 
                 PatternSmpLoader op =
                         (PatternSmpLoader) splitExp.getPatternOp();
@@ -178,7 +173,7 @@ public class ExpSplit extends BaseCUI {
                 int startIndex = op.startIndex;
                 int endIndex = op.startIndex + op.size - 1;
 
-                // Source smp file
+                // Source SMP file
                 File srcSmpFile;
                 try {
                     srcSmpFile = op.getFile(dir);
@@ -189,18 +184,18 @@ public class ExpSplit extends BaseCUI {
                     return;
                 }
 
-                // Destination smp file
+                // Destination SMP file
                 File destSmpFile = new File(splitExpDir, op.filename);
 
                 // Extract
                 smpCreator.extract(srcSmpFile, startIndex, endIndex,
                         destSmpFile);
 
-                MessageDialog.show("Saving split smp " + (i + 1) + "... DONE");
+                MessageDialog.show("Saving split SMP " + index + "... DONE");
             }
-        }
 
-        MessageDialog.show("Saving smaller experiments... DONE");
+            index++;
+        }
     }
 
 
