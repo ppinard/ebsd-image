@@ -126,7 +126,7 @@ public class ExpMerge extends BaseCUI {
 
         ExpMMap dest;
         try {
-            dest = new ExpMMapLoader().load(zipFiles[0]).duplicate();
+            dest = new ExpMMapLoader().load(zipFiles[0]);
         } catch (Exception ex) {
             ErrorDialog.show(ex.getMessage());
             return;
