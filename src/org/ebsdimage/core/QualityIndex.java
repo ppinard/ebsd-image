@@ -95,7 +95,7 @@ public class QualityIndex {
         int numberPeaks = peaks.length;
 
         if (numberPeaks == 0)
-            return 0.0;
+            return Double.NaN;
 
         double value = 0.0;
         for (HoughPeak peak : peaks)

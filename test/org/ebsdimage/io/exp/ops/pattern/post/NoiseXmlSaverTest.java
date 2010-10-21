@@ -17,6 +17,7 @@
  */
 package org.ebsdimage.io.exp.ops.pattern.post;
 
+import static org.ebsdimage.io.exp.ops.pattern.post.NoiseXmlTags.ATTR_COUNT;
 import static org.ebsdimage.io.exp.ops.pattern.post.NoiseXmlTags.ATTR_STDDEV;
 import static org.ebsdimage.io.exp.ops.pattern.post.NoiseXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
@@ -36,7 +37,7 @@ public class NoiseXmlSaverTest {
 
     @Before
     public void setUp() throws Exception {
-        op = new Noise(25.0);
+        op = new Noise(25.0, 3);
     }
 
 
@@ -48,6 +49,7 @@ public class NoiseXmlSaverTest {
         assertEquals(TAG_NAME, element.getName());
         assertEquals(25.0,
                 JDomUtil.getDoubleFromAttribute(element, ATTR_STDDEV), 1e-7);
+        assertEquals(3, JDomUtil.getIntegerFromAttribute(element, ATTR_COUNT));
     }
 
 }

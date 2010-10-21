@@ -186,15 +186,14 @@ public abstract class RunsGenerator implements ObjectXml {
             ArrayList<Operation> ops = new ArrayList<Operation>();
 
             // Sort keys
-            String[] keys =
-                    comb.keySet().toArray(new String[comb.keySet().size()]);
+            String[] keys = comb.keySet().toArray(new String[0]);
             Arrays.sort(keys);
 
             // Add operations
             for (String key : keys)
                 ops.add(comb.get(key));
 
-            combsOps.add(ops.toArray(new Operation[combsOps.size()]));
+            combsOps.add(ops.toArray(new Operation[0]));
         }
 
         return combsOps;
@@ -208,7 +207,7 @@ public abstract class RunsGenerator implements ObjectXml {
      * @return array of keys
      */
     public String[] getKeys() {
-        return items.keySet().toArray(new String[items.keySet().size()]);
+        return items.keySet().toArray(new String[0]);
     }
 
 

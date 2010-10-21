@@ -61,7 +61,6 @@ public class DilationTest extends TestCase {
         identMap = Identification.identify(destMap);
         area = Analysis.getArea(identMap);
 
-        assertEquals(10.0, area.val[0], 1e-6);
+        assertEquals(78.0, area.val[0], 1e-6);
     }
-
 }

@@ -69,9 +69,9 @@ public class DoublePeaksCleanUpTest {
         HoughPeak[] destPeaks = doublePeaksCleanUp.process(srcPeaks, 0.1, 0.1);
 
         assertEquals(3, destPeaks.length);
-        assertEquals(new HoughPeak(0.1, 0.2), destPeaks[0]);
-        assertEquals(new HoughPeak(0.4, 0.7), destPeaks[1]);
-        assertEquals(new HoughPeak(0.0, 0.7), destPeaks[2]);
+        assertEquals(new HoughPeak(0.0, 0.7), destPeaks[0]);
+        assertEquals(new HoughPeak(0.3, 0.6), destPeaks[1]);
+        assertEquals(new HoughPeak(0.1, 0.2), destPeaks[2]);
     }
 
 

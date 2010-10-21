@@ -34,13 +34,15 @@ public class Noise extends PatternPostOps {
     /** Default standard deviation. */
     public static final double DEFAULT_STDDEV = 1.0;
 
+    public final int count;
+
 
 
     /**
      * Creates a new noise operation with the default standard deviation.
      */
     public Noise() {
-        this(DEFAULT_STDDEV);
+        this(DEFAULT_STDDEV, 1);
     }
 
 
@@ -51,12 +53,13 @@ public class Noise extends PatternPostOps {
      * @param stdDev
      *            standard deviation
      */
-    public Noise(double stdDev) {
+    public Noise(double stdDev, int count) {
         if (stdDev <= 0)
             throw new IllegalArgumentException("Standard deviation (" + stdDev
                     + ") must be > " + 0 + '.');
 
         this.stdDev = stdDev;
+        this.count = count;
     }
 
 
@@ -65,15 +68,15 @@ public class Noise extends PatternPostOps {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null)
+        if (!super.equals(obj))
             return false;
         if (getClass() != obj.getClass())
             return false;
-
         Noise other = (Noise) obj;
+        if (count != other.count)
+            return false;
         if (Double.doubleToLongBits(stdDev) != Double.doubleToLongBits(other.stdDev))
             return false;
-
         return true;
     }
 
@@ -82,7 +85,8 @@ public class Noise extends PatternPostOps {
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
+        int result = super.hashCode();
+        result = prime * result + count;
         long temp;
         temp = Double.doubleToLongBits(stdDev);
         result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -105,7 +109,8 @@ public class Noise extends PatternPostOps {
     public ByteMap process(Exp exp, ByteMap srcMap) {
         ByteMap destMap = srcMap.duplicate();
 
-        rmlimage.utility.Noise.gaussian(destMap, stdDev);
+        for (int i = 0; i < count; i++)
+            rmlimage.utility.Noise.gaussian(destMap, stdDev);
 
         // Apply properties of srcMap
         destMap.setProperties(srcMap);

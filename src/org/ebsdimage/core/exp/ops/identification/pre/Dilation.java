@@ -44,7 +44,7 @@ public class Dilation extends IdentificationPreOps {
     public BinMap process(Exp exp, BinMap srcMap) {
         BinMap destMap = srcMap.duplicate();
 
-        MathMorph.dilation(destMap, 2, 8, 1);
+        MathMorph.dilation(destMap, 1, 8, 1);
 
         return destMap;
     }

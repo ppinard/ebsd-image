@@ -15,51 +15,44 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.io.exp.ops.pattern.post;
+package org.ebsdimage.io.exp.ops.identification.op;
 
-import static org.ebsdimage.io.exp.ops.pattern.post.NoiseXmlTags.ATTR_COUNT;
-import static org.ebsdimage.io.exp.ops.pattern.post.NoiseXmlTags.ATTR_STDDEV;
-import static org.ebsdimage.io.exp.ops.pattern.post.NoiseXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.identification.op.MaximumXmlTags.TAG_NAME;
 
-import org.ebsdimage.core.exp.ops.pattern.post.Noise;
+import org.ebsdimage.core.exp.ops.identification.op.Maximum;
 import org.jdom.Element;
 
 import ptpshared.utility.xml.ObjectXml;
 import ptpshared.utility.xml.ObjectXmlSaver;
 
 /**
- * XML saver for a <code>Noise</code> operation.
+ * XML saver for a <code>Maximum</code> operation.
  * 
  * @author Philippe T. Pinard
  */
-public class NoiseXmlSaver implements ObjectXmlSaver {
+public class MaximumXmlSaver implements ObjectXmlSaver {
 
     /**
      * {@inheritDoc}
      * 
-     * @see #save(Noise)
+     * @see #save(Maximum)
      */
     @Override
     public Element save(ObjectXml obj) {
-        return save((Noise) obj);
+        return save((Maximum) obj);
     }
 
 
 
     /**
-     * Saves a <code>Noise</code> operation to an XML <code>Element</code>.
+     * Saves a <code>Maximum</code> operation to an XML <code>Element</code>.
      * 
      * @param op
-     *            a <code>Noise</code> operation
+     *            a <code>Maximum</code> operation
      * @return an XML <code>Element</code>
      */
-    public Element save(Noise op) {
-        Element element = new Element(TAG_NAME);
-
-        element.setAttribute(ATTR_STDDEV, Double.toString(op.stdDev));
-        element.setAttribute(ATTR_COUNT, Integer.toString(op.count));
-
-        return element;
+    public Element save(Maximum op) {
+        return new Element(TAG_NAME);
     }
 
 }

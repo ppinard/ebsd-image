@@ -15,47 +15,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.io.exp.ops.pattern.post;
+package org.ebsdimage.io.exp.ops.identification.op;
 
-import static org.ebsdimage.io.exp.ops.pattern.post.NoiseXmlTags.ATTR_COUNT;
-import static org.ebsdimage.io.exp.ops.pattern.post.NoiseXmlTags.ATTR_STDDEV;
-import static org.ebsdimage.io.exp.ops.pattern.post.NoiseXmlTags.TAG_NAME;
+import static org.ebsdimage.io.exp.ops.identification.op.MaximumXmlTags.TAG_NAME;
 
-import org.ebsdimage.core.exp.ops.pattern.post.Noise;
+import org.ebsdimage.core.exp.ops.identification.op.Maximum;
 import org.jdom.Element;
 import org.jdom.IllegalNameException;
 
-import ptpshared.utility.xml.JDomUtil;
 import ptpshared.utility.xml.ObjectXmlLoader;
 
 /**
- * XML loader for a <code>Noise</code> operation.
+ * XML loader for an <code>Maximum</code> operation.
  * 
  * @author Philippe T. Pinard
  */
-public class NoiseXmlLoader implements ObjectXmlLoader {
+public class MaximumXmlLoader implements ObjectXmlLoader {
 
     /**
-     * Loads a <code>Noise</code> operation from an XML <code>Element</code>.
+     * Loads a <code>Maximum</code> operation from an XML <code>Element</code>.
      * 
      * @param element
      *            an XML <code>Element</code>
-     * @return a <code>Noise</code> operation
+     * @return a <code>Maximum</code> operation
      * @throws IllegalNameException
      *             if the <code>Element</code> tag name is incorrect.
      */
     @Override
-    public Noise load(Element element) {
+    public Maximum load(Element element) {
         if (!element.getName().equals(TAG_NAME))
             throw new IllegalNameException("Name of the element should be "
                     + TAG_NAME + " not " + element.getName() + ".");
 
-        double stdDev =
-                JDomUtil.getDoubleFromAttribute(element, ATTR_STDDEV,
-                        Noise.DEFAULT_STDDEV);
-        int count = JDomUtil.getIntegerFromAttribute(element, ATTR_COUNT, 1);
-
-        return new Noise(stdDev, count);
+        return new Maximum();
     }
 
 }

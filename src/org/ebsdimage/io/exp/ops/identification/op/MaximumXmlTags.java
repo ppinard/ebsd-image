@@ -15,23 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.io.exp.ops.pattern.post;
+package org.ebsdimage.io.exp.ops.identification.op;
 
-import org.ebsdimage.core.exp.ops.pattern.post.Noise;
+import org.ebsdimage.core.exp.ops.identification.op.Maximum;
 
 /**
- * Tags for <code>Noise</code>'s XML <code>Element</code>.
+ * Tags for <code>LocalCentroid</code>'s XML <code>Element</code>.
  * 
  * @author Philippe T. Pinard
  */
-public class NoiseXmlTags {
-    /** XML tag name for <code>Noise</code>. */
-    public static final String TAG_NAME = Noise.class.getSimpleName();
-
-    /** XML attribute for the standard deviation. */
-    public static final String ATTR_STDDEV = "stdDev";
-
-    /** XML attribute for the number of iterations. */
-    public static final String ATTR_COUNT = "count";
-
+public class MaximumXmlTags {
+    /** XML tag name for <code>Maximum</code>. */
+    public static final String TAG_NAME = Maximum.class.getSimpleName();
 }

@@ -158,6 +158,82 @@ public class Analysis {
 
 
     /**
+     * Returns the location of the maximum for each object in the
+     * <code>BinMap</code>.
+     * 
+     * @param houghMap
+     *            hough map where the intensity (mass) will be taken
+     * @param peaksMap
+     *            map where the Hough peaks are detected
+     * @return the list of points in the Hough (rho, theta)
+     * @throws NullPointerException
+     *             if either the hough map or peaks map is null
+     */
+    public static HoughPoint getMaximumLocation(HoughMap houghMap,
+            IdentMap peaksMap) {
+        if (houghMap == null)
+            throw new NullPointerException("Hough map cannot be null.");
+        if (peaksMap == null)
+            throw new NullPointerException("Peaks map cannot be null.");
+
+        // Apply houghMap properties on peaksMap
+        peaksMap.setProperties(houghMap);
+
+        int nbObjects = peaksMap.getObjectCount();
+
+        // +1 for object 0 (background)
+        double[] maximums = new double[nbObjects + 1];
+        double[] rhos = new double[nbObjects + 1];
+        double[] thetas = new double[nbObjects + 1];
+
+        // Initialize the array to 0
+        Arrays.fill(maximums, Double.NEGATIVE_INFINITY);
+        Arrays.fill(rhos, 0);
+        Arrays.fill(thetas, 0);
+
+        int width = peaksMap.width;
+        int height = peaksMap.height;
+        short[] pixArray = peaksMap.pixArray;
+
+        short objectNumber;
+        int n = 0;
+        double rho;
+        double theta;
+        double value;
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                objectNumber = pixArray[n];
+
+                rho = getR(peaksMap, n);
+                theta = getTheta(peaksMap, n);
+
+                value = houghMap.pixArray[houghMap.getIndex(rho, theta)] & 0xff;
+
+                if (value > maximums[objectNumber]) {
+                    maximums[objectNumber] = value;
+                    rhos[objectNumber] = rho;
+                    thetas[objectNumber] = theta;
+                }
+
+                n++;
+            }
+        }
+
+        // Create Hough points
+        HoughPoint points = new HoughPoint(nbObjects);
+
+        for (n = 0; n < nbObjects; n++) {
+            points.rho[n] = (float) rhos[n + 1];
+            points.theta[n] = (float) thetas[n + 1];
+        }
+
+        return points;
+    }
+
+
+
+    /**
      * Return the maximum pixel color index in each object in the
      * <code>IdentMap</code>. The pixel color index is determined from the
      * specified <code>ByteMap</code>.

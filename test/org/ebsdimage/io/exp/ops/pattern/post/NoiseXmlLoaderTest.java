@@ -17,6 +17,7 @@
  */
 package org.ebsdimage.io.exp.ops.pattern.post;
 
+import static org.ebsdimage.io.exp.ops.pattern.post.NoiseXmlTags.ATTR_COUNT;
 import static org.ebsdimage.io.exp.ops.pattern.post.NoiseXmlTags.ATTR_STDDEV;
 import static org.ebsdimage.io.exp.ops.pattern.post.NoiseXmlTags.TAG_NAME;
 import static org.junit.Assert.assertEquals;
@@ -37,6 +38,7 @@ public class NoiseXmlLoaderTest {
         element = new Element(TAG_NAME);
 
         element.setAttribute(ATTR_STDDEV, Double.toString(25.0));
+        element.setAttribute(ATTR_COUNT, Integer.toString(3));
     }
 
 
@@ -47,6 +49,7 @@ public class NoiseXmlLoaderTest {
 
         assertEquals(TAG_NAME, op.getName());
         assertEquals(25.0, op.stdDev, 1e-7);
+        assertEquals(3, op.count);
     }
 
 }

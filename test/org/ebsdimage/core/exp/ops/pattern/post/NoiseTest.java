@@ -32,14 +32,14 @@ public class NoiseTest {
 
     @Before
     public void setUp() {
-        noise = new Noise(25.0);
+        noise = new Noise(25.0, 1);
     }
 
 
 
     @Test
     public void testEquals() {
-        Noise other = new Noise(25.0);
+        Noise other = new Noise(25.0, 1);
         assertFalse(noise == other);
         assertEquals(noise, other);
     }
@@ -63,7 +63,7 @@ public class NoiseTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testNoiseIntException() {
-        new Noise(-1.0);
+        new Noise(-1.0, 1);
     }
 
 
