@@ -21,6 +21,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import ptpshared.util.xml.XmlLoader;
 import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
 
@@ -47,12 +48,12 @@ public class CrystalUtil {
         File[] crystalFiles = FileUtil.listFilesOnly(dir, "*.xml");
         Arrays.sort(crystalFiles);
 
-        CrystalLoader loader = new CrystalLoader();
+        XmlLoader loader = new XmlLoader();
         for (File crystalFile : crystalFiles) {
             Crystal crystal;
 
             try {
-                crystal = loader.load(crystalFile);
+                crystal = loader.load(Crystal.class, crystalFile);
             } catch (Exception e) {
                 continue;
             }

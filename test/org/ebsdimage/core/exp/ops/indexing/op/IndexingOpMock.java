@@ -20,18 +20,20 @@ package org.ebsdimage.core.exp.ops.indexing.op;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Root;
 
 import ptpshared.core.math.Quaternion;
 import crystallography.core.Crystal;
-import crystallography.core.crystals.Silicon;
+import crystallography.core.CrystalFactory;
 
+@Root
 public class IndexingOpMock extends IndexingOp {
 
     @Override
     public Solution[] index(Exp exp, HoughPeak[] srcPeaks) {
         Solution[] slns = new Solution[srcPeaks.length];
 
-        Crystal phase = new Silicon();
+        Crystal phase = CrystalFactory.silicon();
         Quaternion rotation = Quaternion.IDENTITY;
 
         for (int i = 0; i < slns.length; i++)

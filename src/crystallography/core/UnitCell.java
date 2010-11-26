@@ -24,8 +24,12 @@ import static java.lang.Math.sin;
 import static ptpshared.core.math.Math.acos;
 import static ptpshared.core.math.Math.sqrt;
 import net.jcip.annotations.Immutable;
+
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+
 import ptpshared.core.math.Matrix3D;
-import ptpshared.utility.xml.ObjectXml;
+import ptpshared.util.AlmostEquable;
 
 /**
  * Defines a unit cell. From the lattice parameters and angles, the class
@@ -47,24 +51,31 @@ import ptpshared.utility.xml.ObjectXml;
  * 
  * @author Philippe T. Pinard
  */
+@Root
 @Immutable
-public class UnitCell implements ObjectXml {
+public class UnitCell implements AlmostEquable {
     /** Lattice constant a. */
+    @Attribute(name = "a")
     public final double a;
 
     /** Lattice constant b. */
+    @Attribute(name = "b")
     public final double b;
 
     /** Lattice constant c. */
+    @Attribute(name = "c")
     public final double c;
 
     /** Lattice angle alpha. */
+    @Attribute(name = "alpha")
     public final double alpha;
 
     /** Lattice angle beta. */
+    @Attribute(name = "beta")
     public final double beta;
 
     /** Lattice angle gamma. */
+    @Attribute(name = "gamma")
     public final double gamma;
 
     /** Lattice volume. */
@@ -115,8 +126,11 @@ public class UnitCell implements ObjectXml {
      * @param gamma
      *            angle between a and b (in radians)
      */
-    public UnitCell(double a, double b, double c, double alpha, double beta,
-            double gamma) {
+    public UnitCell(@Attribute(name = "a") double a,
+            @Attribute(name = "b") double b, @Attribute(name = "c") double c,
+            @Attribute(name = "alpha") double alpha,
+            @Attribute(name = "beta") double beta,
+            @Attribute(name = "gamma") double gamma) {
         if (a <= 0)
             throw new IllegalArgumentException("Lattice constant a (" + a
                     + ") must be greater than 0.");
@@ -236,7 +250,7 @@ public class UnitCell implements ObjectXml {
      * Checks if this <code>UnitCell</code> is almost equal to the specified one
      * with the given precision.
      * 
-     * @param other
+     * @param obj
      *            other <code>UnitCell</code> to check equality
      * @param precision
      *            level of precision
@@ -246,7 +260,8 @@ public class UnitCell implements ObjectXml {
      * @throws IllegalArgumentException
      *             if the precision is not a number (NaN)
      */
-    public boolean equals(UnitCell other, double precision) {
+    @Override
+    public boolean equals(Object obj, double precision) {
         if (precision < 0)
             throw new IllegalArgumentException(
                     "The precision has to be greater or equal to 0.0.");
@@ -254,10 +269,14 @@ public class UnitCell implements ObjectXml {
             throw new IllegalArgumentException(
                     "The precision must be a number.");
 
-        if (this == other)
+        if (this == obj)
             return true;
-        if (other == null)
+        if (obj == null)
             return false;
+        if (getClass() != obj.getClass())
+            return false;
+
+        UnitCell other = (UnitCell) obj;
 
         if (abs(a - other.a) >= precision)
             return false;

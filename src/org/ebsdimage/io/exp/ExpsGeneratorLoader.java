@@ -22,8 +22,8 @@ import java.io.IOException;
 
 import org.ebsdimage.core.exp.ExpsGenerator;
 
-import ptpshared.utility.xml.ObjectXmlLoader;
-import ptpshared.utility.xml.XmlLoader;
+import ptpshared.util.xml.ObjectXmlLoader;
+import ptpshared.util.xml.XmlLoader;
 
 /**
  * Loads <code>ExpsGenerator</code> from an XML file.

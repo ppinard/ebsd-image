@@ -17,7 +17,9 @@
  */
 package ptpshared.core.math;
 
-import ptpshared.utility.xml.ObjectXml;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 
 /**
@@ -26,7 +28,8 @@ import edu.umd.cs.findbugs.annotations.CheckReturnValue;
  * 
  * @author Philippe T. Pinard
  */
-public class Vector3D extends BaseVector implements ObjectXml {
+@Root
+public class Vector3D extends BaseVector {
 
     /**
      * Creates a new <code>Vector3D</code> with all coordinates are 0.
@@ -63,7 +66,8 @@ public class Vector3D extends BaseVector implements ObjectXml {
      * @param z
      *            z coordinate
      */
-    public Vector3D(double x, double y, double z) {
+    public Vector3D(@Attribute(name = "x") double x,
+            @Attribute(name = "y") double y, @Attribute(name = "z") double z) {
         super(x, y, z);
     }
 
@@ -119,7 +123,7 @@ public class Vector3D extends BaseVector implements ObjectXml {
 
 
     @Override
-    public Vector3D duplicate() {
+    public Vector3D clone() {
         return new Vector3D(v[0], v[1], v[2]);
     }
 
@@ -128,6 +132,42 @@ public class Vector3D extends BaseVector implements ObjectXml {
     @Override
     public Double get(int index) {
         return super.get(index).doubleValue();
+    }
+
+
+
+    /**
+     * Returns the x coordinate of the vector.
+     * 
+     * @return x coordinate
+     */
+    @Attribute(name = "x")
+    public double getX() {
+        return get(0);
+    }
+
+
+
+    /**
+     * Returns the y coordinate of the vector.
+     * 
+     * @return y coordinate
+     */
+    @Attribute(name = "y")
+    public double getY() {
+        return get(1);
+    }
+
+
+
+    /**
+     * Returns the z coordinate of the vector.
+     * 
+     * @return z coordinate
+     */
+    @Attribute(name = "z")
+    public double getZ() {
+        return get(2);
     }
 
 
@@ -170,6 +210,48 @@ public class Vector3D extends BaseVector implements ObjectXml {
     @Override
     public Vector3D positive() {
         return (Vector3D) super.positive();
+    }
+
+
+
+    /**
+     * Sets the x coordinate. Method used during deserialization.
+     * 
+     * @param x
+     *            x coordinate.
+     */
+    @SuppressWarnings("unused")
+    @Attribute(name = "x")
+    private void setX(double x) {
+        v[0] = x;
+    }
+
+
+
+    /**
+     * Sets the y coordinate. Method used during deserialization.
+     * 
+     * @param y
+     *            y coordinate.
+     */
+    @SuppressWarnings("unused")
+    @Attribute(name = "y")
+    private void setY(double y) {
+        v[1] = y;
+    }
+
+
+
+    /**
+     * Sets the z coordinate. Method used during deserialization.
+     * 
+     * @param z
+     *            z coordinate.
+     */
+    @SuppressWarnings("unused")
+    @Attribute(name = "z")
+    private void setZ(double z) {
+        v[2] = z;
     }
 
 

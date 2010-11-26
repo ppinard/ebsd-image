@@ -30,8 +30,7 @@ import rmlimage.core.BinMap;
 import rmlshared.io.FileUtil;
 import rmlshared.util.Properties;
 import crystallography.core.Crystal;
-import crystallography.core.crystals.IronBCC;
-import crystallography.core.crystals.Silicon;
+import crystallography.core.CrystalFactory;
 
 public class ThresholdTest extends TestCase {
 
@@ -150,7 +149,9 @@ public class ThresholdTest extends TestCase {
 
 
     private PhasesMap createPhasesMap() {
-        Crystal[] phases = new Crystal[] { new Silicon(), new IronBCC() };
+        Crystal[] phases =
+                new Crystal[] { CrystalFactory.silicon(),
+                        CrystalFactory.ferrite() };
         byte[] pixArray = new byte[] { 0, 1, 2, 1 };
 
         return new PhasesMap(2, 2, pixArray, phases);

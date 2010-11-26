@@ -35,8 +35,11 @@ import rmlimage.core.Map;
  */
 public class ExpMMap extends EbsdMMap {
 
-    /** Header for the zip file containing an EbsdMMap. */
+    /** Header for the ZIP file containing an EbsdMMap. */
     public static final String FILE_HEADER = EbsdMMap.FILE_HEADER + "-EXP";
+
+    /** Version of the ZIP file. */
+    public static final int VERSION = 1;
 
 
 
@@ -49,12 +52,9 @@ public class ExpMMap extends EbsdMMap {
      *            height of the map
      * @param mapList
      *            list of <code>Map</code> containing all the required maps
-     * @param metadata
-     *            metadata associated to the map
      */
-    public ExpMMap(int width, int height, HashMap<String, Map> mapList,
-            ExpMetadata metadata) {
-        super(width, height, mapList, metadata);
+    public ExpMMap(int width, int height, HashMap<String, Map> mapList) {
+        super(width, height, mapList);
     }
 
 
@@ -67,20 +67,9 @@ public class ExpMMap extends EbsdMMap {
      *            width of the maps
      * @param height
      *            height of the maps
-     * @param metadata
-     *            data defining the EBSD acquisition
      */
-    public ExpMMap(int width, int height, ExpMetadata metadata) {
-        super(width, height, metadata);
-    }
-
-
-
-    @Override
-    public ExpMetadata getMetadata() {
-        return new ExpMetadata(beamEnergy, magnification, tiltAngle,
-                workingDistance, pixelWidth, pixelHeight, sampleRotation,
-                calibration);
+    public ExpMMap(int width, int height) {
+        super(width, height);
     }
 
 
@@ -92,8 +81,10 @@ public class ExpMMap extends EbsdMMap {
         for (Entry<String, Map> entry : getEntrySet())
             mapList.put(entry.getKey(), entry.getValue().duplicate());
 
-        ExpMMap dup = new ExpMMap(width, height, mapList, getMetadata());
-        dup.setProperties(this);
+        ExpMMap dup = new ExpMMap(width, height, mapList);
+
+        dup.setMetadata(getMetadata());
+        cloneMetadataFrom(this);
 
         return dup;
     }
@@ -102,7 +93,7 @@ public class ExpMMap extends EbsdMMap {
 
     @Override
     public ExpMMap createMap(int width, int height) {
-        return new ExpMMap(width, height, getMetadata());
+        return new ExpMMap(width, height);
     }
 
 }

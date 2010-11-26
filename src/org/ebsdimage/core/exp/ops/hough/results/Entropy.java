@@ -31,6 +31,11 @@ import rmlimage.module.real.core.RealMap;
  */
 public class Entropy extends HoughResultsOps {
 
+    /** Default operation. */
+    public static final Entropy DEFAULT = new Entropy();
+
+
+
     @Override
     public OpResult[] calculate(Exp exp, HoughMap srcMap) {
         OpResult result =

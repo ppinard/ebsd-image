@@ -18,23 +18,29 @@
 package org.ebsdimage.core.exp.ops.pattern.results;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.exp.OpResult;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.ByteMap;
 
 public class AverageTest extends TestCase {
 
-    private Average average;
+    private Average op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        average = new Average();
+        op = new Average();
     }
 
 
@@ -42,7 +48,7 @@ public class AverageTest extends TestCase {
     @Test
     public void testCalculate() {
         ByteMap srcMap = (ByteMap) load("org/ebsdimage/testdata/srcMap.bmp");
-        OpResult result = average.calculate(null, srcMap)[0];
+        OpResult result = op.calculate(null, srcMap)[0];
 
         assertEquals(255.0, result.value.doubleValue(), 1e-7);
     }
@@ -51,7 +57,47 @@ public class AverageTest extends TestCase {
 
     @Test
     public void testToString() {
-        assertEquals(average.toString(), "Average");
+        assertEquals(op.toString(), "Average");
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new Average()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new Average(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(1033205276, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        Average other = new XmlLoader().load(Average.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

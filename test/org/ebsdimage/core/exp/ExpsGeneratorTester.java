@@ -19,12 +19,17 @@ package org.ebsdimage.core.exp;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps2Mock;
 import org.ebsdimage.core.exp.ops.pattern.post.PatternPostOpsMock;
 import org.ebsdimage.core.exp.ops.pattern.results.PatternResultsOpsMock;
 import org.junit.Test;
 
-public abstract class ExpsGeneratorTester {
+import ptpshared.util.xml.XmlSaver;
+
+public abstract class ExpsGeneratorTester extends TestCase {
 
     protected ExpsGenerator generator;
 
@@ -94,6 +99,16 @@ public abstract class ExpsGeneratorTester {
     public void testGetKeys() {
         String[] keys = generator.getKeys();
         assertEquals(4, keys.length);
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File tmpFile = new File("/tmp/generator.xml");
+
+        // Write
+        new XmlSaver().save(generator, tmpFile);
     }
 
 }

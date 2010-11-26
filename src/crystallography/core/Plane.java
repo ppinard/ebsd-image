@@ -22,7 +22,6 @@ import static ptpshared.core.math.Fractions.gcd;
 import ptpshared.core.math.BaseVector;
 import ptpshared.core.math.Vector;
 import ptpshared.core.math.Vector3D;
-import ptpshared.utility.xml.ObjectXml;
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 
 /**
@@ -37,7 +36,7 @@ import edu.umd.cs.findbugs.annotations.CheckReturnValue;
  * 
  * @author Philippe T. Pinard
  */
-public class Plane extends BaseVector implements ObjectXml {
+public class Plane extends BaseVector {
 
     /**
      * Creates a plane from h, k and l indices.
@@ -123,7 +122,7 @@ public class Plane extends BaseVector implements ObjectXml {
      *             if the plane is invalid
      */
     @Override
-    public Plane duplicate() {
+    public Plane clone() {
         try {
             return new Plane((int) v[0], (int) v[1], (int) v[2]);
         } catch (InvalidPlaneException e) {

@@ -43,7 +43,7 @@ public class AverageDialog extends OperationDialog {
     public AverageDialog() {
         super("Average");
 
-        maxField = new IntField("Maximum number of peaks", Average.DEFAULT_MAX);
+        maxField = new IntField("Maximum number of peaks", Average.DEFAULT.max);
         maxField.setRange(-1, Integer.MAX_VALUE);
 
         ColumnPanel panel = new ColumnPanel(2);

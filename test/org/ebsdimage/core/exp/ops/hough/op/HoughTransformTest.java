@@ -22,6 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.TestCase;
@@ -30,53 +31,36 @@ import org.ebsdimage.io.HoughMapLoader;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.ByteMap;
 import rmlshared.io.FileUtil;
 
 public class HoughTransformTest extends TestCase {
 
-    private HoughTransform hough;
+    private HoughTransform op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        hough = new HoughTransform(toRadians(1.0), 1.0);
+        op = new HoughTransform(toRadians(1.0), 1.0);
     }
 
 
 
-    @Test
-    public void testEquals() {
-        assertTrue(hough.equals(hough));
-
-        assertFalse(hough.equals(null));
-
-        assertFalse(hough.equals(new Object()));
-
-        assertFalse(hough.equals(new HoughTransform()));
-
-        HoughTransform other = new HoughTransform(toRadians(1.0), 1.0);
-        assertFalse(hough == other);
-        assertTrue(hough.equals(other));
-    }
-
-
-
-    @Test
-    public void testHoughTransformOp() {
-        HoughTransform tmpHough = new HoughTransform();
-        assertEquals(HoughTransform.DEFAULT_DELTA_THETA, tmpHough.deltaTheta,
-                1e-7);
-        assertEquals(HoughTransform.DEFAULT_DELTA_RHO, tmpHough.deltaRho, 1e-7);
-    }
-
-
+    // @Test
+    // public void testHoughTransformOp() {
+    // HoughTransform tmpHough = new HoughTransform();
+    // assertEquals(HoughTransform.DEFAULT_DELTA_THETA, tmpHough.deltaTheta,
+    // 1e-7);
+    // assertEquals(HoughTransform.DEFAULT_DELTA_RHO, tmpHough.deltaRho, 1e-7);
+    // }
 
     @Test
     public void testHoughTransformOpDouble() {
-        assertEquals(toRadians(1.0), hough.deltaTheta, 1e-7);
-        assertEquals(1.0, hough.deltaRho, 1e-7);
+        assertEquals(toRadians(1.0), op.deltaTheta, 1e-7);
+        assertEquals(1.0, op.deltaRho, 1e-7);
     }
 
 
@@ -101,7 +85,7 @@ public class HoughTransformTest extends TestCase {
         HoughMap expectedMap =
                 new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghtransformop.bmp"));
 
-        HoughMap destMap = hough.transform(null, srcMap);
+        HoughMap destMap = op.transform(null, srcMap);
 
         destMap.assertEquals(expectedMap);
     }
@@ -110,8 +94,54 @@ public class HoughTransformTest extends TestCase {
 
     @Test
     public void testToString() {
-        assertEquals(hough.toString(),
+        assertEquals(op.toString(),
                 "Hough Transform [deltaTheta=1.0 deg/px, deltaRho=1.0 px/px]");
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new HoughTransform(toRadians(1.1), 1.0)));
+        assertFalse(op.equals(new HoughTransform(toRadians(1.0), 1.1)));
+        assertTrue(op.equals(new HoughTransform(toRadians(1.0), 1.0)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertFalse(op.equals(new HoughTransform(toRadians(1.0) + 0.1, 1.0),
+                1e-2));
+        assertFalse(op.equals(new HoughTransform(toRadians(1.0), 1.1), 1e-2));
+        assertTrue(op.equals(new HoughTransform(toRadians(1.0) + 0.001, 1.001),
+                1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(7866939, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        HoughTransform other = new XmlLoader().load(HoughTransform.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

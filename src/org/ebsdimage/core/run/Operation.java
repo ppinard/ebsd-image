@@ -20,7 +20,12 @@ package org.ebsdimage.core.run;
 import java.io.IOException;
 
 import net.jcip.annotations.Immutable;
-import ptpshared.utility.xml.ObjectXml;
+
+import org.ebsdimage.core.ErrorCode;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+
+import ptpshared.util.AlmostEquable;
 
 /**
  * Superclass for all operations.
@@ -28,7 +33,16 @@ import ptpshared.utility.xml.ObjectXml;
  * @author Philippe T. Pinard
  */
 @Immutable
-public abstract class Operation implements ObjectXml {
+@Root
+public abstract class Operation implements AlmostEquable {
+
+    /**
+     * Position of the operation in the array of operations. Used only in
+     * serialization and deserialization.
+     */
+    private int index = 0;
+
+
 
     /**
      * Checks if this <code>Operation</code> is equal to the specified one. If
@@ -57,16 +71,45 @@ public abstract class Operation implements ObjectXml {
 
 
 
-    /**
-     * Flushes the operation after running an experiment.
-     * 
-     * @param run
-     *            run executing this method
-     * @throws IOException
-     *             if an error occurs during the flush
-     */
-    public void tearDown(Run run) throws IOException {
+    @Override
+    public boolean equals(Object obj, double precision) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
 
+        Operation other = (Operation) obj;
+        if (!getName().equals(other.getName()))
+            return false;
+
+        return true;
+    }
+
+
+
+    /**
+     * Returns the error codes associated with the operation. By default, no
+     * error codes are defined.
+     * 
+     * @return error codes
+     */
+    public ErrorCode[] getErrorCodes() {
+        return new ErrorCode[0];
+    }
+
+
+
+    /**
+     * Returns the position of the operation in the array of operations. Used
+     * only in serialization and deserialization.
+     * 
+     * @return position of the operation
+     */
+    @Attribute(name = "opIndex")
+    public int getIndex() {
+        return this.index;
     }
 
 
@@ -100,6 +143,23 @@ public abstract class Operation implements ObjectXml {
 
 
     /**
+     * Sets the position of the operation in the array of operations. Used only
+     * in serialization and deserialization.
+     * 
+     * @param index
+     *            position of the operation
+     */
+    @Attribute(name = "opIndex")
+    public void setIndex(int index) {
+        if (index < 0)
+            throw new IllegalArgumentException(
+                    "Index must be greater or equal to zero.");
+        this.index = index;
+    }
+
+
+
+    /**
      * Initialises the operation before running an experiment.
      * 
      * @param run
@@ -108,6 +168,20 @@ public abstract class Operation implements ObjectXml {
      *             if an error occurs during the initialization
      */
     public void setUp(Run run) throws IOException {
+
+    }
+
+
+
+    /**
+     * Flushes the operation after running an experiment.
+     * 
+     * @param run
+     *            run executing this method
+     * @throws IOException
+     *             if an error occurs during the flush
+     */
+    public void tearDown(Run run) throws IOException {
 
     }
 

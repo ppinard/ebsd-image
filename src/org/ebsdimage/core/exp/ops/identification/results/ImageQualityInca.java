@@ -31,6 +31,11 @@ import rmlimage.module.real.core.RealMap;
  */
 public class ImageQualityInca extends IdentificationResultsOps {
 
+    /** Default operation. */
+    public static final ImageQualityInca DEFAULT = new ImageQualityInca();
+
+
+
     @Override
     public String toString() {
         return "Image Quality (INCA)";

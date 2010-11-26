@@ -29,6 +29,11 @@ import rmlimage.core.Filter;
  */
 public class Median extends HoughPreOps {
 
+    /** Default operation. */
+    public static final Median DEFAULT = new Median();
+
+
+
     @Override
     public String toString() {
         return "Median";

@@ -20,6 +20,7 @@ package org.ebsdimage.core.exp.ops.identification.results;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.module.real.core.RealMap;
 import rmlshared.math.Stats;
@@ -31,21 +32,12 @@ import rmlshared.math.Stats;
  */
 public class Sum extends IdentificationResultsOps {
 
+    /** Default operation. */
+    public static final Sum DEFAULT = new Sum(-1);
+
     /** Maximum number of peaks to consider in the calculations. */
+    @Attribute(name = "max")
     public final int max;
-
-    /** Default value of the maximum number of peaks. */
-    public static final int DEFAULT_MAX = -1;
-
-
-
-    /**
-     * Creates a new <code>Sum</code> result operation where an unlimited number
-     * of peaks will be used in the calculations.
-     */
-    public Sum() {
-        this(DEFAULT_MAX);
-    }
 
 
 
@@ -57,7 +49,7 @@ public class Sum extends IdentificationResultsOps {
      * @throws IllegalArgumentException
      *             if the maximum number of peaks is zero
      */
-    public Sum(int max) {
+    public Sum(@Attribute(name = "max") int max) {
         if (max == 0)
             throw new IllegalArgumentException(
                     "The maximum number of peaks cannot be zero.");
@@ -102,15 +94,27 @@ public class Sum extends IdentificationResultsOps {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
         if (!super.equals(obj))
             return false;
-        if (getClass() != obj.getClass())
-            return false;
+
         Sum other = (Sum) obj;
         if (max != other.max)
             return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        Sum other = (Sum) obj;
+        if (Math.abs(max - other.max) >= precision)
+            return false;
+
         return true;
     }
 

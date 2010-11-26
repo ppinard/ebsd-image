@@ -22,11 +22,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import crystallography.core.Crystal;
-import crystallography.core.Plane;
-import crystallography.core.Reflector;
-import crystallography.core.XrayScatteringFactors;
-import crystallography.core.crystals.Silicon;
+import crystallography.core.*;
 
 public class InterplanarAnglePairTest {
 
@@ -44,13 +40,13 @@ public class InterplanarAnglePairTest {
 
     @Before
     public void setUp() throws Exception {
-        Crystal crystal = new Silicon();
-        XrayScatteringFactors scatter = new XrayScatteringFactors();
+        Crystal crystal = CrystalFactory.silicon();
+        ScatteringFactorsEnum scatterType = ScatteringFactorsEnum.XRAY;
 
         plane0 = new Plane(1, 1, 1);
-        refl0 = new Reflector(plane0, crystal, scatter);
+        refl0 = ReflectorFactory.create(plane0, crystal, scatterType);
         plane1 = new Plane(2, 0, 0);
-        refl1 = new Reflector(plane1, crystal, scatter);
+        refl1 = ReflectorFactory.create(plane1, crystal, scatterType);
 
         pair = new InterplanarAnglePair(refl0, refl1, 0.577);
     }

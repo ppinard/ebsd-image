@@ -42,16 +42,40 @@ public class Conversion implements ConversionHandler {
     /**
      * Converts the specified <code>HoughMap</code> to a <code>ByteMap</code>.
      * 
-     * @param houghMap
+     * @param src
      *            <code>HoughMap</code> to convert.
      * @return the <code>ByteMap</code>.
      */
-    public static ByteMap toByteMap(HoughMap houghMap) {
-        ByteMap byteMap = new ByteMap(houghMap.width, houghMap.height);
-        System.arraycopy(houghMap.pixArray, 0, byteMap.pixArray, 0,
-                houghMap.size);
-        byteMap.setProperties(houghMap);
-        return byteMap;
+    public static ByteMap toByteMap(HoughMap src) {
+        ByteMap dest = new ByteMap(src.width, src.height);
+        toByteMap(src, dest);
+
+        // Clear the MAP_CHANGED flag set by toByteMap because it is a new map
+        dest.resetChanged();
+
+        return dest;
+    }
+
+
+
+    /**
+     * Converts the specified <code>HoughMap</code> to a <code>ByteMap</code>.
+     * 
+     * @param src
+     *            <code>HoughMap</code> to convert.
+     * @param dest
+     *            <code>HoughMap</code> to put the result in
+     */
+    public static void toByteMap(HoughMap src, ByteMap dest) {
+        rmlimage.core.Conversion.validate(src, dest);
+
+        // Copy pixarray
+        System.arraycopy(src.pixArray, 0, dest.pixArray, 0, src.size);
+
+        // Copy metadata
+        dest.cloneMetadataFrom(src);
+
+        dest.setChanged(Map.MAP_CHANGED);
     }
 
 
@@ -61,30 +85,42 @@ public class Conversion implements ConversionHandler {
      * information about the phases is lost. Only the <code>PhasesMap</code>
      * pixArray and LUT are copied.
      * 
-     * @param map
-     *            a <code>PhasesMap</code>
+     * @param src
+     *            <code>PhasesMap</code> to convert
      * @return converted map
      */
-    public static ByteMap toByteMap(PhasesMap map) {
-        ByteMap byteMap = new ByteMap(map.width, map.height);
+    public static ByteMap toByteMap(PhasesMap src) {
+        ByteMap dest = new ByteMap(src.width, src.height);
+        toByteMap(src, dest);
 
-        // Set the ByteMap name to the same as the PhaseMap with the
-        // suffix (ByteMap) added.
-        File file = map.getFile();
-        file = FileUtil.append(file, "(ByteMap)");
-        file = FileUtil.setExtension(file, "bmp");
-        byteMap.setFile(file);
+        // Clear the MAP_CHANGED flag set by toByteMap because it is a new map
+        dest.resetChanged();
+
+        return dest;
+    }
+
+
+
+    /**
+     * Converts a <code>PhasesMap</code> to a <code>ByteMap</code>. The
+     * information about the phases is lost. Only the <code>PhasesMap</code>
+     * pixArray and LUT are copied.
+     * 
+     * @param src
+     *            <code>PhasesMap</code> to convert
+     * @param dest
+     *            <code>PhasesMap</code> to put the result in
+     */
+    public static void toByteMap(PhasesMap src, ByteMap dest) {
+        rmlimage.core.Conversion.validate(src, dest);
 
         // Copy pixArray
-        System.arraycopy(map.pixArray, 0, byteMap.pixArray, 0, map.size);
+        System.arraycopy(src.pixArray, 0, dest.pixArray, 0, src.size);
 
-        // Copy LUT
-        byteMap.setLUT(map.getLUT());
+        // Copy metadata and LUT
+        dest.cloneMetadataFrom(src);
 
-        // Copy properties
-        byteMap.setProperties(map);
-
-        return byteMap;
+        dest.setChanged(Map.MAP_CHANGED);
     }
 
 
@@ -107,6 +143,7 @@ public class Conversion implements ConversionHandler {
      *             if any of the properties listed above are missing.
      * @see Map#setProperty(String, double)
      */
+    // TODO: Fix toHoughMap with new HoughMap calibration
     public static HoughMap toHoughMap(ByteMap byteMap) {
         // Get the needed properties from the bytemap
         double deltaR =
@@ -153,31 +190,46 @@ public class Conversion implements ConversionHandler {
      * Converts the three Euler maps in an <code>EbsdMMap</code> into a
      * <code>RGBMap</code>.
      * 
-     * @param ebsdMMap
+     * @param src
      *            an <code>EbsdMMap</code>
      * @return a Eulers <RGBMap</code>
      */
-    public static RGBMap toRGBMap(EbsdMMap ebsdMMap) {
-        RGBMap rgbMap = new RGBMap(ebsdMMap.width, ebsdMMap.height);
+    public static RGBMap toRGBMap(EbsdMMap src) {
+        RGBMap dest = new RGBMap(src.width, src.height);
+        toRGBMap(src, dest);
 
-        // Set the RGBMap name to the same as the EbsdMMap with the
-        // suffix (RGBMap) added.
-        File file = ebsdMMap.getFile();
-        file = FileUtil.append(file, "(RGBMap)");
-        file = FileUtil.setExtension(file, "bmp");
-        rgbMap.setFile(file);
+        // Clear the MAP_CHANGED flag set by toByteMap because it is a new map
+        dest.resetChanged();
 
+        return dest;
+    }
+
+
+
+    /**
+     * Converts the three Euler maps in an <code>EbsdMMap</code> into a
+     * <code>RGBMap</code>.
+     * 
+     * @param src
+     *            an <code>EbsdMMap</code>
+     * @param dest
+     *            <code>RGBMap</code> to put the result in
+     */
+    public static void toRGBMap(EbsdMMap src, RGBMap dest) {
+        rmlimage.core.Conversion.validate(src, dest);
+
+        // Set pixArray values
         int red;
         int green;
         int blue;
-        int size = ebsdMMap.size;
+        int size = src.size;
         for (int n = 0; n < size; n++) {
-            if (ebsdMMap.getPhaseId(n) == 0) {
+            if (src.getPhaseId(n) == 0) {
                 red = 0;
                 blue = 0;
                 green = 0;
             } else {
-                Eulers eulers = ebsdMMap.getRotation(n).toEuler();
+                Eulers eulers = src.getRotation(n).toEuler();
 
                 red = (int) ((eulers.theta1 + PI) / (2 * PI) * 255 + 0.5);
                 assert (red >= 0 && red <= 255) : "Invalid euler1 ("
@@ -195,10 +247,13 @@ public class Conversion implements ConversionHandler {
                         + "Should be between -PI and PI.";
             }
 
-            rgbMap.pixArray[n] = (red << 16) | (green << 8) | blue;
+            dest.pixArray[n] = (red << 16) | (green << 8) | blue;
         }
 
-        return rgbMap;
+        // Copy metadata and LUT
+        dest.cloneMetadataFrom(src);
+
+        dest.setChanged(Map.MAP_CHANGED);
     }
 
 
@@ -224,5 +279,22 @@ public class Conversion implements ConversionHandler {
             return toByteMap((PhasesMap) map);
         else
             return null;
+    }
+
+
+
+    @Override
+    public boolean convert(Map src, Map dest) {
+        if (src instanceof HoughMap && dest.getClass() == ByteMap.class) {
+            toByteMap((HoughMap) src, (ByteMap) dest);
+            return true;
+        } else if (src instanceof EbsdMMap && dest.getClass() == RGBMap.class) {
+            toRGBMap((EbsdMMap) src, (RGBMap) dest);
+            return true;
+        } else if (src instanceof PhasesMap && dest.getClass() == ByteMap.class) {
+            toByteMap((PhasesMap) src, (ByteMap) dest);
+            return true;
+        } else
+            return false;
     }
 }

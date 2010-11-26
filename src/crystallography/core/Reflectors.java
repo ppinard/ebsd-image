@@ -20,52 +20,10 @@ package crystallography.core;
 import static java.util.Arrays.sort;
 import static ptpshared.utility.Arrays.reverse;
 
-import java.io.Serializable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
 
 import net.jcip.annotations.Immutable;
-
-/**
- * Comparator for <code>Reflector</code> according to their intensity.
- * 
- * @author Philippe T. Pinard
- */
-class IntensityComparator implements Comparator<Reflector>, Serializable {
-
-    @Override
-    public int compare(Reflector refl0, Reflector refl1) {
-        double intensity0 = refl0.intensity;
-        double intensity1 = refl1.intensity;
-
-        if (intensity0 < intensity1)
-            return -1;
-        else if (intensity0 > intensity1)
-            return 1;
-        else
-            return 0;
-    }
-}
-
-/**
- * Comparator for <code>Reflector</code> according to their plane spacing.
- * 
- * @author Philippe T. Pinard
- */
-class PlaneSpacingComparator implements Comparator<Reflector>, Serializable {
-
-    @Override
-    public int compare(Reflector refl0, Reflector refl1) {
-        double planeSpacing0 = refl0.planeSpacing;
-        double planeSpacing1 = refl1.planeSpacing;
-
-        if (planeSpacing0 < planeSpacing1)
-            return -1;
-        else if (planeSpacing0 > planeSpacing1)
-            return 1;
-        else
-            return 0;
-    }
-}
 
 /**
  * List of <code>Reflector</code>s of a crystal. The class finds all the
@@ -96,91 +54,28 @@ public class Reflectors implements Iterable<Reflector> {
 
 
     /**
-     * Creates a new list of <code>Reflector</code> for the given crystal. The
-     * reflectors are automatically computed for all planes with indices less or
-     * equal to <code>maxIndice</code>. Only diffracting plane are added.
+     * Creates a new <code>Reflectors</code> with the given crystal and array of
+     * <code>Reflector</code>. Use
+     * {@link ReflectorsFactory#generate(Crystal, ScatteringFactors, int)} to
+     * create a <code>Reflectors</code>.
      * 
      * @param crystal
-     *            a <code>Crystal</code> representing a unit cell and atom sites
-     * @param scatter
-     *            scattering factors
-     * @param maxIndex
-     *            maximum index of the planes to compute
-     * @throws NullPointerException
-     *             if the crystal is null
-     * @throws NullPointerException
-     *             if the scattering factors is null
-     * @throws IllegalArgumentException
-     *             if the maxIndex is less than 0
+     *            crystal
+     * @param reflectors
+     *            array of reflectors
      */
-    public Reflectors(Crystal crystal, ScatteringFactors scatter, int maxIndex) {
+    protected Reflectors(Crystal crystal, Reflector[] reflectors) {
         if (crystal == null)
             throw new NullPointerException("Crystal cannot be null.");
-        if (scatter == null)
-            throw new NullPointerException("Scattering factors cannot be null.");
-        if (maxIndex < 1)
-            throw new IllegalArgumentException(
-                    "The maximum index has to greater or equal to 1.");
+        if (reflectors == null)
+            throw new NullPointerException("Reflectors array cannot be null.");
+        for (int i = 0; i < reflectors.length; i++)
+            if (reflectors[i] == null)
+                throw new NullPointerException("Reflector at position (" + i
+                        + ") is null.");
 
         this.crystal = crystal;
-
-        ArrayList<Reflector> tmpRefls = new ArrayList<Reflector>();
-        UnitCell unitCell = crystal.unitCell;
-        AtomSites atoms = crystal.atoms;
-
-        double maxDiffractionIntensity =
-                Calculations.maximumDiffractionIntensity(unitCell, atoms,
-                        scatter);
-
-        // Find reflectors
-        for (int h = -maxIndex; h <= maxIndex; h++)
-            for (int k = -maxIndex; k <= maxIndex; k++)
-                for (int l = -maxIndex; l <= maxIndex; l++) {
-                    // Create plane
-                    // Only look at positive planes since negative plane are
-                    // equivalent
-                    Plane p;
-                    try {
-                        p = new Plane(h, k, l).positive();
-                    } catch (InvalidPlaneException e) {
-                        continue;
-                    }
-
-                    // Calculate the intensities
-                    double intensity =
-                            Calculations.diffractionIntensity(p, unitCell,
-                                    atoms, scatter);
-
-                    // Check if the plane diffracts
-                    if (Calculations.isDiffracting(intensity,
-                            maxDiffractionIntensity, 1e-14)) {
-                        double planeSpacing =
-                                Calculations.planeSpacing(p, unitCell);
-                        Reflector reflector =
-                                new Reflector(p, planeSpacing, intensity);
-
-                        // Add only if it doesn't already exists
-                        if (!(tmpRefls.contains(reflector)))
-                            tmpRefls.add(reflector);
-                    }
-                }
-
-        // Sort reflectors by intensity
-        Collections.sort(tmpRefls, new IntensityComparator());
-        Collections.reverse(tmpRefls);
-
-        // Find max intensity
-        double maxIntensity = tmpRefls.get(0).intensity;
-
-        // Initalize reflectors array
-        reflectors = new Reflector[tmpRefls.size()];
-
-        // Calculate normalized intensity and add reflector to class ArrayList
-        for (int i = 0; i < tmpRefls.size(); i++) {
-            Reflector refl = tmpRefls.get(i);
-            double normalizedIntensity = refl.intensity / maxIntensity;
-            reflectors[i] = new Reflector(refl, normalizedIntensity);
-        }
+        this.reflectors = reflectors;
     }
 
 

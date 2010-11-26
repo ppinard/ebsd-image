@@ -18,14 +18,22 @@
 package org.ebsdimage.core.exp.ops.detection.pre;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughMap;
 import org.junit.Before;
 import org.junit.Test;
 
-public class DetectionPreOpsMockTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 
-    private DetectionPreOps op;
+public class DetectionPreOpsMockTest extends TestCase {
+
+    private DetectionPreOpsMock op;
 
     private HoughMap srcMap;
 
@@ -55,6 +63,47 @@ public class DetectionPreOpsMockTest {
         byte[] srcPixArray = new byte[] { 7, 11, 15, 19 };
         for (int i = 0; i < result.size; i++)
             assertEquals(srcPixArray[i % 4], result.pixArray[i]);
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new DetectionPreOpsMock()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new DetectionPreOpsMock(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(1755297693, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        DetectionPreOpsMock other =
+                new XmlLoader().load(DetectionPreOpsMock.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

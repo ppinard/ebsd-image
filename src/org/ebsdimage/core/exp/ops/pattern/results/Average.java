@@ -31,6 +31,11 @@ import rmlimage.module.real.core.RealMap;
  */
 public class Average extends PatternResultsOps {
 
+    /** Default operation. */
+    public static final Average DEFAULT = new Average();
+
+
+
     /**
      * Calculates the average quality index of the source map.
      * 

@@ -18,15 +18,23 @@
 package org.ebsdimage.core.exp.ops.identification.results;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.OpResult;
 import org.junit.Before;
 import org.junit.Test;
 
-public class CountTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 
-    private Count count;
+public class CountTest extends TestCase {
+
+    private Count op;
 
     private HoughPeak[] peaks;
 
@@ -46,7 +54,7 @@ public class CountTest {
 
         peaks = new HoughPeak[] { peak1, peak2, peak3 };
 
-        count = new Count();
+        op = new Count();
     }
 
 
@@ -54,7 +62,7 @@ public class CountTest {
     @Test
     public void testCalculate() {
         double expected = peaks.length;
-        OpResult result = count.calculate(null, peaks)[0];
+        OpResult result = op.calculate(null, peaks)[0];
 
         assertEquals(expected, result.value.doubleValue(), 1e-7);
     }
@@ -63,7 +71,47 @@ public class CountTest {
 
     @Test
     public void testToString() {
-        assertEquals(count.toString(), "Peaks Count");
+        assertEquals(op.toString(), "Peaks Count");
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new Count()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new Count(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(65298702, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        Count other = new XmlLoader().load(Count.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

@@ -20,9 +20,11 @@ package org.ebsdimage.core.exp.ops.pattern.op;
 import java.io.IOException;
 
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Root;
 
 import rmlimage.core.ByteMap;
 
+@Root
 public class PatternOpMock extends PatternOp {
 
     public PatternOpMock() {

@@ -38,6 +38,11 @@ import rmlimage.module.real.core.RealMap;
  */
 public class Area extends DetectionResultsOps {
 
+    /** Default operation. */
+    public static final Area DEFAULT = new Area();
+
+
+
     @Override
     public OpResult[] calculate(Exp exp, BinMap peaksMap) {
         IdentMap identMap = Identification.identify(peaksMap);

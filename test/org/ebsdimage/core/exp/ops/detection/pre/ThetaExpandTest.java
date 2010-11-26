@@ -21,15 +21,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughMap;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ThetaExpandTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 
-    private ThetaExpand thetaExpand;
+public class ThetaExpandTest extends TestCase {
+
+    private ThetaExpand op;
 
     private HoughMap houghMap;
 
@@ -37,7 +42,7 @@ public class ThetaExpandTest {
 
     @Before
     public void setUp() throws Exception {
-        thetaExpand = new ThetaExpand(1);
+        op = new ThetaExpand(1);
         houghMap = new HoughMap(3, 3, 1, 1);
         houghMap.pixArray[0] = 1;
         houghMap.pixArray[1] = 2;
@@ -56,7 +61,7 @@ public class ThetaExpandTest {
 
     @Test
     public void testProcess() throws IOException {
-        HoughMap destMap = thetaExpand.process(null, houghMap);
+        HoughMap destMap = op.process(null, houghMap);
 
         assertEquals(4, destMap.width);
         assertEquals(3, destMap.height);
@@ -79,28 +84,8 @@ public class ThetaExpandTest {
 
 
     @Test
-    public void testThetaExpand() {
-        ThetaExpand other = new ThetaExpand();
-        assertEquals(ThetaExpand.DEFAULT_INCREMENT, other.increment, 1e-7);
-    }
-
-
-
-    @Test
     public void testThetaExpandInt() {
-        assertEquals(1, thetaExpand.increment, 1e-7);
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        ThetaExpand other = new ThetaExpand(1);
-
-        assertFalse(other == thetaExpand);
-        assertTrue(other.equals(thetaExpand));
-
-        assertFalse(new ThetaExpand(2).equals(thetaExpand));
+        assertEquals(1, op.increment, 1e-7);
     }
 
 
@@ -108,7 +93,49 @@ public class ThetaExpandTest {
     @Test
     public void testToString() {
         String expected = "ThetaExpand [increment=57.29577951308232 deg]";
-        assertEquals(expected, thetaExpand.toString());
+        assertEquals(expected, op.toString());
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new ThetaExpand(2)));
+        assertTrue(op.equals(new ThetaExpand(1)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertFalse(op.equals(new ThetaExpand(1.1), 1e-2));
+        assertTrue(op.equals(new ThetaExpand(1.001), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(1151098889, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        ThetaExpand other = new XmlLoader().load(ThetaExpand.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

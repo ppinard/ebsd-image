@@ -21,15 +21,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
 import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.ByteMap;
 
 public class SumTest extends TestCase {
 
-    private Sum sum;
+    private Sum op;
 
     private ByteMap patternMap;
 
@@ -37,7 +41,7 @@ public class SumTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        sum = new Sum(0.2, 0.3, 0.5, 0.6);
+        op = new Sum(0.2, 0.3, 0.5, 0.6);
         patternMap =
                 (ByteMap) load(getFile("org/ebsdimage/testdata/pattern.bmp"));
     }
@@ -46,7 +50,7 @@ public class SumTest extends TestCase {
 
     @Test
     public void testCalculateByteMap() {
-        double value = sum.calculateSum(patternMap);
+        double value = op.calculateSum(patternMap);
         assertEquals(801235, value, 1e-6);
     }
 
@@ -54,33 +58,10 @@ public class SumTest extends TestCase {
 
     @Test
     public void testAverageRegionDoubleDoubleDoubleDouble() {
-        assertEquals(0.2, sum.xmin, 1e-6);
-        assertEquals(0.3, sum.ymin, 1e-6);
-        assertEquals(0.5, sum.xmax, 1e-6);
-        assertEquals(0.6, sum.ymax, 1e-6);
-    }
-
-
-
-    @Test
-    public void testAverageRegion() {
-        Sum other = new Sum();
-        assertEquals(Sum.DEFAULT_XMIN, other.xmin, 1e-6);
-        assertEquals(Sum.DEFAULT_YMIN, other.ymin, 1e-6);
-        assertEquals(Sum.DEFAULT_XMAX, other.xmax, 1e-6);
-        assertEquals(Sum.DEFAULT_YMAX, other.ymax, 1e-6);
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        Sum other = new Sum(0.2, 0.3, 0.5, 0.6);
-
-        assertFalse(other == sum);
-        assertTrue(other.equals(sum));
-
-        assertFalse(new Sum(0.2, 0.3, 0.5, 0.9).equals(sum));
+        assertEquals(0.2, op.xmin, 1e-6);
+        assertEquals(0.3, op.ymin, 1e-6);
+        assertEquals(0.5, op.xmax, 1e-6);
+        assertEquals(0.6, op.ymax, 1e-6);
     }
 
 
@@ -88,7 +69,55 @@ public class SumTest extends TestCase {
     @Test
     public void testToString() {
         String expected = "Sum [xmin=0.2, ymin=0.3, xmax=0.5, ymax=0.6]";
-        assertEquals(expected, sum.toString());
+        assertEquals(expected, op.toString());
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new Sum(0.3, 0.3, 0.5, 0.6)));
+        assertFalse(op.equals(new Sum(0.2, 0.4, 0.5, 0.6)));
+        assertFalse(op.equals(new Sum(0.2, 0.3, 0.6, 0.6)));
+        assertFalse(op.equals(new Sum(0.2, 0.3, 0.5, 0.7)));
+        assertTrue(op.equals(new Sum(0.2, 0.3, 0.5, 0.6)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-3));
+        assertFalse(op.equals(null, 1e-3));
+        assertFalse(op.equals(new Object(), 1e-3));
+
+        assertFalse(op.equals(new Sum(0.21, 0.3, 0.5, 0.6), 1e-3));
+        assertFalse(op.equals(new Sum(0.2, 0.31, 0.5, 0.6), 1e-3));
+        assertFalse(op.equals(new Sum(0.2, 0.3, 0.51, 0.6), 1e-3));
+        assertFalse(op.equals(new Sum(0.2, 0.3, 0.5, 0.61), 1e-3));
+        assertTrue(op.equals(new Sum(0.2001, 0.3001, 0.5001, 0.6001), 1e-3));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(377560205, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        Sum other = new XmlLoader().load(Sum.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

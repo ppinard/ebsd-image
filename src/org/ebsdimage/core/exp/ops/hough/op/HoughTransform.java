@@ -17,12 +17,13 @@
  */
 package org.ebsdimage.core.exp.ops.hough.op;
 
-import static java.lang.Math.PI;
+import static java.lang.Math.abs;
 import static java.lang.Math.toDegrees;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.Transform;
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
 import rmlimage.core.Filter;
@@ -35,27 +36,25 @@ import rmlimage.core.Filter;
 public class HoughTransform extends HoughOp {
 
     /** Resolution in theta of the Hough transform (in radians/px). */
+    @Attribute(name = "deltaTheta")
     public final double deltaTheta;
 
-    /** Default resolution in theta of the Hough transform (0.5 deg). */
-    public static final double DEFAULT_DELTA_THETA = 0.5 / 180 * PI;
-
     /** Resolution in rho of the Hough transform (in px/px). */
+    @Attribute(name = "deltaRho")
     public final double deltaRho;
 
-    /** Default resolution in rho of the Hough transform (1 px/px). */
-    public static final double DEFAULT_DELTA_RHO = 1.0;
+    /** Default operation. */
+    public static final HoughTransform DEFAULT = new HoughTransform(
+            Math.toRadians(0.5), 1.0);
 
 
 
-    /**
-     * Creates a new Hough transform operation with the default values.
-     */
-    public HoughTransform() {
-        this(DEFAULT_DELTA_THETA, DEFAULT_DELTA_RHO);
-    }
-
-
+    // /**
+    // * Creates a new Hough transform operation with the default values.
+    // */
+    // public HoughTransform() {
+    // this(DEFAULT_DELTA_THETA, DEFAULT_DELTA_RHO);
+    // }
 
     /**
      * Creates a new Hough transform operation using the specified resolutions.
@@ -69,7 +68,8 @@ public class HoughTransform extends HoughOp {
      * @throws IllegalArgumentException
      *             if the rho resolution is less or equal to zero
      */
-    public HoughTransform(double deltaTheta, double deltaRho) {
+    public HoughTransform(@Attribute(name = "deltaTheta") double deltaTheta,
+            @Attribute(name = "deltaRho") double deltaRho) {
         if (deltaTheta <= 0)
             throw new IllegalArgumentException("Resolution in theta ("
                     + deltaTheta + ") must be > 0");
@@ -121,17 +121,29 @@ public class HoughTransform extends HoughOp {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
         if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
             return false;
 
         HoughTransform other = (HoughTransform) obj;
         if (Double.doubleToLongBits(deltaRho) != Double.doubleToLongBits(other.deltaRho))
             return false;
         if (Double.doubleToLongBits(deltaTheta) != Double.doubleToLongBits(other.deltaTheta))
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        HoughTransform other = (HoughTransform) obj;
+        if (abs(deltaTheta - other.deltaTheta) >= precision)
+            return false;
+        if (abs(deltaRho - other.deltaRho) >= precision)
             return false;
 
         return true;

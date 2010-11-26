@@ -21,14 +21,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.OpResult;
 import org.junit.Before;
 import org.junit.Test;
 
-public class RangeTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 
-    private Range range;
+public class RangeTest extends TestCase {
+
+    private Range op;
 
     private HoughPeak[] peaks;
 
@@ -36,7 +42,7 @@ public class RangeTest {
 
     @Before
     public void setUp() throws Exception {
-        range = new Range(2);
+        op = new Range(2);
         peaks =
                 new HoughPeak[] { new HoughPeak(3.0, 0.5, 1),
                         new HoughPeak(5.0, 1.5, 2), new HoughPeak(7.0, 2.5, 4) };
@@ -45,32 +51,20 @@ public class RangeTest {
 
 
     @Test
-    public void testEqualsObject() {
-        Range other = new Range(2);
-
-        assertFalse(other == range);
-        assertTrue(other.equals(range));
-
-        assertFalse(new Range(3).equals(range));
-    }
-
-
-
-    @Test
     public void testToString() {
         String expected = "Range [max=2]";
-        assertEquals(expected, range.toString());
+        assertEquals(expected, op.toString());
     }
 
 
 
     @Test
     public void testCalculate() {
-        OpResult[] results = range.calculate(null, peaks);
+        OpResult[] results = op.calculate(null, peaks);
         assertEquals(1, results.length);
         assertEquals(2.0, results[0].value.doubleValue(), 1e-6);
 
-        results = new Range().calculate(null, peaks);
+        results = new Range(-1).calculate(null, peaks);
         assertEquals(1, results.length);
         assertEquals(3.0, results[0].value.doubleValue(), 1e-6);
     }
@@ -78,16 +72,49 @@ public class RangeTest {
 
 
     @Test
-    public void testRange() {
-        Range other = new Range();
-        assertEquals(Range.DEFAULT_MAX, other.max);
+    public void testRangeInt() {
+        assertEquals(2, op.max);
     }
 
 
 
     @Test
-    public void testRangeInt() {
-        assertEquals(2, range.max);
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new Range(2)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 2));
+        assertFalse(op.equals(null, 2));
+        assertFalse(op.equals(new Object(), 2));
+
+        assertFalse(op.equals(new Range(4), 2));
+        assertTrue(op.equals(new Range(1), 2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-1854415290, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        Range other = new XmlLoader().load(Range.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

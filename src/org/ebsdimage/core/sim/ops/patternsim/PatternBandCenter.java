@@ -22,6 +22,7 @@ import static java.lang.Math.ceil;
 import java.awt.geom.Line2D;
 
 import org.ebsdimage.core.sim.Band;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.module.real.core.Drawing;
 import rmlimage.module.real.core.RealMap;
@@ -34,12 +35,9 @@ import crystallography.core.ScatteringFactorsEnum;
  */
 public class PatternBandCenter extends PatternSimOp {
 
-    /**
-     * Creates a new <code>PatternBandCenter</code>.
-     */
-    public PatternBandCenter() {
-        super();
-    }
+    /** Default operation. */
+    public static final PatternBandCenter DEFAULT = new PatternBandCenter(1344,
+            1024, 6, ScatteringFactorsEnum.XRAY);
 
 
 
@@ -61,8 +59,10 @@ public class PatternBandCenter extends PatternSimOp {
      * @throws IllegalArgumentException
      *             if the maximum index is less than zero
      */
-    public PatternBandCenter(int width, int height, int maxIndex,
-            ScatteringFactorsEnum scatterType) {
+    public PatternBandCenter(@Attribute(name = "width") int width,
+            @Attribute(name = "height") int height,
+            @Attribute(name = "maxIndex") int maxIndex,
+            @Attribute(name = "scatterType") ScatteringFactorsEnum scatterType) {
         super(width, height, maxIndex, scatterType);
     }
 

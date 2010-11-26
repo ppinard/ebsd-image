@@ -39,6 +39,11 @@ import rmlimage.module.real.core.RealMap;
  */
 public class Diameter extends DetectionResultsOps {
 
+    /** Default operation. */
+    public static final Diameter DEFAULT = new Diameter();
+
+
+
     @Override
     public OpResult[] calculate(Exp exp, BinMap peaksMap) {
         IdentMap identMap = Identification.identify(peaksMap);

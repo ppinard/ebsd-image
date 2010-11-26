@@ -31,7 +31,10 @@ public class PatternBandEdgesDialog extends PatternSimOpDialog {
      * Creates a new <code>PatternBandEdgesDialog</code>.
      */
     public PatternBandEdgesDialog() {
-        super("Pattern Band Edges");
+        super("Pattern Band Edges", PatternBandEdges.DEFAULT.width,
+                PatternBandEdges.DEFAULT.height,
+                PatternBandEdges.DEFAULT.maxIndex,
+                PatternBandEdges.DEFAULT.scatterType);
     }
 
 

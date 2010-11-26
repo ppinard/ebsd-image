@@ -26,6 +26,7 @@ import org.ebsdimage.core.sim.Band;
 import org.ebsdimage.core.sim.BandException;
 import org.ebsdimage.core.sim.Energy;
 import org.ebsdimage.core.sim.Sim;
+import org.simpleframework.xml.Attribute;
 
 import ptpshared.core.math.Quaternion;
 import rmlimage.core.ByteMap;
@@ -33,7 +34,6 @@ import rmlimage.module.real.core.Contrast;
 import rmlimage.module.real.core.Conversion;
 import rmlimage.module.real.core.RealMap;
 import rmlimage.module.real.core.ThreeSigmaRenderer;
-import rmlshared.thread.Reflection;
 import crystallography.core.*;
 
 /**
@@ -44,29 +44,75 @@ import crystallography.core.*;
 public abstract class PatternSimOp extends Operation {
 
     /** Width of the pattern. */
+    @Attribute(name = "width")
     public final int width;
 
-    /** Default width of the pattern. */
-    public static final int DEFAULT_WIDTH = 1344;
+
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + height;
+        result = prime * result + maxIndex;
+        result =
+                prime * result
+                        + ((scatterType == null) ? 0 : scatterType.hashCode());
+        result = prime * result + width;
+        return result;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!super.equals(obj))
+            return false;
+
+        PatternSimOp other = (PatternSimOp) obj;
+        if (height != other.height)
+            return false;
+        if (maxIndex != other.maxIndex)
+            return false;
+        if (scatterType != other.scatterType)
+            return false;
+        if (width != other.width)
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        PatternSimOp other = (PatternSimOp) obj;
+        if (Math.abs(height - other.height) >= precision)
+            return false;
+        if (Math.abs(width - other.width) >= precision)
+            return false;
+        if (scatterType != other.scatterType)
+            return false;
+        if (Math.abs(maxIndex - other.maxIndex) >= precision)
+            return false;
+
+        return true;
+    }
 
     /** Height of the pattern. */
+    @Attribute(name = "height")
     public final int height;
 
-    /** Default height of the pattern. */
-    public static final int DEFAULT_HEIGHT = 1024;
-
     /** Maximum reflector index. */
+    @Attribute(name = "maxIndex")
     public final int maxIndex;
 
-    /** Default maximum reflector index. */
-    public static final int DEFAULT_MAX_INDEX = 6;
-
     /** Type of scattering factors. */
+    @Attribute(name = "scatterType")
     public final ScatteringFactorsEnum scatterType;
-
-    /** Default type of scattering factors. */
-    public static final ScatteringFactorsEnum DEFAULT_SCATTER_TYPE =
-            ScatteringFactorsEnum.XRAY;
 
     /** List of bands. */
     protected ArrayList<Band> bands;
@@ -76,16 +122,6 @@ public abstract class PatternSimOp extends Operation {
 
     /** Pattern's <code>RealMap</code>. */
     protected RealMap patternRealMap;
-
-
-
-    /**
-     * Creates a new pattern simulation operation with the default parameters.
-     */
-    public PatternSimOp() {
-        this(DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_MAX_INDEX,
-                DEFAULT_SCATTER_TYPE);
-    }
 
 
 
@@ -173,9 +209,7 @@ public abstract class PatternSimOp extends Operation {
      * @return reflectors
      */
     public Reflectors calculateReflectors(Crystal crystal) {
-        ScatteringFactors scatter =
-                (ScatteringFactors) Reflection.newInstance(scatterType.getScatteringFactors());
-        return new Reflectors(crystal, scatter, maxIndex);
+        return ReflectorsFactory.generate(crystal, scatterType, maxIndex);
     }
 
 

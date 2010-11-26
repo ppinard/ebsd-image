@@ -24,8 +24,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import crystallography.core.crystals.Silicon;
-
 public class ReflectorTest {
 
     private Reflector refl;
@@ -94,11 +92,12 @@ public class ReflectorTest {
 
     @Test
     public void testReflectorPlaneUnitCellAtomSitesScatteringFactors() {
-        Crystal crystal = new Silicon();
+        Crystal crystal = CrystalFactory.silicon();
         Plane plane = new Plane(1, 1, 1);
 
         Reflector other =
-                new Reflector(plane, crystal, new XrayScatteringFactors());
+                ReflectorFactory.create(plane, crystal,
+                        ScatteringFactorsEnum.XRAY);
 
         assertEquals(plane, other.plane);
         assertEquals(3.13501196, other.planeSpacing, 1e-7);

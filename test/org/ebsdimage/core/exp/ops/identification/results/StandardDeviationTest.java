@@ -21,14 +21,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.OpResult;
 import org.junit.Before;
 import org.junit.Test;
 
-public class StandardDeviationTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 
-    private StandardDeviation stdDev;
+public class StandardDeviationTest extends TestCase {
+
+    private StandardDeviation op;
 
     private HoughPeak[] peaks;
 
@@ -36,7 +42,7 @@ public class StandardDeviationTest {
 
     @Before
     public void setUp() throws Exception {
-        stdDev = new StandardDeviation(2);
+        op = new StandardDeviation(2);
         peaks =
                 new HoughPeak[] { new HoughPeak(3.0, 0.5, 1),
                         new HoughPeak(5.0, 1.5, 2), new HoughPeak(7.0, 2.5, 4) };
@@ -45,32 +51,20 @@ public class StandardDeviationTest {
 
 
     @Test
-    public void testEqualsObject() {
-        StandardDeviation other = new StandardDeviation(2);
-
-        assertFalse(other == stdDev);
-        assertTrue(other.equals(stdDev));
-
-        assertFalse(new StandardDeviation(3).equals(stdDev));
-    }
-
-
-
-    @Test
     public void testToString() {
         String expected = "Standard Deviation [max=2]";
-        assertEquals(expected, stdDev.toString());
+        assertEquals(expected, op.toString());
     }
 
 
 
     @Test
     public void testCalculate() {
-        OpResult[] results = stdDev.calculate(null, peaks);
+        OpResult[] results = op.calculate(null, peaks);
         assertEquals(1, results.length);
         assertEquals(1.41421356, results[0].value.doubleValue(), 1e-6);
 
-        results = new StandardDeviation().calculate(null, peaks);
+        results = new StandardDeviation(-1).calculate(null, peaks);
         assertEquals(1, results.length);
         assertEquals(1.52752523, results[0].value.doubleValue(), 1e-6);
     }
@@ -78,16 +72,50 @@ public class StandardDeviationTest {
 
 
     @Test
-    public void testStandardDeviation() {
-        StandardDeviation other = new StandardDeviation();
-        assertEquals(StandardDeviation.DEFAULT_MAX, other.max);
+    public void testStandardDeviationInt() {
+        assertEquals(2, op.max);
     }
 
 
 
     @Test
-    public void testStandardDeviationInt() {
-        assertEquals(2, stdDev.max);
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new StandardDeviation(2)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 2));
+        assertFalse(op.equals(null, 2));
+        assertFalse(op.equals(new Object(), 2));
+
+        assertFalse(op.equals(new StandardDeviation(4), 2));
+        assertTrue(op.equals(new StandardDeviation(1), 2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(811617823, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        StandardDeviation other =
+                new XmlLoader().load(StandardDeviation.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

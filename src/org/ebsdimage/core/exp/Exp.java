@@ -17,13 +17,12 @@
  */
 package org.ebsdimage.core.exp;
 
-import static java.util.Arrays.sort;
 import static org.ebsdimage.core.exp.ExpConstants.*;
-import static ptpshared.utility.Arrays.reverse;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.ebsdimage.core.*;
 import org.ebsdimage.core.exp.ops.detection.op.AutomaticTopHat;
@@ -31,13 +30,13 @@ import org.ebsdimage.core.exp.ops.detection.op.DetectionOp;
 import org.ebsdimage.core.exp.ops.detection.post.DetectionPostOps;
 import org.ebsdimage.core.exp.ops.detection.pre.DetectionPreOps;
 import org.ebsdimage.core.exp.ops.detection.results.DetectionResultsOps;
+import org.ebsdimage.core.exp.ops.hough.op.AutoHoughTransform;
 import org.ebsdimage.core.exp.ops.hough.op.HoughOp;
-import org.ebsdimage.core.exp.ops.hough.op.HoughTransform;
 import org.ebsdimage.core.exp.ops.hough.post.HoughPostOps;
 import org.ebsdimage.core.exp.ops.hough.pre.HoughPreOps;
 import org.ebsdimage.core.exp.ops.hough.results.HoughResultsOps;
+import org.ebsdimage.core.exp.ops.identification.op.CenterOfMass;
 import org.ebsdimage.core.exp.ops.identification.op.IdentificationOp;
-import org.ebsdimage.core.exp.ops.identification.op.LocalCentroidMaxIntensity;
 import org.ebsdimage.core.exp.ops.identification.post.IdentificationPostOps;
 import org.ebsdimage.core.exp.ops.identification.pre.IdentificationPreOps;
 import org.ebsdimage.core.exp.ops.identification.results.IdentificationResultsOps;
@@ -51,6 +50,11 @@ import org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps;
 import org.ebsdimage.core.exp.ops.pattern.results.PatternResultsOps;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.run.Run;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.core.Persist;
+import org.simpleframework.xml.core.Validate;
 
 import ptpshared.io.FileUtil;
 import rmlimage.core.BinMap;
@@ -66,14 +70,12 @@ import crystallography.core.Crystal;
  */
 public class Exp extends Run {
 
-    /** Save maps during the run. */
-    public final CurrentMapsSaver currentMapsSaver;
+    /** Experiment listeners. */
+    @ElementList(name = "listeners")
+    private ArrayList<ExpListener> listeners = new ArrayList<ExpListener>();
 
     /** <code>MultiMap</code> holding the result and metadata for the experiment. */
     public final EbsdMMap mmap;
-
-    /** Pattern operation of the experiment. */
-    private PatternOp patternOp = null;
 
     /** Runtime variable for the source pattern map. */
     protected ByteMap sourcePatternMap;
@@ -96,85 +98,107 @@ public class Exp extends Run {
     /** Runtime variable of the solutions. */
     protected Solution[] currentSolutions;
 
+    /** Pattern operation of the experiment. */
+    @Element(name = "patternOp")
+    private PatternOp patternOp = null;
+
     /** List of pattern post operations of the experiment. */
+    @ElementList(name = "patternPostOps")
     private ArrayList<PatternPostOps> patternPostOps =
             new ArrayList<PatternPostOps>();
 
     /** List of pattern results operations of the experiment. */
+    @ElementList(name = "patternResultsOps")
     private ArrayList<PatternResultsOps> patternResultsOps =
             new ArrayList<PatternResultsOps>();
 
     /** List of Hough pre operations of the experiment. */
+    @ElementList(name = "houghPreOps")
     private ArrayList<HoughPreOps> houghPreOps = new ArrayList<HoughPreOps>();
 
     /** Default Hough operation. */
-    public static final HoughOp DEFAULT_HOUGH_OP = new HoughTransform();
+    public static final HoughOp DEFAULT_HOUGH_OP = AutoHoughTransform.DEFAULT;
 
     /** Hough operation. */
+    @Element(name = "houghOp")
     private HoughOp houghOp = DEFAULT_HOUGH_OP;
 
     /** List of Hough post operations of the experiment. */
+    @ElementList(name = "houghPostOps")
     private ArrayList<HoughPostOps> houghPostOps =
             new ArrayList<HoughPostOps>();
 
     /** List of Hough results operations of the experiment. */
+    @ElementList(name = "houghResultsOps")
     private ArrayList<HoughResultsOps> houghResultsOps =
             new ArrayList<HoughResultsOps>();
 
     /** List of detection pre operations of the experiment. */
+    @ElementList(name = "detectionPreOps")
     private ArrayList<DetectionPreOps> detectionPreOps =
             new ArrayList<DetectionPreOps>();
 
     /** Default detection operation. */
     public static final DetectionOp DEFAULT_DETECTION_OP =
-            new AutomaticTopHat();
+            AutomaticTopHat.DEFAULT;
 
     /** Detection operation. */
+    @Element(name = "detectionOp")
     private DetectionOp detectionOp = DEFAULT_DETECTION_OP;
 
     /** List of detection post operations of the experiment. */
+    @ElementList(name = "detectionPostOps")
     private ArrayList<DetectionPostOps> detectionPostOps =
             new ArrayList<DetectionPostOps>();
 
     /** List of detection results operations of the experiment. */
+    @ElementList(name = "detectionResultsOps")
     private ArrayList<DetectionResultsOps> detectionResultsOps =
             new ArrayList<DetectionResultsOps>();
 
     /** List of identification pre operations of the experiment. */
+    @ElementList(name = "identificationPreOps")
     private ArrayList<IdentificationPreOps> identificationPreOps =
             new ArrayList<IdentificationPreOps>();
 
     /** Default identification operation. */
     public static final IdentificationOp DEFAULT_IDENTIFICATION_OP =
-            new LocalCentroidMaxIntensity();
+            CenterOfMass.DEFAULT;
 
     /** Identification operation. */
+    @Element(name = "identificationOp")
     private IdentificationOp identificationOp = DEFAULT_IDENTIFICATION_OP;
 
     /** List of identification post operations of the experiment. */
+    @ElementList(name = "identificationPostOps")
     private ArrayList<IdentificationPostOps> identificationPostOps =
             new ArrayList<IdentificationPostOps>();
 
     /** List of identification results operations of the experiment. */
+    @ElementList(name = "identificationResultsOps")
     private ArrayList<IdentificationResultsOps> identificationResultsOps =
             new ArrayList<IdentificationResultsOps>();
 
     /** List of indexing pre operations of the experiment. */
+    @ElementList(name = "indexingPreOps")
     private ArrayList<IndexingPreOps> indexingPreOps =
             new ArrayList<IndexingPreOps>();
 
     /** Default indexing operation. */
     public static final IndexingOp DEFAULT_INDEXING_OP =
-            new KriegerLassen1994();
+            KriegerLassen1994.DEFAULT;
 
     /** Indexing operation. */
+    @Element(name = "indexingOp")
     private IndexingOp indexingOp = DEFAULT_INDEXING_OP;
 
     /** List of indexing post operations of the experiment. */
+    @ElementList(name = "indexingPostOps")
     private ArrayList<IndexingPostOps> indexingPostOps =
             new ArrayList<IndexingPostOps>();
 
     /** List of indexing results operations of the experiment. */
+    @ElementList(name = "indexingResultsOps")
     private ArrayList<IndexingResultsOps> indexingResultsOps =
             new ArrayList<IndexingResultsOps>();
 
@@ -193,7 +217,7 @@ public class Exp extends Run {
      * selected operations.
      * <p/>
      * The array of <code>Operation</code> contains all the operations that the
-     * experiment will execute. The <code>Operation</code>s are organized into
+     * experiment will execute. The <code>Operation</code>s are organised into
      * each step of the experiment (pattern, Hough, detection, identification,
      * indexing and output). The order of the <code>Operation</code> is
      * maintained.
@@ -208,33 +232,24 @@ public class Exp extends Run {
      *            experiment
      * @param ops
      *            operations for the experiment
-     * @param currentMapsSaver
-     *            <code>SaveMaps</code> object
      * @throws NullPointerException
      *             if the <code>EbsdMMap</code> is null
      * @throws NullPointerException
      *             if the array of <code>Operation</code> is null
      * @throws NullPointerException
-     *             if the <code>SaveMaps</code> is null
-     * @throws NullPointerException
      *             if an <code>Operation</code> is null
      * @see EbsdMMap
      * @see CurrentMapsFileSaver
      */
-    public Exp(EbsdMMap mmap, Operation[] ops, CurrentMapsSaver currentMapsSaver) {
+    public Exp(EbsdMMap mmap, Operation[] ops) {
         if (mmap == null)
-            throw new NullPointerException("Ebsd multi-map cannot be null.");
+            throw new NullPointerException("EBSD multimap cannot be null.");
         if (ops == null)
             throw new NullPointerException(
                     "The operations array cannot be null.");
-        if (currentMapsSaver == null)
-            throw new NullPointerException("Current maps saver cannot be null.");
 
         // EbsdMMap
         this.mmap = mmap;
-
-        // Current maps saver
-        this.currentMapsSaver = currentMapsSaver;
 
         // Operations
         for (Operation op : ops)
@@ -251,75 +266,151 @@ public class Exp extends Run {
 
 
     /**
-     * Creates a new experiment. This constructor should be used to create a
-     * completely new experiment without a prior <code>EbsdMMap</code>. In other
-     * words, it creates a new <code>EbsdMMap</code> for the user using the
-     * specified maps' width, maps' height, <code>EbsdMetadata</code> and an
-     * array of phases.
+     * Special constructor to load an experiment from a XML. This constructor is
+     * used by the deserialization.
      * 
      * @param width
-     *            width of the maps
+     *            width of the mapping
      * @param height
-     *            height of the maps
+     *            height of the mapping
      * @param metadata
-     *            metadata for the <code>EbsdMMap</code>
+     *            metadata
      * @param phases
-     *            array of defined phases
-     * @param ops
-     *            operations for the experiment
-     * @param currentMapsSaver
-     *            <code>SaveMaps</code> object
-     * @throws NullPointerException
-     *             if the metadata is null
-     * @throws NullPointerException
-     *             if the array of <code>Operation</code> is null
-     * @throws NullPointerException
-     *             if the array of phases is null
-     * @throws NullPointerException
-     *             if the <code>SaveMaps</code> is null
-     * @throws NullPointerException
-     *             if an <code>Operation</code> is null
-     * @throws IllegalArgumentException
-     *             if the width or the height are less or equal to zero
-     * @see Exp#Exp(EbsdMMap, Operation[], CurrentMapsSaver)
-     * @see EbsdMetadata
-     * @see CurrentMapsFileSaver
+     *            phases
+     * @param listeners
+     *            array of experiment listeners
+     * @param patternOp
+     *            pattern operation
+     * @param patternPostOps
+     *            pattern post operation(s)
+     * @param patternResultsOps
+     *            pattern results operation(s)
+     * @param houghPreOps
+     *            Hough pre operation(s)
+     * @param houghOp
+     *            Hough operation
+     * @param houghPostOps
+     *            Hough post operation(s)
+     * @param houghResultsOps
+     *            Hough results operation(s)
+     * @param detectionPreOps
+     *            detection pre operation(s)
+     * @param detectionOp
+     *            detection operation
+     * @param detectionPostOps
+     *            detection post operation(s)
+     * @param detectionResultsOps
+     *            detection results operation(s)
+     * @param identificationPreOps
+     *            identification pre operation(s)
+     * @param identificationOp
+     *            identification operation
+     * @param identificationPostOps
+     *            identification post operation(s)
+     * @param identificationResultsOps
+     *            identification results operation(s)
+     * @param indexingPreOps
+     *            indexing pre operation(s)
+     * @param indexingOp
+     *            indexing operation
+     * @param indexingPostOps
+     *            indexing post operation(s)
+     * @param indexingResultsOps
+     *            indexing results operation(s)
      */
-    public Exp(int width, int height, ExpMetadata metadata, Crystal[] phases,
-            Operation[] ops, CurrentMapsSaver currentMapsSaver) {
-        if (metadata == null)
-            throw new NullPointerException("Ebsd multi-map cannot be null.");
-        if (phases == null)
-            throw new NullPointerException("Phases cannot be null.");
-        if (ops == null)
-            throw new NullPointerException(
-                    "The operations array cannot be null.");
-        if (currentMapsSaver == null)
-            throw new NullPointerException("Current maps saver cannot be null.");
-        if (width <= 0)
-            throw new IllegalArgumentException(
-                    "The width has to be greater than 0.");
-        if (height <= 0)
-            throw new IllegalArgumentException(
-                    "The height has to be greater than 0.");
+    @SuppressWarnings("unused")
+    private Exp(
+            @Attribute(name = "width") int width,
+            @Attribute(name = "height") int height,
+            @Element(name = "metadata") EbsdMetadata metadata,
+            @ElementList(name = "phases") ArrayList<Crystal> phases,
+            @ElementList(name = "listeners") ArrayList<ExpListener> listeners,
+            @Element(name = "patternOp") PatternOp patternOp,
+            @ElementList(name = "patternPostOps") ArrayList<PatternPostOps> patternPostOps,
+            @ElementList(name = "patternResultsOps") ArrayList<PatternResultsOps> patternResultsOps,
+            @ElementList(name = "houghPreOps") ArrayList<HoughPreOps> houghPreOps,
+            @Element(name = "houghOp") HoughOp houghOp,
+            @ElementList(name = "houghPostOps") ArrayList<HoughPostOps> houghPostOps,
+            @ElementList(name = "houghResultsOps") ArrayList<HoughResultsOps> houghResultsOps,
+            @ElementList(name = "detectionPreOps") ArrayList<DetectionPreOps> detectionPreOps,
+            @Element(name = "detectionOp") DetectionOp detectionOp,
+            @ElementList(name = "detectionPostOps") ArrayList<DetectionPostOps> detectionPostOps,
+            @ElementList(name = "detectionResultsOps") ArrayList<DetectionResultsOps> detectionResultsOps,
+            @ElementList(name = "identificationPreOps") ArrayList<IdentificationPreOps> identificationPreOps,
+            @Element(name = "identificationOp") IdentificationOp identificationOp,
+            @ElementList(name = "identificationPostOps") ArrayList<IdentificationPostOps> identificationPostOps,
+            @ElementList(name = "identificationResultsOps") ArrayList<IdentificationResultsOps> identificationResultsOps,
+            @ElementList(name = "indexingPreOps") ArrayList<IndexingPreOps> indexingPreOps,
+            @Element(name = "indexingOp") IndexingOp indexingOp,
+            @ElementList(name = "indexingPostOps") ArrayList<IndexingPostOps> indexingPostOps,
+            @ElementList(name = "indexingResultsOps") ArrayList<IndexingResultsOps> indexingResultsOps) {
+        mmap = new ExpMMap(width, height);
+        mmap.setMetadata(metadata);
 
-        // EbsdMMap
-        mmap = new ExpMMap(width, height, metadata);
-        mmap.getPhasesMap().setPhases(phases);
-
-        // Current maps saver
-        this.currentMapsSaver = currentMapsSaver;
+        // Listeners
+        for (ExpListener listener : listeners)
+            addExpListener(listener);
 
         // Operations
-        for (Operation op : ops)
-            addOperation(op);
+        addOperation(patternOp);
+        addOperations(patternPostOps);
+        addOperations(patternResultsOps);
 
-        if (patternOp == null)
-            throw new IllegalArgumentException(
-                    "No pattern operation was initialized.");
+        addOperations(houghPreOps);
+        addOperation(houghOp);
+        addOperations(houghPostOps);
+        addOperations(houghResultsOps);
 
-        // Initialize runtime variables
-        initRuntimeVariables();
+        addOperations(detectionPreOps);
+        addOperation(detectionOp);
+        addOperations(detectionPostOps);
+        addOperations(detectionResultsOps);
+
+        addOperations(identificationPreOps);
+        addOperation(identificationOp);
+        addOperations(identificationPostOps);
+        addOperations(identificationResultsOps);
+
+        addOperations(indexingPreOps);
+        addOperation(indexingOp);
+        addOperations(indexingPostOps);
+        addOperations(indexingResultsOps);
+    }
+
+
+
+    /**
+     * Registers an experiment listener.
+     * 
+     * @param listener
+     *            experiment listener
+     * @throws NullPointerException
+     *             if the listener is null
+     */
+    public void addExpListener(ExpListener listener) {
+        if (listener == null)
+            throw new NullPointerException("Listener cannot be null.");
+
+        if (!listeners.contains(listener))
+            listeners.add(listener);
+    }
+
+
+
+    /**
+     * Registers an array of experiment listeners.
+     * 
+     * @param listeners
+     *            experiments listeners
+     * @throws NullPointerException
+     *             if the listeners is null
+     */
+    public void addExpListeners(ExpListener[] listeners) {
+        if (listeners == null)
+            throw new NullPointerException("Listeners cannot be null.");
+
+        for (ExpListener listener : listeners)
+            addExpListener(listener);
     }
 
 
@@ -429,6 +520,20 @@ public class Exp extends Run {
 
 
     /**
+     * Adds a list of operations. The method {@link #addOperation(Operation)} is
+     * called for each operation.
+     * 
+     * @param ops
+     *            operations
+     */
+    protected void addOperations(ArrayList<? extends Operation> ops) {
+        for (Operation op : ops)
+            addOperation(op);
+    }
+
+
+
+    /**
      * Creates a new map of the specified type.
      * 
      * @param type
@@ -457,6 +562,304 @@ public class Exp extends Run {
         } else
             throw new IllegalArgumentException("Unknown type of map ("
                     + type.toString() + ").");
+    }
+
+
+
+    /**
+     * Fires detection operation action.
+     * 
+     * @param op
+     *            operation
+     * @param peaksMap
+     *            peaks map
+     */
+    private void fireDetectionOpPerformed(DetectionOp op, BinMap peaksMap) {
+        for (ExpListener listener : listeners)
+            listener.detectionOpPerformed(this, op, peaksMap);
+    }
+
+
+
+    /**
+     * Fires detection post-operation action.
+     * 
+     * @param op
+     *            operation
+     * @param peaksMap
+     *            peaks map
+     */
+    private void fireDetectionPostPerformed(DetectionPostOps op, BinMap peaksMap) {
+        for (ExpListener listener : listeners)
+            listener.detectionPostPerformed(this, op, peaksMap);
+    }
+
+
+
+    /**
+     * Fires Hough pre-operation action.
+     * 
+     * @param op
+     *            operation
+     * @param houghMap
+     *            Hough map
+     */
+    private void fireDetectionPrePerformed(DetectionPreOps op, HoughMap houghMap) {
+        for (ExpListener listener : listeners)
+            listener.detectionPrePerformed(this, op, houghMap);
+    }
+
+
+
+    /**
+     * Fires detection result action.
+     * 
+     * @param op
+     *            operation
+     * @param results
+     *            operation result(s)
+     */
+    private void fireDetectionResultPerformed(DetectionResultsOps op,
+            OpResult[] results) {
+        for (ExpListener listener : listeners)
+            for (OpResult result : results)
+                listener.detectionResultsPerformed(this, op, result);
+    }
+
+
+
+    /**
+     * Fires Hough operation action.
+     * 
+     * @param op
+     *            operation
+     * @param houghMap
+     *            Hough map
+     */
+    private void fireHoughOpPerformed(HoughOp op, HoughMap houghMap) {
+        for (ExpListener listener : listeners)
+            listener.houghOpPerformed(this, op, houghMap);
+    }
+
+
+
+    /**
+     * Fires Hough post-operation action.
+     * 
+     * @param op
+     *            operation
+     * @param houghMap
+     *            Hough map
+     */
+    private void fireHoughPostPerformed(HoughPostOps op, HoughMap houghMap) {
+        for (ExpListener listener : listeners)
+            listener.houghPostPerformed(this, op, houghMap);
+    }
+
+
+
+    /**
+     * Fires Hough pre-operation action.
+     * 
+     * @param op
+     *            operation
+     * @param patternMap
+     *            pattern map
+     */
+    private void fireHoughPrePerformed(HoughPreOps op, ByteMap patternMap) {
+        for (ExpListener listener : listeners)
+            listener.houghPrePerformed(this, op, patternMap);
+    }
+
+
+
+    /**
+     * Fires Hough result action.
+     * 
+     * @param op
+     *            operation
+     * @param results
+     *            operation result(s)
+     */
+    private void fireHoughResultPerformed(HoughResultsOps op, OpResult[] results) {
+        for (ExpListener listener : listeners)
+            for (OpResult result : results)
+                listener.houghResultsPerformed(this, op, result);
+    }
+
+
+
+    /**
+     * Fires identification operation action.
+     * 
+     * @param op
+     *            operation
+     * @param peaks
+     *            Hough peaks
+     */
+    private void fireIdentificationOpPerformed(IdentificationOp op,
+            HoughPeak[] peaks) {
+        for (ExpListener listener : listeners)
+            listener.identificationOpPerformed(this, op, peaks);
+    }
+
+
+
+    /**
+     * Fires identification post-operation action.
+     * 
+     * @param op
+     *            operation
+     * @param peaks
+     *            Hough peaks
+     */
+    private void fireIdentificationPostPerformed(IdentificationPostOps op,
+            HoughPeak[] peaks) {
+        for (ExpListener listener : listeners)
+            listener.identificationPostPerformed(this, op, peaks);
+    }
+
+
+
+    /**
+     * Fires identification pre-operation action.
+     * 
+     * @param op
+     *            operation
+     * @param peaksMap
+     *            peaks map
+     */
+    private void fireIdentificationPrePerformed(IdentificationPreOps op,
+            BinMap peaksMap) {
+        for (ExpListener listener : listeners)
+            listener.identificationPrePerformed(this, op, peaksMap);
+    }
+
+
+
+    /**
+     * Fires identification result action.
+     * 
+     * @param op
+     *            operation
+     * @param results
+     *            operation result(s)
+     */
+    private void fireIdentificationResultPerformed(IdentificationResultsOps op,
+            OpResult[] results) {
+        for (ExpListener listener : listeners)
+            for (OpResult result : results)
+                listener.identificationResultsPerformed(this, op, result);
+    }
+
+
+
+    /**
+     * Fires indexing operation action.
+     * 
+     * @param op
+     *            operation
+     * @param solutions
+     *            solutions
+     */
+    private void fireIndexingOpPerformed(IndexingOp op, Solution[] solutions) {
+        for (ExpListener listener : listeners)
+            listener.indexingOpPerformed(this, op, solutions);
+    }
+
+
+
+    /**
+     * Fires indexing post-operation action.
+     * 
+     * @param op
+     *            operation
+     * @param solutions
+     *            solutions
+     */
+    private void fireIndexingPostPerformed(IndexingPostOps op,
+            Solution[] solutions) {
+        for (ExpListener listener : listeners)
+            listener.indexingPostPerformed(this, op, solutions);
+    }
+
+
+
+    /**
+     * Fires indexing pre-operation action.
+     * 
+     * @param op
+     *            operation
+     * @param peaks
+     *            Hough peaks
+     */
+    private void fireIndexingPrePerformed(IndexingPreOps op, HoughPeak[] peaks) {
+        for (ExpListener listener : listeners)
+            listener.indexingPrePerformed(this, op, peaks);
+    }
+
+
+
+    /**
+     * Fires indexing result action.
+     * 
+     * @param op
+     *            operation
+     * @param results
+     *            operation result(s)
+     */
+    private void fireIndexingResultPerformed(IndexingResultsOps op,
+            OpResult[] results) {
+        for (ExpListener listener : listeners)
+            for (OpResult result : results)
+                listener.indexingResultsPerformed(this, op, result);
+    }
+
+
+
+    /**
+     * Fires pattern operation action.
+     * 
+     * @param op
+     *            operation
+     * @param patternMap
+     *            pattern map
+     */
+    private void firePatternOpPerformed(PatternOp op, ByteMap patternMap) {
+        for (ExpListener listener : listeners)
+            listener.patternOpPerformed(this, op, patternMap);
+    }
+
+
+
+    /**
+     * Fires pattern post-operation action.
+     * 
+     * @param op
+     *            operation
+     * @param patternMap
+     *            pattern map
+     */
+    private void firePatternPostPerformed(PatternPostOps op, ByteMap patternMap) {
+        for (ExpListener listener : listeners)
+            listener.patternPostPerformed(this, op, patternMap);
+    }
+
+
+
+    /**
+     * Fires pattern result action.
+     * 
+     * @param op
+     *            operation
+     * @param results
+     *            operation result(s)
+     */
+    private void firePatternResultPerformed(PatternResultsOps op,
+            OpResult[] results) {
+        for (ExpListener listener : listeners)
+            for (OpResult result : results)
+                listener.patternResultsPerformed(this, op, result);
     }
 
 
@@ -508,7 +911,7 @@ public class Exp extends Run {
         if (currentHoughMap == null)
             throw new RuntimeException(
                     "The experiment is not running, there is no Hough map.");
-        return currentHoughMap;
+        return currentHoughMap.duplicate();
     }
 
 
@@ -523,38 +926,7 @@ public class Exp extends Run {
         if (currentPatternMap == null)
             throw new RuntimeException(
                     "The experiment is not running, there is no pattern map.");
-        return currentPatternMap;
-    }
-
-
-
-    /**
-     * Returns the source pattern map that is currently being used by the
-     * experiment. Only valid when the experiment is running.
-     * 
-     * @return pattern map
-     */
-    public ByteMap getSourcePatternMap() {
-        if (sourcePatternMap == null)
-            throw new RuntimeException(
-                    "The experiment is not running, there is no pattern map.");
-        return sourcePatternMap;
-    }
-
-
-
-    /**
-     * Returns the source Hough map that is currently being used by the
-     * experiment. The source Hough map corresponds to the Hough map write after
-     * the Hough operation. Only valid when the experiment is running.
-     * 
-     * @return Hough map
-     */
-    public HoughMap getSourceHoughMap() {
-        if (sourceHoughMap == null)
-            throw new RuntimeException(
-                    "The experiment is not running, there is no Hough map.");
-        return sourceHoughMap;
+        return currentPatternMap.duplicate();
     }
 
 
@@ -569,7 +941,7 @@ public class Exp extends Run {
         if (currentPeaks == null)
             throw new RuntimeException(
                     "The experiment is not running, there is no peaks.");
-        return currentPeaks;
+        return currentPeaks.clone();
     }
 
 
@@ -584,7 +956,7 @@ public class Exp extends Run {
         if (currentPeaksMap == null)
             throw new RuntimeException(
                     "The experiment is not running, there is no peaks map.");
-        return currentPeaksMap;
+        return currentPeaksMap.duplicate();
     }
 
 
@@ -599,7 +971,7 @@ public class Exp extends Run {
         if (currentSolutions == null)
             throw new RuntimeException(
                     "The experiment is not running, there is no solution.");
-        return currentSolutions;
+        return currentSolutions.clone();
     }
 
 
@@ -644,6 +1016,30 @@ public class Exp extends Run {
      */
     public DetectionResultsOps[] getDetectionResultsOps() {
         return detectionResultsOps.toArray(new DetectionResultsOps[detectionResultsOps.size()]);
+    }
+
+
+
+    /**
+     * Returns the registered experiment listeners.
+     * 
+     * @return experiment listeners
+     */
+    public ExpListener[] getExpListeners() {
+        return listeners.toArray(new ExpListener[0]);
+    }
+
+
+
+    /**
+     * Returns the height of the mapping. This corresponds to the height of the
+     * multimap.
+     * 
+     * @return height
+     */
+    @Attribute(name = "height")
+    public int getHeight() {
+        return mmap.height;
     }
 
 
@@ -781,6 +1177,19 @@ public class Exp extends Run {
 
 
     /**
+     * Returns the metadata of the multimap. The metadata contains the
+     * acquisition parameters.
+     * 
+     * @return metadata
+     */
+    @Element(name = "metadata")
+    public EbsdMetadata getMetadata() {
+        return mmap.getMetadata();
+    }
+
+
+
+    /**
      * Returns the pattern operation of this experiment.
      * 
      * @return pattern operation
@@ -813,6 +1222,50 @@ public class Exp extends Run {
 
 
 
+    /**
+     * Returns the phases defined in the multimap. A copy of the phases is
+     * returned.
+     * 
+     * @return phases
+     */
+    @ElementList(name = "phases")
+    public ArrayList<Crystal> getPhases() {
+        return new ArrayList<Crystal>(Arrays.asList(mmap.getPhases().clone()));
+    }
+
+
+
+    /**
+     * Returns the source Hough map that is currently being used by the
+     * experiment. The source Hough map corresponds to the Hough map write after
+     * the Hough operation. Only valid when the experiment is running.
+     * 
+     * @return Hough map
+     */
+    public HoughMap getSourceHoughMap() {
+        if (sourceHoughMap == null)
+            throw new RuntimeException(
+                    "The experiment is not running, there is no Hough map.");
+        return sourceHoughMap.duplicate();
+    }
+
+
+
+    /**
+     * Returns the source pattern map that is currently being used by the
+     * experiment. Only valid when the experiment is running.
+     * 
+     * @return pattern map
+     */
+    public ByteMap getSourcePatternMap() {
+        if (sourcePatternMap == null)
+            throw new RuntimeException(
+                    "The experiment is not running, there is no pattern map.");
+        return sourcePatternMap.duplicate();
+    }
+
+
+
     @Override
     public double getTaskProgress() {
         // Quick fix to notify the listeners of the EbsdMMap. This allows the
@@ -820,6 +1273,19 @@ public class Exp extends Run {
         mmap.notifyListeners();
 
         return super.getTaskProgress();
+    }
+
+
+
+    /**
+     * Returns the width of the mapping. This corresponds to the width of the
+     * multimap.
+     * 
+     * @return width
+     */
+    @Attribute(name = "width")
+    public int getWidth() {
+        return mmap.width;
     }
 
 
@@ -835,6 +1301,61 @@ public class Exp extends Run {
         currentPeaksMap = null;
         currentPeaks = null;
         currentSolutions = null;
+    }
+
+
+
+    /**
+     * Prepares the operations to be serialized by setting their index as their
+     * position within each category's array.
+     */
+    @SuppressWarnings("unused")
+    @Persist
+    private void prepare() {
+        prepare(patternPostOps);
+        prepare(patternResultsOps);
+
+        prepare(houghPreOps);
+        prepare(houghPostOps);
+        prepare(houghResultsOps);
+
+        prepare(detectionPreOps);
+        prepare(detectionPostOps);
+        prepare(detectionResultsOps);
+
+        prepare(identificationPreOps);
+        prepare(identificationPostOps);
+        prepare(identificationResultsOps);
+
+        prepare(indexingPreOps);
+        prepare(indexingPostOps);
+        prepare(indexingResultsOps);
+    }
+
+
+
+    /**
+     * Removes a registered listener from the experiment.
+     * 
+     * @param listener
+     *            experiment listener
+     * @throws NullPointerException
+     *             if the listener is null
+     */
+    public void removeExpListerner(ExpListener listener) {
+        if (listener == null)
+            throw new NullPointerException("Listener cannot be null.");
+
+        listeners.remove(listener);
+    }
+
+
+
+    /**
+     * Clears all registered experiment listeners.
+     */
+    public void clearExpListners() {
+        listeners.clear();
     }
 
 
@@ -908,6 +1429,8 @@ public class Exp extends Run {
      *             if an error occurs during the run
      */
     private void runOnce(PatternOp patternOp, int index) throws IOException {
+        OpResult[] results;
+
         // Pattern Op
         setStatus("--- Pattern Operation ---");
 
@@ -918,7 +1441,7 @@ public class Exp extends Run {
 
         setStatus("Performing " + patternOp.getName() + "... DONE");
 
-        currentMapsSaver.savePatternMap(this, currentPatternMap);
+        firePatternOpPerformed(patternOp, getCurrentPatternMap());
 
         // Pattern Post Ops
         setStatus("--- Pattern Post Operations ---");
@@ -929,7 +1452,7 @@ public class Exp extends Run {
 
             setStatus("Performing " + op.getName() + "... DONE");
 
-            currentMapsSaver.saveMap(this, op, currentPatternMap);
+            firePatternPostPerformed(op, getCurrentPatternMap());
         }
 
         // Pattern Results Ops
@@ -937,9 +1460,12 @@ public class Exp extends Run {
         for (PatternResultsOps op : patternResultsOps) {
             setStatus("Calculating " + op.getName() + "...");
 
-            saveResults(op.calculate(this, currentPatternMap));
+            results = op.calculate(this, getCurrentPatternMap());
+            saveResults(results);
 
             setStatus("Calculating " + op.getName() + "... DONE");
+
+            firePatternResultPerformed(op, results);
         }
 
         // Test to continue
@@ -956,7 +1482,7 @@ public class Exp extends Run {
 
                 setStatus("Performing " + op.getName() + "... DONE");
 
-                currentMapsSaver.saveMap(this, op, currentPatternMap);
+                fireHoughPrePerformed(op, getCurrentPatternMap());
             }
 
             // Hough Op
@@ -969,7 +1495,7 @@ public class Exp extends Run {
 
             setStatus("Performing " + houghOp.getName() + "... DONE");
 
-            currentMapsSaver.saveHoughMap(this, currentHoughMap);
+            fireHoughOpPerformed(houghOp, getCurrentHoughMap());
 
             // Hough Post Ops
             setStatus("--- Hough Post Operations ---");
@@ -980,7 +1506,7 @@ public class Exp extends Run {
 
                 setStatus("Performing " + op.getName() + "... DONE");
 
-                currentMapsSaver.saveMap(this, op, currentHoughMap);
+                fireHoughPostPerformed(op, getCurrentHoughMap());
             }
 
             // Hough Results Ops
@@ -988,9 +1514,12 @@ public class Exp extends Run {
             for (HoughResultsOps op : houghResultsOps) {
                 setStatus("Calculating " + op.getName() + "...");
 
-                saveResults(op.calculate(this, currentHoughMap));
+                results = op.calculate(this, currentHoughMap);
+                saveResults(results);
 
                 setStatus("Calculating " + op.getName() + "... DONE");
+
+                fireHoughResultPerformed(op, results);
             }
 
             // Test to continue
@@ -1007,7 +1536,7 @@ public class Exp extends Run {
 
                     setStatus("Performing " + op.getName() + "... DONE");
 
-                    currentMapsSaver.saveMap(this, op, currentHoughMap);
+                    fireDetectionPrePerformed(op, getCurrentHoughMap());
                 }
 
                 // Detection Op
@@ -1019,7 +1548,7 @@ public class Exp extends Run {
 
                 setStatus("Performing " + detectionOp.getName() + "... DONE");
 
-                currentMapsSaver.savePeaksMap(this, currentPeaksMap);
+                fireDetectionOpPerformed(detectionOp, getCurrentPeaksMap());
 
                 // Detection Post Ops
                 setStatus("--- Detection Post Operations ---");
@@ -1030,7 +1559,7 @@ public class Exp extends Run {
 
                     setStatus("Performing " + op.getName() + "... DONE");
 
-                    currentMapsSaver.saveMap(this, op, currentPeaksMap);
+                    fireDetectionPostPerformed(op, getCurrentPeaksMap());
                 }
 
                 // Detection Results Ops
@@ -1038,9 +1567,12 @@ public class Exp extends Run {
                 for (DetectionResultsOps op : detectionResultsOps) {
                     setStatus("Calculating " + op.getName() + "...");
 
-                    saveResults(op.calculate(this, currentPeaksMap));
+                    results = op.calculate(this, currentPeaksMap);
+                    saveResults(results);
 
                     setStatus("Calculating " + op.getName() + "... DONE");
+
+                    fireDetectionResultPerformed(op, results);
                 }
 
                 // Test to continue
@@ -1056,7 +1588,7 @@ public class Exp extends Run {
 
                         setStatus("Performing " + op.getName() + "... DONE");
 
-                        currentMapsSaver.saveMap(this, op, currentPeaksMap);
+                        fireIdentificationPrePerformed(op, getCurrentPeaksMap());
                     }
 
                     // Identification Op
@@ -1072,8 +1604,8 @@ public class Exp extends Run {
                     setStatus("Performing " + identificationOp.getName()
                             + "... DONE");
 
-                    currentMapsSaver.saveHoughPeaks(this, identificationOp,
-                            currentPeaks);
+                    fireIdentificationOpPerformed(identificationOp,
+                            getCurrentPeaks());
 
                     // Identification Post Ops
                     setStatus("--- Identification Post Operations ---");
@@ -1084,7 +1616,7 @@ public class Exp extends Run {
 
                         setStatus("Performing " + op.getName() + "... DONE");
 
-                        currentMapsSaver.saveHoughPeaks(this, op, currentPeaks);
+                        fireIdentificationPostPerformed(op, getCurrentPeaks());
                     }
 
                     // Identification Results Ops
@@ -1092,9 +1624,12 @@ public class Exp extends Run {
                     for (IdentificationResultsOps op : identificationResultsOps) {
                         setStatus("Calculating " + op.getName() + "...");
 
-                        saveResults(op.calculate(this, currentPeaks));
+                        results = op.calculate(this, currentPeaks);
+                        saveResults(results);
 
                         setStatus("Calculating " + op.getName() + "... DONE");
+
+                        fireIdentificationResultPerformed(op, results);
                     }
 
                     // Test to continue
@@ -1109,8 +1644,7 @@ public class Exp extends Run {
 
                             setStatus("Performing " + op.getName() + "... DONE");
 
-                            currentMapsSaver.saveHoughPeaks(this, op,
-                                    currentPeaks);
+                            fireIndexingPrePerformed(op, getCurrentPeaks());
                         }
 
                         // Indexing Op
@@ -1120,14 +1654,8 @@ public class Exp extends Run {
 
                         currentSolutions = indexingOp.index(this, currentPeaks);
 
-                        // Sort solutions by fit
-                        sort(currentSolutions, new SolutionFitComparator());
-                        reverse(currentSolutions);
-
-                        // Solution overlay
-                        if (currentSolutions.length > 0)
-                            currentMapsSaver.saveSolutionOverlay(this,
-                                    currentSolutions[0]);
+                        fireIndexingOpPerformed(indexingOp,
+                                getCurrentSolutions());
 
                         setStatus("Performing " + indexingOp.getName()
                                 + "... DONE");
@@ -1141,6 +1669,8 @@ public class Exp extends Run {
                                     op.process(this, currentSolutions);
 
                             setStatus("Performing " + op.getName() + "... DONE");
+
+                            fireIndexingPostPerformed(op, getCurrentSolutions());
                         }
 
                         // Indexing Results Ops
@@ -1148,10 +1678,13 @@ public class Exp extends Run {
                         for (IndexingResultsOps op : indexingResultsOps) {
                             setStatus("Calculating " + op.getName() + "...");
 
-                            saveResults(op.calculate(this, currentSolutions));
+                            results = op.calculate(this, currentSolutions);
+                            saveResults(results);
 
                             setStatus("Calculating " + op.getName()
                                     + "... DONE");
+
+                            fireIndexingResultPerformed(op, results);
                         }
                     }
                 }
@@ -1230,6 +1763,38 @@ public class Exp extends Run {
         super.setName(name);
 
         mmap.setName(name);
+    }
+
+
+
+    /**
+     * Validates the operations after the deserialization to check that there is
+     * not two operations with the same index.
+     * 
+     * @throws Exception
+     *             if two operations have the same index
+     */
+    @SuppressWarnings("unused")
+    @Validate
+    private void validate() throws Exception {
+        validate(patternPostOps, PatternPostOps.class);
+        validate(patternResultsOps, PatternResultsOps.class);
+
+        validate(houghPreOps, HoughPreOps.class);
+        validate(houghPostOps, HoughPostOps.class);
+        validate(houghResultsOps, HoughResultsOps.class);
+
+        validate(detectionPreOps, DetectionPreOps.class);
+        validate(detectionPostOps, DetectionPostOps.class);
+        validate(detectionResultsOps, DetectionResultsOps.class);
+
+        validate(identificationPreOps, IdentificationPreOps.class);
+        validate(identificationPostOps, IdentificationPostOps.class);
+        validate(identificationResultsOps, IdentificationResultsOps.class);
+
+        validate(indexingPreOps, IndexingPreOps.class);
+        validate(indexingPostOps, IndexingPostOps.class);
+        validate(indexingResultsOps, IndexingResultsOps.class);
     }
 
 }

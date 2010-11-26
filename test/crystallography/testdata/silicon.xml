@@ -1,24 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Crystal name="Silicon">
-  <UnitCell a="5.43" b="5.43" c="5.43" dimUnits="angstrom" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="1.5707963267948966" angleUnits="rad" />
-  <AtomSites>
-    <AtomSite>
-      <Element atomicNumber="14" />
-      <Position x="0.0" y="0.0" z="0.0" />
-    </AtomSite>
-    <AtomSite>
-      <Element atomicNumber="14" />
-      <Position x="0.5" y="0.5" z="0.0" />
-    </AtomSite>
-    <AtomSite>
-      <Element atomicNumber="14" />
-      <Position x="0.5" y="0.0" z="0.5" />
-    </AtomSite>
-    <AtomSite>
-      <Element atomicNumber="14" />
-      <Position x="0.0" y="0.5" z="0.5" />
-    </AtomSite>
-  </AtomSites>
-  <SpaceGroup index="216" />
-</Crystal>
-
+<crystal name="Silicon">
+   <unitCell a="5.43" b="5.43" c="5.43" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="1.5707963267948966"/>
+   <atoms>
+      <atom atomicNumber="14" occupancy="1.0">
+         <position x="0.0" y="0.0" z="0.0"/>
+      </atom>
+      <atom atomicNumber="14" occupancy="1.0">
+         <position x="0.0" y="0.5" z="0.5"/>
+      </atom>
+      <atom atomicNumber="14" occupancy="1.0">
+         <position x="0.5" y="0.0" z="0.5"/>
+      </atom>
+      <atom atomicNumber="14" occupancy="1.0">
+         <position x="0.5" y="0.5" z="0.0"/>
+      </atom>
+   </atoms>
+   <spaceGroup index="216"/>
+</crystal>

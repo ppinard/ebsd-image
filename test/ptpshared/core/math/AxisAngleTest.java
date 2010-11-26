@@ -22,10 +22,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-public class AxisAngleTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
+
+public class AxisAngleTest extends TestCase {
 
     private AxisAngle axisAngle1;
 
@@ -83,8 +89,8 @@ public class AxisAngleTest {
 
 
     @Test
-    public void testDuplicate() {
-        AxisAngle duplicate = axisAngle1.duplicate();
+    public void testClone() {
+        AxisAngle duplicate = axisAngle1.clone();
         assertEquals(duplicate.angle, axisAngle1.angle, 1e-7);
         assertEquals(duplicate.axis.v[0], axisAngle1.axis.v[0], 1e-7);
         assertEquals(duplicate.axis.v[1], axisAngle1.axis.v[1], 1e-7);
@@ -94,7 +100,7 @@ public class AxisAngleTest {
 
 
     @Test
-    public void testEqualsAxisAngleDouble() {
+    public void testEqualsObjectDouble() {
         assertTrue(axisAngle1.equals(axisAngle1, 1e-6));
 
         assertFalse(axisAngle1.equals(null, 1e-6));
@@ -142,4 +148,17 @@ public class AxisAngleTest {
         assertEquals(expected, axisAngle1.toString());
     }
 
+
+
+    @Test
+    public void testXML() throws Exception {
+        File tmpFile = createTempFile();
+
+        // Write
+        new XmlSaver().save(axisAngle1, tmpFile);
+
+        // Read
+        AxisAngle other = new XmlLoader().load(AxisAngle.class, tmpFile);
+        assertAlmostEquals(axisAngle1, other, 1e-6);
+    }
 }

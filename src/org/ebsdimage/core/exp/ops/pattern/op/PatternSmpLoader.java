@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.io.SmpInputStream;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
 
@@ -33,9 +34,11 @@ import rmlimage.core.ByteMap;
 public class PatternSmpLoader extends PatternOp {
 
     /** Directory of the smp file. */
+    @Attribute(name = "dir")
     public final String filedir;
 
     /** File name to the smp file. */
+    @Attribute(name = "filename")
     public final String filename;
 
 
@@ -98,8 +101,10 @@ public class PatternSmpLoader extends PatternOp {
      * @throws IllegalArgumentException
      *             if the extension of the file name is not smp.
      */
-    public PatternSmpLoader(int startIndex, int size, String filedir,
-            String filename) {
+    public PatternSmpLoader(@Attribute(name = "startIndex") int startIndex,
+            @Attribute(name = "size") int size,
+            @Attribute(name = "dir") String filedir,
+            @Attribute(name = "filename") String filename) {
         this(startIndex, size, new File(filedir, filename));
     }
 
@@ -107,11 +112,23 @@ public class PatternSmpLoader extends PatternOp {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
         if (!super.equals(obj))
             return false;
-        if (getClass() != obj.getClass())
+
+        PatternSmpLoader other = (PatternSmpLoader) obj;
+        if (!filedir.equals(other.filedir))
+            return false;
+        if (!filename.equals(other.filename))
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
             return false;
 
         PatternSmpLoader other = (PatternSmpLoader) obj;

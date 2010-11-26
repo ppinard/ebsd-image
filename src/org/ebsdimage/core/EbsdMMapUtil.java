@@ -17,7 +17,10 @@
  */
 package org.ebsdimage.core;
 
-import static rmlimage.utility.MicroscopeConstants.*;
+import static rmlimage.utility.MicroscopeConstants.CLASS;
+import static rmlimage.utility.MicroscopeConstants.ENERGY;
+import static rmlimage.utility.MicroscopeConstants.MAGNIFICATION;
+import static rmlimage.utility.MicroscopeConstants.WORKING_DISTANCE;
 
 import java.util.Map.Entry;
 
@@ -90,11 +93,10 @@ public class EbsdMMapUtil {
             // Set properties
             map.setProperty(CLASS, mmap.getName());
             // map.setProperty(DETECTOR, alias);
-            map.setProperty(ENERGY, mmap.beamEnergy);
-            map.setProperty(MAGNIFICATION, mmap.magnification);
-            map.setProperty(WORKING_DISTANCE, mmap.workingDistance);
-            map.setProperty(FACTORY_PIXEL_HEIGHT, mmap.pixelHeight);
-            map.setProperty(FACTORY_PIXEL_WIDTH, mmap.pixelWidth);
+            EbsdMetadata metadata = mmap.getMetadata();
+            map.setProperty(ENERGY, metadata.beamEnergy);
+            map.setProperty(MAGNIFICATION, metadata.magnification);
+            map.setProperty(WORKING_DISTANCE, metadata.workingDistance);
 
             // Paste micron bar
             if (map instanceof ByteMap)

@@ -28,8 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import rmlshared.io.FileUtil;
-import crystallography.core.crystals.IronBCC;
-import crystallography.core.crystals.Silicon;
+import crystallography.core.CrystalFactory;
 
 public class PhasesMapLoaderTest {
 
@@ -41,7 +40,7 @@ public class PhasesMapLoaderTest {
 
     @Before
     public void setUp() throws Exception {
-        file = FileUtil.getFile("org/ebsdimage/io/phasesmap.bmp");
+        file = FileUtil.getFile("org/ebsdimage/testdata/phasesmap.bmp");
         loader = new PhasesMapLoader();
     }
 
@@ -81,8 +80,8 @@ public class PhasesMapLoaderTest {
         assertEquals(1, map.pixArray[3]);
 
         assertEquals(2, map.getPhases().length);
-        assertTrue(new Silicon().equals(map.getPhases()[0], 1e-6));
-        assertTrue(new IronBCC().equals(map.getPhases()[1], 1e-6));
+        assertTrue(CrystalFactory.silicon().equals(map.getPhases()[0], 1e-6));
+        assertTrue(CrystalFactory.ferrite().equals(map.getPhases()[1], 1e-6));
     }
 
 }

@@ -21,10 +21,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-public class CrystalTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
+
+public class CrystalTest extends TestCase {
 
     private String name;
 
@@ -120,7 +126,7 @@ public class CrystalTest {
 
 
     @Test
-    public void testEqualsCrystalDouble() {
+    public void testEqualsObjectDouble() {
         assertTrue(crystal.equals(crystal, 1e-3));
 
         assertFalse(crystal.equals(null, 1e-3));
@@ -157,5 +163,19 @@ public class CrystalTest {
     public void testHashCode() {
         Crystal other = new Crystal(name, unitCell, atoms, sg);
         assertEquals(crystal.hashCode(), other.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File tmpFile = createTempFile();
+
+        // Write
+        new XmlSaver().save(crystal, tmpFile);
+
+        // Read
+        Crystal other = new XmlLoader().load(Crystal.class, tmpFile);
+        assertAlmostEquals(crystal, other, 1e-6);
     }
 }

@@ -26,7 +26,7 @@ import org.jdom.Element;
 import org.jdom.IllegalNameException;
 
 import ptpshared.io.FileUtil;
-import ptpshared.utility.xml.ObjectXmlLoader;
+import ptpshared.util.xml.ObjectXmlLoader;
 import rmlshared.thread.Reflection;
 
 /**

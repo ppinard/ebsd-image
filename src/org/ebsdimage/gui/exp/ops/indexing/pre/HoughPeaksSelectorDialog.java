@@ -49,12 +49,10 @@ public class HoughPeaksSelectorDialog extends OperationDialog {
     public HoughPeaksSelectorDialog() {
         super("Select Hough Peaks");
 
-        minimumField =
-                new IntField("Minimum", HoughPeaksSelector.DEFAULT_MINIMUM);
+        minimumField = new IntField("Minimum", HoughPeaksSelector.DEFAULT.min);
         minimumField.setRange(3, Integer.MAX_VALUE);
 
-        maximumField =
-                new IntField("Maximum", HoughPeaksSelector.DEFAULT_MAXIMUM);
+        maximumField = new IntField("Maximum", HoughPeaksSelector.DEFAULT.max);
         maximumField.setRange(3, Integer.MAX_VALUE);
 
         Panel panel = new ColumnPanel(2);

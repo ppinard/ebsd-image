@@ -17,10 +17,12 @@
  */
 package org.ebsdimage.io;
 
-import org.ebsdimage.core.EbsdMMap;
-import org.jdom.Document;
-import org.jdom.Element;
+import java.io.File;
+import java.io.IOException;
 
+import org.ebsdimage.core.EbsdMMap;
+
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.module.multi.core.MultiMap;
 import rmlimage.module.multi.io.ZipSaver;
 
@@ -32,32 +34,19 @@ import rmlimage.module.multi.io.ZipSaver;
 public abstract class EbsdMMapSaver extends ZipSaver {
 
     static {
-        rmlimage.io.IO.addHandler(rmlimage.module.real.io.IO.class);
-        rmlimage.io.IO.addHandler(org.ebsdimage.io.IO.class);
+        rmlimage.io.IO.addSaver(rmlimage.module.real.io.RmpSaver.class);
+        rmlimage.io.IO.addSaver(org.ebsdimage.io.PhasesMapSaver.class);
+        rmlimage.io.IO.addSaver(org.ebsdimage.io.ErrorMapSaver.class);
     }
 
 
 
     @Override
-    protected Document getMetadata(MultiMap multiMap) {
-        if (!(multiMap instanceof EbsdMMap))
-            throw new IllegalArgumentException(multiMap.getName() + " is a "
-                    + multiMap.getClass().getName() + ". It should be a "
-                    + EbsdMMap.class.getName());
-        EbsdMMap mmap = (EbsdMMap) multiMap;
+    protected void saveOtherFiles(MultiMap mmap, File zipDir)
+            throws IOException {
+        super.saveOtherFiles(mmap, zipDir);
 
-        Element root = getMetadataSaver().save(mmap.getMetadata());
-
-        return new Document(root);
+        File file = new File(zipDir, "metadata.xml");
+        new XmlSaver().save(((EbsdMMap) mmap).getMetadata(), file);
     }
-
-
-
-    /**
-     * Returns the correct XML saver for the metadata.
-     * 
-     * @return XML saver
-     */
-    protected abstract EbsdMetadataXmlSaver getMetadataSaver();
-
 }

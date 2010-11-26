@@ -18,31 +18,37 @@
 package org.ebsdimage.core.exp.ops.detection.post;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
 
 import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.BinMap;
 import rmlimage.core.Identification;
 
 public class OpeningTest extends TestCase {
 
-    private Opening opening;
+    private Opening op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        opening = new Opening();
+        op = new Opening(2, 8);
     }
 
 
 
     @Test
     public void testToString() {
-        String expected = "Opening";
-        assertEquals(expected, opening.toString());
+        String expected = "Opening [min=2, max=8]";
+        assertEquals(expected, op.toString());
     }
 
 
@@ -53,9 +59,51 @@ public class OpeningTest extends TestCase {
                 (BinMap) load(getFile("org/ebsdimage/testdata/automatic_stddev.bmp"));
         assertEquals(22, Identification.identify(srcMap).getObjectCount());
 
-        BinMap destMap = opening.process(null, srcMap);
+        BinMap destMap = op.process(null, srcMap);
 
         assertEquals(10, Identification.identify(destMap).getObjectCount());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        Opening other = new XmlLoader().load(Opening.class, file);
+        assertAlmostEquals(op, other, 1e-6);
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new Opening(1, 7)));
+        assertTrue(op.equals(new Opening(2, 8)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 2));
+        assertFalse(op.equals(null, 2));
+        assertFalse(op.equals(new Object(), 2));
+
+        assertFalse(op.equals(new Opening(5, 6), 2));
+        assertTrue(op.equals(new Opening(2, 8), 2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-735578991, op.hashCode());
     }
 
 }

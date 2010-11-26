@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import ptpshared.core.math.Quaternion;
+import rmlimage.core.Calibration;
 import rmlimage.core.Map;
 import rmlimage.module.multi.core.MultiMap;
 import rmlimage.module.real.core.RealMap;
@@ -67,29 +68,26 @@ public abstract class EbsdMMap extends MultiMap {
     /** Alias of the map for the phase identification. */
     public static final String PHASES = "Phases";
 
-    /** Energy of the electron beam in eV. */
-    public final double beamEnergy;
+    /** Alias of the error map. */
+    public static final String ERRORS = "Errors";
 
-    /** Magnification of the EBSD acquisition. */
-    public final double magnification;
+    /** Metadata. */
+    private EbsdMetadata metadata;
 
-    /** Angle of sample's tilt in radians. */
-    public final double tiltAngle;
 
-    /** Working distance of the EBSD acquisition. */
-    public final double workingDistance;
 
-    /** Calibration for the width of the pixel in meters. */
-    public final double pixelWidth;
+    /**
+     * Sets the metadata of the EBSD multimap.
+     * 
+     * @param metadata
+     *            new metadata
+     */
+    public void setMetadata(EbsdMetadata metadata) {
+        if (metadata == null)
+            throw new NullPointerException("Metadata cannot be null.");
 
-    /** Calibration for the height of the pixel in meters. */
-    public final double pixelHeight;
-
-    /** Rotation from the pattern frame (camera) into the sample frame. */
-    public final Quaternion sampleRotation;
-
-    /** Calibration of the camera. */
-    public final Camera calibration;
+        this.metadata = metadata;
+    }
 
 
 
@@ -101,41 +99,9 @@ public abstract class EbsdMMap extends MultiMap {
      *            width of the maps
      * @param height
      *            height of the maps
-     * @param metadata
-     *            data defining the EBSD acquisition
      */
-    public EbsdMMap(int width, int height, EbsdMetadata metadata) {
-        super(width, height);
-
-        RealMap q0 = new RealMap(width, height);
-        q0.clear(Float.NaN);
-        add(Q0, q0);
-
-        RealMap q1 = new RealMap(width, height);
-        q1.clear(Float.NaN);
-        add(Q1, q1);
-
-        RealMap q2 = new RealMap(width, height);
-        q2.clear(Float.NaN);
-        add(Q2, q2);
-
-        RealMap q3 = new RealMap(width, height);
-        q3.clear(Float.NaN);
-        add(Q3, q3);
-
-        PhasesMap phasesMap = new PhasesMap(width, height);
-        phasesMap.clear((byte) 0);
-        add(PHASES, phasesMap);
-
-        // Import metadata
-        beamEnergy = metadata.beamEnergy;
-        magnification = metadata.magnification;
-        tiltAngle = metadata.tiltAngle;
-        workingDistance = metadata.workingDistance;
-        pixelWidth = metadata.pixelWidth;
-        pixelHeight = metadata.pixelHeight;
-        sampleRotation = metadata.sampleRotation;
-        calibration = metadata.calibration;
+    public EbsdMMap(int width, int height) {
+        this(width, height, new HashMap<String, Map>());
     }
 
 
@@ -150,78 +116,84 @@ public abstract class EbsdMMap extends MultiMap {
      *            height of the maps
      * @param mapList
      *            aliases and maps
-     * @param metadata
-     *            data defining the EBSD acquisition
      */
-    public EbsdMMap(int width, int height, HashMap<String, Map> mapList,
-            EbsdMetadata metadata) {
+    public EbsdMMap(int width, int height, HashMap<String, Map> mapList) {
         super(width, height);
 
+        // Calibration
+        // Sets calibration as the calibration of the first map
+        // The add(String, Map) ensures that all maps have the same calibration
+        if (mapList.size() > 0)
+            setCalibration(mapList.values().toArray(new Map[0])[0].getCalibration());
+        else
+            setCalibration(Calibration.NONE);
+
+        // Metadata
+        setMetadata(EbsdMetadata.DEFAULT);
+
         // Verify that all the needed Maps are present in the HashMap
-        if (!mapList.containsKey(Q0))
-            throw new IllegalArgumentException(
-                    "Undefined first quaternion component map");
+        if (!mapList.containsKey(Q0)) {
+            RealMap q0 = new RealMap(width, height);
+            q0.clear(Float.NaN);
+            q0.cloneMetadataFrom(this);
+            mapList.put(Q0, q0);
+        }
         if (!mapList.get(Q0).getClass().equals(RealMap.class))
             throw new IllegalArgumentException(
                     "First quaternion component map must be a RealMap.");
 
-        if (!mapList.containsKey(Q1))
-            throw new IllegalArgumentException(
-                    "Undefined second quaternion component map");
+        if (!mapList.containsKey(Q1)) {
+            RealMap q1 = new RealMap(width, height);
+            q1.clear(Float.NaN);
+            q1.cloneMetadataFrom(this);
+            mapList.put(Q1, q1);
+        }
         if (!mapList.get(Q1).getClass().equals(RealMap.class))
             throw new IllegalArgumentException(
                     "Second quaternion component map must be a RealMap.");
 
-        if (!mapList.containsKey(Q2))
-            throw new IllegalArgumentException(
-                    "Undefined third quaternion component map");
+        if (!mapList.containsKey(Q2)) {
+            RealMap q2 = new RealMap(width, height);
+            q2.clear(Float.NaN);
+            q2.cloneMetadataFrom(this);
+            mapList.put(Q2, q2);
+        }
         if (!mapList.get(Q2).getClass().equals(RealMap.class))
             throw new IllegalArgumentException(
                     "Third quaternion component map must be a RealMap.");
 
-        if (!mapList.containsKey(Q3))
-            throw new IllegalArgumentException(
-                    "Undefined fourth quaternion component map");
+        if (!mapList.containsKey(Q3)) {
+            RealMap q3 = new RealMap(width, height);
+            q3.clear(Float.NaN);
+            q3.cloneMetadataFrom(this);
+            mapList.put(Q3, q3);
+        }
         if (!mapList.get(Q3).getClass().equals(RealMap.class))
             throw new IllegalArgumentException(
                     "Fourth quaternion component map must be a RealMap.");
 
-        if (!mapList.containsKey(PHASES))
-            throw new IllegalArgumentException("Undefined phases map");
+        if (!mapList.containsKey(PHASES)) {
+            PhasesMap phasesMap = new PhasesMap(width, height);
+            phasesMap.clear((byte) 0);
+            phasesMap.cloneMetadataFrom(this);
+            mapList.put(PHASES, phasesMap);
+        }
         if (!mapList.get(PHASES).getClass().equals(PhasesMap.class))
             throw new IllegalArgumentException(
                     "Phases map must be a PhasesMap.");
 
-        // Put all the Maps in the underlying MultiMap
+        if (!mapList.containsKey(ERRORS)) {
+            ErrorMap errorMap = new ErrorMap(width, height);
+            errorMap.clear((byte) 0);
+            errorMap.cloneMetadataFrom(this);
+            mapList.put(ERRORS, errorMap);
+        }
+        if (!mapList.get(ERRORS).getClass().equals(ErrorMap.class))
+            throw new IllegalArgumentException("Error map must be a ErrorMap.");
+
+        // Put all the maps in the underlying multiMap.
         for (Entry<String, Map> entry : mapList.entrySet())
             add(entry.getKey(), entry.getValue());
-
-        // Import metadata
-        beamEnergy = metadata.beamEnergy;
-        magnification = metadata.magnification;
-        tiltAngle = metadata.tiltAngle;
-        workingDistance = metadata.workingDistance;
-        pixelWidth = metadata.pixelWidth;
-        pixelHeight = metadata.pixelHeight;
-        sampleRotation = metadata.sampleRotation;
-        calibration = metadata.calibration;
-    }
-
-
-
-    /**
-     * Replaces all the pixels that are NaN to the specify value in all the
-     * <code>RealMap</code> inside this <code>EbsdMMap</code>.
-     * 
-     * @param value
-     *            new value
-     */
-    public void clearNaN(float value) {
-        for (Map map : getMaps())
-            if (map instanceof RealMap)
-                ((RealMap) map).clearNaN(value);
-
-        setChanged(Map.MAP_CHANGED);
     }
 
 
@@ -241,7 +213,9 @@ public abstract class EbsdMMap extends MultiMap {
      * 
      * @return metadata
      */
-    public abstract EbsdMetadata getMetadata();
+    public EbsdMetadata getMetadata() {
+        return metadata;
+    }
 
 
 
@@ -304,6 +278,17 @@ public abstract class EbsdMMap extends MultiMap {
      */
     public PhasesMap getPhasesMap() {
         return (PhasesMap) getMap(PHASES);
+    }
+
+
+
+    /**
+     * Returns the map for the errors.
+     * 
+     * @return error map
+     */
+    public ErrorMap getErrorMap() {
+        return (ErrorMap) getMap(ERRORS);
     }
 
 

@@ -28,6 +28,7 @@ import org.ebsdimage.gui.run.ops.MultipleChoicePanel;
 
 import ptpshared.gui.WizardPage;
 import rmlshared.util.ArrayList;
+import rmlshared.util.Preferences;
 
 /**
  * Template for the experiment's wizard page.
@@ -35,6 +36,17 @@ import rmlshared.util.ArrayList;
  * @author Philippe T. Pinard
  */
 public class OperationWizardPage extends WizardPage {
+
+    /**
+     * Desactives update preferences. The preferences of the operation wizard
+     * pages are not saved.
+     * <p>
+     * {@inheritDoc}
+     */
+    @Override
+    public Preferences getPreferences() {
+        return null;
+    }
 
     /** Panel for the pre operations. */
     protected MultipleChoicePanel prePanel;

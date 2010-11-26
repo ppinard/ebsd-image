@@ -18,12 +18,15 @@
 package org.ebsdimage.core.sim.ops.output;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.Camera;
+import org.ebsdimage.core.EbsdMetadata;
 import org.ebsdimage.core.exp.ExpMMap;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.sim.Energy;
@@ -38,14 +41,15 @@ import org.junit.Test;
 
 import ptpshared.core.math.Eulers;
 import ptpshared.core.math.Quaternion;
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.Map;
 import rmlimage.module.real.core.RealMap;
 import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
-import crystallography.core.crystals.IronBCC;
-import crystallography.core.crystals.Silicon;
+import crystallography.core.CrystalFactory;
 
-public class ExpMMapSmpFileTest {
+public class ExpMMapSmpFileTest extends TestCase {
 
     private ExpMMapSmpFile op;
 
@@ -74,7 +78,9 @@ public class ExpMMapSmpFileTest {
         camera = new Camera(0.1, 0.2, 0.3);
         rotation = new Quaternion(new Eulers(0.1, 0.2, 0.3));
 
-        Crystal[] crystals = new Crystal[] { new Silicon(), new IronBCC() };
+        Crystal[] crystals =
+                new Crystal[] { CrystalFactory.silicon(),
+                        CrystalFactory.ferrite() };
         Camera[] cameras = new Camera[] { camera };
         Energy[] energies = new Energy[] { new Energy(25e3) };
         Quaternion[] rotations = new Quaternion[] { rotation };
@@ -122,15 +128,16 @@ public class ExpMMapSmpFileTest {
         assertEquals(2, mmap.width);
         assertEquals(1, mmap.height);
         assertEquals(9, mmap.getMaps().length);
+        // TODO: Test calibration
 
-        assertEquals(25e3, mmap.beamEnergy, 1e-6);
-        assertEquals(1, mmap.magnification, 1e-6);
-        assertEquals(0, mmap.tiltAngle, 1e-6);
-        assertEquals(Double.NaN, mmap.workingDistance, 1e-6);
-        assertEquals(1, mmap.pixelWidth * 1e6, 1e-6);
-        assertEquals(1, mmap.pixelHeight * 1e6, 1e-6);
-        assertTrue(Quaternion.IDENTITY.equals(mmap.sampleRotation, 1e-6));
-        assertTrue(new Camera(0.1, 0.2, 0.3).equals(mmap.calibration, 1e-6));
+        EbsdMetadata metadata = mmap.getMetadata();
+        assertEquals(25e3, metadata.beamEnergy, 1e-6);
+        assertEquals(1, metadata.magnification, 1e-6);
+        assertEquals(0, metadata.tiltAngle, 1e-6);
+        assertEquals(Double.NaN, metadata.workingDistance, 1e-6);
+        assertTrue(Quaternion.IDENTITY.equals(metadata.sampleRotation, 1e-6));
+        assertTrue(Quaternion.IDENTITY.equals(metadata.cameraRotation, 1e-6));
+        assertTrue(new Camera(0.1, 0.2, 0.3).equals(metadata.camera, 1e-6));
 
         assertEquals(2, mmap.getPhases().length);
 
@@ -199,6 +206,46 @@ public class ExpMMapSmpFileTest {
         assertEquals(0, smp.getStartIndex());
         assertEquals(1, smp.getEndIndex());
         smp.close();
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new ExpMMapSmpFile()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new ExpMMapSmpFile(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-701604571, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        ExpMMapSmpFile other = new XmlLoader().load(ExpMMapSmpFile.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

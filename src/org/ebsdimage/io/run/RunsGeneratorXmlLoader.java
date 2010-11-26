@@ -21,7 +21,7 @@ import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.run.RunsGenerator;
 import org.jdom.Element;
 
-import ptpshared.utility.xml.ObjectXmlLoader;
+import ptpshared.util.xml.ObjectXmlLoader;
 
 /**
  * Abstract XML loader for an <code>RunsGenerator</code>.

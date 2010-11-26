@@ -18,6 +18,7 @@
 package org.ebsdimage.core.exp.ops.pattern.post;
 
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
 
@@ -28,20 +29,12 @@ import rmlimage.core.ByteMap;
  */
 public class Noise extends PatternPostOps {
 
+    /** Default operation. */
+    public static final Noise DEFAULT = new Noise(1.0);
+
     /** Standard deviation of the noise. */
+    @Attribute(name = "stdDev")
     public final double stdDev;
-
-    /** Default standard deviation. */
-    public static final double DEFAULT_STDDEV = 1.0;
-
-
-
-    /**
-     * Creates a new noise operation with the default standard deviation.
-     */
-    public Noise() {
-        this(DEFAULT_STDDEV);
-    }
 
 
 
@@ -51,7 +44,7 @@ public class Noise extends PatternPostOps {
      * @param stdDev
      *            standard deviation
      */
-    public Noise(double stdDev) {
+    public Noise(@Attribute(name = "stdDev") double stdDev) {
         if (stdDev <= 0)
             throw new IllegalArgumentException("Standard deviation (" + stdDev
                     + ") must be > " + 0 + '.');
@@ -63,11 +56,7 @@ public class Noise extends PatternPostOps {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
+        if (!super.equals(obj))
             return false;
 
         Noise other = (Noise) obj;
@@ -80,9 +69,23 @@ public class Noise extends PatternPostOps {
 
 
     @Override
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        Noise other = (Noise) obj;
+        if (Math.abs(stdDev - other.stdDev) >= precision)
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
+        int result = super.hashCode();
         long temp;
         temp = Double.doubleToLongBits(stdDev);
         result = prime * result + (int) (temp ^ (temp >>> 32));

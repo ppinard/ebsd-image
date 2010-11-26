@@ -43,7 +43,7 @@ public class SumDialog extends OperationDialog {
     public SumDialog() {
         super("Sum");
 
-        maxField = new IntField("Maximum number of peaks", Sum.DEFAULT_MAX);
+        maxField = new IntField("Maximum number of peaks", Sum.DEFAULT.max);
         maxField.setRange(-1, Integer.MAX_VALUE);
 
         ColumnPanel panel = new ColumnPanel(2);

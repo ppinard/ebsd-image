@@ -70,6 +70,6 @@ public class TslMetadata extends EbsdMetadata {
         this(metadata.beamEnergy, metadata.magnification, metadata.tiltAngle,
                 metadata.workingDistance, metadata.pixelWidth,
                 metadata.pixelHeight, metadata.sampleRotation,
-                metadata.calibration);
+                metadata.camera);
     }
 }

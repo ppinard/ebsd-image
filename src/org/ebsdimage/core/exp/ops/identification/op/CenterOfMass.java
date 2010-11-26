@@ -35,6 +35,11 @@ import rmlimage.core.Identification;
  */
 public class CenterOfMass extends IdentificationOp {
 
+    /** Default operation. */
+    public static final CenterOfMass DEFAULT = new CenterOfMass();
+
+
+
     @Override
     public HoughPeak[] identify(Exp exp, BinMap peaksMap, HoughMap houghMap) {
         IdentMap identMap = Identification.identify(peaksMap);

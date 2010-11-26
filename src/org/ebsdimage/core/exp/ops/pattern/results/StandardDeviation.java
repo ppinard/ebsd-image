@@ -31,6 +31,11 @@ import rmlimage.module.real.core.RealMap;
  */
 public class StandardDeviation extends PatternResultsOps {
 
+    /** Default operation. */
+    public static final StandardDeviation DEFAULT = new StandardDeviation();
+
+
+
     /**
      * Calculates the standard deviation quality index of the source map.
      * 

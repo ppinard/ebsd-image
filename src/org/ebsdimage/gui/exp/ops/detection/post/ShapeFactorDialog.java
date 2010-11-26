@@ -46,8 +46,7 @@ public class ShapeFactorDialog extends OperationDialog {
         super("Shape Factor");
 
         aspectRatioField =
-                new DoubleField("Aspect Ratio",
-                        ShapeFactor.DEFAULT_ASPECT_RATIO);
+                new DoubleField("Aspect Ratio", ShapeFactor.DEFAULT.aspectRatio);
         aspectRatioField.setRange(1.0, Double.MAX_VALUE);
 
         Panel panel = new ColumnPanel(2);

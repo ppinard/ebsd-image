@@ -19,9 +19,11 @@ package org.ebsdimage.core.exp.ops.hough.op;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Root;
 
 import rmlimage.core.ByteMap;
 
+@Root
 public class HoughOpMock extends HoughOp {
 
     @Override
@@ -32,6 +34,12 @@ public class HoughOpMock extends HoughOp {
             destMap.pixArray[i] = srcMap.pixArray[i % 4];
 
         return destMap;
+    }
+
+
+
+    public HoughOpMock() {
+
     }
 
 }

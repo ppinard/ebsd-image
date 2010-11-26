@@ -19,17 +19,23 @@ package org.ebsdimage.core.sim;
 
 import static java.lang.Math.abs;
 import net.jcip.annotations.Immutable;
-import ptpshared.utility.xml.ObjectXml;
+
+import org.simpleframework.xml.Root;
+import org.simpleframework.xml.Text;
+
+import ptpshared.util.AlmostEquable;
 
 /**
  * Stores the beam energy.
  * 
  * @author Philippe T. Pinard
  */
+@Root
 @Immutable
-public class Energy implements ObjectXml {
+public class Energy implements AlmostEquable {
 
     /** Value of the beam energy (in eV). */
+    @Text
     public final double value;
 
 
@@ -44,7 +50,7 @@ public class Energy implements ObjectXml {
      * @throws IllegalArgumentException
      *             if the energy is infinite.
      */
-    public Energy(double value) {
+    public Energy(@Text double value) {
         if (Double.isNaN(value))
             throw new IllegalArgumentException(
                     "Energy cannot be NaN (not a number).");
@@ -60,7 +66,7 @@ public class Energy implements ObjectXml {
      * Checks if this <code>Energy</code> is almost equal to the specified one
      * with the given precision.
      * 
-     * @param other
+     * @param obj
      *            other <code>Energy</code> to check equality
      * @param precision
      *            level of precision
@@ -70,7 +76,8 @@ public class Energy implements ObjectXml {
      * @throws IllegalArgumentException
      *             if the precision is not a number (NaN)
      */
-    public boolean equals(Energy other, double precision) {
+    @Override
+    public boolean equals(Object obj, double precision) {
         if (precision < 0)
             throw new IllegalArgumentException(
                     "The precision has to be greater or equal to 0.0.");
@@ -78,11 +85,14 @@ public class Energy implements ObjectXml {
             throw new IllegalArgumentException(
                     "The precision must be a number.");
 
-        if (this == other)
+        if (this == obj)
             return true;
-        if (other == null)
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
             return false;
 
+        Energy other = (Energy) obj;
         if (abs(value - other.value) >= precision)
             return false;
 
@@ -106,6 +116,7 @@ public class Energy implements ObjectXml {
             return false;
         if (getClass() != obj.getClass())
             return false;
+
         Energy other = (Energy) obj;
         if (Double.doubleToLongBits(value) != Double.doubleToLongBits(other.value))
             return false;

@@ -20,11 +20,9 @@ public class ExpSplitterTest {
         ArrayList<Operation> ops = ExpTester.createOperations();
         ops.add(new PatternOpMock(8));
 
-        exp =
-                new Exp(4, 2, ExpTester.createMetadata(),
-                        ExpTester.createPhases(),
-                        ops.toArray(new Operation[ops.size()]),
-                        new CurrentMapsFileSaver());
+        ExpMMap mmap = new ExpMMap(4, 2);
+        exp = new Exp(mmap, ops.toArray(new Operation[ops.size()]));
+
         assertEquals(8, exp.getPatternOp().size);
     }
 
@@ -36,11 +34,9 @@ public class ExpSplitterTest {
         ArrayList<Operation> ops = ExpTester.createOperations();
 
         // Experiment
-        Exp exp =
-                new Exp(4, 2, ExpTester.createMetadata(),
-                        ExpTester.createPhases(),
-                        ops.toArray(new Operation[ops.size()]),
-                        new CurrentMapsFileSaver());
+        ExpMMap mmap = new ExpMMap(4, 2);
+        Exp exp = new Exp(mmap, ops.toArray(new Operation[ops.size()]));
+
         assertEquals(2, exp.getPatternOp().size);
 
         new ExpSplitter(exp, 3);

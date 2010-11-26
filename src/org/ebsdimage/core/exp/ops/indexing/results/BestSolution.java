@@ -33,6 +33,11 @@ import crystallography.core.Crystal;
  */
 public class BestSolution extends IndexingResultsOps {
 
+    /** Default operation. */
+    public static final BestSolution DEFAULT = new BestSolution();
+
+
+
     /**
      * Saves the solution with the lowest fit value. The lattice orientation,
      * the phase and the fit value are saved.

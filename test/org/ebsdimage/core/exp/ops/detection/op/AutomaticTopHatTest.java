@@ -18,29 +18,35 @@
 package org.ebsdimage.core.exp.ops.detection.op;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.io.HoughMapLoader;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.BinMap;
 import rmlimage.core.IdentMap;
 import rmlimage.core.Identification;
 import rmlimage.core.MathMorph;
 import rmlshared.io.FileUtil;
 
-public class AutomaticTopHatTest {
+public class AutomaticTopHatTest extends TestCase {
 
-    private AutomaticTopHat topHat;
+    private AutomaticTopHat op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        topHat = new AutomaticTopHat();
+        op = new AutomaticTopHat();
     }
 
 
@@ -49,7 +55,7 @@ public class AutomaticTopHatTest {
     public void testIdentify() throws IOException {
         HoughMap srcMap =
                 new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap_cropped.bmp"));
-        BinMap peaksMap = topHat.detect(null, srcMap);
+        BinMap peaksMap = op.detect(null, srcMap);
 
         // Remove small objects for comparison
         MathMorph.opening(peaksMap, 2, 8);
@@ -63,7 +69,48 @@ public class AutomaticTopHatTest {
 
     @Test
     public void testToString() {
-        assertEquals(topHat.toString(), "Automatic Top Hat");
+        assertEquals(op.toString(), "Automatic Top Hat");
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new AutomaticTopHat()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new AutomaticTopHat(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(1052419856, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        AutomaticTopHat other =
+                new XmlLoader().load(AutomaticTopHat.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

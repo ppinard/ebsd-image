@@ -158,69 +158,143 @@ public class Analysis {
 
 
     /**
-     * Return the maximum pixel color index in each object in the
-     * <code>IdentMap</code>. The pixel color index is determined from the
-     * specified <code>ByteMap</code>.
+     * Returns the location of the maximum for each object in the
+     * <code>BinMap</code>.
      * 
      * @param houghMap
-     *            corresponding <code>HoughMap</code> to get the maximum color
-     *            index from
+     *            hough map where the intensity (mass) will be taken
      * @param peaksMap
      *            map where the Hough peaks are detected
-     * @return the list of the objects maximum pixel color index
+     * @return the list of points in the Hough (rho, theta)
      * @throws NullPointerException
-     *             if the ident map or the byte map is null
-     * @throws IllegalArgumentException
-     *             if the ident map and byte map don't have the same size
+     *             if either the hough map or peaks map is null
      */
-    public static Maximum getMaximumIntensity(HoughMap houghMap,
+    public static HoughPoint getMaximumLocation(HoughMap houghMap,
             IdentMap peaksMap) {
         if (houghMap == null)
-            throw new NullPointerException("Ident map cannot be null.");
+            throw new NullPointerException("Hough map cannot be null.");
         if (peaksMap == null)
-            throw new NullPointerException("Byte map cannot be null.");
+            throw new NullPointerException("Peaks map cannot be null.");
 
         // Apply houghMap properties on peaksMap
         peaksMap.setProperties(houghMap);
 
         int nbObjects = peaksMap.getObjectCount();
 
-        // If no objects, return empty results
-        if (nbObjects <= 0)
-            return new Maximum(0);
+        // +1 for object 0 (background)
+        double[] maximums = new double[nbObjects + 1];
+        double[] rhos = new double[nbObjects + 1];
+        double[] thetas = new double[nbObjects + 1];
 
-        int[] maxima = new int[nbObjects + 1]; // +1 for object 0 (background)
-        Arrays.fill(maxima, 0); // Initialize the array to 0
+        // Initialize the array to 0
+        Arrays.fill(maximums, Double.NEGATIVE_INFINITY);
+        Arrays.fill(rhos, 0);
+        Arrays.fill(thetas, 0);
 
-        // Calculate the maxima
-        int objectNumber;
-        int value;
-        double rho, theta;
+        int width = peaksMap.width;
+        int height = peaksMap.height;
+        short[] pixArray = peaksMap.pixArray;
 
-        for (int n = 0; n < peaksMap.size; n++) {
-            objectNumber = peaksMap.pixArray[n] & 0xff;
-            if (objectNumber == 0)
-                continue;
+        short objectNumber;
+        int n = 0;
+        double rho;
+        double theta;
+        double value;
 
-            theta = Analysis.getTheta(peaksMap, n);
-            rho = Analysis.getR(peaksMap, n);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                objectNumber = pixArray[n];
 
-            value = houghMap.pixArray[houghMap.getIndex(rho, theta)] & 0xff;
+                rho = getR(peaksMap, n);
+                theta = getTheta(peaksMap, n);
 
-            if (value > maxima[objectNumber])
-                maxima[objectNumber] = value;
+                value = houghMap.pixArray[houghMap.getIndex(rho, theta)] & 0xff;
+
+                if (value > maximums[objectNumber]) {
+                    maximums[objectNumber] = value;
+                    rhos[objectNumber] = rho;
+                    thetas[objectNumber] = theta;
+                }
+
+                n++;
+            }
         }
 
-        // Create a proper Result object
-        // and apply the value to the Result object
-        Maximum result = new Maximum(nbObjects);
-        for (int n = 1; n <= nbObjects; n++)
-            result.val[n - 1] = maxima[n];
+        // Create Hough points
+        HoughPoint points = new HoughPoint(nbObjects);
 
-        return result;
+        for (n = 0; n < nbObjects; n++) {
+            points.rho[n] = (float) rhos[n + 1];
+            points.theta[n] = (float) thetas[n + 1];
+        }
+
+        return points;
     }
 
 
+
+    // /**
+    // * Return the maximum pixel color index in each object in the
+    // * <code>IdentMap</code>. The pixel color index is determined from the
+    // * specified <code>ByteMap</code>.
+    // *
+    // * @param houghMap
+    // * corresponding <code>HoughMap</code> to get the maximum color
+    // * index from
+    // * @param peaksMap
+    // * map where the Hough peaks are detected
+    // * @return the list of the objects maximum pixel color index
+    // * @throws NullPointerException
+    // * if the ident map or the byte map is null
+    // * @throws IllegalArgumentException
+    // * if the ident map and byte map don't have the same size
+    // */
+    // public static Maximum getMaximumIntensity(HoughMap houghMap,
+    // IdentMap peaksMap) {
+    // if (houghMap == null)
+    // throw new NullPointerException("Ident map cannot be null.");
+    // if (peaksMap == null)
+    // throw new NullPointerException("Byte map cannot be null.");
+    //
+    // // Apply houghMap properties on peaksMap
+    // peaksMap.setProperties(houghMap);
+    //
+    // int nbObjects = peaksMap.getObjectCount();
+    //
+    // // If no objects, return empty results
+    // if (nbObjects <= 0)
+    // return new Maximum(0);
+    //
+    // int[] maxima = new int[nbObjects + 1]; // +1 for object 0 (background)
+    // Arrays.fill(maxima, 0); // Initialize the array to 0
+    //
+    // // Calculate the maxima
+    // int objectNumber;
+    // int value;
+    // double rho, theta;
+    //
+    // for (int n = 0; n < peaksMap.size; n++) {
+    // objectNumber = peaksMap.pixArray[n] & 0xff;
+    // if (objectNumber == 0)
+    // continue;
+    //
+    // theta = Analysis.getTheta(peaksMap, n);
+    // rho = Analysis.getR(peaksMap, n);
+    //
+    // value = houghMap.pixArray[houghMap.getIndex(rho, theta)] & 0xff;
+    //
+    // if (value > maxima[objectNumber])
+    // maxima[objectNumber] = value;
+    // }
+    //
+    // // Create a proper Result object
+    // // and apply the value to the Result object
+    // Maximum result = new Maximum(nbObjects);
+    // for (int n = 1; n <= nbObjects; n++)
+    // result.val[n - 1] = maxima[n];
+    //
+    // return result;
+    // }
 
     /**
      * Returns the <code>r</code> coordinate of the specified index of the

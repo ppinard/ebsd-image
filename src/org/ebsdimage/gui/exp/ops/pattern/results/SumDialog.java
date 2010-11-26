@@ -55,16 +55,16 @@ public class SumDialog extends OperationDialog {
     public SumDialog() {
         super("Sum");
 
-        xminField = new DoubleField("Lower x limit", Sum.DEFAULT_XMIN * 100.0);
+        xminField = new DoubleField("Lower x limit", Sum.DEFAULT.xmin * 100.0);
         xminField.setRange(0.0, 100.0);
 
-        yminField = new DoubleField("Lower y limit", Sum.DEFAULT_YMIN * 100.0);
+        yminField = new DoubleField("Lower y limit", Sum.DEFAULT.ymin * 100.0);
         yminField.setRange(0.0, 100.0);
 
-        xmaxField = new DoubleField("Upper x limit", Sum.DEFAULT_XMAX * 100.0);
+        xmaxField = new DoubleField("Upper x limit", Sum.DEFAULT.xmax * 100.0);
         xmaxField.setRange(0.0, 100.0);
 
-        ymaxField = new DoubleField("Upper y limit", Sum.DEFAULT_YMAX * 100.0);
+        ymaxField = new DoubleField("Upper y limit", Sum.DEFAULT.ymax * 100.0);
         ymaxField.setRange(0.0, 100.0);
 
         Panel panel = new ColumnPanel(3);

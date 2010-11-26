@@ -21,27 +21,24 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-public class RadialNoiseTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 
-    private RadialNoise noise;
+public class RadialNoiseTest extends TestCase {
+
+    private RadialNoise op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        noise = new RadialNoise();
-    }
-
-
-
-    @Test
-    public void testEquals() {
-        RadialNoise other = new RadialNoise();
-        assertFalse(noise == other);
-        assertEquals(noise, other);
+        op = new RadialNoise(2, 3, 4, 5, 6, 7);
     }
 
 
@@ -55,28 +52,13 @@ public class RadialNoiseTest {
 
 
     @Test
-    public void testRadialNoise() {
-        assertEquals(RadialNoise.DEFAULT_X, noise.x);
-        assertEquals(RadialNoise.DEFAULT_Y, noise.y);
-        assertEquals(RadialNoise.DEFAULT_STDDEV_X, noise.stdDevX, 1e-7);
-        assertEquals(RadialNoise.DEFAULT_STDDEV_Y, noise.stdDevY, 1e-7);
-        assertEquals(RadialNoise.DEFALT_INITIAL_NOISE_STDDEV,
-                noise.initialNoiseStdDev, 1e-7);
-        assertEquals(RadialNoise.DEFALT_FINAL_NOISE_STDDEV,
-                noise.finalNoiseStdDev, 1e-7);
-    }
-
-
-
-    @Test
     public void testRadialNoiseIntIntDoubleDoubleDoubleDouble() {
-        RadialNoise noise = new RadialNoise(2, 3, 4, 5, 6, 7);
-        assertEquals(2, noise.x);
-        assertEquals(3, noise.y);
-        assertEquals(4, noise.stdDevX, 1e-7);
-        assertEquals(5, noise.stdDevY, 1e-7);
-        assertEquals(6, noise.initialNoiseStdDev, 1e-7);
-        assertEquals(7, noise.finalNoiseStdDev, 1e-7);
+        assertEquals(2, op.x);
+        assertEquals(3, op.y);
+        assertEquals(4, op.stdDevX, 1e-7);
+        assertEquals(5, op.stdDevY, 1e-7);
+        assertEquals(6, op.initialNoiseStdDev, 1e-7);
+        assertEquals(7, op.finalNoiseStdDev, 1e-7);
     }
 
 
@@ -98,8 +80,61 @@ public class RadialNoiseTest {
     @Test
     public void testToString() {
         String expected =
-                "RadialNoise [final noise std. dev.=15.0, initial noise std. dev.=1.0, std. dev. x=-1.0, std. dev. y=-1.0, x0=0 px, y0=0 px]";
-        assertEquals(expected, noise.toString());
+                "RadialNoise [x0=2 px, y0=3 px, std. dev. x=4.0, std. dev. y=5.0, initial noise std. dev.=6.0, final noise std. dev.=7.0]";
+        assertEquals(expected, op.toString());
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new RadialNoise(3, 3, 4, 5, 6, 7)));
+        assertFalse(op.equals(new RadialNoise(2, 4, 4, 5, 6, 7)));
+        assertFalse(op.equals(new RadialNoise(2, 3, 5, 5, 6, 7)));
+        assertFalse(op.equals(new RadialNoise(2, 3, 4, 6, 6, 7)));
+        assertFalse(op.equals(new RadialNoise(2, 3, 4, 5, 7, 7)));
+        assertFalse(op.equals(new RadialNoise(2, 3, 4, 5, 6, 8)));
+        assertTrue(op.equals(new RadialNoise(2, 3, 4, 5, 6, 7)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertFalse(op.equals(new RadialNoise(3, 3, 4, 5, 6, 7), 1e-2));
+        assertFalse(op.equals(new RadialNoise(2, 4, 4, 5, 6, 7), 1e-2));
+        assertFalse(op.equals(new RadialNoise(2, 3, 4.1, 5, 6, 7), 1e-2));
+        assertFalse(op.equals(new RadialNoise(2, 3, 4, 5.1, 6, 7), 1e-2));
+        assertFalse(op.equals(new RadialNoise(2, 3, 4, 5, 6.1, 7), 1e-2));
+        assertFalse(op.equals(new RadialNoise(2, 3, 4, 5, 6, 7.1), 1e-2));
+        assertTrue(op.equals(new RadialNoise(2, 3, 4.001, 5.001, 6.001, 7.001),
+                1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(736648443, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        RadialNoise other = new XmlLoader().load(RadialNoise.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

@@ -31,6 +31,11 @@ import rmlimage.module.real.core.RealMap;
  */
 public class Sum extends HoughResultsOps {
 
+    /** Default operation. */
+    public static final Sum DEFAULT = new Sum();
+
+
+
     @Override
     public OpResult[] calculate(Exp exp, HoughMap srcMap) {
         OpResult result =

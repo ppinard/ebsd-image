@@ -19,25 +19,30 @@ package org.ebsdimage.core.exp.ops.hough.post;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.io.HoughMapLoader;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlshared.io.FileUtil;
 
-public class HoughCropTest {
+public class HoughCropTest extends TestCase {
 
-    private HoughCrop houghCrop;
+    private HoughCrop op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        houghCrop = new HoughCrop(8);
+        op = new HoughCrop(8);
     }
 
 
@@ -45,23 +50,15 @@ public class HoughCropTest {
     @Test
     public void testEquals() {
         HoughCrop other = new HoughCrop(8);
-        assertFalse(houghCrop == other);
-        assertEquals(houghCrop, other);
-    }
-
-
-
-    @Test
-    public void testHoughCrop() {
-        HoughCrop tmpHoughCrop = new HoughCrop();
-        assertEquals(HoughCrop.DEFAULT_RADIUS, tmpHoughCrop.radius);
+        assertFalse(op == other);
+        assertEquals(op, other);
     }
 
 
 
     @Test
     public void testHoughCropInt() {
-        assertEquals(8, houghCrop.radius);
+        assertEquals(8, op.radius);
     }
 
 
@@ -73,7 +70,7 @@ public class HoughCropTest {
         HoughMap expectedMap =
                 new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/hough_crop_op.bmp"));
 
-        HoughMap destMap = houghCrop.process(null, srcMap);
+        HoughMap destMap = op.process(null, srcMap);
 
         destMap.assertEquals(expectedMap);
     }
@@ -82,7 +79,49 @@ public class HoughCropTest {
 
     @Test
     public void testToString() {
-        assertEquals(houghCrop.toString(), "Hough Crop [radius=8 px]");
+        assertEquals(op.toString(), "Hough Crop [radius=8 px]");
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new HoughCrop(7)));
+        assertTrue(op.equals(new HoughCrop(8)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 2));
+        assertFalse(op.equals(null, 2));
+        assertFalse(op.equals(new Object(), 2));
+
+        assertFalse(op.equals(new HoughCrop(5), 2));
+        assertTrue(op.equals(new HoughCrop(7), 2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(1983706858, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        HoughCrop other = new XmlLoader().load(HoughCrop.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

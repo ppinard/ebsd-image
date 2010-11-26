@@ -21,7 +21,11 @@ import static java.lang.Math.*;
 import static ptpshared.core.math.Math.acos;
 import static ptpshared.core.math.Math.sqrt;
 import net.jcip.annotations.Immutable;
-import ptpshared.utility.xml.ObjectXml;
+
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+
+import ptpshared.util.AlmostEquable;
 import rmlshared.math.Stats;
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -45,8 +49,9 @@ import edu.umd.cs.findbugs.annotations.NonNull;
  * 
  * @author Philippe T. Pinard
  */
+@Root
 @Immutable
-public class Quaternion implements ObjectXml {
+public class Quaternion implements AlmostEquable, Cloneable {
 
     /** Null quaternion (all coefficients are equal to 0.0). */
     public static final Quaternion ZERO = new Quaternion(0);
@@ -126,17 +131,19 @@ public class Quaternion implements ObjectXml {
      * <em>The <code>Quaternion</code> will be converted to be a positive
      * <code>Quaternion</code>.</em>
      * 
-     * @param a
+     * @param q0
      *            scalar value
-     * @param v1
+     * @param q1
      *            first coordinate of the vector
-     * @param v2
+     * @param q2
      *            second coordinate of the vector
-     * @param v3
+     * @param q3
      *            third coordinate of the vector
      */
-    public Quaternion(double a, double v1, double v2, double v3) {
-        this(a, new Vector3D(v1, v2, v3));
+    public Quaternion(@Attribute(name = "q0") double q0,
+            @Attribute(name = "q1") double q1,
+            @Attribute(name = "q2") double q2, @Attribute(name = "q3") double q3) {
+        this(q0, new Vector3D(q1, q2, q3));
     }
 
 
@@ -328,7 +335,7 @@ public class Quaternion implements ObjectXml {
      *             vector cannot be null
      */
     public Quaternion(Vector3D v) {
-        this(0, v.duplicate());
+        this(0, v.clone());
     }
 
 
@@ -413,8 +420,9 @@ public class Quaternion implements ObjectXml {
      * 
      * @return duplicate
      */
+    @Override
     @CheckReturnValue
-    public Quaternion duplicate() {
+    public Quaternion clone() {
         return new Quaternion(scalar, vector);
     }
 
@@ -452,7 +460,7 @@ public class Quaternion implements ObjectXml {
      * Checks if this <code>Quaternion</code> is almost equal to the specified
      * one with the given precision.
      * 
-     * @param other
+     * @param obj
      *            other <code>Quaternion</code> to check equality
      * @param precision
      *            level of precision
@@ -462,7 +470,8 @@ public class Quaternion implements ObjectXml {
      * @throws IllegalArgumentException
      *             if the precision is not a number (NaN)
      */
-    public boolean equals(Quaternion other, double precision) {
+    @Override
+    public boolean equals(Object obj, double precision) {
         if (precision < 0)
             throw new IllegalArgumentException(
                     "The precision has to be greater or equal to 0.0.");
@@ -470,11 +479,14 @@ public class Quaternion implements ObjectXml {
             throw new IllegalArgumentException(
                     "The precision must be a number.");
 
-        if (this == other)
+        if (this == obj)
             return true;
-        if (other == null)
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
             return false;
 
+        Quaternion other = (Quaternion) obj;
         if (abs(scalar - other.scalar) >= precision)
             return false;
         if (!(vector.equals(other.vector, precision)))
@@ -490,6 +502,7 @@ public class Quaternion implements ObjectXml {
      * 
      * @return value of the first coordinate
      */
+    @Attribute(name = "q0")
     public double getQ0() {
         return scalar;
     }
@@ -501,6 +514,7 @@ public class Quaternion implements ObjectXml {
      * 
      * @return value of the second coordinate
      */
+    @Attribute(name = "q1")
     public double getQ1() {
         return vector.get(0);
     }
@@ -512,6 +526,7 @@ public class Quaternion implements ObjectXml {
      * 
      * @return value of the third coordinate
      */
+    @Attribute(name = "q2")
     public double getQ2() {
         return vector.get(1);
     }
@@ -523,6 +538,7 @@ public class Quaternion implements ObjectXml {
      * 
      * @return value of the fourth coordinate
      */
+    @Attribute(name = "q3")
     public double getQ3() {
         return vector.get(2);
     }

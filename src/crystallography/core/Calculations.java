@@ -470,7 +470,7 @@ public class Calculations {
      */
     @CheckReturnValue
     public static Quaternion reduce(Quaternion q, LaueGroup lg) {
-        Quaternion equiv = q.duplicate();
+        Quaternion equiv = q.clone();
 
         for (Quaternion op : lg.getOperators()) {
             Quaternion out = q.multiply(op);

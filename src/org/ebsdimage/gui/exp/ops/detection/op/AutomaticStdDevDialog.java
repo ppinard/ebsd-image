@@ -45,7 +45,9 @@ public class AutomaticStdDevDialog extends OperationDialog {
         ColumnPanel panel = new ColumnPanel(2);
 
         panel.add("Sigma factor");
-        sigmaFactorField = new DoubleField("Sigma factor", 2);
+        sigmaFactorField =
+                new DoubleField("Sigma factor",
+                        AutomaticStdDev.DEFAULT.sigmaFactor);
         sigmaFactorField.setRange(0, Double.MAX_VALUE);
         panel.add(sigmaFactorField);
 

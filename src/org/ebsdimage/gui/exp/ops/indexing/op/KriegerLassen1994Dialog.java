@@ -52,13 +52,13 @@ public class KriegerLassen1994Dialog extends OperationDialog {
 
         maxIndexField =
                 new IntField("Maximum Index",
-                        KriegerLassen1994.DEFAULT_MAX_INDEX);
+                        KriegerLassen1994.DEFAULT.maxIndex);
         maxIndexField.setRange(1, Integer.MAX_VALUE);
 
         scatterTypeField =
                 new ComboBox<ScatteringFactorsEnum>(
                         ScatteringFactorsEnum.values());
-        scatterTypeField.setSelectedItem(ScatteringFactorsEnum.XRAY);
+        scatterTypeField.setSelectedItem(KriegerLassen1994.DEFAULT.scatterType);
 
         Panel panel = new ColumnPanel(2);
         panel.add(new JLabel("Maximum index of the reflectors"));

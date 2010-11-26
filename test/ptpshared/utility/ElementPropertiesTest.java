@@ -23,6 +23,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import ptpshared.util.ElementProperties;
+
 public class ElementPropertiesTest {
 
     @Test

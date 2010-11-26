@@ -23,8 +23,8 @@ import net.miginfocom.swing.MigLayout;
 
 import org.ebsdimage.core.run.Run;
 
+import ptpshared.gui.DirBrowserField;
 import ptpshared.gui.WizardPage;
-import rmlshared.gui.FileNameField;
 import rmlshared.gui.TextField;
 
 /**
@@ -55,7 +55,7 @@ public class InfoWizardPage extends WizardPage {
     private TextField nameField;
 
     /** Field for the experiment's working directory. */
-    private FileNameField workingDirField;
+    private DirBrowserField workingDirField;
 
 
 
@@ -75,9 +75,8 @@ public class InfoWizardPage extends WizardPage {
         // Create the working directory field label
         add(new JLabel("Working directory"));
 
-        workingDirField = new FileNameField("DIR", 32, false);
-        workingDirField.setFileSelectionMode(FileNameField.DIRECTORIES_ONLY);
-        workingDirField.setFile(Run.DEFAULT_DIR);
+        workingDirField = new DirBrowserField("Working directory", false);
+        workingDirField.setDir(Run.DEFAULT_DIR);
         add(workingDirField);
         add(workingDirField.getBrowseButton(), "wrap");
     }
@@ -96,7 +95,7 @@ public class InfoWizardPage extends WizardPage {
 
         if (buffer) {
             put(KEY_NAME, nameField.getText());
-            put(KEY_DIR, workingDirField.getFile());
+            put(KEY_DIR, workingDirField.getDir());
         }
 
         return true;

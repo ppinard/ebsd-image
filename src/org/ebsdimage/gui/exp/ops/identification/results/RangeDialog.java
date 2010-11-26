@@ -43,7 +43,7 @@ public class RangeDialog extends OperationDialog {
     public RangeDialog() {
         super("Range");
 
-        maxField = new IntField("Maximum number of peaks", Range.DEFAULT_MAX);
+        maxField = new IntField("Maximum number of peaks", Range.DEFAULT.max);
         maxField.setRange(-1, Integer.MAX_VALUE);
 
         ColumnPanel panel = new ColumnPanel(2);

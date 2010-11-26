@@ -22,41 +22,36 @@ import static org.ebsdimage.core.MaskDisc.KEY_CENTROID_Y;
 import static org.ebsdimage.core.MaskDisc.KEY_RADIUS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
 
 import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.ByteMap;
 
 public class MaskDiscTest extends TestCase {
 
-    private MaskDisc mask;
+    private MaskDisc op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        mask = new MaskDisc(10, 11, 8);
-    }
-
-
-
-    @Test
-    public void testCrop() {
-        MaskDisc other = new MaskDisc();
-        assertEquals(MaskDisc.DEFAULT_CENTROID_X, other.centroidX);
-        assertEquals(MaskDisc.DEFAULT_CENTROID_Y, other.centroidY);
-        assertEquals(MaskDisc.DEFAULT_RADIUS, other.radius);
+        op = new MaskDisc(10, 11, 8);
     }
 
 
 
     @Test
     public void testCropIntIntInt() {
-        assertEquals(10, mask.centroidX);
-        assertEquals(11, mask.centroidY);
-        assertEquals(8, mask.radius);
+        assertEquals(10, op.centroidX);
+        assertEquals(11, op.centroidY);
+        assertEquals(8, op.radius);
     }
 
 
@@ -64,8 +59,8 @@ public class MaskDiscTest extends TestCase {
     @Test
     public void testEquals() {
         MaskDisc other = new MaskDisc(10, 11, 8);
-        assertFalse(mask == other);
-        assertEquals(mask, other);
+        assertFalse(op == other);
+        assertEquals(op, other);
     }
 
 
@@ -75,7 +70,7 @@ public class MaskDiscTest extends TestCase {
         ByteMap srcMap = (ByteMap) load("org/ebsdimage/testdata/srcMap.bmp");
         ByteMap expectedMap = (ByteMap) load("org/ebsdimage/testdata/mask.bmp");
 
-        ByteMap destMap = mask.process(null, srcMap);
+        ByteMap destMap = op.process(null, srcMap);
 
         destMap.assertEquals(expectedMap);
 
@@ -102,8 +97,54 @@ public class MaskDiscTest extends TestCase {
 
     @Test
     public void testToString() {
-        assertEquals(mask.toString(),
+        assertEquals(op.toString(),
                 "Mask Disc [centroid X=10 px, centroid Y=11 px, radius=8 px]");
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new MaskDisc(99, 11, 8)));
+        assertFalse(op.equals(new MaskDisc(10, 99, 8)));
+        assertFalse(op.equals(new MaskDisc(10, 11, 99)));
+        assertTrue(op.equals(new MaskDisc(10, 11, 8)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 2));
+        assertFalse(op.equals(null, 2));
+        assertFalse(op.equals(new Object(), 2));
+
+        assertFalse(op.equals(new MaskDisc(8, 11, 8), 2));
+        assertFalse(op.equals(new MaskDisc(8, 9, 8), 2));
+        assertFalse(op.equals(new MaskDisc(8, 11, 6), 2));
+        assertTrue(op.equals(new MaskDisc(9, 10, 7), 2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(626893831, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        MaskDisc other = new XmlLoader().load(MaskDisc.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

@@ -18,6 +18,7 @@
 package org.ebsdimage.core.exp.ops.pattern.post;
 
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
 import rmlimage.core.Transform;
@@ -30,20 +31,12 @@ import rmlshared.math.IntUtil;
  */
 public class Binning extends PatternPostOps {
 
+    /** Default operation. */
+    public static final Binning DEFAULT = new Binning(1);
+
     /** Binning size, i.e. reduction factor. */
+    @Attribute(name = "factor")
     public final int factor;
-
-    /** Default binning size. */
-    public static final int DEFAULT_BINNING_FACTOR = 1;
-
-
-
-    /**
-     * Creates a new binning operation with the default binning factor.
-     */
-    public Binning() {
-        this(DEFAULT_BINNING_FACTOR);
-    }
 
 
 
@@ -53,7 +46,7 @@ public class Binning extends PatternPostOps {
      * @param factor
      *            binning factor (must be a power of two)
      */
-    public Binning(int factor) {
+    public Binning(@Attribute(name = "factor") int factor) {
         if (factor <= 0)
             throw new IllegalArgumentException("Binning size (" + factor
                     + ") must be > " + 0 + '.');
@@ -68,11 +61,7 @@ public class Binning extends PatternPostOps {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
+        if (!super.equals(obj))
             return false;
 
         Binning other = (Binning) obj;
@@ -85,9 +74,23 @@ public class Binning extends PatternPostOps {
 
 
     @Override
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        Binning other = (Binning) obj;
+        if (Math.abs(factor - other.factor) >= precision)
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
+        int result = super.hashCode();
         result = prime * result + factor;
         return result;
     }
@@ -118,7 +121,7 @@ public class Binning extends PatternPostOps {
 
     @Override
     public String toString() {
-        return "Binning [binning factor=" + factor + "]";
+        return "Binning [factor=" + factor + "]";
     }
 
 }

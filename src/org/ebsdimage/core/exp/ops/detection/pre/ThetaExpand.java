@@ -17,8 +17,11 @@
  */
 package org.ebsdimage.core.exp.ops.detection.pre;
 
+import static java.lang.Math.abs;
+
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
 import rmlimage.core.Edit;
@@ -36,18 +39,25 @@ import rmlimage.core.Transform;
 public class ThetaExpand extends DetectionPreOps {
 
     /** Angular increment (in radians) to the Hough theta range. */
+    @Attribute(name = "increment")
     public final double increment;
 
-    /** Default value of the increment. */
-    public static final double DEFAULT_INCREMENT = Math.toRadians(2);
+    /** Default operation. */
+    public static final ThetaExpand DEFAULT =
+            new ThetaExpand(Math.toRadians(2));
 
 
 
-    /**
-     * Creates a new <code>ThetaExpand</code> with the default increment.
-     */
-    public ThetaExpand() {
-        this(DEFAULT_INCREMENT);
+    @Override
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        ThetaExpand other = (ThetaExpand) obj;
+        if (abs(increment - other.increment) >= precision)
+            return false;
+
+        return true;
     }
 
 
@@ -59,7 +69,7 @@ public class ThetaExpand extends DetectionPreOps {
      *            angular increment (in radians). This increment is added to the
      *            theta range of the Hough map.
      */
-    public ThetaExpand(double increment) {
+    public ThetaExpand(@Attribute(name = "increment") double increment) {
         if (increment < 0.0 || increment > Math.PI)
             throw new IllegalArgumentException("Increment (" + increment
                     + ") must be between [0, PI].");
@@ -121,11 +131,7 @@ public class ThetaExpand extends DetectionPreOps {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
         if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
             return false;
 
         ThetaExpand other = (ThetaExpand) obj;

@@ -19,54 +19,46 @@ package org.ebsdimage.core.exp.ops.detection.pre;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.io.HoughMapLoader;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlshared.io.FileUtil;
 
-public class ButterflyTest {
+public class ButterflyTest extends TestCase {
 
-    private Butterfly butterfly;
+    private Butterfly op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        butterfly = new Butterfly(9, -500, 500);
-    }
-
-
-
-    @Test
-    public void testButterfly() {
-        Butterfly tmpButterfly = new Butterfly();
-
-        assertEquals(Butterfly.DEFAULT_KERNEL_SIZE, tmpButterfly.kernelSize);
-        assertEquals(Butterfly.DEFAULT_FLATTEN_LOWER_LIMIT,
-                tmpButterfly.flattenLowerLimit, 1e-6);
-        assertEquals(Butterfly.DEFAULT_FLATTEN_UPPER_LIMIT,
-                tmpButterfly.flattenUpperLimit, 1e-6);
+        op = new Butterfly(9, -500, 500);
     }
 
 
 
     @Test
     public void testButterflyIntFloatFloat() {
-        assertEquals(9, butterfly.kernelSize);
-        assertEquals(-500, butterfly.flattenLowerLimit, 1e-6);
-        assertEquals(500, butterfly.flattenUpperLimit, 1e-6);
+        assertEquals(9, op.kernelSize);
+        assertEquals(-500, op.flattenLowerLimit, 1e-6);
+        assertEquals(500, op.flattenUpperLimit, 1e-6);
     }
 
 
 
     @Test(expected = IllegalArgumentException.class)
     public void testButterflyIntFloatFloatException1() {
-        new Butterfly(3, -500, 500);
+        new Butterfly(4, -500, 500);
     }
 
 
@@ -81,8 +73,8 @@ public class ButterflyTest {
     @Test
     public void testEquals() {
         Butterfly other = new Butterfly(9, -500, 500);
-        assertFalse(butterfly == other);
-        assertEquals(butterfly, other);
+        assertFalse(op == other);
+        assertEquals(op, other);
     }
 
 
@@ -94,7 +86,7 @@ public class ButterflyTest {
         HoughMap expected =
                 new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/butterfly_op.bmp"));
 
-        HoughMap destMap = butterfly.process(null, srcMap);
+        HoughMap destMap = op.process(null, srcMap);
 
         destMap.assertEquals(expected);
     }
@@ -104,8 +96,54 @@ public class ButterflyTest {
     @Test
     public void testToString() {
         assertEquals(
-                butterfly.toString(),
+                op.toString(),
                 "Butterfly [flatten lower limit=-500.0, flatten upper limit=500.0, kernel size=9]");
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new Butterfly(3, -500, 500)));
+        assertFalse(op.equals(new Butterfly(9, -400, 500)));
+        assertFalse(op.equals(new Butterfly(9, -500, 400)));
+        assertTrue(op.equals(new Butterfly(9, -500, 500)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertFalse(op.equals(new Butterfly(3, -500, 500), 1e-2));
+        assertFalse(op.equals(new Butterfly(9, -500.01f, 500), 1e-2));
+        assertFalse(op.equals(new Butterfly(9, -500, 500.01f), 1e-2));
+        assertTrue(op.equals(new Butterfly(9, -500.001f, 500.001f), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-390040472, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        Butterfly other = new XmlLoader().load(Butterfly.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

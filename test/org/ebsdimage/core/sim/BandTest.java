@@ -27,11 +27,7 @@ import org.junit.Test;
 
 import ptpshared.core.geom.Line;
 import ptpshared.core.math.Quaternion;
-import crystallography.core.Crystal;
-import crystallography.core.Plane;
-import crystallography.core.Reflector;
-import crystallography.core.XrayScatteringFactors;
-import crystallography.core.crystals.Silicon;
+import crystallography.core.*;
 
 public class BandTest {
 
@@ -39,7 +35,7 @@ public class BandTest {
 
     private Crystal crystal;
 
-    private XrayScatteringFactors scatter;
+    private ScatteringFactorsEnum scatterType;
 
     private Reflector refl;
 
@@ -56,10 +52,10 @@ public class BandTest {
     @Before
     public void setUp() throws Exception {
         plane = new Plane(1, 1, 1);
-        crystal = new Silicon();
-        scatter = new XrayScatteringFactors();
+        crystal = CrystalFactory.silicon();
+        scatterType = ScatteringFactorsEnum.XRAY;
 
-        refl = new Reflector(plane, crystal, scatter);
+        refl = ReflectorFactory.create(plane, crystal, scatterType);
         rotation = Quaternion.IDENTITY;
         camera = new Camera(0.0, 0.0, 0.3);
         energy = 20e3;
@@ -88,7 +84,7 @@ public class BandTest {
     @Test(expected = BandException.class)
     public void testCalculateQuaternionCameraDoubleException() {
         Plane plane = new Plane(0, 1, 0);
-        Reflector refl = new Reflector(plane, crystal, scatter);
+        Reflector refl = ReflectorFactory.create(plane, crystal, scatterType);
         new Band(refl, rotation, camera, energy); // Throw exception
     }
 
@@ -106,7 +102,9 @@ public class BandTest {
 
         assertFalse(band.equals(new Object()));
 
-        Reflector other = new Reflector(new Plane(3, 1, 1), crystal, scatter);
+        Reflector other =
+                ReflectorFactory.create(new Plane(3, 1, 1), crystal,
+                        scatterType);
         assertFalse(band.equals(new Band(other, rotation, camera, energy)));
     }
 

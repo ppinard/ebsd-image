@@ -17,19 +17,59 @@
  */
 package org.ebsdimage.io.exp;
 
-import ptpshared.utility.xml.ObjectXmlSaver;
-import ptpshared.utility.xml.XmlSaver;
+import java.io.File;
+import java.io.IOException;
+
+import org.ebsdimage.core.exp.Exp;
+
+import ptpshared.util.xml.XmlSaver;
+import rmlshared.io.Saver;
 
 /**
  * Saves an <code>Exp</code> to an XML file.
  * 
  * @author Philippe T. Pinard
  */
-public class ExpSaver extends XmlSaver {
+public class ExpSaver implements Saver {
+
+    /** XML saver. */
+    private final XmlSaver saver = new XmlSaver();
+
+
 
     @Override
-    protected ObjectXmlSaver getXmlSaver() {
-        return new ExpXmlSaver();
+    public void save(Object obj, File file) throws IOException {
+        save((Exp) obj, file);
+    }
+
+
+
+    /**
+     * Saves the specified <code>Exp</code> to disk.
+     * 
+     * @param exp
+     *            experiment to save
+     * @param file
+     *            location where to save the experiment
+     * @throws IOException
+     *             if the experiment could not be saved to disk for any reason
+     */
+    public void save(Exp exp, File file) throws IOException {
+        saver.save(exp, file);
+    }
+
+
+
+    @Override
+    public double getTaskProgress() {
+        return saver.getTaskProgress();
+    }
+
+
+
+    @Override
+    public boolean canSave(Object obj) {
+        return obj instanceof Exp;
     }
 
 }

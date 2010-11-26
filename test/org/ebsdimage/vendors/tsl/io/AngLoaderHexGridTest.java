@@ -74,7 +74,7 @@ public class AngLoaderHexGridTest extends TslMMapTester {
         assertEquals(0.07, metadata.pixelHeight * 1e6, 1e-3);
         assertTrue(Quaternion.IDENTITY.equals(metadata.sampleRotation, 1e-3));
         assertTrue(new Camera(0.0235, 0.3049, 0.7706).equals(
-                metadata.calibration, 1e-3));
+                metadata.camera, 1e-3));
     }
 
 

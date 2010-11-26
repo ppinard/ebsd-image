@@ -27,7 +27,7 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
-import org.ebsdimage.core.exp.ExpMetadata;
+import org.ebsdimage.core.EbsdMetadata;
 import org.ebsdimage.core.exp.ExpUtil;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternFilesLoader;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
@@ -55,13 +55,15 @@ public class ExpWizard extends Wizard {
      *             if an error occurs
      */
     public ExpWizard() throws IOException {
-        super("Experiment", new WizardPage[] { new StartWizardPage(), 
-                new InfoWizardPage(),
-                new AcqMetadataWizardPage(), new PhasesWizardPage(),
-                new PatternsWizardPage(), new PatternWizardPage(),
-                new HoughWizardPage(), new DetectionWizardPage(),
-                new IdentificationWizardPage(), new IndexingWizardPage(),
-                new OutputWizardPage() });
+        // super("Experiment", new WizardPage[] { new StartWizardPage(),
+        // new InfoWizardPage(), new AcqMetadataWizardPage(),
+        // new PhasesWizardPage(), new PatternsWizardPage(),
+        // new PatternWizardPage(), new HoughWizardPage(),
+        // new DetectionWizardPage(), new IdentificationWizardPage(),
+        // new IndexingWizardPage(), new OutputWizardPage() });
+        super("Experiment", new WizardPage[] { new StartWizardPage(),
+                new InfoWizardPage(), new AcqMetadataWizardPage(),
+                new PatternsWizardPage() });
 
         BufferedImage image =
                 ImageIO.read(getURL("org/ebsdimage/gui/sidepanel.png"));
@@ -128,9 +130,9 @@ public class ExpWizard extends Wizard {
      * 
      * @return metadata
      */
-    public ExpMetadata getMetadata() {
-        ExpMetadata metadata =
-                (ExpMetadata) results.get(AcqMetadataWizardPage.KEY_METADATA);
+    public EbsdMetadata getMetadata() {
+        EbsdMetadata metadata =
+                (EbsdMetadata) results.get(AcqMetadataWizardPage.KEY_METADATA);
 
         if (metadata == null)
             throw new NullPointerException(

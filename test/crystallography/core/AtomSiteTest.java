@@ -21,12 +21,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
 import ptpshared.core.math.Vector3D;
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 
-public class AtomSiteTest {
+public class AtomSiteTest extends TestCase {
 
     private AtomSite atom1;
 
@@ -51,7 +56,7 @@ public class AtomSiteTest {
     @Test
     public void testAtomSiteIntDoubleDoubleDouble() {
         assertEquals(13, atom1.atomicNumber);
-        assertTrue(atom1.position.equals(new Vector3D(0.0, 0.5, 0.5), 1e-7));
+        assertAlmostEquals(new Vector3D(0.0, 0.5, 0.5), atom1.position, 1e-7);
         assertEquals(1.0, atom1.occupancy, 1e-7);
     }
 
@@ -60,7 +65,7 @@ public class AtomSiteTest {
     @Test
     public void testAtomSiteIntDoubleDoubleDoubleDouble() {
         assertEquals(15, atom3.atomicNumber);
-        assertTrue(atom3.position.equals(new Vector3D(0.9, 0.2, 0.3), 1e-7));
+        assertAlmostEquals(new Vector3D(0.9, 0.2, 0.3), atom3.position, 1e-7);
         assertEquals(0.5, atom3.occupancy, 1e-7);
     }
 
@@ -83,7 +88,7 @@ public class AtomSiteTest {
     @Test
     public void testAtomSiteIntVector3D() {
         assertEquals(14, atom2.atomicNumber);
-        assertTrue(atom2.position.equals(new Vector3D(0.3, 0.2, 0.1), 1e-7));
+        assertAlmostEquals(new Vector3D(0.3, 0.2, 0.1), atom2.position, 1e-7);
         assertEquals(1.0, atom2.occupancy, 1e-7);
     }
 
@@ -106,7 +111,7 @@ public class AtomSiteTest {
     @Test
     public void testAtomSiteIntVector3DDouble() {
         assertEquals(16, atom4.atomicNumber);
-        assertTrue(atom4.position.equals(new Vector3D(0.1, 0.2, 0.3), 1e-7));
+        assertAlmostEquals(new Vector3D(0.1, 0.2, 0.3), atom4.position, 1e-7);
         assertEquals(0.1, atom4.occupancy, 1e-7);
     }
 
@@ -175,7 +180,7 @@ public class AtomSiteTest {
 
 
     @Test
-    public void testEqualsAtomSiteDouble() {
+    public void testEqualsObjectDouble() {
         assertTrue(atom1.equals(atom1, 1e-4));
 
         assertFalse(atom1.equals(null, 1e-4));
@@ -204,10 +209,10 @@ public class AtomSiteTest {
     @Test
     public void testRefinePosition() {
         AtomSite atom = new AtomSite(13, 1.1, 1.2, 1.3);
-        assertTrue(atom.equals(new AtomSite(13, 0.1, 0.2, 0.3), 1e-3));
+        assertAlmostEquals(new AtomSite(13, 0.1, 0.2, 0.3), atom, 1e-3);
 
         atom = new AtomSite(13, -0.9, -0.8, -0.7);
-        assertTrue(atom.equals(new AtomSite(13, 0.1, 0.2, 0.3), 1e-3));
+        assertAlmostEquals(new AtomSite(13, 0.1, 0.2, 0.3), atom, 1e-3);
     }
 
 
@@ -217,6 +222,20 @@ public class AtomSiteTest {
         assertEquals(atom1.toString(), "Al->(0.0;0.5;0.5) [100%]");
         assertEquals(atom2.toString(),
                 "Si->(0.3;0.19999999999999996;0.1) [100%]");
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File tmpFile = createTempFile();
+
+        // Write
+        new XmlSaver().save(atom1, tmpFile);
+
+        // Read
+        AtomSite other = new XmlLoader().load(AtomSite.class, tmpFile);
+        assertAlmostEquals(atom1, other, 1e-7);
     }
 
 }

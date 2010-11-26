@@ -21,15 +21,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
 import crystallography.core.Crystal;
-import crystallography.core.crystals.IronBCC;
-import crystallography.core.crystals.Silicon;
-import crystallography.core.crystals.ZirconiumAlpha;
+import crystallography.core.CrystalFactory;
 
-public class PhasesMapTest {
+public class PhasesMapTest extends TestCase {
 
     private PhasesMap map;
 
@@ -41,7 +40,9 @@ public class PhasesMapTest {
 
     @Before
     public void setUp() throws Exception {
-        phases = new Crystal[] { new Silicon(), new IronBCC() };
+        phases =
+                new Crystal[] { CrystalFactory.silicon(),
+                        CrystalFactory.ferrite() };
         pixArray = new byte[] { 0, 1, 2, 1 };
 
         map = new PhasesMap(2, 2, pixArray, phases);
@@ -60,8 +61,9 @@ public class PhasesMapTest {
     @Test(expected = AssertionError.class)
     public void testAssertEqualsException1() {
         PhasesMap other =
-                new PhasesMap(2, 2, pixArray, new Crystal[] { new Silicon(),
-                        new IronBCC(), new ZirconiumAlpha() });
+                new PhasesMap(2, 2, pixArray, new Crystal[] {
+                        CrystalFactory.silicon(), CrystalFactory.ferrite(),
+                        CrystalFactory.zirconium() });
         map.assertEquals(other);
     }
 
@@ -70,8 +72,8 @@ public class PhasesMapTest {
     @Test(expected = AssertionError.class)
     public void testAssertEqualsException2() {
         PhasesMap other =
-                new PhasesMap(2, 2, pixArray, new Crystal[] { new Silicon(),
-                        new ZirconiumAlpha() });
+                new PhasesMap(2, 2, pixArray, new Crystal[] {
+                        CrystalFactory.silicon(), CrystalFactory.zirconium() });
         map.assertEquals(other);
     }
 
@@ -110,8 +112,8 @@ public class PhasesMapTest {
     @Test
     public void testGetPhases() {
         assertEquals(2, map.getPhases().length);
-        assertEquals(new Silicon(), map.getPhases()[0]);
-        assertEquals(new IronBCC(), map.getPhases()[1]);
+        assertAlmostEquals(CrystalFactory.silicon(), map.getPhases()[0], 1e-6);
+        assertAlmostEquals(CrystalFactory.ferrite(), map.getPhases()[1], 1e-6);
     }
 
 
@@ -119,18 +121,22 @@ public class PhasesMapTest {
     @Test
     public void testGetPhaseId() {
         assertEquals(0, map.getPhaseId(null));
-        assertEquals(1, map.getPhaseId(new Silicon()));
-        assertEquals(2, map.getPhaseId(new IronBCC()));
+        assertEquals(1, map.getPhaseId(CrystalFactory.silicon()));
+        assertEquals(2, map.getPhaseId(CrystalFactory.ferrite()));
     }
 
 
 
     @Test
     public void testGetPixelInt() {
-        assertEquals("0: Not indexed", map.getPixel(0).getValueLabel());
-        assertEquals("1: Silicon", map.getPixel(1).getValueLabel());
-        assertEquals("2: Iron BCC", map.getPixel(2).getValueLabel());
-        assertEquals("1: Silicon", map.getPixel(3).getValueLabel());
+        assertEquals("Value=0 (0;0;0)  phase = Not Indexed",
+                map.getPixelInfoLabel(0));
+        assertEquals("Value=1 (187;25;104)  phase = 1: Silicon",
+                map.getPixelInfoLabel(1));
+        assertEquals("Value=2 (104;53;9)  phase = 2: Ferrite",
+                map.getPixelInfoLabel(2));
+        assertEquals("Value=1 (187;25;104)  phase = 1: Silicon",
+                map.getPixelInfoLabel(3));
     }
 
 
@@ -236,12 +242,14 @@ public class PhasesMapTest {
 
     @Test
     public void testSetPhases() {
-        Crystal[] newPhases = new Crystal[] { new IronBCC(), new Silicon() };
+        Crystal[] newPhases =
+                new Crystal[] { CrystalFactory.ferrite(),
+                        CrystalFactory.silicon() };
         map.setPhases(newPhases);
 
         assertEquals(2, map.getPhases().length);
-        assertEquals(new IronBCC(), map.getPhases()[0]);
-        assertEquals(new Silicon(), map.getPhases()[1]);
+        assertAlmostEquals(CrystalFactory.ferrite(), map.getPhases()[0], 1e-6);
+        assertAlmostEquals(CrystalFactory.silicon(), map.getPhases()[1], 1e-6);
     }
 
 

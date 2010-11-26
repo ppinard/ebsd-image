@@ -32,6 +32,11 @@ import rmlimage.core.MapMath;
  */
 public class InversionDivision extends DetectionPreOps {
 
+    /** Default operation. */
+    public static final InversionDivision DEFAULT = new InversionDivision();
+
+
+
     @Override
     public String toString() {
         return "Inversion Division";

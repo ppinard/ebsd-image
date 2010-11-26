@@ -20,13 +20,20 @@ package org.ebsdimage.plugin;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import org.ebsdimage.io.SmpInputStream;
 
+import ptpshared.gui.SingleFileBrowserField;
 import rmlimage.core.ByteMap;
 import rmlimage.gui.BasicDialog;
 import rmlimage.gui.PlugIn;
 import rmlshared.cui.ErrorDialog;
-import rmlshared.gui.*;
+import rmlshared.gui.ColumnPanel;
+import rmlshared.gui.IntField;
+import rmlshared.gui.OkCancelDialog;
+import rmlshared.gui.Panel;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 
 /**
@@ -41,10 +48,10 @@ public class SmpViewer extends PlugIn {
      * 
      * @author Philippe T. Pinard
      */
-    private static class Dialog extends BasicDialog {
+    private class Dialog extends BasicDialog {
 
         /** File name browser for the SMP file. */
-        private FileNameField smpFilenameField;
+        private SingleFileBrowserField fileField;
 
         /** Index number. */
         private IntField indexField;
@@ -59,10 +66,12 @@ public class SmpViewer extends PlugIn {
 
             Panel panel = new ColumnPanel(2);
 
-            panel.add("Smp file");
-            smpFilenameField = new FileNameField("Smp file", true);
-            smpFilenameField.setFileFilter("*.smp");
-            panel.add(smpFilenameField);
+            panel.add("SMP file");
+            FileFilter[] filters =
+                    new FileFilter[] { new FileNameExtensionFilter(
+                            "SMP file  (*.smp)", "smp") };
+            fileField = new SingleFileBrowserField("SMP file", true, filters);
+            panel.add(fileField);
 
             panel.add("Pattern index");
             indexField = new IntField("Pattern index", 0);
@@ -70,6 +79,8 @@ public class SmpViewer extends PlugIn {
             panel.add(indexField);
 
             setMainComponent(panel);
+
+            setPreferences(getPlugIn().getPreferences());
         }
 
 
@@ -80,7 +91,7 @@ public class SmpViewer extends PlugIn {
          * @return smp file
          */
         public File getSmpFile() {
-            return smpFilenameField.getFileBFR();
+            return fileField.getFileBFR();
         }
 
 
@@ -135,4 +146,5 @@ public class SmpViewer extends PlugIn {
     protected void xRun() throws Exception {
         getPattern();
     }
+
 }

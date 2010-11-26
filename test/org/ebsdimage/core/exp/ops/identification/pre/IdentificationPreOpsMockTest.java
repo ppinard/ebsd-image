@@ -18,15 +18,22 @@
 package org.ebsdimage.core.exp.ops.identification.pre;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.BinMap;
 
-public class IdentificationPreOpsMockTest {
+public class IdentificationPreOpsMockTest extends TestCase {
 
-    private IdentificationPreOps op;
+    private IdentificationPreOpsMock op;
 
     private BinMap srcMap;
 
@@ -50,6 +57,47 @@ public class IdentificationPreOpsMockTest {
 
         for (int i = 0; i < result.size; i++)
             assertEquals(i % 2, result.pixArray[i]);
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new IdentificationPreOpsMock()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new IdentificationPreOpsMock(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(1112374406, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        IdentificationPreOpsMock other =
+                new XmlLoader().load(IdentificationPreOpsMock.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

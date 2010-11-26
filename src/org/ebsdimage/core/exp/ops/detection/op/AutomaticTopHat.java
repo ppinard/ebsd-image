@@ -30,6 +30,11 @@ import rmlimage.core.BinMap;
  */
 public class AutomaticTopHat extends DetectionOp {
 
+    /** Default operation. */
+    public static final AutomaticTopHat DEFAULT = new AutomaticTopHat();
+
+
+
     /**
      * Detects peaks in the Hough map using the automatic top hat peak detection
      * algorithm.

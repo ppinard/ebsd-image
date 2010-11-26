@@ -17,6 +17,8 @@
  */
 package ptpshared.utility;
 
+import java.util.Comparator;
+
 /**
  * Utilities for manipulating arrays.
  * 
@@ -54,5 +56,27 @@ public class Arrays {
             str.append(item);
 
         return str.toString();
+    }
+
+
+
+    /**
+     * Sorts an array of object with the specified comparator. The array is
+     * reversed if the reverse argument is <code>true</code>.
+     * 
+     * @param <T>
+     *            type of the object
+     * @param array
+     *            an array
+     * @param comparator
+     *            comparator to sort the array
+     * @param reverse
+     *            if <code>true</code> the array is reversed after being sorted
+     */
+    public static <T> void sort(T[] array, Comparator<? super T> comparator,
+            boolean reverse) {
+        java.util.Arrays.sort(array, comparator);
+        if (reverse)
+            reverse(array);
     }
 }

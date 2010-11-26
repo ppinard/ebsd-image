@@ -23,6 +23,7 @@ import java.awt.geom.Line2D;
 import java.util.logging.Logger;
 
 import org.ebsdimage.core.sim.Band;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.module.real.core.Drawing;
 import rmlimage.module.real.core.MapMath;
@@ -36,12 +37,9 @@ import crystallography.core.ScatteringFactorsEnum;
  */
 public class PatternFilledBand extends PatternSimOp {
 
-    /**
-     * Creates a new <code>PatternFilledBand</code>.
-     */
-    public PatternFilledBand() {
-        super();
-    }
+    /** Default operation. */
+    public static final PatternFilledBand DEFAULT = new PatternFilledBand(1344,
+            1024, 6, ScatteringFactorsEnum.XRAY);
 
 
 
@@ -63,8 +61,10 @@ public class PatternFilledBand extends PatternSimOp {
      * @throws IllegalArgumentException
      *             if the maximum index is less than zero
      */
-    public PatternFilledBand(int width, int height, int maxIndex,
-            ScatteringFactorsEnum scatterType) {
+    public PatternFilledBand(@Attribute(name = "width") int width,
+            @Attribute(name = "height") int height,
+            @Attribute(name = "maxIndex") int maxIndex,
+            @Attribute(name = "scatterType") ScatteringFactorsEnum scatterType) {
         super(width, height, maxIndex, scatterType);
     }
 

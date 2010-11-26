@@ -19,7 +19,6 @@ package org.ebsdimage.io.exp;
 
 import org.ebsdimage.core.exp.ExpMMap;
 import org.ebsdimage.io.EbsdMMapSaver;
-import org.ebsdimage.io.EbsdMetadataXmlSaver;
 
 /**
  * Saver for a <code>ExpMMap</code>. A <code>ExpMMap</code> is saved in a human
@@ -37,15 +36,15 @@ public class ExpMMapSaver extends EbsdMMapSaver {
 
 
     @Override
-    protected EbsdMetadataXmlSaver getMetadataSaver() {
-        return new ExpMetadataXmlSaver();
+    public boolean canSave(Object obj) {
+        return obj instanceof ExpMMap;
     }
 
 
 
     @Override
     protected int getVersion() {
-        return 1;
+        return ExpMMap.VERSION;
     }
 
 }

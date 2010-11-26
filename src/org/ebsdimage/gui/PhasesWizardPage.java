@@ -29,14 +29,15 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 
 import net.miginfocom.swing.MigLayout;
+import ptpshared.gui.DirBrowserField;
 import ptpshared.gui.GuiUtil;
 import ptpshared.gui.WizardPage;
+import ptpshared.util.xml.XmlSaver;
 import rmlshared.gui.*;
 import rmlshared.io.FileUtil;
 import rmlshared.thread.PlugIn;
 import crystallography.core.Crystal;
 import crystallography.io.CifLoader;
-import crystallography.io.CrystalSaver;
 import crystallography.io.CrystalUtil;
 
 /**
@@ -137,11 +138,11 @@ public class PhasesWizardPage extends WizardPage {
     private class Edit extends New {
         @Override
         protected void save(Crystal crystal) {
-            File crystalFile = new File(phasesDirField.getFile(), crystal.name);
+            File crystalFile = new File(phasesDirField.getDir(), crystal.name);
             crystalFile = FileUtil.setExtension(crystalFile, "xml");
 
             try {
-                new CrystalSaver().save(crystal, crystalFile);
+                new XmlSaver().save(crystal, crystalFile);
             } catch (IOException e) {
                 ErrorDialog.show("This error occured while saving the XML file for the phase: "
                         + e.getMessage());
@@ -255,7 +256,7 @@ public class PhasesWizardPage extends WizardPage {
          *         otherwise
          */
         protected boolean checkPhaseDir() {
-            if (phasesDirField.getFile() == null) {
+            if (phasesDirField.getDir() == null) {
                 ErrorDialog.show("Please select a phases' directory.");
                 return false;
             } else
@@ -309,7 +310,7 @@ public class PhasesWizardPage extends WizardPage {
          *            crystal to save
          */
         protected void save(Crystal crystal) {
-            File crystalFile = new File(phasesDirField.getFile(), crystal.name);
+            File crystalFile = new File(phasesDirField.getDir(), crystal.name);
             crystalFile = FileUtil.setExtension(crystalFile, "xml");
 
             if (!checkPhaseAlreadyExists(crystalFile)) {
@@ -318,7 +319,7 @@ public class PhasesWizardPage extends WizardPage {
             }
 
             try {
-                new CrystalSaver().save(crystal, crystalFile);
+                new XmlSaver().save(crystal, crystalFile);
             } catch (IOException e) {
                 ErrorDialog.show("This error occured while saving the XML file for the phase: "
                         + e.getMessage());
@@ -499,7 +500,7 @@ public class PhasesWizardPage extends WizardPage {
     private Button newButton;
 
     /** Field for the directory containing the phases definition. */
-    private FileNameField phasesDirField;
+    private DirBrowserField phasesDirField;
 
     /** Button to remove a phase from the current list. */
     private Button removeButton;
@@ -521,8 +522,7 @@ public class PhasesWizardPage extends WizardPage {
 
         phasesDirectoryPanel.add("Phases directory");
 
-        phasesDirField = new FileNameField("Phases directory", 25, true);
-        phasesDirField.setFileSelectionMode(FileNameField.DIRECTORIES_ONLY);
+        phasesDirField = new DirBrowserField("Phases directory", true);
         phasesDirField.getBrowseButton().addMouseListener(
                 new PhasesDirListener());
         phasesDirectoryPanel.add(phasesDirField, "wrap");
@@ -647,8 +647,7 @@ public class PhasesWizardPage extends WizardPage {
 
         model.clear();
 
-        Crystal[] phases =
-                CrystalUtil.listCrystals(phasesDirField.getFileBFR());
+        Crystal[] phases = CrystalUtil.listCrystals(phasesDirField.getDirBFR());
 
         for (Crystal phase : phases)
             model.addElement(phase);

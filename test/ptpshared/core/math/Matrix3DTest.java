@@ -23,10 +23,16 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-public class Matrix3DTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
+
+public class Matrix3DTest extends TestCase {
 
     private Matrix3D m1;
 
@@ -80,15 +86,15 @@ public class Matrix3DTest {
 
 
     @Test
-    public void testDuplicate() {
-        Matrix3D m = m1.duplicate();
+    public void testClone() {
+        Matrix3D m = m1.clone();
         assertEquals(m, m1);
     }
 
 
 
     @Test
-    public void testEqualsMatrix3DDouble() {
+    public void testEqualsObjectDouble() {
         assertTrue(m1.equals(m1, 1e-6));
 
         assertFalse(m1.equals(null, 1e-6));
@@ -355,6 +361,35 @@ public class Matrix3DTest {
     @Test
     public void testTranspose() {
         assertEquals(new Matrix3D(1, 4, 7, 2, 5, 8, 3, 6, 9), m1.transpose());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File tmpFile = createTempFile();
+
+        // Write
+        new XmlSaver().save(m1, tmpFile);
+
+        // Read
+        Matrix3D other = new XmlLoader().load(Matrix3D.class, tmpFile);
+        assertAlmostEquals(m1, other, 1e-6);
+    }
+
+
+
+    @Test
+    public void testGetM() {
+        assertEquals(1.0, m1.getM00(), 1e-6);
+        assertEquals(2.0, m1.getM01(), 1e-6);
+        assertEquals(3.0, m1.getM02(), 1e-6);
+        assertEquals(4.0, m1.getM10(), 1e-6);
+        assertEquals(5.0, m1.getM11(), 1e-6);
+        assertEquals(6.0, m1.getM12(), 1e-6);
+        assertEquals(7.0, m1.getM20(), 1e-6);
+        assertEquals(8.0, m1.getM21(), 1e-6);
+        assertEquals(9.0, m1.getM22(), 1e-6);
     }
 
 }

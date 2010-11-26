@@ -45,7 +45,7 @@ public class NoiseDialog extends OperationDialog {
         super("Noise");
 
         stdDevField =
-                new DoubleField("Standard Deviation", Noise.DEFAULT_STDDEV);
+                new DoubleField("Standard Deviation", Noise.DEFAULT.stdDev);
         stdDevField.setRange(0.1, Double.MAX_VALUE);
 
         Panel panel = new Panel();

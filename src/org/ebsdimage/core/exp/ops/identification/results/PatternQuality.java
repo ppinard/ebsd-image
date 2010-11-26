@@ -31,6 +31,11 @@ import rmlimage.module.real.core.RealMap;
  */
 public class PatternQuality extends IdentificationResultsOps {
 
+    /** Default operation. */
+    public static final PatternQuality DEFAULT = new PatternQuality();
+
+
+
     @Override
     public OpResult[] calculate(Exp exp, HoughPeak[] srcPeaks) {
         OpResult result =

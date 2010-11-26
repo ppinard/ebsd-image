@@ -21,14 +21,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.OpResult;
 import org.junit.Before;
 import org.junit.Test;
 
-public class AverageTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 
-    private Average average;
+public class AverageTest extends TestCase {
+
+    private Average op;
 
     private HoughPeak[] peaks;
 
@@ -36,7 +42,7 @@ public class AverageTest {
 
     @Before
     public void setUp() throws Exception {
-        average = new Average(2);
+        op = new Average(2);
         peaks =
                 new HoughPeak[] { new HoughPeak(3.0, 0.5, 1),
                         new HoughPeak(5.0, 1.5, 2), new HoughPeak(7.0, 2.5, 4) };
@@ -45,32 +51,20 @@ public class AverageTest {
 
 
     @Test
-    public void testEqualsObject() {
-        Average other = new Average(2);
-
-        assertFalse(other == average);
-        assertTrue(other.equals(average));
-
-        assertFalse(new Average(3).equals(average));
-    }
-
-
-
-    @Test
     public void testToString() {
         String expected = "Average [max=2]";
-        assertEquals(expected, average.toString());
+        assertEquals(expected, op.toString());
     }
 
 
 
     @Test
     public void testCalculate() {
-        OpResult[] results = average.calculate(null, peaks);
+        OpResult[] results = op.calculate(null, peaks);
         assertEquals(1, results.length);
         assertEquals(3.0, results[0].value.doubleValue(), 1e-6);
 
-        results = new Average().calculate(null, peaks);
+        results = new Average(-1).calculate(null, peaks);
         assertEquals(1, results.length);
         assertEquals(7.0 / 3.0, results[0].value.doubleValue(), 1e-6);
     }
@@ -78,16 +72,49 @@ public class AverageTest {
 
 
     @Test
-    public void testAverage() {
-        Average other = new Average();
-        assertEquals(Average.DEFAULT_MAX, other.max);
+    public void testAverageInt() {
+        assertEquals(2, op.max);
     }
 
 
 
     @Test
-    public void testAverageInt() {
-        assertEquals(2, average.max);
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new Average(2)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 2));
+        assertFalse(op.equals(null, 2));
+        assertFalse(op.equals(new Object(), 2));
+
+        assertFalse(op.equals(new Average(4), 2));
+        assertTrue(op.equals(new Average(1), 2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(1964592486, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        Average other = new XmlLoader().load(Average.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

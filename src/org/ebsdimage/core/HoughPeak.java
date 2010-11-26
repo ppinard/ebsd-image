@@ -20,23 +20,31 @@ package org.ebsdimage.core;
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import net.jcip.annotations.Immutable;
-import ptpshared.utility.xml.ObjectXml;
+
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+
+import ptpshared.util.AlmostEquable;
 
 /**
  * Peak in the Hough Transform.
  * 
  * @author Philippe T. Pinard
  */
+@Root
 @Immutable
-public class HoughPeak implements ObjectXml {
+public class HoughPeak implements AlmostEquable {
 
     /** Rho coordinate. */
+    @Attribute(name = "rho")
     public final double rho;
 
     /** Theta coordinate. */
+    @Attribute(name = "theta")
     public final double theta;
 
     /** Intensity of the peak. */
+    @Attribute(name = "intensity")
     public final double intensity;
 
 
@@ -57,20 +65,24 @@ public class HoughPeak implements ObjectXml {
      * @throws IllegalArgumentException
      *             if theta is outside [0, PI]
      */
-    public HoughPeak(double rho, double theta, double intensity) {
+    public HoughPeak(@Attribute(name = "rho") double rho,
+            @Attribute(name = "theta") double theta,
+            @Attribute(name = "intensity") double intensity) {
         if (Double.isNaN(rho))
             throw new IllegalArgumentException("Rho cannot be NaN.");
         if (Double.isNaN(theta))
-            throw new IllegalArgumentException("Rho cannot be NaN.");
+            throw new IllegalArgumentException("Theta cannot be NaN.");
 
         if (Double.isInfinite(rho))
             throw new IllegalArgumentException("Rho cannot be infinite.");
         if (Double.isInfinite(theta))
-            throw new IllegalArgumentException("Rho cannot be infinite.");
+            throw new IllegalArgumentException("Theta cannot be infinite.");
         if (Double.isInfinite(intensity))
-            throw new IllegalArgumentException("Rho cannot be infinite.");
+            throw new IllegalArgumentException("Intensity cannot be infinite.");
 
+        // Bring theta within the [0,PI[ interval
         this.theta = theta % PI;
+        // Adjust rho based on the location of theta
         this.rho = rho * Math.pow(-1, (int) (theta / PI));
         this.intensity = intensity;
 
@@ -105,7 +117,7 @@ public class HoughPeak implements ObjectXml {
      * Checks if this <code>HoughPeak</code> is almost equal to the specified
      * one with the given precision.
      * 
-     * @param other
+     * @param obj
      *            other <code>HoughPeak</code> to check equality
      * @param precision
      *            level of precision
@@ -115,7 +127,8 @@ public class HoughPeak implements ObjectXml {
      * @throws IllegalArgumentException
      *             if the precision is not a number (NaN)
      */
-    public boolean equals(HoughPeak other, double precision) {
+    @Override
+    public boolean equals(Object obj, double precision) {
         if (precision < 0)
             throw new IllegalArgumentException(
                     "The precision has to be greater or equal to 0.0.");
@@ -123,11 +136,14 @@ public class HoughPeak implements ObjectXml {
             throw new IllegalArgumentException(
                     "The precision must be a number.");
 
-        if (this == other)
+        if (this == obj)
             return true;
-        if (other == null)
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
             return false;
 
+        HoughPeak other = (HoughPeak) obj;
         if (abs(rho - other.rho) >= precision)
             return false;
         if (abs(theta - other.theta) >= precision)
@@ -156,7 +172,6 @@ public class HoughPeak implements ObjectXml {
             return false;
 
         HoughPeak other = (HoughPeak) obj;
-
         if (Double.doubleToLongBits(rho) != Double.doubleToLongBits(other.rho))
             return false;
         if (Double.doubleToLongBits(theta) != Double.doubleToLongBits(other.theta))

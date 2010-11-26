@@ -32,6 +32,11 @@ import rmlimage.module.real.core.RealMap;
  */
 public class StandardDeviation extends HoughResultsOps {
 
+    /** Default operation. */
+    public static final StandardDeviation DEFAULT = new StandardDeviation();
+
+
+
     @Override
     public OpResult[] calculate(Exp exp, HoughMap srcMap) {
         OpResult result =

@@ -27,7 +27,8 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import ptpshared.utility.ElementProperties;
+import ptpshared.util.ElementProperties;
+import rmlshared.io.FileUtil;
 import rmlshared.io.Loader;
 import rmlshared.ui.Monitorable;
 import bsh.EvalError;
@@ -469,6 +470,10 @@ public class CifLoader implements Loader, Monitorable {
 
     @Override
     public Crystal load(File file) throws IOException {
+        if (!canLoad(file))
+            throw new IOException(
+                    "Invalid type of file. The extension must be cif.");
+
         br = new BufferedReader(new FileReader(file));
 
         progress = 0.0;
@@ -622,5 +627,12 @@ public class CifLoader implements Loader, Monitorable {
         }
         setString(str);
         return str;
+    }
+
+
+
+    @Override
+    public boolean canLoad(File file) {
+        return FileUtil.isExtension(file, "cif");
     }
 }

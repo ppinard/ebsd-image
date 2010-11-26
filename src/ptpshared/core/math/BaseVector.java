@@ -23,6 +23,7 @@ import static java.lang.Math.sqrt;
 import java.util.Arrays;
 
 import net.jcip.annotations.Immutable;
+import ptpshared.util.AlmostEquable;
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -34,7 +35,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
  * @author Philippe T. Pinard
  */
 @Immutable
-public abstract class BaseVector {
+public abstract class BaseVector implements AlmostEquable, Cloneable {
     /** Array that holds the actual data. */
     @NonNull
     protected final double[] v;
@@ -134,8 +135,9 @@ public abstract class BaseVector {
      * 
      * @return copy of the current vector
      */
+    @Override
     @CheckReturnValue
-    public abstract BaseVector duplicate();
+    public abstract BaseVector clone();
 
 
 
@@ -143,7 +145,7 @@ public abstract class BaseVector {
      * Checks if this vector is almost equal to the specified one with the given
      * precision.
      * 
-     * @param other
+     * @param obj
      *            other vector to check equality
      * @param precision
      *            level of precision
@@ -153,7 +155,8 @@ public abstract class BaseVector {
      * @throws IllegalArgumentException
      *             if the precision is not a number (NaN)
      */
-    public boolean equals(BaseVector other, double precision) {
+    @Override
+    public boolean equals(Object obj, double precision) {
         if (precision < 0)
             throw new IllegalArgumentException(
                     "The precision has to be greater or equal to 0.0.");
@@ -161,11 +164,14 @@ public abstract class BaseVector {
             throw new IllegalArgumentException(
                     "The precision must be a number.");
 
-        if (this == other)
+        if (this == obj)
             return true;
-        if (other == null)
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
             return false;
 
+        BaseVector other = (BaseVector) obj;
         for (int n = 0; n < size(); n++)
             if (abs(v[n] - other.v[n]) >= precision)
                 return false;
@@ -244,7 +250,7 @@ public abstract class BaseVector {
         if (other == null)
             throw new NullPointerException("Cannot substract a null.");
 
-        BaseVector dup = other.duplicate();
+        BaseVector dup = other.clone();
         return plus(dup.negate());
     }
 
@@ -260,7 +266,7 @@ public abstract class BaseVector {
      */
     @CheckReturnValue
     public BaseVector multiply(double scalar) {
-        BaseVector output = duplicate(); // To get vector of correct subclass
+        BaseVector output = clone(); // To get vector of correct subclass
 
         for (int n = 0; n < size(); n++)
             output.v[n] = v[n] * scalar;
@@ -277,7 +283,7 @@ public abstract class BaseVector {
      */
     @CheckReturnValue
     public BaseVector negate() {
-        BaseVector output = duplicate();
+        BaseVector output = clone();
 
         for (int n = 0; n < size(); n++)
             output.v[n] = -1 * v[n];
@@ -342,7 +348,7 @@ public abstract class BaseVector {
                     + ") must be the same as the size of the other ("
                     + other.size() + ").");
 
-        BaseVector output = duplicate(); // To get vector of correct subclass
+        BaseVector output = clone(); // To get vector of correct subclass
 
         for (int n = 0; n < size(); n++)
             output.v[n] = get(n).doubleValue() + other.get(n).doubleValue();
@@ -360,7 +366,7 @@ public abstract class BaseVector {
      */
     @CheckReturnValue
     public BaseVector positive() {
-        BaseVector output = duplicate();
+        BaseVector output = clone();
 
         for (int n = 0; n < size(); n++)
             if (output.v[n] == 0.0)

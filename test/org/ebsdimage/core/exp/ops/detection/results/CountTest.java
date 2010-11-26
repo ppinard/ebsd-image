@@ -18,17 +18,23 @@
 package org.ebsdimage.core.exp.ops.detection.results;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.exp.OpResult;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.BinMap;
 
 public class CountTest extends TestCase {
 
-    private Count count;
+    private Count op;
 
     private BinMap peaksMap;
 
@@ -36,7 +42,7 @@ public class CountTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        count = new Count();
+        op = new Count();
 
         peaksMap =
                 (BinMap) load(getFile("org/ebsdimage/testdata/peaksMap.bmp"));
@@ -46,17 +52,57 @@ public class CountTest extends TestCase {
 
     @Test
     public void testToString() {
-        assertEquals("Count", count.toString());
+        assertEquals("Count", op.toString());
     }
 
 
 
     @Test
     public void testCalculate() {
-        OpResult[] results = count.calculate(null, peaksMap);
+        OpResult[] results = op.calculate(null, peaksMap);
 
         assertEquals(1, results.length);
         assertEquals(8, results[0].value.intValue());
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new Count()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new Count(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(65298702, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        Count other = new XmlLoader().load(Count.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

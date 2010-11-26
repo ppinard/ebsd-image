@@ -17,9 +17,12 @@
  */
 package org.ebsdimage.core.exp.ops.detection.post;
 
+import static java.lang.Math.abs;
+
 import java.util.ArrayList;
 
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.*;
 
@@ -32,20 +35,11 @@ import rmlimage.core.*;
 public class ShapeFactor extends DetectionPostOps {
 
     /** Critical aspect ratio of the peaks. */
+    @Attribute(name = "aspectRatio")
     public final double aspectRatio;
 
-    /** Default value for the critical aspect ratio of the peaks. */
-    public static final double DEFAULT_ASPECT_RATIO = 2.0;
-
-
-
-    /**
-     * Creates a new <code>ShapeFactor</code> operation with the default
-     * critical aspect ratio.
-     */
-    public ShapeFactor() {
-        this(DEFAULT_ASPECT_RATIO);
-    }
+    /** Default operation. */
+    public static final ShapeFactor DEFAULT = new ShapeFactor(2.0);
 
 
 
@@ -55,7 +49,7 @@ public class ShapeFactor extends DetectionPostOps {
      * @param aspectRatio
      *            critical aspect ratio of the peaks
      */
-    public ShapeFactor(double aspectRatio) {
+    public ShapeFactor(@Attribute(name = "aspectRatio") double aspectRatio) {
         if (aspectRatio < 1.0)
             throw new IllegalArgumentException(
                     "Aspect ratio must be greater or equal to 1.0.");
@@ -66,12 +60,22 @@ public class ShapeFactor extends DetectionPostOps {
 
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!super.equals(obj))
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
             return false;
-        if (getClass() != obj.getClass())
+
+        ShapeFactor other = (ShapeFactor) obj;
+        if (abs(aspectRatio - other.aspectRatio) >= precision)
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!super.equals(obj))
             return false;
 
         ShapeFactor other = (ShapeFactor) obj;

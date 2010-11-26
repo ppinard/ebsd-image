@@ -18,15 +18,22 @@
 package org.ebsdimage.core.exp.ops.identification.post;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
 import org.junit.Before;
 import org.junit.Test;
 
-public class IdentificationPostOpsMockTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 
-    private IdentificationPostOps op;
+public class IdentificationPostOpsMockTest extends TestCase {
+
+    private IdentificationPostOpsMock op;
 
     private HoughPeak[] srcPeaks;
 
@@ -51,6 +58,47 @@ public class IdentificationPostOpsMockTest {
         assertTrue(destPeaks[0].equals(new HoughPeak(14.0, 0.0), 1e-6));
         assertTrue(destPeaks[1].equals(new HoughPeak(22.0, 1.0), 1e-6));
         assertTrue(destPeaks[2].equals(new HoughPeak(30.0, 0.0), 1e-6));
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new IdentificationPostOpsMock()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new IdentificationPostOpsMock(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(1963676493, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        IdentificationPostOpsMock other =
+                new XmlLoader().load(IdentificationPostOpsMock.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

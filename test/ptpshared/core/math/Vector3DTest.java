@@ -22,10 +22,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-public class Vector3DTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
+
+public class Vector3DTest extends TestCase {
 
     private Vector3D u, v, w;
 
@@ -43,7 +49,15 @@ public class Vector3DTest {
     @Test
     public void testClear() {
         u.clear();
-        assertTrue(new Vector(0, 0, 0).equals(u, 1e-7));
+        assertAlmostEquals(u, new Vector3D(0, 0, 0), 1e-7);
+    }
+
+
+
+    @Test
+    public void testClone() {
+        Vector3D other = u.clone();
+        assertAlmostEquals(u, other, 1e-7);
     }
 
 
@@ -94,7 +108,7 @@ public class Vector3DTest {
 
     @Test
     public void testDuplicate() {
-        Vector3D dup = u.duplicate();
+        Vector3D dup = u.clone();
         assertEquals(u, dup);
     }
 
@@ -283,5 +297,19 @@ public class Vector3DTest {
         assertEquals(1, vector.v[0], 1e-7);
         assertEquals(2, vector.v[1], 1e-7);
         assertEquals(3, vector.v[2], 1e-7);
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File tmpFile = createTempFile();
+
+        // Write
+        new XmlSaver().save(u, tmpFile);
+
+        // Read
+        Vector3D other = new XmlLoader().load(Vector3D.class, tmpFile);
+        assertAlmostEquals(u, other, 1e-6);
     }
 }

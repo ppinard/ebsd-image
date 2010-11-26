@@ -19,10 +19,15 @@ package org.ebsdimage.core.run;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+import org.simpleframework.xml.core.PersistenceException;
+
 import ptpshared.utility.LoggerUtil;
-import ptpshared.utility.xml.ObjectXml;
 import rmlshared.io.FileUtil;
 import rmlshared.ui.Monitorable;
 
@@ -31,7 +36,8 @@ import rmlshared.ui.Monitorable;
  * 
  * @author Philippe T. Pinard
  */
-public abstract class Run implements ObjectXml, Monitorable {
+@Root
+public abstract class Run implements Monitorable {
 
     /** Default directory of the run. */
     public static final File DEFAULT_DIR = FileUtil.getCurrentDirFile();
@@ -43,6 +49,7 @@ public abstract class Run implements ObjectXml, Monitorable {
     public static final String DEFAULT_NAME = "Untitled";
 
     /** Name of the run. */
+    @Attribute
     protected String name = DEFAULT_NAME;
 
     /** Progress value. */
@@ -112,6 +119,18 @@ public abstract class Run implements ObjectXml, Monitorable {
      */
     public File getDir() {
         return dir;
+    }
+
+
+
+    /**
+     * Returns the working directory.
+     * 
+     * @return directory for outputs
+     */
+    @Attribute(name = "dir")
+    public String getDirPath() {
+        return getDir().getPath();
     }
 
 
@@ -202,6 +221,19 @@ public abstract class Run implements ObjectXml, Monitorable {
 
 
     /**
+     * Sets the path of the run's directory.
+     * 
+     * @param dir
+     *            working directory
+     */
+    @Attribute(name = "dir")
+    public void setDirPath(String dir) {
+        setDir(new File(dir));
+    }
+
+
+
+    /**
      * Sets the name of this run.
      * 
      * @param name
@@ -238,6 +270,50 @@ public abstract class Run implements ObjectXml, Monitorable {
      */
     public void turnOffLogger() {
         LoggerUtil.turnOffLogger(logger);
+    }
+
+
+
+    /**
+     * Validates a set of operations to check that there is not two operations
+     * with the same index.
+     * 
+     * @param ops
+     *            operations
+     * @param clasz
+     *            class of the operation (required to return meaningful
+     *            exception message)
+     * @throws Exception
+     *             if two operations have the same index
+     */
+    protected void validate(ArrayList<? extends Operation> ops,
+            Class<? extends Operation> clasz) throws Exception {
+        int[] indexes = new int[ops.size()];
+        Arrays.fill(indexes, -1);
+
+        int index;
+        for (int i = 0; i < ops.size(); i++) {
+            index = ops.get(i).getIndex();
+            if (Arrays.binarySearch(indexes, index) >= 0)
+                throw new PersistenceException("Two " + clasz.getSimpleName()
+                        + " have the same index (" + index + ").");
+            else
+                indexes[i] = index;
+        }
+    }
+
+
+
+    /**
+     * Prepares a set of operations by setting their index as their position
+     * within each category's array.
+     * 
+     * @param ops
+     *            operations
+     */
+    protected void prepare(ArrayList<? extends Operation> ops) {
+        for (int i = 0; i < ops.size(); i++)
+            ops.get(i).setIndex(i);
     }
 
 }

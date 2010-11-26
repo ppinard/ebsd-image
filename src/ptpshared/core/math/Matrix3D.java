@@ -19,6 +19,10 @@ package ptpshared.core.math;
 
 import static java.lang.Math.abs;
 import net.jcip.annotations.Immutable;
+
+import org.simpleframework.xml.Attribute;
+
+import ptpshared.util.AlmostEquable;
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -37,7 +41,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
  * @author Philippe T. Pinard
  */
 @Immutable
-public class Matrix3D {
+public class Matrix3D implements AlmostEquable, Cloneable {
 
     /** Zero matrix. */
     public static final Matrix3D ZERO = new Matrix3D(0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -55,28 +59,35 @@ public class Matrix3D {
     /**
      * Creates a new <code>Matrix3D</code> with the specified values.
      * 
-     * @param d11
+     * @param m00
      *            value of in the first row and first column
-     * @param d12
+     * @param m01
      *            value of in the first row and second column
-     * @param d13
+     * @param m02
      *            value of in the first row and third column
-     * @param d21
+     * @param m10
      *            value of in the second row and first column
-     * @param d22
+     * @param m11
      *            value of in the second row and second column
-     * @param d23
+     * @param m12
      *            value of in the second row and third column
-     * @param d31
+     * @param m20
      *            value of in the third row and first column
-     * @param d32
+     * @param m21
      *            value of in the third row and second column
-     * @param d33
+     * @param m22
      *            value of in the third row and third column
      */
-    public Matrix3D(double d11, double d12, double d13, double d21, double d22,
-            double d23, double d31, double d32, double d33) {
-        this(new double[] { d11, d12, d13, d21, d22, d23, d31, d32, d33 });
+    public Matrix3D(@Attribute(name = "m00") double m00,
+            @Attribute(name = "m01") double m01,
+            @Attribute(name = "m02") double m02,
+            @Attribute(name = "m10") double m10,
+            @Attribute(name = "m11") double m11,
+            @Attribute(name = "m12") double m12,
+            @Attribute(name = "m20") double m20,
+            @Attribute(name = "m21") double m21,
+            @Attribute(name = "m22") double m22) {
+        this(new double[] { m00, m01, m02, m10, m11, m12, m20, m21, m22 });
     }
 
 
@@ -176,6 +187,25 @@ public class Matrix3D {
 
 
     /**
+     * Creates a copy.
+     * 
+     * @return copy of the current <code>Matrix3D</code>
+     */
+    @Override
+    @CheckReturnValue
+    public Matrix3D clone() {
+        double[][] data = new double[3][3];
+
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                data[i][j] = m[i][j];
+
+        return new Matrix3D(data);
+    }
+
+
+
+    /**
      * Returns the determinant of the matrix.
      * 
      * @return determinant
@@ -189,61 +219,6 @@ public class Matrix3D {
                         + m[0][2] * m[2][0] * m[1][1];
 
         return a - b;
-    }
-
-
-
-    /**
-     * Creates a copy.
-     * 
-     * @return copy of the current <code>Matrix3D</code>
-     */
-    @CheckReturnValue
-    public Matrix3D duplicate() {
-        double[][] data = new double[3][3];
-
-        for (int i = 0; i < 3; i++)
-            for (int j = 0; j < 3; j++)
-                data[i][j] = m[i][j];
-
-        return new Matrix3D(data);
-    }
-
-
-
-    /**
-     * Checks if this <code>Matrix3D</code> is almost equal to the specified one
-     * with the given precision.
-     * 
-     * @param other
-     *            other <code>Matrix3D</code> to check equality
-     * @param precision
-     *            level of precision
-     * @return whether the two <code>Matrix3D</code> are almost equal
-     * @throws IllegalArgumentException
-     *             if the precision is less than 0.0
-     * @throws IllegalArgumentException
-     *             if the precision is not a number (NaN)
-     */
-    public boolean equals(Matrix3D other, double precision) {
-        if (precision < 0)
-            throw new IllegalArgumentException(
-                    "The precision has to be greater or equal to 0.0.");
-        if (Double.isNaN(precision))
-            throw new IllegalArgumentException(
-                    "The precision must be a number.");
-
-        if (this == other)
-            return true;
-        if (other == null)
-            return false;
-
-        for (int i = 0; i < 3; i++)
-            for (int j = 0; j < 3; j++)
-                if (abs(m[i][j] - other.m[i][j]) >= precision)
-                    return false;
-
-        return true;
     }
 
 
@@ -276,6 +251,47 @@ public class Matrix3D {
 
 
     /**
+     * Checks if this <code>Matrix3D</code> is almost equal to the specified one
+     * with the given precision.
+     * 
+     * @param obj
+     *            other <code>Matrix3D</code> to check equality
+     * @param precision
+     *            level of precision
+     * @return whether the two <code>Matrix3D</code> are almost equal
+     * @throws IllegalArgumentException
+     *             if the precision is less than 0.0
+     * @throws IllegalArgumentException
+     *             if the precision is not a number (NaN)
+     */
+    @Override
+    public boolean equals(Object obj, double precision) {
+        if (precision < 0)
+            throw new IllegalArgumentException(
+                    "The precision has to be greater or equal to 0.0.");
+        if (Double.isNaN(precision))
+            throw new IllegalArgumentException(
+                    "The precision must be a number.");
+
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+
+        Matrix3D other = (Matrix3D) obj;
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                if (abs(m[i][j] - other.m[i][j]) >= precision)
+                    return false;
+
+        return true;
+    }
+
+
+
+    /**
      * Returns a specific value from the <code>Matrix3D</code>.
      * 
      * @param row
@@ -293,6 +309,114 @@ public class Matrix3D {
                     "Row index has to be between [0, 2].");
 
         return m[row][col];
+    }
+
+
+
+    /**
+     * Returns the element (0,0).
+     * 
+     * @return element (0,0).
+     */
+    @Attribute(name = "m00")
+    public double getM00() {
+        return m[0][0];
+    }
+
+
+
+    /**
+     * Returns the element (0,1).
+     * 
+     * @return element (0,1).
+     */
+    @Attribute(name = "m01")
+    public double getM01() {
+        return m[0][1];
+    }
+
+
+
+    /**
+     * Returns the element (0,2).
+     * 
+     * @return element (0,2).
+     */
+    @Attribute(name = "m02")
+    public double getM02() {
+        return m[0][2];
+    }
+
+
+
+    /**
+     * Returns the element (1,0).
+     * 
+     * @return element (1,0).
+     */
+    @Attribute(name = "m10")
+    public double getM10() {
+        return m[1][0];
+    }
+
+
+
+    /**
+     * Returns the element (1,1).
+     * 
+     * @return element (1,1.
+     */
+    @Attribute(name = "m11")
+    public double getM11() {
+        return m[1][1];
+    }
+
+
+
+    /**
+     * Returns the element (1,2).
+     * 
+     * @return element (1,2).
+     */
+    @Attribute(name = "m12")
+    public double getM12() {
+        return m[1][2];
+    }
+
+
+
+    /**
+     * Returns the element (2,0).
+     * 
+     * @return element (2,0).
+     */
+    @Attribute(name = "m20")
+    public double getM20() {
+        return m[2][0];
+    }
+
+
+
+    /**
+     * Returns the element (2,1).
+     * 
+     * @return element (2,1).
+     */
+    @Attribute(name = "m21")
+    public double getM21() {
+        return m[2][1];
+    }
+
+
+
+    /**
+     * Returns the element (2,2).
+     * 
+     * @return element (2,2).
+     */
+    @Attribute(name = "m22")
+    public double getM22() {
+        return m[2][2];
     }
 
 

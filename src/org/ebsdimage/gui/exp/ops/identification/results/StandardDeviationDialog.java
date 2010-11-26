@@ -45,7 +45,7 @@ public class StandardDeviationDialog extends OperationDialog {
 
         maxField =
                 new IntField("Maximum number of peaks",
-                        StandardDeviation.DEFAULT_MAX);
+                        StandardDeviation.DEFAULT.max);
         maxField.setRange(-1, Integer.MAX_VALUE);
 
         ColumnPanel panel = new ColumnPanel(2);

@@ -18,22 +18,28 @@
 package org.ebsdimage.core.exp.ops.hough.pre;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
 
 import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.ByteMap;
 
 public class MedianTest extends TestCase {
 
-    private Median median;
+    private Median op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        median = new Median();
+        op = new Median();
     }
 
 
@@ -44,7 +50,7 @@ public class MedianTest extends TestCase {
         ByteMap expectedMap =
                 (ByteMap) load("org/ebsdimage/testdata/median.bmp");
 
-        ByteMap destMap = median.process(null, srcMap);
+        ByteMap destMap = op.process(null, srcMap);
 
         destMap.assertEquals(expectedMap);
     }
@@ -53,7 +59,47 @@ public class MedianTest extends TestCase {
 
     @Test
     public void testToString() {
-        assertEquals(median.toString(), "Median");
+        assertEquals(op.toString(), "Median");
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new Median()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new Median(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-1994163895, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        Median other = new XmlLoader().load(Median.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

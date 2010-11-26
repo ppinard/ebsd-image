@@ -26,8 +26,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.EbsdMMap;
+import org.ebsdimage.core.EbsdMetadata;
 import org.ebsdimage.core.PhasesMap;
 import org.ebsdimage.core.exp.ops.detection.op.DetectionOpMock;
 import org.ebsdimage.core.exp.ops.detection.post.DetectionPostOpsMock;
@@ -58,14 +60,14 @@ import rmlimage.core.Map;
 import rmlimage.module.real.core.RealMap;
 import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
-import crystallography.core.crystals.Silicon;
+import crystallography.core.CrystalFactory;
 
-public abstract class ExpTester {
+public abstract class ExpTester extends TestCase {
 
-    static {
-        rmlimage.io.IO.addHandler(org.ebsdimage.io.IO.class);
-        rmlimage.io.IO.addHandler(rmlimage.module.real.io.IO.class);
-    }
+    // static {
+    // rmlimage.io.IO.addHandler(org.ebsdimage.io.IO.class);
+    // rmlimage.io.IO.addHandler(rmlimage.module.real.io.IO.class);
+    // }
 
     protected Exp exp;
 
@@ -75,30 +77,36 @@ public abstract class ExpTester {
 
 
     public static Exp createExp() {
-        return createExp(createSaveMaps());
-    }
-
-
-
-    public static Exp createExp(CurrentMapsFileSaver saveMaps) {
         int width = 2;
         int height = 1;
 
         ArrayList<Operation> ops = createOperations();
+
         Exp exp =
-                new Exp(width, height, createMetadata(), createPhases(),
-                        ops.toArray(new Operation[ops.size()]), saveMaps);
+                new Exp(createExpMMap(width, height),
+                        ops.toArray(new Operation[ops.size()]));
         exp.setName("ExpTester");
         exp.setDir(expPath);
+
+        exp.addExpListener(new MapsSaverListener());
 
         return exp;
     }
 
 
 
-    public static ExpMetadata createMetadata() {
-        return new ExpMetadata(20e3, 100, toRadians(70), 15e-3, 1e-6, 2e-6,
-                new Quaternion(1, 2, 3, 4), new Camera(0.1, 0.2, 0.3));
+    public static ExpMMap createExpMMap(int width, int height) {
+        ExpMMap mmap = new ExpMMap(width, height);
+
+        EbsdMetadata metadata =
+                new EbsdMetadata(20e3, 100, toRadians(70), 15e-3, new Camera(
+                        0.1, 0.2, 0.3), new Quaternion(1, 2, 3, 4),
+                        new Quaternion(5, 6, 7, 8));
+        mmap.setMetadata(metadata);
+
+        mmap.getPhasesMap().setPhases(createPhases());
+
+        return mmap;
     }
 
 
@@ -136,19 +144,14 @@ public abstract class ExpTester {
 
 
     public static Crystal[] createPhases() {
-        return new Crystal[] { new Silicon() };
+        return new Crystal[] { CrystalFactory.silicon() };
     }
 
 
 
-    public static CurrentMapsFileSaver createSaveMaps() {
-        return new CurrentMapsFileSaver(true, true, true, true, true, true);
-    }
-
-
-
+    @Override
     @After
-    public void tearDown() throws IOException {
+    public void tearDown() throws Exception {
         if (expPath.exists())
             FileUtil.rmdir(expPath);
     }
@@ -162,19 +165,21 @@ public abstract class ExpTester {
         assertEquals(1, exp.mmap.height);
 
         // Metadata
-        assertEquals(20e3, exp.mmap.beamEnergy, 1e-6);
-        assertEquals(100, exp.mmap.magnification, 1e-6);
-        assertEquals(toRadians(70), exp.mmap.tiltAngle, 1e-6);
-        assertEquals(15e-3, exp.mmap.workingDistance, 1e-6);
-        assertEquals(1e-6, exp.mmap.pixelWidth, 1e-6);
-        assertEquals(2e-6, exp.mmap.pixelHeight, 1e-6);
+        EbsdMetadata metadata = exp.getMetadata();
+        assertEquals(20e3, metadata.beamEnergy, 1e-6);
+        assertEquals(100, metadata.magnification, 1e-6);
+        assertEquals(toRadians(70), metadata.tiltAngle, 1e-6);
+        assertEquals(15e-3, metadata.workingDistance, 1e-6);
         assertTrue(new Quaternion(1, 2, 3, 4).normalize().equals(
-                exp.mmap.sampleRotation, 1e-6));
-        assertTrue(new Camera(0.1, 0.2, 0.3).equals(exp.mmap.calibration, 1e-6));
+                metadata.sampleRotation, 1e-6));
+        assertTrue(new Quaternion(5, 6, 7, 8).normalize().equals(
+                metadata.cameraRotation, 1e-6));
+        assertTrue(new Camera(0.1, 0.2, 0.3).equals(metadata.camera, 1e-6));
 
         // Phases
         assertEquals(1, exp.mmap.getPhases().length);
-        assertTrue(new Silicon().equals(exp.mmap.getPhases()[0], 1e-6));
+        assertTrue(CrystalFactory.silicon().equals(exp.mmap.getPhases()[0],
+                1e-6));
     }
 
 
@@ -346,10 +351,10 @@ public abstract class ExpTester {
         exp.run();
 
         // Test save maps
-        assertEquals(19 * 2, FileUtil.listFiles(expPath).length);
+        assertEquals(20 * 2, FileUtil.listFiles(expPath).length);
 
         // Test maps
-        assertEquals(10, exp.mmap.getAliases().length);
+        assertEquals(11, exp.mmap.getAliases().length);
 
         // Q0
         Map map = exp.mmap.getMap(EbsdMMap.Q0);
@@ -437,19 +442,6 @@ public abstract class ExpTester {
         realMap = (RealMap) map;
         assertEquals(0.5, realMap.pixArray[0], 1e-6);
         assertEquals(0.5, realMap.pixArray[1], 1e-6);
-    }
-
-
-
-    @Test
-    public void testSaveMaps() {
-        CurrentMapsFileSaver saver =
-                (CurrentMapsFileSaver) exp.currentMapsSaver;
-
-        assertTrue(saver.saveAllMaps);
-        assertTrue(saver.savePatternMap);
-        assertTrue(saver.saveHoughMap);
-        assertTrue(saver.savePeaksMap);
     }
 
 }

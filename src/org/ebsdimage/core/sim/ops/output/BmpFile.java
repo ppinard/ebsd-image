@@ -33,6 +33,11 @@ import rmlimage.io.IO;
  */
 public class BmpFile extends OutputOps {
 
+    /** Default operation. */
+    public static final BmpFile DEFAULT = new BmpFile();
+
+
+
     /**
      * Saves the simulated pattern as a BMP file.
      * 

@@ -20,8 +20,15 @@ package org.ebsdimage.core.sim.ops.patternsim;
 import org.ebsdimage.core.sim.Band;
 
 import rmlimage.module.real.core.RealMap;
+import crystallography.core.ScatteringFactorsEnum;
 
 public class PatternSimOpMock extends PatternSimOp {
+
+    public PatternSimOpMock() {
+        super(1, 1, 1, ScatteringFactorsEnum.XRAY);
+    }
+
+
 
     @Override
     protected RealMap createPatternMap() {

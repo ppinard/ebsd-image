@@ -31,6 +31,11 @@ import rmlimage.module.real.core.RealMap;
  */
 public class ImageQuality extends IdentificationResultsOps {
 
+    /** Default operation. */
+    public static final ImageQuality DEFAULT = new ImageQuality();
+
+
+
     @Override
     public String toString() {
         return "Image Quality";

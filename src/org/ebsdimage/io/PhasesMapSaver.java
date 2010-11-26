@@ -17,18 +17,14 @@
  */
 package org.ebsdimage.io;
 
-import static org.ebsdimage.io.PhasesMapXmlTags.HEADER;
-import static org.ebsdimage.io.PhasesMapXmlTags.TAG_NAME;
+import static org.ebsdimage.core.PhasesMap.FILE_HEADER;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.core.PhasesMap;
-import org.jdom.Comment;
-import org.jdom.Document;
-import org.jdom.Element;
 
-import ptpshared.utility.xml.JDomUtil;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.io.BasicBmpSaver;
 import rmlshared.io.FileUtil;
 
@@ -39,6 +35,13 @@ import rmlshared.io.FileUtil;
  * @author Philippe T. Pinard
  */
 public class PhasesMapSaver extends BasicBmpSaver {
+
+    @Override
+    public boolean canSave(Object obj) {
+        return obj instanceof PhasesMap;
+    }
+
+
 
     /**
      * {@inheritDoc}
@@ -84,17 +87,11 @@ public class PhasesMapSaver extends BasicBmpSaver {
         super.save(map, file);
 
         // Save phases
-        Element element = new Element(TAG_NAME);
-
-        element.addContent(new PhasesMapXmlSaver().save(map.getPhases()));
-
         File xmlFile = FileUtil.setExtension(file, "xml");
+        new XmlSaver().saveArray(map.getPhases(), xmlFile);
 
-        Document doc = new Document();
-        doc.addContent(new Comment(HEADER));
-        doc.addContent(element);
-
-        JDomUtil.saveXML(doc, xmlFile);
+        // Write the property file with the specified header
+        saveProperties(map, file, FILE_HEADER);
 
         map.shouldSave(false); // No need to save anymore
     }

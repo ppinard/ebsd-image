@@ -24,6 +24,7 @@ import static ptpshared.utility.Arrays.reverse;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.HoughPeakIntensityComparator;
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Attribute;
 
 import rmlshared.util.ArrayList;
 
@@ -34,29 +35,17 @@ import rmlshared.util.ArrayList;
  */
 public class DoublePeaksCleanUp extends IdentificationPostOps {
 
+    /** Default operation. */
+    public static final DoublePeaksCleanUp DEFAULT = new DoublePeaksCleanUp(2,
+            2);
+
     /** Minimum number of pixels between two peaks in rho. */
-    public final int spacingRho;
-
-    /** Default value of the minimum number of pixels between two peaks in rho. */
-    public static final int DEFAULT_SPACING_RHO = 2;
-
-    /**
-     * Default value of the minimum number of pixels between two peaks in theta.
-     */
-    public static final int DEFAULT_SPACING_THETA = 2;
+    @Attribute(name = "deltaRho")
+    public final int deltaRho;
 
     /** Minimum number of pixels between two peaks in theta. */
-    public final int spacingTheta;
-
-
-
-    /**
-     * Creates a new <code>DoublePeaksCleanUp</code> with the default
-     * parameters.
-     */
-    public DoublePeaksCleanUp() {
-        this(DEFAULT_SPACING_RHO, DEFAULT_SPACING_THETA);
-    }
+    @Attribute(name = "deltaTheta")
+    public final int deltaTheta;
 
 
 
@@ -71,7 +60,8 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
      * @throws IllegalArgumentException
      *             if the spacing in rho and theta cannot be less than 1
      */
-    public DoublePeaksCleanUp(int spacingRho, int spacingTheta) {
+    public DoublePeaksCleanUp(@Attribute(name = "deltaRho") int spacingRho,
+            @Attribute(name = "deltaTheta") int spacingTheta) {
         if (spacingRho < 1)
             throw new IllegalArgumentException(
                     "Spacing in rho cannot be less than 1.");
@@ -79,25 +69,37 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
             throw new IllegalArgumentException(
                     "Spacing in theta cannot be less than 1.");
 
-        this.spacingRho = spacingRho;
-        this.spacingTheta = spacingTheta;
+        this.deltaRho = spacingRho;
+        this.deltaTheta = spacingTheta;
     }
 
 
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
         if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
             return false;
 
         DoublePeaksCleanUp other = (DoublePeaksCleanUp) obj;
-        if (spacingRho != other.spacingRho)
+        if (deltaRho != other.deltaRho)
             return false;
-        if (spacingTheta != other.spacingTheta)
+        if (deltaTheta != other.deltaTheta)
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        DoublePeaksCleanUp other = (DoublePeaksCleanUp) obj;
+        if (Math.abs(deltaRho - other.deltaRho) >= precision)
+            return false;
+        if (Math.abs(deltaTheta - other.deltaTheta) >= precision)
             return false;
 
         return true;
@@ -109,8 +111,8 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + spacingRho;
-        result = prime * result + spacingTheta;
+        result = prime * result + deltaRho;
+        result = prime * result + deltaTheta;
         return result;
     }
 
@@ -198,15 +200,15 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
      */
     private boolean equivalent(HoughPeak peak0, HoughPeak peak1, double deltaR,
             double deltaTheta) {
-        return abs(peak1.rho - peak0.rho) < deltaR * spacingRho
-                && abs(peak1.theta - peak0.theta) < deltaTheta * spacingTheta;
+        return abs(peak1.rho - peak0.rho) < deltaR * deltaRho
+                && abs(peak1.theta - peak0.theta) < deltaTheta * deltaTheta;
     }
 
 
 
     @Override
     public String toString() {
-        return "DoublePeaksCleanUp [spacingRho=" + spacingRho
-                + ", spacingTheta=" + spacingTheta + "]";
+        return "DoublePeaksCleanUp [deltaRho=" + deltaRho + ", deltaTheta="
+                + deltaTheta + "]";
     }
 }

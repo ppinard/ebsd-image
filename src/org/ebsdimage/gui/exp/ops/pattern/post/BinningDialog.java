@@ -45,8 +45,7 @@ public class BinningDialog extends OperationDialog {
         super("Binning");
 
         binningSizeField =
-                new PowerOfTwoIntField("Binning Factor",
-                        Binning.DEFAULT_BINNING_FACTOR);
+                new PowerOfTwoIntField("Binning Factor", Binning.DEFAULT.factor);
 
         Panel panel = new Panel();
 

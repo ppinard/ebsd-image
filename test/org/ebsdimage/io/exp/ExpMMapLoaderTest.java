@@ -25,9 +25,9 @@ import java.io.File;
 import org.ebsdimage.core.exp.ExpMMapTester;
 import org.junit.Test;
 
-import rmlshared.io.FileUtil;
-
 public class ExpMMapLoaderTest extends ExpMMapTester {
+
+    private ExpMMapLoader loader;
 
     private File file;
 
@@ -35,15 +35,16 @@ public class ExpMMapLoaderTest extends ExpMMapTester {
 
     public ExpMMapLoaderTest() throws Exception {
         file = getFile("org/ebsdimage/testdata/expmmap.zip");
-        mmap = new ExpMMapLoader().load(file);
+        loader = new ExpMMapLoader();
+        mmap = loader.load(file);
     }
 
 
 
     @Test
     public void testIsExpMMap() {
-        assertTrue(ExpMMapLoader.isExpMMap(file));
-        assertFalse(ExpMMapLoader.isExpMMap(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp")));
+        assertTrue(loader.canLoad(file));
+        assertFalse(loader.canLoad(getFile("org/ebsdimage/testdata/houghmap.bmp")));
     }
 
 }

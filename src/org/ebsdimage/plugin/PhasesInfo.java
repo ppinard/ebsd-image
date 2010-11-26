@@ -35,7 +35,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.ebsdimage.core.PhasesMap;
 
-import ptpshared.utility.ElementProperties;
+import ptpshared.util.ElementProperties;
 import rmlimage.core.Map;
 import rmlimage.gui.PlugIn;
 import rmlshared.gui.BasicDialog;

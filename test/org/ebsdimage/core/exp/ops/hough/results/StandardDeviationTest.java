@@ -18,26 +18,32 @@
 package org.ebsdimage.core.exp.ops.hough.results;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.exp.OpResult;
 import org.ebsdimage.io.HoughMapLoader;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlshared.io.FileUtil;
 
-public class StandardDeviationTest {
+public class StandardDeviationTest extends TestCase {
 
-    private StandardDeviation stdDev;
+    private StandardDeviation op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        stdDev = new StandardDeviation();
+        op = new StandardDeviation();
     }
 
 
@@ -46,7 +52,7 @@ public class StandardDeviationTest {
     public void testCalculate() throws IOException {
         HoughMap srcMap =
                 new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
-        OpResult result = stdDev.calculate(null, srcMap)[0];
+        OpResult result = op.calculate(null, srcMap)[0];
 
         assertEquals(5.596094704, result.value.doubleValue(), 1e-7);
     }
@@ -55,7 +61,48 @@ public class StandardDeviationTest {
 
     @Test
     public void testToString() {
-        assertEquals(stdDev.toString(), "Standard Deviation");
+        assertEquals(op.toString(), "Standard Deviation");
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new StandardDeviation()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new StandardDeviation(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-1082197437, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        StandardDeviation other =
+                new XmlLoader().load(StandardDeviation.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

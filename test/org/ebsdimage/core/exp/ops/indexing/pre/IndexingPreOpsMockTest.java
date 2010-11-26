@@ -18,15 +18,22 @@
 package org.ebsdimage.core.exp.ops.indexing.pre;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
 import org.junit.Before;
 import org.junit.Test;
 
-public class IndexingPreOpsMockTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 
-    private IndexingPreOps op;
+public class IndexingPreOpsMockTest extends TestCase {
+
+    private IndexingPreOpsMock op;
 
     private HoughPeak[] srcPeaks;
 
@@ -51,6 +58,54 @@ public class IndexingPreOpsMockTest {
         assertTrue(destPeaks[0].equals(new HoughPeak(15.0, 0.0), 1e-6));
         assertTrue(destPeaks[1].equals(new HoughPeak(23.0, 1.0), 1e-6));
         assertTrue(destPeaks[2].equals(new HoughPeak(31.0, 0.0), 1e-6));
+    }
+
+
+
+    @Test
+    public void testToString() {
+        assertEquals(op.toString(), "IndexingPreOpsMock []");
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new IndexingPreOpsMock()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new IndexingPreOpsMock(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-155874800, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        IndexingPreOpsMock other =
+                new XmlLoader().load(IndexingPreOpsMock.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

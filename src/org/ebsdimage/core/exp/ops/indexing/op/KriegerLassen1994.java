@@ -25,11 +25,12 @@ import org.ebsdimage.core.Indexing;
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.run.Run;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
 
-import rmlshared.thread.Reflection;
 import crystallography.core.Crystal;
 import crystallography.core.Reflectors;
-import crystallography.core.ScatteringFactors;
+import crystallography.core.ReflectorsFactory;
 import crystallography.core.ScatteringFactorsEnum;
 
 /**
@@ -40,35 +41,23 @@ import crystallography.core.ScatteringFactorsEnum;
  */
 public class KriegerLassen1994 extends IndexingOp {
 
+    /** Default operation. */
+    public static final KriegerLassen1994 DEFAULT = new KriegerLassen1994(4,
+            ScatteringFactorsEnum.XRAY);
+
     /** Maximum index of the planes to compute. */
+    @Attribute(name = "maxIndex")
     public final int maxIndex;
 
-    /** Default maximum index. */
-    public static final int DEFAULT_MAX_INDEX = 4;
-
     /** Type of scattering factor. */
+    @Element(name = "scatterType")
     public final ScatteringFactorsEnum scatterType;
-
-    /** Default type of scattering factor. */
-    public static final ScatteringFactorsEnum DEFAULT_SCATTER_TYPE =
-            ScatteringFactorsEnum.XRAY;
 
     /** Reflectors for all the defined phases. */
     private Reflectors[] reflsArray;
 
     /** Calibration for the indexing. */
-    private Camera calibration;
-
-
-
-    /**
-     * Creates a new indexing operation from the algorithm described in Krieger
-     * Lassen (1994) with the default maximum index and scattering factor type.
-     */
-    public KriegerLassen1994() {
-        this.maxIndex = DEFAULT_MAX_INDEX;
-        this.scatterType = DEFAULT_SCATTER_TYPE;
-    }
+    private Camera camera;
 
 
 
@@ -81,13 +70,59 @@ public class KriegerLassen1994 extends IndexingOp {
      * @param scatterType
      *            type of scattering factor
      */
-    public KriegerLassen1994(int maxIndex, ScatteringFactorsEnum scatterType) {
+    public KriegerLassen1994(@Attribute(name = "maxIndex") int maxIndex,
+            @Element(name = "scatterType") ScatteringFactorsEnum scatterType) {
         if (maxIndex < 1)
             throw new IllegalArgumentException(
                     "The maximum index has to greater or equal to 1.");
 
         this.maxIndex = maxIndex;
         this.scatterType = scatterType;
+    }
+
+
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + maxIndex;
+        result =
+                prime * result
+                        + ((scatterType == null) ? 0 : scatterType.hashCode());
+        return result;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!super.equals(obj))
+            return false;
+
+        KriegerLassen1994 other = (KriegerLassen1994) obj;
+        if (maxIndex != other.maxIndex)
+            return false;
+        if (scatterType != other.scatterType)
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        KriegerLassen1994 other = (KriegerLassen1994) obj;
+        if (Math.abs(maxIndex - other.maxIndex) >= precision)
+            return false;
+        if (scatterType != other.scatterType)
+            return false;
+
+        return true;
     }
 
 
@@ -109,7 +144,7 @@ public class KriegerLassen1994 extends IndexingOp {
         if (srcPeaks.length < 3)
             return new Solution[0];
         else
-            return Indexing.index(reflsArray, srcPeaks, calibration);
+            return Indexing.index(reflsArray, srcPeaks, camera);
     }
 
 
@@ -121,18 +156,15 @@ public class KriegerLassen1994 extends IndexingOp {
         Exp exp = (Exp) run;
 
         // Camera
-        calibration = exp.mmap.calibration;
-
-        // Scattering factors
-        ScatteringFactors scatter =
-                (ScatteringFactors) Reflection.newInstance(scatterType.getScatteringFactors());
+        camera = exp.getMetadata().camera;
 
         // Reflectors
         Crystal[] phases = exp.mmap.getPhases();
         reflsArray = new Reflectors[phases.length];
 
         for (int i = 0; i < reflsArray.length; i++)
-            reflsArray[i] = new Reflectors(phases[i], scatter, maxIndex);
+            reflsArray[i] =
+                    ReflectorsFactory.generate(phases[i], scatterType, maxIndex);
     }
 
 

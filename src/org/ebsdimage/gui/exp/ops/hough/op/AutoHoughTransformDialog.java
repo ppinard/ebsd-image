@@ -49,7 +49,7 @@ public class AutoHoughTransformDialog extends OperationDialog {
 
         resolutionField =
                 new DoubleField("Resolution",
-                        toDegrees(AutoHoughTransform.DEFAULT_DELTA_THETA));
+                        toDegrees(AutoHoughTransform.DEFAULT.deltaTheta));
         resolutionField.setRange(0.1, 90.0);
 
         Panel panel = new Panel();

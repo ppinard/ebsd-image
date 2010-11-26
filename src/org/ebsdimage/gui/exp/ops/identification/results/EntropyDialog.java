@@ -43,7 +43,7 @@ public class EntropyDialog extends OperationDialog {
     public EntropyDialog() {
         super("Entropy");
 
-        maxField = new IntField("Maximum number of peaks", Entropy.DEFAULT_MAX);
+        maxField = new IntField("Maximum number of peaks", Entropy.DEFAULT.max);
         maxField.setRange(-1, Integer.MAX_VALUE);
 
         ColumnPanel panel = new ColumnPanel(2);

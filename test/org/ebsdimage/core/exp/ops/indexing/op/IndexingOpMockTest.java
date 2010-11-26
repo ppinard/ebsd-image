@@ -18,20 +18,26 @@
 package org.ebsdimage.core.exp.ops.indexing.op;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.Solution;
 import org.junit.Before;
 import org.junit.Test;
 
 import ptpshared.core.math.Quaternion;
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import crystallography.core.Crystal;
-import crystallography.core.crystals.Silicon;
+import crystallography.core.CrystalFactory;
 
-public class IndexingOpMockTest {
+public class IndexingOpMockTest extends TestCase {
 
-    private IndexingOp op;
+    private IndexingOpMock op;
 
     private HoughPeak[] srcPeaks;
 
@@ -54,7 +60,7 @@ public class IndexingOpMockTest {
 
         assertEquals(3, slns.length);
 
-        Crystal expectedPhase = new Silicon();
+        Crystal expectedPhase = CrystalFactory.silicon();
         Quaternion expectedRotation = Quaternion.IDENTITY;
         for (Solution sln : slns) {
             assertTrue(expectedPhase.equals(sln.phase, 1e-6));
@@ -64,5 +70,52 @@ public class IndexingOpMockTest {
         assertEquals(0.0, slns[0].fit, 1e-6);
         assertEquals(0.333333, slns[1].fit, 1e-6);
         assertEquals(0.666666, slns[2].fit, 1e-6);
+    }
+
+
+
+    @Test
+    public void testToString() {
+        assertEquals(op.toString(), "IndexingOpMock []");
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new IndexingOpMock()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new IndexingOpMock(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(1865016634, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        IndexingOpMock other = new XmlLoader().load(IndexingOpMock.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 }

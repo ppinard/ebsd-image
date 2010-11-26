@@ -18,11 +18,13 @@
 package org.ebsdimage.core.sim.ops.output;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.sim.Sim;
 import org.ebsdimage.core.sim.SimTester;
@@ -30,17 +32,19 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlshared.io.FileUtil;
 
-public class BmpFileTest {
+public class BmpFileTest extends TestCase {
 
-    private BmpFile bmpFile;
+    private BmpFile op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        bmpFile = new BmpFile();
+        op = new BmpFile();
     }
 
 
@@ -57,7 +61,7 @@ public class BmpFileTest {
     public void testSave() throws IOException {
         // Create simulation
         Operation[] ops =
-                new Operation[] { SimTester.createPatternSimOp(), bmpFile };
+                new Operation[] { SimTester.createPatternSimOp(), op };
         Sim sim = SimTester.createSim(ops);
 
         // Run
@@ -71,7 +75,47 @@ public class BmpFileTest {
 
     @Test
     public void testToString() {
-        assertEquals("BmpFile []", bmpFile.toString());
+        assertEquals("BmpFile []", op.toString());
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new BmpFile()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new BmpFile(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(1671902368, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        BmpFile other = new XmlLoader().load(BmpFile.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

@@ -18,7 +18,13 @@
 package crystallography.core;
 
 import net.jcip.annotations.Immutable;
-import ptpshared.utility.xml.ObjectXml;
+
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
+
+import ptpshared.util.AlmostEquable;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
@@ -35,23 +41,28 @@ import edu.umd.cs.findbugs.annotations.NonNull;
  * 
  * @author Philippe T. Pinard
  */
+@Root
 @Immutable
-public class Crystal implements ObjectXml {
+public class Crystal implements AlmostEquable {
 
     /** Given name of the crystal. */
     @NonNull
+    @Attribute(name = "name")
     public final String name;
 
     /** Unit cell of the crystal. */
     @NonNull
+    @Element(name = "unitCell")
     public final UnitCell unitCell;
 
     /** Atom sites of the crystal. */
     @NonNull
+    @ElementList(name = "atoms", type = AtomSite.class)
     public final AtomSites atoms;
 
     /** Space group of the crystal. */
     @NonNull
+    @Element(name = "spaceGroup")
     public final SpaceGroup spaceGroup;
 
 
@@ -63,7 +74,7 @@ public class Crystal implements ObjectXml {
      *            name of the crystal
      * @param unitCell
      *            <code>UnitCell</code> of the crystal
-     * @param atomSites
+     * @param atoms
      *            <code>AtomSites</code> of the crystal
      * @param spaceGroup
      *            <code>SpaceGroup</code> of the crystal
@@ -78,8 +89,11 @@ public class Crystal implements ObjectXml {
      * @throws IllegalArgumentException
      *             if the name is an empty string
      */
-    public Crystal(String name, UnitCell unitCell, AtomSites atomSites,
-            SpaceGroup spaceGroup) {
+    public Crystal(
+            @Attribute(name = "name") String name,
+            @Element(name = "unitCell") UnitCell unitCell,
+            @ElementList(name = "atoms", type = AtomSite.class) AtomSites atoms,
+            @Element(name = "spaceGroup") SpaceGroup spaceGroup) {
         if (name == null)
             throw new NullPointerException("The crystal name cannot be null.");
         if (name.length() == 0)
@@ -87,14 +101,14 @@ public class Crystal implements ObjectXml {
                     "The crystal name cannot be an empty string.");
         if (unitCell == null)
             throw new NullPointerException("The unit cell cannot be null.");
-        if (atomSites == null)
+        if (atoms == null)
             throw new NullPointerException("The atom sites cannot be null.");
         if (spaceGroup == null)
             throw new NullPointerException("The space group cannot be null.");
 
         this.name = name;
         this.unitCell = unitCell;
-        atoms = Calculations.equivalentPositions(atomSites, spaceGroup);
+        this.atoms = Calculations.equivalentPositions(atoms, spaceGroup);
         this.spaceGroup = spaceGroup;
     }
 
@@ -104,7 +118,7 @@ public class Crystal implements ObjectXml {
      * Checks if this <code>Crystal</code> is almost equal to the specified one
      * with the given precision.
      * 
-     * @param other
+     * @param obj
      *            other <code>Crystal</code> to check equality
      * @param precision
      *            level of precision
@@ -116,7 +130,8 @@ public class Crystal implements ObjectXml {
      * @throws IllegalArgumentException
      *             if the precision is not a number (NaN)
      */
-    public boolean equals(Crystal other, double precision) {
+    @Override
+    public boolean equals(Object obj, double precision) {
         if (precision < 0)
             throw new IllegalArgumentException(
                     "The precision has to be greater or equal to 0.0.");
@@ -124,10 +139,14 @@ public class Crystal implements ObjectXml {
             throw new IllegalArgumentException(
                     "The precision must be a number.");
 
-        if (this == other)
+        if (this == obj)
             return true;
-        if (other == null)
+        if (obj == null)
             return false;
+        if (getClass() != obj.getClass())
+            return false;
+
+        Crystal other = (Crystal) obj;
 
         if (!(name.equals(other.name)))
             return false;

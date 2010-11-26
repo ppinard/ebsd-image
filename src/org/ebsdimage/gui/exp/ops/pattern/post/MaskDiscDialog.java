@@ -51,15 +51,13 @@ public class MaskDiscDialog extends OperationDialog {
     public MaskDiscDialog() {
         super("Crop");
 
-        centroidXField =
-                new IntField("Centroid X", MaskDisc.DEFAULT_CENTROID_X);
+        centroidXField = new IntField("Centroid X", MaskDisc.DEFAULT.centroidX);
         centroidXField.setRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
 
-        centroidYField =
-                new IntField("Centroid Y", MaskDisc.DEFAULT_CENTROID_Y);
+        centroidYField = new IntField("Centroid Y", MaskDisc.DEFAULT.centroidY);
         centroidYField.setRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
 
-        radiusField = new IntField("Radius", MaskDisc.DEFAULT_RADIUS);
+        radiusField = new IntField("Radius", MaskDisc.DEFAULT.radius);
         radiusField.setRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
 
         Panel panel = new ColumnPanel(3);

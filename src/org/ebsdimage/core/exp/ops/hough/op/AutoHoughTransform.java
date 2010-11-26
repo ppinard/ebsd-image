@@ -1,11 +1,12 @@
 package org.ebsdimage.core.exp.ops.hough.op;
 
-import static java.lang.Math.PI;
+import static java.lang.Math.abs;
 import static java.lang.Math.toDegrees;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.Transform;
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
 import rmlimage.core.Filter;
@@ -19,54 +20,64 @@ import rmlimage.core.Filter;
  */
 public class AutoHoughTransform extends HoughOp {
 
-    /** Default resolution in theta of the Hough transform (0.5 deg). */
-    public static final double DEFAULT_DELTA_THETA = 0.5 / 180 * PI;
-
     /** Resolution in theta of the Hough transform (in radians/px). */
+    @Attribute(name = "deltaTheta")
     public final double deltaTheta;
 
+    /** Default operation. */
+    public static final AutoHoughTransform DEFAULT = new AutoHoughTransform(
+            Math.toRadians(0.5));
 
 
-    /**
-     * Creates a new Hough transform operation with the default values.
-     */
-    public AutoHoughTransform() {
-        this(DEFAULT_DELTA_THETA);
-    }
 
-
+    // /**
+    // * Creates a new Hough transform operation with the default values.
+    // */
+    // public AutoHoughTransform() {
+    // this(DEFAULT_DELTA_THETA);
+    // }
 
     /**
      * Creates a new Hough transform operation using the specified resolution in
      * theta. The resolution in rho is automatically calculated to ensure that
      * the aspect ratio of the peaks is close to unity (square peaks).
      * 
-     * @param resolution
+     * @param deltaTheta
      *            resolution of the Hough transform (in radians)
      * @throws IllegalArgumentException
      *             if the resolution is less or equal to zero
      */
-    public AutoHoughTransform(double resolution) {
-        if (resolution <= 0)
-            throw new IllegalArgumentException("Resolution (" + resolution
+    public AutoHoughTransform(@Attribute(name = "deltaTheta") double deltaTheta) {
+        if (deltaTheta <= 0)
+            throw new IllegalArgumentException("Resolution (" + deltaTheta
                     + ") must be > 0");
 
-        this.deltaTheta = resolution;
+        this.deltaTheta = deltaTheta;
     }
 
 
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
         if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
             return false;
 
         AutoHoughTransform other = (AutoHoughTransform) obj;
         if (Double.doubleToLongBits(deltaTheta) != Double.doubleToLongBits(other.deltaTheta))
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        AutoHoughTransform other = (AutoHoughTransform) obj;
+        if (abs(deltaTheta - other.deltaTheta) >= precision)
             return false;
 
         return true;

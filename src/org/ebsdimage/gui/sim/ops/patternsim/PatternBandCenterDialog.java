@@ -31,7 +31,10 @@ public class PatternBandCenterDialog extends PatternSimOpDialog {
      * Creates a new <code>PatternBandCenterDialog</code>.
      */
     public PatternBandCenterDialog() {
-        super("Pattern Band Center");
+        super("Pattern Band Center", PatternBandCenter.DEFAULT.width,
+                PatternBandCenter.DEFAULT.height,
+                PatternBandCenter.DEFAULT.maxIndex,
+                PatternBandCenter.DEFAULT.scatterType);
     }
 
 

@@ -18,25 +18,31 @@
 package org.ebsdimage.core.exp.ops.detection.pre;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.io.HoughMapLoader;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlshared.io.FileUtil;
 
-public class InversionDivisionTest {
+public class InversionDivisionTest extends TestCase {
 
-    private InversionDivision invDiv;
+    private InversionDivision op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        invDiv = new InversionDivision();
+        op = new InversionDivision();
     }
 
 
@@ -48,7 +54,7 @@ public class InversionDivisionTest {
         HoughMap expectedMap =
                 new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/inversion_division_op.bmp"));
 
-        HoughMap destMap = invDiv.process(null, srcMap);
+        HoughMap destMap = op.process(null, srcMap);
 
         destMap.assertEquals(expectedMap);
     }
@@ -57,6 +63,47 @@ public class InversionDivisionTest {
 
     @Test
     public void testToString() {
-        assertEquals(invDiv.toString(), "Inversion Division");
+        assertEquals(op.toString(), "Inversion Division");
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new InversionDivision()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new InversionDivision(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-326369825, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        InversionDivision other =
+                new XmlLoader().load(InversionDivision.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 }

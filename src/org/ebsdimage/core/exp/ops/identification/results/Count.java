@@ -30,6 +30,11 @@ import rmlimage.module.real.core.RealMap;
  */
 public class Count extends IdentificationResultsOps {
 
+    /** Default operation. */
+    public static final Count DEFAULT = new Count();
+
+
+
     /**
      * Calculates the number of peaks quality index of the Hough peaks.
      * 

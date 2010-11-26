@@ -19,6 +19,7 @@ package org.ebsdimage.core.exp.ops.pattern.results;
 
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
 import rmlimage.core.MapStats;
@@ -33,38 +34,24 @@ import rmlimage.module.real.core.RealMap;
  */
 public class Sum extends PatternResultsOps {
 
+    /** Default operation. */
+    public static final Sum DEFAULT = new Sum(0.0, 1.0, 0.0, 1.0);
+
     /** Lower x limit as a fraction of the image width. */
+    @Attribute(name = "xmin")
     public final double xmin;
 
     /** Upper x limit as a fraction of the image width. */
+    @Attribute(name = "xmax")
     public final double xmax;
 
     /** Lower y limit as a fraction of the image height. */
+    @Attribute(name = "ymin")
     public final double ymin;
 
     /** Upper y limit as a fraction of the image height. */
+    @Attribute(name = "ymax")
     public final double ymax;
-
-    /** Default value of the lower x limit. */
-    public static final double DEFAULT_XMIN = 0.0;
-
-    /** Default value of the upper x limit. */
-    public static final double DEFAULT_XMAX = 1.0;
-
-    /** Default value of the lower y limit. */
-    public static final double DEFAULT_YMIN = 0.0;
-
-    /** Default value of the upper y limit. */
-    public static final double DEFAULT_YMAX = 1.0;
-
-
-
-    /**
-     * Creates a new <code>Sum</code> with the default values.
-     */
-    public Sum() {
-        this(DEFAULT_XMIN, DEFAULT_YMIN, DEFAULT_XMAX, DEFAULT_YMAX);
-    }
 
 
 
@@ -84,7 +71,10 @@ public class Sum extends PatternResultsOps {
      * @throws IllegalArgumentException
      *             if the lower limit is greater than the upper limit
      */
-    public Sum(double xmin, double ymin, double xmax, double ymax) {
+    public Sum(@Attribute(name = "xmin") double xmin,
+            @Attribute(name = "ymin") double ymin,
+            @Attribute(name = "xmax") double xmax,
+            @Attribute(name = "ymax") double ymax) {
         if (xmin < 0 || xmin > 1)
             throw new IllegalArgumentException(
                     "Lower x limit must be between [0,1].");
@@ -159,12 +149,9 @@ public class Sum extends PatternResultsOps {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
         if (!super.equals(obj))
             return false;
-        if (getClass() != obj.getClass())
-            return false;
+
         Sum other = (Sum) obj;
         if (Double.doubleToLongBits(xmax) != Double.doubleToLongBits(other.xmax))
             return false;
@@ -174,6 +161,27 @@ public class Sum extends PatternResultsOps {
             return false;
         if (Double.doubleToLongBits(ymin) != Double.doubleToLongBits(other.ymin))
             return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        Sum other = (Sum) obj;
+        if (Math.abs(xmin - other.xmin) >= precision)
+            return false;
+        if (Math.abs(xmax - other.xmax) >= precision)
+            return false;
+        if (Math.abs(ymin - other.ymin) >= precision)
+            return false;
+        if (Math.abs(ymax - other.ymax) >= precision)
+            return false;
+
         return true;
     }
 

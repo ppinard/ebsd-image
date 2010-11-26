@@ -19,132 +19,221 @@ package org.ebsdimage.core.exp;
 
 import static java.lang.Math.toRadians;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.ebsdimage.TestCase;
-import org.ebsdimage.core.Camera;
-import org.ebsdimage.core.EbsdMMap;
-import org.ebsdimage.core.PhasesMap;
+import org.ebsdimage.core.*;
+import org.ebsdimage.io.ErrorMapLoader;
 import org.ebsdimage.io.PhasesMapLoader;
-import org.junit.Before;
 import org.junit.Test;
 
 import ptpshared.core.math.Quaternion;
+import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
 import rmlimage.module.real.core.RealMap;
-import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
-import crystallography.core.crystals.IronBCC;
-import crystallography.core.crystals.Silicon;
+import crystallography.core.CrystalFactory;
 
 public abstract class ExpMMapTester extends TestCase {
 
     protected ExpMMap mmap;
 
-    protected Crystal siliconPhase;
-
-    protected Crystal ironPhase;
 
 
+    public static ExpMMap createExpMMap() {
+        EbsdMetadata metadata =
+                new EbsdMetadata(20e3, 100, toRadians(70), 15e-3, new Camera(
+                        0.1, 0.2, 0.3), Quaternion.IDENTITY,
+                        Quaternion.IDENTITY);
 
-    @Before
-    public void setUp() throws Exception {
-        siliconPhase = new Silicon();
-        ironPhase = new IronBCC();
+        HashMap<String, Map> mapList = new HashMap<String, Map>();
+
+        RealMap q0Map = new RealMap(2, 2);
+        q0Map.pixArray[0] = 1.0f;
+        mapList.put(EbsdMMap.Q0, q0Map);
+
+        RealMap q1Map = new RealMap(2, 2);
+        q1Map.pixArray[1] = 1.0f;
+        mapList.put(EbsdMMap.Q1, q1Map);
+
+        RealMap q2Map = new RealMap(2, 2);
+        q2Map.pixArray[2] = 1.0f;
+        mapList.put(EbsdMMap.Q2, q2Map);
+
+        RealMap q3Map = new RealMap(2, 2);
+        q3Map.pixArray[3] = 1.0f;
+        mapList.put(EbsdMMap.Q3, q3Map);
+
+        PhasesMap phasesMap =
+                new PhasesMap(2, 2, new byte[] { 0, 1, 2, 1 }, new Crystal[] {
+                        CrystalFactory.silicon(), CrystalFactory.ferrite() });
+        mapList.put(EbsdMMap.PHASES, phasesMap);
+
+        ErrorMap errorMap =
+                new ErrorMap(2, 2, new ErrorCode[] { new ErrorCode(1, "Error1",
+                        "First test error") });
+        mapList.put(EbsdMMap.ERRORS, errorMap);
+
+        ExpMMap mmap = new ExpMMap(2, 2, mapList);
+        mmap.setMetadata(metadata);
+
+        return mmap;
     }
 
 
 
     @Test
     public void testCreateMapIntInt() {
-        ExpMMap newMMap = mmap.createMap(2, 2);
+        ExpMMap other = mmap.createMap(2, 2);
 
-        assertEquals(2, newMMap.width);
-        assertEquals(2, newMMap.height);
+        assertEquals(2, other.width);
+        assertEquals(2, other.height);
 
-        assertEquals(mmap.beamEnergy, newMMap.beamEnergy, 1e-6);
-        assertEquals(mmap.magnification, newMMap.magnification, 1e-6);
-        assertEquals(mmap.tiltAngle, newMMap.tiltAngle, 1e-6);
-        assertEquals(mmap.workingDistance, newMMap.workingDistance, 1e-6);
-        assertEquals(mmap.pixelWidth, newMMap.pixelWidth, 1e-6);
-        assertEquals(mmap.pixelHeight, newMMap.pixelHeight, 1e-6);
-        assertTrue(mmap.sampleRotation.equals(newMMap.sampleRotation, 1e-6));
-        assertTrue(mmap.calibration.equals(newMMap.calibration, 1e-6));
+        assertAlmostEquals(EbsdMetadata.DEFAULT, other.getMetadata(), 1e-6);
 
-        RealMap q0Map = newMMap.getQ0Map();
+        RealMap q0Map = other.getQ0Map();
         assertEquals(2, q0Map.width);
         assertEquals(2, q0Map.height);
 
-        RealMap q1Map = newMMap.getQ1Map();
+        RealMap q1Map = other.getQ1Map();
         assertEquals(2, q1Map.width);
         assertEquals(2, q1Map.height);
 
-        RealMap q2Map = newMMap.getQ2Map();
+        RealMap q2Map = other.getQ2Map();
         assertEquals(2, q2Map.width);
         assertEquals(2, q2Map.height);
 
-        RealMap q3Map = newMMap.getQ3Map();
+        RealMap q3Map = other.getQ3Map();
         assertEquals(2, q3Map.width);
         assertEquals(2, q3Map.height);
 
-        PhasesMap phasesMap = newMMap.getPhasesMap();
+        PhasesMap phasesMap = other.getPhasesMap();
         assertEquals(2, phasesMap.width);
         assertEquals(2, phasesMap.height);
         assertEquals(0, phasesMap.getPhases().length);
+
+        ErrorMap errorMap = other.getErrorMap();
+        assertEquals(2, errorMap.width);
+        assertEquals(2, errorMap.height);
+        assertEquals(1, errorMap.getErrorCodes().length);
     }
 
 
 
     @Test
     public void testDuplicate() {
-        ExpMMap newMMap = mmap.duplicate();
+        ExpMMap other = mmap.duplicate();
 
-        assertEquals(mmap.width, newMMap.width);
-        assertEquals(mmap.height, newMMap.height);
+        assertEquals(mmap.width, other.width);
+        assertEquals(mmap.height, other.height);
+        assertEquals(mmap.size, other.size);
 
-        assertEquals(mmap.beamEnergy, newMMap.beamEnergy, 1e-6);
-        assertEquals(mmap.magnification, newMMap.magnification, 1e-6);
-        assertEquals(mmap.tiltAngle, newMMap.tiltAngle, 1e-6);
-        assertEquals(mmap.workingDistance, newMMap.workingDistance, 1e-6);
-        assertEquals(mmap.pixelWidth, newMMap.pixelWidth, 1e-6);
-        assertEquals(mmap.pixelHeight, newMMap.pixelHeight, 1e-6);
-        assertTrue(mmap.sampleRotation.equals(newMMap.sampleRotation, 1e-6));
-        assertTrue(mmap.calibration.equals(newMMap.calibration, 1e-6));
+        assertAlmostEquals(mmap.getMetadata(), other.getMetadata(), 1e-6);
 
-        mmap.getQ0Map().assertEquals(newMMap.getQ0Map(), 1e-6);
-        mmap.getQ1Map().assertEquals(newMMap.getQ1Map(), 1e-6);
-        mmap.getQ2Map().assertEquals(newMMap.getQ2Map(), 1e-6);
-        mmap.getQ3Map().assertEquals(newMMap.getQ3Map(), 1e-6);
-        mmap.getPhasesMap().assertEquals(newMMap.getPhasesMap(), 1e-6);
+        mmap.getQ0Map().assertEquals(other.getQ0Map());
+        mmap.getQ1Map().assertEquals(other.getQ1Map());
+        mmap.getQ2Map().assertEquals(other.getQ2Map());
+        mmap.getQ3Map().assertEquals(other.getQ3Map());
+        mmap.getPhasesMap().assertEquals(other.getPhasesMap());
+    }
+
+
+
+    @Test
+    public void testExpMMap() {
+        assertEquals(2, mmap.width);
+        assertEquals(2, mmap.height);
+        assertEquals(4, mmap.size);
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testExpMMapExceptionPhasesIncorrectType() {
+        HashMap<String, Map> mapList = new HashMap<String, Map>();
+
+        mapList.put(EbsdMMap.PHASES, new ByteMap(2, 2));
+
+        mmap = new ExpMMap(2, 2, mapList);
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testExpMMapExceptionQ0IncorrectType() {
+        HashMap<String, Map> mapList = new HashMap<String, Map>();
+
+        mapList.put(EbsdMMap.Q0, new ByteMap(2, 2));
+
+        mmap = new ExpMMap(2, 2, mapList);
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testExpMMapExceptionQ1IncorrectType() {
+        HashMap<String, Map> mapList = new HashMap<String, Map>();
+
+        mapList.put(EbsdMMap.Q1, new ByteMap(2, 2));
+
+        mmap = new ExpMMap(2, 2, mapList);
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testExpMMapExceptionQ2IncorrectType() {
+        HashMap<String, Map> mapList = new HashMap<String, Map>();
+
+        mapList.put(EbsdMMap.Q2, new ByteMap(2, 2));
+
+        mmap = new ExpMMap(2, 2, mapList);
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testExpMMapExceptionQ3IncorrectType() {
+        HashMap<String, Map> mapList = new HashMap<String, Map>();
+
+        mapList.put(EbsdMMap.Q3, new ByteMap(2, 2));
+
+        mmap = new ExpMMap(2, 2, mapList);
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testExpMMapExceptionErrorIncorrectType() {
+        HashMap<String, Map> mapList = new HashMap<String, Map>();
+
+        mapList.put(EbsdMMap.ERRORS, new ByteMap(2, 2));
+
+        mmap = new ExpMMap(2, 2, mapList);
     }
 
 
 
     @Test
     public void testExpMMapIntIntExpMetadata() {
-        ExpMMap other = new ExpMMap(2, 2, mmap.getMetadata());
+        ExpMMap other = new ExpMMap(2, 2);
+        other.setMetadata(mmap.getMetadata());
 
         assertEquals(2, other.width);
         assertEquals(2, other.height);
         assertEquals(4, other.size);
 
         // Metadata
-        assertEquals(mmap.beamEnergy, other.beamEnergy, 1e-3);
-        assertEquals(mmap.magnification, other.magnification, 1e-3);
-        assertEquals(mmap.tiltAngle, other.tiltAngle, 1e-3);
-        assertEquals(mmap.workingDistance * 1000, other.workingDistance * 1000,
-                1e-3);
-        assertEquals(mmap.pixelWidth * 1e6, other.pixelWidth * 1e6, 1e-3);
-        assertEquals(mmap.pixelHeight * 1e6, other.pixelHeight * 1e6, 1e-3);
-        assertTrue(mmap.sampleRotation.equals(other.sampleRotation, 1e-3));
-        assertTrue(mmap.calibration.equals(other.calibration, 1e-3));
+        assertAlmostEquals(mmap.getMetadata(), other.getMetadata(), 1e-6);
 
         // Test nb of Maps in MultiMap
         Map[] maps = other.getMaps();
-        assertEquals(5, maps.length);
+        assertEquals(6, maps.length);
 
         // Test the presence of the Maps
         assertTrue(other.contains(EbsdMMap.Q0));
@@ -152,22 +241,22 @@ public abstract class ExpMMapTester extends TestCase {
         assertTrue(other.contains(EbsdMMap.Q2));
         assertTrue(other.contains(EbsdMMap.Q3));
         assertTrue(other.contains(EbsdMMap.PHASES));
+        assertTrue(other.contains(EbsdMMap.ERRORS));
     }
 
 
 
     @Test
     public void testGetMetadata() {
-        ExpMetadata metadata = mmap.getMetadata();
+        EbsdMetadata metadata = mmap.getMetadata();
 
         assertEquals(20e3, metadata.beamEnergy, 1e-3);
         assertEquals(100.0, metadata.magnification, 1e-3);
         assertEquals(toRadians(70), metadata.tiltAngle, 1e-3);
         assertEquals(15, metadata.workingDistance * 1000, 1e-3);
-        assertEquals(1.0, metadata.pixelWidth * 1e6, 1e-3);
-        assertEquals(1.0, metadata.pixelHeight * 1e6, 1e-3);
         assertTrue(Quaternion.IDENTITY.equals(metadata.sampleRotation, 1e-3));
-        assertTrue(new Camera(0.1, 0.2, 0.3).equals(metadata.calibration, 1e-3));
+        assertTrue(Quaternion.IDENTITY.equals(metadata.cameraRotation, 1e-3));
+        assertTrue(new Camera(0.1, 0.2, 0.3).equals(metadata.camera, 1e-3));
     }
 
 
@@ -175,9 +264,23 @@ public abstract class ExpMMapTester extends TestCase {
     @Test
     public void testGetPhase() {
         assertNull(mmap.getPhase(0));
-        assertTrue(siliconPhase.equals(mmap.getPhase(1), 1e-4));
-        assertTrue(ironPhase.equals(mmap.getPhase(2), 1e-4));
-        assertTrue(siliconPhase.equals(mmap.getPhase(3), 1e-4));
+        assertAlmostEquals(CrystalFactory.silicon(), mmap.getPhase(1), 1e-4);
+        assertAlmostEquals(CrystalFactory.ferrite(), mmap.getPhase(2), 1e-4);
+        assertAlmostEquals(CrystalFactory.silicon(), mmap.getPhase(3), 1e-4);
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetPhaseException1() {
+        mmap.getPhase(-1);
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetPhaseException2() {
+        mmap.getPhase(4);
     }
 
 
@@ -192,14 +295,28 @@ public abstract class ExpMMapTester extends TestCase {
 
 
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetPhaseIdException1() {
+        mmap.getPhaseId(-1);
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetPhaseIdException2() {
+        mmap.getPhaseId(4);
+    }
+
+
+
     @Test
     public void testGetPhases() {
         Crystal[] phases = mmap.getPhases();
 
         assertEquals(2, phases.length);
 
-        assertTrue(siliconPhase.equals(phases[0], 1e-3));
-        assertTrue(ironPhase.equals(phases[1], 1e-3));
+        assertAlmostEquals(CrystalFactory.silicon(), phases[0], 1e-3);
+        assertAlmostEquals(CrystalFactory.ferrite(), phases[1], 1e-3);
     }
 
 
@@ -209,15 +326,34 @@ public abstract class ExpMMapTester extends TestCase {
         PhasesMap phasesMap = mmap.getPhasesMap();
 
         PhasesMap expectedPhasesMap =
-                new PhasesMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/Phases.bmp"));
+                new PhasesMapLoader().load(getFile("org/ebsdimage/testdata/Phases.bmp"));
 
         phasesMap.assertEquals(expectedPhasesMap);
 
         Crystal[] phases = phasesMap.getPhases();
         assertEquals(2, phases.length);
 
-        assertTrue(siliconPhase.equals(phases[0], 1e-3));
-        assertTrue(ironPhase.equals(phases[1], 1e-3));
+        assertAlmostEquals(CrystalFactory.silicon(), phases[0], 1e-3);
+        assertAlmostEquals(CrystalFactory.ferrite(), phases[1], 1e-3);
+    }
+
+
+
+    @Test
+    public void testGetErrorMap() throws IOException {
+        ErrorMap errorMap = mmap.getErrorMap();
+
+        ErrorMap expectedErrorMap =
+                new ErrorMapLoader().load(getFile("org/ebsdimage/testdata/Errors.bmp"));
+
+        errorMap.assertEquals(expectedErrorMap);
+
+        ErrorCode[] errorCodes = errorMap.getErrorCodes();
+        assertEquals(2, errorCodes.length);
+
+        assertEquals(1, errorCodes[1].id);
+        assertEquals("Error1", errorCodes[1].type);
+        assertEquals("First test error", errorCodes[1].description);
     }
 
 
@@ -272,25 +408,59 @@ public abstract class ExpMMapTester extends TestCase {
 
     @Test
     public void testGetRotation() {
-        assertEquals(1.0, mmap.getRotation(0).getQ0(), 1e-6);
-        assertEquals(0.0, mmap.getRotation(0).getQ1(), 1e-6);
-        assertEquals(0.0, mmap.getRotation(0).getQ2(), 1e-6);
-        assertEquals(0.0, mmap.getRotation(0).getQ3(), 1e-6);
+        assertAlmostEquals(new Quaternion(1, 0, 0, 0), mmap.getRotation(0),
+                1e-6);
+        assertAlmostEquals(new Quaternion(0, 1, 0, 0), mmap.getRotation(1),
+                1e-6);
+        assertAlmostEquals(new Quaternion(0, 0, 1, 0), mmap.getRotation(2),
+                1e-6);
+        assertAlmostEquals(new Quaternion(0, 0, 0, 1), mmap.getRotation(3),
+                1e-6);
+    }
 
-        assertEquals(0.0, mmap.getRotation(1).getQ0(), 1e-6);
-        assertEquals(1.0, mmap.getRotation(1).getQ1(), 1e-6);
-        assertEquals(0.0, mmap.getRotation(1).getQ2(), 1e-6);
-        assertEquals(0.0, mmap.getRotation(1).getQ3(), 1e-6);
 
-        assertEquals(0.0, mmap.getRotation(2).getQ0(), 1e-6);
-        assertEquals(0.0, mmap.getRotation(2).getQ1(), 1e-6);
-        assertEquals(1.0, mmap.getRotation(2).getQ2(), 1e-6);
-        assertEquals(0.0, mmap.getRotation(2).getQ3(), 1e-6);
 
-        assertEquals(0.0, mmap.getRotation(3).getQ0(), 1e-6);
-        assertEquals(0.0, mmap.getRotation(3).getQ1(), 1e-6);
-        assertEquals(0.0, mmap.getRotation(3).getQ2(), 1e-6);
-        assertEquals(1.0, mmap.getRotation(3).getQ3(), 1e-6);
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetRotationException1() {
+        mmap.getRotation(-1);
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetRotationException2() {
+        mmap.getRotation(4);
+    }
+
+
+
+    @Test
+    public void testRemoveMap() {
+        ByteMap map = new ByteMap(2, 2);
+        mmap.add("MAP", map);
+        assertTrue(mmap.contains("MAP"));
+
+        mmap.remove(map);
+        assertFalse(mmap.contains("MAP"));
+    }
+
+
+
+    @Test
+    public void testRemoveString() {
+        ByteMap map = new ByteMap(2, 2);
+        mmap.add("MAP", map);
+        assertTrue(mmap.contains("MAP"));
+
+        mmap.remove("MAP");
+        assertFalse(mmap.contains("MAP"));
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testRemoveStringException() {
+        mmap.remove(EbsdMMap.Q0);
     }
 
 }

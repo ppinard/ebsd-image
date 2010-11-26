@@ -18,16 +18,23 @@
 package org.ebsdimage.core.exp.ops.hough.op;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughMap;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.ByteMap;
 
-public class HoughOpMockTest {
+public class HoughOpMockTest extends TestCase {
 
-    private HoughOp op;
+    private HoughOpMock op;
 
     private ByteMap srcMap;
 
@@ -53,6 +60,46 @@ public class HoughOpMockTest {
         byte[] srcPixArray = new byte[] { 3, 5, 7, 9 };
         for (int i = 0; i < result.pixArray.length; i++)
             assertEquals(srcPixArray[i % 4], result.pixArray[i]);
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new HoughOpMock()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new HoughOpMock(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(1706032537, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        HoughOpMock other = new XmlLoader().load(HoughOpMock.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

@@ -25,12 +25,9 @@ import javax.swing.JLabel;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.ebsdimage.core.exp.CurrentMapsFileSaver;
-import org.ebsdimage.core.exp.CurrentMapsSaver;
-import org.ebsdimage.core.exp.ExpMetadata;
-import org.ebsdimage.core.run.Operation;
-import org.ebsdimage.gui.exp.CurrentMapsGUISaver;
+import org.ebsdimage.core.exp.ExpMMap;
 import org.ebsdimage.gui.exp.ExpWizard;
+import org.ebsdimage.gui.exp.MapsGUIListener;
 import org.ebsdimage.io.exp.ExpMMapSaver;
 import org.ebsdimage.io.exp.ExpSaver;
 
@@ -40,7 +37,6 @@ import rmlimage.plugin.builtin.CloseAll;
 import rmlshared.gui.Panel;
 import rmlshared.gui.YesNoCancelDialog;
 import rmlshared.ui.Monitorable;
-import crystallography.core.Crystal;
 
 /**
  * Plug-in for the experiment's engine.
@@ -106,23 +102,13 @@ public class Exp extends PlugIn implements Monitorable {
      *            engine wizard dialog
      */
     private void createExp(ExpWizard wizard) {
-        // Load information
-        int width = wizard.getWidth();
-        int height = wizard.getHeight();
-        ExpMetadata metadata = wizard.getMetadata();
-        Crystal[] phases = wizard.getPhases();
-        Operation[] ops = wizard.getOperations();
-        CurrentMapsSaver currentMapsSaver =
-                new CurrentMapsFileSaver(false, false, false, false, false,
-                        false);
-        String name = wizard.getName();
-        File dir = wizard.getDir();
+        ExpMMap mmap = new ExpMMap(wizard.getWidth(), wizard.getHeight());
+        mmap.setMetadata(wizard.getMetadata());
+        mmap.getPhasesMap().setPhases(wizard.getPhases());
 
-        exp =
-                new org.ebsdimage.core.exp.Exp(width, height, metadata, phases,
-                        ops, currentMapsSaver);
-        exp.setName(name);
-        exp.setDir(dir);
+        exp = new org.ebsdimage.core.exp.Exp(mmap, wizard.getOperations());
+        exp.setName(wizard.getName());
+        exp.setDir(wizard.getDir());
     }
 
 
@@ -135,21 +121,8 @@ public class Exp extends PlugIn implements Monitorable {
      *            engine wizard dialog
      */
     private void createExpPreview(ExpWizard wizard) {
-        // Load information
-        int width = wizard.getWidth();
-        int height = wizard.getHeight();
-        ExpMetadata metadata = wizard.getMetadata();
-        Crystal[] phases = wizard.getPhases();
-        Operation[] ops = wizard.getPreviewOperations();
-        CurrentMapsSaver currentMapsSaver = new CurrentMapsGUISaver();
-        String name = wizard.getName();
-        File dir = wizard.getDir();
-
-        exp =
-                new org.ebsdimage.core.exp.Exp(width, height, metadata, phases,
-                        ops, currentMapsSaver);
-        exp.setName(name);
-        exp.setDir(dir);
+        createExp(wizard);
+        exp.addExpListener(new MapsGUIListener());
     }
 
 

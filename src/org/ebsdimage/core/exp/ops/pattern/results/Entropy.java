@@ -31,6 +31,11 @@ import rmlimage.module.real.core.RealMap;
  */
 public class Entropy extends PatternResultsOps {
 
+    /** Default operation. */
+    public static final Entropy DEFAULT = new Entropy();
+
+
+
     /**
      * Calculates the entropy quality index of the source map.
      * 

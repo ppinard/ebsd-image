@@ -43,7 +43,7 @@ public class HoughCropDialog extends OperationDialog {
     public HoughCropDialog() {
         super("Hough Crop");
 
-        radiusField = new IntField("Radius", HoughCrop.DEFAULT_RADIUS);
+        radiusField = new IntField("Radius", HoughCrop.DEFAULT.radius);
         radiusField.setRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
 
         Panel panel = new Panel();

@@ -135,7 +135,7 @@ public class MissingDataWizardPage extends WizardPage {
         dataPanel.add(calibrationCBox, "span, split 2");
         dataPanel.add("Not defined", "wrap");
 
-        Camera defaultCal = EbsdMetadata.DEFAULT_CALIBRATION;
+        Camera defaultCal = EbsdMetadata.DEFAULT_CAMERA;
         dataPanel.add("PCh:");
         pchField = new DoubleField("PCH", defaultCal.patternCenterH);
         dataPanel.add(pchField);
@@ -159,7 +159,7 @@ public class MissingDataWizardPage extends WizardPage {
     @Override
     public boolean isCorrect(boolean buffer) {
         double workingDistance = EbsdMetadata.DEFAULT_WORKING_DISTANCE;
-        Camera calibration = EbsdMetadata.DEFAULT_CALIBRATION;
+        Camera calibration = EbsdMetadata.DEFAULT_CAMERA;
 
         if (!wdCBox.isSelected()) {
             if (!wdField.isCorrect())

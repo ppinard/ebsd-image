@@ -27,6 +27,11 @@ import org.ebsdimage.core.run.Run;
 import org.ebsdimage.core.sim.ops.output.OutputOps;
 import org.ebsdimage.core.sim.ops.patternsim.PatternFilledBand;
 import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementArray;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.core.Persist;
+import org.simpleframework.xml.core.Validate;
 
 import ptpshared.core.math.Quaternion;
 import rmlshared.ui.Monitorable;
@@ -39,6 +44,10 @@ import crystallography.core.Reflectors;
  * @author Philippe T. Pinard
  */
 public class Sim extends Run implements Monitorable {
+
+    /** Simulation listeners. */
+    @ElementList(name = "listeners")
+    private ArrayList<SimListener> listeners = new ArrayList<SimListener>();
 
     /** Cameras to simulate. */
     private HashSet<Camera> cameras = new HashSet<Camera>();
@@ -53,7 +62,7 @@ public class Sim extends Run implements Monitorable {
     private HashSet<Quaternion> rotations = new HashSet<Quaternion>();
 
     /** Operation for the pattern simulation. */
-    private PatternSimOp patternSimOp = new PatternFilledBand();
+    private PatternSimOp patternSimOp = PatternFilledBand.DEFAULT;
 
     /** Output operations. */
     private ArrayList<OutputOps> outputOps = new ArrayList<OutputOps>();
@@ -69,6 +78,91 @@ public class Sim extends Run implements Monitorable {
 
     /** Runtime variable to access the rotation currently used. */
     protected Quaternion currentRotation;
+
+
+
+    /**
+     * Special constructor to load an experiment from a XML. This constructor is
+     * used by the deserialization.
+     * 
+     * @param cameras
+     *            array of cameras
+     * @param crystals
+     *            array of crystals
+     * @param energies
+     *            array of energies
+     * @param rotations
+     *            array of rotations
+     * @param patternSimOp
+     *            pattern simulation operation
+     * @param outputs
+     *            array of output operations
+     * @param listeners
+     *            array of listeners
+     */
+    @SuppressWarnings("unused")
+    private Sim(@ElementArray(name = "cameras") Camera[] cameras,
+            @ElementArray(name = "energies") Energy[] energies,
+            @ElementArray(name = "rotations") Quaternion[] rotations,
+            @ElementArray(name = "crystals") Crystal[] crystals,
+            @Element(name = "patternSimOp") PatternSimOp patternSimOp,
+            @ElementArray(name = "outputs") OutputOps[] outputs,
+            @ElementList(name = "listeners") ArrayList<SimListener> listeners) {
+        if (cameras == null)
+            throw new NullPointerException("Cameras cannot be null.");
+        if (crystals == null)
+            throw new NullPointerException("Crystals cannot be null.");
+        if (energies == null)
+            throw new NullPointerException("Energies cannot be null.");
+        if (patternSimOp == null)
+            throw new NullPointerException(
+                    "Pattern simulation operation cannot be null.");
+        if (outputs == null)
+            throw new NullPointerException("Outputs cannot be null.");
+        if (rotations == null)
+            throw new NullPointerException("Rotations cannot be null.");
+
+        if (cameras.length < 1)
+            throw new IllegalArgumentException(
+                    "At least one camera must be given.");
+        if (crystals.length < 1)
+            throw new IllegalArgumentException(
+                    "At least one crystal must be given.");
+        if (energies.length < 1)
+            throw new IllegalArgumentException(
+                    "At least one energy must be given.");
+        if (rotations.length < 1)
+            throw new IllegalArgumentException(
+                    "At least one rotation must be given.");
+
+        // Operations
+        for (Operation op : outputs)
+            addOperation(op);
+        addOperation(patternSimOp);
+
+        // Cameras
+        for (Camera camera : cameras)
+            addCamera(camera);
+
+        // Crystals
+        for (Crystal crystal : crystals)
+            addCrystal(crystal);
+
+        // Energies
+        for (Energy energy : energies)
+            addEnergy(energy);
+
+        // Rotation
+        for (Quaternion rotation : rotations)
+            addRotation(rotation);
+
+        // Listeners
+        for (SimListener listener : listeners)
+            addSimListener(listener);
+
+        // Initialise runtime variables
+        initRuntimeVariables();
+    }
 
 
 
@@ -171,18 +265,6 @@ public class Sim extends Run implements Monitorable {
 
 
 
-    @Override
-    protected void initRuntimeVariables() {
-        super.initRuntimeVariables();
-
-        currentCamera = null;
-        currentReflectors = null;
-        currentEnergy = null;
-        currentRotation = null;
-    }
-
-
-
     /**
      * Adds a <code>Camera</code> to the simulation.
      * 
@@ -275,23 +357,84 @@ public class Sim extends Run implements Monitorable {
 
 
     /**
-     * Returns an array of all the defined cameras.
+     * Registers an simulation listener.
      * 
-     * @return an array
+     * @param listener
+     *            simulation listener
+     * @throws NullPointerException
+     *             if the listener is null
      */
-    public Camera[] getCameras() {
-        return cameras.toArray(new Camera[cameras.size()]);
+    public void addSimListener(SimListener listener) {
+        if (listener == null)
+            throw new NullPointerException("Listener cannot be null.");
+
+        if (!listeners.contains(listener))
+            listeners.add(listener);
     }
 
 
 
     /**
-     * Returns an array of all the defined reflectors.
+     * Registers an array of simulation listeners.
+     * 
+     * @param listeners
+     *            simulation listeners
+     * @throws NullPointerException
+     *             if the listeners is null
+     */
+    public void addSimListeners(SimListener[] listeners) {
+        if (listeners == null)
+            throw new NullPointerException("Listeners cannot be null.");
+
+        for (SimListener listener : listeners)
+            addSimListener(listener);
+    }
+
+
+
+    /**
+     * Clears all registered simulation listeners.
+     */
+    public void clearSimListners() {
+        listeners.clear();
+    }
+
+
+
+    /**
+     * Fires output operation action.
+     * 
+     * @param op
+     *            operation
+     */
+    private void fireOutputOp(OutputOps op) {
+        for (SimListener listener : listeners)
+            listener.outputOpPerformed(this, op);
+    }
+
+
+
+    /**
+     * Fires pattern simulation operation action.
+     * 
+     * @param op
+     *            operation
+     */
+    private void firePatternSimOp(PatternSimOp op) {
+        for (SimListener listener : listeners)
+            listener.patternSimOpPerformed(this, op);
+    }
+
+
+
+    /**
+     * Returns an array of all the defined cameras.
      * 
      * @return an array
      */
-    public Reflectors[] getReflectors() {
-        return reflectors.toArray(new Reflectors[reflectors.size()]);
+    @ElementArray(name = "cameras")
+    public Camera[] getCameras() {
+        return cameras.toArray(new Camera[cameras.size()]);
     }
 
 
@@ -301,6 +444,7 @@ public class Sim extends Run implements Monitorable {
      * 
      * @return an array
      */
+    @ElementArray(name = "crystals")
     public Crystal[] getCrystals() {
         Crystal[] crystals = new Crystal[reflectors.size()];
 
@@ -326,21 +470,6 @@ public class Sim extends Run implements Monitorable {
             throw new RuntimeException(
                     "The simulation is not running, there is no camera being used.");
         return currentCamera;
-    }
-
-
-
-    /**
-     * Returns the reflectors that is currently being used by the simulation.
-     * Only valid when the simulation is running.
-     * 
-     * @return current reflectors
-     */
-    public Reflectors getCurrentReflectors() {
-        if (currentReflectors == null)
-            throw new RuntimeException(
-                    "The simulation is not running, there is no crystal being used.");
-        return currentReflectors;
     }
 
 
@@ -376,6 +505,21 @@ public class Sim extends Run implements Monitorable {
 
 
     /**
+     * Returns the reflectors that is currently being used by the simulation.
+     * Only valid when the simulation is running.
+     * 
+     * @return current reflectors
+     */
+    public Reflectors getCurrentReflectors() {
+        if (currentReflectors == null)
+            throw new RuntimeException(
+                    "The simulation is not running, there is no crystal being used.");
+        return currentReflectors;
+    }
+
+
+
+    /**
      * Returns the rotation that is currently being used by the simulation. Only
      * valid when the simulation is running.
      * 
@@ -395,6 +539,7 @@ public class Sim extends Run implements Monitorable {
      * 
      * @return an array
      */
+    @ElementArray(name = "energies")
     public Energy[] getEnergies() {
         return energies.toArray(new Energy[energies.size()]);
     }
@@ -406,6 +551,7 @@ public class Sim extends Run implements Monitorable {
      * 
      * @return an array
      */
+    @ElementArray(name = "outputs")
     public OutputOps[] getOutputOps() {
         return outputOps.toArray(new OutputOps[outputOps.size()]);
     }
@@ -417,8 +563,20 @@ public class Sim extends Run implements Monitorable {
      * 
      * @return pattern simulation operation
      */
+    @Element(name = "patternSimOp")
     public PatternSimOp getPatternSimOp() {
         return patternSimOp;
+    }
+
+
+
+    /**
+     * Returns an array of all the defined reflectors.
+     * 
+     * @return an array
+     */
+    public Reflectors[] getReflectors() {
+        return reflectors.toArray(new Reflectors[reflectors.size()]);
     }
 
 
@@ -428,8 +586,50 @@ public class Sim extends Run implements Monitorable {
      * 
      * @return an array
      */
+    @ElementArray(name = "rotations")
     public Quaternion[] getRotations() {
         return rotations.toArray(new Quaternion[rotations.size()]);
+    }
+
+
+
+    @Override
+    protected void initRuntimeVariables() {
+        super.initRuntimeVariables();
+
+        currentCamera = null;
+        currentReflectors = null;
+        currentEnergy = null;
+        currentRotation = null;
+    }
+
+
+
+    /**
+     * Prepares the operations to be serialized by setting their index as their
+     * position within each category's array.
+     */
+    @SuppressWarnings("unused")
+    @Persist
+    private void prepare() {
+        prepare(outputOps);
+    }
+
+
+
+    /**
+     * Removes a registered listener from the simulation.
+     * 
+     * @param listener
+     *            simulation listener
+     * @throws NullPointerException
+     *             if the listener is null
+     */
+    public void removeSimListerner(SimListener listener) {
+        if (listener == null)
+            throw new NullPointerException("Listener cannot be null.");
+
+        listeners.remove(listener);
     }
 
 
@@ -526,6 +726,8 @@ public class Sim extends Run implements Monitorable {
 
         patternSimOp.simulate(this, camera, reflectorz, energy, rotation);
 
+        firePatternSimOp(patternSimOp);
+
         setStatus("Performing " + patternSimOp.getName() + "... DONE");
 
         // Output Ops
@@ -535,8 +737,25 @@ public class Sim extends Run implements Monitorable {
 
             op.save(this, patternSimOp);
 
+            fireOutputOp(op);
+
             setStatus("Saving to " + op.getName() + "... DONE");
         }
+    }
+
+
+
+    /**
+     * Validates the operations after the deserialization to check that there is
+     * not two operations with the same index.
+     * 
+     * @throws Exception
+     *             if two operations have the same index
+     */
+    @SuppressWarnings("unused")
+    @Validate
+    private void validate() throws Exception {
+        validate(outputOps, OutputOps.class);
     }
 
 }

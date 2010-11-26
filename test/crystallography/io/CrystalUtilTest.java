@@ -18,18 +18,18 @@
 package crystallography.io;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
 import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
-import crystallography.core.crystals.Silicon;
+import crystallography.core.CrystalFactory;
 
-public class CrystalUtilTest {
+public class CrystalUtilTest extends TestCase {
 
     private File dir;
 
@@ -47,7 +47,7 @@ public class CrystalUtilTest {
         Crystal[] crystals = CrystalUtil.listCrystals(dir);
 
         assertEquals(1, crystals.length);
-        assertTrue(new Silicon().equals(crystals[0], 1e-6));
+        assertAlmostEquals(CrystalFactory.silicon(), crystals[0], 1e-6);
     }
 
 

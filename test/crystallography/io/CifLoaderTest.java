@@ -24,15 +24,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import rmlshared.io.FileUtil;
 import crystallography.core.AtomSite;
 import crystallography.core.Crystal;
 import crystallography.core.SpaceGroups1;
 
-public class CifLoaderTest {
+public class CifLoaderTest extends TestCase {
 
     private File file;
 
@@ -40,7 +40,7 @@ public class CifLoaderTest {
 
     @Before
     public void setUp() throws Exception {
-        file = FileUtil.getFile("crystallography/testdata/forsterite.cif");
+        file = getFile("crystallography/testdata/forsterite.cif");
 
     }
 

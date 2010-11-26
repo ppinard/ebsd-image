@@ -17,29 +17,24 @@
  */
 package org.ebsdimage.io;
 
-import static org.ebsdimage.io.PhasesMapXmlTags.TAG_NAME;
-import static org.ebsdimage.io.PhasesMapXmlTags.TAG_PHASES;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.PhasesMap;
-import org.jdom.Element;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.utility.xml.JDomUtil;
+import ptpshared.util.xml.XmlLoader;
 import rmlimage.core.ByteMap;
 import rmlimage.io.BasicBmpLoader;
 import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
-import crystallography.core.crystals.IronBCC;
-import crystallography.core.crystals.Silicon;
+import crystallography.core.CrystalFactory;
 
-public class PhasesMapSaverTest {
+public class PhasesMapSaverTest extends TestCase {
 
     private PhasesMapSaver saver;
 
@@ -51,28 +46,14 @@ public class PhasesMapSaverTest {
 
     @Before
     public void setUp() throws Exception {
-        Crystal[] phases = new Crystal[] { new Silicon(), new IronBCC() };
+        Crystal[] phases =
+                new Crystal[] { CrystalFactory.silicon(),
+                        CrystalFactory.ferrite() };
         byte[] pixArray = new byte[] { 0, 1, 2, 1 };
 
         map = new PhasesMap(2, 2, pixArray, phases);
         saver = new PhasesMapSaver();
-        file = new File(FileUtil.getTempDirFile(), "phasesmap.bmp");
-    }
-
-
-
-    @After
-    public void tearDown() throws Exception {
-        if (file.exists())
-            if (!file.delete())
-                throw new RuntimeException("File (" + file.getAbsolutePath()
-                        + ") could not be deleted.");
-
-        File xmlFile = FileUtil.setExtension(file, "xml");
-        if (xmlFile.exists())
-            if (!xmlFile.delete())
-                throw new RuntimeException("File (" + xmlFile.getAbsolutePath()
-                        + ") could not be deleted.");
+        file = new File(createTempDir(), "phasesmap.bmp");
     }
 
 
@@ -128,13 +109,9 @@ public class PhasesMapSaverTest {
 
     private void testPhasesMapXml() throws IOException {
         File xmlFile = FileUtil.setExtension(file, "xml");
-        Element element = JDomUtil.loadXML(xmlFile).getRootElement();
+        Crystal[] phases = new XmlLoader().loadArray(Crystal.class, xmlFile);
 
-        assertEquals(TAG_NAME, element.getName());
-        assertTrue(JDomUtil.hasChild(element, TAG_PHASES));
-
-        Element child = JDomUtil.getChild(element, TAG_PHASES);
-        assertEquals(2, child.getChildren().size());
+        assertEquals(2, phases.length);
     }
 
 }

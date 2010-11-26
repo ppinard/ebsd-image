@@ -20,7 +20,11 @@ package ptpshared.core.math;
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import net.jcip.annotations.Immutable;
-import ptpshared.utility.xml.ObjectXml;
+
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+
+import ptpshared.util.AlmostEquable;
 
 /**
  * Represents a rotation using set of 3 Euler angles (in radians) as defined by
@@ -41,8 +45,9 @@ import ptpshared.utility.xml.ObjectXml;
  * 
  * @author Philippe T. Pinard
  */
+@Root
 @Immutable
-public class Eulers implements ObjectXml {
+public class Eulers implements AlmostEquable, Cloneable {
 
     /**
      * Convert the first theta angle to be between ]-PI, PI], following the
@@ -92,12 +97,15 @@ public class Eulers implements ObjectXml {
     }
 
     /** First rotation angle about the x-axis (in radians). */
+    @Attribute(name = "theta1")
     public final double theta1;
 
     /** Rotation angle about the z-axis (in radians). */
+    @Attribute(name = "theta2")
     public final double theta2;
 
     /** Second rotation angle about the x-axis (in radians). */
+    @Attribute(name = "theta3")
     public final double theta3;
 
 
@@ -117,7 +125,9 @@ public class Eulers implements ObjectXml {
      * @param theta3
      *            second rotation about the x-axis (in radians)
      */
-    public Eulers(double theta1, double theta2, double theta3) {
+    public Eulers(@Attribute(name = "theta1") double theta1,
+            @Attribute(name = "theta2") double theta2,
+            @Attribute(name = "theta3") double theta3) {
         this.theta1 = theta1ToBunge(theta1);
         this.theta2 = theta2ToBunge(theta2);
         this.theta3 = theta3ToBunge(theta3);
@@ -130,7 +140,8 @@ public class Eulers implements ObjectXml {
      * 
      * @return copy of the current <code>Eulers</code>
      */
-    public Eulers duplicate() {
+    @Override
+    public Eulers clone() {
         return new Eulers(theta1, theta2, theta3);
     }
 
@@ -140,7 +151,7 @@ public class Eulers implements ObjectXml {
      * Checks if this <code>Eulers</code> is almost equal to the specified one
      * with the given precision.
      * 
-     * @param other
+     * @param obj
      *            other <code>Eulers</code> to check equality
      * @param precision
      *            level of precision
@@ -150,7 +161,8 @@ public class Eulers implements ObjectXml {
      * @throws IllegalArgumentException
      *             if the precision is not a number (NaN)
      */
-    public boolean equals(Eulers other, double precision) {
+    @Override
+    public boolean equals(Object obj, double precision) {
         if (precision < 0)
             throw new IllegalArgumentException(
                     "The precision has to be greater or equal to 0.0.");
@@ -158,11 +170,14 @@ public class Eulers implements ObjectXml {
             throw new IllegalArgumentException(
                     "The precision must be a number.");
 
-        if (this == other)
+        if (this == obj)
             return true;
-        if (other == null)
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
             return false;
 
+        Eulers other = (Eulers) obj;
         if (abs(theta1 - other.theta1) >= precision)
             return false;
         if (abs(theta2 - other.theta2) >= precision)

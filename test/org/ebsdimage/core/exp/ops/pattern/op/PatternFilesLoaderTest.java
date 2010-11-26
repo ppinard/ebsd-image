@@ -19,6 +19,7 @@ package org.ebsdimage.core.exp.ops.pattern.op;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,12 +28,13 @@ import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.ByteMap;
-import rmlshared.io.FileUtil;
 
 public class PatternFilesLoaderTest extends TestCase {
 
-    private PatternFilesLoader loader;
+    private PatternFilesLoader op;
 
     private File filepath;
 
@@ -40,14 +42,9 @@ public class PatternFilesLoaderTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        filepath = FileUtil.getFile("org/ebsdimage/testdata/patternloader.bmp");
+        filepath = getFile("org/ebsdimage/testdata/patternloader.bmp");
 
-        if (filepath == null)
-            throw new RuntimeException(
-                    "File \"org/ebsdimage/testdata/patternloader.bmp\" "
-                            + "cannot be found.");
-
-        loader = new PatternFilesLoader(45, filepath);
+        op = new PatternFilesLoader(45, filepath);
     }
 
 
@@ -55,15 +52,15 @@ public class PatternFilesLoaderTest extends TestCase {
     @Test
     public void testEquals() {
         PatternFilesLoader other = new PatternFilesLoader(45, filepath);
-        assertFalse(loader == other);
-        assertEquals(loader, other);
+        assertFalse(op == other);
+        assertEquals(op, other);
     }
 
 
 
     @Test
     public void testLoad() throws IOException {
-        ByteMap patternMap = loader.load(null, 45);
+        ByteMap patternMap = op.load(null, 45);
 
         ByteMap expected =
                 (ByteMap) load("org/ebsdimage/testdata/patternloader.bmp");
@@ -76,8 +73,8 @@ public class PatternFilesLoaderTest extends TestCase {
     @Test
     public void testPatternLoaderIntFile() {
         assertEquals(filepath.getAbsolutePath(),
-                loader.getFiles()[0].getAbsolutePath());
-        assertEquals(45, loader.startIndex);
+                op.getFiles()[0].getAbsolutePath());
+        assertEquals(45, op.startIndex);
     }
 
 
@@ -90,27 +87,52 @@ public class PatternFilesLoaderTest extends TestCase {
 
 
     @Test
-    public void testPatternLoaderIntString() {
-        PatternFilesLoader other =
-                new PatternFilesLoader(45, "", filepath.getName());
-
-        assertEquals(filepath.getName(), other.getFiles()[0].getName());
-        assertEquals(45, other.startIndex);
-    }
-
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testPatternLoaderIntStringException() {
-        new PatternFilesLoader(-1, filepath);
+    public void testToString() {
+        String expected = "Pattern Files Loader [startIndex=45, size=1]";
+        assertEquals(expected, op.toString());
     }
 
 
 
     @Test
-    public void testToString() {
-        String expected = "Pattern Files Loader [startIndex=45, size=1]";
-        assertEquals(expected, loader.toString());
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new PatternFilesLoader(44, filepath)));
+        assertTrue(op.equals(new PatternFilesLoader(45, filepath)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 2));
+        assertFalse(op.equals(null, 2));
+        assertFalse(op.equals(new Object(), 2));
+
+        assertFalse(op.equals(new PatternFilesLoader(43, filepath), 2));
+        assertTrue(op.equals(new PatternFilesLoader(44, filepath), 2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(1227302452, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        PatternFilesLoader other =
+                new XmlLoader().load(PatternFilesLoader.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

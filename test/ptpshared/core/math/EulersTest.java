@@ -22,10 +22,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-public class EulersTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
+
+public class EulersTest extends TestCase {
 
     private Eulers e1;
 
@@ -45,15 +51,15 @@ public class EulersTest {
 
 
     @Test
-    public void testDuplicate() {
-        Eulers dup = e1.duplicate();
+    public void testClone() {
+        Eulers dup = e1.clone();
         assertEquals(e1, dup);
     }
 
 
 
     @Test
-    public void testEqualsEulersDouble() {
+    public void testEqualsObjectDouble() {
         assertTrue(e1.equals(e1, 1e-6));
 
         assertFalse(e1.equals(null, 1e-6));
@@ -180,6 +186,20 @@ public class EulersTest {
         String expected =
                 "(5.729577951308232, 11.459155902616464, 17.188733853924695)";
         assertEquals(expected, e1.toStringDegs());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File tmpFile = createTempFile();
+
+        // Write
+        new XmlSaver().save(e1, tmpFile);
+
+        // Read
+        Eulers other = new XmlLoader().load(Eulers.class, tmpFile);
+        assertAlmostEquals(e1, other, 1e-6);
     }
 
 }

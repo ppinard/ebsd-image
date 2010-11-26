@@ -18,6 +18,7 @@
 package org.ebsdimage.core.exp.ops.pattern.post;
 
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
 import rmlimage.core.Convolution;
@@ -31,20 +32,12 @@ import rmlimage.core.Kernel;
  */
 public class Smoothing extends PatternPostOps {
 
+    /** Default operation. */
+    public static final Smoothing DEFAULT = new Smoothing(1);
+
     /** Kernel size for the smoothing kernel. */
+    @Attribute(name = "kernelSize")
     public final int kernelSize;
-
-    /** Default kernel size. */
-    public static final int DEFAULT_KERNEL_SIZE = 1;
-
-
-
-    /**
-     * Creates a new smoothing operation with the default kernel size.
-     */
-    public Smoothing() {
-        this(DEFAULT_KERNEL_SIZE);
-    }
 
 
 
@@ -54,7 +47,7 @@ public class Smoothing extends PatternPostOps {
      * @param kernelSize
      *            kernel size of the smoothing
      */
-    public Smoothing(int kernelSize) {
+    public Smoothing(@Attribute(name = "kernelSize") int kernelSize) {
         if (kernelSize <= 0)
             throw new IllegalArgumentException(
                     "Kernel size must be greater than 0.");
@@ -69,11 +62,7 @@ public class Smoothing extends PatternPostOps {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
+        if (!super.equals(obj))
             return false;
 
         Smoothing other = (Smoothing) obj;
@@ -86,9 +75,23 @@ public class Smoothing extends PatternPostOps {
 
 
     @Override
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        Smoothing other = (Smoothing) obj;
+        if (Math.abs(kernelSize - other.kernelSize) >= precision)
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
+        int result = super.hashCode();
         result = prime * result + kernelSize;
         return result;
     }

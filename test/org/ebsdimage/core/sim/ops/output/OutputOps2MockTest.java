@@ -17,18 +17,25 @@
  */
 package org.ebsdimage.core.sim.ops.output;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
 import org.ebsdimage.core.sim.ops.patternsim.PatternSimOpMock;
 import org.junit.Before;
 import org.junit.Test;
 
-public class OutputOps2MockTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 
-    private OutputOps op;
+public class OutputOps2MockTest extends TestCase {
+
+    private OutputOps2Mock op;
 
     private PatternSimOp patternSimOp;
 
@@ -46,6 +53,46 @@ public class OutputOps2MockTest {
     public void testSave() throws IOException {
         op.save(null, patternSimOp);
         assertTrue(true);
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new OutputOps2Mock()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new OutputOps2Mock(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(617393610, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        OutputOps2Mock other = new XmlLoader().load(OutputOps2Mock.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

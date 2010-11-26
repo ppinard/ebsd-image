@@ -25,7 +25,6 @@ import java.util.Random;
 import rmlimage.core.ByteMap;
 import rmlimage.core.LUT;
 import rmlimage.core.Map;
-import rmlimage.core.Pixel;
 import crystallography.core.Crystal;
 
 /**
@@ -37,6 +36,26 @@ import crystallography.core.Crystal;
  * @author Philippe T. Pinard
  */
 public class PhasesMap extends ByteMap {
+
+    @Override
+    public String getPixelInfoLabel(int index) {
+        StringBuilder str = new StringBuilder();
+        str = str.append(super.getPixelInfoLabel(index));
+
+        str.append("  phase = ");
+        int id = pixArray[index] & 0xff;
+        if (id == 0)
+            str.append("Not Indexed");
+        else
+            str.append(id + ": " + phases[id - 1].name);
+
+        return str.toString();
+    }
+
+    /** Header key to identify a file as a PhasesMap. */
+    public static final String FILE_HEADER = "PhasesMap1";
+
+
 
     /**
      * Returns a color look-up table for the different phases. Each phase is
@@ -168,11 +187,8 @@ public class PhasesMap extends ByteMap {
         // Copy pixArray
         System.arraycopy(map.pixArray, 0, pixArray, 0, size);
 
-        // Copy the lut
-        lut.setLUT(map.lut);
-
-        // Copy properties
-        setProperties(map);
+        // Copy metadata
+        cloneMetadataFrom(map);
     }
 
 
@@ -346,31 +362,6 @@ public class PhasesMap extends ByteMap {
 
         throw new IllegalArgumentException("The phase (" + phase.name
                 + ") doesn't exist in the phases map.");
-    }
-
-
-
-    /**
-     * Returns a <code>PhasePixel</code> representing the specified pixel.
-     * 
-     * @param index
-     *            index of the pixel
-     * @return a <code>PhasePixel</code>
-     * @throws IllegalArgumentException
-     *             if the index is out of range
-     */
-    @Override
-    public Pixel getPixel(int index) {
-        if (index < 0 || index > size)
-            throw new IllegalArgumentException("Index must be between [0,"
-                    + size + "[.");
-
-        int id = pixArray[index] & 0xff;
-
-        if (id == 0) // Not indexed
-            return new PhasePixel();
-        else
-            return new PhasePixel(id, phases[id - 1]);
     }
 
 

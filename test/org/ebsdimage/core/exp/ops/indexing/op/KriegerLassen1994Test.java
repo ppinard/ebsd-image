@@ -18,15 +18,22 @@
 package org.ebsdimage.core.exp.ops.indexing.op;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.Solution;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import crystallography.core.ScatteringFactorsEnum;
 
-public class KriegerLassen1994Test {
+public class KriegerLassen1994Test extends TestCase {
 
     private KriegerLassen1994 op;
 
@@ -62,19 +69,62 @@ public class KriegerLassen1994Test {
 
 
     @Test
-    public void testKriegerLassen1994() {
-        KriegerLassen1994 other = new KriegerLassen1994();
-
-        assertEquals(KriegerLassen1994.DEFAULT_MAX_INDEX, other.maxIndex);
-        assertEquals(KriegerLassen1994.DEFAULT_SCATTER_TYPE, other.scatterType);
+    public void testKriegerLassen1994IntScatteringFactorsEnum() {
+        assertEquals(1, op.maxIndex);
+        assertEquals(ScatteringFactorsEnum.XRAY, op.scatterType);
     }
 
 
 
     @Test
-    public void testKriegerLassen1994IntScatteringFactorsEnum() {
-        assertEquals(1, op.maxIndex);
-        assertEquals(ScatteringFactorsEnum.XRAY, op.scatterType);
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new KriegerLassen1994(2,
+                ScatteringFactorsEnum.XRAY)));
+        assertFalse(op.equals(new KriegerLassen1994(1,
+                ScatteringFactorsEnum.ELECTRON)));
+        assertTrue(op.equals(new KriegerLassen1994(1,
+                ScatteringFactorsEnum.XRAY)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 2));
+        assertFalse(op.equals(null, 2));
+        assertFalse(op.equals(new Object(), 2));
+
+        assertFalse(op.equals(new KriegerLassen1994(3,
+                ScatteringFactorsEnum.XRAY), 2));
+        assertFalse(op.equals(new KriegerLassen1994(1,
+                ScatteringFactorsEnum.ELECTRON), 2));
+        assertTrue(op.equals(new KriegerLassen1994(2,
+                ScatteringFactorsEnum.XRAY), 2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        // impossible to check since the hashCode of an Enum always changes
+        assertTrue(true);
+        // assertEquals(1897229649, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        KriegerLassen1994 other =
+                new XmlLoader().load(KriegerLassen1994.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

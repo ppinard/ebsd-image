@@ -18,74 +18,68 @@
 package org.ebsdimage.io;
 
 import static org.junit.Assert.assertEquals;
-
-import java.io.File;
-import java.io.IOException;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.ebsdimage.TestCase;
+import org.junit.Before;
 import org.junit.Test;
 
 public class RplFileTest extends TestCase {
 
-    @Test(expected = IOException.class)
-    public void load() throws IOException {
-        RplFile file = new RplFile("gaga.txt");
-        file.load();
+    private RplFile rpl;
+
+
+
+    @Before
+    public void setUp() throws Exception {
+        rpl = new RplFile(1, 168, 128, "dont-care", "unsigned");
     }
 
 
 
     @Test
-    public void getDataLength() throws IOException {
-        File file = getFile("org/ebsdimage/io/warp-x-map.rpl");
-        RplFile rplFile = new RplFile(file);
-        rplFile.load();
-
-        assertEquals(1, rplFile.getDataLength());
+    public void testRplFile() {
+        assertEquals(1, rpl.dataLength);
+        assertEquals(168, rpl.width);
+        assertEquals(128, rpl.height);
+        assertTrue(rpl.isBigEndian());
+        assertFalse(rpl.isSigned());
     }
 
 
 
-    @Test
-    public void getHeight() throws IOException {
-        File file = getFile("org/ebsdimage/io/warp-x-map.rpl");
-        RplFile rplFile = new RplFile(file);
-        rplFile.load();
-
-        assertEquals(128, rplFile.getHeight());
+    @Test(expected = IllegalArgumentException.class)
+    public void testRplFileException1() {
+        new RplFile(3, 168, 128, "dont-care", "unsigned");
     }
 
 
 
-    @Test
-    public void getWidth() throws IOException {
-        File file = getFile("org/ebsdimage/io/warp-x-map.rpl");
-        RplFile rplFile = new RplFile(file);
-        rplFile.load();
-
-        assertEquals(168, rplFile.getWidth());
+    @Test(expected = IllegalArgumentException.class)
+    public void testRplFileException2() {
+        new RplFile(1, 0, 128, "dont-care", "unsigned");
     }
 
 
 
-    @Test
-    public void isBigEndian() throws IOException {
-        File file = getFile("org/ebsdimage/io/warp-x-map.rpl");
-        RplFile rplFile = new RplFile(file);
-        rplFile.load();
-
-        assertEquals(true, rplFile.isBigEndian());
+    @Test(expected = IllegalArgumentException.class)
+    public void testRplFileException3() {
+        new RplFile(1, 168, 0, "dont-care", "unsigned");
     }
 
 
 
-    @Test
-    public void isSigned() throws IOException {
-        File file = getFile("org/ebsdimage/io/warp-x-map.rpl");
-        RplFile rplFile = new RplFile(file);
-        rplFile.load();
+    @Test(expected = IllegalArgumentException.class)
+    public void testRplFileException4() {
+        new RplFile(1, 168, 128, "", "unsigned");
+    }
 
-        assertEquals(false, rplFile.isSigned());
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testRplFileException5() {
+        new RplFile(1, 168, 128, "dont-care", "");
     }
 
 }

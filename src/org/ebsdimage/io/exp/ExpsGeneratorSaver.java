@@ -17,8 +17,8 @@
  */
 package org.ebsdimage.io.exp;
 
-import ptpshared.utility.xml.ObjectXmlSaver;
-import ptpshared.utility.xml.XmlSaver;
+import ptpshared.util.xml.ObjectXmlSaver;
+import ptpshared.util.xml.XmlSaver;
 
 /**
  * Saves an <code>ExpsGenerator</code> to an XML file.

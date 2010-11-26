@@ -18,7 +18,12 @@
 package org.ebsdimage.core.exp.ops.identification.op;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.Threshold;
@@ -26,15 +31,17 @@ import org.ebsdimage.io.HoughMapLoader;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.BinMap;
 import rmlimage.core.IdentMap;
 import rmlimage.core.Identification;
 import rmlimage.core.MapMath;
 import rmlshared.io.FileUtil;
 
-public class CenterOfMassTest {
+public class CenterOfMassTest extends TestCase {
 
-    private CenterOfMass centerOfMass;
+    private CenterOfMass op;
 
     private HoughMap houghMap;
 
@@ -44,7 +51,7 @@ public class CenterOfMassTest {
 
     @Before
     public void setUp() throws Exception {
-        centerOfMass = new CenterOfMass();
+        op = new CenterOfMass();
 
         houghMap =
                 new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap_cropped.bmp"));
@@ -66,7 +73,7 @@ public class CenterOfMassTest {
 
     @Test
     public void testIdentify() throws Exception {
-        HoughPeak[] destPeaks = centerOfMass.identify(null, peaksMap, houghMap);
+        HoughPeak[] destPeaks = op.identify(null, peaksMap, houghMap);
 
         assertEquals(3, destPeaks.length);
 
@@ -91,8 +98,47 @@ public class CenterOfMassTest {
     @Test
     public void testToString() {
         String expected = "Center of Mass";
-        assertEquals(expected, centerOfMass.toString());
+        assertEquals(expected, op.toString());
+    }
 
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new CenterOfMass()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new CenterOfMass(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-13140385, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        CenterOfMass other = new XmlLoader().load(CenterOfMass.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

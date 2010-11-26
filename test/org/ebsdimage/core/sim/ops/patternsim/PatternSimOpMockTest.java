@@ -18,18 +18,25 @@
 package org.ebsdimage.core.sim.ops.patternsim;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.sim.Energy;
 import org.junit.Before;
 import org.junit.Test;
 
 import ptpshared.core.math.Quaternion;
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.ByteMap;
+import crystallography.core.CrystalFactory;
 import crystallography.core.Reflectors;
-import crystallography.core.crystals.Silicon;
 
-public class PatternSimOpMockTest {
+public class PatternSimOpMockTest extends TestCase {
 
     private PatternSimOp op;
 
@@ -47,7 +54,7 @@ public class PatternSimOpMockTest {
     public void setUp() throws Exception {
         op = new PatternSimOpMock();
         camera = new Camera(0, 0, 0.5);
-        reflectors = op.calculateReflectors(new Silicon());
+        reflectors = op.calculateReflectors(CrystalFactory.silicon());
         energy = new Energy(20e3);
         rotation = Quaternion.IDENTITY;
     }
@@ -61,7 +68,48 @@ public class PatternSimOpMockTest {
         ByteMap pattern = op.getPatternMap();
         assertEquals(2, pattern.width);
         assertEquals(2, pattern.height);
-        assertEquals(276, op.getBands().length);
+        assertEquals(4, op.getBands().length);
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new PatternSimOpMock()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new PatternSimOpMock(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(79939921, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        PatternSimOpMock other =
+                new XmlLoader().load(PatternSimOpMock.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

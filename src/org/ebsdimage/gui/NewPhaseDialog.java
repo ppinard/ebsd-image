@@ -33,7 +33,7 @@ import javax.swing.table.AbstractTableModel;
 
 import net.miginfocom.swing.MigLayout;
 import ptpshared.gui.GuiUtil;
-import ptpshared.utility.ElementProperties;
+import ptpshared.util.ElementProperties;
 import rmlimage.gui.BasicDialog;
 import rmlshared.gui.*;
 import rmlshared.thread.PlugIn;

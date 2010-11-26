@@ -31,6 +31,11 @@ import rmlimage.module.real.core.RealMap;
  */
 public class Average extends HoughResultsOps {
 
+    /** Default operation. */
+    public static final Average DEFAULT = new Average();
+
+
+
     @Override
     public OpResult[] calculate(Exp exp, HoughMap srcMap) {
         OpResult result =

@@ -31,13 +31,14 @@ import org.junit.Test;
 import rmlimage.core.ByteMap;
 import rmlimage.core.ROI;
 import crystallography.core.Crystal;
-import crystallography.core.crystals.IronBCC;
-import crystallography.core.crystals.Silicon;
+import crystallography.core.CrystalFactory;
 
 public class EditTest extends TestCase {
 
     private PhasesMap createPhasesMap() {
-        Crystal[] phases = new Crystal[] { new Silicon(), new IronBCC() };
+        Crystal[] phases =
+                new Crystal[] { CrystalFactory.silicon(),
+                        CrystalFactory.ferrite() };
         byte[] pixArray = new byte[] { 0, 1, 2, 1, 0, 0, 0, 0, 2 };
         return new PhasesMap(3, 3, pixArray, phases);
     }

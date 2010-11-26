@@ -20,7 +20,7 @@ package crystallography.core;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import ptpshared.utility.xml.ObjectXml;
+import ptpshared.util.AlmostEquable;
 
 /**
  * List of all the atom sites of an unit cell. The object is an
@@ -30,7 +30,7 @@ import ptpshared.utility.xml.ObjectXml;
  * 
  * @author Philippe T. Pinard
  */
-public class AtomSites extends ArrayList<AtomSite> implements ObjectXml {
+public class AtomSites extends ArrayList<AtomSite> implements AlmostEquable {
 
     /**
      * Creates a new <code>AtomSites</code> to store the position of all atoms
@@ -184,7 +184,7 @@ public class AtomSites extends ArrayList<AtomSite> implements ObjectXml {
      * one with the given precision. The method uses {@link AtomSite#equals} to
      * check the <code>AtomSite</code> inside the array list;
      * 
-     * @param other
+     * @param obj
      *            other <code>AtomSite</code> to check equality
      * @param precision
      *            level of precision
@@ -194,7 +194,8 @@ public class AtomSites extends ArrayList<AtomSite> implements ObjectXml {
      * @throws IllegalArgumentException
      *             if the precision is not a number (NaN)
      */
-    public boolean equals(AtomSites other, double precision) {
+    @Override
+    public boolean equals(Object obj, double precision) {
         if (precision < 0)
             throw new IllegalArgumentException(
                     "The precision has to be greater or equal to 0.0.");
@@ -202,10 +203,14 @@ public class AtomSites extends ArrayList<AtomSite> implements ObjectXml {
             throw new IllegalArgumentException(
                     "The precision must be a number.");
 
-        if (other == this)
+        if (obj == this)
             return true;
-        if (other == null)
+        if (obj == null)
             return false;
+        if (getClass() != obj.getClass())
+            return false;
+
+        AtomSites other = (AtomSites) obj;
 
         if (size() != other.size())
             return false;

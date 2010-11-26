@@ -21,6 +21,11 @@ import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.toDegrees;
 import net.jcip.annotations.Immutable;
+
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
+import ptpshared.util.AlmostEquable;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
@@ -35,14 +40,17 @@ import edu.umd.cs.findbugs.annotations.NonNull;
  * 
  * @author Philippe T. Pinard
  */
+@Root
 @Immutable
-public class AxisAngle {
+public class AxisAngle implements AlmostEquable, Cloneable {
 
     /** Axis of rotation. */
     @NonNull
+    @Element(name = "axis")
     public final Vector3D axis;
 
     /** Rotation angle (in radians). */
+    @Element(name = "angle")
     public final double angle;
 
 
@@ -81,7 +89,8 @@ public class AxisAngle {
      * @throws IllegalArgumentException
      *             angle must be between [0, 2PI[.
      */
-    public AxisAngle(double angle, Vector3D axis) {
+    public AxisAngle(@Element(name = "angle") double angle,
+            @Element(name = "axis") Vector3D axis) {
         if (axis == null)
             throw new NullPointerException("Axis cannot be null");
         if (axis.norm() == 0)
@@ -101,8 +110,9 @@ public class AxisAngle {
      * 
      * @return copy of this <code>AxisAngle</code>.
      */
-    public AxisAngle duplicate() {
-        return new AxisAngle(angle, axis);
+    @Override
+    public AxisAngle clone() {
+        return new AxisAngle(angle, axis.clone());
     }
 
 
@@ -111,7 +121,7 @@ public class AxisAngle {
      * Checks if this <code>AxisAngle</code> is almost equal to the specified
      * one with the given precision.
      * 
-     * @param other
+     * @param obj
      *            other <code>AxisAngle</code> to check equality
      * @param precision
      *            level of precision
@@ -121,7 +131,8 @@ public class AxisAngle {
      * @throws IllegalArgumentException
      *             if the precision is not a number (NaN)
      */
-    public boolean equals(AxisAngle other, double precision) {
+    @Override
+    public boolean equals(Object obj, double precision) {
         if (precision < 0)
             throw new IllegalArgumentException(
                     "The precision has to be greater or equal to 0.0.");
@@ -129,11 +140,14 @@ public class AxisAngle {
             throw new IllegalArgumentException(
                     "The precision must be a number.");
 
-        if (this == other)
+        if (this == obj)
             return true;
-        if (other == null)
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
             return false;
 
+        AxisAngle other = (AxisAngle) obj;
         if (abs(angle - other.angle) >= precision)
             return false;
         if (!(axis.equals(other.axis, precision)))

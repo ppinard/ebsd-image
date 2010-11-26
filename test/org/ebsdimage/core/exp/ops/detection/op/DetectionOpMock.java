@@ -19,9 +19,11 @@ package org.ebsdimage.core.exp.ops.detection.op;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Root;
 
 import rmlimage.core.BinMap;
 
+@Root
 public class DetectionOpMock extends DetectionOp {
 
     @Override

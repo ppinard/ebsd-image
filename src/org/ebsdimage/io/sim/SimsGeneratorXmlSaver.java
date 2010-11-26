@@ -26,7 +26,7 @@ import org.ebsdimage.io.run.RunsGeneratorXmlSaver;
 import org.jdom.Element;
 
 import ptpshared.io.FileUtil;
-import ptpshared.utility.xml.ObjectXmlSaver;
+import ptpshared.util.xml.ObjectXmlSaver;
 import rmlshared.thread.Reflection;
 
 /**

@@ -20,6 +20,7 @@ package org.ebsdimage.core.exp.ops.pattern.post;
 import static java.lang.Math.min;
 
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.BinMap;
 import rmlimage.core.ByteMap;
@@ -32,32 +33,20 @@ import rmlimage.core.MapMath;
  */
 public class MaskDisc extends PatternPostOps {
 
+    /** Default operation. */
+    public static final MaskDisc DEFAULT = new MaskDisc(-1, -1, -1);
+
     /** Horizontal position of the centroid of the disc mask. */
+    @Attribute(name = "x")
     public final int centroidX;
 
     /** Vertical position of the centroid of the disc mask. */
+    @Attribute(name = "y")
     public final int centroidY;
 
     /** Radius of the disc mask. */
+    @Attribute(name = "r")
     public final int radius;
-
-    /** Default horizontal position of the centroid. */
-    public static final int DEFAULT_CENTROID_X = -1; // Recalculate from srcMap
-
-    /** Default vertical position of the centroid. */
-    public static final int DEFAULT_CENTROID_Y = -1; // Recalculate from srcMap
-
-    /** Default radius of the disc mask. */
-    public static final int DEFAULT_RADIUS = -1; // Recalculate from srcMap
-
-
-
-    /**
-     * Creates a new <code>MaskDisc</code> operation from the default values.
-     */
-    public MaskDisc() {
-        this(DEFAULT_CENTROID_X, DEFAULT_CENTROID_Y, DEFAULT_RADIUS);
-    }
 
 
 
@@ -82,7 +71,9 @@ public class MaskDisc extends PatternPostOps {
      * @param radius
      *            radius of the disc mask
      */
-    public MaskDisc(int centroidX, int centroidY, int radius) {
+    public MaskDisc(@Attribute(name = "x") int centroidX,
+            @Attribute(name = "y") int centroidY,
+            @Attribute(name = "r") int radius) {
         // No restriction on arguments since they can be negative to force the
         // auto-computation.
         this.centroidX = centroidX;
@@ -94,11 +85,7 @@ public class MaskDisc extends PatternPostOps {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
+        if (!super.equals(obj))
             return false;
 
         MaskDisc other = (MaskDisc) obj;
@@ -115,9 +102,27 @@ public class MaskDisc extends PatternPostOps {
 
 
     @Override
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        MaskDisc other = (MaskDisc) obj;
+        if (Math.abs(centroidX - other.centroidX) >= precision)
+            return false;
+        if (Math.abs(centroidY - other.centroidY) >= precision)
+            return false;
+        if (Math.abs(radius - other.radius) >= precision)
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
+        int result = super.hashCode();
         result = prime * result + centroidX;
         result = prime * result + centroidY;
         result = prime * result + radius;

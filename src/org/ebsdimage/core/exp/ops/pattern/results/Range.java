@@ -31,6 +31,11 @@ import rmlimage.core.ByteMap;
  */
 public class Range extends PatternResultsOps {
 
+    /** Default operation. */
+    public static final Range DEFAULT = new Range();
+
+
+
     @Override
     public OpResult[] calculate(Exp exp, ByteMap srcMap) {
         rmlshared.util.Range<Integer> range = MapStats.range(srcMap);

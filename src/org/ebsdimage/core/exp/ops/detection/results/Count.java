@@ -31,6 +31,11 @@ import rmlimage.module.real.core.RealMap;
  */
 public class Count extends DetectionResultsOps {
 
+    /** Default operation. */
+    public static final Count DEFAULT = new Count();
+
+
+
     @Override
     public OpResult[] calculate(Exp exp, BinMap peaksMap) {
         int value = Identification.identify(peaksMap).getObjectCount();

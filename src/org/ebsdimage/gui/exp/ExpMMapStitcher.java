@@ -34,9 +34,10 @@ public class ExpMMapStitcher extends MultiMapStitcher {
         int nbRows = tesserae.length;
         int nbColumns = tesserae[0].length;
 
+        ExpMMapLoader loader = new ExpMMapLoader();
         for (int row = 0; row < nbRows; row++)
             for (int column = 0; column < nbColumns; column++)
-                if (!ExpMMapLoader.isExpMMap(tesserae[row][column].file))
+                if (!loader.canLoad(tesserae[row][column].file))
                     return false;
 
         return true;

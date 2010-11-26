@@ -17,8 +17,13 @@
  */
 package crystallography.core;
 
+import org.simpleframework.xml.Root;
+import org.simpleframework.xml.convert.Convert;
+import org.simpleframework.xml.convert.Converter;
+import org.simpleframework.xml.stream.InputNode;
+import org.simpleframework.xml.stream.OutputNode;
+
 import ptpshared.core.math.Quaternion;
-import ptpshared.utility.xml.ObjectXml;
 
 /**
  * Crystallographic space group as defined in the International Tables for
@@ -26,7 +31,9 @@ import ptpshared.utility.xml.ObjectXml;
  * 
  * @author Philippe T. Pinard
  */
-public class SpaceGroup implements ObjectXml {
+@Root
+@Convert(SpaceGroupConverter.class)
+public class SpaceGroup {
 
     /** Crystallographic system. */
     public final CrystalSystem crystalSystem;
@@ -124,4 +131,31 @@ public class SpaceGroup implements ObjectXml {
     public String toString() {
         return symbol;
     }
+}
+
+/**
+ * Converter to serialize and deserialize a space group.
+ * 
+ * @author ppinard
+ */
+class SpaceGroupConverter implements Converter<SpaceGroup> {
+
+    /** XML attribute for the space group index. */
+    private static final String ATTR_INDEX = "index";
+
+
+
+    @Override
+    public SpaceGroup read(InputNode node) throws Exception {
+        return SpaceGroups.fromIndex(Integer.parseInt(node.getAttribute(
+                ATTR_INDEX).getValue()));
+    }
+
+
+
+    @Override
+    public void write(OutputNode node, SpaceGroup sg) throws Exception {
+        node.setAttribute(ATTR_INDEX, Integer.toString(sg.index));
+    }
+
 }

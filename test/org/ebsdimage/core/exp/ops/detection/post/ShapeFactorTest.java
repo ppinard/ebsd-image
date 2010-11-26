@@ -21,16 +21,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
 import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.BinMap;
 import rmlimage.core.Identification;
 
 public class ShapeFactorTest extends TestCase {
 
-    private ShapeFactor shapeFactor;
+    private ShapeFactor op;
 
     private BinMap srcMap;
 
@@ -38,7 +42,7 @@ public class ShapeFactorTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        shapeFactor = new ShapeFactor(1.5);
+        op = new ShapeFactor(1.5);
         srcMap =
                 (BinMap) load(getFile("org/ebsdimage/testdata/automatic_top_hat.bmp"));
     }
@@ -46,21 +50,9 @@ public class ShapeFactorTest extends TestCase {
 
 
     @Test
-    public void testEqualsObject() {
-        ShapeFactor same = new ShapeFactor(1.5);
-        ShapeFactor diff = new ShapeFactor(3.0);
-
-        assertFalse(same == shapeFactor);
-        assertTrue(same.equals(shapeFactor));
-        assertFalse(diff.equals(shapeFactor));
-    }
-
-
-
-    @Test
     public void testToString() {
         String expected = "ShapeFactor [aspectRatio=1.5]";
-        assertEquals(expected, shapeFactor.toString());
+        assertEquals(expected, op.toString());
     }
 
 
@@ -69,23 +61,57 @@ public class ShapeFactorTest extends TestCase {
     public void testProcess() throws Exception {
         assertEquals(9, Identification.identify(srcMap).getObjectCount());
 
-        BinMap destMap = shapeFactor.process(null, srcMap);
+        BinMap destMap = op.process(null, srcMap);
         assertEquals(4, Identification.identify(destMap).getObjectCount());
     }
 
 
 
     @Test
-    public void testShapeFactor() {
-        ShapeFactor other = new ShapeFactor();
-        assertEquals(ShapeFactor.DEFAULT_ASPECT_RATIO, other.aspectRatio, 1e-6);
+    public void testShapeFactorDouble() {
+        assertEquals(1.5, op.aspectRatio, 1e-6);
     }
 
 
 
     @Test
-    public void testShapeFactorDouble() {
-        assertEquals(1.5, shapeFactor.aspectRatio, 1e-6);
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new ShapeFactor(2.0)));
+        assertTrue(op.equals(new ShapeFactor(1.5)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertFalse(op.equals(new ShapeFactor(1.6), 1e-2));
+        assertTrue(op.equals(new ShapeFactor(1.501), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-952620655, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        ShapeFactor other = new XmlLoader().load(ShapeFactor.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

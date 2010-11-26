@@ -33,6 +33,11 @@ import rmlimage.module.real.io.IO;
  */
 public class RmpFile extends OutputOps {
 
+    /** Default operation. */
+    public static final RmpFile DEFAULT = new RmpFile();
+
+
+
     /**
      * Saves the simulated pattern as a RMP file (<code>RealMap</code>).
      * 

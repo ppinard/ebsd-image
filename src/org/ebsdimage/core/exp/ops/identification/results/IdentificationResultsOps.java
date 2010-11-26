@@ -17,14 +17,13 @@
  */
 package org.ebsdimage.core.exp.ops.identification.results;
 
-import static java.util.Arrays.sort;
-import static ptpshared.utility.Arrays.reverse;
-
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.HoughPeakIntensityComparator;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 import org.ebsdimage.core.run.Operation;
+
+import ptpshared.utility.Arrays;
 
 /**
  * Superclass of operation to calculate result(s) from the Hough peaks.
@@ -53,8 +52,7 @@ public abstract class IdentificationResultsOps extends Operation {
      *            array of <code>HoughPeak</code>
      */
     protected void sortDescending(HoughPeak[] peaks) {
-        sort(peaks, new HoughPeakIntensityComparator());
-        reverse(peaks);
+        Arrays.sort(peaks, new HoughPeakIntensityComparator(), true);
     }
 
 

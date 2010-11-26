@@ -28,15 +28,16 @@ import net.miginfocom.swing.MigLayout;
 import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.EbsdMetadata;
-import org.ebsdimage.core.exp.ExpMetadata;
 
 import ptpshared.core.math.Eulers;
 import ptpshared.core.math.Quaternion;
 import ptpshared.gui.WizardPage;
+import rmlimage.core.Calibration;
 import rmlshared.gui.CheckBox;
 import rmlshared.gui.DoubleField;
 import rmlshared.gui.FlowLayout;
 import rmlshared.gui.Panel;
+import rmlshared.util.Preferences;
 
 /**
  * Template for the acquisition metadata wizard page.
@@ -46,88 +47,12 @@ import rmlshared.gui.Panel;
 public class AcqMetadataWizardPage extends WizardPage {
 
     /**
-     * Listener to enable/disable the calibration fields.
+     * Listener to enable/disable the fields.
      */
-    private class CalibrationCBoxListener implements ActionListener {
+    private class RefreshListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            boolean enabled = !calibrationCBox.isSelected();
-            pchField.setEnabled(enabled);
-            pcvField.setEnabled(enabled);
-            ddField.setEnabled(enabled);
-        }
-    }
-
-    /**
-     * Listener to enable/disable the energy field.
-     */
-    private class EnergyCBoxListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            energyField.setEnabled(!energyCBox.isSelected());
-        }
-    }
-
-    /**
-     * Listener to enable/disable the magnification field.
-     */
-    private class MagCBoxListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            magField.setEnabled(!magCBox.isSelected());
-        }
-    }
-
-    /**
-     * Listener to enable/disable the sample rotation fields.
-     */
-    private class RotationCBoxListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            boolean enabled = !rotationCBox.isSelected();
-            theta1Field.setEnabled(enabled);
-            theta2Field.setEnabled(enabled);
-            theta3Field.setEnabled(enabled);
-        }
-    }
-
-    /**
-     * Listener to enable/disable the tilt angle field.
-     */
-    private class TiltCBoxListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            tiltField.setEnabled(!tiltCBox.isSelected());
-        }
-    }
-
-    /**
-     * Listener to enable/disable the working distance field.
-     */
-    private class WdCBoxListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            wdField.setEnabled(!wdCBox.isSelected());
-        }
-    }
-
-    /**
-     * Listener to enable/disable the horizontal step size field.
-     */
-    private class XStepCBoxListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            xStepField.setEnabled(!xStepCBox.isSelected());
-        }
-    }
-
-    /**
-     * Listener to enable/disable the vertical step size field.
-     */
-    private class YStepCBoxListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            yStepField.setEnabled(!yStepCBox.isSelected());
+            refresh();
         }
     }
 
@@ -188,24 +113,36 @@ public class AcqMetadataWizardPage extends WizardPage {
     private CheckBox yStepCBox;
 
     /** Not defined sample's rotation check box. */
-    private CheckBox rotationCBox;
+    private CheckBox sampleRotationCBox;
 
     /** Sample rotation first Euler field. */
-    private DoubleField theta1Field;
+    private DoubleField sampleTheta1Field;
 
     /** Sample rotation second Euler field. */
-    private DoubleField theta2Field;
+    private DoubleField sampleTheta2Field;
 
     /** Sample rotation third Euler field. */
-    private DoubleField theta3Field;
+    private DoubleField sampleTheta3Field;
 
-    /** Not defined calibration check box. */
-    private CheckBox calibrationCBox;
+    /** Not defined camera's rotation check box. */
+    private CheckBox cameraRotationCBox;
 
-    /** Pattern center horizontal coordinate field. */
+    /** Sample rotation first Euler field. */
+    private DoubleField cameraTheta1Field;
+
+    /** Sample rotation second Euler field. */
+    private DoubleField cameraTheta2Field;
+
+    /** Sample rotation third Euler field. */
+    private DoubleField cameraTheta3Field;
+
+    /** Not defined camera check box. */
+    private CheckBox cameraCBox;
+
+    /** Pattern centre horizontal coordinate field. */
     private DoubleField pchField;
 
-    /** Pattern center vertical coordinate field. */
+    /** Pattern centre vertical coordinate field. */
     private DoubleField pcvField;
 
     /** Detector distance field. */
@@ -226,45 +163,56 @@ public class AcqMetadataWizardPage extends WizardPage {
 
         // Beam energy line
         microscopeDataPanel.add("Beam energy");
-        energyField = new DoubleField("Beam energy", 15);
-        energyField.setRange(5, 30);
+        energyField =
+                new DoubleField("Beam energy", EbsdMetadata.DEFAULT.beamEnergy);
+        energyField.setRange(1, 300);
         microscopeDataPanel.add(energyField);
         microscopeDataPanel.add("keV");
         energyCBox = new CheckBox();
-        energyCBox.addActionListener(new EnergyCBoxListener());
+        energyCBox.setName("Energy CBox");
+        energyCBox.addActionListener(new RefreshListener());
         microscopeDataPanel.add(energyCBox);
         microscopeDataPanel.add("Not defined", "wrap");
 
         // Magnification line
         microscopeDataPanel.add("Magnification");
-        magField = new DoubleField("Magnification", 1000);
+        magField =
+                new DoubleField("Magnification",
+                        EbsdMetadata.DEFAULT.magnification);
         magField.setRange(1, 1000000);
         microscopeDataPanel.add(magField);
         microscopeDataPanel.add("X");
         magCBox = new CheckBox();
-        magCBox.addActionListener(new MagCBoxListener());
+        magCBox.setName("Magnification CBox");
+        magCBox.addActionListener(new RefreshListener());
         microscopeDataPanel.add(magCBox);
         microscopeDataPanel.add("Not defined", "wrap");
 
         // Sample tilt line
         microscopeDataPanel.add("Sample tilt");
-        tiltField = new DoubleField("Sample tilt", 70);
+        tiltField =
+                new DoubleField("Sample tilt",
+                        Math.toDegrees(EbsdMetadata.DEFAULT.tiltAngle));
         tiltField.setRange(0, 90);
         microscopeDataPanel.add(tiltField);
         microscopeDataPanel.add("\u00b0"); // deg
         tiltCBox = new CheckBox();
-        tiltCBox.addActionListener(new TiltCBoxListener());
+        tiltCBox.setName("Tilt CBox");
+        tiltCBox.addActionListener(new RefreshListener());
         microscopeDataPanel.add(tiltCBox);
         microscopeDataPanel.add("Not defined", "wrap");
 
         // Working distance line
         microscopeDataPanel.add("Working distance");
-        wdField = new DoubleField("Working distance", 20);
+        wdField =
+                new DoubleField("Working distance",
+                        EbsdMetadata.DEFAULT.workingDistance);
         wdField.setRange(0, 45);
         microscopeDataPanel.add(wdField);
         microscopeDataPanel.add("mm");
         wdCBox = new CheckBox();
-        wdCBox.addActionListener(new WdCBoxListener());
+        wdCBox.setName("Working distance CBox");
+        wdCBox.addActionListener(new RefreshListener());
         microscopeDataPanel.add(wdCBox);
         microscopeDataPanel.add("Not defined", "wrap");
 
@@ -275,7 +223,8 @@ public class AcqMetadataWizardPage extends WizardPage {
         microscopeDataPanel.add(xStepField);
         microscopeDataPanel.add("\u03bcm"); // micrometer
         xStepCBox = new CheckBox();
-        xStepCBox.addActionListener(new XStepCBoxListener());
+        xStepCBox.setName("Horizontal step size CBox");
+        xStepCBox.addActionListener(new RefreshListener());
         microscopeDataPanel.add(xStepCBox);
         microscopeDataPanel.add("Not defined", "wrap");
 
@@ -286,7 +235,8 @@ public class AcqMetadataWizardPage extends WizardPage {
         microscopeDataPanel.add(yStepField);
         microscopeDataPanel.add("\u03bcm"); // micrometer
         yStepCBox = new CheckBox();
-        yStepCBox.addActionListener(new YStepCBoxListener());
+        yStepCBox.setName("Vertical step size CBox");
+        yStepCBox.addActionListener(new RefreshListener());
         microscopeDataPanel.add(yStepCBox);
         microscopeDataPanel.add("Not defined", "wrap");
 
@@ -296,43 +246,167 @@ public class AcqMetadataWizardPage extends WizardPage {
                 new Panel(new MigLayout("",
                         "[][grow,fill][]25[][grow,fill][]25[][grow,fill][]"));
 
+        // Sample rotation
         dataPanel.add("Sample's rotation", "span 2");
-        rotationCBox = new CheckBox();
-        rotationCBox.addActionListener(new RotationCBoxListener());
-        dataPanel.add(rotationCBox, "span, split 2");
+        sampleRotationCBox = new CheckBox();
+        sampleRotationCBox.setName("Sample rotation CBox");
+        sampleRotationCBox.addActionListener(new RefreshListener());
+        dataPanel.add(sampleRotationCBox, "span, split 2");
         dataPanel.add("Not defined", "wrap");
 
+        Eulers defaultThetas = EbsdMetadata.DEFAULT.sampleRotation.toEuler();
+
         dataPanel.add("Theta 1");
-        theta1Field = new DoubleField("Theta 1", 0);
-        dataPanel.add(theta1Field);
+        sampleTheta1Field =
+                new DoubleField("Sample Theta 1",
+                        Math.toDegrees(defaultThetas.theta1));
+        dataPanel.add(sampleTheta1Field);
         dataPanel.add("\u00b0"); // deg
         dataPanel.add("Theta 2");
-        theta2Field = new DoubleField("Theta 2", 0);
-        dataPanel.add(theta2Field);
+        sampleTheta2Field =
+                new DoubleField("Sample Theta 2",
+                        Math.toDegrees(defaultThetas.theta2));
+        dataPanel.add(sampleTheta2Field);
         dataPanel.add("\u00b0"); // deg
         dataPanel.add("Theta 3");
-        theta3Field = new DoubleField("Theta 3", 0);
-        dataPanel.add(theta3Field);
+        sampleTheta3Field =
+                new DoubleField("Sample Theta 3",
+                        Math.toDegrees(defaultThetas.theta3));
+        dataPanel.add(sampleTheta3Field);
         dataPanel.add("\u00b0", "wrap"); // deg
 
-        dataPanel.add("Calibration", "span 2");
-        calibrationCBox = new CheckBox();
-        calibrationCBox.addActionListener(new CalibrationCBoxListener());
-        dataPanel.add(calibrationCBox, "span, split 2");
+        // Camera rotation
+        dataPanel.add("Camera's rotation", "span 2");
+        cameraRotationCBox = new CheckBox();
+        cameraRotationCBox.setName("Camera rotation CBox");
+        cameraRotationCBox.addActionListener(new RefreshListener());
+        dataPanel.add(cameraRotationCBox, "span, split 2");
+        dataPanel.add("Not defined", "wrap");
+
+        defaultThetas = EbsdMetadata.DEFAULT.cameraRotation.toEuler();
+
+        dataPanel.add("Theta 1");
+        cameraTheta1Field =
+                new DoubleField("Camera Theta 1",
+                        Math.toDegrees(defaultThetas.theta1));
+        dataPanel.add(cameraTheta1Field);
+        dataPanel.add("\u00b0"); // deg
+        dataPanel.add("Theta 2");
+        cameraTheta2Field =
+                new DoubleField("Camera Theta 2",
+                        Math.toDegrees(defaultThetas.theta2));
+        dataPanel.add(cameraTheta2Field);
+        dataPanel.add("\u00b0"); // deg
+        dataPanel.add("Theta 3");
+        cameraTheta3Field =
+                new DoubleField("Camera Theta 3",
+                        Math.toDegrees(defaultThetas.theta3));
+        dataPanel.add(cameraTheta3Field);
+        dataPanel.add("\u00b0", "wrap"); // deg
+
+        dataPanel.add("Camera's calibration", "span 2");
+        cameraCBox = new CheckBox();
+        cameraCBox.setName("Camera calibration CBox");
+        cameraCBox.addActionListener(new RefreshListener());
+        dataPanel.add(cameraCBox, "span, split 2");
         dataPanel.add("Not defined", "wrap");
 
         dataPanel.add("PCh");
-        pchField = new DoubleField("PCh", 0);
+        pchField =
+                new DoubleField("PCh",
+                        EbsdMetadata.DEFAULT.camera.patternCenterH);
         dataPanel.add(pchField);
         dataPanel.add("PCv", "skip");
-        pcvField = new DoubleField("PCv", 0);
+        pcvField =
+                new DoubleField("PCv",
+                        EbsdMetadata.DEFAULT.camera.patternCenterV);
         dataPanel.add(pcvField);
         dataPanel.add("DD", "skip");
-        ddField = new DoubleField("DD", 1.0);
+        ddField =
+                new DoubleField("DD",
+                        EbsdMetadata.DEFAULT.camera.detectorDistance);
         ddField.setRange(1e-5, Double.MAX_VALUE);
         dataPanel.add(ddField);
 
         add(dataPanel);
+
+        // Refresh
+        energyCBox.doClick();
+        magCBox.doClick();
+        tiltCBox.doClick();
+        wdCBox.doClick();
+        xStepCBox.doClick();
+        yStepCBox.doClick();
+        sampleRotationCBox.doClick();
+        cameraRotationCBox.doClick();
+        cameraCBox.doClick();
+        refresh();
+    }
+
+
+
+    /**
+     * Returns the metadata constructed from this page. The method
+     * {@link #isCorrect()} should be called prior to this method to make sure
+     * all the data is correct.
+     * 
+     * @return a <code>EbsdMetadata</code>
+     */
+    protected EbsdMetadata getMetadata() {
+        double beamEnergy;
+        if (!energyCBox.isSelected())
+            beamEnergy = energyField.getValue() * 1e3;
+        else
+            beamEnergy = EbsdMetadata.DEFAULT.beamEnergy;
+
+        double magnification;
+        if (!magCBox.isSelected())
+            magnification = magField.getValue();
+        else
+            magnification = EbsdMetadata.DEFAULT.magnification;
+
+        double tiltAngle;
+        if (!tiltCBox.isSelected())
+            tiltAngle = toRadians(tiltField.getValue());
+        else
+            tiltAngle = EbsdMetadata.DEFAULT.tiltAngle;
+
+        double workingDistance;
+        if (!wdCBox.isSelected())
+            workingDistance = wdField.getValue() * 1e-3;
+        else
+            workingDistance = EbsdMetadata.DEFAULT.workingDistance;
+
+        Quaternion sampleRotation;
+        if (!sampleRotationCBox.isSelected())
+            sampleRotation =
+                    new Quaternion(new Eulers(
+                            toRadians(sampleTheta1Field.getValue()),
+                            toRadians(sampleTheta2Field.getValue()),
+                            toRadians(sampleTheta3Field.getValue())));
+        else
+            sampleRotation = EbsdMetadata.DEFAULT.sampleRotation;
+
+        Quaternion cameraRotation;
+        if (!cameraRotationCBox.isSelected())
+            cameraRotation =
+                    new Quaternion(new Eulers(
+                            toRadians(cameraTheta1Field.getValue()),
+                            toRadians(cameraTheta2Field.getValue()),
+                            toRadians(cameraTheta3Field.getValue())));
+        else
+            cameraRotation = EbsdMetadata.DEFAULT.cameraRotation;
+
+        Camera camera;
+        if (!cameraCBox.isSelected())
+            camera =
+                    new Camera(pchField.getValue(), pcvField.getValue(),
+                            ddField.getValue());
+        else
+            camera = EbsdMetadata.DEFAULT.camera;
+
+        return new EbsdMetadata(beamEnergy, magnification, tiltAngle,
+                workingDistance, camera, sampleRotation, cameraRotation);
     }
 
 
@@ -363,16 +437,25 @@ public class AcqMetadataWizardPage extends WizardPage {
             if (!yStepField.isCorrect())
                 return false;
 
-        if (!rotationCBox.isSelected()) {
-            if (!theta1Field.isCorrect())
+        if (!sampleRotationCBox.isSelected()) {
+            if (!sampleTheta1Field.isCorrect())
                 return false;
-            if (!theta2Field.isCorrect())
+            if (!sampleTheta2Field.isCorrect())
                 return false;
-            if (!theta3Field.isCorrect())
+            if (!sampleTheta3Field.isCorrect())
                 return false;
         }
 
-        if (!calibrationCBox.isSelected()) {
+        if (!sampleRotationCBox.isSelected()) {
+            if (!sampleTheta1Field.isCorrect())
+                return false;
+            if (!sampleTheta2Field.isCorrect())
+                return false;
+            if (!sampleTheta3Field.isCorrect())
+                return false;
+        }
+
+        if (!cameraCBox.isSelected()) {
             if (!pchField.isCorrect())
                 return false;
             if (!pcvField.isCorrect())
@@ -398,70 +481,44 @@ public class AcqMetadataWizardPage extends WizardPage {
 
 
     /**
-     * Returns the metadata constructed from this page. The method
-     * {@link #isCorrect()} should be called prior to this method to make sure
-     * all the data is correct.
-     * 
-     * @return a <code>EbsdMetadata</code>
+     * Refresh combo boxes and fields.
      */
-    protected EbsdMetadata getMetadata() {
-        double beamEnergy;
-        if (!energyCBox.isSelected())
-            beamEnergy = energyField.getValue() * 1e3;
-        else
-            beamEnergy = EbsdMetadata.DEFAULT_BEAM_ENERGY;
+    private void refresh() {
+        // Camera
+        boolean enabled = !cameraCBox.isSelected();
+        pchField.setEnabled(enabled);
+        pcvField.setEnabled(enabled);
+        ddField.setEnabled(enabled);
 
-        double magnification;
-        if (!magCBox.isSelected())
-            magnification = magField.getValue();
-        else
-            magnification = EbsdMetadata.DEFAULT_MAGNIFICATION;
+        // Energy
+        energyField.setEnabled(!energyCBox.isSelected());
 
-        double tiltAngle;
-        if (!tiltCBox.isSelected())
-            tiltAngle = toRadians(tiltField.getValue());
-        else
-            tiltAngle = EbsdMetadata.DEFAULT_TILT_ANGLE;
+        // Mag
+        magField.setEnabled(!magCBox.isSelected());
 
-        double workingDistance;
-        if (!wdCBox.isSelected())
-            workingDistance = wdField.getValue() * 1e-3;
-        else
-            workingDistance = EbsdMetadata.DEFAULT_WORKING_DISTANCE;
+        // Sample rotation
+        enabled = !sampleRotationCBox.isSelected();
+        sampleTheta1Field.setEnabled(enabled);
+        sampleTheta2Field.setEnabled(enabled);
+        sampleTheta3Field.setEnabled(enabled);
 
-        double pixelWidth;
-        if (!xStepCBox.isSelected())
-            pixelWidth = xStepField.getValue() * 1e-6;
-        else
-            pixelWidth = EbsdMetadata.DEFAULT_PIXEL_WIDTH;
+        // Camera rotation
+        enabled = !cameraRotationCBox.isSelected();
+        cameraTheta1Field.setEnabled(enabled);
+        cameraTheta2Field.setEnabled(enabled);
+        cameraTheta3Field.setEnabled(enabled);
 
-        double pixelHeight;
-        if (!yStepCBox.isSelected())
-            pixelHeight = yStepField.getValue() * 1e-6;
-        else
-            pixelHeight = EbsdMetadata.DEFAULT_PIXEL_HEIGHT;
+        // Tilt
+        tiltField.setEnabled(!tiltCBox.isSelected());
 
-        Quaternion sampleRotation;
-        if (!rotationCBox.isSelected())
-            sampleRotation =
-                    new Quaternion(new Eulers(
-                            toRadians(theta1Field.getValue()),
-                            toRadians(theta2Field.getValue()),
-                            toRadians(theta3Field.getValue())));
-        else
-            sampleRotation = EbsdMetadata.DEFAULT_SAMPLE_ROTATION;
+        // Working distance
+        wdField.setEnabled(!wdCBox.isSelected());
 
-        Camera calibration;
-        if (!calibrationCBox.isSelected())
-            calibration =
-                    new Camera(pchField.getValue(), pcvField.getValue(),
-                            ddField.getValue());
-        else
-            calibration = EbsdMetadata.DEFAULT_CALIBRATION;
+        // Horizontal step size
+        xStepField.setEnabled(!xStepCBox.isSelected());
 
-        return new ExpMetadata(beamEnergy, magnification, tiltAngle,
-                workingDistance, pixelWidth, pixelHeight, sampleRotation,
-                calibration);
+        // Vertical step size
+        yStepField.setEnabled(!yStepCBox.isSelected());
     }
 
 
@@ -475,79 +532,110 @@ public class AcqMetadataWizardPage extends WizardPage {
         if (mmap == null)
             return;
 
+        EbsdMetadata metadata = mmap.getMetadata();
+        Calibration calibration = mmap.getCalibration();
+
         if (get(KEY_LOADED) != null)
             if ((Integer) get(KEY_LOADED) > 0)
                 return;
 
         try {
-            energyField.setValue(mmap.beamEnergy / 1e3);
-            energyCBox.setSelected(Double.isNaN(mmap.beamEnergy));
-            energyField.setEnabled(!Double.isNaN(mmap.beamEnergy));
+            energyField.setValue(metadata.beamEnergy / 1e3);
+            energyCBox.setSelected(Double.isNaN(metadata.beamEnergy));
+            energyField.setEnabled(!Double.isNaN(metadata.beamEnergy));
         } catch (IllegalArgumentException ex) {
             showErrorDialog("Beam energy value could not be loaded from EbsdMMap.");
         }
 
         try {
-            magField.setValue(mmap.magnification);
-            magCBox.setSelected(Double.isNaN(mmap.magnification));
-            magField.setEnabled(!Double.isNaN(mmap.magnification));
+            magField.setValue(metadata.magnification);
+            magCBox.setSelected(Double.isNaN(metadata.magnification));
+            magField.setEnabled(!Double.isNaN(metadata.magnification));
         } catch (IllegalArgumentException ex) {
             showErrorDialog("Magnification value could not be loaded from EbsdMMap.");
         }
 
         try {
-            tiltField.setValue(toDegrees(mmap.tiltAngle));
-            tiltCBox.setSelected(Double.isNaN(mmap.tiltAngle));
-            tiltField.setEnabled(!Double.isNaN(mmap.tiltAngle));
+            tiltField.setValue(toDegrees(metadata.tiltAngle));
+            tiltCBox.setSelected(Double.isNaN(metadata.tiltAngle));
+            tiltField.setEnabled(!Double.isNaN(metadata.tiltAngle));
         } catch (IllegalArgumentException ex) {
             showErrorDialog("Tilt angle value could not be loaded from EbsdMMap.");
         }
 
         try {
-            wdField.setValue(mmap.workingDistance * 1e3);
-            wdCBox.setSelected(Double.isNaN(mmap.workingDistance));
-            wdField.setEnabled(!Double.isNaN(mmap.workingDistance));
+            wdField.setValue(metadata.workingDistance * 1e3);
+            wdCBox.setSelected(Double.isNaN(metadata.workingDistance));
+            wdField.setEnabled(!Double.isNaN(metadata.workingDistance));
         } catch (IllegalArgumentException ex) {
             showErrorDialog("Working distance value could not be loaded from EbsdMMap.");
         }
 
         try {
-            xStepField.setValue(mmap.pixelWidth * 1e6);
-            xStepCBox.setSelected(Double.isNaN(mmap.pixelWidth));
-            xStepField.setEnabled(!Double.isNaN(mmap.pixelWidth));
+            double pixelWidth = calibration.getX0().getValue("um");
+            xStepField.setValue(pixelWidth);
+            xStepCBox.setSelected(Double.isNaN(pixelWidth));
+            xStepField.setEnabled(!Double.isNaN(pixelWidth));
         } catch (IllegalArgumentException ex) {
             showErrorDialog("Horizontal step size value could not be loaded from EbsdMMap.");
         }
 
         try {
-            yStepField.setValue(mmap.pixelHeight * 1e6);
-            yStepCBox.setSelected(Double.isNaN(mmap.pixelHeight));
-            yStepField.setEnabled(!Double.isNaN(mmap.pixelHeight));
+            double pixelHeight = calibration.getY0().getValue("um");
+            yStepField.setValue(pixelHeight);
+            yStepCBox.setSelected(Double.isNaN(pixelHeight));
+            yStepField.setEnabled(!Double.isNaN(pixelHeight));
         } catch (IllegalArgumentException ex) {
             showErrorDialog("Vertical step size value could not be loaded from EbsdMMap.");
         }
 
-        Eulers sampleRotation = mmap.sampleRotation.toEuler();
+        Eulers sampleRotation = metadata.sampleRotation.toEuler();
         try {
-            theta1Field.setValue(toDegrees(sampleRotation.theta1));
-            theta2Field.setValue(toDegrees(sampleRotation.theta2));
-            theta3Field.setValue(toDegrees(sampleRotation.theta3));
-            rotationCBox.setSelected(false);
+            sampleTheta1Field.setValue(toDegrees(sampleRotation.theta1));
+            sampleTheta2Field.setValue(toDegrees(sampleRotation.theta2));
+            sampleTheta3Field.setValue(toDegrees(sampleRotation.theta3));
+            sampleRotationCBox.setSelected(false);
         } catch (IllegalArgumentException ex) {
             showErrorDialog("Sample rotation could not be loaded from EbsdMMap.");
         }
 
-        Camera calibration = mmap.calibration;
+        Eulers cameraRotation = metadata.cameraRotation.toEuler();
         try {
-            pchField.setValue(calibration.patternCenterH);
-            pcvField.setValue(calibration.patternCenterV);
-            ddField.setValue(calibration.detectorDistance);
-            calibrationCBox.setSelected(false);
+            cameraTheta1Field.setValue(toDegrees(cameraRotation.theta1));
+            cameraTheta2Field.setValue(toDegrees(cameraRotation.theta2));
+            cameraTheta3Field.setValue(toDegrees(cameraRotation.theta3));
+            cameraRotationCBox.setSelected(false);
         } catch (IllegalArgumentException ex) {
-            showErrorDialog("Calibration could not be loaded from EbsdMMap.");
+            showErrorDialog("Camera rotation could not be loaded from EbsdMMap.");
+        }
+
+        Camera camera = metadata.camera;
+        try {
+            pchField.setValue(camera.patternCenterH);
+            pcvField.setValue(camera.patternCenterV);
+            ddField.setValue(camera.detectorDistance);
+            cameraCBox.setSelected(false);
+        } catch (IllegalArgumentException ex) {
+            showErrorDialog("Camera calibration could not be loaded from EbsdMMap.");
         }
 
         put(KEY_LOADED, 1);
+    }
+
+
+
+    @Override
+    public void setPreferences(Preferences pref) {
+        super.setPreferences(pref);
+
+        energyCBox.setSelected(energyField.getValue().isNaN());
+        magCBox.setSelected(magField.getValue().isNaN());
+        tiltCBox.setSelected(tiltField.getValue().isNaN());
+        wdCBox.setSelected(wdField.getValue().isNaN());
+        xStepCBox.setSelected(xStepField.getValue().isNaN());
+        yStepCBox.setSelected(yStepField.getValue().isNaN());
+
+        refresh();
     }
 
 }

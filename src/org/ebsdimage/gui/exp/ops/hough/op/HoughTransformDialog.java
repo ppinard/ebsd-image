@@ -52,12 +52,11 @@ public class HoughTransformDialog extends OperationDialog {
 
         deltaThetaField =
                 new DoubleField("deltaTheta",
-                        toDegrees(HoughTransform.DEFAULT_DELTA_THETA));
+                        toDegrees(HoughTransform.DEFAULT.deltaTheta));
         deltaThetaField.setRange(0.1, 90.0);
 
         deltaRhoField =
-                new DoubleField("deltaRho",
-                        toDegrees(HoughTransform.DEFAULT_DELTA_RHO));
+                new DoubleField("deltaRho", HoughTransform.DEFAULT.deltaRho);
         deltaRhoField.setRange(0.0001, Double.MAX_VALUE);
 
         Panel panel = new Panel();

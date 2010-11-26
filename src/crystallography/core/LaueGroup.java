@@ -20,7 +20,6 @@ package crystallography.core;
 import static crystallography.core.Constants.*;
 import static crystallography.core.CrystalSystem.*;
 import ptpshared.core.math.Quaternion;
-import ptpshared.utility.xml.ObjectXml;
 import rmlshared.util.Labeled;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -38,7 +37,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
  * 
  * @author Philippe T. Pinard
  */
-public enum LaueGroup implements ObjectXml, Labeled {
+public enum LaueGroup implements Labeled {
 
     /** 1st <code>LaueGroup</code> (1 or -1). */
     LG1(1, "1", TRICLINIC, new Quaternion[] { O1 }),

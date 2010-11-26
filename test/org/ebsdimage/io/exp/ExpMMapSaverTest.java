@@ -46,11 +46,8 @@ public class ExpMMapSaverTest extends ExpMMapTester {
 
 
 
-    @Override
     @Before
     public void setUp() throws Exception {
-        super.setUp();
-
         mmap = new ExpMMapLoader().load(zipFile);
     }
 

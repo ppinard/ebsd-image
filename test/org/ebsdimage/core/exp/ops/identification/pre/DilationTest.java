@@ -18,22 +18,28 @@
 package org.ebsdimage.core.exp.ops.identification.pre;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
 
 import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.*;
 
 public class DilationTest extends TestCase {
 
-    private Dilation dilation;
+    private Dilation op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        dilation = new Dilation();
+        op = new Dilation(2, 8);
     }
 
 
@@ -41,7 +47,7 @@ public class DilationTest extends TestCase {
     @Test
     public void testToString() {
         String expected = "Dilation";
-        assertEquals(expected, dilation.toString());
+        assertEquals(expected, op.toString());
     }
 
 
@@ -55,13 +61,57 @@ public class DilationTest extends TestCase {
         Area area = Analysis.getArea(identMap);
         assertEquals(20.0, area.val[0], 1e-6);
 
-        BinMap destMap = dilation.process(null, srcMap);
+        BinMap destMap = op.process(null, srcMap);
 
         // Test
         identMap = Identification.identify(destMap);
         area = Analysis.getArea(identMap);
 
         assertEquals(10.0, area.val[0], 1e-6);
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new Dilation(3, 8)));
+        assertFalse(op.equals(new Dilation(2, 7)));
+        assertTrue(op.equals(new Dilation(2, 8)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 2));
+        assertFalse(op.equals(null, 2));
+        assertFalse(op.equals(new Object(), 2));
+
+        assertFalse(op.equals(new Dilation(4, 8), 2));
+        assertFalse(op.equals(new Dilation(2, 6), 2));
+        assertTrue(op.equals(new Dilation(1, 7), 2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(1572686023, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        Dilation other = new XmlLoader().load(Dilation.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

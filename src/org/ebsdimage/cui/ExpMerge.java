@@ -29,7 +29,9 @@ import org.ebsdimage.io.exp.ExpMMapLoader;
 import org.ebsdimage.io.exp.ExpMMapSaver;
 
 import ptpshared.cui.BaseCUI;
+import rmlimage.core.Map;
 import rmlimage.core.MapMath;
+import rmlimage.module.real.core.RealMap;
 import rmlshared.cui.ErrorDialog;
 import rmlshared.cui.MessageDialog;
 import rmlshared.io.FileUtil;
@@ -121,8 +123,8 @@ public class ExpMerge extends BaseCUI {
 
         MessageDialog.show("Listing experiment multimaps... DONE");
 
-        // Load first experiment multimap files to create a duplicate
-        MessageDialog.show("Loading first experiment multimap...");
+        // Load first experiment multimap files to create an empty multimap
+        MessageDialog.show("Creating an empty multimap...");
 
         ExpMMap dest;
         try {
@@ -132,14 +134,19 @@ public class ExpMerge extends BaseCUI {
             return;
         }
 
-        // Clear NaN values in destination multimap
-        dest.clearNaN(0.0f);
+        // Create empty map
+        dest = dest.createMap(dest.width, dest.height);
 
-        MessageDialog.show("Loading first experiment multimap... DONE");
+        // Clear NaN to 0.0f
+        for (Map map : dest.getMaps())
+            if (map instanceof RealMap)
+                ((RealMap) map).clearNaN(0.0f);
+
+        MessageDialog.show("Creating an empty multimap... DONE");
 
         // Load other experiment multimap files
         ExpMMap mmap;
-        for (int i = 1; i < zipFiles.length; i++) {
+        for (int i = 0; i < zipFiles.length; i++) {
             MessageDialog.show("Adding experiment multimap " + (i + 1) + "...");
 
             // Load multimap
@@ -149,9 +156,6 @@ public class ExpMerge extends BaseCUI {
                 ErrorDialog.show(ex.getMessage());
                 return;
             }
-
-            // Clear NaN values in multimap
-            mmap.clearNaN(0.0f);
 
             // Perform addition
             try {
@@ -253,11 +257,12 @@ public class ExpMerge extends BaseCUI {
     private File[] listExpMMapFiles(File dir) {
         ArrayList<File> expDirs = new ArrayList<File>();
 
+        ExpMMapLoader loader = new ExpMMapLoader();
         for (File expDir : FileUtil.listDirectories(dir)) {
             // List all files in directory
             for (File file : FileUtil.listFilesOnly(expDir))
                 // Look for Exp multimap zip files
-                if (ExpMMapLoader.isExpMMap(file))
+                if (loader.canLoad(file))
                     expDirs.add(file);
         }
 

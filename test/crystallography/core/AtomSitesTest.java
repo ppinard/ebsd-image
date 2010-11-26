@@ -23,10 +23,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
+import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-public class AtomSitesTest {
+public class AtomSitesTest extends TestCase {
 
     private AtomSites atoms;
 
@@ -179,14 +180,14 @@ public class AtomSitesTest {
 
 
     @Test
-    public void testEqualsAtomSitesDouble1() {
+    public void testEqualsObjectDouble1() {
         assertFalse(atoms.equals(null, 1e-3));
     }
 
 
 
     @Test
-    public void testEqualsAtomSitesDouble2() {
+    public void testEqualsObjectDouble2() {
         atoms.add(atom1);
         atoms.add(atom2);
 
@@ -200,7 +201,7 @@ public class AtomSitesTest {
 
 
     @Test
-    public void testEqualsAtomSitesDouble3() {
+    public void testEqualsObjectDouble3() {
         atoms.add(atom1);
 
         AtomSites other = new AtomSites();
@@ -211,7 +212,7 @@ public class AtomSitesTest {
 
 
     @Test
-    public void testEqualsAtomSitesDouble4() {
+    public void testEqualsObjectDouble4() {
         atoms.add(atom1);
 
         AtomSites other = new AtomSites();

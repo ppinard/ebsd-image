@@ -18,16 +18,19 @@
 package org.ebsdimage.core.exp.ops.indexing.results;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static ptpshared.utility.Arrays.reverse;
 
+import java.io.File;
 import java.util.Arrays;
 
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.SolutionFitComparator;
-import org.ebsdimage.core.exp.CurrentMapsFileSaver;
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.exp.ExpMetadata;
+import org.ebsdimage.core.exp.ExpMMap;
 import org.ebsdimage.core.exp.OpResult;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOpMock;
 import org.ebsdimage.core.run.Operation;
@@ -35,12 +38,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ptpshared.core.math.Quaternion;
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import crystallography.core.Crystal;
-import crystallography.core.crystals.IronBCC;
-import crystallography.core.crystals.Silicon;
-import crystallography.core.crystals.ZirconiumAlpha;
+import crystallography.core.CrystalFactory;
 
-public class BestSolutionTest {
+public class BestSolutionTest extends TestCase {
 
     private BestSolution op;
 
@@ -55,12 +58,13 @@ public class BestSolutionTest {
         op = new BestSolution();
 
         Crystal[] phases =
-                new Crystal[] { new Silicon(), new IronBCC(),
-                        new ZirconiumAlpha() };
-        exp =
-                new Exp(1, 1, new ExpMetadata(), phases,
-                        new Operation[] { new PatternOpMock() },
-                        new CurrentMapsFileSaver());
+                new Crystal[] { CrystalFactory.silicon(),
+                        CrystalFactory.ferrite(), CrystalFactory.zirconium() };
+
+        ExpMMap mmap = new ExpMMap(1, 1);
+        mmap.getPhasesMap().setPhases(phases);
+
+        exp = new Exp(mmap, new Operation[] { new PatternOpMock() });
 
         srcSlns =
                 new Solution[] {
@@ -114,6 +118,46 @@ public class BestSolutionTest {
     public void testToString() {
         String expected = "Best Solution";
         assertEquals(expected, op.toString());
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new BestSolution()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new BestSolution(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(47118268, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        BestSolution other = new XmlLoader().load(BestSolution.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

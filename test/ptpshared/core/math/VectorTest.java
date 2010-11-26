@@ -23,10 +23,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
+import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-public class VectorTest {
+public class VectorTest extends TestCase {
 
     private Vector u, v, w, x, y, z, a;
 
@@ -49,6 +50,14 @@ public class VectorTest {
     public void testClear() {
         v.clear();
         assertEquals(v, new Vector(0, 0, 0));
+    }
+
+
+
+    @Test
+    public void testClone() {
+        Vector other = x.clone();
+        assertAlmostEquals(x, other, 1e-6);
     }
 
 
@@ -92,7 +101,7 @@ public class VectorTest {
 
     @Test
     public void testDuplicate() {
-        Vector dup = u.duplicate();
+        Vector dup = u.clone();
         assertEquals(u, dup);
         assertNotSame(u, dup);
     }
@@ -100,7 +109,7 @@ public class VectorTest {
 
 
     @Test
-    public void testEqualsBaseVectorDouble() {
+    public void testEqualsObjectDouble() {
         assertTrue(u.equals(u, 1e-7));
 
         assertFalse(u.equals(null, 1e-7));

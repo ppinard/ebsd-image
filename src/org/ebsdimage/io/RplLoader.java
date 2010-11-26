@@ -20,10 +20,16 @@ package org.ebsdimage.io;
 import java.io.File;
 import java.io.IOException;
 
+import rmlshared.io.FileUtil;
 import rmlshared.io.Loader;
 import rmlshared.io.TsvReader;
 import rmlshared.util.Properties;
 
+/**
+ * Loader of RPL file.
+ * 
+ * @author ppinard
+ */
 public class RplLoader implements Loader {
 
     @Override
@@ -34,31 +40,31 @@ public class RplLoader implements Loader {
 
 
     @Override
-    public Object load(File file) throws IOException {
-        return load(file, new Properties());
+    public RplFile load(File file, Object arg) throws IOException {
+        return load(file);
     }
 
 
 
+    /**
+     * Loads the RPL file and returns a <code>RplFile</code>.
+     * 
+     * @param file
+     *            RPL file
+     * @return a <code>RplFile</code>
+     * @throws IOException
+     *             if an error occurs while loading the RPL file
+     */
     @Override
-    public Object load(File file, Object arg) throws IOException {
-        if (arg == null)
-            return load(file, (Properties) arg);
+    public RplFile load(File file) throws IOException {
+        if (!canLoad(file))
+            throw new IOException("Invalid rpl file");
 
-        if (arg instanceof Properties)
-            return load(file, (Properties) arg);
-
-        throw new IOException("Arg is of type " + arg.getClass().getName()
-                + ". It must be of type " + Properties.class.getName());
-    }
-
-
-
-    public Properties load(File file, Properties props) throws IOException {
         TsvReader reader = new TsvReader(file);
 
         reader.skipLine(); // Skip the header
 
+        Properties props = new Properties();
         String[] line;
         while (true) {
             line = reader.readLine();
@@ -74,7 +80,53 @@ public class RplLoader implements Loader {
             props.setProperty(line[0], line[1]);
         }
 
-        return props;
+        // Data length
+        int dataLength = props.getProperty("data-length", -1);
+        if (dataLength < 0)
+            throw new IllegalArgumentException("data-length not specified in "
+                    + file);
+        if (dataLength > 2)
+            throw new IllegalArgumentException("data-length of " + dataLength
+                    + " is not supported.");
+
+        // Assertion that if data-length >= 2
+        // there must be a specified byte ordering
+        String byteOrder = props.getProperty("byte-order", "");
+        if (dataLength >= 2 && byteOrder.equals("dont-care"))
+            throw new IllegalArgumentException("There is an error in the file."
+                    + '\n' + "data-length = " + dataLength
+                    + " and byte-order = " + byteOrder);
+        if (!byteOrder.equals("big-endian")
+                && !byteOrder.equals("little-endian")
+                && !byteOrder.equals("dont-care"))
+            throw new IllegalArgumentException("Unknown byte-order ( "
+                    + byteOrder + ").");
+
+        // Width
+        int width = props.getProperty("width", -1);
+        if (width < 0)
+            throw new IllegalArgumentException("Width not specified in " + file);
+
+        // Height
+        int height = props.getProperty("height", -1);
+        if (height < 0)
+            throw new IllegalArgumentException("Height not specified in "
+                    + file);
+
+        // Signed
+        String dataType = props.getProperty("data-type", "");
+        if (!dataType.equals("signed") && !dataType.equals("unsigned"))
+            throw new IllegalArgumentException("Unknown data-type (" + dataType
+                    + ").");
+
+        return new RplFile(dataLength, width, height, byteOrder, dataType);
+    }
+
+
+
+    @Override
+    public boolean canLoad(File file) {
+        return FileUtil.getExtension(file).equalsIgnoreCase("rpl");
     }
 
 }

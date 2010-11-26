@@ -17,6 +17,9 @@
  */
 package crystallography.core;
 
+import java.io.Serializable;
+import java.util.Comparator;
+
 import net.jcip.annotations.Immutable;
 
 /**
@@ -50,32 +53,6 @@ public class Reflector {
      * <code>max=1</code>)
      */
     public final double normalizedIntensity;
-
-
-
-    /**
-     * Creates a new <code>Reflector</code>.
-     * 
-     * @param plane
-     *            crystallographic plane
-     * @param crystal
-     *            crystal containing the plane
-     * @param scatter
-     *            scattering coefficient to calculate the diffraction intensity
-     * @throws NullPointerException
-     *             if the plane is null
-     * @throws IllegalArgumentException
-     *             if the plane spacing is less or equal to 0.
-     * @throws IllegalArgumentException
-     *             if the intensity is less or equal to 0.
-     * @throws IllegalArgumentException
-     *             if the normalized intensity is less or equal to 0.
-     */
-    public Reflector(Plane plane, Crystal crystal, ScatteringFactors scatter) {
-        this(plane, Calculations.planeSpacing(plane, crystal.unitCell),
-                Calculations.diffractionIntensity(plane, crystal.unitCell,
-                        crystal.atoms, scatter));
-    }
 
 
 
@@ -236,4 +213,46 @@ public class Reflector {
                 * 100 + "%";
     }
 
+}
+
+/**
+ * Comparator for <code>Reflector</code> according to their intensity.
+ * 
+ * @author Philippe T. Pinard
+ */
+class IntensityComparator implements Comparator<Reflector>, Serializable {
+
+    @Override
+    public int compare(Reflector refl0, Reflector refl1) {
+        double intensity0 = refl0.intensity;
+        double intensity1 = refl1.intensity;
+
+        if (intensity0 < intensity1)
+            return -1;
+        else if (intensity0 > intensity1)
+            return 1;
+        else
+            return 0;
+    }
+}
+
+/**
+ * Comparator for <code>Reflector</code> according to their plane spacing.
+ * 
+ * @author Philippe T. Pinard
+ */
+class PlaneSpacingComparator implements Comparator<Reflector>, Serializable {
+
+    @Override
+    public int compare(Reflector refl0, Reflector refl1) {
+        double planeSpacing0 = refl0.planeSpacing;
+        double planeSpacing1 = refl1.planeSpacing;
+
+        if (planeSpacing0 < planeSpacing1)
+            return -1;
+        else if (planeSpacing0 > planeSpacing1)
+            return 1;
+        else
+            return 0;
+    }
 }

@@ -18,18 +18,24 @@
 package org.ebsdimage.core.exp.ops.identification.op;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.BinMap;
 
-public class IdentificationOpMockTest {
+public class IdentificationOpMockTest extends TestCase {
 
-    private IdentificationOp op;
+    private IdentificationOpMock op;
 
     private BinMap peaksMap;
 
@@ -61,6 +67,47 @@ public class IdentificationOpMockTest {
         assertTrue(destPeaks[0].equals(new HoughPeak(0.07, 0.0), 1e-6));
         assertTrue(destPeaks[1].equals(new HoughPeak(0.11, 1.0), 1e-6));
         assertTrue(destPeaks[2].equals(new HoughPeak(0.15, 0.0), 1e-6));
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new IdentificationOpMock()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new IdentificationOpMock(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-1244382376, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        IdentificationOpMock other =
+                new XmlLoader().load(IdentificationOpMock.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

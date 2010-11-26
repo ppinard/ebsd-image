@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.ElementArray;
 
 import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
@@ -38,6 +40,23 @@ public class PatternFilesLoader extends PatternOp {
 
     /** List of files. */
     private File[] files;
+
+
+
+    /**
+     * Returns the path of all the defined pattern files.
+     * 
+     * @return path of files
+     */
+    @ElementArray(name = "files")
+    public String[] getFilePaths() {
+        String[] filePaths = new String[files.length];
+
+        for (int i = 0; i < files.length; i++)
+            filePaths[i] = files[i].getPath();
+
+        return filePaths;
+    }
 
 
 
@@ -91,22 +110,27 @@ public class PatternFilesLoader extends PatternOp {
 
 
     /**
-     * Creates a new <code>PatternLoad</code> from the specified file directory
-     * and file name.
+     * Creates a new <code>PatternFilesLoader</code> with the list of files. The
+     * start index is assigned the first file in the array.
      * 
-     * @param index
-     *            index of the pattern in a map
-     * @param filedir
-     *            directory of the pattern file
-     * @param filename
-     *            file name of the pattern file
+     * @param startIndex
+     *            index of the first pattern
+     * @param filePaths
+     *            list of file paths
      * @throws NullPointerException
-     *             if the file directory is null
-     * @throws NullPointerException
-     *             if the file name is null
+     *             if a file path in the array is null
      */
-    public PatternFilesLoader(int index, String filedir, String filename) {
-        this(index, new File(filedir, filename));
+    public PatternFilesLoader(@Attribute(name = "startIndex") int startIndex,
+            @ElementArray(name = "files") String[] filePaths) {
+        super(startIndex, filePaths.length);
+
+        files = new File[filePaths.length];
+
+        for (int i = 0; i < filePaths.length; i++) {
+            if (filePaths[i] == null)
+                throw new NullPointerException("File (" + i + ") is null.");
+            files[i] = new File(filePaths[i]);
+        }
     }
 
 

@@ -18,15 +18,21 @@
 package org.ebsdimage.core.exp.ops.indexing.pre;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlshared.util.Arrays;
 
-public class SelectHoughPeaksTest {
+public class SelectHoughPeaksTest extends TestCase {
 
     private HoughPeaksSelector op;
 
@@ -92,19 +98,9 @@ public class SelectHoughPeaksTest {
 
 
     @Test
-    public void testSelectHoughPeaks() {
-        HoughPeaksSelector other = new HoughPeaksSelector();
-
-        assertEquals(HoughPeaksSelector.DEFAULT_MINIMUM, other.minimum);
-        assertEquals(HoughPeaksSelector.DEFAULT_MAXIMUM, other.maximum);
-    }
-
-
-
-    @Test
     public void testSelectHoughPeaksIntInt() {
-        assertEquals(4, op.minimum);
-        assertEquals(6, op.maximum);
+        assertEquals(4, op.min);
+        assertEquals(6, op.max);
     }
 
 
@@ -134,6 +130,51 @@ public class SelectHoughPeaksTest {
     public void testToString() {
         String expected = "Hough Peaks Selector [minimum=4, maximum=6]";
         assertEquals(expected, op.toString());
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new HoughPeaksSelector(3, 6)));
+        assertFalse(op.equals(new HoughPeaksSelector(4, 5)));
+        assertTrue(op.equals(new HoughPeaksSelector(4, 6)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 2));
+        assertFalse(op.equals(null, 2));
+        assertFalse(op.equals(new Object(), 2));
+
+        assertFalse(op.equals(new HoughPeaksSelector(6, 6), 2));
+        assertFalse(op.equals(new HoughPeaksSelector(4, 8), 2));
+        assertTrue(op.equals(new HoughPeaksSelector(3, 5), 2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-7739839, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        HoughPeaksSelector other =
+                new XmlLoader().load(HoughPeaksSelector.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

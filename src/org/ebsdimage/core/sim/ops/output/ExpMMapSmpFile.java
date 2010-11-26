@@ -21,8 +21,8 @@ import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.core.Camera;
+import org.ebsdimage.core.EbsdMetadata;
 import org.ebsdimage.core.exp.ExpMMap;
-import org.ebsdimage.core.exp.ExpMetadata;
 import org.ebsdimage.core.run.Run;
 import org.ebsdimage.core.sim.Sim;
 import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
@@ -39,6 +39,9 @@ import rmlimage.module.real.core.RealMap;
  * @author Philippe T. Pinard
  */
 public class ExpMMapSmpFile extends OutputOps {
+
+    /** Default operation. */
+    public static final ExpMMapSmpFile DEFAULT = new ExpMMapSmpFile();
 
     /** Key for the detector distance map. */
     public static final String DD = "dd";
@@ -105,21 +108,6 @@ public class ExpMMapSmpFile extends OutputOps {
 
         Sim sim = (Sim) run;
 
-        // Set-up metadata
-        double beamEnergy = sim.getEnergies()[0].value;
-        double magnification = 1;
-        double tiltAngle = 0.0;
-        double workingDistance = Double.NaN;
-        double pixelWidth = 1.0e-6;
-        double pixelHeight = 1.0e-6;
-        Quaternion sampleRotation = Quaternion.IDENTITY;
-        Camera calibration = sim.getCameras()[0];
-
-        ExpMetadata metadata =
-                new ExpMetadata(beamEnergy, magnification, tiltAngle,
-                        workingDistance, pixelWidth, pixelHeight,
-                        sampleRotation, calibration);
-
         // Calculate width
         int width =
                 sim.getCameras().length * sim.getEnergies().length
@@ -128,7 +116,18 @@ public class ExpMMapSmpFile extends OutputOps {
         int height = 1;
 
         // Init multimap
-        mmap = new ExpMMap(width, height, metadata);
+        mmap = new ExpMMap(width, height);
+
+        // Set-up metadata
+        double beamEnergy = sim.getEnergies()[0].value;
+        double magnification = 1;
+        double tiltAngle = 0.0;
+        double workingDistance = Double.NaN;
+        Quaternion sampleRotation = Quaternion.IDENTITY;
+        Quaternion cameraQuaternion = Quaternion.IDENTITY;
+        Camera camera = sim.getCameras()[0];
+        mmap.setMetadata(new EbsdMetadata(beamEnergy, magnification, tiltAngle,
+                workingDistance, camera, sampleRotation, cameraQuaternion));
 
         // Set phases
         mmap.getPhasesMap().setPhases(sim.getCrystals());

@@ -17,8 +17,8 @@
  */
 package org.ebsdimage.io.sim;
 
-import ptpshared.utility.xml.ObjectXmlSaver;
-import ptpshared.utility.xml.XmlSaver;
+import ptpshared.util.xml.ObjectXmlSaver;
+import ptpshared.util.xml.XmlSaver;
 
 /**
  * Saves a <code>SimsGenerator</code> to an XML file.

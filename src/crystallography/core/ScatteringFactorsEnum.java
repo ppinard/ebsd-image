@@ -17,11 +17,19 @@
  */
 package crystallography.core;
 
+import org.simpleframework.xml.Root;
+import org.simpleframework.xml.convert.Convert;
+import org.simpleframework.xml.convert.Converter;
+import org.simpleframework.xml.stream.InputNode;
+import org.simpleframework.xml.stream.OutputNode;
+
 /**
  * Enumeration of the scattering factors.
  * 
  * @author Philippe T. Pinard
  */
+@Root(name = "scatteringFactors")
+@Convert(ScatteringFactorsEnumConverter.class)
 public enum ScatteringFactorsEnum {
 
     /** Scattering factors based on X-ray diffraction. */
@@ -56,4 +64,27 @@ public enum ScatteringFactorsEnum {
     public Class<? extends ScatteringFactors> getScatteringFactors() {
         return clasz;
     }
+}
+
+/**
+ * Converter to serialize and deserialize a scattering factor.
+ * 
+ * @author ppinard
+ */
+class ScatteringFactorsEnumConverter implements
+        Converter<ScatteringFactorsEnum> {
+
+    @Override
+    public ScatteringFactorsEnum read(InputNode node) throws Exception {
+        return ScatteringFactorsEnum.valueOf(node.getValue());
+    }
+
+
+
+    @Override
+    public void write(OutputNode node, ScatteringFactorsEnum scatterType)
+            throws Exception {
+        node.setValue(scatterType.toString());
+    }
+
 }

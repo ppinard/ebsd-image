@@ -18,76 +18,55 @@
 package org.ebsdimage.core;
 
 import static java.lang.Math.PI;
+import net.jcip.annotations.Immutable;
+
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 import ptpshared.core.math.Quaternion;
-import ptpshared.utility.xml.ObjectXml;
+import ptpshared.util.AlmostEquable;
 
 /**
  * Representation of the metadata held in the <code>EbsdMMap</code>.
  * 
  * @author Philippe T. Pinard
  */
-public abstract class EbsdMetadata implements ObjectXml {
+@Root(name = "metadata")
+@Immutable
+public class EbsdMetadata implements AlmostEquable {
+
+    /** Default EBSD metadata. */
+    public static final EbsdMetadata DEFAULT = new EbsdMetadata(Double.NaN,
+            Double.NaN, Double.NaN, Double.NaN, new Camera(0.0, 0.0, 1.0),
+            Quaternion.IDENTITY, Quaternion.IDENTITY);
 
     /** Energy of the electron beam in eV. */
+    @Element(name = "beamEnergy")
     public final double beamEnergy;
 
-    /** Default or not defined value of the beam energy. */
-    public static final double DEFAULT_BEAM_ENERGY = Double.NaN;
+    /** Calibration of the camera. */
+    @Element(name = "camera")
+    public final Camera camera;
+
+    /** Rotation of the camera with respect to the microscope reference frame. */
+    @Element(name = "cameraRotation")
+    public final Quaternion cameraRotation;
 
     /** Magnification of the EBSD acquisition. */
+    @Element(name = "magnification")
     public final double magnification;
 
-    /** Default or not defined value of the magnification. */
-    public static final double DEFAULT_MAGNIFICATION = Double.NaN;
-
-    /** Angle of sample's tilt in radians. */
-    public final double tiltAngle;
-
-    /** Default or not defined value of the tilt angle. */
-    public static final double DEFAULT_TILT_ANGLE = Double.NaN;
-
-    /** Working distance of the EBSD acquisition in meters. */
-    public final double workingDistance;
-
-    /** Default or not defined value of the working distance. */
-    public static final double DEFAULT_WORKING_DISTANCE = Double.NaN;
-
-    /** Calibration for the width of the pixel in meters. */
-    public final double pixelWidth;
-
-    /** Default or not defined value of the pixel width. */
-    public static final double DEFAULT_PIXEL_WIDTH = Double.NaN;
-
-    /** Calibration for the height of the pixel in meters. */
-    public final double pixelHeight;
-
-    /** Default or not defined value of the pixel height. */
-    public static final double DEFAULT_PIXEL_HEIGHT = Double.NaN;
-
-    /** Rotation from the pattern frame (camera) into the sample frame. */
+    /** Rotation of the sample with respect to the microscope reference frame. */
+    @Element(name = "sampleRotation")
     public final Quaternion sampleRotation;
 
-    /** Default or not defined value of the sample's rotation. */
-    public static final Quaternion DEFAULT_SAMPLE_ROTATION =
-            Quaternion.IDENTITY;
+    /** Angle of sample's tilt in radians. */
+    @Element(name = "tiltAngle")
+    public final double tiltAngle;
 
-    /** Calibration of the camera. */
-    public final Camera calibration;
-
-    /** Default or not defined value of the camera's calibration. */
-    public static final Camera DEFAULT_CALIBRATION = new Camera(0.0, 0.0, 1.0);
-
-
-
-    /**
-     * Creates a new <code>EbsdMetadata</code> with all the default values.
-     */
-    public EbsdMetadata() {
-        this(DEFAULT_BEAM_ENERGY, DEFAULT_MAGNIFICATION, DEFAULT_TILT_ANGLE,
-                DEFAULT_WORKING_DISTANCE, DEFAULT_PIXEL_WIDTH,
-                DEFAULT_PIXEL_HEIGHT, DEFAULT_SAMPLE_ROTATION,
-                DEFAULT_CALIBRATION);
-    }
+    /** Working distance of the EBSD acquisition in meters. */
+    @Element(name = "workingDistance")
+    public final double workingDistance;
 
 
 
@@ -103,18 +82,22 @@ public abstract class EbsdMetadata implements ObjectXml {
      *            angle of sample's tilt in radians
      * @param workingDistance
      *            working distance of the EBSD acquisition in meters
-     * @param pixelWidth
-     *            calibration for the width of the pixel in meters
-     * @param pixelHeight
-     *            calibration for the height of the pixel in meters
-     * @param sampleRotation
-     *            rotation from the pattern frame (camera) into the sample frame
-     * @param calibration
+     * @param camera
      *            calibration of the camera
+     * @param sampleRotation
+     *            rotation of the sample with respect to the microscope
+     *            reference frame
+     * @param cameraRotation
+     *            rotation of the camera with respect to the microscope
+     *            reference frame
      */
-    public EbsdMetadata(double beamEnergy, double magnification,
-            double tiltAngle, double workingDistance, double pixelWidth,
-            double pixelHeight, Quaternion sampleRotation, Camera calibration) {
+    public EbsdMetadata(@Element(name = "beamEnergy") double beamEnergy,
+            @Element(name = "magnification") double magnification,
+            @Element(name = "tiltAngle") double tiltAngle,
+            @Element(name = "workingDistance") double workingDistance,
+            @Element(name = "camera") Camera camera,
+            @Element(name = "sampleRotation") Quaternion sampleRotation,
+            @Element(name = "cameraRotation") Quaternion cameraRotation) {
         // Beam energy
         if (Double.isInfinite(beamEnergy))
             throw new IllegalArgumentException("Beam energy is infinite");
@@ -147,21 +130,10 @@ public abstract class EbsdMetadata implements ObjectXml {
                     + workingDistance + ") must be greater than 0.");
         this.workingDistance = workingDistance;
 
-        // Pixel width
-        if (Double.isInfinite(pixelWidth))
-            throw new IllegalArgumentException("Pixel width is infinite");
-        if (pixelWidth <= 0)
-            throw new IllegalArgumentException("Invalid pixel width ("
-                    + pixelWidth + ')');
-        this.pixelWidth = pixelWidth;
-
-        // Pixel height
-        if (Double.isInfinite(pixelHeight))
-            throw new IllegalArgumentException("Pixel height is infinite");
-        if (pixelHeight <= 0)
-            throw new IllegalArgumentException("Invalid pixel height ("
-                    + pixelHeight + ')');
-        this.pixelHeight = pixelHeight;
+        // Calibration
+        if (camera == null)
+            throw new NullPointerException("Calibration cannot be null.");
+        this.camera = camera;
 
         // Sample rotation
         if (sampleRotation == null)
@@ -169,9 +141,101 @@ public abstract class EbsdMetadata implements ObjectXml {
                     "The sample rotation cannot be null.");
         this.sampleRotation = sampleRotation.normalize();
 
-        // Calibration
-        if (calibration == null)
-            throw new NullPointerException("Calibration cannot be null.");
-        this.calibration = calibration;
+        // camera rotation
+        if (cameraRotation == null)
+            throw new NullPointerException(
+                    "The camera rotation cannot be null.");
+        this.cameraRotation = cameraRotation.normalize();
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+
+        EbsdMetadata other = (EbsdMetadata) obj;
+        if (Double.doubleToLongBits(beamEnergy) != Double.doubleToLongBits(other.beamEnergy))
+            return false;
+        if (Double.doubleToLongBits(tiltAngle) != Double.doubleToLongBits(other.tiltAngle))
+            return false;
+        if (Double.doubleToLongBits(workingDistance) != Double.doubleToLongBits(other.workingDistance))
+            return false;
+        if (Double.doubleToLongBits(magnification) != Double.doubleToLongBits(other.magnification))
+            return false;
+
+        if (!camera.equals(other.camera))
+            return false;
+        if (!cameraRotation.equals(other.cameraRotation))
+            return false;
+        if (!sampleRotation.equals(other.sampleRotation))
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj, double precision) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+
+        EbsdMetadata other = (EbsdMetadata) obj;
+        if (Math.abs(beamEnergy - other.beamEnergy) >= precision)
+            return false;
+        if (Math.abs(tiltAngle - other.tiltAngle) >= precision)
+            return false;
+        if (Math.abs(workingDistance - other.workingDistance) >= precision)
+            return false;
+        if (Math.abs(magnification - other.magnification) >= precision)
+            return false;
+
+        if (!camera.equals(other.camera, precision))
+            return false;
+        if (!cameraRotation.equals(other.cameraRotation, precision))
+            return false;
+        if (!sampleRotation.equals(other.sampleRotation, precision))
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        long temp;
+        temp = Double.doubleToLongBits(beamEnergy);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + ((camera == null) ? 0 : camera.hashCode());
+        result =
+                prime
+                        * result
+                        + ((cameraRotation == null) ? 0
+                                : cameraRotation.hashCode());
+        temp = Double.doubleToLongBits(magnification);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result =
+                prime
+                        * result
+                        + ((sampleRotation == null) ? 0
+                                : sampleRotation.hashCode());
+        temp = Double.doubleToLongBits(tiltAngle);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(workingDistance);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 }

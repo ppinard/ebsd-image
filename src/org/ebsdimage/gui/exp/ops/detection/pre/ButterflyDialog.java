@@ -51,16 +51,16 @@ public class ButterflyDialog extends OperationDialog {
 
         flattenLowerLimitField =
                 new DoubleField("Flatten Lower Limit",
-                        Butterfly.DEFAULT_FLATTEN_LOWER_LIMIT);
-        // flattenLowerLimitField.setRange(Double.MIN_VALUE, Double.MAX_VALUE);
+                        Butterfly.DEFAULT.flattenLowerLimit);
+        flattenLowerLimitField.setRange(Float.MIN_VALUE, Float.MAX_VALUE);
 
         flattenUpperLimitField =
                 new DoubleField("Flatten Upper Limit",
-                        Butterfly.DEFAULT_FLATTEN_UPPER_LIMIT);
-        // flattenUpperLimitField.setRange(Double.MIN_VALUE, Double.MAX_VALUE);
+                        Butterfly.DEFAULT.flattenUpperLimit);
+        flattenUpperLimitField.setRange(Float.MIN_VALUE, Float.MAX_VALUE);
 
         kernelSizeField =
-                new OddIntField("Kernel Size", Butterfly.DEFAULT_KERNEL_SIZE);
+                new OddIntField("Kernel Size", Butterfly.DEFAULT.kernelSize);
         kernelSizeField.setEnabled(false);
 
         Panel panel = new ColumnPanel(2);

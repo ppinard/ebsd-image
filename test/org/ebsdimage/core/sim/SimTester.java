@@ -27,8 +27,8 @@ import ptpshared.core.math.Eulers;
 import ptpshared.core.math.Quaternion;
 import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
+import crystallography.core.CrystalFactory;
 import crystallography.core.ScatteringFactorsEnum;
-import crystallography.core.crystals.Silicon;
 
 public abstract class SimTester {
 
@@ -40,7 +40,7 @@ public abstract class SimTester {
 
 
     public static Sim createSim(Operation[] ops) {
-        Crystal[] crystals = new Crystal[] { new Silicon() };
+        Crystal[] crystals = new Crystal[] { CrystalFactory.silicon() };
         Camera[] cameras = new Camera[] { new Camera(0.1, 0.2, 0.3) };
         Energy[] energies = new Energy[] { new Energy(25e3) };
         Quaternion[] rotations =

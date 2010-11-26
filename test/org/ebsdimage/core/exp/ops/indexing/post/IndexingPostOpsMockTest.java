@@ -18,19 +18,25 @@
 package org.ebsdimage.core.exp.ops.indexing.post;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.Solution;
 import org.junit.Before;
 import org.junit.Test;
 
 import ptpshared.core.math.Quaternion;
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import crystallography.core.Crystal;
-import crystallography.core.crystals.Silicon;
+import crystallography.core.CrystalFactory;
 
-public class IndexingPostOpsMockTest {
+public class IndexingPostOpsMockTest extends TestCase {
 
-    private IndexingPostOps op;
+    private IndexingPostOpsMock op;
 
     private Solution[] srcSlns;
 
@@ -40,7 +46,7 @@ public class IndexingPostOpsMockTest {
     public void setUp() throws Exception {
         op = new IndexingPostOpsMock();
 
-        Crystal phase = new Silicon();
+        Crystal phase = CrystalFactory.silicon();
         Quaternion rotation = Quaternion.IDENTITY;
         srcSlns =
                 new Solution[] { new Solution(phase, rotation, 0.0),
@@ -56,7 +62,7 @@ public class IndexingPostOpsMockTest {
 
         assertEquals(3, destSlns.length);
 
-        Crystal expectedPhase = new Silicon();
+        Crystal expectedPhase = CrystalFactory.silicon();
         Quaternion expectedRotation = Quaternion.IDENTITY;
         for (Solution sln : destSlns) {
             assertTrue(expectedPhase.equals(sln.phase, 1e-6));
@@ -66,6 +72,54 @@ public class IndexingPostOpsMockTest {
         assertEquals(0.0, destSlns[0].fit, 1e-6);
         assertEquals(1.0 / 6.0, destSlns[1].fit, 1e-6);
         assertEquals(1.0 / 3.0, destSlns[2].fit, 1e-6);
+    }
+
+
+
+    @Test
+    public void testToString() {
+        assertEquals(op.toString(), "IndexingPostOpsMock []");
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new IndexingPostOpsMock()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new IndexingPostOpsMock(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(763266731, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        IndexingPostOpsMock other =
+                new XmlLoader().load(IndexingPostOpsMock.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

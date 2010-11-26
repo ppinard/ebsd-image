@@ -25,8 +25,8 @@ import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.run.RunsGenerator;
 import org.jdom.Element;
 
-import ptpshared.utility.xml.ObjectXml;
-import ptpshared.utility.xml.ObjectXmlSaver;
+import ptpshared.util.xml.ObjectXml;
+import ptpshared.util.xml.ObjectXmlSaver;
 
 /**
  * Abstract XML saver for a <code>RunsGenerator</code>.

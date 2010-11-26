@@ -18,15 +18,23 @@
 package org.ebsdimage.core.exp.ops.identification.results;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.OpResult;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ImageQualityTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 
-    private ImageQuality iq;
+public class ImageQualityTest extends TestCase {
+
+    private ImageQuality op;
 
     private HoughPeak[] peaks;
 
@@ -46,7 +54,7 @@ public class ImageQualityTest {
 
         peaks = new HoughPeak[] { peak1, peak2, peak3 };
 
-        iq = new ImageQuality();
+        op = new ImageQuality();
     }
 
 
@@ -55,7 +63,7 @@ public class ImageQualityTest {
     public void testCalculate() {
         double expected =
                 (peak1.intensity + peak2.intensity + peak3.intensity) / 3.0;
-        OpResult result = iq.calculate(null, peaks)[0];
+        OpResult result = op.calculate(null, peaks)[0];
 
         assertEquals(expected, result.value.doubleValue(), 1e-7);
     }
@@ -64,7 +72,47 @@ public class ImageQualityTest {
 
     @Test
     public void testToString() {
-        assertEquals(iq.toString(), "Image Quality");
+        assertEquals(op.toString(), "Image Quality");
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new ImageQuality()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new ImageQuality(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(1413797731, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        ImageQuality other = new XmlLoader().load(ImageQuality.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.run.Operation;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
 
@@ -33,9 +34,11 @@ import rmlimage.core.ByteMap;
 public abstract class PatternOp extends Operation {
 
     /** First index of the patterns. */
+    @Attribute(name = "startIndex")
     public final int startIndex;
 
     /** Number of patterns to load. */
+    @Attribute(name = "size", required = false)
     public final int size;
 
 
@@ -68,17 +71,29 @@ public abstract class PatternOp extends Operation {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
         if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
             return false;
 
         PatternOp other = (PatternOp) obj;
         if (size != other.size)
             return false;
         if (startIndex != other.startIndex)
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        PatternOp other = (PatternOp) obj;
+        if (Math.abs(size - other.size) >= precision)
+            return false;
+        if (Math.abs(startIndex - other.startIndex) >= precision)
             return false;
 
         return true;

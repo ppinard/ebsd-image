@@ -18,15 +18,22 @@
 package org.ebsdimage.core.exp.ops.pattern.post;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.ByteMap;
 
-public class PatternPostOpsMockTest {
+public class PatternPostOpsMockTest extends TestCase {
 
-    private PatternPostOps op;
+    private PatternPostOpsMock op;
 
     private ByteMap srcMap;
 
@@ -50,6 +57,47 @@ public class PatternPostOpsMockTest {
         assertEquals(4, result.pixArray[1]);
         assertEquals(6, result.pixArray[2]);
         assertEquals(8, result.pixArray[3]);
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new PatternPostOpsMock()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new PatternPostOpsMock(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-983474901, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        PatternPostOpsMock other =
+                new XmlLoader().load(PatternPostOpsMock.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

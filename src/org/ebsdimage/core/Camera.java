@@ -19,23 +19,31 @@ package org.ebsdimage.core;
 
 import static java.lang.Math.abs;
 import net.jcip.annotations.Immutable;
-import ptpshared.utility.xml.ObjectXml;
+
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+
+import ptpshared.util.AlmostEquable;
 
 /**
  * Calibration of the EBSD camera.
  * 
  * @author Philippe T. Pinard
  */
+@Root
 @Immutable
-public class Camera implements ObjectXml {
+public class Camera implements AlmostEquable {
 
     /** Location of the pattern center in the horizontal direction. */
+    @Attribute(name = "pcH")
     public final double patternCenterH;
 
     /** Location of the pattern center in the vertical direction. */
+    @Attribute(name = "pcV")
     public final double patternCenterV;
 
     /** Distance between the sample and the detector window. */
+    @Attribute(name = "dd")
     public final double detectorDistance;
 
 
@@ -60,8 +68,9 @@ public class Camera implements ObjectXml {
      * @throws IllegalArgumentException
      *             if the detector distance is out of range
      */
-    public Camera(double patternCenterH, double patternCenterV,
-            double detectorDistance) {
+    public Camera(@Attribute(name = "pcH") double patternCenterH,
+            @Attribute(name = "pcV") double patternCenterV,
+            @Attribute(name = "dd") double detectorDistance) {
         if (Double.isNaN(patternCenterH))
             throw new IllegalArgumentException(
                     "The horizontal coordinate of the pattern center cannot be NaN.");
@@ -111,7 +120,7 @@ public class Camera implements ObjectXml {
      * Checks if this <code>Camera</code> is almost equal to the specified one
      * with the given precision.
      * 
-     * @param other
+     * @param obj
      *            other <code>Camera</code> to check equality
      * @param precision
      *            level of precision
@@ -121,7 +130,8 @@ public class Camera implements ObjectXml {
      * @throws IllegalArgumentException
      *             if the precision is not a number (NaN)
      */
-    public boolean equals(Camera other, double precision) {
+    @Override
+    public boolean equals(Object obj, double precision) {
         if (precision < 0)
             throw new IllegalArgumentException(
                     "The precision has to be greater or equal to 0.0.");
@@ -129,11 +139,14 @@ public class Camera implements ObjectXml {
             throw new IllegalArgumentException(
                     "The precision must be a number.");
 
-        if (this == other)
+        if (this == obj)
             return true;
-        if (other == null)
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
             return false;
 
+        Camera other = (Camera) obj;
         if (abs(patternCenterH - other.patternCenterH) >= precision)
             return false;
         if (abs(patternCenterV - other.patternCenterV) >= precision)
@@ -161,6 +174,7 @@ public class Camera implements ObjectXml {
             return false;
         if (getClass() != obj.getClass())
             return false;
+
         Camera other = (Camera) obj;
         if (Double.doubleToLongBits(detectorDistance) != Double.doubleToLongBits(other.detectorDistance))
             return false;

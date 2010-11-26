@@ -31,6 +31,11 @@ import rmlimage.module.real.core.RealMap;
  */
 public class SNR extends PatternResultsOps {
 
+    /** Default operation. */
+    public static final SNR DEFAULT = new SNR();
+
+
+
     @Override
     public OpResult[] calculate(Exp exp, ByteMap srcMap) {
         OpResult result =

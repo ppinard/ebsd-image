@@ -44,17 +44,17 @@ public class ExpUtil {
      * 
      * @param mmap
      *            base <code>EbsdMMap</code> for all the experiments
-     * @param saveMaps
-     *            <code>SaveMaps</code> for all the experiments
      * @param generator
      *            experiment generator to generate combinations of
      *            <code>Operation</code>
      * @param inputs
      *            array of <code>PatternOp</code>
+     * @param listeners
+     *            experiment listeners
      * @return an array of <code>Exp</code>
      */
-    public static Exp[] createExps(EbsdMMap mmap, CurrentMapsSaver saveMaps,
-            ExpsGenerator generator, PatternOp[] inputs) {
+    public static Exp[] createExps(EbsdMMap mmap, ExpsGenerator generator,
+            PatternOp[] inputs, ExpListener[] listeners) {
         if (inputs.length < 1)
             throw new IllegalArgumentException(
                     "At least one input must be defined in the inputs.");
@@ -73,7 +73,8 @@ public class ExpUtil {
             // Create an experiment with the operations
             Exp exp =
                     new Exp(mmap.duplicate(),
-                            ops.toArray(new Operation[ops.size()]), saveMaps);
+                            ops.toArray(new Operation[ops.size()]));
+            exp.addExpListeners(listeners);
 
             exps[i] = exp;
             i++;

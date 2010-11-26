@@ -26,7 +26,7 @@ import org.junit.Test;
 import ptpshared.core.math.Eulers;
 import ptpshared.core.math.Quaternion;
 import crystallography.core.Crystal;
-import crystallography.core.crystals.Silicon;
+import crystallography.core.CrystalFactory;
 
 public class SolutionTest {
 
@@ -42,7 +42,7 @@ public class SolutionTest {
 
     @Before
     public void setUp() throws Exception {
-        crystal = new Silicon();
+        crystal = CrystalFactory.silicon();
         rotation = new Quaternion(new Eulers(0.5, 0.6, 0.7));
         fit = 0.5;
 

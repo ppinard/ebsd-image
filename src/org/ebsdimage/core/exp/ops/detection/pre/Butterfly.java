@@ -17,9 +17,12 @@
  */
 package org.ebsdimage.core.exp.ops.detection.pre;
 
+import static java.lang.Math.abs;
+
 import org.ebsdimage.core.Conversion;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
 import rmlimage.core.Kernel;
@@ -36,32 +39,37 @@ import rmlimage.module.real.core.RealMap;
 public class Butterfly extends DetectionPreOps {
 
     /** Size of the butterfly kernel. */
+    @Attribute(name = "kernelSize")
     public final int kernelSize;
 
     /** Lower limit of the flattening operation. */
+    @Attribute(name = "flattenLowerLimit")
     public final float flattenLowerLimit;
 
+
+
+    @Override
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        Butterfly other = (Butterfly) obj;
+        if (abs(kernelSize - other.kernelSize) >= precision)
+            return false;
+        if (abs(flattenLowerLimit - other.flattenLowerLimit) >= precision)
+            return false;
+        if (abs(flattenUpperLimit - other.flattenUpperLimit) >= precision)
+            return false;
+
+        return true;
+    }
+
     /** Upper limit of the flattening operation. */
+    @Attribute(name = "flattenUpperLimit")
     public final float flattenUpperLimit;
 
-    /** Default size of butterfly kernel. */
-    public static final int DEFAULT_KERNEL_SIZE = 9;
-
-    /** Default lower limit of the flattening operation. */
-    public static final float DEFAULT_FLATTEN_LOWER_LIMIT = -800;
-
-    /** Default upper limit of the flattening operation. */
-    public static final float DEFAULT_FLATTEN_UPPER_LIMIT = 800;
-
-
-
-    /**
-     * Creates a new butterfly operation with the default values.
-     */
-    public Butterfly() {
-        this(DEFAULT_KERNEL_SIZE, DEFAULT_FLATTEN_LOWER_LIMIT,
-                DEFAULT_FLATTEN_UPPER_LIMIT);
-    }
+    /** Default operation. */
+    public static final Butterfly DEFAULT = new Butterfly(9, -800f, 800f);
 
 
 
@@ -75,11 +83,12 @@ public class Butterfly extends DetectionPreOps {
      * @param flattenUpperLimit
      *            upper limit of the flattening operation
      */
-    public Butterfly(int kernelSize, float flattenLowerLimit,
-            float flattenUpperLimit) {
-        if (kernelSize != 9)
+    public Butterfly(@Attribute(name = "kernelSize") int kernelSize,
+            @Attribute(name = "flattenLowerLimit") float flattenLowerLimit,
+            @Attribute(name = "flattenUpperLimit") float flattenUpperLimit) {
+        if (kernelSize != 9 && kernelSize != 3)
             throw new IllegalArgumentException(
-                    "Only a kernel size of 9 is implemented.");
+                    "Only a kernel size of 3 or 9 is implemented.");
         if (flattenLowerLimit >= flattenUpperLimit)
             throw new IllegalArgumentException("Flatten lower limit ("
                     + flattenLowerLimit + ") must be < than the upper limit ("
@@ -94,11 +103,7 @@ public class Butterfly extends DetectionPreOps {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
+        if (!super.equals(obj))
             return false;
 
         Butterfly other = (Butterfly) obj;
@@ -145,20 +150,29 @@ public class Butterfly extends DetectionPreOps {
     public HoughMap process(Exp exp, HoughMap srcMap) {
         // TODO: Implements different kernel size
 
-        // 3x3
-        // int[][] data = {{0,-2,0}, {1,3,1}, {0,-2,0}};
+        int[][] data;
+        switch (kernelSize) {
+        case 3:
+            data = new int[][] { { 0, -2, 0 }, { 1, 3, 1 }, { 0, -2, 0 } };
+            break;
 
-        // 9x9
-        int[][] data =
-                { { -10, -15, -22, -22, -22, -22, -22, -15, -10 },
-                        { -1, -6, -13, -22, -22, -22, -13, -6, -1 },
-                        { 3, 6, 4, -3, -22, -3, 4, 6, 3 },
-                        { 3, 11, 19, 28, 42, 28, 19, 11, 3 },
-                        { 3, 11, 27, 42, 42, 42, 27, 11, 3 },
-                        { 3, 11, 19, 28, 42, 28, 19, 11, 3 },
-                        { 3, 6, 4, -3, -22, -3, 4, 6, 3 },
-                        { -1, -6, -13, -22, -22, -22, -13, -6, -1 },
-                        { -10, -15, -22, -22, -22, -22, -22, -15, -10 } };
+        case 9:
+            data =
+                    new int[][] {
+                            { -10, -15, -22, -22, -22, -22, -22, -15, -10 },
+                            { -1, -6, -13, -22, -22, -22, -13, -6, -1 },
+                            { 3, 6, 4, -3, -22, -3, 4, 6, 3 },
+                            { 3, 11, 19, 28, 42, 28, 19, 11, 3 },
+                            { 3, 11, 27, 42, 42, 42, 27, 11, 3 },
+                            { 3, 11, 19, 28, 42, 28, 19, 11, 3 },
+                            { 3, 6, 4, -3, -22, -3, 4, 6, 3 },
+                            { -1, -6, -13, -22, -22, -22, -13, -6, -1 },
+                            { -10, -15, -22, -22, -22, -22, -22, -15, -10 } };
+            break;
+
+        default:
+            throw new IllegalArgumentException("Invalid kernel size");
+        }
 
         Kernel kernel = new Kernel(data, 1);
 

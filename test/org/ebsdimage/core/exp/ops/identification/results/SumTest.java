@@ -21,14 +21,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.OpResult;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SumTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 
-    private Sum sum;
+public class SumTest extends TestCase {
+
+    private Sum op;
 
     private HoughPeak[] peaks;
 
@@ -36,7 +42,7 @@ public class SumTest {
 
     @Before
     public void setUp() throws Exception {
-        sum = new Sum(2);
+        op = new Sum(2);
         peaks =
                 new HoughPeak[] { new HoughPeak(3.0, 0.5, 1),
                         new HoughPeak(5.0, 1.5, 2), new HoughPeak(7.0, 2.5, 4) };
@@ -45,32 +51,20 @@ public class SumTest {
 
 
     @Test
-    public void testEqualsObject() {
-        Sum other = new Sum(2);
-
-        assertFalse(other == sum);
-        assertTrue(other.equals(sum));
-
-        assertFalse(new Sum(3).equals(sum));
-    }
-
-
-
-    @Test
     public void testToString() {
         String expected = "Sum [max=2]";
-        assertEquals(expected, sum.toString());
+        assertEquals(expected, op.toString());
     }
 
 
 
     @Test
     public void testCalculate() {
-        OpResult[] results = sum.calculate(null, peaks);
+        OpResult[] results = op.calculate(null, peaks);
         assertEquals(1, results.length);
         assertEquals(6.0, results[0].value.doubleValue(), 1e-6);
 
-        results = new Sum().calculate(null, peaks);
+        results = new Sum(-1).calculate(null, peaks);
         assertEquals(1, results.length);
         assertEquals(7.0, results[0].value.doubleValue(), 1e-6);
     }
@@ -78,16 +72,49 @@ public class SumTest {
 
 
     @Test
-    public void testSum() {
-        Sum other = new Sum();
-        assertEquals(Sum.DEFAULT_MAX, other.max);
+    public void testSumInt() {
+        assertEquals(2, op.max);
     }
 
 
 
     @Test
-    public void testSumInt() {
-        assertEquals(2, sum.max);
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new Sum(2)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 2));
+        assertFalse(op.equals(null, 2));
+        assertFalse(op.equals(new Object(), 2));
+
+        assertFalse(op.equals(new Sum(4), 2));
+        assertTrue(op.equals(new Sum(1), 2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(2589432, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        Sum other = new XmlLoader().load(Sum.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

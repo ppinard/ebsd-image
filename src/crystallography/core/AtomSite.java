@@ -18,10 +18,15 @@
 package crystallography.core;
 
 import static java.lang.Math.abs;
-import static ptpshared.utility.ElementProperties.getSymbol;
+import static ptpshared.util.ElementProperties.getSymbol;
 import net.jcip.annotations.Immutable;
+
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 import ptpshared.core.math.Vector3D;
-import ptpshared.utility.xml.ObjectXml;
+import ptpshared.util.AlmostEquable;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
@@ -35,17 +40,71 @@ import edu.umd.cs.findbugs.annotations.NonNull;
  * @author Philippe T. Pinard
  */
 @Immutable
-public class AtomSite implements ObjectXml {
+@Root(name = "atom")
+public class AtomSite implements AlmostEquable {
+
+    /**
+     * Refines the position of the atom to be between 0.0 and 1.0.
+     * 
+     * @param position
+     *            position of the atom
+     * @return refine position vector
+     */
+    private static Vector3D refinePosition(Vector3D position) {
+        double x = position.get(0);
+        double y = position.get(1);
+        double z = position.get(2);
+
+        while (x < 0)
+            x += 1;
+        while (y < 0)
+            y += 1;
+        while (z < 0)
+            z += 1;
+
+        while (x >= 1)
+            x -= 1;
+        while (y >= 1)
+            y -= 1;
+        while (z >= 1)
+            z -= 1;
+
+        return new Vector3D(x, y, z);
+    }
 
     /** Atomic number of the atom. */
+    @Attribute(name = "atomicNumber")
     public final int atomicNumber;
+
+    /** Occupancy of the atom on this position. */
+    @Attribute(name = "occupancy")
+    public final double occupancy;
 
     /** Position of the atom in the unit cell. */
     @NonNull
+    @Element(name = "position")
     public final Vector3D position;
 
-    /** Occupancy of the atom on this position. */
-    public final double occupancy;
+
+
+    /**
+     * Creates a new <code>AtomSite</code> from the atomic number and positions
+     * of an atom along the unit cell axes. The occurrence is set to 1.0.
+     * 
+     * @param atomicNumber
+     *            atomic number of an atom
+     * @param x
+     *            position along the a axis
+     * @param y
+     *            position along the b axis
+     * @param z
+     *            position along the c axis
+     * @throws IllegalArgumentException
+     *             if the atomic number is outside [1,111].
+     */
+    public AtomSite(int atomicNumber, double x, double y, double z) {
+        this(atomicNumber, new Vector3D(x, y, z));
+    }
 
 
 
@@ -77,22 +136,20 @@ public class AtomSite implements ObjectXml {
 
 
     /**
-     * Creates a new <code>AtomSite</code> from the atomic number and positions
-     * of an atom along the unit cell axes. The occurrence is set to 1.0.
+     * Creates a new <code>AtomSite</code> from the atomic number and position
+     * of an atom. The occurrence is set to 1.0.
      * 
      * @param atomicNumber
      *            atomic number of an atom
-     * @param x
-     *            position along the a axis
-     * @param y
-     *            position along the b axis
-     * @param z
-     *            position along the c axis
+     * @param position
+     *            position relative to the unit cell
      * @throws IllegalArgumentException
      *             if the atomic number is outside [1,111].
+     * @throws NullPointerException
+     *             if the position vector is null.
      */
-    public AtomSite(int atomicNumber, double x, double y, double z) {
-        this(atomicNumber, new Vector3D(x, y, z));
+    public AtomSite(int atomicNumber, Vector3D position) {
+        this(atomicNumber, position, 1.0);
     }
 
 
@@ -115,7 +172,9 @@ public class AtomSite implements ObjectXml {
      * @throws NullPointerException
      *             if the position vector is null.
      */
-    public AtomSite(int atomicNumber, Vector3D position, double occupancy) {
+    public AtomSite(@Attribute(name = "atomicNumber") int atomicNumber,
+            @Element(name = "position") Vector3D position,
+            @Attribute(name = "occupancy") double occupancy) {
         if (atomicNumber < 1 || atomicNumber > 111)
             throw new IllegalArgumentException("The atomic number ("
                     + atomicNumber
@@ -129,73 +188,6 @@ public class AtomSite implements ObjectXml {
         this.atomicNumber = atomicNumber;
         this.position = refinePosition(position);
         this.occupancy = occupancy;
-    }
-
-
-
-    /**
-     * Creates a new <code>AtomSite</code> from the atomic number and position
-     * of an atom. The occurrence is set to 1.0.
-     * 
-     * @param atomicNumber
-     *            atomic number of an atom
-     * @param position
-     *            position relative to the unit cell
-     * @throws IllegalArgumentException
-     *             if the atomic number is outside [1,111].
-     * @throws NullPointerException
-     *             if the position vector is null.
-     */
-    public AtomSite(int atomicNumber, Vector3D position) {
-        if (atomicNumber < 1 || atomicNumber > 111)
-            throw new IllegalArgumentException("The atomic number ("
-                    + atomicNumber
-                    + ") is invalid. It must be betwwen [1, 111].");
-        if (position == null)
-            throw new NullPointerException("The position can not be null.");
-
-        this.atomicNumber = atomicNumber;
-        this.position = refinePosition(position);
-        occupancy = 1.0;
-    }
-
-
-
-    /**
-     * Checks if this <code>AtomSite</code> is almost equal to the specified one
-     * with the given precision.
-     * 
-     * @param other
-     *            other <code>AtomSite</code> to check equality
-     * @param precision
-     *            level of precision
-     * @return whether the two <code>AtomSite</code> are almost equal
-     * @throws IllegalArgumentException
-     *             if the precision is less than 0.0
-     * @throws IllegalArgumentException
-     *             if the precision is not a number (NaN)
-     */
-    public boolean equals(AtomSite other, double precision) {
-        if (precision < 0)
-            throw new IllegalArgumentException(
-                    "The precision has to be greater or equal to 0.0.");
-        if (Double.isNaN(precision))
-            throw new IllegalArgumentException(
-                    "The precision must be a number.");
-
-        if (this == other)
-            return true;
-        if (other == null)
-            return false;
-
-        if (atomicNumber != other.atomicNumber)
-            return false;
-        if (!position.equals(other.position, precision))
-            return false;
-        if (abs(occupancy - other.occupancy) >= precision)
-            return false;
-
-        return true;
     }
 
 
@@ -231,6 +223,49 @@ public class AtomSite implements ObjectXml {
 
 
     /**
+     * Checks if this <code>AtomSite</code> is almost equal to the specified one
+     * with the given precision.
+     * 
+     * @param obj
+     *            other <code>AtomSite</code> to check equality
+     * @param precision
+     *            level of precision
+     * @return whether the two <code>AtomSite</code> are almost equal
+     * @throws IllegalArgumentException
+     *             if the precision is less than 0.0
+     * @throws IllegalArgumentException
+     *             if the precision is not a number (NaN)
+     */
+    @Override
+    public boolean equals(Object obj, double precision) {
+        if (precision < 0)
+            throw new IllegalArgumentException(
+                    "The precision has to be greater or equal to 0.0.");
+        if (Double.isNaN(precision))
+            throw new IllegalArgumentException(
+                    "The precision must be a number.");
+
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+
+        AtomSite other = (AtomSite) obj;
+        if (atomicNumber != other.atomicNumber)
+            return false;
+        if (!position.equals(other.position, precision))
+            return false;
+        if (abs(occupancy - other.occupancy) >= precision)
+            return false;
+
+        return true;
+    }
+
+
+
+    /**
      * Returns the hash code for this <code>AtomSite</code>.
      * 
      * @return hash code
@@ -247,37 +282,6 @@ public class AtomSite implements ObjectXml {
         result = prime * result + (int) (temp ^ (temp >>> 32));
 
         return result;
-    }
-
-
-
-    /**
-     * Refines the position of the atom to be between 0.0 and 1.0.
-     * 
-     * @param position
-     *            position of the atom
-     * @return refine position vector
-     */
-    private Vector3D refinePosition(Vector3D position) {
-        double x = position.get(0);
-        double y = position.get(1);
-        double z = position.get(2);
-
-        while (x < 0)
-            x += 1;
-        while (y < 0)
-            y += 1;
-        while (z < 0)
-            z += 1;
-
-        while (x >= 1)
-            x -= 1;
-        while (y >= 1)
-            y -= 1;
-        while (z >= 1)
-            z -= 1;
-
-        return new Vector3D(x, y, z);
     }
 
 

@@ -22,6 +22,7 @@ import static java.lang.Math.ceil;
 import java.awt.geom.Line2D;
 
 import org.ebsdimage.core.sim.Band;
+import org.simpleframework.xml.Attribute;
 
 import ptpshared.core.geom.Line;
 import rmlimage.module.real.core.Drawing;
@@ -35,12 +36,9 @@ import crystallography.core.ScatteringFactorsEnum;
  */
 public class PatternBandEdges extends PatternSimOp {
 
-    /**
-     * Creates a new <code>PatternBandEdges</code>.
-     */
-    public PatternBandEdges() {
-        super();
-    }
+    /** Default operation. */
+    public static final PatternBandEdges DEFAULT = new PatternBandEdges(1344,
+            1024, 6, ScatteringFactorsEnum.XRAY);
 
 
 
@@ -62,8 +60,10 @@ public class PatternBandEdges extends PatternSimOp {
      * @throws IllegalArgumentException
      *             if the maximum index is less than zero
      */
-    public PatternBandEdges(int width, int height, int maxIndex,
-            ScatteringFactorsEnum scatterType) {
+    public PatternBandEdges(@Attribute(name = "width") int width,
+            @Attribute(name = "height") int height,
+            @Attribute(name = "maxIndex") int maxIndex,
+            @Attribute(name = "scatterType") ScatteringFactorsEnum scatterType) {
         super(width, height, maxIndex, scatterType);
     }
 

@@ -154,7 +154,7 @@ public abstract class HklMMapTester extends TestCase {
         assertEquals(8e-7, metadata.pixelWidth, 1e-9);
         assertEquals(8e-7, metadata.pixelHeight, 1e-9);
         assertEquals("Project19", metadata.projectName);
-        assertTrue(new Camera(0.1, 0.2, 0.3).equals(metadata.calibration, 1e-3));
+        assertTrue(new Camera(0.1, 0.2, 0.3).equals(metadata.camera, 1e-3));
         // Cannot be tested
         // assertEquals(new File("").getAbsoluteFile(), metadata.projectPath);
     }

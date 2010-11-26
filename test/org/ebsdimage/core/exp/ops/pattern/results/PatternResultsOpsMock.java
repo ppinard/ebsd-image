@@ -19,9 +19,11 @@ package org.ebsdimage.core.exp.ops.pattern.results;
 
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
+import org.simpleframework.xml.Root;
 
 import rmlimage.core.ByteMap;
 
+@Root
 public class PatternResultsOpsMock extends PatternResultsOps {
 
     @Override

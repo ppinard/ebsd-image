@@ -18,17 +18,23 @@
 package org.ebsdimage.core.exp.ops.detection.results;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.exp.OpResult;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.BinMap;
 
 public class DiameterTest extends TestCase {
 
-    private Diameter diameter;
+    private Diameter op;
 
     private BinMap peaksMap;
 
@@ -36,7 +42,7 @@ public class DiameterTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        diameter = new Diameter();
+        op = new Diameter();
 
         peaksMap =
                 (BinMap) load(getFile("org/ebsdimage/testdata/peaksMap.bmp"));
@@ -46,14 +52,14 @@ public class DiameterTest extends TestCase {
 
     @Test
     public void testToString() {
-        assertEquals("Diameter", diameter.toString());
+        assertEquals("Diameter", op.toString());
     }
 
 
 
     @Test
     public void testCalculate() {
-        OpResult[] results = diameter.calculate(null, peaksMap);
+        OpResult[] results = op.calculate(null, peaksMap);
 
         assertEquals(4, results.length);
 
@@ -68,6 +74,46 @@ public class DiameterTest extends TestCase {
 
         // Max
         assertEquals(15.55825805, results[3].value.doubleValue(), 1e-6);
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new Diameter()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new Diameter(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-168560436, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        Diameter other = new XmlLoader().load(Diameter.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

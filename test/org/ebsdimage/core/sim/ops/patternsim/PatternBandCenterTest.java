@@ -18,6 +18,10 @@
 package org.ebsdimage.core.sim.ops.patternsim;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.Camera;
@@ -26,11 +30,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ptpshared.core.math.Quaternion;
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.ByteMap;
 import rmlimage.module.real.core.RealMap;
+import crystallography.core.CrystalFactory;
 import crystallography.core.Reflectors;
 import crystallography.core.ScatteringFactorsEnum;
-import crystallography.core.crystals.Silicon;
 
 public class PatternBandCenterTest extends TestCase {
 
@@ -50,21 +56,10 @@ public class PatternBandCenterTest extends TestCase {
     public void setUp() throws Exception {
         op = new PatternBandCenter(336, 256, 4, ScatteringFactorsEnum.XRAY);
 
-        reflectors = op.calculateReflectors(new Silicon());
+        reflectors = op.calculateReflectors(CrystalFactory.silicon());
         camera = new Camera(0.0, 0.0, 0.3);
         energy = new Energy(20e3);
         rotation = Quaternion.IDENTITY;
-    }
-
-
-
-    @Test
-    public void testPatternBandCenter() {
-        PatternBandCenter op = new PatternBandCenter();
-        assertEquals(PatternSimOp.DEFAULT_WIDTH, op.width);
-        assertEquals(PatternSimOp.DEFAULT_HEIGHT, op.height);
-        assertEquals(PatternSimOp.DEFAULT_MAX_INDEX, op.maxIndex);
-        assertEquals(PatternSimOp.DEFAULT_SCATTER_TYPE, op.scatterType);
     }
 
 
@@ -126,6 +121,67 @@ public class PatternBandCenterTest extends TestCase {
                 (RealMap) load("org/ebsdimage/testdata/patternbandcenter.rmp");
 
         expectedMap.assertEquals(patternMap);
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new PatternBandCenter(337, 256, 4,
+                ScatteringFactorsEnum.XRAY)));
+        assertFalse(op.equals(new PatternBandCenter(336, 257, 4,
+                ScatteringFactorsEnum.XRAY)));
+        assertFalse(op.equals(new PatternBandCenter(336, 256, 5,
+                ScatteringFactorsEnum.XRAY)));
+        assertFalse(op.equals(new PatternBandCenter(336, 256, 4,
+                ScatteringFactorsEnum.ELECTRON)));
+        assertTrue(op.equals(new PatternBandCenter(336, 256, 4,
+                ScatteringFactorsEnum.XRAY)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 2));
+        assertFalse(op.equals(null, 2));
+        assertFalse(op.equals(new Object(), 2));
+
+        assertFalse(op.equals(new PatternBandCenter(338, 256, 4,
+                ScatteringFactorsEnum.XRAY), 2));
+        assertFalse(op.equals(new PatternBandCenter(336, 258, 4,
+                ScatteringFactorsEnum.XRAY), 2));
+        assertFalse(op.equals(new PatternBandCenter(336, 256, 6,
+                ScatteringFactorsEnum.XRAY), 2));
+        assertFalse(op.equals(new PatternBandCenter(336, 256, 4,
+                ScatteringFactorsEnum.ELECTRON), 2));
+        assertTrue(op.equals(new PatternBandCenter(337, 257, 5,
+                ScatteringFactorsEnum.XRAY), 2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        // Impossible to test the hash code because of the enum
+        assertTrue(true);
+        // assertEquals(1052419856, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        PatternBandCenter other =
+                new XmlLoader().load(PatternBandCenter.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

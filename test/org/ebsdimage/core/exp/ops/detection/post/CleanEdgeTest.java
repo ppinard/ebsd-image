@@ -18,23 +18,29 @@
 package org.ebsdimage.core.exp.ops.detection.post;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
 
 import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.BinMap;
 import rmlimage.core.Identification;
 
 public class CleanEdgeTest extends TestCase {
 
-    private CleanEdge cleanEdge;
+    private CleanEdge op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        cleanEdge = new CleanEdge();
+        op = new CleanEdge();
     }
 
 
@@ -42,7 +48,7 @@ public class CleanEdgeTest extends TestCase {
     @Test
     public void testToString() {
         String expected = "Clean Edge";
-        assertEquals(expected, cleanEdge.toString());
+        assertEquals(expected, op.toString());
     }
 
 
@@ -53,9 +59,49 @@ public class CleanEdgeTest extends TestCase {
                 (BinMap) load(getFile("org/ebsdimage/testdata/automatic_stddev.bmp"));
         assertEquals(22, Identification.identify(srcMap).getObjectCount());
 
-        BinMap destMap = cleanEdge.process(null, srcMap);
+        BinMap destMap = op.process(null, srcMap);
 
         assertEquals(20, Identification.identify(destMap).getObjectCount());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        CleanEdge other = new XmlLoader().load(CleanEdge.class, file);
+        assertAlmostEquals(op, other, 1e-6);
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new CleanEdge()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new CleanEdge(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(728918949, op.hashCode());
     }
 
 }

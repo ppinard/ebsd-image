@@ -30,6 +30,11 @@ import rmlimage.core.Identification.Edge;
  */
 public class CleanEdge extends DetectionPostOps {
 
+    /** Default operation. */
+    public static final CleanEdge DEFAULT = new CleanEdge();
+
+
+
     /**
      * Removes the peaks touching the right edge of the peaks map.
      * 

@@ -20,9 +20,11 @@ package org.ebsdimage.core.exp.ops.identification.op;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Root;
 
 import rmlimage.core.BinMap;
 
+@Root
 public class IdentificationOpMock extends IdentificationOp {
 
     @Override

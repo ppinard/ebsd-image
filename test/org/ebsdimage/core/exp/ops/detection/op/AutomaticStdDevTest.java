@@ -18,45 +18,42 @@
 package org.ebsdimage.core.exp.ops.detection.op;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.io.HoughMapLoader;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.BinMap;
 import rmlimage.core.IdentMap;
 import rmlimage.core.Identification;
 import rmlimage.core.MathMorph;
 import rmlshared.io.FileUtil;
 
-public class AutomaticStdDevTest {
+public class AutomaticStdDevTest extends TestCase {
 
-    private AutomaticStdDev autoStdDev;
+    private AutomaticStdDev op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        autoStdDev = new AutomaticStdDev();
-    }
-
-
-
-    @Test
-    public void testAutomaticStdDev() {
-        assertEquals(AutomaticStdDev.DEFAULT_SIGMAFACTOR,
-                autoStdDev.sigmaFactor, 1e-6);
+        op = new AutomaticStdDev(2.0);
     }
 
 
 
     @Test
     public void testAutomaticStdDevDouble() {
-        AutomaticStdDev other = new AutomaticStdDev(1.5);
-        assertEquals(1.5, other.sigmaFactor, 1e-6);
+        assertEquals(2.0, op.sigmaFactor, 1e-6);
     }
 
 
@@ -65,7 +62,7 @@ public class AutomaticStdDevTest {
     public void testIdentify() throws IOException {
         HoughMap srcMap =
                 new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap_cropped.bmp"));
-        BinMap peaksMap = autoStdDev.detect(null, srcMap);
+        BinMap peaksMap = op.detect(null, srcMap);
 
         // Remove small objects for comparison
         MathMorph.opening(peaksMap, 2, 8);
@@ -78,9 +75,51 @@ public class AutomaticStdDevTest {
 
 
     @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new AutomaticStdDev(1.5)));
+        assertTrue(op.equals(new AutomaticStdDev(2.0)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertFalse(op.equals(new AutomaticStdDev(2.1), 1e-2));
+        assertTrue(op.equals(new AutomaticStdDev(2.01), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-1416536444, op.hashCode());
+    }
+
+
+
+    @Test
     public void testToString() {
-        assertEquals(autoStdDev.toString(),
-                "Automatic Std Dev [sigmaFactor=2.0]");
+        assertEquals(op.toString(), "Automatic Std Dev [sigmaFactor=2.0]");
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        AutomaticStdDev other =
+                new XmlLoader().load(AutomaticStdDev.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

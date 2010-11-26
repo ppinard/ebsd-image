@@ -17,19 +17,59 @@
  */
 package org.ebsdimage.io.sim;
 
-import ptpshared.utility.xml.ObjectXmlSaver;
-import ptpshared.utility.xml.XmlSaver;
+import java.io.File;
+import java.io.IOException;
+
+import org.ebsdimage.core.sim.Sim;
+
+import ptpshared.util.xml.XmlSaver;
+import rmlshared.io.Saver;
 
 /**
  * Saves a <code>Sim</code> to an XML file.
  * 
  * @author Philippe T. Pinard
  */
-public class SimSaver extends XmlSaver {
+public class SimSaver implements Saver {
+
+    /** XMl saver. */
+    private final XmlSaver saver = new XmlSaver();
+
+
 
     @Override
-    protected ObjectXmlSaver getXmlSaver() {
-        return new SimXmlSaver();
+    public void save(Object obj, File file) throws IOException {
+        save((Sim) obj, file);
+    }
+
+
+
+    /**
+     * Saves the specified <code>Sim</code> to disk.
+     * 
+     * @param sim
+     *            simulation to save
+     * @param file
+     *            file to save to
+     * @throws IOException
+     *             if the simulation could not be saved to disk for any reason
+     */
+    public void save(Sim sim, File file) throws IOException {
+        saver.save(sim, file);
+    }
+
+
+
+    @Override
+    public double getTaskProgress() {
+        return saver.getTaskProgress();
+    }
+
+
+
+    @Override
+    public boolean canSave(Object obj) {
+        return obj instanceof Sim;
     }
 
 }

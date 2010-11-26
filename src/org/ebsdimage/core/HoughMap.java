@@ -19,7 +19,6 @@ package org.ebsdimage.core;
 
 import static java.lang.Math.ceil;
 import rmlimage.core.ByteMap;
-import rmlimage.core.Pixel;
 
 /**
  * Map representing a Hough transform.
@@ -38,6 +37,25 @@ import rmlimage.core.Pixel;
  * @author Marin Lagac&eacute;
  */
 public class HoughMap extends ByteMap {
+    /** Key representing the deltaR value in the prop file. */
+    public static final String DELTA_R = "Hough.dr";
+
+
+
+    /** Key representing the deltaTheta value in the prop file. */
+    public static final String DELTA_THETA = "Hough.dtheta";
+
+
+
+    /** Header key to identify a file as a HoughMap. */
+    public static final String FILE_HEADER = "HoughMap1";
+
+    /** Key representing the height value in the prop file. */
+    public static final String HEIGHT = "Hough.height";
+
+    /** Key representing the width value in the prop file. */
+    public static final String WIDTH = "Hough.width";
+
     /**
      * Calculate the height that a <code>HoughMap</code> will have according to
      * the specified distance scale and increment.
@@ -63,8 +81,6 @@ public class HoughMap extends ByteMap {
 
         return 2 * (int) ceil(rMax / deltaR) + 1;
     }
-
-
 
     /**
      * Calculate the width that a <code>HoughMap</code> will have according to
@@ -94,40 +110,23 @@ public class HoughMap extends ByteMap {
                 : (int) widthInteger - 1;
     }
 
-    /** Minimum value of the distance axis (y = height-1). */
-    public final double rMin;
-
-    /** Maximum value of the distance axis (y = 0). */
-    public final double rMax;
-
     /** Distance increment (pixel width) in pixel. */
     public final double deltaR;
-
-    /** Minimum value of the angle axis (x = 0). */
-    public final double thetaMin;
-
-    /** Maximum value of the angle axis (x = width-1). */
-    public final double thetaMax;
 
     /** Angle increment (pixel height) in radians. */
     public final double deltaTheta;
 
-    /** Key representing the height value in the prop file. */
-    public static final String HEIGHT = "Hough.height";
+    /** Maximum value of the distance axis (y = 0). */
+    public final double rMax;
 
-    /** Key representing the width value in the prop file. */
-    public static final String WIDTH = "Hough.width";
+    /** Minimum value of the distance axis (y = height-1). */
+    public final double rMin;
 
-    /** Key representing the deltaR value in the prop file. */
-    public static final String DELTA_R = "Hough.dr";
+    /** Maximum value of the angle axis (x = width-1). */
+    public final double thetaMax;
 
-    /** Key representing the deltaTheta value in the prop file. */
-    public static final String DELTA_THETA = "Hough.dtheta";
-
-    /** Header key to identify a file as a HoughMap. */
-    public static final String FILE_HEADER = "HoughMap1";
-
-
+    /** Minimum value of the angle axis (x = 0). */
+    public final double thetaMin;
 
     /**
      * Creates a <code>HoughMap</code> with the specified distance and angle
@@ -287,17 +286,23 @@ public class HoughMap extends ByteMap {
 
 
 
-    /**
-     * Returns the value of the specified pixel. <i>Used for the status bar of
-     * the GUI.</i>
-     * 
-     * @param index
-     *            index of the pixel in the pixArray
-     * @return the value of the specified pixel
-     */
     @Override
-    public Pixel getPixel(int index) {
-        return new HoughPixel(getR(index), getTheta(index), pixArray[index]);
+    public String getPixelInfoLabel(int index) {
+        StringBuilder str = new StringBuilder();
+        str = str.append(super.getPixelInfoLabel(index));
+
+        str.append("r = ");
+        str.append(getR(index));
+
+        str.append("  theta = ");
+        str.append(rmlshared.math.Double.round(Math.toDegrees(getTheta(index)),
+                1));
+        str.append("\u00b0");
+
+        str.append("  value = ");
+        str.append(pixArray[index] & 0xff);
+
+        return str.toString();
     }
 
 

@@ -31,7 +31,10 @@ public class PatternFilledBandDialog extends PatternSimOpDialog {
      * Creates a new <code>PatternFilledBandDialog</code>.
      */
     public PatternFilledBandDialog() {
-        super("Pattern Filled Band");
+        super("Pattern Filled Band", PatternFilledBand.DEFAULT.width,
+                PatternFilledBand.DEFAULT.height,
+                PatternFilledBand.DEFAULT.maxIndex,
+                PatternFilledBand.DEFAULT.scatterType);
     }
 
 

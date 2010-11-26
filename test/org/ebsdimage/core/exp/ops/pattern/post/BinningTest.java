@@ -19,37 +19,34 @@ package org.ebsdimage.core.exp.ops.pattern.post;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
 
 import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.ByteMap;
 
 public class BinningTest extends TestCase {
 
-    private Binning binning;
+    private Binning op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        binning = new Binning(2);
-    }
-
-
-
-    @Test
-    public void testBinning() {
-        Binning tmpBinning = new Binning();
-        assertEquals(Binning.DEFAULT_BINNING_FACTOR, tmpBinning.factor);
+        op = new Binning(2);
     }
 
 
 
     @Test
     public void testBinningInt() {
-        assertEquals(2, binning.factor);
+        assertEquals(2, op.factor);
     }
 
 
@@ -64,8 +61,8 @@ public class BinningTest extends TestCase {
     @Test
     public void testEquals() {
         Binning other = new Binning(2);
-        assertFalse(binning == other);
-        assertEquals(binning, other);
+        assertFalse(op == other);
+        assertEquals(op, other);
     }
 
 
@@ -76,7 +73,7 @@ public class BinningTest extends TestCase {
         ByteMap expectedMap =
                 (ByteMap) load("org/ebsdimage/testdata/binning.bmp");
 
-        ByteMap destMap = binning.process(null, srcMap);
+        ByteMap destMap = op.process(null, srcMap);
 
         destMap.assertEquals(expectedMap);
         assertEquals(destMap.width, srcMap.width / 2);
@@ -86,7 +83,49 @@ public class BinningTest extends TestCase {
 
     @Test
     public void testToString() {
-        assertEquals(binning.toString(), "Binning [binning factor=2]");
+        assertEquals(op.toString(), "Binning [factor=2]");
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new Binning(4)));
+        assertTrue(op.equals(new Binning(2)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 2));
+        assertFalse(op.equals(null, 2));
+        assertFalse(op.equals(new Object(), 2));
+
+        assertFalse(op.equals(new Binning(4), 2));
+        assertTrue(op.equals(new Binning(1), 2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(1014002952, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        Binning other = new XmlLoader().load(Binning.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

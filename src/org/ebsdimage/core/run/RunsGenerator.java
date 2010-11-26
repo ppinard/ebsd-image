@@ -17,12 +17,15 @@
  */
 package org.ebsdimage.core.run;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import org.simpleframework.xml.ElementMap;
+import org.simpleframework.xml.Root;
+
 import ptpshared.utility.MultipleLoop;
-import ptpshared.utility.xml.ObjectXml;
 
 /**
  * Abstract class to create a generator from a list of items. An item is defined
@@ -35,9 +38,11 @@ import ptpshared.utility.xml.ObjectXml;
  * 
  * @author Philippe T. Pinard
  */
-public abstract class RunsGenerator implements ObjectXml {
+@Root
+public abstract class RunsGenerator {
 
     /** HashMap of the items containing a key and an array of operations. */
+    @ElementMap(name = "items", valueType = Array.class)
     protected HashMap<String, Operation[]> items =
             new HashMap<String, Operation[]>();
 

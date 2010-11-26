@@ -18,17 +18,23 @@
 package org.ebsdimage.core.exp.ops.detection.results;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.exp.OpResult;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.BinMap;
 
 public class AreaTest extends TestCase {
 
-    private Area area;
+    private Area op;
 
     private BinMap peaksMap;
 
@@ -36,7 +42,7 @@ public class AreaTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        area = new Area();
+        op = new Area();
 
         peaksMap =
                 (BinMap) load(getFile("org/ebsdimage/testdata/peaksMap.bmp"));
@@ -46,14 +52,14 @@ public class AreaTest extends TestCase {
 
     @Test
     public void testToString() {
-        assertEquals("Area", area.toString());
+        assertEquals("Area", op.toString());
     }
 
 
 
     @Test
     public void testCalculate() {
-        OpResult[] results = area.calculate(null, peaksMap);
+        OpResult[] results = op.calculate(null, peaksMap);
 
         assertEquals(4, results.length);
 
@@ -68,6 +74,46 @@ public class AreaTest extends TestCase {
 
         // Max
         assertEquals(94.0, results[3].value.doubleValue(), 1e-6);
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new Area()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new Area(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(2049228, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        Area other = new XmlLoader().load(Area.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

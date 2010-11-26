@@ -26,7 +26,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-import ptpshared.utility.ElementProperties;
+import ptpshared.util.ElementProperties;
 import rmlshared.io.CsvReader;
 
 /**

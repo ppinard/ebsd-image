@@ -21,13 +21,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
 import org.junit.Before;
 import org.junit.Test;
 
-public class DoublePeaksCleanUpTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 
-    private DoublePeaksCleanUp doublePeaksCleanUp;
+public class DoublePeaksCleanUpTest extends TestCase {
+
+    private DoublePeaksCleanUp op;
 
     private HoughPeak[] srcPeaks;
 
@@ -35,7 +41,7 @@ public class DoublePeaksCleanUpTest {
 
     @Before
     public void setUp() throws Exception {
-        doublePeaksCleanUp = new DoublePeaksCleanUp(2, 3);
+        op = new DoublePeaksCleanUp(2, 3);
 
         srcPeaks =
                 new HoughPeak[] { new HoughPeak(0.1, 0.2),
@@ -46,27 +52,16 @@ public class DoublePeaksCleanUpTest {
 
 
     @Test
-    public void testEqualsObject() {
-        DoublePeaksCleanUp other = new DoublePeaksCleanUp(2, 3);
-
-        assertTrue(other != doublePeaksCleanUp);
-        assertTrue(other.equals(doublePeaksCleanUp));
-        assertFalse(new DoublePeaksCleanUp(3, 4).equals(doublePeaksCleanUp));
-    }
-
-
-
-    @Test
     public void testToString() {
-        String expected = "DoublePeaksCleanUp [spacingRho=2, spacingTheta=3]";
-        assertEquals(expected, doublePeaksCleanUp.toString());
+        String expected = "DoublePeaksCleanUp [deltaRho=2, deltaTheta=3]";
+        assertEquals(expected, op.toString());
     }
 
 
 
     @Test
     public void testProcess() {
-        HoughPeak[] destPeaks = doublePeaksCleanUp.process(srcPeaks, 0.1, 0.1);
+        HoughPeak[] destPeaks = op.process(srcPeaks, 0.1, 0.1);
 
         assertEquals(3, destPeaks.length);
         assertEquals(new HoughPeak(0.1, 0.2), destPeaks[0]);
@@ -77,19 +72,54 @@ public class DoublePeaksCleanUpTest {
 
 
     @Test
-    public void testDoublePeaksCleanUp() {
-        DoublePeaksCleanUp other = new DoublePeaksCleanUp();
-        assertEquals(DoublePeaksCleanUp.DEFAULT_SPACING_RHO, other.spacingRho);
-        assertEquals(DoublePeaksCleanUp.DEFAULT_SPACING_THETA,
-                other.spacingTheta);
+    public void testDoublePeaksCleanUpIntInt() {
+        assertEquals(2, op.deltaRho);
+        assertEquals(3, op.deltaTheta);
     }
 
 
 
     @Test
-    public void testDoublePeaksCleanUpIntInt() {
-        assertEquals(2, doublePeaksCleanUp.spacingRho);
-        assertEquals(3, doublePeaksCleanUp.spacingTheta);
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new DoublePeaksCleanUp(1, 3)));
+        assertFalse(op.equals(new DoublePeaksCleanUp(2, 4)));
+        assertTrue(op.equals(new DoublePeaksCleanUp(2, 3)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 2));
+        assertFalse(op.equals(null, 2));
+        assertFalse(op.equals(new Object(), 2));
+
+        assertFalse(op.equals(new DoublePeaksCleanUp(4, 3), 2));
+        assertFalse(op.equals(new DoublePeaksCleanUp(2, 5), 2));
+        assertTrue(op.equals(new DoublePeaksCleanUp(1, 4), 2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-972408927, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        DoublePeaksCleanUp other =
+                new XmlLoader().load(DoublePeaksCleanUp.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

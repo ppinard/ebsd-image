@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.TestCase;
+import org.junit.Before;
 import org.junit.Test;
 
 import rmlimage.core.ByteMap;
@@ -32,11 +33,23 @@ import rmlimage.module.integer.core.IntMap;
 
 public class RawLoaderTest extends TestCase {
 
+    private RawLoader loader;
+
+    private File file;
+
+
+
+    @Before
+    public void setUp() throws Exception {
+        loader = new RawLoader();
+        file = getFile("org/ebsdimage/testdata/warp-y-map.raw");
+    }
+
+
+
     @Test
     public void getDimension() throws IOException {
-        // Load the IntMap and convert it to a ByteMap for easier comparison
-        File srcFile = getFile("org/ebsdimage/io/warp-y-map.raw");
-        Dimension dimension = new RawLoader().getDimension(srcFile);
+        Dimension dimension = loader.getDimension(file);
         assertEquals(168, dimension.width);
         assertEquals(128, dimension.height);
     }
@@ -46,13 +59,15 @@ public class RawLoaderTest extends TestCase {
     @Test
     public void load() throws IOException {
         // Load the IntMap and convert it to a ByteMap for easier comparison
-        File srcFile = getFile("org/ebsdimage/io/warp-y-map.raw");
-        IntMap intMap = (IntMap) new RawLoader().load(srcFile);
+        IntMap intMap = loader.load(file);
         ByteMap byteMap =
                 rmlimage.module.integer.core.Conversion.toByteMap(intMap);
+        byteMap.clearProperties();
 
         // Load the expected map
-        ByteMap xpctMap = (ByteMap) load("org/ebsdimage/io/warp-y-map.bmp");
+        ByteMap xpctMap =
+                (ByteMap) load("org/ebsdimage/testdata/warp-y-map.bmp");
+        xpctMap.clearProperties();
 
         byteMap.assertEquals(xpctMap);
     }
@@ -62,17 +77,19 @@ public class RawLoaderTest extends TestCase {
     @Test
     public void load2() throws IOException {
         // Load the IntMap and convert it to a ByteMap for easier comparison
-        File srcFile = getFile("org/ebsdimage/io/warp-y-map.raw");
         IntMap intMap = new IntMap(168, 128);
-        IntMap map = new RawLoader().load(srcFile, intMap);
+        IntMap map = loader.load(file, intMap);
         ByteMap byteMap =
                 rmlimage.module.integer.core.Conversion.toByteMap(intMap);
+        byteMap.clearProperties();
 
         // Check the IntMap returned is the same as the one sent as an argument
         assertSame(intMap, map);
 
         // Load the expected map
-        ByteMap xpctMap = (ByteMap) load("org/ebsdimage/io/warp-y-map.bmp");
+        ByteMap xpctMap =
+                (ByteMap) load("org/ebsdimage/testdata/warp-y-map.bmp");
+        xpctMap.clearProperties();
 
         byteMap.assertEquals(xpctMap);
     }

@@ -19,7 +19,6 @@ package org.ebsdimage.gui.sim.ops.patternsim;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
 import org.ebsdimage.gui.run.ops.OperationDialog;
 
 import rmlshared.gui.ComboBox;
@@ -53,24 +52,33 @@ public abstract class PatternSimOpDialog extends OperationDialog {
      * 
      * @param title
      *            title of the dialog
+     * @param width
+     *            default width
+     * @param height
+     *            default height
+     * @param maxIndex
+     *            default maximum index of the reflectors to use in the pattern
+     *            simulate
+     * @param scatterType
+     *            default type of scattering factors
      */
-    public PatternSimOpDialog(String title) {
+    public PatternSimOpDialog(String title, int width, int height,
+            int maxIndex, ScatteringFactorsEnum scatterType) {
         super(title);
 
-        widthField = new IntField("Width", PatternSimOp.DEFAULT_WIDTH);
+        widthField = new IntField("Width", width);
         widthField.setRange(1, Integer.MAX_VALUE);
 
-        heightField = new IntField("Height", PatternSimOp.DEFAULT_HEIGHT);
+        heightField = new IntField("Height", height);
         heightField.setRange(1, Integer.MAX_VALUE);
 
-        maxIndexfield =
-                new IntField("Maximum index", PatternSimOp.DEFAULT_MAX_INDEX);
+        maxIndexfield = new IntField("Maximum index", maxIndex);
         maxIndexfield.setRange(1, Integer.MAX_VALUE);
 
         scatterTypeField =
                 new ComboBox<ScatteringFactorsEnum>(
                         ScatteringFactorsEnum.values());
-        scatterTypeField.setSelectedItem(PatternSimOp.DEFAULT_SCATTER_TYPE);
+        scatterTypeField.setSelectedItem(scatterType);
 
         Panel panel = new Panel(new MigLayout());
 

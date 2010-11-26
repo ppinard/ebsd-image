@@ -261,7 +261,7 @@ public class LineOverlay extends PlugIn {
         sourceWindow.addMapMouseMotionListener(mapMouseMotionListener);
 
         // Set up the view listener to listen for scrolling and scale changes
-        sourceWindow.addMapWindowListener(viewListener);
+        sourceWindow.addWindowListener(viewListener);
 
         // Setup the internal frame listener to listen to frame closing
         sourceWindow.addInternalFrameListener(internalFrameListener);
@@ -278,7 +278,7 @@ public class LineOverlay extends PlugIn {
         pointer.setVisible(false);
         pointer.removePanel();
 
-        sourceWindow.removeMapWindowListener(viewListener);
+        sourceWindow.removeWindowListener(viewListener);
 
         sourceWindow.removeInternalFrameListener(internalFrameListener);
         destinationWindow.removeInternalFrameListener(internalFrameListener);

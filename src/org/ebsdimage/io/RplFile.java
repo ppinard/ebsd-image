@@ -17,86 +17,89 @@
  */
 package org.ebsdimage.io;
 
-import java.io.File;
-import java.io.IOException;
-
-import rmlshared.util.Properties;
-
+/**
+ * Properties given by a RPL file.
+ * 
+ * @author ppinard
+ */
 public class RplFile {
 
-    private File file;
+    /** Number of bytes per pixel. */
+    public final int dataLength;
 
-    private Properties props;
+    /** Height of the map. */
+    public final int height;
 
+    /** Width of the map. */
+    public final int width;
 
+    /** Specified if the data is little or big endian. */
+    private final String byteOrder;
 
-    public RplFile(String fileName) {
-        this(new File(fileName));
-    }
-
-
-
-    public RplFile(File file) {
-        if (file == null)
-            throw new NullPointerException("file == null.");
-        this.file = file;
-    }
+    /** Specified if the data is signed. */
+    private final String dataType;
 
 
 
-    // Get the number of bytes per pixel
-    public int getDataLength() {
-        int dataLength = props.getProperty("data-length", -1);
-        if (dataLength < 0)
-            throw new IllegalArgumentException("data-length not specified in "
-                    + file);
-        if (dataLength > 2)
+    /**
+     * Creates a new <code>RplFile</code>.
+     * 
+     * @param dataLength
+     *            number of bytes per pixel
+     * @param width
+     *            width of the map
+     * @param height
+     *            height of the map
+     * @param byteOrder
+     *            specified if the data is little or big endian
+     * @param dataType
+     *            specified if the data is signed
+     */
+    public RplFile(int dataLength, int width, int height, String byteOrder,
+            String dataType) {
+        // Data length
+        if (dataLength > 2 || dataLength < 0)
             throw new IllegalArgumentException("data-length of " + dataLength
                     + " is not supported.");
+        this.dataLength = dataLength;
 
-        // Assertion that if data-length >= 2
-        // there must be a specified byte ordering
-        String byteOrder = props.getProperty("byte-order", "");
-        if (dataLength >= 2 && byteOrder.equals("dont-care"))
-            throw new IllegalArgumentException("There is an error in " + file
-                    + '\n' + "data-length = " + dataLength
-                    + " and byte-order = " + byteOrder);
+        // Width
+        if (width <= 0)
+            throw new IllegalArgumentException("The width (" + width
+                    + ") must be greater than zero.");
+        this.width = width;
 
-        return dataLength;
+        // Height
+        if (height <= 0)
+            throw new IllegalArgumentException("The height (" + height
+                    + ") must be greater than zero.");
+        this.height = height;
+
+        // Byte order
+        if (!byteOrder.equals("big-endian")
+                && !byteOrder.equals("little-endian")
+                && !byteOrder.equals("dont-care"))
+            throw new IllegalArgumentException("Unknown byte-order ( "
+                    + byteOrder + ").");
+        this.byteOrder = byteOrder;
+
+        // Data type
+        if (!dataType.equals("signed") && !dataType.equals("unsigned"))
+            throw new IllegalArgumentException("Unknown data-type (" + dataType
+                    + ").");
+        this.dataType = dataType;
+
     }
 
 
 
-    public int getHeight() {
-        if (props == null)
-            throw new NullPointerException("Must use load() first");
-
-        int height = props.getProperty("height", -1);
-        if (height >= 0)
-            return height;
-        else
-            throw new IllegalArgumentException("Height not specified in "
-                    + file);
-    }
-
-
-
-    public int getWidth() {
-        if (props == null)
-            throw new NullPointerException("Must use load() first");
-
-        int width = props.getProperty("width", -1);
-        if (width >= 0)
-            return width;
-        else
-            throw new IllegalArgumentException("Width not specified in " + file);
-    }
-
-
-
-    // Get whether the date is coded in big or little endian
+    /**
+     * Returns whether the data is coded in big or little endian.
+     * 
+     * @return <code>true</code> if the data is coded in big endian,
+     *         <code>false</code> otherwise
+     */
     public boolean isBigEndian() {
-        String byteOrder = props.getProperty("byte-order", "");
         if (byteOrder.equals("big-endian"))
             return true;
         else if (byteOrder.equals("little-endian"))
@@ -104,28 +107,22 @@ public class RplFile {
         else if (byteOrder.equals("dont-care"))
             return true;
         else
-            throw new IllegalArgumentException("Unknown byte-order ( "
-                    + byteOrder + ") in " + file);
+            return false;
     }
 
 
 
-    // Get whether the data is signed or unsigned
+    /**
+     * Returns whether the data is signed or unsigned.
+     * 
+     * @return <code>true</code> if the data is signed, <code>false</code>
+     *         otherwise
+     */
     public boolean isSigned() {
-        String dataType = props.getProperty("data-type", "");
         if (dataType.equals("signed"))
             return true;
-        else if (dataType.equals("unsigned"))
-            return false;
         else
-            throw new IllegalArgumentException("Unknown data-type (" + dataType
-                    + ") in " + file);
-    }
-
-
-
-    public void load() throws IOException {
-        props = (Properties) new RplLoader().load(file);
+            return false;
     }
 
 }

@@ -22,9 +22,9 @@ import java.io.IOException;
 
 import org.ebsdimage.core.exp.Exp;
 
-import ptpshared.utility.xml.ObjectXmlLoader;
-import ptpshared.utility.xml.XmlLoader;
+import ptpshared.util.xml.XmlLoader;
 import rmlshared.io.FileUtil;
+import rmlshared.io.Loader;
 import rmlshared.io.TextFileReader;
 
 /**
@@ -32,7 +32,12 @@ import rmlshared.io.TextFileReader;
  * 
  * @author Philippe T. Pinard
  */
-public class ExpLoader extends XmlLoader {
+public class ExpLoader implements Loader {
+
+    /** XML loader. */
+    private final XmlLoader loader = new XmlLoader();
+
+
 
     /**
      * Returns the validation message. An empty string is the file is valid; a
@@ -42,7 +47,7 @@ public class ExpLoader extends XmlLoader {
      *            a file
      * @return error message or empty string
      */
-    protected static String getValidationMessage(File file) {
+    protected String getValidationMessage(File file) {
         // Check extension
         String ext = FileUtil.getExtension(file);
         if (!ext.equalsIgnoreCase("xml"))
@@ -67,47 +72,33 @@ public class ExpLoader extends XmlLoader {
 
 
 
-    /**
-     * Checks if the file is a valid <code>PhasesMap</code>.
-     * 
-     * @param file
-     *            a file
-     * @return <code>true</code> if the file is valid, <code>false</code>
-     *         otherwise
-     */
-    public static boolean isExp(File file) {
-        return (getValidationMessage(file).length() == 0) ? true : false;
-    }
-
-
-
-    /**
-     * Validates the file to be a valid <code>PhasesMap</code>.
-     * 
-     * @param file
-     *            a file
-     * @throws IOException
-     *             if the file is not valid
-     */
-    private static void validate(File file) throws IOException {
-        String message = getValidationMessage(file);
-        if (message.length() > 0)
-            throw new IOException(message);
-    }
-
-
-
-    @Override
-    protected ObjectXmlLoader getXmlLoader() {
-        return new ExpXmlLoader();
-    }
-
-
-
     @Override
     public Exp load(File file) throws IOException {
-        validate(file);
-        return (Exp) super.load(file);
+        if (!canLoad(file))
+            throw new IOException(getValidationMessage(file));
+
+        return loader.load(Exp.class, file);
+    }
+
+
+
+    @Override
+    public Exp load(File file, Object obj) throws IOException {
+        return loader.load(Exp.class, file);
+    }
+
+
+
+    @Override
+    public double getTaskProgress() {
+        return loader.getTaskProgress();
+    }
+
+
+
+    @Override
+    public boolean canLoad(File file) {
+        return getValidationMessage(file).length() == 0;
     }
 
 }

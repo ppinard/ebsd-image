@@ -23,15 +23,19 @@ import java.io.File;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.miginfocom.swing.MigLayout;
 
 import org.ebsdimage.core.EbsdMMap;
 
+import ptpshared.gui.DirBrowserField;
+import ptpshared.gui.SingleFileBrowserField;
 import ptpshared.gui.WizardPage;
-import rmlshared.gui.FileNameField;
 import rmlshared.gui.IntField;
 import rmlshared.gui.RadioButton;
+import rmlshared.util.Preferences;
 
 /**
  * Template for the patterns wizard page.
@@ -41,20 +45,12 @@ import rmlshared.gui.RadioButton;
 public class PatternsWizardPage extends WizardPage {
 
     /**
-     * Listener to enable/disable the file browser field.
+     * Listener to enable/disable the fields.
      */
-    private class RButtonListener implements ActionListener {
+    private class RefreshListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            smpFileField.setEnabled(smpFileRButton.isSelected());
-            widthField1.setEnabled(smpFileRButton.isSelected());
-            heightField1.setEnabled(smpFileRButton.isSelected());
-
-            widthField2.setEnabled(patternFolderRButton.isSelected());
-            heightField2.setEnabled(patternFolderRButton.isSelected());
-            patternFolderField.setEnabled(patternFolderRButton.isSelected());
-
-            patternFileField.setEnabled(patternFileRButton.isSelected());
+            refresh();
         }
     }
 
@@ -94,13 +90,13 @@ public class PatternsWizardPage extends WizardPage {
     private RadioButton smpFileRButton;
 
     /** Field for the smp file. */
-    private FileNameField smpFileField;
+    private SingleFileBrowserField smpFileField;
 
     /** Radio button for the folder selection. */
     private RadioButton patternFolderRButton;
 
     /** Field for the folder location. */
-    private FileNameField patternFolderField;
+    private DirBrowserField patternFolderField;
 
     /** Field for the width of the map (smp file selection only). */
     private IntField widthField1;
@@ -118,7 +114,7 @@ public class PatternsWizardPage extends WizardPage {
     private RadioButton patternFileRButton;
 
     /** Field for the pattern file location. */
-    private FileNameField patternFileField;
+    private SingleFileBrowserField patternFileField;
 
 
 
@@ -130,14 +126,15 @@ public class PatternsWizardPage extends WizardPage {
         setLayout(new MigLayout());
 
         smpFileRButton = new RadioButton("From an smp file");
-        smpFileRButton.addActionListener(new RButtonListener());
+        smpFileRButton.addActionListener(new RefreshListener());
         add(smpFileRButton, "wrap");
 
         add(new JLabel("File"), "gapleft 35");
-        smpFileField = new FileNameField("smp file", 25, true);
-        smpFileField.setFileSelectionMode(FileNameField.FILES_ONLY);
-        rmlshared.gui.FileDialog.addFilter("*.smp");
-        smpFileField.setFileFilter("*.smp");
+
+        FileFilter[] filters =
+                new FileFilter[] { new FileNameExtensionFilter(
+                        "SMP file (*.smp)", "smp") };
+        smpFileField = new SingleFileBrowserField("SMP file", true, filters);
         add(smpFileField, "growx, pushx, wrap");
 
         add(new JLabel("Mapping's width"), "gapleft 35");
@@ -151,12 +148,11 @@ public class PatternsWizardPage extends WizardPage {
         add(new JLabel("px"), "wrap");
 
         patternFolderRButton = new RadioButton("From a folder of patterns");
-        patternFolderRButton.addActionListener(new RButtonListener());
+        patternFolderRButton.addActionListener(new RefreshListener());
         add(patternFolderRButton, "span");
 
         add(new JLabel("Folder"), "gapleft 35");
-        patternFolderField = new FileNameField("folder of patterns", 25, true);
-        patternFolderField.setFileSelectionMode(FileNameField.DIRECTORIES_ONLY);
+        patternFolderField = new DirBrowserField("Folder of patterns", true);
         add(patternFolderField, "growx, pushx, wrap");
 
         add(new JLabel("Mapping's width"), "gapleft 35");
@@ -170,14 +166,15 @@ public class PatternsWizardPage extends WizardPage {
         add(new JLabel("px"), "wrap");
 
         patternFileRButton = new RadioButton("From a single pattern");
-        patternFileRButton.addActionListener(new RButtonListener());
+        patternFileRButton.addActionListener(new RefreshListener());
         add(patternFileRButton, "span");
 
         add(new JLabel("File"), "gapleft 35");
-        patternFileField = new FileNameField("single pattern", 25, true);
-        patternFileField.setFileSelectionMode(FileNameField.FILES_ONLY);
-        rmlshared.gui.FileDialog.setFilter("*.jpg");
-        patternFileField.setFileFilter("*.jpg");
+        filters =
+                new FileFilter[] { new FileNameExtensionFilter(
+                        "Image files (*.bmp, *.jpg)", "bmp", "jpg") };
+        patternFileField =
+                new SingleFileBrowserField("Single pattern", true, filters);
         add(patternFileField, "growx, pushx");
 
         // Used to manage only one radio button being selected at a time
@@ -188,6 +185,7 @@ public class PatternsWizardPage extends WizardPage {
 
         // Initial state
         smpFileRButton.doClick();
+        refresh();
     }
 
 
@@ -216,7 +214,7 @@ public class PatternsWizardPage extends WizardPage {
             width = widthField1.getValue();
             height = heightField1.getValue();
         } else if (patternFolderRButton.isSelected()) {
-            if (patternFolderField.getFile() == null) {
+            if (patternFolderField.getDir() == null) {
                 showErrorDialog("Please specify a folder.");
                 return false;
             }
@@ -227,7 +225,7 @@ public class PatternsWizardPage extends WizardPage {
             if (!heightField2.isCorrect())
                 return false;
 
-            dir = patternFolderField.getFile();
+            dir = patternFolderField.getDir();
             width = widthField2.getValue();
             height = heightField2.getValue();
         } else if (patternFileRButton.isSelected()) {
@@ -282,5 +280,30 @@ public class PatternsWizardPage extends WizardPage {
         }
 
         put(KEY_LOADED, 1);
+    }
+
+
+
+    @Override
+    public void setPreferences(Preferences pref) {
+        super.setPreferences(pref);
+        refresh();
+    }
+
+
+
+    /**
+     * Refresh radio buttons and fields.
+     */
+    private void refresh() {
+        smpFileField.setEnabled(smpFileRButton.isSelected());
+        widthField1.setEnabled(smpFileRButton.isSelected());
+        heightField1.setEnabled(smpFileRButton.isSelected());
+
+        widthField2.setEnabled(patternFolderRButton.isSelected());
+        heightField2.setEnabled(patternFolderRButton.isSelected());
+        patternFolderField.setEnabled(patternFolderRButton.isSelected());
+
+        patternFileField.setEnabled(patternFileRButton.isSelected());
     }
 }

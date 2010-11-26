@@ -23,6 +23,7 @@ import org.ebsdimage.core.Edit;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.MaskDisc;
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
 
@@ -34,19 +35,25 @@ import rmlimage.core.ByteMap;
 public class HoughCrop extends HoughPostOps {
 
     /** Radius cropping limit. */
+    @Attribute(name = "radius")
     public final int radius;
 
-    /** Default radius. */
-    public static final int DEFAULT_RADIUS = -1; // Recalculate from srcMap
 
 
+    @Override
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
+            return false;
 
-    /**
-     * Creates a new Hough crop operation using the default radius.
-     */
-    public HoughCrop() {
-        this(DEFAULT_RADIUS);
+        HoughCrop other = (HoughCrop) obj;
+        if (Math.abs(radius - other.radius) >= precision)
+            return false;
+
+        return true;
     }
+
+    /** Default operation. */
+    public static final HoughCrop DEFAULT = new HoughCrop(-1);
 
 
 
@@ -58,7 +65,7 @@ public class HoughCrop extends HoughPostOps {
      * @param radius
      *            radius cropping limit
      */
-    public HoughCrop(int radius) {
+    public HoughCrop(@Attribute(name = "radius") int radius) {
         // No restriction on radius since it can be negative to force the
         // auto-computation.
         this.radius = radius;
@@ -68,11 +75,7 @@ public class HoughCrop extends HoughPostOps {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
+        if (!super.equals(obj))
             return false;
 
         HoughCrop other = (HoughCrop) obj;
@@ -87,7 +90,7 @@ public class HoughCrop extends HoughPostOps {
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
+        int result = super.hashCode();
         result = prime * result + radius;
         return result;
     }

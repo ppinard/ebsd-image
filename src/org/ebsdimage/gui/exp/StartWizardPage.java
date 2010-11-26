@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.util.Map;
 
 import javax.swing.JLabel;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -33,10 +35,11 @@ import org.ebsdimage.io.exp.ExpLoader;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPanelNavResult;
 
+import ptpshared.gui.SingleFileBrowserField;
 import ptpshared.gui.WizardPage;
 import rmlimage.io.IO;
 import rmlshared.gui.CheckBox;
-import rmlshared.gui.FileNameField;
+import rmlshared.util.Preferences;
 
 /**
  * Template for the start page of the wizard.
@@ -45,37 +48,13 @@ import rmlshared.gui.FileNameField;
  */
 public class StartWizardPage extends WizardPage {
 
-    @Override
-    public WizardPanelNavResult allowNext(String stepName,
-            @SuppressWarnings("rawtypes") Map settings, Wizard wizard) {
-
-        put(AcqMetadataWizardPage.KEY_LOADED, 0);
-        put(PatternWizardPage.KEY_LOADED, 0);
-        put(HoughWizardPage.KEY_LOADED, 0);
-        put(DetectionWizardPage.KEY_LOADED, 0);
-        put(IdentificationWizardPage.KEY_LOADED, 0);
-        put(IndexingWizardPage.KEY_LOADED, 0);
-
-        return super.allowNext(stepName, settings, wizard);
-    }
-
     /**
-     * Listener to enable/disable the metadata file browser field.
+     * Listener to enable/disable the fields.
      */
-    private class MetadataCBoxListener implements ActionListener {
+    private class RefreshListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            metadataFileField.setEnabled(metadataCBox.isSelected());
-        }
-    }
-
-    /**
-     * Listener to enable/disable the operations file browser field.
-     */
-    private class OpsCBoxListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            opsFileField.setEnabled(opsCBox.isSelected());
+            refresh();
         }
     }
 
@@ -96,17 +75,17 @@ public class StartWizardPage extends WizardPage {
         return "Start";
     }
 
-    /** Field for the metadata file. */
-    private FileNameField metadataFileField;
-
-    /** Field for the operations file. */
-    private FileNameField opsFileField;
-
     /** Check box for importing the metadata. */
     private CheckBox metadataCBox;
 
+    /** Field for the metadata file. */
+    private SingleFileBrowserField metadataFileField;
+
     /** Check box for importing the operations. */
-    private CheckBox opsCBox;;
+    private CheckBox opsCBox;
+
+    /** Field for the operations file. */
+    private SingleFileBrowserField opsFileField;
 
 
 
@@ -140,27 +119,46 @@ public class StartWizardPage extends WizardPage {
         add(new JLabel(text), "grow, wrap 40");
 
         metadataCBox = new CheckBox("Import metadata");
-        metadataCBox.addActionListener(new MetadataCBoxListener());
+        metadataCBox.addActionListener(new RefreshListener());
         add(metadataCBox, "wrap");
 
-        metadataFileField = new FileNameField("METADATA_FILE", 32, true);
-        metadataFileField.setFileSelectionMode(FileNameField.FILES_ONLY);
-        rmlshared.gui.FileDialog.addFilter("*.zip");
-        metadataFileField.setFileFilter("*.zip");
-        metadataFileField.setEnabled(false);
+        FileFilter[] filters =
+                new FileFilter[] { new FileNameExtensionFilter(
+                        "EBSD multimap (*.zip)", "zip") };
+        metadataFileField =
+                new SingleFileBrowserField("Metadata file", true, filters);
         add(metadataFileField, "gapleft 35, wrap");
 
         opsCBox = new CheckBox("Import operations");
-        opsCBox.addActionListener(new OpsCBoxListener());
+        opsCBox.addActionListener(new RefreshListener());
         add(opsCBox, "wrap");
 
-        opsFileField = new FileNameField("OPS_FILE", 32, true);
-        opsFileField.setFileSelectionMode(FileNameField.FILES_ONLY);
-        rmlshared.gui.FileDialog.addFilter("*.xml");
-        opsFileField.setFileFilter("*.xml");
-        opsFileField.setEnabled(false);
+        filters =
+                new FileFilter[] { new FileNameExtensionFilter(
+                        "Experiment operations (*.xml)", "xml") };
+        opsFileField =
+                new SingleFileBrowserField("Operations file", true, filters);
         add(opsFileField, "gapleft 35, wrap");
+
+        // Refresh
+        refresh();
     }
+
+
+
+    @Override
+    public WizardPanelNavResult allowNext(String stepName,
+            @SuppressWarnings("rawtypes") Map settings, Wizard wizard) {
+
+        put(AcqMetadataWizardPage.KEY_LOADED, 0);
+        put(PatternWizardPage.KEY_LOADED, 0);
+        put(HoughWizardPage.KEY_LOADED, 0);
+        put(DetectionWizardPage.KEY_LOADED, 0);
+        put(IdentificationWizardPage.KEY_LOADED, 0);
+        put(IndexingWizardPage.KEY_LOADED, 0);
+
+        return super.allowNext(stepName, settings, wizard);
+    };
 
 
 
@@ -222,4 +220,23 @@ public class StartWizardPage extends WizardPage {
 
         return true;
     }
+
+
+
+    /**
+     * Refresh combo boxes and file fields.
+     */
+    private void refresh() {
+        metadataFileField.setEnabled(metadataCBox.isSelected());
+        opsFileField.setEnabled(opsCBox.isSelected());
+    }
+
+
+
+    @Override
+    public void setPreferences(Preferences pref) {
+        super.setPreferences(pref);
+        refresh();
+    }
+
 }

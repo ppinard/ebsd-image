@@ -31,6 +31,11 @@ import rmlimage.module.real.core.RealMap;
  */
 public class Fourier extends PatternResultsOps {
 
+    /** Default operation. */
+    public static final Fourier DEFAULT = new Fourier();
+
+
+
     /**
      * Calculates the Fourier transform quality index of the source map.
      * 

@@ -43,6 +43,11 @@ import rmlimage.module.real.core.RealMap;
  */
 public class Difference extends DetectionResultsOps {
 
+    /** Default operation. */
+    public static final Difference DEFAULT = new Difference();
+
+
+
     @Override
     public OpResult[] calculate(Exp exp, BinMap peaksMap) {
         return calculate(peaksMap, exp.getSourceHoughMap());

@@ -25,6 +25,7 @@ import java.util.Arrays;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.HoughPeakIntensityComparator;
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Attribute;
 
 /**
  * Operation to select the number of Hough Peaks for the indexing operation.
@@ -33,34 +34,60 @@ import org.ebsdimage.core.exp.Exp;
  */
 public class HoughPeaksSelector extends IndexingPreOps {
 
-    @Override
-    public String toString() {
-        return "Hough Peaks Selector [minimum=" + minimum + ", maximum="
-                + maximum + "]";
-    }
+    /** Default operation. */
+    public static final HoughPeaksSelector DEFAULT = new HoughPeaksSelector(3,
+            5);
 
     /** Minimum number of Hough peaks. */
-    public final int minimum;
+    @Attribute(name = "min")
+    public final int min;
 
-    /** Default minimum number of Hough peaks. */
-    public static final int DEFAULT_MINIMUM = 3;
+
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + max;
+        result = prime * result + min;
+        return result;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!super.equals(obj))
+            return false;
+
+        HoughPeaksSelector other = (HoughPeaksSelector) obj;
+        if (max != other.max)
+            return false;
+        if (min != other.min)
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        HoughPeaksSelector other = (HoughPeaksSelector) obj;
+        if (Math.abs(max - other.max) >= precision)
+            return false;
+        if (Math.abs(min - other.min) >= precision)
+            return false;
+
+        return true;
+    }
 
     /** Maximum number of Hough Peaks. */
-    public final int maximum;
-
-    /** Default maximum number of Hough peaks. */
-    public static final int DEFAULT_MAXIMUM = 5;
-
-
-
-    /**
-     * Creates a new <code>SelectHoughPeaks</code> operation with the default
-     * minimum and maximum number of Hough peaks.
-     */
-    public HoughPeaksSelector() {
-        this.maximum = DEFAULT_MAXIMUM;
-        this.minimum = DEFAULT_MINIMUM;
-    }
+    @Attribute(name = "max")
+    public final int max;
 
 
 
@@ -68,9 +95,9 @@ public class HoughPeaksSelector extends IndexingPreOps {
      * Creates a new <code>SelectHoughPeaks</code> operation with the specified
      * minimum and maximum number of Hough peaks.
      * 
-     * @param minimum
+     * @param min
      *            minimum number of Hough peaks to consider during the indexing
-     * @param maximum
+     * @param max
      *            maximum number of Hough peaks to consider during the indexing
      * @throws IllegalArgumentException
      *             if the minimum number of Hough peaks is less than zero
@@ -80,19 +107,20 @@ public class HoughPeaksSelector extends IndexingPreOps {
      *             if the maximum number of Hough peaks is greater than the
      *             minimum number
      */
-    public HoughPeaksSelector(int minimum, int maximum) {
-        if (minimum < 3)
+    public HoughPeaksSelector(@Attribute(name = "min") int min,
+            @Attribute(name = "max") int max) {
+        if (min < 3)
             throw new IllegalArgumentException(
-                    "The minimum number of Hough peaks cannot be less than zero.");
-        if (maximum < 3)
+                    "The minimum number of Hough peaks cannot be less than 3.");
+        if (max < 3)
             throw new IllegalArgumentException(
-                    "The maximum number of Hough peaks cannot be less than zero.");
-        if (minimum > maximum)
+                    "The maximum number of Hough peaks cannot be less than 3.");
+        if (min > max)
             throw new IllegalArgumentException(
                     "The maximum number of Hough peaks cannot be greater than the minimum number.");
 
-        this.minimum = minimum;
-        this.maximum = maximum;
+        this.min = min;
+        this.max = max;
     }
 
 
@@ -119,17 +147,25 @@ public class HoughPeaksSelector extends IndexingPreOps {
      */
     @Override
     public HoughPeak[] process(Exp exp, HoughPeak[] srcPeaks) {
-        if (srcPeaks.length < minimum)
+        if (srcPeaks.length < min)
             return new HoughPeak[0];
 
-        if (srcPeaks.length <= maximum)
+        if (srcPeaks.length <= max)
             return srcPeaks;
         else {
             sort(srcPeaks, new HoughPeakIntensityComparator());
             reverse(srcPeaks);
 
-            return Arrays.copyOf(srcPeaks, maximum);
+            return Arrays.copyOf(srcPeaks, max);
         }
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Hough Peaks Selector [minimum=" + min + ", maximum=" + max
+                + "]";
     }
 
 }

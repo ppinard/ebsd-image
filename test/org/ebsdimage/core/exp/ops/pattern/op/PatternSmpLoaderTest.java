@@ -19,6 +19,7 @@ package org.ebsdimage.core.exp.ops.pattern.op;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,12 +30,13 @@ import org.ebsdimage.core.exp.ExpTester;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.ByteMap;
-import rmlshared.io.FileUtil;
 
 public class PatternSmpLoaderTest extends TestCase {
 
-    private PatternSmpLoader loader;
+    private PatternSmpLoader op;
 
     private File filepath;
 
@@ -44,30 +46,18 @@ public class PatternSmpLoaderTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        filepath = FileUtil.getFile("org/ebsdimage/testdata/Project19.smp");
-        if (filepath == null)
-            throw new IOException(
-                    "File \"org/ebsdimage/testdata/Project19.smp\" not found.");
+        filepath = getFile("org/ebsdimage/testdata/Project19.smp");
 
         exp = ExpTester.createExp();
 
-        loader = new PatternSmpLoader(2, 4, filepath);
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        PatternSmpLoader other = new PatternSmpLoader(2, 4, filepath);
-        assertFalse(loader == other);
-        assertEquals(loader, other);
+        op = new PatternSmpLoader(2, 4, filepath);
     }
 
 
 
     @Test
     public void testLoad() throws IOException {
-        ByteMap patternMap = loader.load(exp, 2);
+        ByteMap patternMap = op.load(exp, 2);
 
         ByteMap expected =
                 (ByteMap) load("org/ebsdimage/testdata/Project19/Project193.jpg");
@@ -79,10 +69,10 @@ public class PatternSmpLoaderTest extends TestCase {
 
     @Test
     public void testPatternSmpLoaderIntFile() {
-        assertEquals(filepath.getParent(), loader.filedir);
-        assertEquals(filepath.getName(), loader.filename);
-        assertEquals(2, loader.startIndex);
-        assertEquals(4, loader.size);
+        assertEquals(filepath.getParent(), op.filedir);
+        assertEquals(filepath.getName(), op.filename);
+        assertEquals(2, op.startIndex);
+        assertEquals(4, op.size);
     }
 
 
@@ -112,7 +102,53 @@ public class PatternSmpLoaderTest extends TestCase {
                 "Pattern Smp Loader [startIndex=2, size=4, filedir="
                         + filepath.getParent() + ", filename="
                         + filepath.getName() + "]";
-        assertEquals(expected, loader.toString());
+        assertEquals(expected, op.toString());
     }
 
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new PatternSmpLoader(1, 4, filepath)));
+        assertFalse(op.equals(new PatternSmpLoader(2, 5, filepath)));
+        assertFalse(op.equals(new PatternSmpLoader(2, 4, new File(""))));
+        assertTrue(op.equals(new PatternSmpLoader(2, 4, filepath)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 2));
+        assertFalse(op.equals(null, 2));
+        assertFalse(op.equals(new Object(), 2));
+
+        assertFalse(op.equals(new PatternSmpLoader(4, 4, filepath), 2));
+        assertFalse(op.equals(new PatternSmpLoader(2, 6, filepath), 2));
+        assertFalse(op.equals(new PatternSmpLoader(2, 4, new File("")), 2));
+        assertTrue(op.equals(new PatternSmpLoader(2, 4, filepath), 2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(1052419856, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        PatternSmpLoader other =
+                new XmlLoader().load(PatternSmpLoader.class, file);
+        assertAlmostEquals(op, other, 1e-6);
+    }
 }

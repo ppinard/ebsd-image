@@ -26,10 +26,16 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-public class QuaternionTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
+
+public class QuaternionTest extends TestCase {
 
     private Quaternion q1;
 
@@ -119,7 +125,15 @@ public class QuaternionTest {
 
 
     @Test
-    public void testEqualsQuaternionDouble() {
+    public void testClone() {
+        Quaternion other = q1.clone();
+        assertEquals(q1, other);
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
         assertTrue(q1.equals(q1, 1e-6));
 
         assertFalse(q1.equals(null, 1e-6));
@@ -509,5 +523,19 @@ public class QuaternionTest {
         assertEquals("[[-0.0; 1.0; -1.0; -1.0]]", q2.toString());
         assertEquals("[[0.7071067811865476; 0.7071067811865476; 0.0; 0.0]]",
                 q3.toString());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File tmpFile = createTempFile();
+
+        // Write
+        new XmlSaver().save(q1, tmpFile);
+
+        // Read
+        Quaternion other = new XmlLoader().load(Quaternion.class, tmpFile);
+        assertAlmostEquals(q1, other, 1e-6);
     }
 }

@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import crystallography.core.crystals.Silicon;
-
 public class ReflectorsTest {
 
     private Reflectors reflsFCC;
@@ -36,8 +34,6 @@ public class ReflectorsTest {
     private Reflectors reflsBCC;
 
     private Reflectors reflsHCP;
-
-    private ElectronScatteringFactors scatter;
 
 
 
@@ -61,14 +57,16 @@ public class ReflectorsTest {
         Crystal crystalHCP =
                 new Crystal("HCP", unitCellHCP, atomsHCP, SpaceGroups2.SG168);
 
-        // Scattering factors
-        scatter = new ElectronScatteringFactors();
-
         // Reflectors
-        reflsFCC = new Reflectors(crystalFCC, scatter, 2);
-        reflsBCC = new Reflectors(crystalBCC, scatter, 2);
-        reflsHCP = new Reflectors(crystalHCP, scatter, 2);
-
+        reflsFCC =
+                ReflectorsFactory.generate(crystalFCC,
+                        ScatteringFactorsEnum.ELECTRON, 2);
+        reflsBCC =
+                ReflectorsFactory.generate(crystalBCC,
+                        ScatteringFactorsEnum.ELECTRON, 2);
+        reflsHCP =
+                ReflectorsFactory.generate(crystalHCP,
+                        ScatteringFactorsEnum.ELECTRON, 2);
     }
 
 
@@ -334,7 +332,9 @@ public class ReflectorsTest {
 
     @Test
     public void testReflectorsCrystalScatteringFactorsInt() {
-        Reflectors refls = new Reflectors(new Silicon(), scatter, 2);
+        Reflectors refls =
+                ReflectorsFactory.generate(CrystalFactory.silicon(),
+                        ScatteringFactorsEnum.ELECTRON, 2);
         assertEquals(17, refls.size());
     }
 

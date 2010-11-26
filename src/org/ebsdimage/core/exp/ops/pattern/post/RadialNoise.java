@@ -19,6 +19,7 @@ package org.ebsdimage.core.exp.ops.pattern.post;
 
 import org.ebsdimage.core.Noise;
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
 
@@ -29,55 +30,33 @@ import rmlimage.core.ByteMap;
  */
 public class RadialNoise extends PatternPostOps {
 
-    /** Location of the center in x. */
+    /** Default operation. */
+    public static final RadialNoise DEFAULT = new RadialNoise(0, 0, -1.0, -1.0,
+            1.0, 15.0);
+
+    /** Location of the centre in x. */
+    @Attribute(name = "x")
     public final int x;
 
-    /** Default location of the center in x. */
-    public static final int DEFAULT_X = 0;
-
-    /** Location of the center in y. */
+    /** Location of the centre in y. */
+    @Attribute(name = "y")
     public final int y;
 
-    /** Default location of the center in y. */
-    public static final int DEFAULT_Y = 0;
-
     /** Standard deviation in x for the 2D gaussian distribution. */
+    @Attribute(name = "stdDevX")
     public final double stdDevX;
 
-    /** Default standard deviation in x. */
-    public static final double DEFAULT_STDDEV_X = -1.0; // Recalculate from
-
-    // srcMap
-
     /** Standard deviation in y for the 2D gaussian distribution. */
+    @Attribute(name = "stdDevY")
     public final double stdDevY;
 
-    /** Default standard deviation in y. */
-    public static final double DEFAULT_STDDEV_Y = -1.0; // Recalculate from
-
-    // srcMap
-
     /** Initial noise level at (x0, y0). */
+    @Attribute(name = "initialNoiseStdDev")
     public final double initialNoiseStdDev;
 
-    /** Default initial noise level at (x0, y0). */
-    public static final double DEFALT_INITIAL_NOISE_STDDEV = 1.0;
-
     /** Final noise level. */
+    @Attribute(name = "finalNoiseStdDev")
     public final double finalNoiseStdDev;
-
-    /** Default final noise level. */
-    public static final double DEFALT_FINAL_NOISE_STDDEV = 15.0;
-
-
-
-    /**
-     * Creates a new radial noise operation using the default parameters.
-     */
-    public RadialNoise() {
-        this(DEFAULT_X, DEFAULT_Y, DEFAULT_STDDEV_X, DEFAULT_STDDEV_Y,
-                DEFALT_INITIAL_NOISE_STDDEV, DEFALT_FINAL_NOISE_STDDEV);
-    }
 
 
 
@@ -99,8 +78,12 @@ public class RadialNoise extends PatternPostOps {
      * @see org.ebsdimage.core.Noise#radialNoise(ByteMap, int, int, double,
      *      double, double, double)
      */
-    public RadialNoise(int x, int y, double stdDevX, double stdDevY,
-            double initialNoiseStdDev, double finalNoiseStdDev) {
+    public RadialNoise(@Attribute(name = "x") int x,
+            @Attribute(name = "y") int y,
+            @Attribute(name = "stdDevX") double stdDevX,
+            @Attribute(name = "stdDevY") double stdDevY,
+            @Attribute(name = "initialNoiseStdDev") double initialNoiseStdDev,
+            @Attribute(name = "finalNoiseStdDev") double finalNoiseStdDev) {
         if (initialNoiseStdDev <= 0)
             throw new IllegalArgumentException("The initial std.dev. ("
                     + initialNoiseStdDev + ") must be greater than 0.");
@@ -120,11 +103,7 @@ public class RadialNoise extends PatternPostOps {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
+        if (!super.equals(obj))
             return false;
 
         RadialNoise other = (RadialNoise) obj;
@@ -147,9 +126,33 @@ public class RadialNoise extends PatternPostOps {
 
 
     @Override
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        RadialNoise other = (RadialNoise) obj;
+        if (Math.abs(finalNoiseStdDev - other.finalNoiseStdDev) >= precision)
+            return false;
+        if (Math.abs(initialNoiseStdDev - other.initialNoiseStdDev) >= precision)
+            return false;
+        if (Math.abs(stdDevX - other.stdDevX) >= precision)
+            return false;
+        if (Math.abs(stdDevY - other.stdDevY) >= precision)
+            return false;
+        if (Math.abs(x - other.x) >= precision)
+            return false;
+        if (Math.abs(y - other.y) >= precision)
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
+        int result = super.hashCode();
         long temp;
         temp = Double.doubleToLongBits(finalNoiseStdDev);
         result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -207,10 +210,17 @@ public class RadialNoise extends PatternPostOps {
 
     @Override
     public String toString() {
-        return "RadialNoise [final noise std. dev.=" + finalNoiseStdDev
-                + ", initial noise std. dev.=" + initialNoiseStdDev
-                + ", std. dev. x=" + stdDevX + ", std. dev. y=" + stdDevY
-                + ", x0=" + x + " px, y0=" + y + " px]";
+        StringBuilder str = new StringBuilder();
+
+        str.append("RadialNoise [");
+        str.append("x0=" + x + " px, ");
+        str.append("y0=" + y + " px, ");
+        str.append("std. dev. x=" + stdDevX + ", ");
+        str.append("std. dev. y=" + stdDevY + ", ");
+        str.append("initial noise std. dev.=" + initialNoiseStdDev + ", ");
+        str.append("final noise std. dev.=" + finalNoiseStdDev + "]");
+
+        return str.toString();
     }
 
 }

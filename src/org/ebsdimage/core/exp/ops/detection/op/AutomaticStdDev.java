@@ -17,9 +17,12 @@
  */
 package org.ebsdimage.core.exp.ops.detection.op;
 
+import static java.lang.Math.abs;
+
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.Threshold;
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.BinMap;
 
@@ -32,20 +35,11 @@ import rmlimage.core.BinMap;
 public class AutomaticStdDev extends DetectionOp {
 
     /** Standard deviation scaling factor. */
+    @Attribute(name = "sigma")
     public final double sigmaFactor;
 
-    /** Default value for the standard deviation scaling factor. */
-    public static final double DEFAULT_SIGMAFACTOR = 2;
-
-
-
-    /**
-     * Creates a new <code>AutomaticStdDev</code> operation with the default
-     * sigma factor.
-     */
-    public AutomaticStdDev() {
-        this(DEFAULT_SIGMAFACTOR);
-    }
+    /** Default operation. */
+    public static final AutomaticStdDev DEFAULT = new AutomaticStdDev(2);
 
 
 
@@ -58,7 +52,7 @@ public class AutomaticStdDev extends DetectionOp {
      * @throws IllegalArgumentException
      *             if the sigma factor is less than 0
      */
-    public AutomaticStdDev(double sigmaFactor) {
+    public AutomaticStdDev(@Attribute(name = "sigma") double sigmaFactor) {
         if (sigmaFactor < 0)
             throw new IllegalArgumentException("Sigma factor (" + sigmaFactor
                     + ") cannot be less than 0.");
@@ -84,6 +78,46 @@ public class AutomaticStdDev extends DetectionOp {
         BinMap peaksMap = Threshold.automaticStdDev(srcMap, sigmaFactor);
 
         return peaksMap;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!super.equals(obj))
+            return false;
+
+        AutomaticStdDev other = (AutomaticStdDev) obj;
+        if (Double.doubleToLongBits(sigmaFactor) != Double.doubleToLongBits(other.sigmaFactor))
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj, double precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        AutomaticStdDev other = (AutomaticStdDev) obj;
+        if (abs(sigmaFactor - other.sigmaFactor) >= precision)
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        long temp;
+        temp = Double.doubleToLongBits(sigmaFactor);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 
 

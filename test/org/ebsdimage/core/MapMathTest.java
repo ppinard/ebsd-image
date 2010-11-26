@@ -23,13 +23,14 @@ import org.junit.Test;
 
 import rmlimage.core.BinMap;
 import crystallography.core.Crystal;
-import crystallography.core.crystals.IronBCC;
-import crystallography.core.crystals.Silicon;
+import crystallography.core.CrystalFactory;
 
 public class MapMathTest {
 
     private PhasesMap createSrc1PhasesMap() {
-        Crystal[] phases = new Crystal[] { new Silicon(), new IronBCC() };
+        Crystal[] phases =
+                new Crystal[] { CrystalFactory.silicon(),
+                        CrystalFactory.ferrite() };
         byte[] pixArray = new byte[] { 0, 1, 2, 1 };
 
         return new PhasesMap(2, 2, pixArray, phases);
@@ -44,7 +45,9 @@ public class MapMathTest {
 
 
     private PhasesMap createSrc2PhasesMap() {
-        Crystal[] phases = new Crystal[] { new Silicon(), new IronBCC() };
+        Crystal[] phases =
+                new Crystal[] { CrystalFactory.silicon(),
+                        CrystalFactory.ferrite() };
         byte[] pixArray = new byte[] { 2, 0, 0, 0 };
 
         return new PhasesMap(2, 2, pixArray, phases);

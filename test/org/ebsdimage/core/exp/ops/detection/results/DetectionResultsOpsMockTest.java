@@ -18,16 +18,23 @@
 package org.ebsdimage.core.exp.ops.detection.results;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.exp.OpResult;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.BinMap;
 
-public class DetectionResultsOpsMockTest {
+public class DetectionResultsOpsMockTest extends TestCase {
 
-    private DetectionResultsOps op;
+    private DetectionResultsOpsMock op;
 
     private BinMap peaksMap;
 
@@ -49,6 +56,47 @@ public class DetectionResultsOpsMockTest {
         double expected = 12;
         OpResult result = op.calculate(null, peaksMap)[0];
         assertEquals(expected, result.value.doubleValue(), 1e-6);
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new DetectionResultsOpsMock()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new DetectionResultsOpsMock(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-266211222, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        DetectionResultsOpsMock other =
+                new XmlLoader().load(DetectionResultsOpsMock.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

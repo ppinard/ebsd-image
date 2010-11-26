@@ -1,0 +1,5 @@
+<array>
+   <object class="org.ebsdimage.core.ErrorCode" id="0" type="No error" description=""/>
+   <object class="org.ebsdimage.core.ErrorCode" id="1" type="Error1" description="First test error"/>
+   <object class="org.ebsdimage.core.ErrorCode" id="2" type="Error2" description="Second test error"/>
+</array>

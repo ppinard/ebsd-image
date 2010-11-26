@@ -23,7 +23,7 @@ import org.ebsdimage.io.EbsdMetadataXmlSaver;
 import org.ebsdimage.vendors.tsl.core.TslMetadata;
 import org.jdom.Element;
 
-import ptpshared.utility.xml.ObjectXml;
+import ptpshared.util.xml.ObjectXml;
 
 /**
  * XML saver for <code>TslMetadata</code>.

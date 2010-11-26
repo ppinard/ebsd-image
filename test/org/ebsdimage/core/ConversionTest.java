@@ -24,7 +24,6 @@ import java.util.HashMap;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.exp.ExpMMap;
-import org.ebsdimage.core.exp.ExpMetadata;
 import org.junit.Test;
 
 import rmlimage.core.ByteMap;
@@ -32,13 +31,14 @@ import rmlimage.core.Map;
 import rmlimage.core.RGBMap;
 import rmlimage.module.real.core.RealMap;
 import crystallography.core.Crystal;
-import crystallography.core.crystals.IronBCC;
-import crystallography.core.crystals.Silicon;
+import crystallography.core.CrystalFactory;
 
 public class ConversionTest extends TestCase {
 
     private PhasesMap createPhasesMap() {
-        Crystal[] phases = new Crystal[] { new Silicon(), new IronBCC() };
+        Crystal[] phases =
+                new Crystal[] { CrystalFactory.silicon(),
+                        CrystalFactory.ferrite() };
         byte[] pixArray = new byte[] { 0, 1, 2, 1 };
 
         return new PhasesMap(2, 2, pixArray, phases);
@@ -196,10 +196,10 @@ public class ConversionTest extends TestCase {
 
         PhasesMap phasesMap =
                 new PhasesMap(2, 2, new byte[] { 0, 1, 2, 1 }, new Crystal[] {
-                        new Silicon(), new IronBCC() });
+                        CrystalFactory.silicon(), CrystalFactory.ferrite() });
         mapList.put(EbsdMMap.PHASES, phasesMap);
 
-        ExpMMap mmap = new ExpMMap(2, 2, mapList, new ExpMetadata());
+        ExpMMap mmap = new ExpMMap(2, 2, mapList);
 
         // Convert
         RGBMap rgbMap = Conversion.toRGBMap(mmap);

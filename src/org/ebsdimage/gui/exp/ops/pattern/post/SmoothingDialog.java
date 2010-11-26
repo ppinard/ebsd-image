@@ -45,7 +45,7 @@ public class SmoothingDialog extends OperationDialog {
         super("Smoothing");
 
         kernelSizeField =
-                new OddIntField("Kernel Size", Smoothing.DEFAULT_KERNEL_SIZE);
+                new OddIntField("Kernel Size", Smoothing.DEFAULT.kernelSize);
         kernelSizeField.setRange(1, Integer.MAX_VALUE);
 
         Panel panel = new Panel();

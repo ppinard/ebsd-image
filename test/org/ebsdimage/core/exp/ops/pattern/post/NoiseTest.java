@@ -21,18 +21,24 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-public class NoiseTest {
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 
-    private Noise noise;
+public class NoiseTest extends TestCase {
+
+    private Noise op;
 
 
 
     @Before
     public void setUp() {
-        noise = new Noise(25.0);
+        op = new Noise(25.0);
     }
 
 
@@ -40,23 +46,15 @@ public class NoiseTest {
     @Test
     public void testEquals() {
         Noise other = new Noise(25.0);
-        assertFalse(noise == other);
-        assertEquals(noise, other);
-    }
-
-
-
-    @Test
-    public void testNoise() {
-        Noise tmpNoise = new Noise();
-        assertEquals(Noise.DEFAULT_STDDEV, tmpNoise.stdDev, 1e-7);
+        assertFalse(op == other);
+        assertEquals(op, other);
     }
 
 
 
     @Test
     public void testNoiseInt() {
-        assertEquals(25.0, noise.stdDev, 1e-7);
+        assertEquals(25.0, op.stdDev, 1e-7);
     }
 
 
@@ -78,7 +76,49 @@ public class NoiseTest {
 
     @Test
     public void testToString() {
-        assertEquals(noise.toString(), "Noise [std. dev.=25.0]");
+        assertEquals(op.toString(), "Noise [std. dev.=25.0]");
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new Noise(26.0)));
+        assertTrue(op.equals(new Noise(25.0)));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertFalse(op.equals(new Noise(25.1), 1e-2));
+        assertTrue(op.equals(new Noise(25.001), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-878662649, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        Noise other = new XmlLoader().load(Noise.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

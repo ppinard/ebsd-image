@@ -18,11 +18,13 @@
 package org.ebsdimage.core.sim.ops.output;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.sim.Sim;
 import org.ebsdimage.core.sim.SimTester;
@@ -30,17 +32,19 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.xml.XmlSaver;
 import rmlshared.io.FileUtil;
 
-public class RmpFileTest {
+public class RmpFileTest extends TestCase {
 
-    private RmpFile rmpFile;
+    private RmpFile op;
 
 
 
     @Before
     public void setUp() throws Exception {
-        rmpFile = new RmpFile();
+        op = new RmpFile();
     }
 
 
@@ -57,7 +61,7 @@ public class RmpFileTest {
     public void testSave() throws IOException {
         // Create simulation
         Operation[] ops =
-                new Operation[] { SimTester.createPatternSimOp(), rmpFile };
+                new Operation[] { SimTester.createPatternSimOp(), op };
         Sim sim = SimTester.createSim(ops);
 
         // Run
@@ -71,7 +75,47 @@ public class RmpFileTest {
 
     @Test
     public void testToString() {
-        assertEquals("RmpFile []", rmpFile.toString());
+        assertEquals("RmpFile []", op.toString());
+    }
+
+
+
+    @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new RmpFile()));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertTrue(op.equals(new RmpFile(), 1e-2));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-1307907920, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testXML() throws Exception {
+        File file = createTempFile();
+        new XmlSaver().save(op, file);
+
+        RmpFile other = new XmlLoader().load(RmpFile.class, file);
+        assertAlmostEquals(op, other, 1e-6);
     }
 
 }

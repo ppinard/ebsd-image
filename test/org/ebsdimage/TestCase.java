@@ -19,16 +19,39 @@ package org.ebsdimage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.ebsdimage.io.HoughMapLoader;
+import org.junit.After;
 import org.junit.Assert;
 
+import ptpshared.util.AlmostEquable;
 import rmlimage.io.BmpLoader;
 import rmlimage.io.JpgLoader;
 import rmlimage.module.real.io.RmpLoader;
 import rmlshared.io.FileUtil;
 
 public class TestCase {
+
+    private ArrayList<File> files = new ArrayList<File>();
+
+
+
+    @After
+    public void tearDown() throws Exception {
+        for (File file : files) {
+            if (!file.exists())
+                continue;
+
+            if (file.isFile()) {
+                FileUtil.remove(file);
+            } else if (file.isDirectory()) {
+                FileUtil.rmdir(file);
+            }
+        }
+    }
+
+
 
     public void assertArrayEquals(byte[] expected, byte[] actual) {
         if (actual == null)
@@ -47,6 +70,64 @@ public class TestCase {
                 throw new AssertionError("Pixel different at index " + n
                         + ": Actual = " + actual[n] + ", expected = "
                         + expected[n]);
+    }
+
+
+
+    /**
+     * Asserts if two objects are almost equal to the specified precision.
+     * 
+     * @param expected
+     *            expected object
+     * @param actual
+     *            actual object
+     * @param precision
+     *            level of precision
+     */
+    public void assertAlmostEquals(AlmostEquable expected,
+            AlmostEquable actual, double precision) {
+        if (actual == null)
+            Assert.fail("actual is null");
+        if (expected == null)
+            Assert.fail("expected is null");
+
+        if (!expected.equals(actual, precision))
+            Assert.fail(format(null, expected, actual));
+    }
+
+
+
+    /**
+     * Formats fail message. Copied from org.junit.Assert.
+     * 
+     * @param message
+     *            message
+     * @param expected
+     *            expected object
+     * @param actual
+     *            actual object
+     * @return fail message
+     */
+    private String format(String message, Object expected, Object actual) {
+        String formatted = "";
+        if (message != null && !message.equals(""))
+            formatted = message + " ";
+        String expectedString = String.valueOf(expected);
+        String actualString = String.valueOf(actual);
+        if (expectedString.equals(actualString))
+            return formatted + "expected: "
+                    + formatClassAndValue(expected, expectedString)
+                    + " but was: " + formatClassAndValue(actual, actualString);
+        else
+            return formatted + "expected:<" + expectedString + "> but was:<"
+                    + actualString + ">";
+    }
+
+
+
+    private String formatClassAndValue(Object value, String valueString) {
+        String className = value == null ? "null" : value.getClass().getName();
+        return className + "<" + valueString + ">";
     }
 
 
@@ -86,6 +167,32 @@ public class TestCase {
 
         Assert.fail("Cannot load " + extension + " files.");
         return null;
+    }
+
+
+
+    public File createTempFile() throws IOException {
+        File file = File.createTempFile("tmp", null);
+        files.add(file);
+        return file;
+    }
+
+
+
+    public File createTempDir() throws IOException {
+        File dir = File.createTempFile("tmp", Long.toString(System.nanoTime()));
+
+        if (!dir.delete())
+            throw new IOException("Could not delete temp file: "
+                    + dir.getAbsolutePath());
+
+        if (!dir.mkdir())
+            throw new IOException("Could not create temp dir: "
+                    + dir.getAbsolutePath());
+
+        files.add(dir);
+
+        return dir;
     }
 
 }

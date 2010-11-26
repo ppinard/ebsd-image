@@ -47,7 +47,7 @@ public class ThetaExpandDialog extends OperationDialog {
 
         incrementField =
                 new DoubleField("increment",
-                        Math.toDegrees(ThetaExpand.DEFAULT_INCREMENT));
+                        Math.toDegrees(ThetaExpand.DEFAULT.increment));
         incrementField.setRange(0.0, Double.MAX_VALUE);
 
         Panel panel = new ColumnPanel(3);

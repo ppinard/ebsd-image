@@ -25,7 +25,7 @@ import org.ebsdimage.io.EbsdMetadataXmlSaver;
 import org.ebsdimage.vendors.hkl.core.HklMetadata;
 import org.jdom.Element;
 
-import ptpshared.utility.xml.ObjectXml;
+import ptpshared.util.xml.ObjectXml;
 
 /**
  * XML saver for <code>HklMetadata</code>.

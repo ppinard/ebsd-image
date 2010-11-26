@@ -31,6 +31,11 @@ import rmlimage.core.ByteMap;
  */
 public class Range extends HoughResultsOps {
 
+    /** Default operation. */
+    public static final Range DEFAULT = new Range();
+
+
+
     /**
      * Calculates the Hough range quality index of the source map.
      * 

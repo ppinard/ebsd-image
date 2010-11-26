@@ -66,7 +66,7 @@ public class Vector extends BaseVector {
 
 
     @Override
-    public Vector duplicate() {
+    public Vector clone() {
         Vector output = new Vector(size());
 
         for (int i = 0; i < size(); i++)
