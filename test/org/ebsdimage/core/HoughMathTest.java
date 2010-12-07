@@ -17,28 +17,52 @@
  */
 package org.ebsdimage.core;
 
-import static java.lang.Math.PI;
-import static java.lang.Math.sin;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import magnitude.core.Magnitude;
+import magnitude.geom.Line2D;
 
 import org.junit.Test;
 
-import ptpshared.core.geom.Line;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import static java.lang.Math.PI;
+import static java.lang.Math.sin;
+
+import static junittools.test.Assert.assertEquals;
 
 public class HoughMathTest {
 
     @Test
     public void testFit1() {
         // Peaks1
-        HoughPeak[] peaks1 =
-                new HoughPeak[] { new HoughPeak(1, 2), new HoughPeak(5, 1.5),
-                        new HoughPeak(8, 1) };
+        Magnitude theta = new Magnitude(2, "rad");
+        Magnitude rho = new Magnitude(1, "m");
+        HoughPeak peak1 = new HoughPeak(theta, rho);
 
-        // Peak2
-        HoughPeak[] peaks2 =
-                new HoughPeak[] { new HoughPeak(5, 1.5), new HoughPeak(1, 2),
-                        new HoughPeak(8, 1) };
+        theta = new Magnitude(1.5, "rad");
+        rho = new Magnitude(5, "m");
+        HoughPeak peak2 = new HoughPeak(theta, rho);
+
+        theta = new Magnitude(1, "rad");
+        rho = new Magnitude(8, "m");
+        HoughPeak peak3 = new HoughPeak(theta, rho);
+
+        HoughPeak[] peaks1 = new HoughPeak[] { peak1, peak2, peak3 };
+
+        // Peaks2
+        theta = new Magnitude(1.5, "rad");
+        rho = new Magnitude(5, "m");
+        peak1 = new HoughPeak(theta, rho);
+
+        theta = new Magnitude(2, "rad");
+        rho = new Magnitude(1, "m");
+        peak2 = new HoughPeak(theta, rho);
+
+        theta = new Magnitude(1, "rad");
+        rho = new Magnitude(8, "m");
+        peak3 = new HoughPeak(theta, rho);
+
+        HoughPeak[] peaks2 = new HoughPeak[] { peak1, peak2, peak3 };
 
         assertEquals(0.0, HoughMath.fit(peaks1, peaks2), 1e-6);
     }
@@ -48,14 +72,34 @@ public class HoughMathTest {
     @Test
     public void testFit2() {
         // Peaks1
-        HoughPeak[] peaks1 =
-                new HoughPeak[] { new HoughPeak(1, 2), new HoughPeak(5, 1.5),
-                        new HoughPeak(8, 1) };
+        Magnitude theta = new Magnitude(2, "rad");
+        Magnitude rho = new Magnitude(1, "m");
+        HoughPeak peak1 = new HoughPeak(theta, rho);
 
-        // Peak2
-        HoughPeak[] peaks2 =
-                new HoughPeak[] { new HoughPeak(5, 1.5), new HoughPeak(1, 3),
-                        new HoughPeak(8, 2) };
+        theta = new Magnitude(1.5, "rad");
+        rho = new Magnitude(5, "m");
+        HoughPeak peak2 = new HoughPeak(theta, rho);
+
+        theta = new Magnitude(1, "rad");
+        rho = new Magnitude(8, "m");
+        HoughPeak peak3 = new HoughPeak(theta, rho);
+
+        HoughPeak[] peaks1 = new HoughPeak[] { peak1, peak2, peak3 };
+
+        // Peaks2
+        theta = new Magnitude(1.5, "rad");
+        rho = new Magnitude(5, "m");
+        peak1 = new HoughPeak(theta, rho);
+
+        theta = new Magnitude(3, "rad");
+        rho = new Magnitude(1, "m");
+        peak2 = new HoughPeak(theta, rho);
+
+        theta = new Magnitude(2, "rad");
+        rho = new Magnitude(8, "m");
+        peak3 = new HoughPeak(theta, rho);
+
+        HoughPeak[] peaks2 = new HoughPeak[] { peak1, peak2, peak3 };
 
         assertEquals(2.0 / 3.0, HoughMath.fit(peaks1, peaks2), 1e-6);
     }
@@ -65,14 +109,34 @@ public class HoughMathTest {
     @Test
     public void testFit3() {
         // Peaks1
-        HoughPeak[] peaks1 =
-                new HoughPeak[] { new HoughPeak(1, 2), new HoughPeak(5, 1.5),
-                        new HoughPeak(8, 1) };
+        Magnitude theta = new Magnitude(2, "rad");
+        Magnitude rho = new Magnitude(1, "m");
+        HoughPeak peak1 = new HoughPeak(theta, rho);
 
-        // Peak2
-        HoughPeak[] peaks2 =
-                new HoughPeak[] { new HoughPeak(50, 3), new HoughPeak(10, 0),
-                        new HoughPeak(80, 1) };
+        theta = new Magnitude(1.5, "rad");
+        rho = new Magnitude(5, "m");
+        HoughPeak peak2 = new HoughPeak(theta, rho);
+
+        theta = new Magnitude(1, "rad");
+        rho = new Magnitude(8, "m");
+        HoughPeak peak3 = new HoughPeak(theta, rho);
+
+        HoughPeak[] peaks1 = new HoughPeak[] { peak1, peak2, peak3 };
+
+        // Peaks2
+        theta = new Magnitude(1.5, "rad");
+        rho = new Magnitude(50, "m");
+        peak1 = new HoughPeak(theta, rho);
+
+        theta = new Magnitude(0, "rad");
+        rho = new Magnitude(10, "m");
+        peak2 = new HoughPeak(theta, rho);
+
+        theta = new Magnitude(1, "rad");
+        rho = new Magnitude(80, "m");
+        peak3 = new HoughPeak(theta, rho);
+
+        HoughPeak[] peaks2 = new HoughPeak[] { peak1, peak2, peak3 };
 
         assertEquals(39.0833333, HoughMath.fit(peaks1, peaks2), 1e-6);
     }
@@ -81,27 +145,32 @@ public class HoughMathTest {
 
     @Test
     public void testHoughSpaceToLine1() {
-        HoughPeak peak = new HoughPeak(1, PI / 4);
+        Magnitude theta = new Magnitude(PI / 4, "rad");
+        Magnitude rho = new Magnitude(1, "m");
+        HoughPeak peak = new HoughPeak(theta, rho);
 
-        Line line = HoughMath.houghSpaceToLine(peak);
-        assertEquals(-1.0, line.m, 1e-6);
-        assertEquals(1.0 / sin(PI / 4), line.k, 1e-6);
+        Line2D line = HoughMath.getLine(peak);
+        assertEquals(-1.0, line.getSlope().getBaseUnitsValue(), 1e-6);
+        assertEquals(1.0 / sin(PI / 4), line.getInterceptY().getValue("m"),
+                1e-6);
 
-        HoughPeak other = HoughMath.lineSpaceToHoughSpace(line, -1);
-        assertTrue(peak.equals(other, 1e-6));
+        HoughPeak other = HoughMath.getHoughPeak(line, -1);
+        assertEquals(peak, other, 1e-6);
     }
 
 
 
     @Test
     public void testHoughSpaceToLine2() {
-        HoughPeak peak = new HoughPeak(1, 0);
+        Magnitude theta = new Magnitude(0, "rad");
+        Magnitude rho = new Magnitude(1, "m");
+        HoughPeak peak = new HoughPeak(theta, rho);
 
-        Line line = HoughMath.houghSpaceToLine(peak);
-        assertTrue(Double.isInfinite(line.m));
-        assertEquals(1.0, line.k, 1e-6);
+        Line2D line = HoughMath.getLine(peak);
+        assertTrue(Magnitude.isInfinite(line.getSlope()));
+        assertEquals(1.0, line.getInterceptX().getValue("m"), 1e-6);
 
-        HoughPeak other = HoughMath.lineSpaceToHoughSpace(line, -1);
+        HoughPeak other = HoughMath.getHoughPeak(line, -1);
         assertTrue(peak.equals(other, 1e-6));
     }
 
@@ -109,13 +178,16 @@ public class HoughMathTest {
 
     @Test
     public void testHoughSpaceToLine3() {
-        HoughPeak peak = new HoughPeak(-1, 3 * PI / 4);
+        Magnitude theta = new Magnitude(3 * PI / 4, "rad");
+        Magnitude rho = new Magnitude(-1, "m");
+        HoughPeak peak = new HoughPeak(theta, rho);
 
-        Line line = HoughMath.houghSpaceToLine(peak);
-        assertEquals(1.0, line.m, 1e-6);
-        assertEquals(-1.0 / sin(PI / 4), line.k, 1e-6);
+        Line2D line = HoughMath.getLine(peak);
+        assertEquals(1.0, line.getSlope().getBaseUnitsValue(), 1e-6);
+        assertEquals(-1.0 / sin(PI / 4), line.getInterceptY().getValue("m"),
+                1e-6);
 
-        HoughPeak other = HoughMath.lineSpaceToHoughSpace(line, -1);
+        HoughPeak other = HoughMath.getHoughPeak(line, -1);
         assertTrue(peak.equals(other, 1e-6));
     }
 
@@ -123,13 +195,15 @@ public class HoughMathTest {
 
     @Test
     public void testHoughSpaceToLine4() {
-        HoughPeak peak = new HoughPeak(1, PI / 2);
+        Magnitude theta = new Magnitude(PI / 2, "rad");
+        Magnitude rho = new Magnitude(1, "m");
+        HoughPeak peak = new HoughPeak(theta, rho);
 
-        Line line = HoughMath.houghSpaceToLine(peak);
-        assertEquals(0.0, line.m, 1e-6);
-        assertEquals(1.0, line.k, 1e-6);
+        Line2D line = HoughMath.getLine(peak);
+        assertEquals(0.0, line.getSlope().getBaseUnitsValue(), 1e-6);
+        assertEquals(1.0, line.getInterceptY().getValue("m"), 1e-6);
 
-        HoughPeak other = HoughMath.lineSpaceToHoughSpace(line, -1);
+        HoughPeak other = HoughMath.getHoughPeak(line, -1);
         assertTrue(peak.equals(other, 1e-6));
     }
 
@@ -137,56 +211,64 @@ public class HoughMathTest {
 
     @Test
     public void testLineSpaceToHoughSpace1() {
-        Line line = new Line(-1.0, 1.0 / sin(PI / 4));
+        double m = -1.0;
+        Magnitude b = new Magnitude(1.0 / sin(PI / 4), "cm");
+        Line2D line = Line2D.fromSlopeIntercept(m, b);
 
-        HoughPeak peak = HoughMath.lineSpaceToHoughSpace(line, -1);
-        assertEquals(1.0, peak.rho, 1e-6);
-        assertEquals(PI / 4, peak.theta, 1e-6);
+        HoughPeak peak = HoughMath.getHoughPeak(line, -1);
+        assertEquals(1.0, peak.rho.getValue("cm"), 1e-6);
+        assertEquals(PI / 4, peak.theta.getValue("rad"), 1e-6);
 
-        Line other = HoughMath.houghSpaceToLine(peak);
-        assertTrue(line.equals(other, 1e-6));
+        Line2D other = HoughMath.getLine(peak);
+        assertEquals(line, other, 1e-6);
     }
 
 
 
     @Test
     public void testLineSpaceToHoughSpace2() {
-        Line line = new Line(Double.POSITIVE_INFINITY, 1.0);
+        double m = Double.POSITIVE_INFINITY;
+        Magnitude b = new Magnitude(1.0, "cm");
+        Line2D line = Line2D.fromSlopeIntercept(m, b);
 
-        HoughPeak peak = HoughMath.lineSpaceToHoughSpace(line, -1);
-        assertEquals(1.0, peak.rho, 1e-6);
-        assertEquals(0.0, peak.theta, 1e-6);
+        HoughPeak peak = HoughMath.getHoughPeak(line, -1);
+        assertEquals(1.0, peak.rho.getValue("cm"), 1e-6);
+        assertEquals(0.0, peak.theta.getValue("rad"), 1e-6);
 
-        Line other = HoughMath.houghSpaceToLine(peak);
-        assertTrue(line.equals(other, 1e-6));
+        Line2D other = HoughMath.getLine(peak);
+        assertEquals(line, other, 1e-6);
     }
 
 
 
     @Test
     public void testLineSpaceToHoughSpace3() {
-        Line line = new Line(1.0, -1.0 / sin(PI / 4));
+        double m = 1.0;
+        Magnitude b = new Magnitude(-1.0 / sin(PI / 4), "cm");
+        Line2D line = Line2D.fromSlopeIntercept(m, b);
 
-        HoughPeak peak = HoughMath.lineSpaceToHoughSpace(line, -1);
-        assertEquals(-1.0, peak.rho, 1e-6);
-        assertEquals(3 * PI / 4, peak.theta, 1e-6);
+        HoughPeak peak = HoughMath.getHoughPeak(line, -1);
+        assertEquals(-1.0, peak.rho.getValue("cm"), 1e-6);
+        assertEquals(3 * PI / 4, peak.theta.getValue("rad"), 1e-6);
 
-        Line other = HoughMath.houghSpaceToLine(peak);
-        assertTrue(line.equals(other, 1e-6));
+        Line2D other = HoughMath.getLine(peak);
+        assertEquals(line, other, 1e-6);
     }
 
 
 
     @Test
     public void testLineSpaceToHoughSpace4() {
-        Line line = new Line(0.0, 1.0);
+        double m = 0.0;
+        Magnitude b = new Magnitude(1.0, "cm");
+        Line2D line = Line2D.fromSlopeIntercept(m, b);
 
-        HoughPeak peak = HoughMath.lineSpaceToHoughSpace(line, -1);
-        assertEquals(1.0, peak.rho, 1e-6);
-        assertEquals(PI / 2, peak.theta, 1e-6);
+        HoughPeak peak = HoughMath.getHoughPeak(line, -1);
+        assertEquals(1.0, peak.rho.getValue("cm"), 1e-6);
+        assertEquals(PI / 2, peak.theta.getValue("rad"), 1e-6);
 
-        Line other = HoughMath.houghSpaceToLine(peak);
-        assertTrue(line.equals(other, 1e-6));
+        Line2D other = HoughMath.getLine(peak);
+        assertEquals(line, other, 1e-6);
     }
 
 }

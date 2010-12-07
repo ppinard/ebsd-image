@@ -17,17 +17,16 @@
  */
 package org.ebsdimage.core;
 
-import static magnitude.core.Math.cos;
-import static magnitude.core.Math.sin;
 import magnitude.core.Magnitude;
+import magnitude.geom.Line2D;
 
 import org.ebsdimage.core.sim.Band;
 
-import ptpshared.core.geom.Line;
-import ptpshared.core.geom.Line3D;
-import ptpshared.core.geom.LinePlane;
-import ptpshared.core.math.Vector3D;
 import rmlshared.math.Stats;
+import static magnitude.core.Math.PI;
+import static magnitude.core.Math.atan;
+import static magnitude.core.Math.cos;
+import static magnitude.core.Math.sin;
 
 /**
  * Miscellaneous calculations in Hough space.
@@ -86,50 +85,63 @@ public class HoughMath {
 
 
     /**
-     * Converts a Hough peak into the slope and intercept of a line. Equations:
-     * <ul>
-     * <li><code>m = -cos(theta) / sin(theta)</code></li>
-     * <li><code>k = rho / sin(theta)</code></li>
-     * </ul>
+     * Calculates the slope of the line in the image space represented by the
+     * specified Hough peak.
+     * <p/>
+     * A vertical line has a slope of positive infinity.
      * 
      * @param peak
-     *            a <code>HoughPeak</code>
-     * @return a line
+     *            a Hough peak
+     * @return slope of the line in the image space
      */
-    public static Line houghSpaceToLine(HoughPeak peak) {
+    public static double getSlope(HoughPeak peak) {
         double m;
-        Magnitude k;
 
         // -cos(theta) / sin(theta)
         // unitless by definition
-        m = cos(peak.theta).multiply(-1).div(sin(peak.theta)).getValue("");
+        m =
+                cos(peak.theta).multiply(-1).div(sin(peak.theta)).getBaseUnitsValue();
         if (Double.isInfinite(m))
             m = Double.POSITIVE_INFINITY;
 
-        k = peak.rho.div(sin(peak.theta));
-        if (k.isInfinite() || k.isNaN())
-            k = peak.rho;
-
-        return new Line(m, k);
+        return m;
     }
 
 
 
     /**
-     * Converts a Hough peak to a normal vector representing the Hough peak in
-     * 3D space. The normal is calculated from the position of the camera.
+     * Returns the intercept of the line in the image space represented by the
+     * specified Hough Peak.
+     * <p/>
+     * For vertical lines, the intercept along the x axis is returned (i.e.
+     * <code>b</code> in <code>x = b</code>).
      * 
      * @param peak
      *            a Hough peak
-     * @param cameraPosition
-     *            position of the camera in space
-     * @return normal vector representing the Hough peak
+     * @return slope of the line in the image space
      */
-    public static Vector3D houghSpaceToVectorNormal(HoughPeak peak,
-            Vector3D cameraPosition) {
-        Line3D line0 = HoughMath.houghSpaceToLine(peak).toLine3D(LinePlane.XZ);
+    public static Magnitude getIntercept(HoughPeak peak) {
+        Magnitude b;
 
-        return line0.vector.cross(line0.point.minus(cameraPosition)).normalize();
+        b = peak.rho.div(sin(peak.theta));
+        if (b.isInfinite() || b.isNaN())
+            b = peak.rho;
+
+        return b;
+    }
+
+
+
+    /**
+     * Returns a <code>Line2D</code> representing the Hough peak in the image
+     * space.
+     * 
+     * @param peak
+     *            a Hough peak
+     * @return a <code>Line2D</code> of the Hough peak
+     */
+    public static Line2D getLine(HoughPeak peak) {
+        return Line2D.fromSlopeIntercept(getSlope(peak), getIntercept(peak));
     }
 
 
@@ -147,19 +159,25 @@ public class HoughMath {
      *            intensity of the Hough peak
      * @return a hough peak
      */
-    public static HoughPeak lineSpaceToHoughSpace(Line line, double intensity) {
-        double rho;
-        double theta;
+    public static HoughPeak getHoughPeak(Line2D line, double intensity) {
+        Magnitude rho;
+        Magnitude theta;
 
-        if (Double.isInfinite(line.m)) {
-            theta = 0.0;
-            rho = line.k;
-        } else {
-            theta = PI / 2 + atan(line.m);
-            rho = line.k * sin(theta);
+        Magnitude m = line.getSlope();
+
+        if (Magnitude.isInfinite(m)) { // Vertical line
+            theta = new Magnitude(0.0, "rad");
+            rho = line.getInterceptX();
+        } else { // Any other line
+            // theta = -arccot(m) = PI / 2 + atan(m)
+            theta = PI.div(2.0).add(atan(m));
+
+            // rho = x*cos(theta) + y*sin(theta)
+            // if x == 0: rho = y*sin(theta)
+            rho = line.getInterceptY().multiply(sin(theta));
         }
 
-        return new HoughPeak(rho, theta, intensity);
+        return new HoughPeak(theta, rho, intensity);
     }
 
 
