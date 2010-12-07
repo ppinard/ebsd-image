@@ -115,8 +115,8 @@ public class LineOverlay extends PlugIn {
 
             if (source instanceof HoughMap) {
                 HoughMap houghMap = (HoughMap) source;
-                double r = houghMap.getR(x, y);
-                double theta = houghMap.getTheta(x, y);
+                double r = houghMap.getRho(x, y).getPreferredUnitsValue();
+                double theta = houghMap.getTheta(x, y).getValue("rad");
 
                 ByteMap destination = (ByteMap) destinationWindow.getMap();
                 Line2D line = Drawing.getLine(destination, r, theta);
@@ -127,7 +127,6 @@ public class LineOverlay extends PlugIn {
             }
 
         }
-
     }
 
     /**

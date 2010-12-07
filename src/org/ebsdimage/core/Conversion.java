@@ -18,18 +18,12 @@
 package org.ebsdimage.core;
 
 import static java.lang.Math.PI;
-import static org.ebsdimage.core.HoughMap.DELTA_R;
-import static org.ebsdimage.core.HoughMap.DELTA_THETA;
-
-import java.io.File;
-import java.util.Properties;
-
 import ptpshared.core.math.Eulers;
 import rmlimage.core.ByteMap;
+import rmlimage.core.Calibration;
 import rmlimage.core.Map;
 import rmlimage.core.RGBMap;
 import rmlimage.core.handler.ConversionHandler;
-import rmlshared.io.FileUtil;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 
 /**
@@ -127,61 +121,48 @@ public class Conversion implements ConversionHandler {
 
     /**
      * Converts the specified <code>ByteMap</code> to a <code>HoughMap</code>.
+     * The calibration (deltaTheta and deltaR) of the <code>HoughMap</code> are
+     * preserved.
      * <p/>
-     * The <code>ByteMap</code> must have the following properties set:
-     * <ul>
-     * <li>{@link HoughMap#DELTA_R}</li>
-     * <li>{@link HoughMap#DELTA_THETA}</li>
-     * </ul>
-     * <br/>
-     * Otherwise, an exception will be thrown.
+     * The calibration of the <code>ByteMap</code> must have the same units as
+     * deltaR of the <code>HoughMap</code>.
      * 
-     * @param byteMap
+     * @param src
      *            <code>ByteMap</code> to convert.
-     * @return the <code>HoughMap</code>.
+     * @param dest
+     *            destination <code>HoughMap</code>
      * @throws IllegalArgumentException
-     *             if any of the properties listed above are missing.
-     * @see Map#setProperty(String, double)
+     *             if the two maps don't have the same size
+     * @throws IllegalArgumentException
+     *             if the calibration of the <code>ByteMap</code> does not have
+     *             the same units as the deltaR of the <code>HoughMap</code>
      */
     // TODO: Fix toHoughMap with new HoughMap calibration
-    public static HoughMap toHoughMap(ByteMap byteMap) {
-        // Get the needed properties from the bytemap
-        double deltaR =
-                Double.longBitsToDouble(byteMap.getProperty(DELTA_R, -1L));
-        if (deltaR < 0)
-            throw new IllegalArgumentException("Incorrect value for property "
-                    + DELTA_R + " (" + deltaR + ").");
+    public static void toHoughMap(ByteMap src, HoughMap dest) {
+        // Validate maps' dimensions
+        rmlimage.core.Conversion.validate(src, dest);
 
-        double deltaTheta =
-                Double.longBitsToDouble(byteMap.getProperty(DELTA_THETA, -1L));
-        if (deltaTheta < 0)
-            throw new IllegalArgumentException("Incorrect value for property "
-                    + DELTA_THETA + " (" + deltaTheta + ").");
-
-        // Create the HoughMap
-        HoughMap houghMap =
-                new HoughMap(byteMap.width, byteMap.height, deltaR, deltaTheta);
+        // Validate units of calibration
+        if (!src.getCalibration().getDX().areSameUnits(dest.getDeltaTheta()))
+            throw new IllegalArgumentException("Units of the map ("
+                    + src.getCalibration().getDX().getBaseUnitsLabel()
+                    + ") must match the units of deltaTheta ("
+                    + dest.getDeltaRho().getBaseUnitsLabel() + ").");
+        if (!src.getCalibration().getDY().areSameUnits(dest.getDeltaRho()))
+            throw new IllegalArgumentException("Units of the map ("
+                    + src.getCalibration().getDY().getBaseUnitsLabel()
+                    + ") must match the units of deltaR ("
+                    + dest.getDeltaRho().getBaseUnitsLabel() + ").");
 
         // Copy the pixArray
-        System.arraycopy(byteMap.pixArray, 0, houghMap.pixArray, 0,
-                houghMap.size);
+        System.arraycopy(src.pixArray, 0, dest.pixArray, 0, dest.size);
 
-        // Save the ByteMap's properties to the new HoughMap
-        // except the one defining the HoughMap's parameters
-        // They were already set by the HoughMap constructor
-        Properties props = byteMap.getProperties();
-        props.remove(HoughMap.DELTA_R);
-        props.remove(HoughMap.DELTA_THETA);
-        houghMap.setProperties(props);
+        // Copy metadata except calibration
+        Calibration cal = dest.getCalibration();
+        dest.cloneMetadataFrom(src);
+        dest.setCalibration(cal);
 
-        // Set the HoughMap name to the same as the ByteMap with the
-        // suffix (HoughMap) added.
-        File file = byteMap.getFile();
-        file = FileUtil.append(file, "(HoughMap)");
-        file = FileUtil.setExtension(file, "bmp");
-        houghMap.setFile(file);
-
-        return houghMap;
+        dest.setChanged(Map.MAP_CHANGED);
     }
 
 

@@ -18,21 +18,19 @@
 package org.ebsdimage.io;
 
 import static java.lang.Math.PI;
-import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
 
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.Transform;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import rmlimage.core.ByteMap;
-import rmlshared.io.FileUtil;
 
-public class HoughMapSaverTest {
+public class HoughMapSaverTest extends TestCase {
 
     private File file;
 
@@ -42,33 +40,15 @@ public class HoughMapSaverTest {
 
     @Before
     public void setUp() throws Exception {
-        file = new File(FileUtil.getTempDirFile(), "houghmap.bmp");
+        file = new File(createTempDir(), "houghmap.bmp");
         saver = new HoughMapSaver();
-    }
-
-
-
-    @After
-    public void tearDown() throws Exception {
-        if (file.exists())
-            if (!file.delete())
-                throw new RuntimeException("File (" + file.getAbsolutePath()
-                        + ") could not be deleted.");
-
-        File propFile = FileUtil.setExtension(file, "prop");
-        if (propFile.exists())
-            if (!propFile.delete())
-                throw new RuntimeException("File ("
-                        + propFile.getAbsolutePath()
-                        + ") could not be deleted.");
     }
 
 
 
     @Test
     public void testSaveHoughMapFile() throws IOException {
-        ByteMap original =
-                (ByteMap) rmlimage.io.IO.load(FileUtil.getFile("org/ebsdimage/io/Lena.bmp"));
+        ByteMap original = (ByteMap) load("org/ebsdimage/io/Lena.bmp");
         HoughMap map = Transform.hough(original, 1.5 / 180 * PI);
 
         saver.save(map, file);
@@ -80,17 +60,7 @@ public class HoughMapSaverTest {
 
     private void testHoughMap(HoughMap map) throws IOException {
         HoughMap other = new HoughMapLoader().load(file);
-
-        assertEquals(other.width, map.width);
-        assertEquals(other.height, map.height);
-        assertEquals(other.size, map.size);
-
-        assertEquals(other.deltaR, map.deltaR, 1e-6);
-        assertEquals(other.deltaTheta, map.deltaTheta, 1e-6);
-        assertEquals(other.rMax, map.rMax, 1e-6);
-        assertEquals(other.rMin, map.rMin, 1e-6);
-        assertEquals(other.thetaMax, map.thetaMax, 1e-6);
-        assertEquals(other.thetaMin, map.thetaMin, 1e-6);
+        other.assertEquals(map);
     }
 
 }

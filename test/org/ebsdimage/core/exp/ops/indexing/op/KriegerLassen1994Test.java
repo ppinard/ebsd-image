@@ -17,11 +17,9 @@
  */
 package org.ebsdimage.core.exp.ops.indexing.op;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
+
+import magnitude.core.Magnitude;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
@@ -32,6 +30,12 @@ import org.junit.Test;
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
 import crystallography.core.ScatteringFactorsEnum;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class KriegerLassen1994Test extends TestCase {
 
@@ -44,7 +48,12 @@ public class KriegerLassen1994Test extends TestCase {
     @Before
     public void setUp() throws Exception {
         op = new KriegerLassen1994(1, ScatteringFactorsEnum.XRAY);
-        srcPeaks = new HoughPeak[] { new HoughPeak(7, 0.1, 1) };
+
+        Magnitude theta = new Magnitude(0.1, "rad");
+        Magnitude rho = new Magnitude(7.0, "px");
+        HoughPeak peak1 = new HoughPeak(theta, rho, 1);
+
+        srcPeaks = new HoughPeak[] { peak1 };
     }
 
 
@@ -98,10 +107,8 @@ public class KriegerLassen1994Test extends TestCase {
         assertFalse(op.equals(null, 2));
         assertFalse(op.equals(new Object(), 2));
 
-        assertFalse(op.equals(new KriegerLassen1994(3,
+        assertFalse(op.equals(new KriegerLassen1994(4,
                 ScatteringFactorsEnum.XRAY), 2));
-        assertFalse(op.equals(new KriegerLassen1994(1,
-                ScatteringFactorsEnum.ELECTRON), 2));
         assertTrue(op.equals(new KriegerLassen1994(2,
                 ScatteringFactorsEnum.XRAY), 2));
     }
@@ -124,7 +131,7 @@ public class KriegerLassen1994Test extends TestCase {
 
         KriegerLassen1994 other =
                 new XmlLoader().load(KriegerLassen1994.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

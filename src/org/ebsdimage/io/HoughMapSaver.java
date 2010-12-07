@@ -17,7 +17,7 @@
  */
 package org.ebsdimage.io;
 
-import static org.ebsdimage.core.HoughMap.*;
+import static org.ebsdimage.core.HoughMap.FILE_HEADER;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,14 +35,9 @@ import rmlimage.io.BasicBmpSaver;
  */
 public class HoughMapSaver extends BasicBmpSaver {
 
-    /** Progress value. */
-    private double progress = 0;
-
-
-
     @Override
-    public double getTaskProgress() {
-        return progress;
+    public boolean canSave(Object obj) {
+        return obj instanceof HoughMap;
     }
 
 
@@ -78,12 +73,6 @@ public class HoughMapSaver extends BasicBmpSaver {
         // Save ByteMap
         super.save(map, file);
 
-        // Ensures that the needed properties are present and valid
-        map.setProperty(WIDTH, map.width);
-        map.setProperty(HEIGHT, map.height);
-        map.setProperty(DELTA_R, map.deltaR);
-        map.setProperty(DELTA_THETA, map.deltaTheta);
-
         // Write the property file with the specified header
         saveProperties(map, file, FILE_HEADER);
 
@@ -99,11 +88,7 @@ public class HoughMapSaver extends BasicBmpSaver {
      */
     @Override
     public void save(Object map, File file) throws IOException {
-        if (map instanceof HoughMap)
-            save((HoughMap) map, file);
-        else
-            throw new IllegalArgumentException("Invalid map type: "
-                    + map.getClass().getName());
+        save((HoughMap) map, file);
     }
 
 }

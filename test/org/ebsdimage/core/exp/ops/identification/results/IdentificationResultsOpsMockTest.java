@@ -17,11 +17,9 @@
  */
 package org.ebsdimage.core.exp.ops.identification.results;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
+
+import magnitude.core.Magnitude;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
@@ -31,6 +29,12 @@ import org.junit.Test;
 
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class IdentificationResultsOpsMockTest extends TestCase {
 
@@ -44,9 +48,19 @@ public class IdentificationResultsOpsMockTest extends TestCase {
     public void setUp() throws Exception {
         op = new IdentificationResultsOpsMock();
 
-        srcPeaks =
-                new HoughPeak[] { new HoughPeak(14.0, 0.0),
-                        new HoughPeak(22.0, 1.0), new HoughPeak(30.0, 0.0) };
+        Magnitude theta = new Magnitude(0.0, "rad");
+        Magnitude rho = new Magnitude(14.0, "px");
+        HoughPeak peak1 = new HoughPeak(theta, rho);
+
+        theta = new Magnitude(1.0, "rad");
+        rho = new Magnitude(22.0, "px");
+        HoughPeak peak2 = new HoughPeak(theta, rho);
+
+        theta = new Magnitude(0.0, "rad");
+        rho = new Magnitude(30.0, "px");
+        HoughPeak peak3 = new HoughPeak(theta, rho);
+
+        srcPeaks = new HoughPeak[] { peak1, peak2, peak3 };
     }
 
 
@@ -97,7 +111,7 @@ public class IdentificationResultsOpsMockTest extends TestCase {
 
         IdentificationResultsOpsMock other =
                 new XmlLoader().load(IdentificationResultsOpsMock.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

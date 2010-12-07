@@ -19,12 +19,11 @@ package ptpshared.core.math;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
+import junittools.core.AlmostEquable;
 import net.jcip.annotations.Immutable;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
-
-import ptpshared.util.AlmostEquable;
 
 /**
  * Represents a rotation using set of 3 Euler angles (in radians) as defined by
@@ -162,11 +161,12 @@ public class Eulers implements AlmostEquable, Cloneable {
      *             if the precision is not a number (NaN)
      */
     @Override
-    public boolean equals(Object obj, double precision) {
-        if (precision < 0)
+    public boolean equals(Object obj, Object precision) {
+        double delta = ((Number) precision).doubleValue();
+        if (delta < 0)
             throw new IllegalArgumentException(
                     "The precision has to be greater or equal to 0.0.");
-        if (Double.isNaN(precision))
+        if (Double.isNaN(delta))
             throw new IllegalArgumentException(
                     "The precision must be a number.");
 
@@ -178,11 +178,11 @@ public class Eulers implements AlmostEquable, Cloneable {
             return false;
 
         Eulers other = (Eulers) obj;
-        if (abs(theta1 - other.theta1) >= precision)
+        if (abs(theta1 - other.theta1) > delta)
             return false;
-        if (abs(theta2 - other.theta2) >= precision)
+        if (abs(theta2 - other.theta2) > delta)
             return false;
-        if (abs(theta3 - other.theta3) >= precision)
+        if (abs(theta3 - other.theta3) > delta)
             return false;
 
         return true;

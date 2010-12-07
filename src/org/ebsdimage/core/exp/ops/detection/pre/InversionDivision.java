@@ -69,7 +69,8 @@ public class InversionDivision extends DetectionPreOps {
         // Put srcMap properties in dividedMap
         divisionMap.setProperties(srcMap);
 
-        HoughMap destMap = Conversion.toHoughMap(divisionMap);
+        HoughMap destMap = srcMap.duplicate();
+        Conversion.toHoughMap(divisionMap, destMap);
 
         return destMap;
     }

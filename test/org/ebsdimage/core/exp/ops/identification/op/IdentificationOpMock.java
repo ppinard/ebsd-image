@@ -17,6 +17,8 @@
  */
 package org.ebsdimage.core.exp.ops.identification.op;
 
+import magnitude.core.Magnitude;
+
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.Exp;
@@ -33,8 +35,8 @@ public class IdentificationOpMock extends IdentificationOp {
 
         for (int i = 0; i < peaksMap.height; i++)
             peaks[i] =
-                    new HoughPeak(houghMap.pixArray[i] / 100.0,
-                            peaksMap.pixArray[i]);
+                    new HoughPeak(new Magnitude(peaksMap.pixArray[i], "rad"),
+                            new Magnitude(houghMap.pixArray[i] / 100.0, "px"));
 
         return peaks;
     }

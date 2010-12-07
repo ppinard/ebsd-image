@@ -28,7 +28,6 @@ public class Init extends rmlimage.module.Init {
     public void preGUI() {
         if (rmlimage.module.Module.DEBUG)
             System.out.println("Running preGUI init of the EBSD module");
-        rmlimage.io.IO.addHandler(org.ebsdimage.vendors.hkl.io.IO.class);
     }
 
 

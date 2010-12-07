@@ -17,6 +17,8 @@
  */
 package org.ebsdimage.core.exp.ops.indexing.pre;
 
+import magnitude.core.Magnitude;
+
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.Exp;
 
@@ -26,9 +28,10 @@ public class IndexingPreOpsMock extends IndexingPreOps {
     public HoughPeak[] process(Exp exp, HoughPeak[] srcPeaks) {
         HoughPeak[] destPeaks = new HoughPeak[srcPeaks.length];
 
+        Magnitude term = new Magnitude(1, srcPeaks[0].rho);
         for (int i = 0; i < srcPeaks.length; i++)
             destPeaks[i] =
-                    new HoughPeak(srcPeaks[i].rho + 1, srcPeaks[i].theta);
+                    new HoughPeak(srcPeaks[i].theta, srcPeaks[i].rho.add(term));
 
         return destPeaks;
     }

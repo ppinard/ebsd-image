@@ -17,10 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.identification.results;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
 import org.ebsdimage.TestCase;
@@ -29,6 +25,12 @@ import org.junit.Test;
 
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class PatternQualityTest extends TestCase {
 
@@ -85,7 +87,7 @@ public class PatternQualityTest extends TestCase {
         new XmlSaver().save(op, file);
 
         PatternQuality other = new XmlLoader().load(PatternQuality.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

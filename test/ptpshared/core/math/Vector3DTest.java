@@ -17,11 +17,6 @@
  */
 package ptpshared.core.math;
 
-import static java.lang.Math.sqrt;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
 import org.ebsdimage.TestCase;
@@ -30,6 +25,14 @@ import org.junit.Test;
 
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static java.lang.Math.sqrt;
+
+import static junittools.test.Assert.assertEquals;
 
 public class Vector3DTest extends TestCase {
 
@@ -49,7 +52,7 @@ public class Vector3DTest extends TestCase {
     @Test
     public void testClear() {
         u.clear();
-        assertAlmostEquals(u, new Vector3D(0, 0, 0), 1e-7);
+        assertEquals(u, new Vector3D(0, 0, 0), 1e-7);
     }
 
 
@@ -57,7 +60,7 @@ public class Vector3DTest extends TestCase {
     @Test
     public void testClone() {
         Vector3D other = u.clone();
-        assertAlmostEquals(u, other, 1e-7);
+        assertEquals(u, other, 1e-7);
     }
 
 
@@ -310,6 +313,6 @@ public class Vector3DTest extends TestCase {
 
         // Read
         Vector3D other = new XmlLoader().load(Vector3D.class, tmpFile);
-        assertAlmostEquals(u, other, 1e-6);
+        assertEquals(u, other, 1e-6);
     }
 }

@@ -60,12 +60,13 @@ public class ShapeFactor extends DetectionPostOps {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
 
+        double delta = ((Number) precision).doubleValue();
         ShapeFactor other = (ShapeFactor) obj;
-        if (abs(aspectRatio - other.aspectRatio) >= precision)
+        if (abs(aspectRatio - other.aspectRatio) > delta)
             return false;
 
         return true;

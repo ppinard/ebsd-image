@@ -72,14 +72,15 @@ public class HoughPeaksSelector extends IndexingPreOps {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
 
+        double delta = ((Number) precision).doubleValue();
         HoughPeaksSelector other = (HoughPeaksSelector) obj;
-        if (Math.abs(max - other.max) >= precision)
+        if (Math.abs(max - other.max) > delta)
             return false;
-        if (Math.abs(min - other.min) >= precision)
+        if (Math.abs(min - other.min) > delta)
             return false;
 
         return true;

@@ -17,12 +17,10 @@
  */
 package org.ebsdimage.core;
 
-import static java.lang.Math.toRadians;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 import java.util.logging.Logger;
+
+import magnitude.core.Magnitude;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.io.HoughMapLoader;
@@ -32,6 +30,11 @@ import rmlimage.core.ByteMap;
 import rmlimage.core.ROI;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import static java.lang.Math.toRadians;
 
 public class EditTest extends TestCase {
 
@@ -75,11 +78,12 @@ public class EditTest extends TestCase {
         HoughMap houghMap =
                 new HoughMapLoader().load(getFile("org/ebsdimage/testdata/houghmap.bmp"));
 
-        HoughMap croppedMap = Edit.crop(houghMap, 50.0);
+        HoughMap croppedMap = Edit.crop(houghMap, new Magnitude(50.0, "px"));
         assertEquals(houghMap.width, croppedMap.width);
         assertEquals(55, croppedMap.height);
-        assertEquals(50.80506, croppedMap.rMax, 0.001);
-        assertEquals(houghMap.deltaR, croppedMap.deltaR, 0.001);
+        assertEquals(50.80506, croppedMap.rhoMax.getValue("px"), 0.001);
+        assertTrue(houghMap.getDeltaRho().equals(croppedMap.getDeltaRho(),
+                0.001));
 
         ByteMap expected =
                 (ByteMap) load("org/ebsdimage/testdata/houghmap_cropped.bmp");
@@ -95,11 +99,14 @@ public class EditTest extends TestCase {
                 (ByteMap) load("org/ebsdimage/testdata/pattern_masked.bmp");
         HoughMap houghMap = Transform.hough(pattern, toRadians(0.5));
 
-        for (int i = 1; i <= (int) houghMap.rMax; i++) {
+        for (int i = 1; i <= (int) houghMap.rhoMax.getValue("px"); i++) {
             Logger.getLogger("ebsd").info("Cropping radius: " + i);
-            HoughMap croppedMap = Edit.crop(houghMap, i);
-            assertEquals(houghMap.deltaR, croppedMap.deltaR, 1e-6);
-            assertEquals(houghMap.deltaTheta, croppedMap.deltaTheta, 1e-6);
+            HoughMap croppedMap = Edit.crop(houghMap, new Magnitude(i, "px"));
+
+            assertTrue(houghMap.getDeltaRho().equals(croppedMap.getDeltaRho(),
+                    1e-6));
+            assertTrue(houghMap.getDeltaTheta().equals(
+                    croppedMap.getDeltaTheta(), 1e-6));
         }
     }
 

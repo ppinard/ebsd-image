@@ -19,6 +19,7 @@ package org.ebsdimage.core;
 
 import java.util.ArrayList;
 
+import magnitude.core.Magnitude;
 import rmlimage.core.Map;
 import rmlimage.core.ROI;
 import rmlimage.core.handler.EditHandler;
@@ -144,29 +145,29 @@ public class Edit implements EditHandler {
      *             <code>rMax</code> of <code>map</code>.
      * @throws NullPointerException
      *             if the Hough map is null
-     * @see HoughMap#rMax
+     * @see HoughMap#rhoMax
      */
     @CheckReturnValue
-    public static HoughMap crop(HoughMap map, double r) {
+    public static HoughMap crop(HoughMap map, Magnitude r) {
         if (map == null)
             throw new NullPointerException("Hough map cannot be null.");
 
-        if (r <= 0)
+        if (r.getBaseUnitsValue() <= 0)
             throw new IllegalArgumentException("r (" + r + ") must be > 0.");
 
-        if (r > map.rMax)
+        if (r.compareTo(map.rhoMax) > 0)
             throw new IllegalArgumentException("r (" + r
-                    + ") must be <= rMax of " + map.getName() + " (" + map.rMax
-                    + ").");
+                    + ") must be <= rMax of " + map.getName() + " ("
+                    + map.rhoMax + ").");
 
         // Get the cropping coordinates
         int yMin = map.getY(r);
-        int yMax = map.getY(-r);
+        int yMax = map.getY(r.multiply(-1));
 
         // Create the new HoughMap
         HoughMap croppedMap =
-                new HoughMap(map.width, yMax - yMin + 1, map.deltaR,
-                        map.deltaTheta);
+                new HoughMap(map.width, yMax - yMin + 1, map.getDeltaTheta(),
+                        map.getDeltaRho());
 
         // Calculate the cropping roi
         ROI roi = new ROI(0, yMin, map.width - 1, yMax);

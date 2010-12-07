@@ -17,10 +17,7 @@
  */
 package org.ebsdimage;
 
-import org.ebsdimage.io.ErrorMapLoader;
-import org.ebsdimage.io.ErrorMapSaver;
-import org.ebsdimage.io.PhasesMapLoader;
-import org.ebsdimage.io.PhasesMapSaver;
+import org.ebsdimage.io.*;
 
 import rmlimage.RMLImage;
 
@@ -42,10 +39,12 @@ public class Init extends rmlimage.module.Init {
         // Loader
         rmlimage.io.IO.addLoader(PhasesMapLoader.class);
         rmlimage.io.IO.addLoader(ErrorMapLoader.class);
+        rmlimage.io.IO.addLoader(HoughMapLoader.class);
 
         // Saver
         rmlimage.io.IO.addSaver(PhasesMapSaver.class);
         rmlimage.io.IO.addSaver(ErrorMapSaver.class);
+        rmlimage.io.IO.addSaver(HoughMapSaver.class);
 
         // Edit
         rmlimage.core.Edit.addHandler(org.ebsdimage.core.Edit.class);

@@ -17,10 +17,6 @@
  */
 package org.ebsdimage.core.sim.ops.output;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -48,6 +44,12 @@ import rmlimage.module.real.core.RealMap;
 import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class ExpMMapSmpFileTest extends TestCase {
 
@@ -93,6 +95,7 @@ public class ExpMMapSmpFileTest extends TestCase {
 
 
 
+    @Override
     @After
     public void tearDown() throws Exception {
         FileUtil.rmdir(tmpPath);
@@ -245,7 +248,7 @@ public class ExpMMapSmpFileTest extends TestCase {
         new XmlSaver().save(op, file);
 
         ExpMMapSmpFile other = new XmlLoader().load(ExpMMapSmpFile.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

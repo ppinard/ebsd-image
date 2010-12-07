@@ -1,10 +1,7 @@
 package org.ebsdimage.core.exp.ops.identification.op;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
+import java.util.Arrays;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughMap;
@@ -21,6 +18,12 @@ import rmlimage.core.IdentMap;
 import rmlimage.core.Identification;
 import rmlimage.core.MapMath;
 import rmlshared.io.FileUtil;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class LocalCentroidTest extends TestCase {
 
@@ -68,19 +71,24 @@ public class LocalCentroidTest extends TestCase {
 
         assertEquals(3, destPeaks.length);
 
+        System.out.println(Arrays.toString(destPeaks));
+
         // Peak 1
-        assertEquals(48.92339324951172, destPeaks[0].rho, 1e-6);
-        assertEquals(2.670353651046753, destPeaks[0].theta, 1e-6);
+        assertEquals(48.92339324951172, destPeaks[0].rho.getValue("px"), 1e-6);
+        assertEquals(2.670353651046753, destPeaks[0].theta.getValue("rad"),
+                1e-6);
         assertEquals(142.0, destPeaks[0].intensity, 1e-6);
 
         // Peak 2
-        assertEquals(37.63337707519531, destPeaks[1].rho, 1e-6);
-        assertEquals(2.1991147994995117, destPeaks[1].theta, 1e-6);
+        assertEquals(37.63337707519531, destPeaks[1].rho.getValue("px"), 1e-6);
+        assertEquals(2.1991147994995117, destPeaks[1].theta.getValue("rad"),
+                1e-6);
         assertEquals(125.0, destPeaks[1].intensity, 1e-6);
 
         // Peak 3
-        assertEquals(30.10670280456543, destPeaks[2].rho, 1e-6);
-        assertEquals(0.5410520434379578, destPeaks[2].theta, 1e-6);
+        assertEquals(30.10670280456543, destPeaks[2].rho.getValue("px"), 1e-6);
+        assertEquals(0.5410520434379578, destPeaks[2].theta.getValue("rad"),
+                1e-6);
         assertEquals(121.0, destPeaks[2].intensity, 1e-6);
     }
 
@@ -121,6 +129,6 @@ public class LocalCentroidTest extends TestCase {
         new XmlSaver().save(op, file);
 
         LocalCentroid other = new XmlLoader().load(LocalCentroid.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 }

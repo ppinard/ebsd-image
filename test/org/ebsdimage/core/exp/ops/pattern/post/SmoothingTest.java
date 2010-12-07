@@ -17,10 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.pattern.post;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
 import org.ebsdimage.TestCase;
@@ -30,6 +26,12 @@ import org.junit.Test;
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.ByteMap;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class SmoothingTest extends TestCase {
 
@@ -124,7 +126,7 @@ public class SmoothingTest extends TestCase {
         new XmlSaver().save(op, file);
 
         Smoothing other = new XmlLoader().load(Smoothing.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

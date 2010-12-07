@@ -17,15 +17,18 @@
  */
 package ptpshared.core.math;
 
-import static java.lang.Math.sqrt;
+import org.ebsdimage.TestCase;
+import org.junit.Before;
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
-import org.ebsdimage.TestCase;
-import org.junit.Before;
-import org.junit.Test;
+import static java.lang.Math.sqrt;
+
+import static junittools.test.Assert.assertEquals;
 
 public class VectorTest extends TestCase {
 
@@ -57,7 +60,7 @@ public class VectorTest extends TestCase {
     @Test
     public void testClone() {
         Vector other = x.clone();
-        assertAlmostEquals(x, other, 1e-6);
+        assertEquals(x, other, 1e-6);
     }
 
 

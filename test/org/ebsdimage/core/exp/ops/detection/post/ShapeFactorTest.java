@@ -17,10 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.detection.post;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
 import org.ebsdimage.TestCase;
@@ -31,6 +27,12 @@ import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.BinMap;
 import rmlimage.core.Identification;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class ShapeFactorTest extends TestCase {
 
@@ -111,7 +113,7 @@ public class ShapeFactorTest extends TestCase {
         new XmlSaver().save(op, file);
 
         ShapeFactor other = new XmlLoader().load(ShapeFactor.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

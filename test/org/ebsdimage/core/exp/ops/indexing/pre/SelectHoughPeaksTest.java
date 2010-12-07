@@ -17,11 +17,9 @@
  */
 package org.ebsdimage.core.exp.ops.indexing.pre;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
+
+import magnitude.core.Magnitude;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
@@ -30,7 +28,13 @@ import org.junit.Test;
 
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
-import rmlshared.util.Arrays;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertContains;
+import static junittools.test.Assert.assertEquals;
 
 public class SelectHoughPeaksTest extends TestCase {
 
@@ -38,16 +42,45 @@ public class SelectHoughPeaksTest extends TestCase {
 
     private HoughPeak[] srcPeaks;
 
+    private HoughPeak peak1, peak2, peak3, peak4, peak5, peak6, peak7;
+
 
 
     @Before
     public void setUp() throws Exception {
         op = new HoughPeaksSelector(4, 6);
+
+        Magnitude theta = new Magnitude(0.1, "rad");
+        Magnitude rho = new Magnitude(7.0, "px");
+        peak1 = new HoughPeak(theta, rho, 3);
+
+        theta = new Magnitude(0.2, "rad");
+        rho = new Magnitude(6.0, "px");
+        peak2 = new HoughPeak(theta, rho, 6);
+
+        theta = new Magnitude(0.3, "rad");
+        rho = new Magnitude(5.0, "px");
+        peak3 = new HoughPeak(theta, rho, 4);
+
+        theta = new Magnitude(0.4, "rad");
+        rho = new Magnitude(4.0, "px");
+        peak4 = new HoughPeak(theta, rho, 7);
+
+        theta = new Magnitude(0.5, "rad");
+        rho = new Magnitude(3.0, "px");
+        peak5 = new HoughPeak(theta, rho, 2);
+
+        theta = new Magnitude(0.6, "rad");
+        rho = new Magnitude(2.0, "px");
+        peak6 = new HoughPeak(theta, rho, 5);
+
+        theta = new Magnitude(0.7, "rad");
+        rho = new Magnitude(1.0, "px");
+        peak7 = new HoughPeak(theta, rho, 1);
+
         srcPeaks =
-                new HoughPeak[] { new HoughPeak(7, 0.1, 3),
-                        new HoughPeak(6, 0.2, 6), new HoughPeak(5, 0.3, 4),
-                        new HoughPeak(4, 0.4, 7), new HoughPeak(3, 0.5, 2),
-                        new HoughPeak(2, 0.6, 5), new HoughPeak(1, 0.7, 1) };
+                new HoughPeak[] { peak1, peak2, peak3, peak4, peak5, peak6,
+                        peak7 };
     }
 
 
@@ -57,12 +90,12 @@ public class SelectHoughPeaksTest extends TestCase {
         HoughPeak[] destPeaks = op.process(null, srcPeaks);
 
         assertEquals(6, destPeaks.length);
-        assertTrue(Arrays.contains(destPeaks, new HoughPeak(4, 0.4, 7)));
-        assertTrue(Arrays.contains(destPeaks, new HoughPeak(6, 0.2, 6)));
-        assertTrue(Arrays.contains(destPeaks, new HoughPeak(2, 0.6, 5)));
-        assertTrue(Arrays.contains(destPeaks, new HoughPeak(5, 0.3, 4)));
-        assertTrue(Arrays.contains(destPeaks, new HoughPeak(7, 0.1, 3)));
-        assertTrue(Arrays.contains(destPeaks, new HoughPeak(3, 0.5, 2)));
+        assertContains(peak1, destPeaks);
+        assertContains(peak2, destPeaks);
+        assertContains(peak3, destPeaks);
+        assertContains(peak4, destPeaks);
+        assertContains(peak5, destPeaks);
+        assertContains(peak6, destPeaks);
     }
 
 
@@ -70,26 +103,22 @@ public class SelectHoughPeaksTest extends TestCase {
     @Test
     public void testProcess2() {
         HoughPeak[] otherPeaks =
-                new HoughPeak[] { new HoughPeak(7, 0.1, 3),
-                        new HoughPeak(6, 0.2, 6), new HoughPeak(5, 0.3, 4),
-                        new HoughPeak(4, 0.4, 1), new HoughPeak(3, 0.5, 2) };
+                new HoughPeak[] { peak1, peak2, peak3, peak4, peak5 };
         HoughPeak[] destPeaks = op.process(null, otherPeaks);
 
         assertEquals(5, destPeaks.length);
-        assertTrue(Arrays.contains(destPeaks, new HoughPeak(6, 0.2, 6)));
-        assertTrue(Arrays.contains(destPeaks, new HoughPeak(5, 0.3, 4)));
-        assertTrue(Arrays.contains(destPeaks, new HoughPeak(7, 0.1, 3)));
-        assertTrue(Arrays.contains(destPeaks, new HoughPeak(3, 0.5, 2)));
-        assertTrue(Arrays.contains(destPeaks, new HoughPeak(4, 0.4, 1)));
+        assertContains(peak1, destPeaks);
+        assertContains(peak2, destPeaks);
+        assertContains(peak3, destPeaks);
+        assertContains(peak4, destPeaks);
+        assertContains(peak5, destPeaks);
     }
 
 
 
     @Test
     public void testProcess3() {
-        HoughPeak[] otherPeaks =
-                new HoughPeak[] { new HoughPeak(7, 0.1, 3),
-                        new HoughPeak(6, 0.2, 6), new HoughPeak(5, 0.3, 4) };
+        HoughPeak[] otherPeaks = new HoughPeak[] { peak1, peak2, peak3 };
         HoughPeak[] destPeaks = op.process(null, otherPeaks);
 
         assertEquals(0, destPeaks.length);
@@ -153,8 +182,8 @@ public class SelectHoughPeaksTest extends TestCase {
         assertFalse(op.equals(null, 2));
         assertFalse(op.equals(new Object(), 2));
 
-        assertFalse(op.equals(new HoughPeaksSelector(6, 6), 2));
-        assertFalse(op.equals(new HoughPeaksSelector(4, 8), 2));
+        assertFalse(op.equals(new HoughPeaksSelector(7, 7), 2));
+        assertFalse(op.equals(new HoughPeaksSelector(4, 9), 2));
         assertTrue(op.equals(new HoughPeaksSelector(3, 5), 2));
     }
 
@@ -174,7 +203,7 @@ public class SelectHoughPeaksTest extends TestCase {
 
         HoughPeaksSelector other =
                 new XmlLoader().load(HoughPeaksSelector.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

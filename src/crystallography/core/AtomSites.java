@@ -20,7 +20,7 @@ package crystallography.core;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import ptpshared.util.AlmostEquable;
+import junittools.core.AlmostEquable;
 
 /**
  * List of all the atom sites of an unit cell. The object is an
@@ -173,7 +173,7 @@ public class AtomSites extends ArrayList<AtomSite> implements AlmostEquable {
      * @throws IllegalArgumentException
      *             if the precision is not a number (NaN)
      */
-    public boolean contains(AtomSite atom, double precision) {
+    public boolean contains(AtomSite atom, Object precision) {
         return indexOf(atom, precision) >= 0;
     }
 
@@ -195,14 +195,7 @@ public class AtomSites extends ArrayList<AtomSite> implements AlmostEquable {
      *             if the precision is not a number (NaN)
      */
     @Override
-    public boolean equals(Object obj, double precision) {
-        if (precision < 0)
-            throw new IllegalArgumentException(
-                    "The precision has to be greater or equal to 0.0.");
-        if (Double.isNaN(precision))
-            throw new IllegalArgumentException(
-                    "The precision must be a number.");
-
+    public boolean equals(Object obj, Object precision) {
         if (obj == this)
             return true;
         if (obj == null)
@@ -243,14 +236,7 @@ public class AtomSites extends ArrayList<AtomSite> implements AlmostEquable {
      * @throws IllegalArgumentException
      *             if the precision is not a number (NaN)
      */
-    public int indexOf(AtomSite atom, double precision) {
-        if (precision < 0)
-            throw new IllegalArgumentException(
-                    "The precision has to be greater or equal to 0.0.");
-        if (Double.isNaN(precision))
-            throw new IllegalArgumentException(
-                    "The precision must be a number.");
-
+    public int indexOf(AtomSite atom, Object precision) {
         if (atom == null) {
             for (int i = 0; i < size(); i++)
                 if (get(i) == null)

@@ -7,6 +7,8 @@ import static java.lang.Math.sqrt;
 import java.io.File;
 import java.io.IOException;
 
+import magnitude.core.Magnitude;
+
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughMath;
 import org.ebsdimage.core.HoughPeak;
@@ -80,25 +82,26 @@ public class SimHoughMap extends OutputOps {
 
         Arrays.sort(peaks, new HoughPeakIntensityComparator(), true);
 
-        double rMax = ceil(sqrt(pow(width, 2) + pow(height, 2)) / 2);
-        HoughMap houghMap = new HoughMap(rMax, deltaRho, deltaTheta);
+        double rhoMax = ceil(sqrt(pow(width, 2) + pow(height, 2)) / 2);
+        HoughMap houghMap = new HoughMap(deltaTheta, deltaRho, rhoMax);
 
         double thresholdIntensity = peaks[count - 1].intensity;
 
         int index;
-        double rho;
-        double theta;
+        Magnitude rho;
+        Magnitude theta;
         for (HoughPeak peak : peaks) {
-            rho = peak.rho * width;
+            rho = peak.rho;
             theta = peak.theta;
 
             if (peak.intensity < thresholdIntensity)
                 break;
 
-            if (rho > houghMap.rMax || rho < houghMap.rMin)
+            if (rho.compareTo(houghMap.getRhoMax()) > 0
+                    || rho.compareTo(houghMap.getRhoMin()) < 0)
                 continue;
-
-            if (theta > houghMap.thetaMax || theta < houghMap.thetaMin)
+            if (theta.compareTo(houghMap.getThetaMax()) > 0
+                    || theta.compareTo(houghMap.getThetaMin()) < 0)
                 continue;
 
             index = houghMap.getIndex(rho, theta);

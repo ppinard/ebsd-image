@@ -17,11 +17,9 @@
  */
 package org.ebsdimage.core.exp.ops.identification.results;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
+
+import magnitude.core.Magnitude;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
@@ -31,6 +29,12 @@ import org.junit.Test;
 
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class SumTest extends TestCase {
 
@@ -43,9 +47,20 @@ public class SumTest extends TestCase {
     @Before
     public void setUp() throws Exception {
         op = new Sum(2);
-        peaks =
-                new HoughPeak[] { new HoughPeak(3.0, 0.5, 1),
-                        new HoughPeak(5.0, 1.5, 2), new HoughPeak(7.0, 2.5, 4) };
+
+        Magnitude theta = new Magnitude(0.5, "rad");
+        Magnitude rho = new Magnitude(3.0, "px");
+        HoughPeak peak1 = new HoughPeak(theta, rho, 1);
+
+        theta = new Magnitude(1.5, "rad");
+        rho = new Magnitude(5.0, "px");
+        HoughPeak peak2 = new HoughPeak(theta, rho, 2);
+
+        theta = new Magnitude(2.5, "rad");
+        rho = new Magnitude(7.0, "px");
+        HoughPeak peak3 = new HoughPeak(theta, rho, 4);
+
+        peaks = new HoughPeak[] { peak1, peak2, peak3 };
     }
 
 
@@ -95,7 +110,7 @@ public class SumTest extends TestCase {
         assertFalse(op.equals(null, 2));
         assertFalse(op.equals(new Object(), 2));
 
-        assertFalse(op.equals(new Sum(4), 2));
+        assertFalse(op.equals(new Sum(5), 2));
         assertTrue(op.equals(new Sum(1), 2));
     }
 
@@ -114,7 +129,7 @@ public class SumTest extends TestCase {
         new XmlSaver().save(op, file);
 
         Sum other = new XmlLoader().load(Sum.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

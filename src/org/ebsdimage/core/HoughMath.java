@@ -17,10 +17,9 @@
  */
 package org.ebsdimage.core;
 
-import static java.lang.Math.PI;
-import static java.lang.Math.atan;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
+import static magnitude.core.Math.cos;
+import static magnitude.core.Math.sin;
+import magnitude.core.Magnitude;
 
 import org.ebsdimage.core.sim.Band;
 
@@ -58,16 +57,25 @@ public class HoughMath {
 
         double[] distances = new double[peaks1.length];
 
+        double tmpTheta;
+        Magnitude tmpThetaMag;
+        double tmpRho;
+        Magnitude tmpRhoMag;
         for (int i = 0; i < peaks1.length; i++) {
             HoughPeak peak1 = peaks1[i];
             double distance = Double.POSITIVE_INFINITY;
 
-            for (HoughPeak peak2 : peaks2)
-                distance =
-                        Math.min(
-                                distance,
-                                Math.pow(peak1.theta - peak2.theta, 2)
-                                        + Math.pow(peak1.rho - peak2.rho, 2));
+            for (HoughPeak peak2 : peaks2) {
+                // (peak1.theta - peak2.theta)^2
+                tmpThetaMag = peak1.theta.minus(peak2.theta).power(2);
+                tmpTheta = tmpThetaMag.getPreferredUnitsValue();
+
+                // (peak1.rho - peak2.rho)^2
+                tmpRhoMag = peak1.rho.minus(peak2.rho).power(2);
+                tmpRho = tmpRhoMag.getPreferredUnitsValue();
+
+                distance = Math.min(distance, tmpTheta + tmpRho);
+            }
 
             distances[i] = distance;
         }
@@ -90,14 +98,16 @@ public class HoughMath {
      */
     public static Line houghSpaceToLine(HoughPeak peak) {
         double m;
-        double k;
+        Magnitude k;
 
-        m = -cos(peak.theta) / sin(peak.theta);
+        // -cos(theta) / sin(theta)
+        // unitless by definition
+        m = cos(peak.theta).multiply(-1).div(sin(peak.theta)).getValue("");
         if (Double.isInfinite(m))
             m = Double.POSITIVE_INFINITY;
 
-        k = peak.rho / sin(peak.theta);
-        if (Double.isInfinite(k) || Double.isNaN(k))
+        k = peak.rho.div(sin(peak.theta));
+        if (k.isInfinite() || k.isNaN())
             k = peak.rho;
 
         return new Line(m, k);
@@ -120,7 +130,6 @@ public class HoughMath {
         Line3D line0 = HoughMath.houghSpaceToLine(peak).toLine3D(LinePlane.XZ);
 
         return line0.vector.cross(line0.point.minus(cameraPosition)).normalize();
-
     }
 
 

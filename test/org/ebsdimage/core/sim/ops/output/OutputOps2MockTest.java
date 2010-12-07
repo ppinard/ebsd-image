@@ -17,10 +17,6 @@
  */
 package org.ebsdimage.core.sim.ops.output;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -32,6 +28,12 @@ import org.junit.Test;
 
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class OutputOps2MockTest extends TestCase {
 
@@ -92,7 +94,7 @@ public class OutputOps2MockTest extends TestCase {
         new XmlSaver().save(op, file);
 
         OutputOps2Mock other = new XmlLoader().load(OutputOps2Mock.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

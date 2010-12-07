@@ -17,11 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.hough.op;
 
-import static java.lang.Math.toRadians;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -35,6 +30,14 @@ import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.ByteMap;
 import rmlshared.io.FileUtil;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static java.lang.Math.toRadians;
+
+import static junittools.test.Assert.assertEquals;
 
 public class AutoHoughTransformTest extends TestCase {
 
@@ -130,6 +133,6 @@ public class AutoHoughTransformTest extends TestCase {
 
         AutoHoughTransform other =
                 new XmlLoader().load(AutoHoughTransform.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 }

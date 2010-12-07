@@ -17,11 +17,6 @@
  */
 package ptpshared.core.math;
 
-import static java.lang.Math.sqrt;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
 import org.ebsdimage.TestCase;
@@ -30,6 +25,14 @@ import org.junit.Test;
 
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static java.lang.Math.sqrt;
+
+import static junittools.test.Assert.assertEquals;
 
 public class AxisAngleTest extends TestCase {
 
@@ -159,6 +162,6 @@ public class AxisAngleTest extends TestCase {
 
         // Read
         AxisAngle other = new XmlLoader().load(AxisAngle.class, tmpFile);
-        assertAlmostEquals(axisAngle1, other, 1e-6);
+        assertEquals(axisAngle1, other, 1e-6);
     }
 }

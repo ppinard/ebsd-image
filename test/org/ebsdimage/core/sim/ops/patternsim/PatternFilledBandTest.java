@@ -17,10 +17,6 @@
  */
 package org.ebsdimage.core.sim.ops.patternsim;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
 import org.ebsdimage.TestCase;
@@ -37,6 +33,12 @@ import rmlimage.module.real.core.RealMap;
 import crystallography.core.CrystalFactory;
 import crystallography.core.Reflectors;
 import crystallography.core.ScatteringFactorsEnum;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class PatternFilledBandTest extends TestCase {
 
@@ -181,7 +183,7 @@ public class PatternFilledBandTest extends TestCase {
 
         PatternFilledBand other =
                 new XmlLoader().load(PatternFilledBand.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

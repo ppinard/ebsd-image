@@ -18,12 +18,11 @@
 package org.ebsdimage.core;
 
 import static java.lang.Math.abs;
+import junittools.core.AlmostEquable;
 import net.jcip.annotations.Immutable;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
-
-import ptpshared.util.AlmostEquable;
 
 /**
  * Calibration of the EBSD camera.
@@ -131,11 +130,12 @@ public class Camera implements AlmostEquable {
      *             if the precision is not a number (NaN)
      */
     @Override
-    public boolean equals(Object obj, double precision) {
-        if (precision < 0)
+    public boolean equals(Object obj, Object precision) {
+        double delta = ((Number) precision).doubleValue();
+        if (delta < 0)
             throw new IllegalArgumentException(
                     "The precision has to be greater or equal to 0.0.");
-        if (Double.isNaN(precision))
+        if (Double.isNaN(delta))
             throw new IllegalArgumentException(
                     "The precision must be a number.");
 
@@ -147,11 +147,11 @@ public class Camera implements AlmostEquable {
             return false;
 
         Camera other = (Camera) obj;
-        if (abs(patternCenterH - other.patternCenterH) >= precision)
+        if (abs(patternCenterH - other.patternCenterH) > delta)
             return false;
-        if (abs(patternCenterV - other.patternCenterV) >= precision)
+        if (abs(patternCenterV - other.patternCenterV) > delta)
             return false;
-        if (abs(detectorDistance - other.detectorDistance) >= precision)
+        if (abs(detectorDistance - other.detectorDistance) > delta)
             return false;
 
         return true;

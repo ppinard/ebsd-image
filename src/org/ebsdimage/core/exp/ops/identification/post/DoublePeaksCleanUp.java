@@ -17,9 +17,7 @@
  */
 package org.ebsdimage.core.exp.ops.identification.post;
 
-import static java.lang.Math.abs;
-import static java.util.Arrays.sort;
-import static ptpshared.utility.Arrays.reverse;
+import magnitude.core.Magnitude;
 
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.HoughPeakIntensityComparator;
@@ -27,6 +25,7 @@ import org.ebsdimage.core.exp.Exp;
 import org.simpleframework.xml.Attribute;
 
 import rmlshared.util.ArrayList;
+import static java.util.Arrays.sort;
 
 /**
  * Clean-up peaks that appears twice in the list of Hough peaks.
@@ -40,12 +39,12 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
             2);
 
     /** Minimum number of pixels between two peaks in rho. */
-    @Attribute(name = "deltaRho")
-    public final int deltaRho;
+    @Attribute(name = "spacingRho")
+    public final int spacingRho;
 
     /** Minimum number of pixels between two peaks in theta. */
-    @Attribute(name = "deltaTheta")
-    public final int deltaTheta;
+    @Attribute(name = "spacingTheta")
+    public final int spacingTheta;
 
 
 
@@ -60,8 +59,8 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
      * @throws IllegalArgumentException
      *             if the spacing in rho and theta cannot be less than 1
      */
-    public DoublePeaksCleanUp(@Attribute(name = "deltaRho") int spacingRho,
-            @Attribute(name = "deltaTheta") int spacingTheta) {
+    public DoublePeaksCleanUp(@Attribute(name = "spacingRho") int spacingRho,
+            @Attribute(name = "spacingTheta") int spacingTheta) {
         if (spacingRho < 1)
             throw new IllegalArgumentException(
                     "Spacing in rho cannot be less than 1.");
@@ -69,8 +68,8 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
             throw new IllegalArgumentException(
                     "Spacing in theta cannot be less than 1.");
 
-        this.deltaRho = spacingRho;
-        this.deltaTheta = spacingTheta;
+        this.spacingRho = spacingRho;
+        this.spacingTheta = spacingTheta;
     }
 
 
@@ -81,9 +80,9 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
             return false;
 
         DoublePeaksCleanUp other = (DoublePeaksCleanUp) obj;
-        if (deltaRho != other.deltaRho)
+        if (spacingRho != other.spacingRho)
             return false;
-        if (deltaTheta != other.deltaTheta)
+        if (spacingTheta != other.spacingTheta)
             return false;
 
         return true;
@@ -92,14 +91,15 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
 
+        double delta = ((Number) precision).doubleValue();
         DoublePeaksCleanUp other = (DoublePeaksCleanUp) obj;
-        if (Math.abs(deltaRho - other.deltaRho) >= precision)
+        if (Math.abs(spacingRho - other.spacingRho) > delta)
             return false;
-        if (Math.abs(deltaTheta - other.deltaTheta) >= precision)
+        if (Math.abs(spacingTheta - other.spacingTheta) > delta)
             return false;
 
         return true;
@@ -111,8 +111,8 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + deltaRho;
-        result = prime * result + deltaTheta;
+        result = prime * result + spacingRho;
+        result = prime * result + spacingTheta;
         return result;
     }
 
@@ -132,10 +132,10 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
      */
     @Override
     public HoughPeak[] process(Exp exp, HoughPeak[] srcPeaks) {
-        double deltaR = exp.getCurrentHoughMap().deltaR;
-        double deltaTheta = exp.getCurrentHoughMap().deltaTheta;
+        Magnitude deltaRho = exp.getCurrentHoughMap().getDeltaRho();
+        Magnitude deltaTheta = exp.getCurrentHoughMap().getDeltaTheta();
 
-        return process(srcPeaks, deltaR, deltaTheta);
+        return process(srcPeaks, deltaTheta, deltaRho);
     }
 
 
@@ -146,14 +146,14 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
      * 
      * @param srcPeaks
      *            source <code>HoughPeak</code>
-     * @param deltaR
+     * @param deltaRho
      *            resolution in rho
      * @param deltaTheta
      *            resolution in theta
      * @return list of <code>HoughPeak</code> without duplicates
      */
-    protected HoughPeak[] process(HoughPeak[] srcPeaks, double deltaR,
-            double deltaTheta) {
+    protected HoughPeak[] process(HoughPeak[] srcPeaks, Magnitude deltaTheta,
+            Magnitude deltaRho) {
         ArrayList<HoughPeak> destPeaks = new ArrayList<HoughPeak>();
 
         HoughPeak peak0;
@@ -161,7 +161,6 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
         boolean same;
 
         sort(srcPeaks, new HoughPeakIntensityComparator());
-        reverse(srcPeaks);
 
         for (int i = 0; i < srcPeaks.length; i++) {
             peak0 = srcPeaks[i];
@@ -170,7 +169,8 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
             for (int j = i + 1; j < srcPeaks.length; j++) {
                 peak1 = srcPeaks[j];
 
-                if (equivalent(peak0, peak1, deltaR, deltaTheta))
+                if (peak0.equivalent(peak1, deltaRho.multiply(spacingRho),
+                        deltaTheta.multiply(spacingTheta)))
                     same = true;
             }
 
@@ -183,32 +183,9 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
 
 
 
-    /**
-     * Returns if two peaks are equivalent based on the specified spacing and
-     * the resolutions in rho and theta.
-     * 
-     * @param peak0
-     *            first peak
-     * @param peak1
-     *            second peak
-     * @param deltaR
-     *            resolution in rho
-     * @param deltaTheta
-     *            resolution in theta
-     * @return <code>true</code> if the two peaks are equivalent,
-     *         <code>false</code> otherwise
-     */
-    private boolean equivalent(HoughPeak peak0, HoughPeak peak1, double deltaR,
-            double deltaTheta) {
-        return abs(peak1.rho - peak0.rho) < deltaR * deltaRho
-                && abs(peak1.theta - peak0.theta) < deltaTheta * deltaTheta;
-    }
-
-
-
     @Override
     public String toString() {
-        return "DoublePeaksCleanUp [deltaRho=" + deltaRho + ", deltaTheta="
-                + deltaTheta + "]";
+        return "DoublePeaksCleanUp [spacingRho=" + spacingRho
+                + ", spacingTheta=" + spacingTheta + "]";
     }
 }

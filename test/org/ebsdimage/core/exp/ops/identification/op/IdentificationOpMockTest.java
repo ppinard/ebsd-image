@@ -17,11 +17,9 @@
  */
 package org.ebsdimage.core.exp.ops.identification.op;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
+
+import magnitude.core.Magnitude;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughMap;
@@ -32,6 +30,12 @@ import org.junit.Test;
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.BinMap;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class IdentificationOpMockTest extends TestCase {
 
@@ -64,9 +68,21 @@ public class IdentificationOpMockTest extends TestCase {
         HoughPeak[] destPeaks = op.identify(null, peaksMap, houghMap);
 
         assertEquals(3, destPeaks.length);
-        assertTrue(destPeaks[0].equals(new HoughPeak(0.07, 0.0), 1e-6));
-        assertTrue(destPeaks[1].equals(new HoughPeak(0.11, 1.0), 1e-6));
-        assertTrue(destPeaks[2].equals(new HoughPeak(0.15, 0.0), 1e-6));
+
+        Magnitude theta = new Magnitude(0.0, "rad");
+        Magnitude rho = new Magnitude(0.07, "px");
+        HoughPeak other = new HoughPeak(theta, rho);
+        assertTrue(destPeaks[0].equals(other, 1e-6));
+
+        theta = new Magnitude(1.0, "rad");
+        rho = new Magnitude(0.11, "px");
+        other = new HoughPeak(theta, rho);
+        assertTrue(destPeaks[1].equals(other, 1e-6));
+
+        theta = new Magnitude(0.0, "rad");
+        rho = new Magnitude(0.15, "px");
+        other = new HoughPeak(theta, rho);
+        assertTrue(destPeaks[2].equals(other, 1e-6));
     }
 
 
@@ -107,7 +123,7 @@ public class IdentificationOpMockTest extends TestCase {
 
         IdentificationOpMock other =
                 new XmlLoader().load(IdentificationOpMock.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

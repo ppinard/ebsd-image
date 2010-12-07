@@ -24,7 +24,8 @@ import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.standar
 
 import java.util.Arrays;
 
-import org.ebsdimage.core.Analysis;
+import magnitude.core.Magnitude;
+
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
@@ -90,8 +91,8 @@ public class Difference extends DetectionResultsOps {
         int width = identMap.width;
         int height = identMap.height;
         short[] pixArray = identMap.pixArray;
-        double rho;
-        double theta;
+        Magnitude rhoMag;
+        Magnitude thetaMag;
 
         int value;
 
@@ -99,10 +100,11 @@ public class Difference extends DetectionResultsOps {
             for (int x = 0; x < width; x++) {
                 objectNumber = pixArray[n];
 
-                rho = Analysis.getR(peaksMap, n);
-                theta = Analysis.getTheta(peaksMap, n);
+                rhoMag = HoughMap.getRho(peaksMap, n);
+                thetaMag = HoughMap.getTheta(peaksMap, n);
 
-                value = houghMap.pixArray[houghMap.getIndex(rho, theta)] & 0xff;
+                value =
+                        houghMap.pixArray[houghMap.getIndex(thetaMag, rhoMag)] & 0xff;
 
                 if (value < minValue[objectNumber])
                     minValue[objectNumber] = value;

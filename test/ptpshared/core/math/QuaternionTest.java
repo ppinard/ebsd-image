@@ -17,15 +17,6 @@
  */
 package ptpshared.core.math;
 
-import static java.lang.Math.PI;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
 import org.ebsdimage.TestCase;
@@ -34,6 +25,18 @@ import org.junit.Test;
 
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
+
+import static junittools.test.Assert.assertEquals;
 
 public class QuaternionTest extends TestCase {
 
@@ -536,6 +539,6 @@ public class QuaternionTest extends TestCase {
 
         // Read
         Quaternion other = new XmlLoader().load(Quaternion.class, tmpFile);
-        assertAlmostEquals(q1, other, 1e-6);
+        assertEquals(q1, other, 1e-6);
     }
 }

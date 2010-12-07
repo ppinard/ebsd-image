@@ -17,19 +17,19 @@
  */
 package org.ebsdimage.io;
 
-import static org.ebsdimage.core.HoughMap.*;
-
 import java.io.File;
 import java.io.IOException;
 
+import magnitude.core.Magnitude;
+
 import org.ebsdimage.core.HoughMap;
 
-import rmlimage.core.EightBitMap;
+import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
 import rmlimage.io.BasicBmpLoader;
 import rmlshared.io.FileUtil;
 import rmlshared.io.TextFileReader;
-import rmlshared.util.Properties;
+import static org.ebsdimage.core.HoughMap.FILE_HEADER;
 
 /**
  * Loads a Hough map.
@@ -37,6 +37,19 @@ import rmlshared.util.Properties;
  * @author Marin Lagac&eacute;
  */
 public class HoughMapLoader extends BasicBmpLoader {
+
+    @Override
+    public boolean canLoad(File file) {
+        if (!super.canLoad(file))
+            return false;
+
+        if (getValidationMessage(file).length() != 0)
+            return false;
+
+        return true;
+    }
+
+
 
     /**
      * Will return an error message if the file is not a valid HoughMap file or
@@ -53,7 +66,7 @@ public class HoughMapLoader extends BasicBmpLoader {
      *            file to validate
      * @return an error message or an empty string if the file is valid
      */
-    private static String getValidationMessage(File file) {
+    protected String getValidationMessage(File file) {
         // Check extension
         String ext = FileUtil.getExtension(file);
         if (!ext.equalsIgnoreCase("bmp"))
@@ -97,36 +110,6 @@ public class HoughMapLoader extends BasicBmpLoader {
 
 
 
-    /**
-     * Checks if the file is a valid <code>HoughMap</code>.
-     * 
-     * @param file
-     *            a file
-     * @return <code>true</code> if the file is valid, <code>false</code>
-     *         otherwise
-     */
-    public static boolean isHoughMap(File file) {
-        return (getValidationMessage(file).length() == 0) ? true : false;
-    }
-
-
-
-    /**
-     * Validates the file to be a valid <code>HoughMap</code>.
-     * 
-     * @param file
-     *            a file
-     * @throws IOException
-     *             if the file is not valid
-     */
-    private static void validate(File file) throws IOException {
-        String message = getValidationMessage(file);
-        if (message.length() > 0)
-            throw new IOException(message);
-    }
-
-
-
     @Override
     public HoughMap load(File file) throws IOException {
         return (HoughMap) super.load(file);
@@ -136,37 +119,33 @@ public class HoughMapLoader extends BasicBmpLoader {
 
     @Override
     public HoughMap load(File file, Map map) throws IOException {
-        // Validate file
-        validate(file);
+        if (!canLoad(file))
+            throw new IOException(getValidationMessage(file));
 
-        // Load properties
+        // Create dummy map
+        if (map == null)
+            map = new ByteMap(1, 1);
+
+        // Load properties to get the calibration
         File propFile = FileUtil.setExtension(file, "prop");
-        Properties props = new Properties(propFile);
+        loadProperties(propFile, map);
 
-        // Read the needed properties
-        int width = props.getProperty(WIDTH, 0);
-        if (width <= 0)
-            throw new IOException("Incorrect value for property " + WIDTH
-                    + " (" + width + ").");
+        // Calibration
+        Magnitude deltaTheta = map.getCalibration().getDX();
+        Magnitude deltaRho = map.getCalibration().getDY();
 
-        int height = props.getProperty(HEIGHT, 0);
-        if (height <= 0)
-            throw new IOException("Incorrect value for property " + HEIGHT
-                    + " (" + height + ").");
+        // Test if the map is well calibrated
+        if (!map.isCalibrated())
+            throw new IllegalArgumentException(
+                    "Properties must contain the map calibration.");
+        if (!deltaTheta.areUnits("rad"))
+            throw new IllegalArgumentException("Delta theta units ("
+                    + deltaTheta.getBaseUnitsLabel()
+                    + ") cannot be expressed as \"rad\".");
 
-        double deltaR =
-                Double.longBitsToDouble(props.getProperty(DELTA_R, -1L));
-        if (deltaR < 0)
-            throw new IOException("Incorrect value for property " + DELTA_R
-                    + " (" + deltaR + ").");
-
-        double deltaTheta =
-                Double.longBitsToDouble(props.getProperty(DELTA_THETA, -1L));
-        if (deltaTheta < 0)
-            throw new IOException("Incorrect value for property " + DELTA_THETA
-                    + " (" + deltaTheta + ").");
-
-        HoughMap houghMap = new HoughMap(width, height, deltaR, deltaTheta);
+        // Create HoughMap
+        HoughMap houghMap =
+                new HoughMap(map.width, map.height, deltaTheta, deltaRho);
         map = super.load(file, houghMap);
 
         return (HoughMap) map;
@@ -198,19 +177,15 @@ public class HoughMapLoader extends BasicBmpLoader {
         if (map == null)
             throw new NullPointerException("Cannot validate a null map.");
 
-        if (!(map instanceof EightBitMap))
+        if (!(map instanceof HoughMap))
             throw new IllegalArgumentException(
-                    "Map should be a HoughMap, not a " + map.getType() + ".");
+                    "Map should be an HoughMap, not a " + map.getType() + ".");
 
-        if (map.width != biWidth)
-            throw new IllegalArgumentException("Width of specified map ("
-                    + map.width + ") does not match width of bmp file ("
-                    + biWidth + ").");
-
-        if (map.height != biHeight)
-            throw new IllegalArgumentException("Height of specified map ("
-                    + map.height + ") does not match height of bmp file ("
-                    + biHeight + ").");
+        if (map.width != biWidth || map.height != biHeight)
+            map =
+                    new HoughMap(biWidth, biHeight,
+                            ((HoughMap) map).getDeltaTheta(),
+                            ((HoughMap) map).getDeltaRho());
 
         return map;
     }

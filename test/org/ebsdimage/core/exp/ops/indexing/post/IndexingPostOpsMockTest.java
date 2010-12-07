@@ -17,10 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.indexing.post;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
 import org.ebsdimage.TestCase;
@@ -33,6 +29,12 @@ import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class IndexingPostOpsMockTest extends TestCase {
 
@@ -119,7 +121,7 @@ public class IndexingPostOpsMockTest extends TestCase {
 
         IndexingPostOpsMock other =
                 new XmlLoader().load(IndexingPostOpsMock.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

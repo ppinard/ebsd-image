@@ -17,16 +17,18 @@
  */
 package org.ebsdimage.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class PhasesMapTest extends TestCase {
 
@@ -112,8 +114,8 @@ public class PhasesMapTest extends TestCase {
     @Test
     public void testGetPhases() {
         assertEquals(2, map.getPhases().length);
-        assertAlmostEquals(CrystalFactory.silicon(), map.getPhases()[0], 1e-6);
-        assertAlmostEquals(CrystalFactory.ferrite(), map.getPhases()[1], 1e-6);
+        assertEquals(CrystalFactory.silicon(), map.getPhases()[0], 1e-6);
+        assertEquals(CrystalFactory.ferrite(), map.getPhases()[1], 1e-6);
     }
 
 
@@ -248,8 +250,8 @@ public class PhasesMapTest extends TestCase {
         map.setPhases(newPhases);
 
         assertEquals(2, map.getPhases().length);
-        assertAlmostEquals(CrystalFactory.ferrite(), map.getPhases()[0], 1e-6);
-        assertAlmostEquals(CrystalFactory.silicon(), map.getPhases()[1], 1e-6);
+        assertEquals(CrystalFactory.ferrite(), map.getPhases()[0], 1e-6);
+        assertEquals(CrystalFactory.silicon(), map.getPhases()[1], 1e-6);
     }
 
 

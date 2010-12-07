@@ -17,11 +17,9 @@
  */
 package org.ebsdimage.core.exp.ops.indexing.op;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
+
+import magnitude.core.Magnitude;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
@@ -35,6 +33,12 @@ import ptpshared.util.xml.XmlSaver;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
+
 public class IndexingOpMockTest extends TestCase {
 
     private IndexingOpMock op;
@@ -47,9 +51,19 @@ public class IndexingOpMockTest extends TestCase {
     public void setUp() throws Exception {
         op = new IndexingOpMock();
 
-        srcPeaks =
-                new HoughPeak[] { new HoughPeak(15.0, 0.0),
-                        new HoughPeak(23.0, 1.0), new HoughPeak(31.0, 0.0) };
+        Magnitude theta = new Magnitude(0.0, "rad");
+        Magnitude rho = new Magnitude(15.0, "px");
+        HoughPeak peak1 = new HoughPeak(theta, rho);
+
+        theta = new Magnitude(1.0, "rad");
+        rho = new Magnitude(23.0, "px");
+        HoughPeak peak2 = new HoughPeak(theta, rho);
+
+        theta = new Magnitude(0.0, "rad");
+        rho = new Magnitude(31.0, "px");
+        HoughPeak peak3 = new HoughPeak(theta, rho);
+
+        srcPeaks = new HoughPeak[] { peak1, peak2, peak3 };
     }
 
 
@@ -116,6 +130,6 @@ public class IndexingOpMockTest extends TestCase {
         new XmlSaver().save(op, file);
 
         IndexingOpMock other = new XmlLoader().load(IndexingOpMock.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 }

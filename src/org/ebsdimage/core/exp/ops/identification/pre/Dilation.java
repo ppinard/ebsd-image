@@ -70,14 +70,15 @@ public class Dilation extends IdentificationPreOps {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
 
+        double delta = ((Number) precision).doubleValue();
         Dilation other = (Dilation) obj;
-        if (Math.abs(min - other.min) >= precision)
+        if (Math.abs(min - other.min) > delta)
             return false;
-        if (Math.abs(max - other.max) >= precision)
+        if (Math.abs(max - other.max) > delta)
             return false;
 
         return true;

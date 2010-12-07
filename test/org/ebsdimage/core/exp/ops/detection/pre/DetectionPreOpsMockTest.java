@@ -17,10 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.detection.pre;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
 import org.ebsdimage.TestCase;
@@ -30,6 +26,12 @@ import org.junit.Test;
 
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class DetectionPreOpsMockTest extends TestCase {
 
@@ -57,8 +59,8 @@ public class DetectionPreOpsMockTest extends TestCase {
 
         assertEquals(4, result.width);
         assertEquals(3, result.height);
-        assertEquals(1.0, result.deltaR, 1e-6);
-        assertEquals(1.0, result.deltaTheta, 1e-6);
+        assertEquals(1.0, result.getDeltaRho().getValue("px"), 1e-6);
+        assertEquals(1.0, result.getDeltaTheta().getValue("rad"), 1e-6);
 
         byte[] srcPixArray = new byte[] { 7, 11, 15, 19 };
         for (int i = 0; i < result.size; i++)
@@ -103,7 +105,7 @@ public class DetectionPreOpsMockTest extends TestCase {
 
         DetectionPreOpsMock other =
                 new XmlLoader().load(DetectionPreOpsMock.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

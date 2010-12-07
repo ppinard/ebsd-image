@@ -17,12 +17,6 @@
  */
 package org.ebsdimage.core.exp;
 
-import static java.lang.Math.toRadians;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -38,6 +32,15 @@ import rmlimage.core.Map;
 import rmlimage.module.real.core.RealMap;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import static java.lang.Math.toRadians;
+
+import static junittools.test.Assert.assertEquals;
 
 public abstract class ExpMMapTester extends TestCase {
 
@@ -94,7 +97,7 @@ public abstract class ExpMMapTester extends TestCase {
         assertEquals(2, other.width);
         assertEquals(2, other.height);
 
-        assertAlmostEquals(EbsdMetadata.DEFAULT, other.getMetadata(), 1e-6);
+        assertEquals(EbsdMetadata.DEFAULT, other.getMetadata(), 1e-6);
 
         RealMap q0Map = other.getQ0Map();
         assertEquals(2, q0Map.width);
@@ -133,7 +136,7 @@ public abstract class ExpMMapTester extends TestCase {
         assertEquals(mmap.height, other.height);
         assertEquals(mmap.size, other.size);
 
-        assertAlmostEquals(mmap.getMetadata(), other.getMetadata(), 1e-6);
+        assertEquals(mmap.getMetadata(), other.getMetadata(), 1e-6);
 
         mmap.getQ0Map().assertEquals(other.getQ0Map());
         mmap.getQ1Map().assertEquals(other.getQ1Map());
@@ -229,7 +232,7 @@ public abstract class ExpMMapTester extends TestCase {
         assertEquals(4, other.size);
 
         // Metadata
-        assertAlmostEquals(mmap.getMetadata(), other.getMetadata(), 1e-6);
+        assertEquals(mmap.getMetadata(), other.getMetadata(), 1e-6);
 
         // Test nb of Maps in MultiMap
         Map[] maps = other.getMaps();
@@ -264,9 +267,9 @@ public abstract class ExpMMapTester extends TestCase {
     @Test
     public void testGetPhase() {
         assertNull(mmap.getPhase(0));
-        assertAlmostEquals(CrystalFactory.silicon(), mmap.getPhase(1), 1e-4);
-        assertAlmostEquals(CrystalFactory.ferrite(), mmap.getPhase(2), 1e-4);
-        assertAlmostEquals(CrystalFactory.silicon(), mmap.getPhase(3), 1e-4);
+        assertEquals(CrystalFactory.silicon(), mmap.getPhase(1), 1e-4);
+        assertEquals(CrystalFactory.ferrite(), mmap.getPhase(2), 1e-4);
+        assertEquals(CrystalFactory.silicon(), mmap.getPhase(3), 1e-4);
     }
 
 
@@ -315,8 +318,8 @@ public abstract class ExpMMapTester extends TestCase {
 
         assertEquals(2, phases.length);
 
-        assertAlmostEquals(CrystalFactory.silicon(), phases[0], 1e-3);
-        assertAlmostEquals(CrystalFactory.ferrite(), phases[1], 1e-3);
+        assertEquals(CrystalFactory.silicon(), phases[0], 1e-3);
+        assertEquals(CrystalFactory.ferrite(), phases[1], 1e-3);
     }
 
 
@@ -333,8 +336,8 @@ public abstract class ExpMMapTester extends TestCase {
         Crystal[] phases = phasesMap.getPhases();
         assertEquals(2, phases.length);
 
-        assertAlmostEquals(CrystalFactory.silicon(), phases[0], 1e-3);
-        assertAlmostEquals(CrystalFactory.ferrite(), phases[1], 1e-3);
+        assertEquals(CrystalFactory.silicon(), phases[0], 1e-3);
+        assertEquals(CrystalFactory.ferrite(), phases[1], 1e-3);
     }
 
 
@@ -408,14 +411,10 @@ public abstract class ExpMMapTester extends TestCase {
 
     @Test
     public void testGetRotation() {
-        assertAlmostEquals(new Quaternion(1, 0, 0, 0), mmap.getRotation(0),
-                1e-6);
-        assertAlmostEquals(new Quaternion(0, 1, 0, 0), mmap.getRotation(1),
-                1e-6);
-        assertAlmostEquals(new Quaternion(0, 0, 1, 0), mmap.getRotation(2),
-                1e-6);
-        assertAlmostEquals(new Quaternion(0, 0, 0, 1), mmap.getRotation(3),
-                1e-6);
+        assertEquals(new Quaternion(1, 0, 0, 0), mmap.getRotation(0), 1e-6);
+        assertEquals(new Quaternion(0, 1, 0, 0), mmap.getRotation(1), 1e-6);
+        assertEquals(new Quaternion(0, 0, 1, 0), mmap.getRotation(2), 1e-6);
+        assertEquals(new Quaternion(0, 0, 0, 1), mmap.getRotation(3), 1e-6);
     }
 
 

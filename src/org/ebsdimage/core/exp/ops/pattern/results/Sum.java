@@ -168,18 +168,19 @@ public class Sum extends PatternResultsOps {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
 
+        double delta = ((Number) precision).doubleValue();
         Sum other = (Sum) obj;
-        if (Math.abs(xmin - other.xmin) >= precision)
+        if (Math.abs(xmin - other.xmin) > delta)
             return false;
-        if (Math.abs(xmax - other.xmax) >= precision)
+        if (Math.abs(xmax - other.xmax) > delta)
             return false;
-        if (Math.abs(ymin - other.ymin) >= precision)
+        if (Math.abs(ymin - other.ymin) > delta)
             return false;
-        if (Math.abs(ymax - other.ymax) >= precision)
+        if (Math.abs(ymax - other.ymax) > delta)
             return false;
 
         return true;

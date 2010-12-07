@@ -18,11 +18,11 @@
 package ptpshared.core.math;
 
 import static java.lang.Math.abs;
+import junittools.core.AlmostEquable;
 import net.jcip.annotations.Immutable;
 
 import org.simpleframework.xml.Attribute;
 
-import ptpshared.util.AlmostEquable;
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -265,11 +265,12 @@ public class Matrix3D implements AlmostEquable, Cloneable {
      *             if the precision is not a number (NaN)
      */
     @Override
-    public boolean equals(Object obj, double precision) {
-        if (precision < 0)
+    public boolean equals(Object obj, Object precision) {
+        double delta = ((Number) precision).doubleValue();
+        if (delta < 0)
             throw new IllegalArgumentException(
                     "The precision has to be greater or equal to 0.0.");
-        if (Double.isNaN(precision))
+        if (Double.isNaN(delta))
             throw new IllegalArgumentException(
                     "The precision must be a number.");
 
@@ -283,7 +284,7 @@ public class Matrix3D implements AlmostEquable, Cloneable {
         Matrix3D other = (Matrix3D) obj;
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < 3; j++)
-                if (abs(m[i][j] - other.m[i][j]) >= precision)
+                if (abs(m[i][j] - other.m[i][j]) > delta)
                     return false;
 
         return true;

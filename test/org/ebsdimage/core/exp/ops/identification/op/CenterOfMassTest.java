@@ -17,10 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.identification.op;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
 import org.ebsdimage.TestCase;
@@ -37,7 +33,12 @@ import rmlimage.core.BinMap;
 import rmlimage.core.IdentMap;
 import rmlimage.core.Identification;
 import rmlimage.core.MapMath;
-import rmlshared.io.FileUtil;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class CenterOfMassTest extends TestCase {
 
@@ -54,7 +55,7 @@ public class CenterOfMassTest extends TestCase {
         op = new CenterOfMass();
 
         houghMap =
-                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap_cropped.bmp"));
+                new HoughMapLoader().load(getFile("org/ebsdimage/testdata/houghmap_cropped.bmp"));
 
         // Create peaks map with three peaks;
         IdentMap identMap =
@@ -67,6 +68,9 @@ public class CenterOfMassTest extends TestCase {
                 peaksMap);
         MapMath.or(peaksMap, Identification.extractObject(identMap, 3),
                 peaksMap);
+
+        System.out.println("houghMap: " + houghMap.getCalibration());
+        System.out.println("peaksMap: " + peaksMap.getCalibration());
     }
 
 
@@ -78,18 +82,20 @@ public class CenterOfMassTest extends TestCase {
         assertEquals(3, destPeaks.length);
 
         // Peak 1
-        assertEquals(48.95774459838867, destPeaks[0].rho, 1e-6);
-        assertEquals(2.67545223236084, destPeaks[0].theta, 1e-6);
+        assertEquals(48.95774459838867, destPeaks[0].rho.getValue("px"), 1e-6);
+        assertEquals(2.67545223236084, destPeaks[0].theta.getValue("rad"), 1e-6);
         assertEquals(142.0, destPeaks[0].intensity, 1e-6);
 
         // Peak 2
-        assertEquals(37.75833511352539, destPeaks[1].rho, 1e-6);
-        assertEquals(2.202118158340454, destPeaks[1].theta, 1e-6);
+        assertEquals(37.75833511352539, destPeaks[1].rho.getValue("px"), 1e-6);
+        assertEquals(2.202118158340454, destPeaks[1].theta.getValue("rad"),
+                1e-6);
         assertEquals(125.0, destPeaks[1].intensity, 1e-6);
 
         // Peak 3
-        assertEquals(29.368501663208008, destPeaks[2].rho, 1e-6);
-        assertEquals(0.5339681506156921, destPeaks[2].theta, 1e-6);
+        assertEquals(29.368501663208008, destPeaks[2].rho.getValue("px"), 1e-6);
+        assertEquals(0.5339681506156921, destPeaks[2].theta.getValue("rad"),
+                1e-6);
         assertEquals(121.0, destPeaks[2].intensity, 1e-6);
     }
 
@@ -138,7 +144,16 @@ public class CenterOfMassTest extends TestCase {
         new XmlSaver().save(op, file);
 
         CenterOfMass other = new XmlLoader().load(CenterOfMass.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
+    }
+
+
+
+    public static void main(String[] args) {
+        double y0 = Double.longBitsToDouble(4632346994038276096l);
+        double dy = Double.longBitsToDouble(4611153102643396608l);
+
+        System.out.println(y0 / dy);
     }
 
 }

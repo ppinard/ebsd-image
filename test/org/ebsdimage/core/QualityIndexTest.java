@@ -17,7 +17,7 @@
  */
 package org.ebsdimage.core;
 
-import static org.junit.Assert.assertEquals;
+import magnitude.core.Magnitude;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.io.HoughMapLoader;
@@ -26,6 +26,8 @@ import org.junit.Test;
 
 import rmlimage.core.ByteMap;
 import rmlshared.io.FileUtil;
+
+import static org.junit.Assert.assertEquals;
 
 public class QualityIndexTest extends TestCase {
 
@@ -53,9 +55,17 @@ public class QualityIndexTest extends TestCase {
                 new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
 
         // Peak
-        peak1 = new HoughPeak(3.0, 0.5, 1);
-        peak2 = new HoughPeak(5.0, 1.5, 3);
-        peak3 = new HoughPeak(4.0, 1.0, 2);
+        Magnitude theta = new Magnitude(3.0, "rad");
+        Magnitude rho = new Magnitude(0.5, "px");
+        peak1 = new HoughPeak(theta, rho, 1);
+
+        theta = new Magnitude(5.0, "rad");
+        rho = new Magnitude(1.5, "px");
+        peak2 = new HoughPeak(theta, rho, 3);
+
+        theta = new Magnitude(4.0, "rad");
+        rho = new Magnitude(1.0, "px");
+        peak3 = new HoughPeak(theta, rho, 2);
 
         peaks = new HoughPeak[] { peak1, peak2, peak3 };
     }

@@ -49,12 +49,13 @@ public class ThetaExpand extends DetectionPreOps {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
 
+        double delta = ((Number) precision).doubleValue();
         ThetaExpand other = (ThetaExpand) obj;
-        if (abs(increment - other.increment) >= precision)
+        if (abs(increment - other.increment) > delta)
             return false;
 
         return true;
@@ -92,15 +93,17 @@ public class ThetaExpand extends DetectionPreOps {
      */
     @Override
     public HoughMap process(Exp exp, HoughMap srcMap) {
-        int incrementWidth = (int) Math.floor(increment / srcMap.deltaTheta);
+        int incrementWidth =
+                (int) Math.floor(increment
+                        / srcMap.getDeltaTheta().getValue("rad"));
         int width = srcMap.width;
         int height = srcMap.height;
 
         // Destination
         int destWidth = width + incrementWidth;
         HoughMap destMap =
-                new HoughMap(destWidth, height, srcMap.deltaR,
-                        srcMap.deltaTheta);
+                new HoughMap(destWidth, height, srcMap.getDeltaTheta(),
+                        srcMap.getDeltaRho());
 
         // Copy srcMap in destMap
         Edit.copy(srcMap, srcMap.getROI(), destMap, 0, 0);

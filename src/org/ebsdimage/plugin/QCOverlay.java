@@ -17,9 +17,6 @@
  */
 package org.ebsdimage.plugin;
 
-import static org.ebsdimage.core.HoughMap.DELTA_R;
-import static org.ebsdimage.core.HoughMap.DELTA_THETA;
-
 import java.util.ArrayList;
 
 import org.ebsdimage.core.QC;
@@ -147,12 +144,13 @@ public class QCOverlay extends PlugIn {
             return false;
         BinMap binMap = (BinMap) map;
 
-        if (!binMap.containsProperty(DELTA_R)
-                || !binMap.containsProperty(DELTA_THETA)) {
-            showErrorDialog("Cannot do a line overly." + '\n'
-                    + "The BinMap does not come from a HoughMap.");
-            return false;
-        }
+        if (!binMap.isCalibrated())
+            throw new IllegalArgumentException("The map (" + binMap
+                    + ") must be calibrated.");
+        if (!binMap.getCalibration().getDX().areUnits("rad"))
+            throw new IllegalArgumentException("Invalid map, delta x units ("
+                    + binMap.getCalibration().getDX().getBaseUnitsLabel()
+                    + ") cannot be expressed as \"rad\".");
 
         // Check if at least one ByteMap is loaded
         if (getByteMapCount() < 1) {

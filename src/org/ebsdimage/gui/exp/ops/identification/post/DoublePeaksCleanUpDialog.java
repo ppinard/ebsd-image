@@ -50,12 +50,12 @@ public class DoublePeaksCleanUpDialog extends OperationDialog {
 
         spacingRhoField =
                 new IntField("Spacing in rho",
-                        DoublePeaksCleanUp.DEFAULT.deltaRho);
+                        DoublePeaksCleanUp.DEFAULT.spacingRho);
         spacingRhoField.setRange(1, Integer.MAX_VALUE);
 
         spacingThetaField =
                 new IntField("Spacing in theta",
-                        DoublePeaksCleanUp.DEFAULT.deltaTheta);
+                        DoublePeaksCleanUp.DEFAULT.spacingTheta);
         spacingThetaField.setRange(1, Integer.MAX_VALUE);
 
         Panel panel = new ColumnPanel(3);

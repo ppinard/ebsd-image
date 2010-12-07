@@ -18,6 +18,7 @@
 package org.ebsdimage.core.exp.ops.hough.post;
 
 import static java.lang.Math.min;
+import magnitude.core.Magnitude;
 
 import org.ebsdimage.core.Edit;
 import org.ebsdimage.core.HoughMap;
@@ -41,12 +42,13 @@ public class HoughCrop extends HoughPostOps {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
 
+        double delta = ((Number) precision).doubleValue();
         HoughCrop other = (HoughCrop) obj;
-        if (Math.abs(radius - other.radius) >= precision)
+        if (Math.abs(radius - other.radius) > delta)
             return false;
 
         return true;
@@ -130,7 +132,8 @@ public class HoughCrop extends HoughPostOps {
             radius += this.radius + 1;
         }
 
-        HoughMap destMap = Edit.crop(srcMap, radius);
+        Magnitude radiusMag = srcMap.getDeltaRho().multiply(radius);
+        HoughMap destMap = Edit.crop(srcMap, radiusMag);
 
         return destMap;
     }

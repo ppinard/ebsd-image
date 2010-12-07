@@ -19,13 +19,12 @@ package org.ebsdimage.core.run;
 
 import java.io.IOException;
 
+import junittools.core.AlmostEquable;
 import net.jcip.annotations.Immutable;
 
 import org.ebsdimage.core.ErrorCode;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
-
-import ptpshared.util.AlmostEquable;
 
 /**
  * Superclass for all operations.
@@ -72,7 +71,7 @@ public abstract class Operation implements AlmostEquable {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
         if (this == obj)
             return true;
         if (obj == null)

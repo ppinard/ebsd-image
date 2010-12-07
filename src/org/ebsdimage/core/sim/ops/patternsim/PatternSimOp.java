@@ -85,18 +85,19 @@ public abstract class PatternSimOp extends Operation {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
 
+        double delta = ((Number) precision).doubleValue();
         PatternSimOp other = (PatternSimOp) obj;
-        if (Math.abs(height - other.height) >= precision)
+        if (Math.abs(height - other.height) > delta)
             return false;
-        if (Math.abs(width - other.width) >= precision)
+        if (Math.abs(width - other.width) > delta)
             return false;
         if (scatterType != other.scatterType)
             return false;
-        if (Math.abs(maxIndex - other.maxIndex) >= precision)
+        if (Math.abs(maxIndex - other.maxIndex) > delta)
             return false;
 
         return true;

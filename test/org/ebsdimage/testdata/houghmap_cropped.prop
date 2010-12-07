@@ -1,6 +1,10 @@
-#HoughMap1
-#Tue Oct 05 09:50:11 EDT 2010
-Hough.height=55
-Hough.width=180
-Hough.dr=4611153102534928811
-Hough.dtheta=4580687790476533049
+#HoughMap2 - Calib: (0.017453292rad;50.80506,1.8816689px)
+#Tue Dec 07 08:41:12 EST 2010
+calibration.flip.y=true
+calibration.units.y=px
+calibration.y0=4632346994038276096
+calibration.flip.x=false
+calibration.units.x=rad
+calibration.dy=4611153102643396608
+calibration.dx=4580687790437564416
+calibration.x0=0

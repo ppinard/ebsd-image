@@ -17,11 +17,8 @@
  */
 package org.ebsdimage.core.exp.ops.pattern.post;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
+import java.io.IOException;
 
 import org.ebsdimage.TestCase;
 import org.junit.Before;
@@ -29,6 +26,13 @@ import org.junit.Test;
 
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
+import rmlimage.core.ByteMap;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class RadialNoiseTest extends TestCase {
 
@@ -134,7 +138,22 @@ public class RadialNoiseTest extends TestCase {
         new XmlSaver().save(op, file);
 
         RadialNoise other = new XmlLoader().load(RadialNoise.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
+    }
+
+
+
+    @Test
+    public void testRadialNoise() throws IOException {
+        ByteMap expected =
+                (ByteMap) load("org/ebsdimage/testdata/noise_radialnoise.bmp");
+
+        ByteMap map = new ByteMap(100, 100);
+        map.clear(128);
+
+        op.radialNoise(map, 0, -30, 50, 100, 1.0, 15.0, 1);
+
+        map.assertEquals(expected);
     }
 
 }

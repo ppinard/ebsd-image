@@ -17,6 +17,8 @@
  */
 package org.ebsdimage.plugin;
 
+import magnitude.core.Magnitude;
+
 import org.ebsdimage.core.Edit;
 import org.ebsdimage.core.HoughMap;
 
@@ -63,8 +65,9 @@ public class HoughCrop extends PlugIn {
             ColumnPanel cPanel = new ColumnPanel(3);
 
             cPanel.add("Positive \u03c1:");
-            rhoField = new DoubleField("Rho", map.getR(0, map.height / 4));
-            rhoField.setRange(0.1, map.rMax);
+            double rhoMax = map.getRhoMax().getPreferredUnitsValue();
+            rhoField = new DoubleField("Rho", rhoMax);
+            rhoField.setRange(0.1, rhoMax);
             cPanel.add(rhoField);
             cPanel.add("px");
 
@@ -109,7 +112,8 @@ public class HoughCrop extends PlugIn {
         if (dialog.show() != OkCancelDialog.OK)
             return null;
 
-        HoughMap cropMap = Edit.crop(srcMap, dialog.getRho());
+        Magnitude rho = new Magnitude(dialog.getRho(), srcMap.getRhoMax());
+        HoughMap cropMap = Edit.crop(srcMap, rho);
 
         cropMap.setFile(FileUtil.append(srcMap.getFile(), "(Crop)"));
 

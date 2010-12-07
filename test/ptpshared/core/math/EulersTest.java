@@ -17,11 +17,6 @@
  */
 package ptpshared.core.math;
 
-import static java.lang.Math.PI;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
 import org.ebsdimage.TestCase;
@@ -30,6 +25,14 @@ import org.junit.Test;
 
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static java.lang.Math.PI;
+
+import static junittools.test.Assert.assertEquals;
 
 public class EulersTest extends TestCase {
 
@@ -199,7 +202,7 @@ public class EulersTest extends TestCase {
 
         // Read
         Eulers other = new XmlLoader().load(Eulers.class, tmpFile);
-        assertAlmostEquals(e1, other, 1e-6);
+        assertEquals(e1, other, 1e-6);
     }
 
 }

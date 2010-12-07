@@ -69,12 +69,13 @@ public class Noise extends PatternPostOps {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
 
+        double delta = ((Number) precision).doubleValue();
         Noise other = (Noise) obj;
-        if (Math.abs(stdDev - other.stdDev) >= precision)
+        if (Math.abs(stdDev - other.stdDev) > delta)
             return false;
 
         return true;

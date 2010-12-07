@@ -17,11 +17,9 @@
  */
 package org.ebsdimage.core.exp.ops.identification.post;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
+
+import magnitude.core.Magnitude;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
@@ -30,6 +28,12 @@ import org.junit.Test;
 
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class IdentificationPostOpsMockTest extends TestCase {
 
@@ -43,9 +47,19 @@ public class IdentificationPostOpsMockTest extends TestCase {
     public void setUp() throws Exception {
         op = new IdentificationPostOpsMock();
 
-        srcPeaks =
-                new HoughPeak[] { new HoughPeak(7.0, 0.0),
-                        new HoughPeak(11.0, 1.0), new HoughPeak(15.0, 0.0) };
+        Magnitude theta = new Magnitude(0.0, "rad");
+        Magnitude rho = new Magnitude(7.0, "px");
+        HoughPeak peak1 = new HoughPeak(theta, rho);
+
+        theta = new Magnitude(1.0, "rad");
+        rho = new Magnitude(11.0, "px");
+        HoughPeak peak2 = new HoughPeak(theta, rho);
+
+        theta = new Magnitude(0.0, "rad");
+        rho = new Magnitude(15.0, "px");
+        HoughPeak peak3 = new HoughPeak(theta, rho);
+
+        srcPeaks = new HoughPeak[] { peak1, peak2, peak3 };
     }
 
 
@@ -55,9 +69,21 @@ public class IdentificationPostOpsMockTest extends TestCase {
         HoughPeak[] destPeaks = op.process(null, srcPeaks);
 
         assertEquals(3, destPeaks.length);
-        assertTrue(destPeaks[0].equals(new HoughPeak(14.0, 0.0), 1e-6));
-        assertTrue(destPeaks[1].equals(new HoughPeak(22.0, 1.0), 1e-6));
-        assertTrue(destPeaks[2].equals(new HoughPeak(30.0, 0.0), 1e-6));
+
+        Magnitude theta = new Magnitude(0.0, "rad");
+        Magnitude rho = new Magnitude(14.0, "px");
+        HoughPeak other = new HoughPeak(theta, rho);
+        assertEquals(other, destPeaks[0], 1e-6);
+
+        theta = new Magnitude(1.0, "rad");
+        rho = new Magnitude(22.0, "px");
+        other = new HoughPeak(theta, rho);
+        assertEquals(other, destPeaks[1], 1e-6);
+
+        theta = new Magnitude(0.0, "rad");
+        rho = new Magnitude(30.0, "px");
+        other = new HoughPeak(theta, rho);
+        assertEquals(other, destPeaks[2], 1e-6);
     }
 
 
@@ -98,7 +124,7 @@ public class IdentificationPostOpsMockTest extends TestCase {
 
         IdentificationPostOpsMock other =
                 new XmlLoader().load(IdentificationPostOpsMock.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

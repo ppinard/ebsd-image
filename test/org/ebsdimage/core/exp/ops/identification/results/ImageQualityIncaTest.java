@@ -17,11 +17,9 @@
  */
 package org.ebsdimage.core.exp.ops.identification.results;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
+
+import magnitude.core.Magnitude;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
@@ -31,6 +29,12 @@ import org.junit.Test;
 
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class ImageQualityIncaTest extends TestCase {
 
@@ -48,9 +52,18 @@ public class ImageQualityIncaTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        peak1 = new HoughPeak(3.0, 0.5, 1);
-        peak2 = new HoughPeak(5.0, 1.5, 3);
-        peak3 = new HoughPeak(4.0, 1.0, 2);
+
+        Magnitude theta = new Magnitude(0.5, "rad");
+        Magnitude rho = new Magnitude(3.0, "px");
+        peak1 = new HoughPeak(theta, rho, 1);
+
+        theta = new Magnitude(1.5, "rad");
+        rho = new Magnitude(5.0, "px");
+        peak2 = new HoughPeak(theta, rho, 3);
+
+        theta = new Magnitude(4.0, "rad");
+        rho = new Magnitude(1.0, "px");
+        peak3 = new HoughPeak(theta, rho, 2);
 
         peaks = new HoughPeak[] { peak1, peak2, peak3 };
 
@@ -112,7 +125,7 @@ public class ImageQualityIncaTest extends TestCase {
 
         ImageQualityInca other =
                 new XmlLoader().load(ImageQualityInca.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

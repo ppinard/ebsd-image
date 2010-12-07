@@ -74,12 +74,13 @@ public class Binning extends PatternPostOps {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
 
+        double delta = ((Number) precision).doubleValue();
         Binning other = (Binning) obj;
-        if (Math.abs(factor - other.factor) >= precision)
+        if (Math.abs(factor - other.factor) > delta)
             return false;
 
         return true;

@@ -29,7 +29,7 @@ public class IdentificationResultsOpsMock extends IdentificationResultsOps {
     public OpResult[] calculate(Exp exp, HoughPeak[] srcPeaks) {
         double sum = 0.0;
         for (HoughPeak peak : srcPeaks)
-            sum += peak.rho;
+            sum += peak.rho.getValue("px");
 
         OpResult result = new OpResult(getName(), sum, RealMap.class);
 

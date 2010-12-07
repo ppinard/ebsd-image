@@ -17,11 +17,9 @@
  */
 package org.ebsdimage.core.exp.ops.indexing.pre;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
+
+import magnitude.core.Magnitude;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
@@ -30,6 +28,12 @@ import org.junit.Test;
 
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class IndexingPreOpsMockTest extends TestCase {
 
@@ -43,9 +47,19 @@ public class IndexingPreOpsMockTest extends TestCase {
     public void setUp() throws Exception {
         op = new IndexingPreOpsMock();
 
-        srcPeaks =
-                new HoughPeak[] { new HoughPeak(14.0, 0.0),
-                        new HoughPeak(22.0, 1.0), new HoughPeak(30.0, 0.0) };
+        Magnitude theta = new Magnitude(0.0, "rad");
+        Magnitude rho = new Magnitude(14.0, "px");
+        HoughPeak peak1 = new HoughPeak(theta, rho);
+
+        theta = new Magnitude(1.0, "rad");
+        rho = new Magnitude(22.0, "px");
+        HoughPeak peak2 = new HoughPeak(theta, rho);
+
+        theta = new Magnitude(0.0, "rad");
+        rho = new Magnitude(30.0, "px");
+        HoughPeak peak3 = new HoughPeak(theta, rho);
+
+        srcPeaks = new HoughPeak[] { peak1, peak2, peak3 };
     }
 
 
@@ -55,9 +69,21 @@ public class IndexingPreOpsMockTest extends TestCase {
         HoughPeak[] destPeaks = op.process(null, srcPeaks);
 
         assertEquals(3, destPeaks.length);
-        assertTrue(destPeaks[0].equals(new HoughPeak(15.0, 0.0), 1e-6));
-        assertTrue(destPeaks[1].equals(new HoughPeak(23.0, 1.0), 1e-6));
-        assertTrue(destPeaks[2].equals(new HoughPeak(31.0, 0.0), 1e-6));
+
+        Magnitude theta = new Magnitude(0.0, "rad");
+        Magnitude rho = new Magnitude(15.0, "px");
+        HoughPeak other = new HoughPeak(theta, rho);
+        assertEquals(other, destPeaks[0], 1e-6);
+
+        theta = new Magnitude(1.0, "rad");
+        rho = new Magnitude(23.0, "px");
+        other = new HoughPeak(theta, rho);
+        assertEquals(other, destPeaks[1], 1e-6);
+
+        theta = new Magnitude(0.0, "rad");
+        rho = new Magnitude(31.0, "px");
+        other = new HoughPeak(theta, rho);
+        assertEquals(other, destPeaks[2], 1e-6);
     }
 
 
@@ -93,7 +119,7 @@ public class IndexingPreOpsMockTest extends TestCase {
 
     @Test
     public void testHashCode() {
-        assertEquals(-155874800, op.hashCode());
+        assertEquals(-1558747800, op.hashCode());
     }
 
 
@@ -105,7 +131,7 @@ public class IndexingPreOpsMockTest extends TestCase {
 
         IndexingPreOpsMock other =
                 new XmlLoader().load(IndexingPreOpsMock.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

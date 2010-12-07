@@ -101,16 +101,17 @@ public class NoiseCizmar extends PatternPostOps {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
 
+        double delta = ((Number) precision).doubleValue();
         NoiseCizmar other = (NoiseCizmar) obj;
-        if (Math.abs(gaussian - other.gaussian) >= precision)
+        if (Math.abs(gaussian - other.gaussian) > delta)
             return false;
-        if (Math.abs(poisson - other.poisson) >= precision)
+        if (Math.abs(poisson - other.poisson) > delta)
             return false;
-        if (Math.abs(seed - other.seed) >= precision)
+        if (Math.abs(seed - other.seed) > delta)
             return false;
 
         return true;

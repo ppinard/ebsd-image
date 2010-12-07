@@ -97,12 +97,13 @@ public class AutomaticStdDev extends DetectionOp {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
 
+        double delta = ((Number) precision).doubleValue();
         AutomaticStdDev other = (AutomaticStdDev) obj;
-        if (abs(sigmaFactor - other.sigmaFactor) >= precision)
+        if (abs(sigmaFactor - other.sigmaFactor) > delta)
             return false;
 
         return true;

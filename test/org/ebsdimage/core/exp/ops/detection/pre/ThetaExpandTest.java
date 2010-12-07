@@ -17,10 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.detection.pre;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -31,6 +27,12 @@ import org.junit.Test;
 
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class ThetaExpandTest extends TestCase {
 
@@ -135,7 +137,7 @@ public class ThetaExpandTest extends TestCase {
         new XmlSaver().save(op, file);
 
         ThetaExpand other = new XmlLoader().load(ThetaExpand.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

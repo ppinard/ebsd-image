@@ -17,10 +17,6 @@
  */
 package crystallography.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
 import org.ebsdimage.TestCase;
@@ -30,6 +26,12 @@ import org.junit.Test;
 import ptpshared.core.math.Vector3D;
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class AtomSiteTest extends TestCase {
 
@@ -56,7 +58,7 @@ public class AtomSiteTest extends TestCase {
     @Test
     public void testAtomSiteIntDoubleDoubleDouble() {
         assertEquals(13, atom1.atomicNumber);
-        assertAlmostEquals(new Vector3D(0.0, 0.5, 0.5), atom1.position, 1e-7);
+        assertEquals(new Vector3D(0.0, 0.5, 0.5), atom1.position, 1e-7);
         assertEquals(1.0, atom1.occupancy, 1e-7);
     }
 
@@ -65,7 +67,7 @@ public class AtomSiteTest extends TestCase {
     @Test
     public void testAtomSiteIntDoubleDoubleDoubleDouble() {
         assertEquals(15, atom3.atomicNumber);
-        assertAlmostEquals(new Vector3D(0.9, 0.2, 0.3), atom3.position, 1e-7);
+        assertEquals(new Vector3D(0.9, 0.2, 0.3), atom3.position, 1e-7);
         assertEquals(0.5, atom3.occupancy, 1e-7);
     }
 
@@ -88,7 +90,7 @@ public class AtomSiteTest extends TestCase {
     @Test
     public void testAtomSiteIntVector3D() {
         assertEquals(14, atom2.atomicNumber);
-        assertAlmostEquals(new Vector3D(0.3, 0.2, 0.1), atom2.position, 1e-7);
+        assertEquals(new Vector3D(0.3, 0.2, 0.1), atom2.position, 1e-7);
         assertEquals(1.0, atom2.occupancy, 1e-7);
     }
 
@@ -111,7 +113,7 @@ public class AtomSiteTest extends TestCase {
     @Test
     public void testAtomSiteIntVector3DDouble() {
         assertEquals(16, atom4.atomicNumber);
-        assertAlmostEquals(new Vector3D(0.1, 0.2, 0.3), atom4.position, 1e-7);
+        assertEquals(new Vector3D(0.1, 0.2, 0.3), atom4.position, 1e-7);
         assertEquals(0.1, atom4.occupancy, 1e-7);
     }
 
@@ -209,10 +211,10 @@ public class AtomSiteTest extends TestCase {
     @Test
     public void testRefinePosition() {
         AtomSite atom = new AtomSite(13, 1.1, 1.2, 1.3);
-        assertAlmostEquals(new AtomSite(13, 0.1, 0.2, 0.3), atom, 1e-3);
+        assertEquals(new AtomSite(13, 0.1, 0.2, 0.3), atom, 1e-3);
 
         atom = new AtomSite(13, -0.9, -0.8, -0.7);
-        assertAlmostEquals(new AtomSite(13, 0.1, 0.2, 0.3), atom, 1e-3);
+        assertEquals(new AtomSite(13, 0.1, 0.2, 0.3), atom, 1e-3);
     }
 
 
@@ -235,7 +237,7 @@ public class AtomSiteTest extends TestCase {
 
         // Read
         AtomSite other = new XmlLoader().load(AtomSite.class, tmpFile);
-        assertAlmostEquals(atom1, other, 1e-7);
+        assertEquals(atom1, other, 1e-7);
     }
 
 }

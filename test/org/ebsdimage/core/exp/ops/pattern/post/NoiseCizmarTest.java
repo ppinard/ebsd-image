@@ -1,9 +1,5 @@
 package org.ebsdimage.core.exp.ops.pattern.post;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -14,6 +10,12 @@ import org.junit.Test;
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.ByteMap;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class NoiseCizmarTest extends TestCase {
 
@@ -99,7 +101,7 @@ public class NoiseCizmarTest extends TestCase {
         new XmlSaver().save(op, file);
 
         NoiseCizmar other = new XmlLoader().load(NoiseCizmar.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

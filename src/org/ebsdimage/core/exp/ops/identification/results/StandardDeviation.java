@@ -108,12 +108,13 @@ public class StandardDeviation extends IdentificationResultsOps {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
 
+        double delta = ((Number) precision).doubleValue();
         StandardDeviation other = (StandardDeviation) obj;
-        if (Math.abs(max - other.max) >= precision)
+        if (Math.abs(max - other.max) > delta)
             return false;
 
         return true;

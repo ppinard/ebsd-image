@@ -17,10 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.detection.op;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -37,6 +33,12 @@ import rmlimage.core.IdentMap;
 import rmlimage.core.Identification;
 import rmlimage.core.MathMorph;
 import rmlshared.io.FileUtil;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class AutomaticStdDevTest extends TestCase {
 
@@ -119,7 +121,7 @@ public class AutomaticStdDevTest extends TestCase {
 
         AutomaticStdDev other =
                 new XmlLoader().load(AutomaticStdDev.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

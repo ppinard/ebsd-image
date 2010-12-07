@@ -49,7 +49,7 @@ public interface OperationCreator {
 
 
     /**
-     * Returns the <code>Operation</code> properly initialized using the
+     * Returns the <code>Operation</code> properly initialised using the
      * parameters specified in the dialog.
      * <p/>
      * This method must be called after <code>show()</code> and only if the

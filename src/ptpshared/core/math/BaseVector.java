@@ -22,8 +22,8 @@ import static java.lang.Math.sqrt;
 
 import java.util.Arrays;
 
+import junittools.core.AlmostEquable;
 import net.jcip.annotations.Immutable;
-import ptpshared.util.AlmostEquable;
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -156,11 +156,12 @@ public abstract class BaseVector implements AlmostEquable, Cloneable {
      *             if the precision is not a number (NaN)
      */
     @Override
-    public boolean equals(Object obj, double precision) {
-        if (precision < 0)
+    public boolean equals(Object obj, Object precision) {
+        double delta = ((Number) precision).doubleValue();
+        if (delta < 0)
             throw new IllegalArgumentException(
                     "The precision has to be greater or equal to 0.0.");
-        if (Double.isNaN(precision))
+        if (Double.isNaN(delta))
             throw new IllegalArgumentException(
                     "The precision must be a number.");
 
@@ -173,7 +174,7 @@ public abstract class BaseVector implements AlmostEquable, Cloneable {
 
         BaseVector other = (BaseVector) obj;
         for (int n = 0; n < size(); n++)
-            if (abs(v[n] - other.v[n]) >= precision)
+            if (abs(v[n] - other.v[n]) > delta)
                 return false;
 
         return true;

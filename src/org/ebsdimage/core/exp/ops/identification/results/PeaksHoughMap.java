@@ -3,6 +3,8 @@ package org.ebsdimage.core.exp.ops.identification.results;
 import java.io.File;
 import java.io.IOException;
 
+import magnitude.core.Magnitude;
+
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.Exp;
@@ -87,12 +89,13 @@ public class PeaksHoughMap extends IdentificationResultsOps {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
 
+        double delta = ((Number) precision).doubleValue();
         PeaksHoughMap other = (PeaksHoughMap) obj;
-        if (Math.abs(count - other.count) >= precision)
+        if (Math.abs(count - other.count) > delta)
             return false;
 
         return true;
@@ -139,8 +142,8 @@ public class PeaksHoughMap extends IdentificationResultsOps {
             thresholdIntensity = peaks[count - 1].intensity;
 
         int index;
-        double rho;
-        double theta;
+        Magnitude rho;
+        Magnitude theta;
         for (HoughPeak peak : peaks) {
             rho = peak.rho;
             theta = peak.theta;
@@ -150,9 +153,11 @@ public class PeaksHoughMap extends IdentificationResultsOps {
                 break;
 
             // Check that the peak is located inside the map
-            if (rho > map.rMax || rho < map.rMin)
+            if (rho.compareTo(map.getRhoMax()) > 0
+                    || rho.compareTo(map.getRhoMin()) < 0)
                 continue;
-            if (theta > map.thetaMax || theta < map.thetaMin)
+            if (theta.compareTo(map.getThetaMax()) > 0
+                    || theta.compareTo(map.getThetaMin()) < 0)
                 continue;
 
             // Get index of the peak and assign a white pixel

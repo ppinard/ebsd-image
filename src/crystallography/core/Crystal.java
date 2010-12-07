@@ -17,6 +17,7 @@
  */
 package crystallography.core;
 
+import junittools.core.AlmostEquable;
 import net.jcip.annotations.Immutable;
 
 import org.simpleframework.xml.Attribute;
@@ -24,7 +25,6 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
-import ptpshared.util.AlmostEquable;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
@@ -131,14 +131,7 @@ public class Crystal implements AlmostEquable {
      *             if the precision is not a number (NaN)
      */
     @Override
-    public boolean equals(Object obj, double precision) {
-        if (precision < 0)
-            throw new IllegalArgumentException(
-                    "The precision has to be greater or equal to 0.0.");
-        if (Double.isNaN(precision))
-            throw new IllegalArgumentException(
-                    "The precision must be a number.");
-
+    public boolean equals(Object obj, Object precision) {
         if (this == obj)
             return true;
         if (obj == null)

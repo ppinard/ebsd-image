@@ -17,10 +17,6 @@
  */
 package org.ebsdimage.core.sim.ops.patternsim;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
 import org.ebsdimage.TestCase;
@@ -35,6 +31,12 @@ import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.ByteMap;
 import crystallography.core.CrystalFactory;
 import crystallography.core.Reflectors;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class PatternSimOpMockTest extends TestCase {
 
@@ -109,7 +111,7 @@ public class PatternSimOpMockTest extends TestCase {
 
         PatternSimOpMock other =
                 new XmlLoader().load(PatternSimOpMock.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

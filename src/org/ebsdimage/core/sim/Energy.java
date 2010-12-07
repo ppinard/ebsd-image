@@ -18,12 +18,11 @@
 package org.ebsdimage.core.sim;
 
 import static java.lang.Math.abs;
+import junittools.core.AlmostEquable;
 import net.jcip.annotations.Immutable;
 
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Text;
-
-import ptpshared.util.AlmostEquable;
 
 /**
  * Stores the beam energy.
@@ -77,11 +76,12 @@ public class Energy implements AlmostEquable {
      *             if the precision is not a number (NaN)
      */
     @Override
-    public boolean equals(Object obj, double precision) {
-        if (precision < 0)
+    public boolean equals(Object obj, Object precision) {
+        double delta = ((Number) precision).doubleValue();
+        if (delta < 0)
             throw new IllegalArgumentException(
                     "The precision has to be greater or equal to 0.0.");
-        if (Double.isNaN(precision))
+        if (Double.isNaN(delta))
             throw new IllegalArgumentException(
                     "The precision must be a number.");
 
@@ -93,7 +93,7 @@ public class Energy implements AlmostEquable {
             return false;
 
         Energy other = (Energy) obj;
-        if (abs(value - other.value) >= precision)
+        if (abs(value - other.value) > delta)
             return false;
 
         return true;

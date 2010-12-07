@@ -17,10 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.detection.results;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
 import org.ebsdimage.TestCase;
@@ -33,6 +29,12 @@ import org.junit.Test;
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
 import rmlimage.core.BinMap;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class DifferenceTest extends TestCase {
 
@@ -119,7 +121,7 @@ public class DifferenceTest extends TestCase {
         new XmlSaver().save(op, file);
 
         Difference other = new XmlLoader().load(Difference.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

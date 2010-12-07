@@ -86,14 +86,15 @@ public abstract class PatternOp extends Operation {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
 
+        double delta = ((Number) precision).doubleValue();
         PatternOp other = (PatternOp) obj;
-        if (Math.abs(size - other.size) >= precision)
+        if (Math.abs(size - other.size) > delta)
             return false;
-        if (Math.abs(startIndex - other.startIndex) >= precision)
+        if (Math.abs(startIndex - other.startIndex) > delta)
             return false;
 
         return true;

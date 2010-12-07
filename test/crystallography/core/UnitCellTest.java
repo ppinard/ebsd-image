@@ -17,11 +17,6 @@
  */
 package crystallography.core;
 
-import static java.lang.Math.PI;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
 import org.ebsdimage.TestCase;
@@ -31,6 +26,14 @@ import org.junit.Test;
 import ptpshared.core.math.Matrix3D;
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static java.lang.Math.PI;
+
+import static junittools.test.Assert.assertEquals;
 
 public class UnitCellTest extends TestCase {
 
@@ -155,6 +158,6 @@ public class UnitCellTest extends TestCase {
 
         // Read
         UnitCell other = new XmlLoader().load(UnitCell.class, tmpFile);
-        assertAlmostEquals(unitCell, other, 1e-6);
+        assertEquals(unitCell, other, 1e-6);
     }
 }

@@ -1,11 +1,9 @@
 package org.ebsdimage.core.exp.ops.identification.results;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
+
+import magnitude.core.Magnitude;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
@@ -14,6 +12,12 @@ import org.junit.Test;
 
 import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static junittools.test.Assert.assertEquals;
 
 public class HoughPeaksTest extends TestCase {
 
@@ -33,9 +37,17 @@ public class HoughPeaksTest extends TestCase {
     public void setUp() throws Exception {
         op = new HoughPeaks();
 
-        peak1 = new HoughPeak(3.0, 0.5, 1);
-        peak2 = new HoughPeak(5.0, 1.5, 3);
-        peak3 = new HoughPeak(4.0, 1.0, 2);
+        Magnitude theta = new Magnitude(0.5, "rad");
+        Magnitude rho = new Magnitude(3.0, "px");
+        peak1 = new HoughPeak(theta, rho, 1);
+
+        theta = new Magnitude(1.5, "rad");
+        rho = new Magnitude(5.0, "px");
+        peak2 = new HoughPeak(theta, rho, 3);
+
+        theta = new Magnitude(1.0, "rad");
+        rho = new Magnitude(4.0, "px");
+        peak3 = new HoughPeak(theta, rho, 2);
 
         peaks = new HoughPeak[] { peak1, peak2, peak3 };
     }
@@ -50,9 +62,9 @@ public class HoughPeaksTest extends TestCase {
         HoughPeak[] other = new XmlLoader().loadArray(HoughPeak.class, file);
 
         assertEquals(3, other.length);
-        assertAlmostEquals(peak2, other[0], 1e-6);
-        assertAlmostEquals(peak3, other[1], 1e-6);
-        assertAlmostEquals(peak1, other[2], 1e-6);
+        assertEquals(peak2, other[0], 1e-6);
+        assertEquals(peak3, other[1], 1e-6);
+        assertEquals(peak1, other[2], 1e-6);
     }
 
 
@@ -92,6 +104,6 @@ public class HoughPeaksTest extends TestCase {
         new XmlSaver().save(op, file);
 
         HoughPeaks other = new XmlLoader().load(HoughPeaks.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 }

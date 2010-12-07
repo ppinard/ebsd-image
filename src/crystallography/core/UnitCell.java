@@ -17,19 +17,19 @@
  */
 package crystallography.core;
 
-import static java.lang.Math.PI;
-import static java.lang.Math.abs;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import static ptpshared.core.math.Math.acos;
-import static ptpshared.core.math.Math.sqrt;
+import junittools.core.AlmostEquable;
 import net.jcip.annotations.Immutable;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
 import ptpshared.core.math.Matrix3D;
-import ptpshared.util.AlmostEquable;
+import static ptpshared.core.math.Math.acos;
+import static ptpshared.core.math.Math.sqrt;
+import static java.lang.Math.PI;
+import static java.lang.Math.abs;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
 /**
  * Defines a unit cell. From the lattice parameters and angles, the class
@@ -261,11 +261,12 @@ public class UnitCell implements AlmostEquable {
      *             if the precision is not a number (NaN)
      */
     @Override
-    public boolean equals(Object obj, double precision) {
-        if (precision < 0)
+    public boolean equals(Object obj, Object precision) {
+        double delta = ((Number) precision).doubleValue();
+        if (delta < 0)
             throw new IllegalArgumentException(
                     "The precision has to be greater or equal to 0.0.");
-        if (Double.isNaN(precision))
+        if (Double.isNaN(delta))
             throw new IllegalArgumentException(
                     "The precision must be a number.");
 
@@ -278,17 +279,17 @@ public class UnitCell implements AlmostEquable {
 
         UnitCell other = (UnitCell) obj;
 
-        if (abs(a - other.a) >= precision)
+        if (abs(a - other.a) > delta)
             return false;
-        if (abs(b - other.b) >= precision)
+        if (abs(b - other.b) > delta)
             return false;
-        if (abs(c - other.c) >= precision)
+        if (abs(c - other.c) > delta)
             return false;
-        if (abs(alpha - other.alpha) >= precision)
+        if (abs(alpha - other.alpha) > delta)
             return false;
-        if (abs(beta - other.beta) >= precision)
+        if (abs(beta - other.beta) > delta)
             return false;
-        if (abs(gamma - other.gamma) >= precision)
+        if (abs(gamma - other.gamma) > delta)
             return false;
 
         return true;

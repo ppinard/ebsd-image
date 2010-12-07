@@ -18,13 +18,13 @@
 package org.ebsdimage.core;
 
 import static java.lang.Math.PI;
+import junittools.core.AlmostEquable;
 import net.jcip.annotations.Immutable;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 import ptpshared.core.math.Quaternion;
-import ptpshared.util.AlmostEquable;
 
 /**
  * Representation of the metadata held in the <code>EbsdMMap</code>.
@@ -182,7 +182,15 @@ public class EbsdMetadata implements AlmostEquable {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
+        double delta = ((Number) precision).doubleValue();
+        if (delta < 0)
+            throw new IllegalArgumentException(
+                    "The precision has to be greater or equal to 0.0.");
+        if (Double.isNaN(delta))
+            throw new IllegalArgumentException(
+                    "The precision must be a number.");
+
         if (this == obj)
             return true;
         if (obj == null)
@@ -191,13 +199,13 @@ public class EbsdMetadata implements AlmostEquable {
             return false;
 
         EbsdMetadata other = (EbsdMetadata) obj;
-        if (Math.abs(beamEnergy - other.beamEnergy) >= precision)
+        if (Math.abs(beamEnergy - other.beamEnergy) > delta)
             return false;
-        if (Math.abs(tiltAngle - other.tiltAngle) >= precision)
+        if (Math.abs(tiltAngle - other.tiltAngle) > delta)
             return false;
-        if (Math.abs(workingDistance - other.workingDistance) >= precision)
+        if (Math.abs(workingDistance - other.workingDistance) > delta)
             return false;
-        if (Math.abs(magnification - other.magnification) >= precision)
+        if (Math.abs(magnification - other.magnification) > delta)
             return false;
 
         if (!camera.equals(other.camera, precision))

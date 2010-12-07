@@ -17,26 +17,8 @@
  */
 package org.ebsdimage.core;
 
-import java.io.IOException;
-
 import org.ebsdimage.TestCase;
-import org.junit.Test;
-
-import rmlimage.core.ByteMap;
 
 public class NoiseTest extends TestCase {
-
-    @Test
-    public void testRadialNoise() throws IOException {
-        ByteMap expected =
-                (ByteMap) load("org/ebsdimage/core/noise_radialnoise.bmp");
-
-        ByteMap map = new ByteMap(100, 100);
-        map.clear(128);
-
-        map = Noise.radialNoise(map, 0, -30, 50, 100, 1.0, 15.0, 1);
-
-        map.assertEquals(expected);
-    }
 
 }

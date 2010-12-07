@@ -1,5 +1,7 @@
 package org.ebsdimage.core.exp.ops.identification.op;
 
+import magnitude.core.Magnitude;
+
 import org.ebsdimage.core.Analysis;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
@@ -36,17 +38,16 @@ public class Maximum extends IdentificationOp {
 
         // Calculate maximum location
         HoughPoint maximums = Analysis.getMaximumLocation(houghMap, identMap);
-        float[] rhos = maximums.rho;
-        float[] thetas = maximums.theta;
 
         // Create Peak objects with intensity at maximum
         HoughPeak[] peaks = new HoughPeak[identMap.getObjectCount()];
 
-        double rho, theta, intensity;
+        Magnitude rho, theta;
+        double intensity;
         int index;
         for (int i = 0; i < identMap.getObjectCount(); i++) {
-            rho = rhos[i];
-            theta = thetas[i];
+            rho = (Magnitude) maximums.getRho(i);
+            theta = (Magnitude) maximums.getTheta(i);
 
             index = houghMap.getIndex(rho, theta);
             intensity = houghMap.pixArray[index] & 0xff;

@@ -75,12 +75,13 @@ public class Smoothing extends PatternPostOps {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
 
+        double delta = ((Number) precision).doubleValue();
         Smoothing other = (Smoothing) obj;
-        if (Math.abs(kernelSize - other.kernelSize) >= precision)
+        if (Math.abs(kernelSize - other.kernelSize) > delta)
             return false;
 
         return true;

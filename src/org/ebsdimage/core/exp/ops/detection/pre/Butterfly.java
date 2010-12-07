@@ -49,16 +49,17 @@ public class Butterfly extends DetectionPreOps {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
 
+        double delta = ((Number) precision).doubleValue();
         Butterfly other = (Butterfly) obj;
-        if (abs(kernelSize - other.kernelSize) >= precision)
+        if (abs(kernelSize - other.kernelSize) > delta)
             return false;
-        if (abs(flattenLowerLimit - other.flattenLowerLimit) >= precision)
+        if (abs(flattenLowerLimit - other.flattenLowerLimit) > delta)
             return false;
-        if (abs(flattenUpperLimit - other.flattenUpperLimit) >= precision)
+        if (abs(flattenUpperLimit - other.flattenUpperLimit) > delta)
             return false;
 
         return true;
@@ -184,8 +185,8 @@ public class Butterfly extends DetectionPreOps {
         // Convert back to byteMap
         ByteMap houghMapFlatten = Contrast.expansion(houghMapConvol);
 
-        houghMapFlatten.setProperties(srcMap);
-        HoughMap destMap = Conversion.toHoughMap(houghMapFlatten);
+        HoughMap destMap = srcMap.duplicate();
+        Conversion.toHoughMap(houghMapFlatten, destMap);
 
         return destMap;
     }

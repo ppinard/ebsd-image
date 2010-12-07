@@ -17,9 +17,6 @@
  */
 package org.ebsdimage.core;
 
-import static java.lang.Math.toRadians;
-import static org.junit.Assert.assertEquals;
-
 import java.util.HashMap;
 
 import org.ebsdimage.TestCase;
@@ -32,6 +29,11 @@ import rmlimage.core.RGBMap;
 import rmlimage.module.real.core.RealMap;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+
+import static java.lang.Math.toRadians;
 
 public class ConversionTest extends TestCase {
 
@@ -59,10 +61,6 @@ public class ConversionTest extends TestCase {
 
         assertEquals(houghMap.width, byteMap.width);
         assertEquals(houghMap.height, byteMap.height);
-        assertEquals(Double.doubleToLongBits(houghMap.deltaR),
-                byteMap.getProperty(HoughMap.DELTA_R, -1l));
-        assertEquals(Double.doubleToLongBits(houghMap.deltaTheta),
-                byteMap.getProperty(HoughMap.DELTA_THETA, -1l));
 
         // If the pixArray are different
         byte[] bytePixArray = byteMap.pixArray;
@@ -75,6 +73,9 @@ public class ConversionTest extends TestCase {
                         + ") between the ByteMap (" + (bytePixArray[n] & 0xff)
                         + ") and the HoughMap (" + (houghPixArray[n] & 0xff)
                         + ')');
+
+        // Calibration
+        byteMap.getCalibration().assertEquals(houghMap.getCalibration());
     }
 
 
@@ -89,10 +90,6 @@ public class ConversionTest extends TestCase {
 
         assertEquals(houghMap.width, byteMap.width);
         assertEquals(houghMap.height, byteMap.height);
-        assertEquals(Double.doubleToLongBits(houghMap.deltaR),
-                byteMap.getProperty(HoughMap.DELTA_R, -1l));
-        assertEquals(Double.doubleToLongBits(houghMap.deltaTheta),
-                byteMap.getProperty(HoughMap.DELTA_THETA, -1l));
 
         // If the pixArray are different
         byte[] bytePixArray = byteMap.pixArray;
@@ -105,6 +102,9 @@ public class ConversionTest extends TestCase {
                         + ") between the ByteMap (" + (bytePixArray[n] & 0xff)
                         + ") and the HoughMap (" + (houghPixArray[n] & 0xff)
                         + ')');
+
+        // Calibration
+        byteMap.getCalibration().assertEquals(houghMap.getCalibration());
     }
 
 
@@ -154,20 +154,25 @@ public class ConversionTest extends TestCase {
         // Load a HoughMap derived ByteMap
         ByteMap byteMap = (ByteMap) load("org/ebsdimage/testdata/houghmap.bmp");
 
-        HoughMap reconvertedHoughMap = Conversion.toHoughMap(byteMap);
+        // Create an empty HoughMap with the good calibration
+        HoughMap destMap =
+                new HoughMap(byteMap.width, byteMap.height, toRadians(1.0),
+                        1.8816689);
 
-        assertEquals(180, reconvertedHoughMap.width);
-        assertEquals(227, reconvertedHoughMap.height);
+        Conversion.toHoughMap(byteMap, destMap);
 
-        assertEquals(212.628585835, reconvertedHoughMap.rMax, 0.001);
-        assertEquals(-212.628585835, reconvertedHoughMap.rMin, 0.001);
-        assertEquals(1.8816689, reconvertedHoughMap.deltaR, 0.001);
+        assertEquals(180, destMap.width);
+        assertEquals(227, destMap.height);
 
-        assertEquals(0.0, reconvertedHoughMap.thetaMin, 0.001);
-        assertEquals(3.12414, reconvertedHoughMap.thetaMax, 0.001);
-        assertEquals(toRadians(1.0), reconvertedHoughMap.deltaTheta, 0.001);
+        assertEquals(212.628585835, destMap.rhoMax.getValue("px"), 0.001);
+        assertEquals(-212.628585835, destMap.rhoMin.getValue("px"), 0.001);
+        assertEquals(1.8816689, destMap.getDeltaRho().getValue("px"), 0.001);
 
-        assertArrayEquals(reconvertedHoughMap.pixArray, byteMap.pixArray);
+        assertEquals(0.0, destMap.thetaMin.getValue("rad"), 0.001);
+        assertEquals(3.12414, destMap.thetaMax.getValue("rad"), 0.001);
+        assertEquals(1.0, destMap.getDeltaTheta().getValue("deg"), 0.001);
+
+        assertArrayEquals(destMap.pixArray, byteMap.pixArray);
     }
 
 

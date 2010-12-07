@@ -17,6 +17,7 @@
  */
 package org.ebsdimage.core;
 
+import magnitude.core.Magnitude;
 import rmlimage.core.Result;
 
 /**
@@ -27,11 +28,11 @@ import rmlimage.core.Result;
  */
 public class HoughPoint extends Result {
 
-    /** Id for the rho values. */
-    public static final int ID_RHO = 0;
-
     /** Id for the theta values. */
-    public static final int ID_THETA = 1;
+    public static final int ID_THETA = 0;
+
+    /** Id for the rho values. */
+    public static final int ID_RHO = 1;
 
     /** Rho values of the centroids. */
     public final float[] rho;
@@ -43,33 +44,70 @@ public class HoughPoint extends Result {
 
     /**
      * Creates a new <code>Centroid</code> containing a number of centroids. The
-     * units for the rho values are in pixels and for the theta values in
-     * radians.
+     * units for the theta values are in radians.
      * 
      * @param nbValues
      *            number of centroids
+     * @param rhoUnits
+     *            units for the rho values
      */
-    public HoughPoint(int nbValues) {
+    public HoughPoint(int nbValues, String rhoUnits) {
         super(2, nbValues);
 
-        name[ID_RHO] = "Centroid R";
+        if (rhoUnits == null)
+            throw new NullPointerException("rho units cannot be null.");
+
         name[ID_THETA] = "Centroid Theta";
+        name[ID_RHO] = "Centroid R";
 
-        units[ID_RHO] = "pix";
         units[ID_THETA] = "rad";
+        units[ID_RHO] = rhoUnits;
 
-        rho = values[ID_RHO];
         theta = values[ID_THETA];
+        rho = values[ID_RHO];
     }
 
 
 
     @Override
     public HoughPoint duplicate() {
-        HoughPoint dup = new HoughPoint(rho.length);
+        HoughPoint dup = new HoughPoint(rho.length, units[ID_RHO]);
         System.arraycopy(rho, 0, dup.rho, 0, rho.length);
         System.arraycopy(theta, 0, dup.theta, 0, theta.length);
         return dup;
+    }
+
+
+
+    /**
+     * Returns the rho value at the specified index as a <code>Magnitude</code>.
+     * 
+     * @param index
+     *            index of the result
+     * @return rho
+     */
+    public Magnitude getRho(int index) {
+        if (index < 0 || index >= rho.length)
+            throw new IllegalArgumentException("Index must be between [0,"
+                    + rho.length + "[");
+        return new Magnitude(rho[index], units[ID_RHO]);
+    }
+
+
+
+    /**
+     * Returns the theta value at the specified index as a
+     * <code>Magnitude</code>.
+     * 
+     * @param index
+     *            index of the result
+     * @return theta
+     */
+    public Magnitude getTheta(int index) {
+        if (index < 0 || index >= theta.length)
+            throw new IllegalArgumentException("Index must be between [0,"
+                    + theta.length + "[");
+        return new Magnitude(theta[index], units[ID_THETA]);
     }
 
 }

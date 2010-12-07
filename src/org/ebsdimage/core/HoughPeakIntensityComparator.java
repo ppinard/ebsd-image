@@ -31,14 +31,6 @@ public class HoughPeakIntensityComparator implements Comparator<HoughPeak>,
 
     @Override
     public int compare(HoughPeak peak0, HoughPeak peak1) {
-        double intensity0 = peak0.intensity;
-        double intensity1 = peak1.intensity;
-
-        if (intensity0 < intensity1)
-            return -1;
-        else if (intensity0 > intensity1)
-            return 1;
-        else
-            return 0;
+        return Double.compare(peak0.intensity, peak1.intensity);
     }
 }

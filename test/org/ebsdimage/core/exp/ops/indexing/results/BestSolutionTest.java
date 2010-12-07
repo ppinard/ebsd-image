@@ -17,11 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.indexing.results;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static ptpshared.utility.Arrays.reverse;
-
 import java.io.File;
 import java.util.Arrays;
 
@@ -42,6 +37,14 @@ import ptpshared.util.xml.XmlLoader;
 import ptpshared.util.xml.XmlSaver;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static ptpshared.utility.Arrays.reverse;
+
+import static junittools.test.Assert.assertEquals;
 
 public class BestSolutionTest extends TestCase {
 
@@ -157,7 +160,7 @@ public class BestSolutionTest extends TestCase {
         new XmlSaver().save(op, file);
 
         BestSolution other = new XmlLoader().load(BestSolution.class, file);
-        assertAlmostEquals(op, other, 1e-6);
+        assertEquals(op, other, 1e-6);
     }
 
 }

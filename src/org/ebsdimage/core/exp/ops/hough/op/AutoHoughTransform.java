@@ -72,12 +72,13 @@ public class AutoHoughTransform extends HoughOp {
 
 
     @Override
-    public boolean equals(Object obj, double precision) {
+    public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
 
+        double delta = ((Number) precision).doubleValue();
         AutoHoughTransform other = (AutoHoughTransform) obj;
-        if (abs(deltaTheta - other.deltaTheta) >= precision)
+        if (abs(deltaTheta - other.deltaTheta) > delta)
             return false;
 
         return true;

@@ -77,21 +77,6 @@ public abstract class EbsdMMap extends MultiMap {
 
 
     /**
-     * Sets the metadata of the EBSD multimap.
-     * 
-     * @param metadata
-     *            new metadata
-     */
-    public void setMetadata(EbsdMetadata metadata) {
-        if (metadata == null)
-            throw new NullPointerException("Metadata cannot be null.");
-
-        this.metadata = metadata;
-    }
-
-
-
-    /**
      * Creates a new <code>EbsdMMap</code> with the specified dimensions and
      * metadata. All the required maps are created but are empty.
      * 
@@ -209,6 +194,17 @@ public abstract class EbsdMMap extends MultiMap {
 
 
     /**
+     * Returns the map for the errors.
+     * 
+     * @return error map
+     */
+    public ErrorMap getErrorMap() {
+        return (ErrorMap) getMap(ERRORS);
+    }
+
+
+
+    /**
      * Returns the metadata.
      * 
      * @return metadata
@@ -278,17 +274,6 @@ public abstract class EbsdMMap extends MultiMap {
      */
     public PhasesMap getPhasesMap() {
         return (PhasesMap) getMap(PHASES);
-    }
-
-
-
-    /**
-     * Returns the map for the errors.
-     * 
-     * @return error map
-     */
-    public ErrorMap getErrorMap() {
-        return (ErrorMap) getMap(ERRORS);
     }
 
 
@@ -377,5 +362,20 @@ public abstract class EbsdMMap extends MultiMap {
                     + " cannot be removed.");
         else
             super.remove(alias);
+    }
+
+
+
+    /**
+     * Sets the metadata of the EBSD multimap.
+     * 
+     * @param metadata
+     *            new metadata
+     */
+    public void setMetadata(EbsdMetadata metadata) {
+        if (metadata == null)
+            throw new NullPointerException("Metadata cannot be null.");
+
+        this.metadata = metadata;
     }
 }
