@@ -19,9 +19,6 @@ package org.ebsdimage.core;
 
 import magnitude.core.Magnitude;
 import magnitude.geom.Line2D;
-
-import org.ebsdimage.core.sim.Band;
-
 import rmlshared.math.Stats;
 import static magnitude.core.Math.PI;
 import static magnitude.core.Math.atan;
@@ -180,24 +177,23 @@ public class HoughMath {
         return new HoughPeak(theta, rho, intensity);
     }
 
-
-
-    /**
-     * Converts a list of bands to a list of Hough peaks.
-     * 
-     * @param bands
-     *            list of bands
-     * @return list of Hough peaks
-     */
-    public static HoughPeak[] bandsToHoughPeaks(Band[] bands) {
-        HoughPeak[] peaks = new HoughPeak[bands.length];
-
-        for (int i = 0; i < bands.length; i++) {
-            peaks[i] =
-                    HoughMath.lineSpaceToHoughSpace(bands[i].line,
-                            bands[i].intensity);
-        }
-
-        return peaks;
-    }
+    // TODO: Fix when calibration is fully implemented
+    // /**
+    // * Converts a list of bands to a list of Hough peaks.
+    // *
+    // * @param bands
+    // * list of bands
+    // * @return list of Hough peaks
+    // */
+    // public static HoughPeak[] bandsToHoughPeaks(Band[] bands) {
+    // HoughPeak[] peaks = new HoughPeak[bands.length];
+    //
+    // for (int i = 0; i < bands.length; i++) {
+    // peaks[i] =
+    // HoughMath.lineSpaceToHoughSpace(bands[i].line,
+    // bands[i].intensity);
+    // }
+    //
+    // return peaks;
+    // }
 }

@@ -46,7 +46,7 @@ public class ReflectorsFactory {
         UnitCell unitCell = crystal.unitCell;
         AtomSites atoms = crystal.atoms;
         ScatteringFactors scatter =
-                Reflection.newInstance(scatterType.getScatteringFactors());
+                (ScatteringFactors) Reflection.newInstance(scatterType.getScatteringFactors());
 
         double maxDiffractionIntensity =
                 Calculations.maximumDiffractionIntensity(unitCell, atoms,

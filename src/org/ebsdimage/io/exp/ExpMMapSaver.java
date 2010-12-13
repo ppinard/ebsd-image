@@ -19,6 +19,9 @@ package org.ebsdimage.io.exp;
 
 import org.ebsdimage.core.exp.ExpMMap;
 import org.ebsdimage.io.EbsdMMapSaver;
+import org.jdom.Document;
+
+import rmlimage.module.multi.core.MultiMap;
 
 /**
  * Saver for a <code>ExpMMap</code>. A <code>ExpMMap</code> is saved in a human
@@ -45,6 +48,14 @@ public class ExpMMapSaver extends EbsdMMapSaver {
     @Override
     protected int getVersion() {
         return ExpMMap.VERSION;
+    }
+
+
+
+    // TODO: Fix when ZipSaver and ZipLoader are fully modified
+    @Override
+    protected Document getMetadata(MultiMap multiMap) {
+        return null;
     }
 
 }

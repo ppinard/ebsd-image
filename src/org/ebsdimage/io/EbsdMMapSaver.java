@@ -17,13 +17,6 @@
  */
 package org.ebsdimage.io;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.ebsdimage.core.EbsdMMap;
-
-import ptpshared.util.xml.XmlSaver;
-import rmlimage.module.multi.core.MultiMap;
 import rmlimage.module.multi.io.ZipSaver;
 
 /**
@@ -39,14 +32,12 @@ public abstract class EbsdMMapSaver extends ZipSaver {
         rmlimage.io.IO.addSaver(org.ebsdimage.io.ErrorMapSaver.class);
     }
 
-
-
-    @Override
-    protected void saveOtherFiles(MultiMap mmap, File zipDir)
-            throws IOException {
-        super.saveOtherFiles(mmap, zipDir);
-
-        File file = new File(zipDir, "metadata.xml");
-        new XmlSaver().save(((EbsdMMap) mmap).getMetadata(), file);
-    }
+    // @Override
+    // protected void saveOtherFiles(MultiMap mmap, File zipDir)
+    // throws IOException {
+    // super.saveOtherFiles(mmap, zipDir);
+    //
+    // File file = new File(zipDir, "metadata.xml");
+    // new XmlSaver().save(((EbsdMMap) mmap).getMetadata(), file);
+    // }
 }

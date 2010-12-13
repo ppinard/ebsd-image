@@ -20,7 +20,6 @@ package org.ebsdimage.core.sim.ops.output;
 import java.io.File;
 import java.io.IOException;
 
-import org.ebsdimage.core.HoughMath;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.sim.Band;
 import org.ebsdimage.core.sim.Sim;
@@ -55,7 +54,10 @@ public class HoughPeaks extends OutputOps {
     public void save(Sim sim, PatternSimOp patternSimOp) throws IOException {
         // Convert pattern's bands to Hough peaks
         Band[] bands = patternSimOp.getBands();
-        HoughPeak[] peaks = HoughMath.bandsToHoughPeaks(bands);
+
+        // TODO: Fix when calibration is fully implemented
+        // HoughPeak[] peaks = HoughMath.bandsToHoughPeaks(bands);
+        HoughPeak[] peaks = new HoughPeak[0];
 
         // Save Hough peaks
         File file =

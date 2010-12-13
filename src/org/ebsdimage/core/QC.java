@@ -39,8 +39,8 @@ public class QC {
      *            color of the lines
      */
     public void overlay(ByteMap patternMap, BinMap peaksMap, RGB rgb) {
-        HoughPoint centroids =
-                Analysis.getCentroid(Identification.identify(peaksMap));
+        rmlimage.core.Centroid centroids =
+                rmlimage.core.Analysis.getCentroid(Identification.identify(peaksMap));
 
         // Set color 255 to specified RGB
         MapMath.subtraction(patternMap, 1, patternMap);
@@ -49,7 +49,7 @@ public class QC {
 
         int nbPeaks = centroids.getValueCount();
         for (int n = 0; n < nbPeaks; n++)
-            Drawing.line(patternMap, centroids.rho[n], centroids.theta[n], 255);
+            Drawing.line(patternMap, centroids.x[n], centroids.y[n], 255);
 
     }
 

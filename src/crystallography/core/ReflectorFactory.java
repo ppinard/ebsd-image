@@ -33,7 +33,7 @@ public class ReflectorFactory {
             throw new NullPointerException("Scattering factors cannot be null.");
 
         ScatteringFactors scatter =
-                Reflection.newInstance(scatterType.getScatteringFactors());
+                (ScatteringFactors) Reflection.newInstance(scatterType.getScatteringFactors());
 
         return new Reflector(plane, Calculations.planeSpacing(plane,
                 crystal.unitCell), Calculations.diffractionIntensity(plane,

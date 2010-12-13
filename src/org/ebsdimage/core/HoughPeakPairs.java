@@ -17,12 +17,11 @@
  */
 package org.ebsdimage.core;
 
-import static java.util.Arrays.sort;
-import static ptpshared.utility.Arrays.reverse;
-
 import java.util.ArrayList;
 
 import ptpshared.core.math.Vector3D;
+import static ptpshared.utility.Arrays.reverse;
+import static java.util.Arrays.sort;
 
 /**
  * Store many <code>HoughPeakPairs</code>.
@@ -61,19 +60,20 @@ public class HoughPeakPairs extends Pairs<HoughPeakPair> {
                         -calibration.detectorDistance,
                         calibration.patternCenterV);
 
-        for (int i = 0; i < peaks.length; i++) {
-            for (int j = i + 1; j < peaks.length; j++) {
-                HoughPeak peak0 = peaks[i];
-                Vector3D normal0 =
-                        HoughMath.houghSpaceToVectorNormal(peak0, cameraPos);
-
-                HoughPeak peak1 = peaks[j];
-                Vector3D normal1 =
-                        HoughMath.houghSpaceToVectorNormal(peak1, cameraPos);
-
-                tmpPairs.add(new HoughPeakPair(peak0, normal0, peak1, normal1));
-            }
-        }
+        // TODO: Fix when calibration is fully implemented
+        // for (int i = 0; i < peaks.length; i++) {
+        // for (int j = i + 1; j < peaks.length; j++) {
+        // HoughPeak peak0 = peaks[i];
+        // Vector3D normal0 =
+        // HoughMath.houghSpaceToVectorNormal(peak0, cameraPos);
+        //
+        // HoughPeak peak1 = peaks[j];
+        // Vector3D normal1 =
+        // HoughMath.houghSpaceToVectorNormal(peak1, cameraPos);
+        //
+        // tmpPairs.add(new HoughPeakPair(peak0, normal0, peak1, normal1));
+        // }
+        // }
 
         // Initialize pairs array
         pairs = new HoughPeakPair[tmpPairs.size()];

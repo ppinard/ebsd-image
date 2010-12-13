@@ -1,16 +1,11 @@
 package org.ebsdimage.core.sim.ops.output;
 
-import static java.lang.Math.ceil;
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
-
 import java.io.File;
 import java.io.IOException;
 
 import magnitude.core.Magnitude;
 
 import org.ebsdimage.core.HoughMap;
-import org.ebsdimage.core.HoughMath;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.HoughPeakIntensityComparator;
 import org.ebsdimage.core.sim.Band;
@@ -19,6 +14,9 @@ import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
 import org.ebsdimage.io.HoughMapSaver;
 
 import ptpshared.utility.Arrays;
+import static java.lang.Math.ceil;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 /**
  * Operation to save simulated peaks in a Hough map. Each peak is represented by
@@ -78,7 +76,10 @@ public class SimHoughMap extends OutputOps {
     public void save(Sim sim, PatternSimOp patternSimOp) throws IOException {
         // Convert pattern's bands to Hough peaks
         Band[] bands = patternSimOp.getBands();
-        HoughPeak[] peaks = HoughMath.bandsToHoughPeaks(bands);
+
+        // TODO: Fix when calibration is fully implemented
+        // HoughPeak[] peaks = HoughMath.bandsToHoughPeaks(bands);
+        HoughPeak[] peaks = new HoughPeak[0];
 
         Arrays.sort(peaks, new HoughPeakIntensityComparator(), true);
 
