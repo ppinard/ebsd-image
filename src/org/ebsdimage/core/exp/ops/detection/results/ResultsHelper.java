@@ -17,7 +17,7 @@
  */
 package org.ebsdimage.core.exp.ops.detection.results;
 
-import rmlimage.module.real.core.Stats;
+import rmlshared.math.Stats;
 
 /**
  * Helper methods for detection results operations.
@@ -34,7 +34,7 @@ public class ResultsHelper {
      *            set of data
      * @return average
      */
-    public static float average(float[] data) {
+    public static double average(double[] data) {
         if (data.length > 1)
             return Stats.average(data);
         else
@@ -51,7 +51,7 @@ public class ResultsHelper {
      *            set of data
      * @return standard deviation
      */
-    public static float standardDeviation(float[] data) {
+    public static double standardDeviation(double[] data) {
         if (data.length > 1)
             return Stats.standardDeviation(data);
         else
@@ -68,7 +68,7 @@ public class ResultsHelper {
      *            set of data
      * @return standard deviation
      */
-    public static float min(float[] data) {
+    public static double min(double[] data) {
         if (data.length > 1)
             return Stats.min(data);
         else
@@ -85,7 +85,7 @@ public class ResultsHelper {
      *            set of data
      * @return standard deviation
      */
-    public static float max(float[] data) {
+    public static double max(double[] data) {
         if (data.length > 1)
             return Stats.max(data);
         else

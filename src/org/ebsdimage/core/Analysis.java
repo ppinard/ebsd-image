@@ -17,11 +17,9 @@
  */
 package org.ebsdimage.core;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
-import magnitude.core.Magnitude;
-import rmlimage.core.Centroid;
+import rmlimage.core.Calibration;
 import rmlimage.core.IdentMap;
 
 /**
@@ -39,22 +37,70 @@ public class Analysis {
      * 
      * @param peaksMap
      *            <code>IdentMap</code> to get the centroid of
+     * @param houghMap
+     *            <code>HoughMap</code> to get the intensity of
      * @return the list of centroid coordinates in (r;theta)
      * @throws NullPointerException
      *             if the bin map is null
      */
-    public static Centroid getCentroid(IdentMap peaksMap) {
-        if (peaksMap == null)
-            throw new NullPointerException("IdentMap cannot be null.");
-        if (!peaksMap.isCalibrated())
-            throw new IllegalArgumentException("The map (" + peaksMap
-                    + ") must be calibrated.");
-        if (!peaksMap.getCalibration().getDX().areUnits("rad"))
-            throw new IllegalArgumentException("Invalid map, delta x units ("
-                    + peaksMap.getCalibration().getDX().getBaseUnitsLabel()
-                    + ") cannot be expressed as \"rad\".");
+    public static Centroid getCentroid(IdentMap peaksMap, HoughMap houghMap) {
+        // Validate maps
+        validate(peaksMap, houghMap);
 
-        return rmlimage.core.Analysis.getCentroid(peaksMap);
+        int nbObjects = peaksMap.getObjectCount();
+
+        // Calculate the calibration factors
+        Calibration cal = peaksMap.getCalibration();
+
+        Centroid result = new Centroid(nbObjects, cal.unitsX, cal.unitsY);
+
+        // If there are no objects, return an empty result
+        if (nbObjects <= 0)
+            return result;
+
+        // centroidX and centroidY should be made double to avoid overflow
+        // +1 for object 0 (background)
+        int[] centroidX = new int[nbObjects + 1];
+        int[] centroidY = new int[nbObjects + 1];
+        int[] area = new int[nbObjects + 1];
+
+        Arrays.fill(centroidX, 0); // Initialize the array to 0
+        Arrays.fill(centroidY, 0); // Initialize the array to 0
+        Arrays.fill(area, 0); // Initialize the array to 0
+
+        short objectNumber;
+
+        int n = 0;
+        int width = peaksMap.width;
+        int height = peaksMap.height;
+        short[] pixArray = peaksMap.pixArray;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                objectNumber = pixArray[n];
+
+                centroidX[objectNumber] += x;
+                centroidY[objectNumber] += y;
+                area[objectNumber]++;
+
+                n++;
+            }
+        }
+
+        // Apply the calibration factor and save the value to the Result object
+        double theta;
+        double rho;
+        byte[] houghPixArray = houghMap.pixArray;
+        for (n = 1; n <= nbObjects; n++) {
+            theta = (double) centroidX[n] / (double) area[n];
+            rho = (double) centroidY[n] / (double) area[n];
+
+            result.x[n - 1] = (float) cal.getCalibratedX(theta);
+            result.y[n - 1] = (float) cal.getCalibratedY(rho);
+            result.intensity[n - 1] =
+                    houghPixArray[houghMap.getIndex((int) theta, (int) rho)] & 0xff;
+        }
+
+        return result;
     }
 
 
@@ -71,88 +117,73 @@ public class Analysis {
      * @throws NullPointerException
      *             if either the hough map or peaks map is null
      */
-    public static HoughPoint getCenterOfMass(HoughMap houghMap,
-            IdentMap peaksMap) {
-        if (houghMap == null)
-            throw new NullPointerException("Hough map cannot be null.");
-        if (peaksMap == null)
-            throw new NullPointerException("Peaks map cannot be null.");
-
-        if (!peaksMap.isCalibrated())
-            throw new IllegalArgumentException("The map (" + peaksMap
-                    + ") must be calibrated.");
-        if (!peaksMap.getCalibration().getDX().areUnits("rad"))
-            throw new IllegalArgumentException("Invalid map, delta x units ("
-                    + peaksMap.getCalibration().getDX().getBaseUnitsLabel()
-                    + ") cannot be expressed as \"rad\".");
+    public static Centroid getCenterOfMass(IdentMap peaksMap, HoughMap houghMap) {
+        // Validate maps
+        validate(peaksMap, houghMap);
 
         int nbObjects = peaksMap.getObjectCount();
 
         // +1 for object 0 (background)
-        double[] massRho = new double[nbObjects + 1];
-        double[] massTheta = new double[nbObjects + 1];
-        double[] area = new double[nbObjects + 1];
+        int[] xs = new int[nbObjects + 1];
+        int[] ys = new int[nbObjects + 1];
+        int[] values = new int[nbObjects + 1];
 
         // Initialize the array to 0
-        Arrays.fill(massRho, 0);
-        Arrays.fill(massTheta, 0);
-        Arrays.fill(area, 0);
+        Arrays.fill(xs, 0);
+        Arrays.fill(ys, 0);
+        Arrays.fill(values, 0);
 
         int width = peaksMap.width;
         int height = peaksMap.height;
         short[] pixArray = peaksMap.pixArray;
 
-        short objectNumber;
         int n = 0;
-        Magnitude rhoMag;
-        double rho;
-        Magnitude thetaMag;
-        double theta;
-        double value;
+        int value;
+        short objectNumber;
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 objectNumber = pixArray[n];
 
-                rhoMag = HoughMap.getRho(peaksMap, n);
-                rho = (float) rhoMag.getPreferredUnitsValue();
+                value = houghMap.pixArray[houghMap.getIndex(x, y)] & 0xff;
 
-                thetaMag = HoughMap.getTheta(peaksMap, n);
-                theta = (float) thetaMag.getValue("rad");
-
-                value =
-                        houghMap.pixArray[houghMap.getIndex(thetaMag, rhoMag)] & 0xff;
-
-                massRho[objectNumber] += rho * value;
-                massTheta[objectNumber] += theta * value;
-                area[objectNumber] += value;
+                xs[objectNumber] += x * value;
+                ys[objectNumber] += y * value;
+                values[objectNumber] += value;
 
                 n++;
             }
         }
 
-        // Calculate rhos and thetas
-        ArrayList<Float> rhos = new ArrayList<Float>();
-        ArrayList<Float> thetas = new ArrayList<Float>();
+        // Create result
+        Calibration cal = peaksMap.getCalibration();
+        Centroid result = new Centroid(nbObjects, cal.unitsX, cal.unitsY);
 
-        for (n = 0; n < nbObjects; n++) {
-            if (area[n + 1] == 0.0)
+        n = 0;
+        double theta;
+        double rho;
+        byte[] houghPixArray = houghMap.pixArray;
+        for (int i = 1; i <= nbObjects; i++) {
+            if (values[i] == 0)
                 continue;
 
-            rhos.add((float) (massRho[n + 1] / area[n + 1]));
-            thetas.add((float) (massTheta[n + 1] / area[n + 1]));
+            theta = (double) xs[i] / (double) values[i];
+            rho = (double) ys[i] / (double) values[i];
+
+            result.x[n] = (float) cal.getCalibratedX(theta);
+            result.y[n] = (float) cal.getCalibratedY(rho);
+            result.intensity[n] =
+                    houghPixArray[houghMap.getIndex((int) theta, (int) rho)] & 0xff;
+
+            n++;
         }
 
-        // Create Hough points
-        String units = peaksMap.getCalibration().unitsY;
-        HoughPoint points = new HoughPoint(nbObjects, units);
+        // Resize array
+        System.arraycopy(result.x, 0, result.x, 0, n - 1);
+        System.arraycopy(result.y, 0, result.y, 0, n - 1);
+        System.arraycopy(result.intensity, 0, result.intensity, 0, n - 1);
 
-        for (n = 0; n < rhos.size(); n++) {
-            points.rho[n] = rhos.get(n);
-            points.theta[n] = thetas.get(n);
-        }
-
-        return points;
+        return result;
     }
 
 
@@ -169,79 +200,63 @@ public class Analysis {
      * @throws NullPointerException
      *             if either the hough map or peaks map is null
      */
-    public static HoughPoint getMaximumLocation(HoughMap houghMap,
-            IdentMap peaksMap) {
-        if (houghMap == null)
-            throw new NullPointerException("Hough map cannot be null.");
-        if (peaksMap == null)
-            throw new NullPointerException("Peaks map cannot be null.");
-
-        if (!peaksMap.isCalibrated())
-            throw new IllegalArgumentException("The map (" + peaksMap
-                    + ") must be calibrated.");
-        if (!peaksMap.getCalibration().getDX().areUnits("rad"))
-            throw new IllegalArgumentException("Invalid map, delta x units ("
-                    + peaksMap.getCalibration().getDX().getBaseUnitsLabel()
-                    + ") cannot be expressed as \"rad\".");
+    public static Centroid getMaximumLocation(IdentMap peaksMap,
+            HoughMap houghMap) {
+        // Validate maps
+        validate(peaksMap, houghMap);
 
         int nbObjects = peaksMap.getObjectCount();
 
         // +1 for object 0 (background)
-        double[] maximums = new double[nbObjects + 1];
-        double[] rhos = new double[nbObjects + 1];
-        double[] thetas = new double[nbObjects + 1];
+        int[] maximums = new int[nbObjects + 1];
+        int[] xs = new int[nbObjects + 1];
+        int[] ys = new int[nbObjects + 1];
 
         // Initialize the array to 0
-        Arrays.fill(maximums, Double.NEGATIVE_INFINITY);
-        Arrays.fill(rhos, 0);
-        Arrays.fill(thetas, 0);
+        Arrays.fill(maximums, Integer.MIN_VALUE);
+        Arrays.fill(xs, 0);
+        Arrays.fill(ys, 0);
 
         int width = peaksMap.width;
         int height = peaksMap.height;
         short[] pixArray = peaksMap.pixArray;
 
-        short objectNumber;
+        int x;
+        int y;
         int n = 0;
-        Magnitude rhoMag;
-        double rho;
-        Magnitude thetaMag;
-        double theta;
-        double value;
+        short objectNumber;
+        int value;
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (y = 0; y < height; y++) {
+            for (x = 0; x < width; x++) {
                 objectNumber = pixArray[n];
 
-                rhoMag = HoughMap.getRho(peaksMap, n);
-                rho = (float) rhoMag.getPreferredUnitsValue();
-
-                thetaMag = HoughMap.getTheta(peaksMap, n);
-                theta = (float) thetaMag.getValue("rad");
-
-                value =
-                        houghMap.pixArray[houghMap.getIndex(thetaMag, rhoMag)] & 0xff;
+                value = houghMap.pixArray[houghMap.getIndex(x, y)] & 0xff;
 
                 if (value > maximums[objectNumber]) {
                     maximums[objectNumber] = value;
-                    rhos[objectNumber] = rho;
-                    thetas[objectNumber] = theta;
+                    xs[objectNumber] = x;
+                    ys[objectNumber] = y;
                 }
 
                 n++;
             }
         }
 
-        // Create Hough points
-        String units = peaksMap.getCalibration().unitsY;
-        HoughPoint points = new HoughPoint(nbObjects, units);
+        // Create results
+        Calibration cal = peaksMap.getCalibration();
+        Centroid result = new Centroid(nbObjects, cal.unitsX, cal.unitsY);
 
-        for (n = 0; n < nbObjects; n++) {
-            points.rho[n] = (float) rhos[n + 1];
-            points.theta[n] = (float) thetas[n + 1];
+        for (n = 1; n <= nbObjects; n++) {
+            result.x[n - 1] = (float) cal.getCalibratedX(xs[n]);
+            result.y[n - 1] = (float) cal.getCalibratedY(ys[n]);
+            result.intensity[n - 1] = maximums[n];
         }
 
-        return points;
+        return result;
     }
+
+
 
     // /**
     // * Return the maximum pixel color index in each object in the
@@ -305,5 +320,39 @@ public class Analysis {
     //
     // return result;
     // }
+
+    /**
+     * Validates that the peaks map and Hough map have the same size and
+     * calibration.
+     * 
+     * @param peaksMap
+     *            peaks map
+     * @param houghMap
+     *            Hough map
+     * @throws IllegalArgumentException
+     *             if the two maps do not have the same size
+     * @throws IllegalArgumentException
+     *             if the two maps do not have the same calibration
+     * @throws NullPointerException
+     *             if a map is null
+     */
+    private static void validate(IdentMap peaksMap, HoughMap houghMap) {
+        if (houghMap == null)
+            throw new NullPointerException("Hough map cannot be null.");
+        if (peaksMap == null)
+            throw new NullPointerException("Peaks map cannot be null.");
+
+        if (!peaksMap.isSameSize(houghMap))
+            throw new IllegalArgumentException("The peaks map ("
+                    + peaksMap.getDimensionLabel()
+                    + ") must have the same size as the Hough map ("
+                    + houghMap.getDimensionLabel() + ")");
+        if (!peaksMap.getCalibration().equals(houghMap.getCalibration(), 1e-6))
+            throw new IllegalArgumentException(
+                    "The calibration of the peaks map ("
+                            + peaksMap.getCalibration()
+                            + ") must be the same as the Hough map ("
+                            + houghMap.getCalibration() + ").");
+    }
 
 }

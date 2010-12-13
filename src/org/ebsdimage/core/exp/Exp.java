@@ -17,8 +17,6 @@
  */
 package org.ebsdimage.core.exp;
 
-import static org.ebsdimage.core.exp.ExpConstants.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,6 +60,7 @@ import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
 import rmlimage.module.real.core.RealMap;
 import crystallography.core.Crystal;
+import static org.ebsdimage.core.exp.ExpConstants.*;
 
 /**
  * Experiment engine.
@@ -82,6 +81,9 @@ public class Exp extends Run {
 
     /** Runtime variable for the source Hough map (original Hough map). */
     protected HoughMap sourceHoughMap;
+
+    /** Runtime variable for the source peaks map (original peaks map). */
+    protected BinMap sourcePeaksMap;
 
     /** Runtime variable of the pattern map. */
     protected ByteMap currentPatternMap;
@@ -529,6 +531,15 @@ public class Exp extends Run {
     protected void addOperations(ArrayList<? extends Operation> ops) {
         for (Operation op : ops)
             addOperation(op);
+    }
+
+
+
+    /**
+     * Clears all registered experiment listeners.
+     */
+    public void clearExpListners() {
+        listeners.clear();
     }
 
 
@@ -1266,6 +1277,21 @@ public class Exp extends Run {
 
 
 
+    /**
+     * Returns the source peaks map that is currently being used by the
+     * experiment. Only valid when the experiment is running.
+     * 
+     * @return pattern map
+     */
+    public BinMap getSourcePeaksMap() {
+        if (sourcePeaksMap == null)
+            throw new RuntimeException(
+                    "The experiment is not running, there is no peaks map.");
+        return sourcePeaksMap.duplicate();
+    }
+
+
+
     @Override
     public double getTaskProgress() {
         // Quick fix to notify the listeners of the EbsdMMap. This allows the
@@ -1290,12 +1316,32 @@ public class Exp extends Run {
 
 
 
+    /**
+     * Checks whether the size of the current map has changed. If so, the source
+     * map is updated to be a duplicate of the current map.
+     * 
+     * @param source
+     *            original map obtained after a "op" operation
+     * @param current
+     *            current map
+     */
+    private void hasMapSizeChanged(Map source, Map current) {
+        if (source == null)
+            source = current.duplicate();
+
+        if (!source.isSameSize(current))
+            source = current.duplicate();
+    }
+
+
+
     @Override
     protected void initRuntimeVariables() {
         super.initRuntimeVariables();
 
         sourcePatternMap = null;
         sourceHoughMap = null;
+        sourcePeaksMap = null;
         currentPatternMap = null;
         currentHoughMap = null;
         currentPeaksMap = null;
@@ -1347,15 +1393,6 @@ public class Exp extends Run {
             throw new NullPointerException("Listener cannot be null.");
 
         listeners.remove(listener);
-    }
-
-
-
-    /**
-     * Clears all registered experiment listeners.
-     */
-    public void clearExpListners() {
-        listeners.clear();
     }
 
 
@@ -1436,8 +1473,8 @@ public class Exp extends Run {
 
         setStatus("Performing " + patternOp.getName() + " (" + index + ")...");
 
-        sourcePatternMap = patternOp.load(this, index);
-        currentPatternMap = sourcePatternMap.duplicate();
+        currentPatternMap = patternOp.load(this, index);
+        hasMapSizeChanged(sourcePatternMap, currentPatternMap);
 
         setStatus("Performing " + patternOp.getName() + "... DONE");
 
@@ -1449,6 +1486,7 @@ public class Exp extends Run {
             setStatus("Performing " + op.getName() + "...");
 
             currentPatternMap = op.process(this, currentPatternMap);
+            hasMapSizeChanged(sourcePatternMap, currentPatternMap);
 
             setStatus("Performing " + op.getName() + "... DONE");
 
@@ -1490,8 +1528,8 @@ public class Exp extends Run {
 
             setStatus("Performing " + houghOp.getName() + "...");
 
-            sourceHoughMap = houghOp.transform(this, currentPatternMap);
-            currentHoughMap = sourceHoughMap.duplicate();
+            currentHoughMap = houghOp.transform(this, currentPatternMap);
+            hasMapSizeChanged(sourceHoughMap, currentHoughMap);
 
             setStatus("Performing " + houghOp.getName() + "... DONE");
 
@@ -1503,6 +1541,7 @@ public class Exp extends Run {
                 setStatus("Performing " + op.getName() + "...");
 
                 currentHoughMap = op.process(this, currentHoughMap);
+                hasMapSizeChanged(sourceHoughMap, currentHoughMap);
 
                 setStatus("Performing " + op.getName() + "... DONE");
 
@@ -1545,6 +1584,7 @@ public class Exp extends Run {
                 setStatus("Performing " + detectionOp.getName() + "...");
 
                 currentPeaksMap = detectionOp.detect(this, currentHoughMap);
+                hasMapSizeChanged(sourcePeaksMap, currentPeaksMap);
 
                 setStatus("Performing " + detectionOp.getName() + "... DONE");
 
@@ -1556,6 +1596,7 @@ public class Exp extends Run {
                     setStatus("Performing " + op.getName() + "...");
 
                     currentPeaksMap = op.process(this, currentPeaksMap);
+                    hasMapSizeChanged(sourcePeaksMap, currentPeaksMap);
 
                     setStatus("Performing " + op.getName() + "... DONE");
 

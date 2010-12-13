@@ -20,12 +20,12 @@ package org.ebsdimage.core.exp.ops.identification.op;
 import magnitude.core.Magnitude;
 
 import org.ebsdimage.core.Analysis;
+import org.ebsdimage.core.Centroid;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.Exp;
 
 import rmlimage.core.BinMap;
-import rmlimage.core.Centroid;
 import rmlimage.core.IdentMap;
 import rmlimage.core.Identification;
 
@@ -68,21 +68,18 @@ public class LocalCentroid extends IdentificationOp {
         IdentMap identMap = Identification.identify(peaksMap);
 
         // Calculate centroids
-        Centroid centroids = Analysis.getCentroid(identMap);
+        Centroid centroids = Analysis.getCentroid(identMap, houghMap);
 
         // Create Peak objects with intensity at centroid
-        HoughPeak[] peaks = new HoughPeak[identMap.getObjectCount()];
+        HoughPeak[] peaks = new HoughPeak[centroids.getValueCount()];
 
-        Magnitude theta = new Magnitude(0, centroids.units[0]);
-        Magnitude rho = new Magnitude(0, centroids.units[1]);
         double intensity;
-        int index;
-        for (int i = 0; i < identMap.getObjectCount(); i++) {
+        Magnitude theta = new Magnitude(0, centroids.units[Centroid.X]);
+        Magnitude rho = new Magnitude(0, centroids.units[Centroid.Y]);
+        for (int i = 0; i < centroids.getValueCount(); i++) {
             theta = new Magnitude(centroids.x[i], theta);
             rho = new Magnitude(centroids.y[i], rho);
-
-            index = houghMap.getIndex(theta, rho);
-            intensity = houghMap.pixArray[index] & 0xff;
+            intensity = centroids.intensity[i];
 
             peaks[i] = new HoughPeak(theta, rho, intensity);
         }

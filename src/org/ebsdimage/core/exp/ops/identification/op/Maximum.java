@@ -3,9 +3,9 @@ package org.ebsdimage.core.exp.ops.identification.op;
 import magnitude.core.Magnitude;
 
 import org.ebsdimage.core.Analysis;
+import org.ebsdimage.core.Centroid;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
-import org.ebsdimage.core.HoughPoint;
 import org.ebsdimage.core.exp.Exp;
 
 import rmlimage.core.BinMap;
@@ -37,22 +37,20 @@ public class Maximum extends IdentificationOp {
         IdentMap identMap = Identification.identify(peaksMap);
 
         // Calculate maximum location
-        HoughPoint maximums = Analysis.getMaximumLocation(houghMap, identMap);
+        Centroid maximums = Analysis.getMaximumLocation(identMap, houghMap);
 
         // Create Peak objects with intensity at maximum
-        HoughPeak[] peaks = new HoughPeak[identMap.getObjectCount()];
+        HoughPeak[] peaks = new HoughPeak[maximums.getValueCount()];
 
-        Magnitude rho, theta;
         double intensity;
-        int index;
-        for (int i = 0; i < identMap.getObjectCount(); i++) {
-            rho = (Magnitude) maximums.getRho(i);
-            theta = (Magnitude) maximums.getTheta(i);
+        Magnitude theta = new Magnitude(0, maximums.units[Centroid.X]);
+        Magnitude rho = new Magnitude(0, maximums.units[Centroid.Y]);
+        for (int i = 0; i < maximums.getValueCount(); i++) {
+            theta = new Magnitude(maximums.x[i], theta);
+            rho = new Magnitude(maximums.y[i], rho);
+            intensity = maximums.intensity[i];
 
-            index = houghMap.getIndex(rho, theta);
-            intensity = houghMap.pixArray[index] & 0xff;
-
-            peaks[i] = new HoughPeak(rho, theta, intensity);
+            peaks[i] = new HoughPeak(theta, rho, intensity);
         }
 
         return peaks;

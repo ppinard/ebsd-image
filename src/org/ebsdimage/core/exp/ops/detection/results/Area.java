@@ -17,11 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.detection.results;
 
-import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.average;
-import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.max;
-import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.min;
-import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.standardDeviation;
-
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 
@@ -30,6 +25,10 @@ import rmlimage.core.BinMap;
 import rmlimage.core.IdentMap;
 import rmlimage.core.Identification;
 import rmlimage.module.real.core.RealMap;
+import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.average;
+import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.max;
+import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.min;
+import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.standardDeviation;
 
 /**
  * Result operation that evaluate the area over peaks.
@@ -49,7 +48,7 @@ public class Area extends DetectionResultsOps {
 
         // ========= Calculate area ===========
 
-        float[] areas = Analysis.getArea(identMap).val;
+        double[] areas = Analysis.getArea(identMap).val;
 
         // ========= Calculate results ===========
 

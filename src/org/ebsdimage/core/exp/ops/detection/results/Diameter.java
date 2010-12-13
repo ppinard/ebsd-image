@@ -17,11 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.detection.results;
 
-import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.average;
-import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.max;
-import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.min;
-import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.standardDeviation;
-
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 
@@ -30,6 +25,10 @@ import rmlimage.core.BinMap;
 import rmlimage.core.IdentMap;
 import rmlimage.core.Identification;
 import rmlimage.module.real.core.RealMap;
+import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.average;
+import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.max;
+import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.min;
+import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.standardDeviation;
 
 /**
  * Result operation that evaluate the diameter of the greatest inscribed circle
@@ -50,7 +49,7 @@ public class Diameter extends DetectionResultsOps {
 
         // ========= Calculate diameter ===========
 
-        float[] diameters = Analysis.getFeret(identMap).max;
+        double[] diameters = Analysis.getFeret(identMap).max;
 
         // ========= Calculate results ===========
 

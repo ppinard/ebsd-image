@@ -17,11 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.detection.results;
 
-import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.average;
-import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.max;
-import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.min;
-import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.standardDeviation;
-
 import java.util.Arrays;
 
 import magnitude.core.Magnitude;
@@ -35,6 +30,10 @@ import rmlimage.core.ByteMap;
 import rmlimage.core.IdentMap;
 import rmlimage.core.Identification;
 import rmlimage.module.real.core.RealMap;
+import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.average;
+import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.max;
+import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.min;
+import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.standardDeviation;
 
 /**
  * Result operation that evaluate the minimum and maximum value inside each
@@ -117,7 +116,7 @@ public class Difference extends DetectionResultsOps {
 
         // ========= Calculate difference ===========
 
-        float diff[] = new float[nbObjects]; // Ignore background
+        double diff[] = new double[nbObjects]; // Ignore background
 
         for (int i = 1; i <= nbObjects; i++)
             diff[i - 1] = maxValue[i] - minValue[i];
