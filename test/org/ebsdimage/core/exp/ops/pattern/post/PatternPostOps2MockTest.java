@@ -65,7 +65,7 @@ public class PatternPostOps2MockTest extends TestCase {
 
     @Test
     public void testPatternPostOps2Mock() {
-        PatternPostOps2Mock other = new PatternPostOps2Mock();
+        PatternPostOps2Mock other = new PatternPostOps2Mock(1);
         assertEquals(1, other.var);
     }
 
@@ -84,7 +84,7 @@ public class PatternPostOps2MockTest extends TestCase {
         assertFalse(op.equals(null));
         assertFalse(op.equals(new Object()));
 
-        assertTrue(op.equals(new PatternPostOps2Mock()));
+        assertTrue(op.equals(new PatternPostOps2Mock(1)));
     }
 
 
@@ -95,7 +95,7 @@ public class PatternPostOps2MockTest extends TestCase {
         assertFalse(op.equals(null, 1e-2));
         assertFalse(op.equals(new Object(), 1e-2));
 
-        assertTrue(op.equals(new PatternPostOps2Mock(), 1e-2));
+        assertTrue(op.equals(new PatternPostOps2Mock(1), 1e-2));
     }
 
 

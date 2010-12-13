@@ -17,12 +17,12 @@
  */
 package org.ebsdimage.core.run;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
-import org.simpleframework.xml.ElementMap;
+import org.simpleframework.xml.ElementArray;
 import org.simpleframework.xml.Root;
 
 import ptpshared.utility.MultipleLoop;
@@ -39,27 +39,24 @@ import ptpshared.utility.MultipleLoop;
  * @author Philippe T. Pinard
  */
 @Root
-public abstract class RunsGenerator {
+public class OperationGenerator {
 
     /** HashMap of the items containing a key and an array of operations. */
-    @ElementMap(name = "items", valueType = Array.class)
     protected HashMap<String, Operation[]> items =
             new HashMap<String, Operation[]>();
 
 
 
-    /**
-     * Creates a new generator that stores a list of items. This allows to
-     * generate many <code>Run</code>s based on the given items. Use
-     * {@link RunsGenerator#addItem(int, Operation)} to add items.
-     * 
-     * @see MultipleLoop#MultipleLoop(HashMap)
-     */
-    public RunsGenerator() {
-
-    }
-
-
+    // /**
+    // * Creates a new generator that stores a list of items. This allows to
+    // * generate many <code>Run</code>s based on the given items. Use
+    // * {@link OperationGenerator#addItem(int, Operation)} to add items.
+    // *
+    // * @see MultipleLoop#MultipleLoop(HashMap)
+    // */
+    // public OperationGenerator() {
+    //
+    // }
 
     /**
      * Add an operation to the items.
@@ -228,6 +225,49 @@ public abstract class RunsGenerator {
     public static int getOrderFromKey(String key) {
         String[] split = key.split(":");
         return Integer.parseInt(split[0]);
+    }
+
+
+
+    /**
+     * Returns an array of <code>Operation</code> to serialize the operations in
+     * the generator. The order of the operation is set inside the operation.
+     * 
+     * @return array of <code>Operation</code>
+     */
+    @SuppressWarnings("unused")
+    @ElementArray(name = "ops")
+    private Operation[] getOperations() {
+        ArrayList<Operation> ops = new ArrayList<Operation>();
+
+        int order;
+        for (Entry<String, Operation[]> item : items.entrySet()) {
+            order = getOrderFromKey(item.getKey());
+
+            for (Operation op : item.getValue()) {
+                op.setIndex(order);
+                ops.add(op);
+            }
+        }
+
+        return ops.toArray(new Operation[0]);
+    }
+
+
+
+    /**
+     * Sets the operations inside the generator in the deserialization process.
+     * The order is taken as the order saved inside each operation.
+     * 
+     * @param ops
+     *            array of <code>Operation</code>
+     */
+    @SuppressWarnings("unused")
+    @ElementArray(name = "ops")
+    private void setOperations(Operation[] ops) {
+        for (Operation op : ops) {
+            addItem(op.getIndex(), op);
+        }
     }
 
 }

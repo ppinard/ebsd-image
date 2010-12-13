@@ -18,24 +18,18 @@
 package org.ebsdimage.core.exp.ops.pattern.post;
 
 import org.ebsdimage.core.exp.Exp;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
 
 public class PatternPostOps2Mock extends PatternPostOps {
 
+    @Attribute(name = "var")
     public final int var;
 
-    public static final int defaultVar = 1;
 
 
-
-    public PatternPostOps2Mock() {
-        var = defaultVar;
-    }
-
-
-
-    public PatternPostOps2Mock(int var) {
+    public PatternPostOps2Mock(@Attribute(name = "var") int var) {
         this.var = var;
     }
 

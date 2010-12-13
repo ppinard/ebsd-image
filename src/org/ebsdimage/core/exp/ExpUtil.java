@@ -27,6 +27,7 @@ import org.ebsdimage.core.exp.ops.pattern.op.PatternFilesLoader;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternSmpLoader;
 import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.run.OperationGenerator;
 import org.ebsdimage.io.SmpInputStream;
 
 import rmlshared.io.FileUtil;
@@ -53,7 +54,7 @@ public class ExpUtil {
      *            experiment listeners
      * @return an array of <code>Exp</code>
      */
-    public static Exp[] createExps(EbsdMMap mmap, ExpsGenerator generator,
+    public static Exp[] createExps(EbsdMMap mmap, OperationGenerator generator,
             PatternOp[] inputs, ExpListener[] listeners) {
         if (inputs.length < 1)
             throw new IllegalArgumentException(

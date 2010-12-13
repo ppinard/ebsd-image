@@ -18,16 +18,10 @@
 package org.ebsdimage.core.exp.ops.pattern.post;
 
 import org.ebsdimage.core.exp.Exp;
-import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
 
 public class PatternPostOpsMock extends PatternPostOps {
-
-    @Attribute
-    public int a = 1;
-
-
 
     @Override
     public ByteMap process(Exp exp, ByteMap srcMap) {

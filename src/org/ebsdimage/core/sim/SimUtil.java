@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.run.OperationGenerator;
 
 import ptpshared.core.math.Quaternion;
 import crystallography.core.Crystal;
@@ -50,7 +51,7 @@ public class SimUtil {
      *            <code>Operation</code>
      * @return an array of <code>Sim</code>
      */
-    public static Sim[] createSimulations(SimsGenerator generator,
+    public static Sim[] createSimulations(OperationGenerator generator,
             Crystal[] crystals, Camera[] cameras, Energy[] energies,
             Quaternion[] rotations) {
         if (crystals.length < 1)
