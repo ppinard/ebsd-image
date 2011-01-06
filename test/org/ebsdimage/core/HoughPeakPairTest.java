@@ -46,9 +46,9 @@ public class HoughPeakPairTest {
         peak1 = new HoughPeak(1, PI / 3.0);
 
         normal0 =
-                HoughMath.houghSpaceToLine(peak0).toLine3D(LinePlane.XY).vector;
+                HoughMath.houghSpaceToLine(peak0).toLine3D(LinePlane.XY).v;
         normal1 =
-                HoughMath.houghSpaceToLine(peak1).toLine3D(LinePlane.XY).vector;
+                HoughMath.houghSpaceToLine(peak1).toLine3D(LinePlane.XY).v;
 
         pair = new HoughPeakPair(peak0, normal0, peak1, normal1);
     }

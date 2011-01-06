@@ -17,12 +17,13 @@
  */
 package org.ebsdimage.core;
 
-import static java.lang.Math.abs;
 import junittools.core.AlmostEquable;
+import magnitude.core.Magnitude;
 import net.jcip.annotations.Immutable;
 
-import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
+
+import ptpshared.core.math.Vector3D;
 
 /**
  * Calibration of the EBSD camera.
@@ -33,84 +34,53 @@ import org.simpleframework.xml.Root;
 @Immutable
 public class Camera implements AlmostEquable {
 
-    /** Location of the pattern center in the horizontal direction. */
-    @Attribute(name = "pcH")
-    public final double patternCenterH;
+    /** Translation of the camera. */
+    public final Vector3D t;
 
-    /** Location of the pattern center in the vertical direction. */
-    @Attribute(name = "pcV")
-    public final double patternCenterV;
-
-    /** Distance between the sample and the detector window. */
-    @Attribute(name = "dd")
-    public final double detectorDistance;
+    /** Normal of the camera plane. */
+    public final Vector3D n;
 
 
 
     /**
      * Creates a new EBSD camera.
      * <p/>
-     * A pattern center of <code>(0.0, 0.0)</code> is centered.
+     * A pattern centre of <code>(0.0, 0.0)</code> is centred.
      * 
      * @param patternCenterH
-     *            location of the pattern center in the horizontal direction
+     *            location of the pattern centre in the horizontal direction
      * @param patternCenterV
-     *            location of the pattern center in the vertical direction
+     *            location of the pattern centre in the vertical direction
      * @param detectorDistance
      *            distance between the sample and the detector window
      * @throws IllegalArgumentException
      *             if a value is not a number (NaN)
      * @throws IllegalArgumentException
      *             if a value is infinite
-     * @throws IllegalArgumentException
-     *             if the pattern center is out of range
-     * @throws IllegalArgumentException
-     *             if the detector distance is out of range
      */
-    public Camera(@Attribute(name = "pcH") double patternCenterH,
-            @Attribute(name = "pcV") double patternCenterV,
-            @Attribute(name = "dd") double detectorDistance) {
-        if (Double.isNaN(patternCenterH))
+    public Camera(Magnitude patternCenterH, Magnitude patternCenterV,
+            Magnitude detectorDistance) {
+        if (Magnitude.isNaN(patternCenterH))
             throw new IllegalArgumentException(
                     "The horizontal coordinate of the pattern center cannot be NaN.");
-        if (Double.isInfinite(patternCenterH))
+        if (Magnitude.isInfinite(patternCenterH))
             throw new IllegalArgumentException(
                     "The horizontal coordinate of the pattern center cannot be infinite.");
 
-        if (Double.isNaN(patternCenterV))
+        if (Magnitude.isNaN(patternCenterV))
             throw new IllegalArgumentException(
                     "The vertical coordinate of the pattern center cannot be NaN.");
-        if (Double.isInfinite(patternCenterV))
+        if (Magnitude.isInfinite(patternCenterV))
             throw new IllegalArgumentException(
                     "The vertical coordinate of the pattern center cannot be infinite.");
 
-        if (Double.isNaN(detectorDistance))
+        if (Magnitude.isNaN(detectorDistance))
             throw new IllegalArgumentException(
                     "The detector distance cannot be NaN.");
-        if (Double.isInfinite(detectorDistance))
+        if (Magnitude.isInfinite(detectorDistance))
             throw new IllegalArgumentException(
                     "The detector distance cannot be infinite.");
 
-        // Check limits
-        if (patternCenterH < -0.5 || patternCenterH > 0.5)
-            throw new IllegalArgumentException("The horizontal coordinate ("
-                    + patternCenterH
-                    + ") of the pattern center must be with the range"
-                    + "[-0.5, 0.5].");
-
-        if (patternCenterV < -0.5 || patternCenterV > 0.5)
-            throw new IllegalArgumentException("The vertical coordinate ("
-                    + patternCenterV
-                    + ") of the pattern center must be with the range"
-                    + "[-0.5, 0.5].");
-
-        if (detectorDistance < 1e-6)
-            throw new IllegalArgumentException("The detector distance ("
-                    + detectorDistance + ") must greater than zero.");
-
-        this.patternCenterH = patternCenterH;
-        this.patternCenterV = patternCenterV;
-        this.detectorDistance = detectorDistance;
     }
 
 
@@ -131,14 +101,6 @@ public class Camera implements AlmostEquable {
      */
     @Override
     public boolean equals(Object obj, Object precision) {
-        double delta = ((Number) precision).doubleValue();
-        if (delta < 0)
-            throw new IllegalArgumentException(
-                    "The precision has to be greater or equal to 0.0.");
-        if (Double.isNaN(delta))
-            throw new IllegalArgumentException(
-                    "The precision must be a number.");
-
         if (this == obj)
             return true;
         if (obj == null)
@@ -147,11 +109,11 @@ public class Camera implements AlmostEquable {
             return false;
 
         Camera other = (Camera) obj;
-        if (abs(patternCenterH - other.patternCenterH) > delta)
+        if (!detectorDistance.equals(other.detectorDistance, precision))
             return false;
-        if (abs(patternCenterV - other.patternCenterV) > delta)
+        if (!patternCenterH.equals(other.patternCenterH, precision))
             return false;
-        if (abs(detectorDistance - other.detectorDistance) > delta)
+        if (!patternCenterV.equals(other.patternCenterV, precision))
             return false;
 
         return true;
@@ -159,13 +121,6 @@ public class Camera implements AlmostEquable {
 
 
 
-    /**
-     * Checks if this <code>Camera</code> is exactly equal to the specified one.
-     * 
-     * @param obj
-     *            other <code>Camera</code> to check equality
-     * @return whether the two <code>Camera</code> are equal
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -176,33 +131,25 @@ public class Camera implements AlmostEquable {
             return false;
 
         Camera other = (Camera) obj;
-        if (Double.doubleToLongBits(detectorDistance) != Double.doubleToLongBits(other.detectorDistance))
+        if (!detectorDistance.equals(other.detectorDistance))
             return false;
-        if (Double.doubleToLongBits(patternCenterH) != Double.doubleToLongBits(other.patternCenterH))
+        if (!patternCenterH.equals(other.patternCenterH))
             return false;
-        if (Double.doubleToLongBits(patternCenterV) != Double.doubleToLongBits(other.patternCenterV))
+        if (!patternCenterV.equals(other.patternCenterV))
             return false;
+
         return true;
     }
 
 
 
-    /**
-     * Returns the hash code for this <code>Camera</code>.
-     * 
-     * @return hash code
-     */
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        long temp;
-        temp = Double.doubleToLongBits(detectorDistance);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(patternCenterH);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(patternCenterV);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + detectorDistance.hashCode();
+        result = prime * result + patternCenterH.hashCode();
+        result = prime * result + patternCenterV.hashCode();
         return result;
     }
 

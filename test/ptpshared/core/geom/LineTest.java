@@ -244,21 +244,21 @@ public class LineTest {
         Line3D paramLine;
 
         paramLine = line1.toLine3D(LinePlane.XY);
-        assertTrue(paramLine.vector.equals(new Vector3D(0.70710, 0.70710, 0.0),
+        assertTrue(paramLine.v.equals(new Vector3D(0.70710, 0.70710, 0.0),
                 1e-5));
-        assertTrue(paramLine.point.equals(new Vector3D(-0.35355, 1.64644, 0.0),
+        assertTrue(paramLine.p.equals(new Vector3D(-0.35355, 1.64644, 0.0),
                 1e-5));
 
         paramLine = line1.toLine3D(LinePlane.XZ);
-        assertTrue(paramLine.vector.equals(new Vector3D(0.70710, 0.0, 0.70710),
+        assertTrue(paramLine.v.equals(new Vector3D(0.70710, 0.0, 0.70710),
                 1e-5));
-        assertTrue(paramLine.point.equals(new Vector3D(-0.35355, 0.0, 1.64644),
+        assertTrue(paramLine.p.equals(new Vector3D(-0.35355, 0.0, 1.64644),
                 1e-5));
 
         paramLine = line1.toLine3D(LinePlane.YZ);
-        assertTrue(paramLine.vector.equals(new Vector3D(0.0, 0.70710, 0.70710),
+        assertTrue(paramLine.v.equals(new Vector3D(0.0, 0.70710, 0.70710),
                 1e-5));
-        assertTrue(paramLine.point.equals(new Vector3D(0.0, -0.35355, 1.64644),
+        assertTrue(paramLine.p.equals(new Vector3D(0.0, -0.35355, 1.64644),
                 1e-5));
 
     }

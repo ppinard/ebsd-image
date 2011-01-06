@@ -17,9 +17,8 @@
  */
 package org.ebsdimage.core.sim;
 
-import static java.lang.Math.PI;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import magnitude.core.Magnitude;
+import magnitude.geom.Line2D;
 
 import org.junit.Test;
 
@@ -27,6 +26,11 @@ import ptpshared.core.geom.Line;
 import ptpshared.core.math.AxisAngle;
 import ptpshared.core.math.Quaternion;
 import crystallography.core.Plane;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import static java.lang.Math.PI;
 
 public class CalculationsTest {
 
@@ -132,52 +136,64 @@ public class CalculationsTest {
 
     @Test
     public void testGetBandHalfWidths() {
-        Line line;
+        Line2D line;
         double planeSpacing = 3.0;
         double energy = 20e3;
-        double dd = 1.0; // Detector distance
-        double[] halfWidths;
+        Magnitude dd = new Magnitude(1.0, "m"); // Detector distance
+        Magnitude[] halfWidths;
 
-        line = new Line(0.0, 0.0);
+        line = Line2D.fromSlopeIntercept(0.0, new Magnitude(0.0, "m"));
         halfWidths =
                 Calculations.getBandHalfWidths(planeSpacing, line, dd, energy);
-        assertEquals(0.0139204, halfWidths[0], 1e-7);
-        assertEquals(0.0139204, halfWidths[1], 1e-7);
+        assertEquals(0.0139204, halfWidths[0].getValue("m"), 1e-7);
+        assertEquals(0.0139204, halfWidths[1].getValue("m"), 1e-7);
 
-        line = new Line(Double.POSITIVE_INFINITY, 0.0);
+        line =
+                Line2D.fromSlopeIntercept(Double.POSITIVE_INFINITY,
+                        new Magnitude(0.0, "m"));
         halfWidths =
                 Calculations.getBandHalfWidths(planeSpacing, line, dd, energy);
-        assertEquals(0.0139204, halfWidths[0], 1e-7);
-        assertEquals(0.0139204, halfWidths[1], 1e-7);
+        assertEquals(0.0139204, halfWidths[0].getValue("m"), 1e-7);
+        assertEquals(0.0139204, halfWidths[1].getValue("m"), 1e-7);
     }
 
 
 
     @Test
     public void testGetBandWidth() {
-        double[] halfWidths = { 0.001, 0.0139204 };
+        Magnitude[] halfWidths =
+                { new Magnitude(0.001, "m"), new Magnitude(0.0139204, "m") };
 
-        double width = Calculations.getBandWidth(halfWidths);
-        assertEquals(0.0139204 * 2, width, 1e-7);
+        Magnitude width = Calculations.getBandWidth(halfWidths);
+        assertEquals(0.0139204 * 2, width.getValue("m"), 1e-7);
     }
 
 
 
     @Test
     public void testGetEdgesIntercepts() {
-        Line line;
-        double[] halfWidths = { 0.0139204, 0.0139204 };
-        Line[] edgeIntercepts;
+        Line2D line;
+        double planeSpacing = 3.0;
+        double energy = 20e3;
+        Magnitude dd = new Magnitude(1.0, "m"); // Detector distance
+        Line2D[] edgeIntercepts;
 
-        line = new Line(0.0, 0.0);
-        edgeIntercepts = Calculations.getEdgesIntercepts(line, halfWidths);
-        assertEquals(0.0139204, edgeIntercepts[0].k, 1e-7);
-        assertEquals(-0.0139204, edgeIntercepts[1].k, 1e-7);
+        line = Line2D.fromSlopeIntercept(0.0, new Magnitude(0.0, "m"));
+        edgeIntercepts =
+                Calculations.getEdgesIntercepts(planeSpacing, line, dd, energy);
+        assertEquals(0.0139204,
+                edgeIntercepts[0].getInterceptY().getValue("m"), 1e-7);
+        assertEquals(-0.0139204,
+                edgeIntercepts[1].getInterceptY().getValue("m"), 1e-7);
 
-        line = new Line(Double.POSITIVE_INFINITY, 0.0);
-        edgeIntercepts = Calculations.getEdgesIntercepts(line, halfWidths);
-        assertEquals(0.0139204, edgeIntercepts[0].k, 1e-7);
-        assertEquals(-0.0139204, edgeIntercepts[1].k, 1e-7);
+        line =
+                Line2D.fromSlopeIntercept(Double.POSITIVE_INFINITY,
+                        new Magnitude(0.0, "m"));
+        edgeIntercepts =
+                Calculations.getEdgesIntercepts(planeSpacing, line, dd, energy);
+        assertEquals(0.0139204,
+                edgeIntercepts[1].getInterceptX().getValue("m"), 1e-7);
+        assertEquals(-0.0139204,
+                edgeIntercepts[0].getInterceptX().getValue("m"), 1e-7);
     }
-
 }

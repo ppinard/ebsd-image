@@ -17,13 +17,15 @@
  */
 package org.ebsdimage.core.sim;
 
-import static java.lang.Math.abs;
+import magnitude.core.Magnitude;
+import magnitude.geom.Line2D;
 
 import org.ebsdimage.core.Camera;
 
 import ptpshared.core.geom.Line;
 import ptpshared.core.math.Quaternion;
 import crystallography.core.Reflector;
+import static java.lang.Math.abs;
 
 /**
  * Band in a diffraction pattern. A band consists of a <code>Reflector</code>
@@ -35,16 +37,16 @@ import crystallography.core.Reflector;
 public class Band extends Reflector {
 
     /** Line representing the middle of this band. */
-    public final Line line;
+    public final Line2D line;
 
     /** Two-item array for the half widths above and below the middle line. */
-    public final double[] halfWidths;
+    public final Magnitude[] halfWidths;
 
     /** Two-item array for the intercept values of this band's edges. */
-    public final Line[] edgeIntercepts;
+    public final Line2D[] edgeIntercepts;
 
     /** Estimated width of this band from the half widths. */
-    public final double width;
+    public final Magnitude width;
 
 
 

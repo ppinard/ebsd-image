@@ -17,7 +17,9 @@
  */
 package ptpshared.core.geom;
 
+import junittools.core.AlmostEquable;
 import ptpshared.core.math.Vector3D;
+import rmlshared.geom.Point3D;
 
 /**
  * Represents a 3D line using a point and a vector. The line is passing by the
@@ -25,13 +27,13 @@ import ptpshared.core.math.Vector3D;
  * 
  * @author Philippe T. Pinard
  */
-public class Line3D {
+public class Line3D implements Cloneable, AlmostEquable {
 
     /** A point on the line. */
-    public final Vector3D point;
+    public final Vector3D p;
 
     /** Vector of the line. */
-    public final Vector3D vector;
+    public final Vector3D v;
 
 
 
@@ -53,14 +55,141 @@ public class Line3D {
         if (vector == null)
             throw new NullPointerException("Vector cannot be null.");
 
-        this.point = point;
-        this.vector = vector;
+        this.p = point;
+        this.v = vector;
+    }
+
+
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return new Line3D(p, v);
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+
+        Line3D other = (Line3D) obj;
+        if (!p.equals(other.p))
+            return false;
+        if (!v.equals(other.v))
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj, Object precision) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+
+        Line3D other = (Line3D) obj;
+        if (!p.equals(other.p, precision))
+            return false;
+        if (!v.equals(other.v, precision))
+            return false;
+
+        return true;
+    }
+
+
+
+    /**
+     * Returns the point on the line when <code>x</code> equals the specified
+     * coordinate.
+     * 
+     * @param x
+     *            coordinate
+     * @return point on the line
+     */
+    public Point3D getPointFromX(double x) {
+        double t = (x - p.getX()) / v.getX();
+
+        if (Double.isInfinite(t))
+            throw new ArithmeticException("The line does not pass through x="
+                    + x + ".");
+
+        double y = p.getY() + v.getY() * t;
+        double z = p.getZ() + v.getZ() * t;
+
+        return new Point3D(x, y, z);
+    }
+
+
+
+    /**
+     * Returns the point on the line when <code>y</code> equals the specified
+     * coordinate.
+     * 
+     * @param y
+     *            coordinate
+     * @return point on the line
+     */
+    public Point3D getPointFromY(double y) {
+        double t = (y - p.getY()) / v.getY();
+
+        if (Double.isInfinite(t))
+            throw new ArithmeticException("The line does not pass through y="
+                    + y + ".");
+
+        double x = p.getX() + v.getX() * t;
+        double z = p.getZ() + v.getZ() * t;
+
+        return new Point3D(x, y, z);
+    }
+
+
+
+    /**
+     * Returns the point on the line when <code>z</code> equals the specified
+     * coordinate.
+     * 
+     * @param z
+     *            coordinate
+     * @return point on the line
+     */
+    public Point3D getPointFromZ(double z) {
+        double t = (z - p.getZ()) / v.getZ();
+
+        if (Double.isInfinite(t))
+            throw new ArithmeticException("The line does not pass through z="
+                    + z + ".");
+
+        double x = p.getX() + v.getX() * t;
+        double y = p.getY() + v.getY() * t;
+
+        return new Point3D(x, y, z);
+    }
+
+
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + p.hashCode();
+        result = prime * result + v.hashCode();
+        return result;
     }
 
 
 
     @Override
     public String toString() {
-        return point + "+" + vector + "t";
+        return p + "+" + v + "t";
     }
 }

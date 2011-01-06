@@ -17,14 +17,19 @@
  */
 package org.ebsdimage.core.sim;
 
-import static crystallography.core.Calculations.diffractionAngle;
-import static crystallography.core.Calculations.electronWavelength;
-import static java.lang.Math.*;
+import java.util.Arrays;
+
+import magnitude.core.Magnitude;
+import magnitude.geom.Line2D;
+import magnitude.geom.Line2DUtil;
+import magnitude.geom.Vector2D;
 import ptpshared.core.geom.Line;
 import ptpshared.core.math.Quaternion;
 import ptpshared.core.math.QuaternionMath;
 import ptpshared.core.math.Vector3D;
 import ptpshared.core.math.Vector3DMath;
+import static crystallography.core.Calculations.diffractionAngle;
+import static crystallography.core.Calculations.electronWavelength;
 
 /**
  * Calculations to draw band in a pattern.
@@ -34,7 +39,7 @@ import ptpshared.core.math.Vector3DMath;
 public class Calculations {
 
     /**
-     * Returns the width of the band above and below the center line.
+     * Returns the width of the band above and below the centre line.
      * 
      * @param planeSpacing
      *            spacing between the plane corresponding to the band
@@ -46,46 +51,46 @@ public class Calculations {
      *            beam energy (in eV)
      * @return two-item array for the half widths
      */
-    public static double[] getBandHalfWidths(double planeSpacing, Line line,
-            double detectorDistance, double energy) {
+    public static Line2D[] getEdgesIntercepts(double planeSpacing, Line2D line,
+            Magnitude detectorDistance, double energy) {
         /*
          * Calculate the alpha angle: angle between the diffraction plane normal
          * and the screen.
          */
-        Vector3D x0;
-        Vector3D x1;
-        Vector3D x2;
+        if (!line.p.getX().areSameUnits(detectorDistance)
+                || !line.p.getY().areSameUnits(detectorDistance))
+            throw new IllegalArgumentException("The detector distance ("
+                    + detectorDistance.getBaseUnitsLabel()
+                    + ") must have the same units as the line ("
+                    + Arrays.toString(line.p.getBaseUnitsLabels()) + ").");
+        if (!line.v.getX().areSameUnits(detectorDistance)
+                || !line.v.getY().areSameUnits(detectorDistance))
+            throw new IllegalArgumentException("The detector distance ("
+                    + detectorDistance.getBaseUnitsLabel()
+                    + ") must have the same units as the line ("
+                    + Arrays.toString(line.v.getBaseUnitsLabels()) + ").");
 
-        x0 = new Vector3D(0, 0, 0);
+        // Vector from the origin to a point along the line
+        double px = line.p.getX().getBaseUnitsValue();
+        double py = line.p.getY().getBaseUnitsValue();
+        double dd = detectorDistance.getBaseUnitsValue();
+        Vector3D v0 = new Vector3D(px, dd, py);
 
-        // Vertical line
-        if (line.m == Double.POSITIVE_INFINITY) {
-            x1 = new Vector3D(line.k, detectorDistance, 0.0);
-            x2 = new Vector3D(line.k, detectorDistance, 0.1);
-        }
+        // Vector of the line (Vector2D) express in 3D
+        double vx = line.v.getX().getBaseUnitsValue();
+        double vy = line.v.getY().getBaseUnitsValue();
+        Vector3D v1 = new Vector3D(vx, 0.0, vy);
 
-        // Horizontal line
-        else if (abs(line.m) <= 1e-7) {
-            x1 = new Vector3D(0.0, detectorDistance, line.k);
-            x2 = new Vector3D(0.1, detectorDistance, line.k);
-        }
+        // Vector normal to the plane from by x0 and x1
+        Vector3D n = v1.cross(v0);
 
-        // Oblique line
-        else {
-            x1 = new Vector3D(0.0, detectorDistance, line.k);
+        // Vector parallel to the screen
+        Vector3D s = new Vector3D(n.getX(), 0.0, n.getZ());
 
-            // Intercept greater than 0.0
-            if (abs(line.k) > 1e-7)
-                x2 = new Vector3D(-line.k / line.m, detectorDistance, 0.0);
+        // Shortest distance between the origin and the line
+        double d = n.norm() / v1.norm();
 
-            // Intercept less than 0.0
-            else
-                x2 = new Vector3D((1 - line.k) / line.m, detectorDistance, 1.0);
-        }
-
-        Vector3D n = x2.minus(x1).cross(x1.minus(x0));
-        Vector3D s = new Vector3D(n.get(0), 0, n.get(2));
-        double d = n.norm() / x2.minus(x1).norm();
+        // Angle between the vector n and s
         double alpha = Vector3DMath.angle(n, s);
 
         /* Calculate the diffraction angle */
@@ -96,10 +101,15 @@ public class Calculations {
          * Calculate the half-widths of the band (top and bottom or left and
          * right)
          */
-        double widthTop = abs(d * sin(theta) / cos(alpha - theta));
-        double widthBottom = abs(d * sin(theta) / cos(alpha + theta));
+        Vector2D t = Line2DUtil.getPerpendicular(line).v;
 
-        return new double[] { widthTop, widthBottom };
+        double width = Math.abs(d * Math.sin(theta) / Math.cos(alpha - theta));
+        Line2D top = Line2DUtil.translate(line, t.multiply(width));
+
+        width = Math.abs(d * Math.sin(theta) / Math.cos(alpha + theta));
+        Line2D bottom = Line2DUtil.translate(line, t.multiply(-width));
+
+        return new Line2D[] { top, bottom };
     }
 
 
@@ -111,39 +121,43 @@ public class Calculations {
      *            two-item array of the half widths
      * @return estimation of the full width of the band
      */
-    public static double getBandWidth(double[] halfWidths) {
-        double halfWidth = max(halfWidths[0], halfWidths[1]);
-        return 2 * halfWidth;
+    public static Magnitude getBandWidth(Magnitude[] halfWidths) {
+        Magnitude halfWidth =
+                magnitude.core.Math.max(halfWidths[0], halfWidths[1]);
+        return halfWidth.multiply(2.0);
     }
 
 
 
-    /**
-     * Returns the top and bottom intercepts of the lines at the edges of a
-     * band.
-     * 
-     * @param line
-     *            middle line of the band
-     * @param halfWidths
-     *            two-item array of the half widths
-     * @return two-item array for the intercept values of the band edges
-     */
-    public static Line[] getEdgesIntercepts(Line line, double[] halfWidths) {
-        // Calculate the beta angle: angle between the band and the x-axis
-        double beta;
-
-        if (line.m == Double.POSITIVE_INFINITY)
-            beta = 0.0;
-        else
-            beta = atan(line.m);
-
-        double kTop = line.k + halfWidths[0] / cos(beta);
-        double kBottom = line.k - halfWidths[1] / cos(beta);
-
-        return new Line[] { new Line(line.m, kTop), new Line(line.m, kBottom) };
-    }
-
-
+    // /**
+    // * Returns the top and bottom intercepts of the lines at the edges of a
+    // * band.
+    // *
+    // * @param line
+    // * middle line of the band
+    // * @param halfWidths
+    // * two-item array of the half widths
+    // * @return two-item array for the intercept values of the band edges
+    // */
+    // public static Line2D[] getEdgesIntercepts(Line2D line,
+    // Magnitude[] halfWidths) {
+    // // Calculate the beta angle: angle between the band and the x-axis
+    // double cosBeta;
+    //
+    // if (line.isVertical())
+    // cosBeta = 1.0;
+    // else
+    // cosBeta = Math.cos(Math.atan(line.getSlope().getValue("")));
+    //
+    // Magnitude x = line.p.getX();
+    // Magnitude y = line.p.getY().add(halfWidths[0].div(cosBeta));
+    // Line2D top = new Line2D(new Vector2D(x, y), line.v);
+    //
+    // y = line.p.getY().minus(halfWidths[1].div(cosBeta));
+    // Line2D bottom = new Line2D(new Vector2D(x, y), line.v);
+    //
+    // return new Line2D[] { top, bottom };
+    // }
 
     /**
      * Returns the slope and intercept of the projection of a plane (hkl) on a

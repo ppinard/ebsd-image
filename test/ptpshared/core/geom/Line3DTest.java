@@ -45,8 +45,8 @@ public class Line3DTest {
 
     @Test
     public void testParametrizedLine() {
-        assertEquals(vector, line.vector);
-        assertEquals(point, line.point);
+        assertEquals(vector, line.v);
+        assertEquals(point, line.p);
     }
 
 
