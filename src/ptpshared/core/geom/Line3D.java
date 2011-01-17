@@ -19,7 +19,6 @@ package ptpshared.core.geom;
 
 import junittools.core.AlmostEquable;
 import ptpshared.core.math.Vector3D;
-import rmlshared.geom.Point3D;
 
 /**
  * Represents a 3D line using a point and a vector. The line is passing by the
@@ -116,7 +115,7 @@ public class Line3D implements Cloneable, AlmostEquable {
      *            coordinate
      * @return point on the line
      */
-    public Point3D getPointFromX(double x) {
+    public Vector3D getPointFromX(double x) {
         double t = (x - p.getX()) / v.getX();
 
         if (Double.isInfinite(t))
@@ -126,7 +125,7 @@ public class Line3D implements Cloneable, AlmostEquable {
         double y = p.getY() + v.getY() * t;
         double z = p.getZ() + v.getZ() * t;
 
-        return new Point3D(x, y, z);
+        return new Vector3D(x, y, z);
     }
 
 
@@ -139,7 +138,7 @@ public class Line3D implements Cloneable, AlmostEquable {
      *            coordinate
      * @return point on the line
      */
-    public Point3D getPointFromY(double y) {
+    public Vector3D getPointFromY(double y) {
         double t = (y - p.getY()) / v.getY();
 
         if (Double.isInfinite(t))
@@ -149,7 +148,7 @@ public class Line3D implements Cloneable, AlmostEquable {
         double x = p.getX() + v.getX() * t;
         double z = p.getZ() + v.getZ() * t;
 
-        return new Point3D(x, y, z);
+        return new Vector3D(x, y, z);
     }
 
 
@@ -162,7 +161,7 @@ public class Line3D implements Cloneable, AlmostEquable {
      *            coordinate
      * @return point on the line
      */
-    public Point3D getPointFromZ(double z) {
+    public Vector3D getPointFromZ(double z) {
         double t = (z - p.getZ()) / v.getZ();
 
         if (Double.isInfinite(t))
@@ -172,7 +171,21 @@ public class Line3D implements Cloneable, AlmostEquable {
         double x = p.getX() + v.getX() * t;
         double y = p.getY() + v.getY() * t;
 
-        return new Point3D(x, y, z);
+        return new Vector3D(x, y, z);
+    }
+
+
+
+    /**
+     * Returns the point along the line at a distance <code>s</code> from
+     * <code>p</code>.
+     * 
+     * @param s
+     *            distance from point <code>p</code>
+     * @return point along the line
+     */
+    public Vector3D getPointFromS(double s) {
+        return v.multiply(s).plus(p);
     }
 
 
