@@ -17,12 +17,6 @@
  */
 package crystallography.core;
 
-import static java.lang.Math.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static ptpshared.core.math.Math.acos;
-
 import java.util.ArrayList;
 
 import org.apache.commons.math.complex.Complex;
@@ -33,6 +27,13 @@ import ptpshared.core.math.AxisAngle;
 import ptpshared.core.math.Matrix3D;
 import ptpshared.core.math.Quaternion;
 import ptpshared.core.math.Vector3D;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static ptpshared.core.math.Math.acos;
+import static java.lang.Math.*;
 
 public class CalculationsTest {
 
@@ -50,7 +51,7 @@ public class CalculationsTest {
 
     private UnitCell triclinic;
 
-    private ArrayList<Plane> planes;
+    private ArrayList<Vector3D> planes;
 
     private UnitCell unitCell1;
 
@@ -100,14 +101,14 @@ public class CalculationsTest {
                 UnitCellFactory.triclinic(1, 2, 3, 75.0 / 180 * PI,
                         55.0 / 180 * PI, 35.0 / 180 * PI);
 
-        planes = new ArrayList<Plane>();
-        planes.add(new Plane(1, 0, 0));
-        planes.add(new Plane(1, 1, 0));
-        planes.add(new Plane(1, 1, 1));
-        planes.add(new Plane(2, 0, 2));
-        planes.add(new Plane(1, 2, 3));
-        planes.add(new Plane(4, 5, 6));
-        planes.add(new Plane(0, 9, 2));
+        planes = new ArrayList<Vector3D>();
+        planes.add(new Vector3D(1, 0, 0));
+        planes.add(new Vector3D(1, 1, 0));
+        planes.add(new Vector3D(1, 1, 1));
+        planes.add(new Vector3D(2, 0, 2));
+        planes.add(new Vector3D(1, 2, 3));
+        planes.add(new Vector3D(4, 5, 6));
+        planes.add(new Vector3D(0, 9, 2));
 
         // Example 1.13 from Mathematical Crystallography (p.31-33)
         unitCell1 = UnitCellFactory.hexagonal(4.914, 5.409);
@@ -232,8 +233,8 @@ public class CalculationsTest {
         double expected;
 
         // Planes
-        Plane plane1 = new Plane(1, 1, 1);
-        Plane plane2 = new Plane(1, 0, 1);
+        Vector3D plane1 = new Vector3D(1, 1, 1);
+        Vector3D plane2 = new Vector3D(1, 0, 1);
 
         // FCC
         intensity =
@@ -294,8 +295,8 @@ public class CalculationsTest {
         Complex expected;
 
         // Planes
-        Plane plane1 = new Plane(1, 1, 1);
-        Plane plane2 = new Plane(1, 0, 1);
+        Vector3D plane1 = new Vector3D(1, 1, 1);
+        Vector3D plane2 = new Vector3D(1, 0, 1);
 
         // FCC
         f = Calculations.formFactor(plane1, cubic, atomsfcc, scatter);
@@ -336,8 +337,8 @@ public class CalculationsTest {
     @Test
     public void testInterplanarAngle() {
         // Problem 2.15
-        Plane plane1 = new Plane(1, 0, 0);
-        Plane plane2 = new Plane(1, 1, 0);
+        Vector3D plane1 = new Vector3D(1, 0, 0);
+        Vector3D plane2 = new Vector3D(1, 1, 0);
 
         double angle = Calculations.interplanarAngle(plane1, plane2, unitCell4);
         angle *= 180 / PI;
@@ -348,8 +349,8 @@ public class CalculationsTest {
 
     @Test
     public void testInterplanarAngleCubic() {
-        for (Plane plane1 : planes)
-            for (Plane plane2 : planes) {
+        for (Vector3D plane1 : planes)
+            for (Vector3D plane2 : planes) {
                 // Interplanar angle from Calculations.interplanarAngle()
                 double angle =
                         Calculations.interplanarAngle(plane1, plane2, cubic);
@@ -377,8 +378,8 @@ public class CalculationsTest {
 
     @Test
     public void testInterplanarAngleHexagonal() {
-        for (Plane plane1 : planes)
-            for (Plane plane2 : planes) {
+        for (Vector3D plane1 : planes)
+            for (Vector3D plane2 : planes) {
                 // Interplanar angle from Calculations.interplanarAngle()
                 double angle =
                         Calculations.interplanarAngle(plane1, plane2, hexagonal);
@@ -414,8 +415,8 @@ public class CalculationsTest {
 
     @Test
     public void testInterplanarAngleMonoclinic() {
-        for (Plane plane1 : planes)
-            for (Plane plane2 : planes) {
+        for (Vector3D plane1 : planes)
+            for (Vector3D plane2 : planes) {
                 // Interplanar angle from Calculations.interplanarAngle()
                 double angle =
                         Calculations.interplanarAngle(plane1, plane2,
@@ -456,8 +457,8 @@ public class CalculationsTest {
 
     @Test
     public void testInterplanarAngleOrthorhombic() {
-        for (Plane plane1 : planes)
-            for (Plane plane2 : planes) {
+        for (Vector3D plane1 : planes)
+            for (Vector3D plane2 : planes) {
                 // Interplanar angle from Calculations.interplanarAngle()
                 double angle =
                         Calculations.interplanarAngle(plane1, plane2,
@@ -494,8 +495,8 @@ public class CalculationsTest {
 
     @Test
     public void testInterplanarAngleTetragonal() {
-        for (Plane plane1 : planes)
-            for (Plane plane2 : planes) {
+        for (Vector3D plane1 : planes)
+            for (Vector3D plane2 : planes) {
                 // Interplanar angle from Calculations.interplanarAngle()
                 double angle =
                         Calculations.interplanarAngle(plane1, plane2,
@@ -530,8 +531,8 @@ public class CalculationsTest {
 
     @Test
     public void testInterplanarAngleTriclinic() {
-        for (Plane plane1 : planes)
-            for (Plane plane2 : planes) {
+        for (Vector3D plane1 : planes)
+            for (Vector3D plane2 : planes) {
                 // Interplanar angle from Calculations.interplanarAngle()
                 double angle =
                         Calculations.interplanarAngle(plane1, plane2, triclinic);
@@ -595,8 +596,8 @@ public class CalculationsTest {
 
     @Test
     public void testInterplanarAngleTrigonal() {
-        for (Plane plane1 : planes)
-            for (Plane plane2 : planes) {
+        for (Vector3D plane1 : planes)
+            for (Vector3D plane2 : planes) {
                 // Interplanar angle from Calculations.interplanarAngle()
                 double angle =
                         Calculations.interplanarAngle(plane1, plane2, trigonal);
@@ -639,8 +640,8 @@ public class CalculationsTest {
     @Test
     public void testIsDiffracting() {
         // Planes
-        Plane plane1 = new Plane(1, 1, 1);
-        Plane plane2 = new Plane(1, 0, 1);
+        Vector3D plane1 = new Vector3D(1, 1, 1);
+        Vector3D plane2 = new Vector3D(1, 0, 1);
 
         // FCC
         assertTrue(Calculations.isDiffracting(plane1, cubic, atomsfcc, scatter,
@@ -721,7 +722,7 @@ public class CalculationsTest {
     @Test
     public void testPlaneSpacing() {
         // Example 2.3
-        Plane plane = new Plane(3, 1, 2);
+        Vector3D plane = new Vector3D(3, 1, 2);
         double planeSpacing = Calculations.planeSpacing(plane, unitCell2);
         assertEquals(1.964, planeSpacing, 1e-3);
     }
@@ -730,7 +731,7 @@ public class CalculationsTest {
 
     @Test
     public void testPlaneSpacingCubic() {
-        for (Plane plane : planes) {
+        for (Vector3D plane : planes) {
             // Plane spacing from Calculations.planeSpacing()
             double spacing = Calculations.planeSpacing(plane, cubic);
 
@@ -753,7 +754,7 @@ public class CalculationsTest {
 
     @Test
     public void testPlaneSpacingHexagonal() {
-        for (Plane plane : planes) {
+        for (Vector3D plane : planes) {
             // Plane spacing from Calculations.planeSpacing()
             double spacing = Calculations.planeSpacing(plane, hexagonal);
 
@@ -779,7 +780,7 @@ public class CalculationsTest {
 
     @Test
     public void testPlaneSpacingMonoclinic() {
-        for (Plane plane : planes) {
+        for (Vector3D plane : planes) {
             // Plane spacing from Calculations.planeSpacing()
             double spacing = Calculations.planeSpacing(plane, monoclinic);
 
@@ -810,7 +811,7 @@ public class CalculationsTest {
 
     @Test
     public void testPlaneSpacingOrthorhombic() {
-        for (Plane plane : planes) {
+        for (Vector3D plane : planes) {
             // Plane spacing from Calculations.planeSpacing()
             double spacing = Calculations.planeSpacing(plane, orthorhombic);
 
@@ -837,7 +838,7 @@ public class CalculationsTest {
 
     @Test
     public void testPlaneSpacingTetragonal() {
-        for (Plane plane : planes) {
+        for (Vector3D plane : planes) {
             // Plane spacing from Calculations.planeSpacing()
             double spacing = Calculations.planeSpacing(plane, tetragonal);
 
@@ -862,7 +863,7 @@ public class CalculationsTest {
 
     @Test
     public void testPlaneSpacingTriclinic() {
-        for (Plane plane : planes) {
+        for (Vector3D plane : planes) {
             // Plane spacing from Calculations.planeSpacing()
             double spacing = Calculations.planeSpacing(plane, triclinic);
 
@@ -911,7 +912,7 @@ public class CalculationsTest {
 
     @Test
     public void testPlaneSpacingTrigonal() {
-        for (Plane plane : planes) {
+        for (Vector3D plane : planes) {
             // Plane spacing from Calculations.planeSpacing()
             double spacing = Calculations.planeSpacing(plane, trigonal);
 

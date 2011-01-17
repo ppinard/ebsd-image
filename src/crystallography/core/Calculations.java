@@ -17,12 +17,6 @@
  */
 package crystallography.core;
 
-import static java.lang.Math.*;
-import static ptpshared.core.math.Constants.C;
-import static ptpshared.core.math.Constants.CHARGE_ELECTRON;
-import static ptpshared.core.math.Constants.H;
-import static ptpshared.core.math.Constants.MASS_ELECTRON;
-
 import org.apache.commons.math.complex.Complex;
 
 import ptpshared.core.math.Matrix3D;
@@ -30,6 +24,11 @@ import ptpshared.core.math.Quaternion;
 import ptpshared.core.math.Vector3D;
 import ptpshared.core.math.Vector3DMath;
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
+import static ptpshared.core.math.Constants.C;
+import static ptpshared.core.math.Constants.CHARGE_ELECTRON;
+import static ptpshared.core.math.Constants.H;
+import static ptpshared.core.math.Constants.MASS_ELECTRON;
+import static java.lang.Math.*;
 
 /**
  * Operations on <code>AtomSite</code>, <code>AtomSites</code>,
@@ -178,8 +177,9 @@ public class Calculations {
      *            scattering factors to calculate for the form factor
      * @return diffraction intensity
      */
-    public static double diffractionIntensity(Plane plane, UnitCell unitCell,
-            AtomSites atomSites, ScatteringFactors scatteringFactors) {
+    public static double diffractionIntensity(Vector3D plane,
+            UnitCell unitCell, AtomSites atomSites,
+            ScatteringFactors scatteringFactors) {
         Complex formFactor =
                 formFactor(plane, unitCell, atomSites, scatteringFactors);
 
@@ -254,7 +254,7 @@ public class Calculations {
      *            scattering factors to calculate for the form factor
      * @return form factor (complex form)
      */
-    public static Complex formFactor(Plane plane, UnitCell unitCell,
+    public static Complex formFactor(Vector3D plane, UnitCell unitCell,
             AtomSites atomSites, ScatteringFactors scatteringFactors) {
         Complex f = new Complex(0.0, 0.0); // Form factor
         double d = planeSpacing(plane, unitCell);
@@ -285,7 +285,7 @@ public class Calculations {
      *            unitCell unit cell containing the planes
      * @return angle between plane1 and plane2 (in radians)
      */
-    public static double interplanarAngle(Plane plane1, Plane plane2,
+    public static double interplanarAngle(Vector3D plane1, Vector3D plane2,
             UnitCell unitCell) {
         return Vector3DMath.angle(interplanarDirectionCosine(plane1, plane2,
                 unitCell));
@@ -305,13 +305,13 @@ public class Calculations {
      *            unitCell unit cell containing the planes
      * @return direction cosine between plane1 and plane2 (in radians)
      */
-    public static double interplanarDirectionCosine(Plane plane1, Plane plane2,
-            UnitCell unitCell) {
+    public static double interplanarDirectionCosine(Vector3D plane1,
+            Vector3D plane2, UnitCell unitCell) {
         Matrix3D cartesianMatrix = unitCell.cartesianMatrix;
         Matrix3D b = cartesianMatrix.transpose().inverse();
 
-        Vector3D plane1C = b.multiply(plane1.toVector3D());
-        Vector3D plane2C = b.multiply(plane2.toVector3D());
+        Vector3D plane1C = b.multiply(plane1);
+        Vector3D plane2C = b.multiply(plane2);
 
         return Vector3DMath.directionCosine(plane1C, plane2C);
     }
@@ -359,7 +359,7 @@ public class Calculations {
      *            discriminating fraction to say that a plane is diffracting
      * @return <code>true</code> plane is diffraction
      */
-    public static boolean isDiffracting(Plane plane, UnitCell unitCell,
+    public static boolean isDiffracting(Vector3D plane, UnitCell unitCell,
             AtomSites atomSites, ScatteringFactors scatteringFactors,
             double fraction) {
         double maxIntensity =
@@ -444,11 +444,11 @@ public class Calculations {
      *            unit cell containing the plane
      * @return plane spacing
      */
-    public static double planeSpacing(Plane plane, UnitCell unitCell) {
+    public static double planeSpacing(Vector3D plane, UnitCell unitCell) {
         Matrix3D matrix = unitCell.metricalMatrix.inverse();
 
         // s square (d = 1/s^2)
-        double sSquare = plane.dot(matrix.multiply(plane.toVector3D()));
+        double sSquare = plane.dot(matrix.multiply(plane));
 
         // plane spacing d
         double d = 1.0 / sqrt(sSquare);

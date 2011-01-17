@@ -3,6 +3,7 @@ package crystallography.core;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import ptpshared.core.math.Vector3D;
 import rmlshared.thread.Reflection;
 
 /**
@@ -56,15 +57,13 @@ public class ReflectorsFactory {
         for (int h = -maxIndex; h <= maxIndex; h++)
             for (int k = -maxIndex; k <= maxIndex; k++)
                 for (int l = -maxIndex; l <= maxIndex; l++) {
+                    if (h == 0 && k == 0 & l == 0)
+                        continue;
+
                     // Create plane
                     // Only look at positive planes since negative plane are
                     // equivalent
-                    Plane p;
-                    try {
-                        p = new Plane(h, k, l).positive();
-                    } catch (InvalidPlaneException e) {
-                        continue;
-                    }
+                    Vector3D p = new Vector3D(h, k, l).positive();
 
                     // Calculate the intensities
                     double intensity =
@@ -77,7 +76,8 @@ public class ReflectorsFactory {
                         double planeSpacing =
                                 Calculations.planeSpacing(p, unitCell);
                         Reflector reflector =
-                                new Reflector(p, planeSpacing, intensity);
+                                new Reflector((int) p.getX(), (int) p.getY(),
+                                        (int) p.getZ(), planeSpacing, intensity);
 
                         // Add only if it doesn't already exists
                         if (!(tmpRefls.contains(reflector)))
@@ -92,10 +92,10 @@ public class ReflectorsFactory {
         // Find max intensity
         double maxIntensity = tmpRefls.get(0).intensity;
 
-        // Initalize reflectors array
+        // Initialise reflectors array
         Reflector[] reflectors = new Reflector[tmpRefls.size()];
 
-        // Calculate normalized intensity and add reflector to class ArrayList
+        // Calculate normalised intensity and add reflector to class ArrayList
         for (int i = 0; i < tmpRefls.size(); i++) {
             Reflector refl = tmpRefls.get(i);
             double normalizedIntensity = refl.intensity / maxIntensity;

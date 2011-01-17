@@ -17,13 +17,11 @@
  */
 package crystallography.core;
 
-import static java.util.Arrays.sort;
-import static ptpshared.utility.Arrays.reverse;
-
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import net.jcip.annotations.Immutable;
+import ptpshared.utility.Arrays;
 
 /**
  * List of <code>Reflector</code>s of a crystal. The class finds all the
@@ -46,7 +44,7 @@ import net.jcip.annotations.Immutable;
 public class Reflectors implements Iterable<Reflector> {
 
     /** Array of reflectors. */
-    private final Reflector[] reflectors;
+    private final HashMap<Integer, Reflector> reflectors;
 
     /** Crystal associated with the reflectors. */
     public final Crystal crystal;
@@ -75,24 +73,10 @@ public class Reflectors implements Iterable<Reflector> {
                         + ") is null.");
 
         this.crystal = crystal;
-        this.reflectors = reflectors;
-    }
 
-
-
-    /**
-     * Returns the reflector with the specified index.
-     * 
-     * @param index
-     *            index of a reflector in the array.
-     * @return a <code>Reflector</code>
-     */
-    public Reflector get(int index) {
-        if (index < 0 || index >= size())
-            throw new IllegalArgumentException("Index must be between [0,"
-                    + size() + "[");
-
-        return reflectors[index];
+        this.reflectors = new HashMap<Integer, Reflector>();
+        for (Reflector refl : reflectors)
+            this.reflectors.put(refl.hashCode(), refl);
     }
 
 
@@ -100,17 +84,43 @@ public class Reflectors implements Iterable<Reflector> {
     /**
      * Returns a reflector for the given plane.
      * 
-     * @param plane
-     *            a plane
+     * @param h
+     *            h index of the crystallographic plane
+     * @param k
+     *            k index of the crystallographic plane
+     * @param l
+     *            l index of the crystallographic plane
      * @return reflector associated to the plane
      */
-    public Reflector get(Plane plane) {
-        for (Reflector refl : reflectors)
-            if (refl.equals(plane))
-                return refl;
+    public Reflector get(int h, int k, int l) {
+        int hashCode = Reflector.calculateHashCode(h, k, l);
 
-        throw new IllegalArgumentException("Plane " + plane.toString()
-                + " was not found.");
+        Reflector refl = reflectors.get(hashCode);
+        if (refl == null)
+            throw new IllegalArgumentException("Plane (" + h + ";" + k + ";"
+                    + l + ") was not found.");
+        else
+            return refl;
+    }
+
+
+
+    /**
+     * Check whether this <code>Reflectors</code> object contains a
+     * <code>Reflector</code> with the specified indices.
+     * 
+     * @param h
+     *            h index of the crystallographic plane
+     * @param k
+     *            k index of the crystallographic plane
+     * @param l
+     *            l index of the crystallographic plane
+     * @return <code>true</code> if a <code>Reflector</code> exists,
+     *         <code>false</code> otherwise
+     */
+    public boolean contains(int h, int k, int l) {
+        int hashCode = Reflector.calculateHashCode(h, k, l);
+        return reflectors.containsKey(hashCode);
     }
 
 
@@ -122,7 +132,7 @@ public class Reflectors implements Iterable<Reflector> {
      */
     @Override
     public Iterator<Reflector> iterator() {
-        return Arrays.asList(reflectors).iterator();
+        return reflectors.values().iterator();
     }
 
 
@@ -133,38 +143,45 @@ public class Reflectors implements Iterable<Reflector> {
      * @return number of reflectors
      */
     public int size() {
-        return reflectors.length;
+        return reflectors.size();
     }
 
 
 
     /**
-     * Sort the reflectors list by their intensity.
+     * Returns a array of the reflectors sorted by their intensity. If
+     * <code>reverse</code> is <code>false</code>, the order is ascending. If
+     * <code>reverse</code> is <code>true</code>, the order is descending.
      * 
      * @param reverse
-     *            if <code>true</code> the reflectors are sorted by descending
-     *            order of intensity
+     *            order of the sorting
+     * @return sorted array of the reflectors
      */
-    public void sortByIntensity(boolean reverse) {
-        sort(reflectors, new IntensityComparator());
+    public Reflector[] getReflectorsSortedByIntensity(boolean reverse) {
+        Reflector[] refls = reflectors.values().toArray(new Reflector[0]);
 
-        if (reverse)
-            reverse(reflectors);
+        Arrays.sort(refls, new IntensityComparator(), reverse);
+
+        return refls;
     }
 
 
 
     /**
-     * Sort the reflectors list by their plane spacing.
+     * Returns a array of the reflectors sorted by their plane spacing. If
+     * <code>reverse</code> is <code>false</code>, the order is ascending. If
+     * <code>reverse</code> is <code>true</code>, the order is descending.
      * 
      * @param reverse
-     *            if <code>true</code> the reflectors are sorted by descending
-     *            order of plane spacing
+     *            order of the sorting
+     * @return sorted array of the reflectors
      */
-    public void sortByPlaneSpacing(boolean reverse) {
-        sort(reflectors, new PlaneSpacingComparator());
+    public Reflector[] getReflectorsSortedByPlaneSpacing(boolean reverse) {
+        Reflector[] refls = reflectors.values().toArray(new Reflector[0]);
 
-        if (reverse)
-            reverse(reflectors);
+        Arrays.sort(refls, new PlaneSpacingComparator(), reverse);
+
+        return refls;
     }
+
 };

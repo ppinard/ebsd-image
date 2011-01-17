@@ -17,12 +17,12 @@
  */
 package crystallography.core;
 
-import static java.lang.Math.*;
-import static ptpshared.core.math.Math.acos;
 import ptpshared.core.math.Quaternion;
 import ptpshared.core.math.QuaternionMath;
 import ptpshared.core.math.Vector3D;
 import rmlimage.module.real.core.RealMap;
+import static ptpshared.core.math.Math.acos;
+import static java.lang.Math.*;
 
 /**
  * Stereographic pole figure. Draw rotation(s) on a stereographic pole figure.
@@ -57,9 +57,9 @@ public class PoleFigureMap extends RealMap {
      * @param crystal
      *            crystal (for symmetry operators)
      */
-    public PoleFigureMap(int width, Plane pole, Crystal crystal) {
+    public PoleFigureMap(int width, Vector3D pole, Crystal crystal) {
         super(width, width);
-        this.pole = pole.toVector3D().normalize();
+        this.pole = pole.normalize();
         this.crystal = crystal;
     }
 

@@ -17,25 +17,27 @@
  */
 package crystallography.core;
 
+import org.junit.Before;
+import org.junit.Test;
+
+import ptpshared.core.math.Vector3D;
+
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
+import static junittools.test.Assert.assertEquals;
 
 public class ReflectorTest {
 
     private Reflector refl;
 
-    private Plane plane;
-
 
 
     @Before
     public void setUp() throws Exception {
-        plane = new Plane(1, -1, 1);
-        refl = new Reflector(plane, 3.0, 0.03512, 0.5);
+        refl = new Reflector(1, -1, 1, 3.0, 0.03512, 0.5);
     }
 
 
@@ -48,7 +50,7 @@ public class ReflectorTest {
 
         assertFalse(refl.equals(new Object()));
 
-        Reflector refl2 = new Reflector(plane, 4.0, 0.5, 0.5);
+        Reflector refl2 = new Reflector(1, -1, 1, 4.0, 0.5, 0.5);
         assertEquals(refl, refl2);
     }
 
@@ -56,7 +58,7 @@ public class ReflectorTest {
 
     @Test
     public void testHasCode() {
-        assertEquals(new Reflector(plane, 3.0, 0.03512).hashCode(),
+        assertEquals(new Reflector(1, -1, 1, 3.0, 0.03512).hashCode(),
                 refl.hashCode());
     }
 
@@ -64,7 +66,9 @@ public class ReflectorTest {
 
     @Test
     public void testReflectorPlaneDoubleDoubleDouble() {
-        assertEquals(plane, refl.plane);
+        assertEquals(1, refl.h);
+        assertEquals(-1, refl.k);
+        assertEquals(1, refl.l);
         assertEquals(3.0, refl.planeSpacing, 1e-7);
         assertEquals(0.03512, refl.intensity, 1e-7);
         assertEquals(0.5, refl.normalizedIntensity, 1e-7);
@@ -72,17 +76,19 @@ public class ReflectorTest {
 
 
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testReflectorException() {
-        new Reflector(null, 3.0, 0.03512, 0.5);
+        new Reflector(0, 0, 0, 3.0, 0.03512, 0.5);
     }
 
 
 
     @Test
     public void testReflectorPlaneDoubleDouble() {
-        Reflector other = new Reflector(plane, 3.0, 0.03512);
-        assertEquals(plane, other.plane);
+        Reflector other = new Reflector(1, -1, 1, 3.0, 0.03512);
+        assertEquals(1, refl.h);
+        assertEquals(-1, refl.k);
+        assertEquals(1, refl.l);
         assertEquals(3.0, other.planeSpacing, 1e-7);
         assertEquals(0.03512, other.intensity, 1e-7);
         assertEquals(1.0, other.normalizedIntensity, 1e-7);
@@ -91,29 +97,51 @@ public class ReflectorTest {
 
 
     @Test
-    public void testReflectorPlaneUnitCellAtomSitesScatteringFactors() {
-        Crystal crystal = CrystalFactory.silicon();
-        Plane plane = new Plane(1, 1, 1);
-
-        Reflector other =
-                ReflectorFactory.create(plane, crystal,
-                        ScatteringFactorsEnum.XRAY);
-
-        assertEquals(plane, other.plane);
-        assertEquals(3.13501196, other.planeSpacing, 1e-7);
-        assertEquals(1775.88446522, other.intensity, 1e-7);
+    public void testReflectorReflectorDouble() {
+        Reflector other = new Reflector(refl, 1.0);
+        assertEquals(1, refl.h);
+        assertEquals(-1, refl.k);
+        assertEquals(1, refl.l);
+        assertEquals(refl.planeSpacing, other.planeSpacing, 1e-7);
+        assertEquals(refl.intensity, other.intensity, 1e-7);
         assertEquals(1.0, other.normalizedIntensity, 1e-7);
     }
 
 
 
     @Test
-    public void testReflectorReflectorDouble() {
-        Reflector other = new Reflector(refl, 1.0);
-        assertEquals(refl.plane, other.plane);
-        assertEquals(refl.planeSpacing, other.planeSpacing, 1e-7);
-        assertEquals(refl.intensity, other.intensity, 1e-7);
-        assertEquals(1.0, other.normalizedIntensity, 1e-7);
+    public void testGetPlane() {
+        Vector3D expected = new Vector3D(1, -1, 1);
+        Vector3D actual = refl.getPlane();
+        assertEquals(expected, actual, 1e-6);
+    }
+
+
+
+    @Test
+    public void testGetBravaisIndices() {
+        // Reflector 1
+        Reflector refl = new Reflector(1, -2, 0, 1.0, 1.0);
+
+        int[] expected = new int[] { 1, -2, 1, 0 };
+        int[] actual = refl.getBravaisIndices();
+        assertArrayEquals(expected, actual);
+
+        // Reflector 2
+        refl = new Reflector(1, 1, 0, 1.0, 1.0);
+
+        expected = new int[] { 1, 1, -2, 0 };
+        actual = refl.getBravaisIndices();
+        assertArrayEquals(expected, actual);
+    }
+
+
+
+    @Test
+    public void testGetMillerIndices() {
+        int[] expected = new int[] { 1, -1, 1 };
+        int[] actual = refl.getMillerIndices();
+        assertArrayEquals(expected, actual);
     }
 
 }

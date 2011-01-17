@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 import net.jcip.annotations.Immutable;
+import ptpshared.core.math.Vector3D;
 
 /**
  * Defines a diffracting plane. The difference between the object
@@ -39,8 +40,14 @@ import net.jcip.annotations.Immutable;
 @Immutable
 public class Reflector {
 
-    /** Crystallographic plane. */
-    public final Plane plane;
+    /** Crystallographic plane h index. */
+    public final int h;
+
+    /** Crystallographic plane k index. */
+    public final int k;
+
+    /** Crystallographic plane l index. */
+    public final int l;
 
     /** Spacing between planes. */
     public final double planeSpacing;
@@ -49,7 +56,7 @@ public class Reflector {
     public final double intensity;
 
     /**
-     * Normalized diffraction intensity of the reflector (i.e.
+     * Normalised diffraction intensity of the reflector (i.e.
      * <code>max=1</code>)
      */
     public final double normalizedIntensity;
@@ -57,35 +64,66 @@ public class Reflector {
 
 
     /**
-     * Creates a new <code>Reflector</code>. Protected constructor. Reflectors
-     * should be created using {@link Reflectors}. The normalized intensity is
-     * set to 1.0.
+     * Calculates the hash code (unique integer representation) for the indices.
      * 
-     * @param plane
-     *            crystallographic plane
-     * @param planeSpacing
-     *            spacing between planes
-     * @param intensity
-     *            diffraction intensity
+     * @param h
+     *            h index of the crystallographic plane
+     * @param k
+     *            k index of the crystallographic plane
+     * @param l
+     *            l index of the crystallographic plane
+     * @return hash code
      */
-    protected Reflector(Plane plane, double planeSpacing, double intensity) {
-        this(plane, planeSpacing, intensity, 1.0);
+    protected static int calculateHashCode(int h, int k, int l) {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + h;
+        result = prime * result + k;
+        result = prime * result + l;
+        return result;
     }
 
 
 
     /**
      * Creates a new <code>Reflector</code>. Protected constructor. Reflectors
-     * should be created using {@link Reflectors}. *
+     * should be created using {@link Reflectors}. The normalised intensity is
+     * set to 1.0.
      * 
-     * @param plane
-     *            crystallographic plane
+     * @param h
+     *            h index of the crystallographic plane
+     * @param k
+     *            k index of the crystallographic plane
+     * @param l
+     *            l index of the crystallographic plane
+     * @param planeSpacing
+     *            spacing between planes
+     * @param intensity
+     *            diffraction intensity
+     */
+    protected Reflector(int h, int k, int l, double planeSpacing,
+            double intensity) {
+        this(h, k, l, planeSpacing, intensity, 1.0);
+    }
+
+
+
+    /**
+     * Creates a new <code>Reflector</code>. Protected constructor. Reflectors
+     * should be created using {@link ReflectorsFactory}. *
+     * 
+     * @param h
+     *            h index of the crystallographic plane
+     * @param k
+     *            k index of the crystallographic plane
+     * @param l
+     *            l index of the crystallographic plane
      * @param planeSpacing
      *            plane spacing
      * @param intensity
      *            diffraction intensity
      * @param normalizedIntensity
-     *            normalized diffraction intensity
+     *            normalised diffraction intensity
      * @throws NullPointerException
      *             if the plane is null
      * @throws IllegalArgumentException
@@ -93,12 +131,13 @@ public class Reflector {
      * @throws IllegalArgumentException
      *             if the intensity is less or equal to 0.
      * @throws IllegalArgumentException
-     *             if the normalized intensity is less or equal to 0.
+     *             if the normalised intensity is less or equal to 0.
      */
-    protected Reflector(Plane plane, double planeSpacing, double intensity,
-            double normalizedIntensity) {
-        if (plane == null)
-            throw new NullPointerException("Plane cannot be null.");
+    protected Reflector(int h, int k, int l, double planeSpacing,
+            double intensity, double normalizedIntensity) {
+        if (h == 0 && k == 0 && l == 0)
+            throw new IllegalArgumentException(
+                    "Plane hkl cannot be a null vector.");
         if (planeSpacing <= 0)
             throw new IllegalArgumentException(
                     "The plane spacing cannot be less or equal to 0.0.");
@@ -109,7 +148,9 @@ public class Reflector {
             throw new IllegalArgumentException(
                     "The plane spacing cannot be less or equal to 0.0.");
 
-        this.plane = plane;
+        this.h = h;
+        this.k = k;
+        this.l = l;
         this.planeSpacing = planeSpacing;
         this.intensity = intensity;
         this.normalizedIntensity = normalizedIntensity;
@@ -119,12 +160,12 @@ public class Reflector {
 
     /**
      * Creates a new <code>Reflector</code> from an old <code>Reflector</code>
-     * and updates the normalized intensity.
+     * and updates the normalised intensity.
      * 
      * @param refl
      *            old <code>Reflector</code>
      * @param normalizedIntensity
-     *            updated normalized diffraction intensity
+     *            updated normalised diffraction intensity
      * @throws NullPointerException
      *             if the plane is null
      * @throws IllegalArgumentException
@@ -135,19 +176,12 @@ public class Reflector {
      *             if the normalized intensity is less or equal to 0.
      */
     protected Reflector(Reflector refl, double normalizedIntensity) {
-        this(refl.plane, refl.planeSpacing, refl.intensity, normalizedIntensity);
+        this(refl.h, refl.k, refl.l, refl.planeSpacing, refl.intensity,
+                normalizedIntensity);
     }
 
 
 
-    /**
-     * Checks if the plane of this <code>Reflector</code> is equal to the plane
-     * of the specified one.
-     * 
-     * @param obj
-     *            other <code>Reflector</code> to check equality
-     * @return whether the planes of the two <code>Reflector</code> are equal
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -158,7 +192,11 @@ public class Reflector {
             return false;
 
         Reflector other = (Reflector) obj;
-        if (!plane.equals(other.plane))
+        if (h != other.h)
+            return false;
+        if (k != other.k)
+            return false;
+        if (l != other.l)
             return false;
 
         return true;
@@ -167,18 +205,23 @@ public class Reflector {
 
 
     /**
-     * Checks if the plane of this <code>Reflector</code> is equal to the
-     * specified plane.
+     * Check whether this reflector is made out of the specified indices.
      * 
-     * @param plane
-     *            <code>Plane</code> to check equality
-     * @return whether the planes are equal
+     * @param h
+     *            h index of the crystallographic plane
+     * @param k
+     *            k index of the crystallographic plane
+     * @param l
+     *            l index of the crystallographic plane
+     * @return <code>true</code> if the reflector is made of the specified
+     *         indices, <code>false</code> otherwise
      */
-    public boolean equals(Plane plane) {
-        if (plane == null)
+    public boolean equals(int h, int k, int l) {
+        if (h != this.h)
             return false;
-
-        if (!this.plane.equals(plane))
+        if (k != this.k)
+            return false;
+        if (l != this.l)
             return false;
 
         return true;
@@ -186,18 +229,9 @@ public class Reflector {
 
 
 
-    /**
-     * Returns the hash code of the reflector. The hash code of the reflector is
-     * equal to the hash code of the plane.
-     * 
-     * @return hash code
-     */
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + plane.hashCode();
-        return result;
+        return calculateHashCode(h, k, l);
     }
 
 
@@ -209,10 +243,45 @@ public class Reflector {
      */
     @Override
     public String toString() {
-        return plane + "\t" + planeSpacing + " A" + "\t" + normalizedIntensity
-                * 100 + "%";
+        return "(" + h + ";" + k + ";" + l + ")" + "\t" + planeSpacing + " A"
+                + "\t" + normalizedIntensity * 100 + "%";
     }
 
+
+
+    /**
+     * Returns the crystallographic plane as a <code>Vector3D</code>.
+     * 
+     * @return crystallographic plane
+     */
+    public Vector3D getPlane() {
+        return new Vector3D(h, k, l);
+    }
+
+
+
+    /**
+     * Returns the indices of the crystallographic plane using the Bravais
+     * notation.
+     * 
+     * @return indices in the Bravais notation (array of length 4)
+     */
+    public int[] getBravaisIndices() {
+        int i = -(h + k);
+        return new int[] { h, k, i, l };
+    }
+
+
+
+    /**
+     * Returns the indices of the crystallographic plane using the Miller
+     * notation.
+     * 
+     * @return indices in the Miller notation (array of length 3)
+     */
+    public int[] getMillerIndices() {
+        return new int[] { h, k, l };
+    }
 }
 
 /**

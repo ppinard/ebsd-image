@@ -17,15 +17,16 @@
  */
 package crystallography.core;
 
-import static java.lang.Math.abs;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static java.lang.Math.abs;
 
 public class ReflectorsTest {
 
@@ -75,13 +76,13 @@ public class ReflectorsTest {
     public void testIntensityBCC() {
         Reflector refl;
 
-        refl = reflsBCC.get(new Plane(1, 0, 1));
+        refl = reflsBCC.get(1, 0, 1);
         assertEquals(0.0044562961611491949, refl.intensity, 1e-7);
 
-        refl = reflsBCC.get(new Plane(1, -1, 0));
+        refl = reflsBCC.get(1, -1, 0);
         assertEquals(0.0044562961611491949, refl.intensity, 1e-7);
 
-        refl = reflsBCC.get(new Plane(2, 0, 0));
+        refl = reflsBCC.get(2, 0, 0);
         assertEquals(0.0013809857316082104, refl.intensity, 1e-7);
     }
 
@@ -91,13 +92,13 @@ public class ReflectorsTest {
     public void testIntensityFCC() {
         Reflector refl;
 
-        refl = reflsFCC.get(new Plane(1, 1, 1));
+        refl = reflsFCC.get(1, 1, 1);
         assertEquals(0.0859145669508, refl.intensity, 1e-7);
 
-        refl = reflsFCC.get(new Plane(1, -1, 1));
+        refl = reflsFCC.get(1, -1, 1);
         assertEquals(0.0859145669508, refl.intensity, 1e-7);
 
-        refl = reflsFCC.get(new Plane(2, -2, 0));
+        refl = reflsFCC.get(2, -2, 0);
         assertEquals(0.0152361124413, refl.intensity, 1e-7);
     }
 
@@ -107,13 +108,13 @@ public class ReflectorsTest {
     public void testIntensityHCP() {
         Reflector refl;
 
-        refl = reflsHCP.get(new Plane(0, 0, 2));
+        refl = reflsHCP.get(0, 0, 2);
         assertEquals(0.0223094348195904, refl.intensity, 1e-7);
 
-        refl = reflsHCP.get(new Plane(1, 0, -1));
+        refl = reflsHCP.get(1, 0, -1);
         assertEquals(0.00796522126479333, refl.intensity, 1e-7);
 
-        refl = reflsHCP.get(new Plane(2, -1, 0));
+        refl = reflsHCP.get(2, -1, 0);
         assertEquals(0.004871818018137741, refl.intensity, 1e-7);
     }
 
@@ -123,13 +124,13 @@ public class ReflectorsTest {
     public void testNormalizedIntensityBCC() {
         Reflector refl;
 
-        refl = reflsBCC.get(new Plane(1, 0, 1));
+        refl = reflsBCC.get(1, 0, 1);
         assertEquals(1.0, refl.normalizedIntensity, 1e-7);
 
-        refl = reflsBCC.get(new Plane(1, -1, 0));
+        refl = reflsBCC.get(1, -1, 0);
         assertEquals(1.0, refl.normalizedIntensity, 1e-7);
 
-        refl = reflsBCC.get(new Plane(2, 0, 0));
+        refl = reflsBCC.get(2, 0, 0);
         assertEquals(0.30989541127178588, refl.normalizedIntensity, 1e-7);
     }
 
@@ -139,13 +140,13 @@ public class ReflectorsTest {
     public void testNormalizedIntensityFCC() {
         Reflector refl;
 
-        refl = reflsFCC.get(new Plane(1, 1, 1));
+        refl = reflsFCC.get(1, 1, 1);
         assertEquals(1.0, refl.normalizedIntensity, 1e-7);
 
-        refl = reflsFCC.get(new Plane(1, -1, 1));
+        refl = reflsFCC.get(1, -1, 1);
         assertEquals(1.0, refl.normalizedIntensity, 1e-7);
 
-        refl = reflsFCC.get(new Plane(2, -2, 0));
+        refl = reflsFCC.get(2, -2, 0);
         assertEquals(0.177340269316, refl.normalizedIntensity, 1e-7);
     }
 
@@ -155,13 +156,13 @@ public class ReflectorsTest {
     public void testNormalizedIntensityHCP() {
         Reflector refl;
 
-        refl = reflsHCP.get(new Plane(0, 0, 2));
+        refl = reflsHCP.get(0, 0, 2);
         assertEquals(0.5870027442721996, refl.normalizedIntensity, 1e-7);
 
-        refl = reflsHCP.get(new Plane(1, 0, -1));
+        refl = reflsHCP.get(1, 0, -1);
         assertEquals(0.20957979191091056, refl.normalizedIntensity, 1e-7);
 
-        refl = reflsHCP.get(new Plane(2, -1, 0));
+        refl = reflsHCP.get(2, -1, 0);
         assertEquals(0.1281865967791338, refl.normalizedIntensity, 1e-7);
     }
 
@@ -169,44 +170,50 @@ public class ReflectorsTest {
 
     @Test
     public void testPlaneBCC() {
-        ArrayList<Plane> planesBCC = new ArrayList<Plane>();
-        planesBCC.add(new Plane(0, 1, 1));
-        planesBCC.add(new Plane(1, 1, 0));
-        planesBCC.add(new Plane(1, 0, 1));
-        planesBCC.add(new Plane(1, -1, 0));
-        planesBCC.add(new Plane(1, 0, -1));
-        planesBCC.add(new Plane(0, 1, -1));
-        planesBCC.add(new Plane(0, 2, 0));
-        planesBCC.add(new Plane(2, 0, 0));
-        planesBCC.add(new Plane(0, 0, 2));
-        planesBCC.add(new Plane(1, 1, 2));
-        planesBCC.add(new Plane(1, 2, 1));
-        planesBCC.add(new Plane(2, 1, 1));
-        planesBCC.add(new Plane(1, -2, -1));
-        planesBCC.add(new Plane(2, 1, -1));
-        planesBCC.add(new Plane(2, -1, -1));
-        planesBCC.add(new Plane(1, 1, -2));
-        planesBCC.add(new Plane(1, -1, -2));
-        planesBCC.add(new Plane(1, 2, -1));
-        planesBCC.add(new Plane(2, -1, 1));
-        planesBCC.add(new Plane(1, -2, 1));
-        planesBCC.add(new Plane(1, -1, 2));
-        planesBCC.add(new Plane(0, 2, 2));
-        planesBCC.add(new Plane(2, 0, 2));
-        planesBCC.add(new Plane(2, 2, 0));
-        planesBCC.add(new Plane(2, -2, 0));
-        planesBCC.add(new Plane(2, 0, -2));
-        planesBCC.add(new Plane(0, 2, -2));
-        planesBCC.add(new Plane(2, 2, 2));
-        planesBCC.add(new Plane(2, -2, -2));
-        planesBCC.add(new Plane(2, -2, 2));
-        planesBCC.add(new Plane(2, 2, -2));
+        ArrayList<Integer[]> planesBCC = new ArrayList<Integer[]>();
+        planesBCC.add(new Integer[] { 0, 1, 1 });
+        planesBCC.add(new Integer[] { 1, 1, 0 });
+        planesBCC.add(new Integer[] { 1, 0, 1 });
+        planesBCC.add(new Integer[] { 1, -1, 0 });
+        planesBCC.add(new Integer[] { 1, 0, -1 });
+        planesBCC.add(new Integer[] { 0, 1, -1 });
+        planesBCC.add(new Integer[] { 0, 2, 0 });
+        planesBCC.add(new Integer[] { 2, 0, 0 });
+        planesBCC.add(new Integer[] { 0, 0, 2 });
+        planesBCC.add(new Integer[] { 1, 1, 2 });
+        planesBCC.add(new Integer[] { 1, 2, 1 });
+        planesBCC.add(new Integer[] { 2, 1, 1 });
+        planesBCC.add(new Integer[] { 1, -2, -1 });
+        planesBCC.add(new Integer[] { 2, 1, -1 });
+        planesBCC.add(new Integer[] { 2, -1, -1 });
+        planesBCC.add(new Integer[] { 1, 1, -2 });
+        planesBCC.add(new Integer[] { 1, -1, -2 });
+        planesBCC.add(new Integer[] { 1, 2, -1 });
+        planesBCC.add(new Integer[] { 2, -1, 1 });
+        planesBCC.add(new Integer[] { 1, -2, 1 });
+        planesBCC.add(new Integer[] { 1, -1, 2 });
+        planesBCC.add(new Integer[] { 0, 2, 2 });
+        planesBCC.add(new Integer[] { 2, 0, 2 });
+        planesBCC.add(new Integer[] { 2, 2, 0 });
+        planesBCC.add(new Integer[] { 2, -2, 0 });
+        planesBCC.add(new Integer[] { 2, 0, -2 });
+        planesBCC.add(new Integer[] { 0, 2, -2 });
+        planesBCC.add(new Integer[] { 2, 2, 2 });
+        planesBCC.add(new Integer[] { 2, -2, -2 });
+        planesBCC.add(new Integer[] { 2, -2, 2 });
+        planesBCC.add(new Integer[] { 2, 2, -2 });
 
+        // Check count
+        assertEquals(planesBCC.size(), reflsBCC.size());
+
+        // Check indices
+        for (Integer[] plane : planesBCC) {
+            assertTrue(reflsBCC.contains(plane[0], plane[1], plane[2]));
+        }
+
+        // Check indices rule(s)
         for (Reflector refl : reflsBCC) {
-            Plane plane = refl.plane;
-            assertTrue(planesBCC.contains(plane));
-
-            int modulo = (plane.sum() % 2);
+            int modulo = ((refl.h + refl.k + refl.l) % 2);
             assertEquals(0, modulo);
         }
     }
@@ -215,35 +222,41 @@ public class ReflectorsTest {
 
     @Test
     public void testPlaneFCC() {
-        ArrayList<Plane> planesFCC = new ArrayList<Plane>();
-        planesFCC.add(new Plane(1, 1, 1));
-        planesFCC.add(new Plane(1, -1, -1));
-        planesFCC.add(new Plane(1, 1, -1));
-        planesFCC.add(new Plane(1, -1, 1));
-        planesFCC.add(new Plane(0, 2, 0));
-        planesFCC.add(new Plane(0, 0, 2));
-        planesFCC.add(new Plane(2, 0, 0));
-        planesFCC.add(new Plane(0, 2, 2));
-        planesFCC.add(new Plane(2, 0, 2));
-        planesFCC.add(new Plane(2, 2, 0));
-        planesFCC.add(new Plane(0, 2, -2));
-        planesFCC.add(new Plane(2, 0, -2));
-        planesFCC.add(new Plane(2, -2, 0));
-        planesFCC.add(new Plane(2, 2, 2));
-        planesFCC.add(new Plane(2, -2, 2));
-        planesFCC.add(new Plane(2, -2, -2));
-        planesFCC.add(new Plane(2, 2, -2));
+        ArrayList<Integer[]> planesFCC = new ArrayList<Integer[]>();
+        planesFCC.add(new Integer[] { 1, 1, 1 });
+        planesFCC.add(new Integer[] { 1, -1, -1 });
+        planesFCC.add(new Integer[] { 1, 1, -1 });
+        planesFCC.add(new Integer[] { 1, -1, 1 });
+        planesFCC.add(new Integer[] { 0, 2, 0 });
+        planesFCC.add(new Integer[] { 0, 0, 2 });
+        planesFCC.add(new Integer[] { 2, 0, 0 });
+        planesFCC.add(new Integer[] { 0, 2, 2 });
+        planesFCC.add(new Integer[] { 2, 0, 2 });
+        planesFCC.add(new Integer[] { 2, 2, 0 });
+        planesFCC.add(new Integer[] { 0, 2, -2 });
+        planesFCC.add(new Integer[] { 2, 0, -2 });
+        planesFCC.add(new Integer[] { 2, -2, 0 });
+        planesFCC.add(new Integer[] { 2, 2, 2 });
+        planesFCC.add(new Integer[] { 2, -2, 2 });
+        planesFCC.add(new Integer[] { 2, -2, -2 });
+        planesFCC.add(new Integer[] { 2, 2, -2 });
 
+        // Check count
+        assertEquals(planesFCC.size(), reflsFCC.size());
+
+        // Check indices
+        for (Integer[] plane : planesFCC) {
+            assertTrue(reflsFCC.contains(plane[0], plane[1], plane[2]));
+        }
+
+        // Check indices rule(s)
         for (Reflector refl : reflsFCC) {
-            Plane plane = refl.plane;
-            assertTrue(planesFCC.contains(plane));
-
-            if (plane.get(0) % 2 == 0) {
-                assertEquals(plane.get(1) % 2, 0, 1e-7);
-                assertEquals(plane.get(2) % 2, 0, 1e-7);
+            if (refl.h % 2 == 0) {
+                assertEquals(refl.k % 2, 0, 1e-7);
+                assertEquals(refl.l % 2, 0, 1e-7);
             } else {// plane[0] % 2 == 1
-                assertEquals(abs(plane.get(1) % 2), 1, 1e-7);
-                assertEquals(abs(plane.get(2) % 2), 1, 1e-7);
+                assertEquals(abs(refl.k % 2), 1, 1e-7);
+                assertEquals(abs(refl.l % 2), 1, 1e-7);
             }
         }
     }
@@ -253,11 +266,9 @@ public class ReflectorsTest {
     @Test
     public void testPlaneHCP() {
         for (Reflector refl : reflsHCP) {
-            Plane plane = refl.plane;
-
             // From Rollett 2008
-            boolean condition1 = abs((plane.get(0) + 2 * plane.get(1)) % 3) < 0;
-            boolean condition2 = abs(plane.get(2) % 2) == 1;
+            boolean condition1 = abs((refl.h + 2 * refl.k) % 3) < 0;
+            boolean condition2 = abs(refl.l % 2) == 1;
             assertFalse(condition1 && condition2);
         }
     }
@@ -269,19 +280,19 @@ public class ReflectorsTest {
         // Compared with HKL Channel 5 Phases Database
         Reflector refl;
 
-        refl = reflsBCC.get(new Plane(1, 0, 1));
+        refl = reflsBCC.get(1, 0, 1);
         assertEquals(2.0293964620053915, refl.planeSpacing, 1e-7);
 
-        refl = reflsBCC.get(new Plane(1, -1, 0));
+        refl = reflsBCC.get(1, -1, 0);
         assertEquals(2.0293964620053915, refl.planeSpacing, 1e-7);
 
-        refl = reflsBCC.get(new Plane(2, 0, 0));
+        refl = reflsBCC.get(2, 0, 0);
         assertEquals(1.4349999999999998, refl.planeSpacing, 1e-7);
 
-        refl = reflsBCC.get(new Plane(1, -1, 2));
+        refl = reflsBCC.get(1, -1, 2);
         assertEquals(1.1716725936312868, refl.planeSpacing, 1e-7);
 
-        refl = reflsBCC.get(new Plane(2, 0, 2));
+        refl = reflsBCC.get(2, 0, 2);
         assertEquals(1.0146982310026957, refl.planeSpacing, 1e-7);
     }
 
@@ -292,13 +303,13 @@ public class ReflectorsTest {
         // Compared with HKL Channel 5 Phases Database
         Reflector refl;
 
-        refl = reflsFCC.get(new Plane(1, 1, 1));
+        refl = reflsFCC.get(1, 1, 1);
         assertEquals(3.1350119616996683, refl.planeSpacing, 1e-7);
 
-        refl = reflsFCC.get(new Plane(1, -1, 1));
+        refl = reflsFCC.get(1, -1, 1);
         assertEquals(3.1350119616996683, refl.planeSpacing, 1e-7);
 
-        refl = reflsFCC.get(new Plane(2, -2, 0));
+        refl = reflsFCC.get(2, -2, 0);
         assertEquals(1.919794910921476, refl.planeSpacing, 1e-7);
     }
 
@@ -309,13 +320,13 @@ public class ReflectorsTest {
         // Compared with HKL Channel 5 Phases Database
         Reflector refl;
 
-        refl = reflsHCP.get(new Plane(0, 0, 2));
+        refl = reflsHCP.get(0, 0, 2);
         assertEquals(2.605, refl.planeSpacing, 1e-7);
 
-        refl = reflsHCP.get(new Plane(1, 0, -1));
+        refl = reflsHCP.get(1, 0, -1);
         assertEquals(2.4526403546701228, refl.planeSpacing, 1e-7);
 
-        refl = reflsHCP.get(new Plane(2, -1, 0));
+        refl = reflsHCP.get(2, -1, 0);
         assertEquals(1.605, refl.planeSpacing, 1e-7);
     }
 
@@ -342,49 +353,44 @@ public class ReflectorsTest {
 
     @Test
     public void testSortByIntensity() {
-        reflsFCC.sortByIntensity(true);
-        assertEquals(1.0, reflsFCC.get(0).normalizedIntensity, 1e-7);
-        assertEquals(new Plane(1, 1, 1), reflsFCC.get(0).plane);
+        Reflector[] refls = reflsFCC.getReflectorsSortedByIntensity(true);
+        assertEquals(1.0, refls[0].normalizedIntensity, 1e-7);
     }
 
 
 
     @Test
     public void testSortByIntensity2() {
-        reflsFCC.sortByIntensity(false);
-        assertEquals(1.0,
-                reflsFCC.get(reflsFCC.size() - 1).normalizedIntensity, 1e-7);
-        assertEquals(new Plane(1, 1, 1),
-                reflsFCC.get(reflsFCC.size() - 1).plane);
+        Reflector[] refls = reflsFCC.getReflectorsSortedByIntensity(false);
+        assertEquals(1.0, refls[refls.length - 1].normalizedIntensity, 1e-7);
     }
 
 
 
     @Test
     public void testSortByPlaneSpacing() {
-        reflsFCC.sortByPlaneSpacing(true);
-        assertEquals(1.0, reflsFCC.get(0).normalizedIntensity, 1e-7);
-        assertEquals(new Plane(1, 1, 1), reflsFCC.get(0).plane);
+        Reflector[] refls = reflsFCC.getReflectorsSortedByPlaneSpacing(true);
+        assertEquals(1.0, refls[0].normalizedIntensity, 1e-7);
+        assertEquals(3.1350119617, refls[0].planeSpacing, 1e-7);
     }
 
 
 
     @Test
     public void testSortByPlaneSpacing2() {
-        reflsFCC.sortByPlaneSpacing(false);
-        assertEquals(1.0,
-                reflsFCC.get(reflsFCC.size() - 1).normalizedIntensity, 1e-7);
-        assertEquals(new Plane(1, 1, 1),
-                reflsFCC.get(reflsFCC.size() - 1).plane);
+        Reflector[] refls = reflsFCC.getReflectorsSortedByPlaneSpacing(false);
+        assertEquals(1.0, refls[refls.length - 1].normalizedIntensity, 1e-7);
+        assertEquals(3.1350119617, refls[refls.length - 1].planeSpacing, 1e-7);
     }
 
 
 
     @Test
     public void testGetPlane() {
-        Plane plane = new Plane(1, 1, 1);
-        Reflector refl = reflsFCC.get(plane);
-        assertEquals(plane, refl.plane);
+        Reflector refl = reflsFCC.get(1, 1, 1);
+        assertEquals(1, refl.h);
+        assertEquals(1, refl.k);
+        assertEquals(1, refl.l);
         assertEquals(3.1350119616996683, refl.planeSpacing, 1e-7);
         assertEquals(0.0859145669508, refl.intensity, 1e-7);
         assertEquals(1.0, refl.normalizedIntensity, 1e-7);
@@ -394,18 +400,7 @@ public class ReflectorsTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetPlaneException() {
-        reflsFCC.get(new Plane(0, 1, 1));
+        reflsFCC.get(0, 1, 1);
     }
 
-
-
-    @Test
-    public void testIterator() {
-        int i = 0;
-
-        for (Reflector refl : reflsFCC) {
-            assertEquals(refl, reflsFCC.get(i));
-            i++;
-        }
-    }
 }
