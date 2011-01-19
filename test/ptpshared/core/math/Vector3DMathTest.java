@@ -17,10 +17,13 @@
  */
 package ptpshared.core.math;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class Vector3DMathTest {
 
@@ -71,4 +74,51 @@ public class Vector3DMathTest {
         assertEquals(tp, 3.0, 0.001);
     }
 
+
+
+    @Test
+    public void testAreCoplanar() {
+        assertFalse(Vector3DMath.areCoplanar(u, v, w, 1e-6));
+
+        Vector3D a = new Vector3D(1, 2, 0);
+        Vector3D b = new Vector3D(4, 4, 0);
+        Vector3D c = new Vector3D(0, 1, 0);
+        assertTrue(Vector3DMath.areCoplanar(a, b, c, 1e-6));
+    }
+
+
+
+    @Test
+    public void testAreParallel() {
+        assertFalse(Vector3DMath.areParallel(u, w, 1e-6));
+        assertFalse(Vector3DMath.areParallel(v, w, 1e-6));
+        assertFalse(Vector3DMath.areParallel(u, v, 1e-6));
+
+        Vector3D a = new Vector3D(1, 2, 3);
+        Vector3D b = new Vector3D(2, 4, 6);
+        assertTrue(Vector3DMath.areParallel(a, b, 1e-6));
+    }
+
+
+
+    @Test
+    public void testLinearDecomposition() {
+        Vector3D a = new Vector3D(1, 0, 0);
+        Vector3D b = new Vector3D(0, 4, 6);
+
+        double[] expected = new double[] { 1.0, 0.5 };
+        double[] actual = Vector3DMath.linearDecomposition(u, a, b);
+        assertArrayEquals(expected, actual, 1e-6);
+
+    }
+
+
+
+    @Test(expected = ArithmeticException.class)
+    public void testLinearDecompositionException() {
+        Vector3D a = new Vector3D(1, 0, 0);
+        Vector3D b = new Vector3D(0, 4, 6);
+
+        Vector3DMath.linearDecomposition(v, a, b);
+    }
 }

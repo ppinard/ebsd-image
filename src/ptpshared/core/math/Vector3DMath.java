@@ -17,6 +17,7 @@
  */
 package ptpshared.core.math;
 
+import Jama.Matrix;
 import static ptpshared.core.math.Math.acos;
 
 /**
@@ -37,22 +38,7 @@ public class Vector3DMath {
      * @return angle in radians
      */
     public static double angle(Vector3D v1, Vector3D v2) {
-        return angle(directionCosine(v1, v2));
-    }
-
-
-
-    /**
-     * Returns the angle in radians for the given direction cosine.
-     * <p/>
-     * <code>angle = acos(directionCosine)</code>
-     * 
-     * @param directionCosine
-     *            direction cosine value
-     * @return angle in radians
-     */
-    public static double angle(double directionCosine) {
-        return acos(directionCosine);
+        return acos(directionCosine(v1, v2));
     }
 
 
@@ -90,4 +76,88 @@ public class Vector3DMath {
         return v1.cross(v2).dot(v3);
     }
 
+
+
+    /**
+     * Checks whether three vectors are coplanar (i.e. they lie inside the same
+     * plane). To be coplanar, the triple product of the vector must be equal to
+     * zero.
+     * 
+     * @param v1
+     *            the first vector
+     * @param v2
+     *            the second vector
+     * @param v3
+     *            the third vector
+     * @param precision
+     *            precision of the verification
+     * @return <code>true</code> if the vectors are coplanar, <code>false</code>
+     *         otherwise
+     */
+    public static boolean areCoplanar(Vector3D v1, Vector3D v2, Vector3D v3,
+            double precision) {
+        return java.lang.Math.abs(tripleProduct(v1, v2, v3)) < precision;
+    }
+
+
+
+    /**
+     * Checks whether two vectors are parallel. To be parallel, the cross
+     * product of two vectors must be the null vector.
+     * 
+     * @param v1
+     *            first vector
+     * @param v2
+     *            second vector
+     * @param precision
+     *            precision of the verification
+     * @return <code>true</code> if the vectors are parallel, <code>false</code>
+     *         otherwise
+     */
+    public static boolean areParallel(Vector3D v1, Vector3D v2, double precision) {
+        return v1.cross(v2).norm() < precision;
+    }
+
+
+
+    /**
+     * Finds the coefficients (t, s) to express the vector <code>v</code> as a
+     * linear combination of vectors <code>a</code> and <code>b</code>.
+     * 
+     * @param v
+     *            a vector
+     * @param a
+     *            first vector of the linear combination
+     * @param b
+     *            second vector of the linear combination
+     * @return coefficients t and s
+     * @throws ArithmeticException
+     *             if the vector <code>v</code> cannot be decomposed by the
+     *             vectors <code>a</code> and <code>b</code>
+     */
+    public static double[] linearDecomposition(Vector3D v, Vector3D a,
+            Vector3D b) {
+        // Find a solution with x and y
+        // AX = B
+        Matrix mA =
+                new Matrix(new double[][] { { a.getX(), b.getX() },
+                        { a.getY(), b.getY() } });
+        Matrix mB = new Matrix(new double[][] { { v.getX() }, { v.getY() } });
+
+        // X = A^{-1}B
+        mA = mA.inverse();
+        Matrix mX = mA.times(mB);
+
+        double t = mX.get(0, 0);
+        double s = mX.get(1, 0);
+
+        // Check that this solution applies to z
+        if (java.lang.Math.abs(t * a.getZ() + s * b.getZ() - v.getZ()) < 1e-6)
+            return new double[] { t, s };
+        else
+            throw new ArithmeticException(
+                    "The linear decomposition of vector (" + v
+                            + ") with the vectors (" + a + " and " + b
+                            + ") is not possible");
+    }
 }
