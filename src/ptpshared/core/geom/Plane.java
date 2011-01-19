@@ -1,5 +1,9 @@
 package ptpshared.core.geom;
 
+import junittools.core.AlmostEquable;
+import net.jcip.annotations.Immutable;
+import ptpshared.core.math.Quaternion;
+import ptpshared.core.math.QuaternionMath;
 import ptpshared.core.math.Vector3D;
 
 /**
@@ -7,36 +11,14 @@ import ptpshared.core.math.Vector3D;
  * 
  * @author ppinard
  */
-public class Plane {
+@Immutable
+public class Plane implements Rotatable, Translatable, Cloneable, AlmostEquable {
 
     /** Normal of the plane. */
     public final Vector3D n;
 
     /** Point on the plane. */
     public final Vector3D p;
-
-
-
-    /**
-     * Creates a new <code>Plane</code>.
-     * 
-     * @param p
-     *            point on the plane
-     * @param n
-     *            normal of the plane
-     */
-    public Plane(Vector3D p, Vector3D n) {
-        if (p == null)
-            throw new NullPointerException("The point cannot be null.");
-        if (n == null)
-            throw new NullPointerException("The normal cannot be null.");
-        if (n.norm() == 0.0)
-            throw new IllegalArgumentException(
-                    "A plane cannot have a null normal vector.");
-
-        this.p = p;
-        this.n = n;
-    }
 
 
 
@@ -66,6 +48,87 @@ public class Plane {
         else
             throw new IllegalArgumentException(
                     "A plane cannot have a null normal vector.");
+    }
+
+
+
+    /**
+     * Creates a new <code>Plane</code>.
+     * 
+     * @param p
+     *            point on the plane
+     * @param n
+     *            normal of the plane
+     */
+    public Plane(Vector3D p, Vector3D n) {
+        if (p == null)
+            throw new NullPointerException("The point cannot be null.");
+        if (n == null)
+            throw new NullPointerException("The normal cannot be null.");
+        if (n.norm() == 0.0)
+            throw new IllegalArgumentException(
+                    "A plane cannot have a null normal vector.");
+
+        this.p = p;
+        this.n = n;
+    }
+
+
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return new Plane(p, n);
+    }
+
+
+
+    /**
+     * Returns the distance of this plane from the origin.
+     * 
+     * @return distance of this plane from the origin
+     */
+    public double distanceFromOrigin() {
+        return Math.abs(getD()) / n.norm();
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+
+        Plane other = (Plane) obj;
+        if (!n.equals(other.n))
+            return false;
+        if (!p.equals(other.p))
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj, Object precision) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+
+        Plane other = (Plane) obj;
+        if (!n.equals(other.n, precision))
+            return false;
+        if (!p.equals(other.p, precision))
+            return false;
+
+        return true;
     }
 
 
@@ -169,12 +232,35 @@ public class Plane {
 
 
 
-    /**
-     * Returns the distance of this plane from the origin.
-     * 
-     * @return distance of this plane from the origin
-     */
-    public double distanceFromOrigin() {
-        return Math.abs(getD()) / n.norm();
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((n == null) ? 0 : n.hashCode());
+        result = prime * result + ((p == null) ? 0 : p.hashCode());
+        return result;
+    }
+
+
+
+    @Override
+    public Plane rotate(Quaternion r) {
+        Vector3D newNormal = QuaternionMath.rotate(n, r);
+        return new Plane(p, newNormal);
+    }
+
+
+
+    @Override
+    public String toString() {
+        return getA() + "x + " + getB() + "y + " + getC() + "z + " + getD();
+    }
+
+
+
+    @Override
+    public Plane translate(Vector3D t) {
+        Vector3D newPoint = p.plus(t);
+        return new Plane(newPoint, n);
     }
 }

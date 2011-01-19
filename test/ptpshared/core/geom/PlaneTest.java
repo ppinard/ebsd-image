@@ -3,9 +3,12 @@ package ptpshared.core.geom;
 import org.junit.Before;
 import org.junit.Test;
 
+import ptpshared.core.math.Quaternion;
 import ptpshared.core.math.Vector3D;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import static junittools.test.Assert.assertEquals;
 
@@ -26,22 +29,52 @@ public class PlaneTest {
 
 
     @Test
-    public void testPlaneVector3DVector3D() {
-        assertEquals(new Vector3D(1, 2, 3), p1.p, 1e-6);
-        assertEquals(new Vector3D(4, 5, 6), p1.n, 1e-6);
+    public void testDistanceFromOrigin() {
+        assertEquals(32.0 / p1.n.norm(), p1.distanceFromOrigin(), 1e-6);
+        assertEquals(5 / p2.n.norm(), p2.distanceFromOrigin(), 1e-6);
     }
 
 
 
     @Test
-    public void testPlaneDoubleDoubleDoubleDouble() {
-        assertEquals(3, p2.getA(), 1e-6);
-        assertEquals(4, p2.getB(), 1e-6);
-        assertEquals(0, p2.getC(), 1e-6);
-        assertEquals(5, p2.getD(), 1e-6);
+    public void testEqualsObject() {
+        assertTrue(p1.equals(p1));
 
-        assertEquals(new Vector3D(3, 4, 0), p2.n, 1e-6);
-        assertEquals(new Vector3D(-(5 + 4 + 0) / 3, 1, 1), p2.p, 1e-6);
+        assertFalse(p1.equals(null));
+
+        assertFalse(p1.equals(new Object()));
+
+        assertTrue(p1.equals(new Plane(new Vector3D(1, 2, 3), new Vector3D(4,
+                5, 6))));
+
+        assertFalse(p1.equals(new Plane(new Vector3D(99, 2, 3), new Vector3D(4,
+                5, 6))));
+
+        assertFalse(p1.equals(new Plane(new Vector3D(1, 2, 3), new Vector3D(99,
+                5, 6))));
+    }
+
+
+
+    @Test
+    public void testEqualsObjectObject() {
+        assertTrue(p1.equals(p1, 1e-3));
+
+        assertFalse(p1.equals(null, 1e-3));
+
+        assertFalse(p1.equals(new Object(), 1e-3));
+
+        assertTrue(p1.equals(new Plane(new Vector3D(1.0001, 2, 3),
+                new Vector3D(4, 5, 6)), 1e-3));
+
+        assertTrue(p1.equals(new Plane(new Vector3D(1, 2, 3), new Vector3D(
+                4.0001, 5, 6)), 1e-3));
+
+        assertFalse(p1.equals(new Plane(new Vector3D(1.1, 2, 3), new Vector3D(
+                4, 5, 6))));
+
+        assertFalse(p1.equals(new Plane(new Vector3D(1, 2, 3), new Vector3D(
+                4.1, 5, 6))));
     }
 
 
@@ -109,9 +142,54 @@ public class PlaneTest {
 
 
     @Test
-    public void testDistanceFromOrigin() {
-        assertEquals(32.0 / p1.n.norm(), p1.distanceFromOrigin(), 1e-6);
-        assertEquals(5 / p2.n.norm(), p2.distanceFromOrigin(), 1e-6);
+    public void testPlaneDoubleDoubleDoubleDouble() {
+        assertEquals(3, p2.getA(), 1e-6);
+        assertEquals(4, p2.getB(), 1e-6);
+        assertEquals(0, p2.getC(), 1e-6);
+        assertEquals(5, p2.getD(), 1e-6);
+
+        assertEquals(new Vector3D(3, 4, 0), p2.n, 1e-6);
+        assertEquals(new Vector3D(-(5 + 4 + 0) / 3, 1, 1), p2.p, 1e-6);
+    }
+
+
+
+    @Test
+    public void testPlaneVector3DVector3D() {
+        assertEquals(new Vector3D(1, 2, 3), p1.p, 1e-6);
+        assertEquals(new Vector3D(4, 5, 6), p1.n, 1e-6);
+    }
+
+
+
+    @Test
+    public void testRotate() {
+        Quaternion r = new Quaternion(0, 0, 0, 1); // 180 deg around [001]
+        Plane other = p1.rotate(r);
+
+        Vector3D expected = new Vector3D(-4, -5, 6);
+        assertEquals(expected, other.n, 1e-6);
+        assertEquals(p1.p, other.p, 1e-6);
+    }
+
+
+
+    @Test
+    public void testToString() {
+        String expected = "4.0x + 5.0y + 6.0z + -32.0";
+        assertEquals(expected, p1.toString());
+    }
+
+
+
+    @Test
+    public void testTranslate() {
+        Vector3D t = new Vector3D(100, 200, 300);
+        Plane other = p1.translate(t);
+
+        Vector3D expected = new Vector3D(101, 202, 303);
+        assertEquals(expected, other.p, 1e-6);
+        assertEquals(p1.n, other.n, 1e-6);
     }
 
 }
