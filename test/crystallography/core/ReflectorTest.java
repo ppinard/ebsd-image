@@ -112,7 +112,7 @@ public class ReflectorTest {
     @Test
     public void testGetPlane() {
         Vector3D expected = new Vector3D(1, -1, 1);
-        Vector3D actual = refl.getPlane();
+        Vector3D actual = refl.getNormal();
         assertEquals(expected, actual, 1e-6);
     }
 

@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 import net.jcip.annotations.Immutable;
+import ptpshared.core.geom.Plane;
 import ptpshared.core.math.Vector3D;
 
 /**
@@ -250,12 +251,25 @@ public class Reflector {
 
 
     /**
-     * Returns the crystallographic plane as a <code>Vector3D</code>.
+     * Returns the normal of the crystallographic plane as a
+     * <code>Vector3D</code>.
+     * 
+     * @return normal of the crystallographic plane
+     */
+    public Vector3D getNormal() {
+        return new Vector3D(h, k, l);
+    }
+
+
+
+    /**
+     * Returns a <code>Plane</code> of the reflector. The plane's normal is
+     * given by the indices. The plane is centred at the origin.
      * 
      * @return crystallographic plane
      */
-    public Vector3D getPlane() {
-        return new Vector3D(h, k, l);
+    public Plane getPlane() {
+        return new Plane(new Vector3D(), getNormal());
     }
 
 
