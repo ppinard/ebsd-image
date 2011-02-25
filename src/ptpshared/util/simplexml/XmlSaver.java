@@ -15,13 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ptpshared.util.xml;
+package ptpshared.util.simplexml;
 
 import java.io.File;
 import java.io.IOException;
 
+import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.strategy.Strategy;
 
 import rmlshared.ui.Monitorable;
 
@@ -32,24 +34,17 @@ import rmlshared.ui.Monitorable;
  */
 public class XmlSaver implements Monitorable {
 
-    /** Persister to serialize XML. */
-    private static Persister persister;
-
     /** Progress of the saving process. */
     protected double progress = 0.0;
 
     /** Progress status. */
     protected String status = "";
 
+    /** Matchers that should be looked at when saving an XML. */
+    public final Matchers matchers = new Matchers();
 
-
-    /**
-     * Creates a new <code>XmlSaver</code>.
-     */
-    public XmlSaver() {
-        AnnotationStrategy strategy = new AnnotationStrategy();
-        persister = new Persister(strategy);
-    }
+    /** Strategy to use when saving an XML. */
+    private final Strategy strategy = new AnnotationStrategy();
 
 
 
@@ -71,6 +66,7 @@ public class XmlSaver implements Monitorable {
      *             if an error occurs during the saving process
      */
     public void save(Object obj, File file) throws IOException {
+        Serializer persister = new Persister(strategy, matchers);
         try {
             persister.write(obj, file);
         } catch (Exception e) {

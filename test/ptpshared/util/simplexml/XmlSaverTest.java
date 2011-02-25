@@ -1,4 +1,4 @@
-package ptpshared.util.xml;
+package ptpshared.util.simplexml;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,6 +6,9 @@ import java.io.IOException;
 import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
+
+import ptpshared.util.simplexml.XmlLoader;
+import ptpshared.util.simplexml.XmlSaver;
 
 public class XmlSaverTest extends TestCase {
 

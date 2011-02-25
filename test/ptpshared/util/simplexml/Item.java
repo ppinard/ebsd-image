@@ -1,4 +1,4 @@
-package ptpshared.util.xml;
+package ptpshared.util.simplexml;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;

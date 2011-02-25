@@ -1,4 +1,4 @@
-package ptpshared.util.xml;
+package ptpshared.util.simplexml;
 
 import java.util.ArrayList;
 import java.util.Arrays;

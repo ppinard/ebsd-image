@@ -15,15 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ptpshared.util.xml;
+package ptpshared.util.simplexml;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
 
+import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.strategy.Strategy;
 
 import rmlshared.ui.Monitorable;
 
@@ -34,24 +36,17 @@ import rmlshared.ui.Monitorable;
  */
 public class XmlLoader implements Monitorable {
 
-    /** Persister to deserialize XML. */
-    private static Persister persister;
-
     /** Progress of the loading process. */
     protected double progress = 0.0;
 
     /** Progress status. */
     protected String status = "";
 
+    /** Matchers that should be looked at when loading an XML. */
+    public final Matchers matchers = new Matchers();
 
-
-    /**
-     * Creates a new <code>XmlLoader</code>.
-     */
-    public XmlLoader() {
-        AnnotationStrategy strategy = new AnnotationStrategy();
-        persister = new Persister(strategy);
-    }
+    /** Strategy to use when loading an XML. */
+    private final Strategy strategy = new AnnotationStrategy();
 
 
 
@@ -83,6 +78,7 @@ public class XmlLoader implements Monitorable {
      * @return Deserialized XML object
      */
     public <T> T load(Class<? extends T> type, File source) throws IOException {
+        Serializer persister = new Persister(strategy, matchers);
         try {
             return persister.read(type, source);
         } catch (Exception e) {
@@ -136,6 +132,7 @@ public class XmlLoader implements Monitorable {
      */
     public <T> T load(Class<? extends T> type, InputStream source)
             throws IOException {
+        Serializer persister = new Persister(strategy, matchers);
         try {
             return persister.read(type, source);
         } catch (Exception e) {
