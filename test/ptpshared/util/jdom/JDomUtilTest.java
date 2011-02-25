@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ptpshared.util.xml;
+package ptpshared.util.jdom;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -31,7 +31,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.util.xml.JDomUtil;
+import ptpshared.util.jdom.JDomUtil;
 
 import rmlshared.io.FileUtil;
 import rmlshared.util.Properties;
