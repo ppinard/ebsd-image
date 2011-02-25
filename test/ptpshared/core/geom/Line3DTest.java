@@ -17,12 +17,12 @@
  */
 package ptpshared.core.geom;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import ptpshared.core.math.Vector3D;
+
+import static org.junit.Assert.assertEquals;
 
 public class Line3DTest {
 
@@ -53,7 +53,7 @@ public class Line3DTest {
 
     @Test
     public void testToString() {
-        String expected = "(4.0;5.0;6.0)+(1.0;2.0;3.0)t";
+        String expected = "(4.0;5.0;6.0) + (1.0;2.0;3.0)t";
         assertEquals(expected, line.toString());
     }
 

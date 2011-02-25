@@ -2,8 +2,6 @@ package ptpshared.core.geom;
 
 import junittools.core.AlmostEquable;
 import net.jcip.annotations.Immutable;
-import ptpshared.core.math.Quaternion;
-import ptpshared.core.math.QuaternionMath;
 import ptpshared.core.math.Vector3D;
 
 /**
@@ -12,7 +10,7 @@ import ptpshared.core.math.Vector3D;
  * @author ppinard
  */
 @Immutable
-public class Plane implements Rotatable, Translatable, Cloneable, AlmostEquable {
+public class Plane implements Cloneable, AlmostEquable, Transformable {
 
     /** Normal of the plane. */
     public final Vector3D n;
@@ -244,14 +242,6 @@ public class Plane implements Rotatable, Translatable, Cloneable, AlmostEquable 
 
 
     @Override
-    public Plane rotate(Quaternion r) {
-        Vector3D newNormal = QuaternionMath.rotate(n, r);
-        return new Plane(p, newNormal);
-    }
-
-
-
-    @Override
     public String toString() {
         return getA() + "x + " + getB() + "y + " + getC() + "z + " + getD();
     }
@@ -259,8 +249,7 @@ public class Plane implements Rotatable, Translatable, Cloneable, AlmostEquable 
 
 
     @Override
-    public Plane translate(Vector3D t) {
-        Vector3D newPoint = p.plus(t);
-        return new Plane(newPoint, n);
+    public Plane transform(AffineTransform3D t) {
+        return new Plane(t.transformPoint(p), t.transformVector(n));
     }
 }

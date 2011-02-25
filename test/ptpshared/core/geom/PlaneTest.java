@@ -3,7 +3,6 @@ package ptpshared.core.geom;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.core.math.Quaternion;
 import ptpshared.core.math.Vector3D;
 
 import static org.junit.Assert.assertEquals;
@@ -163,33 +162,9 @@ public class PlaneTest {
 
 
     @Test
-    public void testRotate() {
-        Quaternion r = new Quaternion(0, 0, 0, 1); // 180 deg around [001]
-        Plane other = p1.rotate(r);
-
-        Vector3D expected = new Vector3D(-4, -5, 6);
-        assertEquals(expected, other.n, 1e-6);
-        assertEquals(p1.p, other.p, 1e-6);
-    }
-
-
-
-    @Test
     public void testToString() {
         String expected = "4.0x + 5.0y + 6.0z + -32.0";
         assertEquals(expected, p1.toString());
-    }
-
-
-
-    @Test
-    public void testTranslate() {
-        Vector3D t = new Vector3D(100, 200, 300);
-        Plane other = p1.translate(t);
-
-        Vector3D expected = new Vector3D(101, 202, 303);
-        assertEquals(expected, other.p, 1e-6);
-        assertEquals(p1.n, other.n, 1e-6);
     }
 
 }

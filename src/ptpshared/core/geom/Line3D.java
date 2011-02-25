@@ -26,7 +26,7 @@ import ptpshared.core.math.Vector3D;
  * 
  * @author Philippe T. Pinard
  */
-public class Line3D implements Cloneable, AlmostEquable, Translatable {
+public class Line3D implements Cloneable, AlmostEquable, Transformable {
 
     /** A point on the line. */
     public final Vector3D p;
@@ -209,8 +209,8 @@ public class Line3D implements Cloneable, AlmostEquable, Translatable {
 
 
     @Override
-    public Translatable translate(Vector3D t) {
-        Vector3D newPoint = p.plus(t);
-        return new Line3D(newPoint, v);
+    public Line3D transform(AffineTransform3D t) {
+        return new Line3D(t.transformPoint(p), t.transformVector(v));
     }
+
 }
