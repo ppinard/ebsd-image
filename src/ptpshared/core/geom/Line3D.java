@@ -18,7 +18,9 @@
 package ptpshared.core.geom;
 
 import junittools.core.AlmostEquable;
-import ptpshared.core.math.Vector3D;
+import net.jcip.annotations.Immutable;
+
+import org.apache.commons.math.geometry.Vector3D;
 
 /**
  * Represents a 3D line using a point and a vector. The line is passing by the
@@ -26,7 +28,8 @@ import ptpshared.core.math.Vector3D;
  * 
  * @author Philippe T. Pinard
  */
-public class Line3D implements Cloneable, AlmostEquable, Transformable {
+@Immutable
+public class Line3D implements AlmostEquable, Transformable {
 
     /** A point on the line. */
     public final Vector3D p;
@@ -61,34 +64,15 @@ public class Line3D implements Cloneable, AlmostEquable, Transformable {
 
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return new Line3D(p, v);
-    }
-
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-
-        Line3D other = (Line3D) obj;
-        if (!p.equals(other.p))
-            return false;
-        if (!v.equals(other.v))
-            return false;
-
-        return true;
-    }
-
-
-
-    @Override
     public boolean equals(Object obj, Object precision) {
+        double delta = ((Number) precision).doubleValue();
+        if (delta < 0)
+            throw new IllegalArgumentException(
+                    "The precision has to be greater or equal to 0.0.");
+        if (Double.isNaN(delta))
+            throw new IllegalArgumentException(
+                    "The precision must be a number.");
+
         if (this == obj)
             return true;
         if (obj == null)
@@ -97,12 +81,35 @@ public class Line3D implements Cloneable, AlmostEquable, Transformable {
             return false;
 
         Line3D other = (Line3D) obj;
-        if (!p.equals(other.p, precision))
+        if (Math.abs(p.getX() - other.p.getX()) > delta)
             return false;
-        if (!v.equals(other.v, precision))
+        if (Math.abs(p.getY() - other.p.getY()) > delta)
+            return false;
+        if (Math.abs(p.getZ() - other.p.getZ()) > delta)
+            return false;
+
+        if (Math.abs(v.getX() - other.v.getX()) > delta)
+            return false;
+        if (Math.abs(v.getY() - other.v.getY()) > delta)
+            return false;
+        if (Math.abs(v.getZ() - other.v.getZ()) > delta)
             return false;
 
         return true;
+    }
+
+
+
+    /**
+     * Returns the point along the line at a distance <code>s</code> from
+     * <code>p</code>.
+     * 
+     * @param s
+     *            distance from point <code>p</code>
+     * @return point along the line
+     */
+    public Vector3D getPointFromS(double s) {
+        return v.scalarMultiply(s).add(p);
     }
 
 
@@ -172,31 +179,6 @@ public class Line3D implements Cloneable, AlmostEquable, Transformable {
         double y = p.getY() + v.getY() * t;
 
         return new Vector3D(x, y, z);
-    }
-
-
-
-    /**
-     * Returns the point along the line at a distance <code>s</code> from
-     * <code>p</code>.
-     * 
-     * @param s
-     *            distance from point <code>p</code>
-     * @return point along the line
-     */
-    public Vector3D getPointFromS(double s) {
-        return v.multiply(s).plus(p);
-    }
-
-
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + p.hashCode();
-        result = prime * result + v.hashCode();
-        return result;
     }
 
 

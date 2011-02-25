@@ -1,9 +1,9 @@
 package ptpshared.core.geom;
 
+import junittools.core.AlmostEquable;
 import net.jcip.annotations.Immutable;
-import ptpshared.core.math.Matrix3D;
-import ptpshared.core.math.Vector3D;
-import ptpshared.core.math.Vector3DMath;
+
+import org.apache.commons.math.geometry.Vector3D;
 
 /**
  * Representation of an Euclidean space.
@@ -11,7 +11,7 @@ import ptpshared.core.math.Vector3DMath;
  * @author ppinard
  */
 @Immutable
-public class EuclideanSpace {
+public class EuclideanSpace implements AlmostEquable {
 
     /** Euclidean space of the origin. */
     public static final EuclideanSpace ORIGIN =
@@ -31,10 +31,26 @@ public class EuclideanSpace {
     public final Vector3D translation;
 
     /** Matrix of the basis vectors. */
-    public final Matrix3D basisMatrix;
+    public final double[][] basisMatrix;
 
     /** Affine transform representing the Euclidean space. */
     public final AffineTransform3D affineTransformation;
+
+
+
+    /**
+     * Creates a new Euclidean space with three orthonormal basis vectors.
+     * 
+     * @param i
+     *            first basis vector
+     * @param j
+     *            second basis vector
+     * @param k
+     *            third basis vector
+     */
+    public EuclideanSpace(Vector3D i, Vector3D j, Vector3D k) {
+        this(i, j, k, new Vector3D(0.0, 0.0, 0.0));
+    }
 
 
 
@@ -54,26 +70,26 @@ public class EuclideanSpace {
     public EuclideanSpace(Vector3D i, Vector3D j, Vector3D k, Vector3D t) {
         if (i == null)
             throw new NullPointerException("Basic vector i cannot be null.");
-        if (i.norm() == 0.0)
+        if (i.getNorm() == 0.0)
             throw new IllegalArgumentException(
                     "Basic vector i cannot be a null vector.");
         this.i = i.normalize();
 
         if (j == null)
             throw new NullPointerException("Basic vector j cannot be null.");
-        if (j.norm() == 0.0)
+        if (j.getNorm() == 0.0)
             throw new IllegalArgumentException(
                     "Basic vector j cannot be a null vector.");
         this.j = j.normalize();
 
         if (k == null)
             throw new NullPointerException("Basic vector k cannot be null.");
-        if (k.norm() == 0.0)
+        if (k.getNorm() == 0.0)
             throw new IllegalArgumentException(
                     "Basic vector k cannot be a null vector.");
         this.k = k.normalize();
 
-        if (Vector3DMath.tripleProduct(i, j, k) == 0)
+        if (Vector3D.dotProduct(Vector3D.crossProduct(i, j), k) == 0)
             throw new IllegalArgumentException(
                     "Vectors i, j and k must be orthogonal.");
 
@@ -82,60 +98,29 @@ public class EuclideanSpace {
         translation = t;
 
         basisMatrix =
-                new Matrix3D(i.getX(), j.getX(), k.getX(), i.getY(), j.getY(),
-                        k.getY(), i.getZ(), j.getZ(), k.getZ());
-        if (!basisMatrix.isSpecialOrthogonal())
-            throw new AssertionError("The matrix is not orthogonal.");
+                new double[][] { { i.getX(), j.getX(), k.getX() },
+                        { i.getY(), j.getY(), k.getY() },
+                        { i.getZ(), j.getZ(), k.getZ() } };
 
         affineTransformation = new AffineTransform3D(basisMatrix, t);
     }
 
 
 
-    /**
-     * Creates a new Euclidean space from the basis' matrix (columns are the
-     * basis vectors) and the translation vector.
-     * 
-     * @param m
-     *            basis' matrix
-     * @param t
-     *            translation vector
-     */
-    public EuclideanSpace(Matrix3D m, Vector3D t) {
-        if (m == null)
-            throw new NullPointerException("basis' matrix cannot be null.");
-        if (!m.isSpecialOrthogonal())
-            throw new IllegalArgumentException("The matrix is not orthogonal.");
-        basisMatrix = m;
+    @Override
+    public boolean equals(Object obj, Object precision) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
 
-        if (t == null)
-            throw new NullPointerException("Translation vector cannot be null.");
-        translation = t;
+        EuclideanSpace other = (EuclideanSpace) obj;
+        if (!affineTransformation.equals(other.affineTransformation, precision))
+            return false;
 
-        i = new Vector3D(m.get(0, 0), m.get(1, 0), m.get(2, 0));
-        j = new Vector3D(m.get(0, 1), m.get(1, 1), m.get(2, 1));
-        k = new Vector3D(m.get(0, 2), m.get(1, 2), m.get(2, 2));
-
-        if (Vector3DMath.tripleProduct(i, j, k) == 0)
-            throw new AssertionError("Vectors i, j and k must be orthogonal.");
-
-        affineTransformation = new AffineTransform3D(m, t);
-    }
-
-
-
-    /**
-     * Creates a new Euclidean space with three orthonormal basis vectors.
-     * 
-     * @param i
-     *            first basis vector
-     * @param j
-     *            second basis vector
-     * @param k
-     *            third basis vector
-     */
-    public EuclideanSpace(Vector3D i, Vector3D j, Vector3D k) {
-        this(i, j, k, new Vector3D());
+        return true;
     }
 
 

@@ -1,11 +1,10 @@
 package ptpshared.core.geom;
 
+import org.apache.commons.math.geometry.Vector3D;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.core.math.Vector3D;
-
-import static junittools.test.Assert.assertEquals;
+import static ptpshared.core.geom.Assert.assertEquals;
 
 public class PlaneUtilTest {
 

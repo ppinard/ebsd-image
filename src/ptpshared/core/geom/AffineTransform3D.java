@@ -1,11 +1,12 @@
 package ptpshared.core.geom;
 
-import java.util.Arrays;
-
 import junittools.core.AlmostEquable;
 import net.jcip.annotations.Immutable;
-import ptpshared.core.math.Matrix3D;
-import ptpshared.core.math.Vector3D;
+
+import org.apache.commons.math.geometry.NotARotationMatrixException;
+import org.apache.commons.math.geometry.Rotation;
+import org.apache.commons.math.geometry.Vector3D;
+
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 import static java.lang.Math.abs;
 
@@ -18,37 +19,70 @@ import static java.lang.Math.abs;
  * @author ppinard
  */
 @Immutable
-public class AffineTransform3D implements Cloneable, AlmostEquable {
+public class AffineTransform3D implements AlmostEquable {
+
+    /** Threshold to consider the rotation matrix is special orthogonal. */
+    private static final double THRESHOLD = 1e-7;
+
+
+
+    /**
+     * Creates a 4x4 matrix from a rotation matrix and a translation vector.
+     * 
+     * @param r
+     *            a 3x3 matrix representing the rotation
+     * @param t
+     *            a 3x1 vector representing the translation
+     * @return a 4x4 matrix
+     */
+    private static double[][] create4x4Matrix(double[][] r, double[] t) {
+        // dimension check
+        if ((r.length != 3) || (r[0].length != 3) || (r[1].length != 3)
+                || (r[2].length != 3))
+            throw new IllegalArgumentException(
+                    "The rotation matrix must be a 3x3 matrix.");
+        if (t.length != 3)
+            throw new IllegalArgumentException("The translation array ("
+                    + t.length + ") must have a length of 3.");
+
+        double[][] out = new double[4][4];
+
+        System.arraycopy(r[0], 0, out[0], 0, 3);
+        System.arraycopy(r[1], 0, out[1], 0, 3);
+        System.arraycopy(r[2], 0, out[2], 0, 3);
+        out[3] = new double[] { 0, 0, 0, 1 };
+
+        out[0][3] = t[0];
+        out[1][3] = t[1];
+        out[2][3] = t[2];
+
+        return out;
+    }
 
     /** 4x4 matrix. */
-    private double m[][] = new double[4][4];
+    private final double[][] m;
 
 
 
     /**
      * Creates a new affine transformation from a 4x4 array.
      * 
-     * @param m
+     * @param d
      *            4x4 array representing the affine transformation matrix.
      */
-    public AffineTransform3D(double[][] m) {
-        if (m == null)
-            throw new NullPointerException("Array cannot be null.");
-        if (m.length != 4)
-            throw new IllegalArgumentException("The number of matrix rows ("
-                    + m.length + ") must be 4.");
-        if (m[0].length != 4)
-            throw new IllegalArgumentException("The number of matrix columns ("
-                    + m[0].length + ") must be 4.");
+    public AffineTransform3D(double[][] d) {
+        // dimension check
+        if ((d.length != 4) || (d[0].length != 4) || (d[1].length != 4)
+                || (d[2].length != 4) || (d[3].length != 4))
+            throw new IllegalArgumentException(
+                    "The matrix must be a 3x3 matrix.");
 
-        for (int i = 0; i < 4; i++)
-            for (int j = 0; j < 4; j++) {
-                if (Double.isNaN(m[i][j]) || Double.isInfinite(m[i][j]))
-                    throw new IllegalArgumentException(
-                            "NaN and Infinite at position " + i + ", " + j
-                                    + " is not accepted in Matrix3D.");
-                this.m[i][j] = m[i][j];
-            }
+        // orthogonality
+        if (!isSpecialOrthogonal(getRotationMatrix(d)))
+            throw new IllegalArgumentException(
+                    "The rotation matrix is not a special orthogonal matrix.");
+
+        this.m = d;
     }
 
 
@@ -62,59 +96,24 @@ public class AffineTransform3D implements Cloneable, AlmostEquable {
      * @param translation
      *            translation vector
      */
-    public AffineTransform3D(Matrix3D rotation, Vector3D translation) {
-        if (rotation == null)
-            throw new NullPointerException("Rotation matrix cannot be null.");
-        if (!rotation.isSpecialOrthogonal())
-            throw new IllegalArgumentException(
-                    "The matrix must be special orthogonal to represent a rotation.");
-        if (translation == null)
-            throw new NullPointerException("Translation vector cannot be null.");
-
-        m[0][0] = rotation.get(0, 0);
-        m[0][1] = rotation.get(0, 1);
-        m[0][2] = rotation.get(0, 2);
-        m[0][3] = translation.getX();
-
-        m[1][0] = rotation.get(1, 0);
-        m[1][1] = rotation.get(1, 1);
-        m[1][2] = rotation.get(1, 2);
-        m[1][3] = translation.getY();
-
-        m[2][0] = rotation.get(2, 0);
-        m[2][1] = rotation.get(2, 1);
-        m[2][2] = rotation.get(2, 2);
-        m[2][3] = translation.getZ();
-
-        m[3][0] = 0;
-        m[3][1] = 0;
-        m[3][2] = 0;
-        m[3][3] = 1;
+    public AffineTransform3D(double[][] rotation, double[] translation) {
+        this(create4x4Matrix(rotation, translation));
     }
 
 
 
-    @Override
-    public AffineTransform3D clone() {
-        return new AffineTransform3D(m);
-    }
-
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-
-        AffineTransform3D other = (AffineTransform3D) obj;
-        if (!Arrays.equals(m, other.m))
-            return false;
-
-        return true;
+    /**
+     * Creates a new affine transformation from a rotation matrix and a
+     * translation vector.
+     * 
+     * @param rotation
+     *            rotation matrix (must be special orthogonal)
+     * @param translation
+     *            translation vector
+     */
+    public AffineTransform3D(double[][] rotation, Vector3D translation) {
+        this(rotation, new double[] { translation.getX(), translation.getY(),
+                translation.getZ() });
     }
 
 
@@ -148,13 +147,58 @@ public class AffineTransform3D implements Cloneable, AlmostEquable {
 
 
     /**
+     * Returns a copy of the internal 4x4 matrix representing this affine
+     * transformation.
+     * 
+     * @return 4x4 matrix
+     */
+    public double[][] getMatrix() {
+        return m.clone();
+    }
+
+
+
+    /**
+     * Returns the rotation matrix of this affine transformation.
+     * 
+     * @return rotation
+     */
+    public Rotation getRotation() {
+        try {
+            return new Rotation(getRotationMatrix(), THRESHOLD);
+        } catch (NotARotationMatrixException e) {
+            throw new RuntimeException("Cannot create rotation from matrix", e);
+        }
+    }
+
+
+
+    /**
      * Returns the rotation matrix of this affine transformation.
      * 
      * @return rotation matrix
      */
-    public Matrix3D getRotation() {
-        return new Matrix3D(m[0][0], m[0][1], m[0][2], m[1][0], m[1][1],
-                m[1][2], m[2][0], m[2][1], m[2][2]);
+    public double[][] getRotationMatrix() {
+        return getRotationMatrix(m);
+    }
+
+
+
+    /**
+     * Extracts and returns the rotation matrix from the specified 4x4 array.
+     * 
+     * @param m
+     *            4x4 array
+     * @return rotation matrix
+     */
+    private double[][] getRotationMatrix(double[][] m) {
+        double[][] out = new double[3][3];
+
+        for (int i = 0; i < 3; i++)
+            System.arraycopy(m[i], 0, out[i], 0, 3);
+
+        return out;
+
     }
 
 
@@ -170,12 +214,21 @@ public class AffineTransform3D implements Cloneable, AlmostEquable {
 
 
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + Arrays.hashCode(m);
-        return result;
+    /**
+     * Returns the transpose of a 3x3 matrix.
+     * 
+     * @param m
+     *            3x3 matrix
+     * @return transpose matrix
+     */
+    private double[][] getTranspose(double[][] m) {
+        double[][] out = new double[3][3];
+
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                out[i][j] = m[j][i];
+
+        return out;
     }
 
 
@@ -183,14 +236,66 @@ public class AffineTransform3D implements Cloneable, AlmostEquable {
     /**
      * Returns the inverse affine transformation.
      * 
-     * @return inserve affine transformation
+     * @return inverse affine transformation
      */
     @CheckReturnValue
     public AffineTransform3D inverse() {
         // Use transpose() instead of inverse() since the rotation is SO3
-        Matrix3D rotation = getRotation().transpose();
-        Vector3D translation = rotation.multiply(getTranslation()).negate();
-        return new AffineTransform3D(rotation, translation);
+        double[][] oldRotation = getRotationMatrix();
+        double[][] newRotation = getTranspose(oldRotation);
+
+        double[] oldTranslation = new double[] { m[0][3], m[1][3], m[2][3] };
+        double[] newTranslation = new double[3];
+
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                newTranslation[i] -= newRotation[i][j] * oldTranslation[j];
+
+        return new AffineTransform3D(newRotation, newTranslation);
+    }
+
+
+
+    /**
+     * Returns a 3x3 matrix is a special orthogonal matrix.
+     * <p/>
+     * Conditions:
+     * <ul>
+     * <li>abs(det) == 1.0</li>
+     * <li>AA^T=I (Wolfram MathWorld)</li>
+     * </ul>
+     * 
+     * @param m
+     *            a 3x3 matrix
+     * @return <code>true</code> if the matrix is special orthogonal,
+     *         <code>false</code> otherwise
+     */
+    private boolean isSpecialOrthogonal(double[][] m) {
+        // determinant == 1.0
+        double det =
+                m[0][0] * (m[1][1] * m[2][2] - m[2][1] * m[1][2]) - m[1][0]
+                        * (m[0][1] * m[2][2] - m[2][1] * m[0][2]) + m[2][0]
+                        * (m[0][1] * m[1][2] - m[1][1] * m[0][2]);
+        if (abs(det - 1.0) > THRESHOLD)
+            return false;
+
+        // AA^T = I
+        double[][] transpose = getTranspose(m);
+        double[][] p = new double[3][3]; // product
+
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                for (int k = 0; k < 3; k++)
+                    p[i][j] += m[i][k] * transpose[k][j];
+
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                if (i == j && abs(p[i][j] - 1.0) > THRESHOLD)
+                    return false;
+                else if (i != j && abs(p[i][j]) > THRESHOLD)
+                    return false;
+
+        return true;
     }
 
 
@@ -250,6 +355,7 @@ public class AffineTransform3D implements Cloneable, AlmostEquable {
      *            a point
      * @return transformed point
      */
+    @CheckReturnValue
     public Vector3D transformPoint(Vector3D p) {
         double px = p.getX();
         double py = p.getY();
@@ -285,5 +391,4 @@ public class AffineTransform3D implements Cloneable, AlmostEquable {
 
         return new Vector3D(x, y, z);
     }
-
 }

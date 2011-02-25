@@ -1,15 +1,14 @@
 package ptpshared.core.geom;
 
+import org.apache.commons.math.geometry.Vector3D;
 import org.junit.Before;
 import org.junit.Test;
-
-import ptpshared.core.math.Vector3D;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import static junittools.test.Assert.assertEquals;
+import static ptpshared.core.geom.Assert.assertEquals;
 
 public class PlaneTest {
 
@@ -29,28 +28,8 @@ public class PlaneTest {
 
     @Test
     public void testDistanceFromOrigin() {
-        assertEquals(32.0 / p1.n.norm(), p1.distanceFromOrigin(), 1e-6);
-        assertEquals(5 / p2.n.norm(), p2.distanceFromOrigin(), 1e-6);
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(p1.equals(p1));
-
-        assertFalse(p1.equals(null));
-
-        assertFalse(p1.equals(new Object()));
-
-        assertTrue(p1.equals(new Plane(new Vector3D(1, 2, 3), new Vector3D(4,
-                5, 6))));
-
-        assertFalse(p1.equals(new Plane(new Vector3D(99, 2, 3), new Vector3D(4,
-                5, 6))));
-
-        assertFalse(p1.equals(new Plane(new Vector3D(1, 2, 3), new Vector3D(99,
-                5, 6))));
+        assertEquals(32.0 / p1.n.getNorm(), p1.distanceFromOrigin(), 1e-6);
+        assertEquals(5 / p2.n.getNorm(), p2.distanceFromOrigin(), 1e-6);
     }
 
 

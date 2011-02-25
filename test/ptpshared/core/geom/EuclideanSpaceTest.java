@@ -1,10 +1,10 @@
 package ptpshared.core.geom;
 
+import org.apache.commons.math.geometry.Vector3D;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.core.math.Matrix3D;
-import ptpshared.core.math.Vector3D;
+import static ptpshared.core.geom.Assert.assertEquals;
 
 import static junittools.test.Assert.assertEquals;
 
@@ -43,7 +43,8 @@ public class EuclideanSpaceTest {
         Vector3D jExpected = new Vector3D(1, 0, 0);
         Vector3D kExpected = new Vector3D(0, 0, 1);
         Vector3D tExpected = new Vector3D(0, 5, 0);
-        Matrix3D mExpected = new Matrix3D(0, 1, 0, -1, 0, 0, 0, 0, 1);
+        double[][] mExpected =
+                new double[][] { { 0, 1, 0 }, { -1, 0, 0 }, { 0, 0, 1 } };
         AffineTransform3D transformExpected =
                 new AffineTransform3D(mExpected, tExpected);
 
@@ -52,7 +53,8 @@ public class EuclideanSpaceTest {
         assertEquals(kExpected, e1.k, 1e-6);
         assertEquals(tExpected, e1.translation, 1e-6);
         assertEquals(mExpected, e1.basisMatrix, 1e-6);
-        assertEquals(transformExpected, e1.affineTransformation, 1e-6);
+        assertEquals(transformExpected.getMatrix(),
+                e1.affineTransformation.getMatrix(), 1e-6);
     }
 
 
@@ -64,28 +66,35 @@ public class EuclideanSpaceTest {
         Vector3D k = new Vector3D(1, 0, 0);
         EuclideanSpace e = new EuclideanSpace(i, j, k);
 
-        Matrix3D mExpected = new Matrix3D(0, 0, 1, 0, 1, 0, -1, 0, 0);
+        double[][] mExpected =
+                new double[][] { { 0, 0, 1 }, { 0, 1, 0 }, { -1, 0, 0 } };
         AffineTransform3D transformExpected =
-                new AffineTransform3D(mExpected, new Vector3D());
+                new AffineTransform3D(mExpected, new Vector3D(0.0, 0.0, 0.0));
 
         assertEquals(i, e.i, 1e-6);
         assertEquals(j, e.j, 1e-6);
         assertEquals(k, e.k, 1e-6);
-        assertEquals(new Vector3D(), e.translation, 1e-6);
+        assertEquals(new Vector3D(0.0, 0.0, 0.0), e.translation, 1e-6);
         assertEquals(mExpected, e.basisMatrix, 1e-6);
-        assertEquals(transformExpected, e.affineTransformation, 1e-6);
+        assertEquals(transformExpected.getMatrix(),
+                e.affineTransformation.getMatrix(), 1e-6);
     }
 
 
 
     @Test
     public void testGetTransformationEquivalence() {
-        assertEquals(e0.getTransformationTo(e1), e1.getTransformationFrom(e0),
-                1e-6);
-        assertEquals(e0.getTransformationTo(e2), e2.getTransformationFrom(e0),
-                1e-6);
-        assertEquals(e2.getTransformationTo(e1), e1.getTransformationFrom(e2),
-                1e-6);
+        AffineTransform3D f = e0.getTransformationTo(e1);
+        AffineTransform3D b = e1.getTransformationFrom(e0);
+        assertEquals(f.getMatrix(), b.getMatrix(), 1e-6);
+
+        f = e0.getTransformationTo(e2);
+        b = e2.getTransformationFrom(e0);
+        assertEquals(f.getMatrix(), b.getMatrix(), 1e-6);
+
+        f = e2.getTransformationTo(e1);
+        b = e1.getTransformationFrom(e2);
+        assertEquals(f.getMatrix(), b.getMatrix(), 1e-6);
     }
 
 

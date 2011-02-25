@@ -2,7 +2,8 @@ package ptpshared.core.geom;
 
 import junittools.core.AlmostEquable;
 import net.jcip.annotations.Immutable;
-import ptpshared.core.math.Vector3D;
+
+import org.apache.commons.math.geometry.Vector3D;
 
 /**
  * Representation of a 3D plane.
@@ -10,7 +11,7 @@ import ptpshared.core.math.Vector3D;
  * @author ppinard
  */
 @Immutable
-public class Plane implements Cloneable, AlmostEquable, Transformable {
+public class Plane implements AlmostEquable, Transformable {
 
     /** Normal of the plane. */
     public final Vector3D n;
@@ -63,19 +64,12 @@ public class Plane implements Cloneable, AlmostEquable, Transformable {
             throw new NullPointerException("The point cannot be null.");
         if (n == null)
             throw new NullPointerException("The normal cannot be null.");
-        if (n.norm() == 0.0)
+        if (n.getNorm() == 0.0)
             throw new IllegalArgumentException(
                     "A plane cannot have a null normal vector.");
 
         this.p = p;
         this.n = n;
-    }
-
-
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return new Plane(p, n);
     }
 
 
@@ -86,33 +80,21 @@ public class Plane implements Cloneable, AlmostEquable, Transformable {
      * @return distance of this plane from the origin
      */
     public double distanceFromOrigin() {
-        return Math.abs(getD()) / n.norm();
-    }
-
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-
-        Plane other = (Plane) obj;
-        if (!n.equals(other.n))
-            return false;
-        if (!p.equals(other.p))
-            return false;
-
-        return true;
+        return Math.abs(getD()) / n.getNorm();
     }
 
 
 
     @Override
     public boolean equals(Object obj, Object precision) {
+        double delta = ((Number) precision).doubleValue();
+        if (delta < 0)
+            throw new IllegalArgumentException(
+                    "The precision has to be greater or equal to 0.0.");
+        if (Double.isNaN(delta))
+            throw new IllegalArgumentException(
+                    "The precision must be a number.");
+
         if (this == obj)
             return true;
         if (obj == null)
@@ -121,9 +103,18 @@ public class Plane implements Cloneable, AlmostEquable, Transformable {
             return false;
 
         Plane other = (Plane) obj;
-        if (!n.equals(other.n, precision))
+        if (Math.abs(p.getX() - other.p.getX()) > delta)
             return false;
-        if (!p.equals(other.p, precision))
+        if (Math.abs(p.getY() - other.p.getY()) > delta)
+            return false;
+        if (Math.abs(p.getZ() - other.p.getZ()) > delta)
+            return false;
+
+        if (Math.abs(n.getX() - other.n.getX()) > delta)
+            return false;
+        if (Math.abs(n.getY() - other.n.getY()) > delta)
+            return false;
+        if (Math.abs(n.getZ() - other.n.getZ()) > delta)
             return false;
 
         return true;
@@ -226,17 +217,6 @@ public class Plane implements Cloneable, AlmostEquable, Transformable {
                     "The plane does not intersect the z-axis.");
 
         return z;
-    }
-
-
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((n == null) ? 0 : n.hashCode());
-        result = prime * result + ((p == null) ? 0 : p.hashCode());
-        return result;
     }
 
 
