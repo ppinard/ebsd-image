@@ -75,7 +75,7 @@ public class AffineTransform3D implements AlmostEquable {
         if ((d.length != 4) || (d[0].length != 4) || (d[1].length != 4)
                 || (d[2].length != 4) || (d[3].length != 4))
             throw new IllegalArgumentException(
-                    "The matrix must be a 3x3 matrix.");
+                    "The matrix must be a 4x4 matrix.");
 
         // orthogonality
         if (!isSpecialOrthogonal(getRotationMatrix(d)))
