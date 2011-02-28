@@ -47,9 +47,8 @@ public class AffineTransform3D implements AlmostEquable {
 
         double[][] out = new double[4][4];
 
-        System.arraycopy(r[0], 0, out[0], 0, 3);
-        System.arraycopy(r[1], 0, out[1], 0, 3);
-        System.arraycopy(r[2], 0, out[2], 0, 3);
+        for (int i = 0; i < 3; i++)
+            System.arraycopy(r[i], 0, out[i], 0, 3);
         out[3] = new double[] { 0, 0, 0, 1 };
 
         out[0][3] = t[0];

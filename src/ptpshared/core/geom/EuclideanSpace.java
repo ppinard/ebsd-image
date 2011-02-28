@@ -89,7 +89,7 @@ public class EuclideanSpace implements AlmostEquable {
                     "Basic vector k cannot be a null vector.");
         this.k = k.normalize();
 
-        if (Vector3DUtil.tripleProduct(i, j, k) == 0)
+        if (Vector3DUtils.tripleProduct(i, j, k) == 0)
             throw new IllegalArgumentException(
                     "Vectors i, j and k must be orthogonal.");
 
