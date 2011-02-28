@@ -17,13 +17,11 @@
  */
 package crystallography.core;
 
-import static crystallography.core.Constants.*;
-import static java.lang.Math.sqrt;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 
-import ptpshared.core.math.Matrix3D;
+import static ptpshared.geom.Assert.assertEquals;
+import static crystallography.core.Constants.*;
+import static java.lang.Math.sqrt;
 
 public class OperatorTest {
 
@@ -35,288 +33,319 @@ public class OperatorTest {
 
     @Test
     public void testO1() {
-        Matrix3D expected = new Matrix3D(1, 0, 0, 0, 1, 0, 0, 0, 1);
-        Matrix3D m = O1.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } };
+        double[][] m = O1.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO2_z() {
-        Matrix3D expected = new Matrix3D(-1, 0, 0, 0, -1, 0, 0, 0, 1);
-        Matrix3D m = O2_Z.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { -1, 0, 0 }, { 0, -1, 0 }, { 0, 0, 1 } };
+        double[][] m = O2_Z.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO2_y() {
-        Matrix3D expected = new Matrix3D(-1, 0, 0, 0, 1, 0, 0, 0, -1);
-        Matrix3D m = O2_Y.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { -1, 0, 0 }, { 0, 1, 0 }, { 0, 0, -1 } };
+        double[][] m = O2_Y.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO2_x() {
-        Matrix3D expected = new Matrix3D(1, 0, 0, 0, -1, 0, 0, 0, -1);
-        Matrix3D m = O2_X.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 1, 0, 0 }, { 0, -1, 0 }, { 0, 0, -1 } };
+        double[][] m = O2_X.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO3p_xyz() {
-        Matrix3D expected = new Matrix3D(0, 0, 1, 1, 0, 0, 0, 1, 0);
-        Matrix3D m = O3P_XYZ.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 0, 0, 1 }, { 1, 0, 0 }, { 0, 1, 0 } };
+        double[][] m = O3P_XYZ.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO3n_xyz() {
-        Matrix3D expected = new Matrix3D(0, 1, 0, 0, 0, 1, 1, 0, 0);
-        Matrix3D m = O3N_XYZ.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 0, 1, 0 }, { 0, 0, 1 }, { 1, 0, 0 } };
+        double[][] m = O3N_XYZ.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO3p_xnynz() {
-        Matrix3D expected = new Matrix3D(0, 0, -1, -1, 0, 0, 0, 1, 0);
-        Matrix3D m = O3P_XNYNZ.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 0, 0, -1 }, { -1, 0, 0 }, { 0, 1, 0 } };
+        double[][] m = O3P_XNYNZ.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO3n_xnynz() {
-        Matrix3D expected = new Matrix3D(0, -1, 0, 0, 0, 1, -1, 0, 0);
-        Matrix3D m = O3N_XNYNZ.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 0, -1, 0 }, { 0, 0, 1 }, { -1, 0, 0 } };
+        double[][] m = O3N_XNYNZ.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO3p_nxynz() {
-        Matrix3D expected = new Matrix3D(0, 0, 1, -1, 0, 0, 0, -1, 0);
-        Matrix3D m = O3P_NXYNZ.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 0, 0, 1 }, { -1, 0, 0 }, { 0, -1, 0 } };
+        double[][] m = O3P_NXYNZ.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO3n_nxynz() {
-        Matrix3D expected = new Matrix3D(0, -1, 0, 0, 0, -1, 1, 0, 0);
-        Matrix3D m = O3N_NXYNZ.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 0, -1, 0 }, { 0, 0, -1 }, { 1, 0, 0 } };
+        double[][] m = O3N_NXYNZ.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO3p_nxnyz() {
-        Matrix3D expected = new Matrix3D(0, 0, -1, 1, 0, 0, 0, -1, 0);
-        Matrix3D m = O3P_NXNYZ.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 0, 0, -1 }, { 1, 0, 0 }, { 0, -1, 0 } };
+        double[][] m = O3P_NXNYZ.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO3n_nxnyz() {
-        Matrix3D expected = new Matrix3D(0, 1, 0, 0, 0, -1, -1, 0, 0);
-        Matrix3D m = O3N_NXNYZ.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 0, 1, 0 }, { 0, 0, -1 }, { -1, 0, 0 } };
+        double[][] m = O3N_NXNYZ.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO2_xy() {
-        Matrix3D expected = new Matrix3D(0, 1, 0, 1, 0, 0, 0, 0, -1);
-        Matrix3D m = O2_XY.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 0, 1, 0 }, { 1, 0, 0 }, { 0, 0, -1 } };
+        double[][] m = O2_XY.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO2_xny() {
-        Matrix3D expected = new Matrix3D(0, -1, 0, -1, 0, 0, 0, 0, -1);
-        Matrix3D m = O2_XNY.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 0, -1, 0 }, { -1, 0, 0 }, { 0, 0, -1 } };
+        double[][] m = O2_XNY.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO2_xz() {
-        Matrix3D expected = new Matrix3D(0, 0, 1, 0, -1, 0, 1, 0, 0);
-        Matrix3D m = O2_XZ.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 0, 0, 1 }, { 0, -1, 0 }, { 1, 0, 0 } };
+        double[][] m = O2_XZ.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO2_nxz() {
-        Matrix3D expected = new Matrix3D(0, 0, -1, 0, -1, 0, -1, 0, 0);
-        Matrix3D m = O2_NXZ.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 0, 0, -1 }, { 0, -1, 0 }, { -1, 0, 0 } };
+        double[][] m = O2_NXZ.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO2_yz() {
-        Matrix3D expected = new Matrix3D(-1, 0, 0, 0, 0, 1, 0, 1, 0);
-        Matrix3D m = O2_YZ.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { -1, 0, 0 }, { 0, 0, 1 }, { 0, 1, 0 } };
+        double[][] m = O2_YZ.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO2_ynz() {
-        Matrix3D expected = new Matrix3D(-1, 0, 0, 0, 0, -1, 0, -1, 0);
-        Matrix3D m = O2_YNZ.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { -1, 0, 0 }, { 0, 0, -1 }, { 0, -1, 0 } };
+        double[][] m = O2_YNZ.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO4p_z() {
-        Matrix3D expected = new Matrix3D(0, -1, 0, 1, 0, 0, 0, 0, 1);
-        Matrix3D m = O4P_Z.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 0, -1, 0 }, { 1, 0, 0 }, { 0, 0, 1 } };
+        double[][] m = O4P_Z.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO4n_z() {
-        Matrix3D expected = new Matrix3D(0, 1, 0, -1, 0, 0, 0, 0, 1);
-        Matrix3D m = O4N_Z.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 0, 1, 0 }, { -1, 0, 0 }, { 0, 0, 1 } };
+        double[][] m = O4N_Z.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO4p_y() {
-        Matrix3D expected = new Matrix3D(0, 0, 1, 0, 1, 0, -1, 0, 0);
-        Matrix3D m = O4P_Y.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 0, 0, 1 }, { 0, 1, 0 }, { -1, 0, 0 } };
+        double[][] m = O4P_Y.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO4n_y() {
-        Matrix3D expected = new Matrix3D(0, 0, -1, 0, 1, 0, 1, 0, 0);
-        Matrix3D m = O4N_Y.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 0, 0, -1 }, { 0, 1, 0 }, { 1, 0, 0 } };
+        double[][] m = O4N_Y.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO4p_x() {
-        Matrix3D expected = new Matrix3D(1, 0, 0, 0, 0, -1, 0, 1, 0);
-        Matrix3D m = O4P_X.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 1, 0, 0 }, { 0, 0, -1 }, { 0, 1, 0 } };
+        double[][] m = O4P_X.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testO4n_x() {
-        Matrix3D expected = new Matrix3D(1, 0, 0, 0, 0, 1, 0, -1, 0);
-        Matrix3D m = O4N_X.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { 1, 0, 0 }, { 0, 0, 1 }, { 0, -1, 0 } };
+        double[][] m = O4N_X.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testH3p_z() {
-        Matrix3D expected = new Matrix3D(-h2, -s3, 0, s3, -h2, 0, 0, 0, 1);
-        Matrix3D m = H3P_Z.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { -h2, -s3, 0 }, { s3, -h2, 0 }, { 0, 0, 1 } };
+        double[][] m = H3P_Z.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testH3n_z() {
-        Matrix3D expected = new Matrix3D(-h2, s3, 0, -s3, -h2, 0, 0, 0, 1);
-        Matrix3D m = H3N_Z.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { -h2, s3, 0 }, { -s3, -h2, 0 }, { 0, 0, 1 } };
+        double[][] m = H3N_Z.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testH6p_z() {
-        Matrix3D expected = new Matrix3D(h2, -s3, 0, s3, h2, 0, 0, 0, 1);
-        Matrix3D m = H6P_Z.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { h2, -s3, 0 }, { s3, h2, 0 }, { 0, 0, 1 } };
+        double[][] m = H6P_Z.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testH6n_z() {
-        Matrix3D expected = new Matrix3D(h2, s3, 0, -s3, h2, 0, 0, 0, 1);
-        Matrix3D m = H6N_Z.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { h2, s3, 0 }, { -s3, h2, 0 }, { 0, 0, 1 } };
+        double[][] m = H6N_Z.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testH2_xy() {
-        Matrix3D expected = new Matrix3D(h2, s3, 0, s3, -h2, 0, 0, 0, -1);
-        Matrix3D m = H2_XY.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { h2, s3, 0 }, { s3, -h2, 0 }, { 0, 0, -1 } };
+        double[][] m = H2_XY.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testH2_xny() {
-        Matrix3D expected = new Matrix3D(h2, -s3, 0, -s3, -h2, 0, 0, 0, -1);
-        Matrix3D m = H2_XNY.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { h2, -s3, 0 }, { -s3, -h2, 0 }, { 0, 0, -1 } };
+        double[][] m = H2_XNY.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testH2_x2y() {
-        Matrix3D expected = new Matrix3D(-h2, -s3, 0, -s3, h2, 0, 0, 0, -1);
-        Matrix3D m = H2_X2Y.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { -h2, -s3, 0 }, { -s3, h2, 0 }, { 0, 0, -1 } };
+        double[][] m = H2_X2Y.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
 
 
 
     @Test
     public void testH2_2xy() {
-        Matrix3D expected = new Matrix3D(-h2, s3, 0, s3, h2, 0, 0, 0, -1);
-        Matrix3D m = H2_2XY.toSO3matrix();
-        assertTrue(m.equals(expected, 1e-7));
+        double[][] expected =
+                new double[][] { { -h2, s3, 0 }, { s3, h2, 0 }, { 0, 0, -1 } };
+        double[][] m = H2_2XY.getMatrix();
+        assertEquals(expected, m, 1e-7);
     }
-
 }

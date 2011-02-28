@@ -20,20 +20,21 @@ package crystallography.core;
 import java.util.ArrayList;
 
 import org.apache.commons.math.complex.Complex;
+import org.apache.commons.math.geometry.NotARotationMatrixException;
+import org.apache.commons.math.geometry.Rotation;
+import org.apache.commons.math.geometry.Vector3D;
 import org.junit.Before;
 import org.junit.Test;
-
-import ptpshared.core.math.AxisAngle;
-import ptpshared.core.math.Matrix3D;
-import ptpshared.core.math.Quaternion;
-import ptpshared.core.math.Vector3D;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import static ptpshared.core.math.Math.acos;
+import static ptpshared.geom.Assert.assertEquals;
+import static ptpshared.math.Math.acos;
 import static java.lang.Math.*;
+
+import static junittools.test.Assert.assertEquals;
 
 public class CalculationsTest {
 
@@ -337,8 +338,8 @@ public class CalculationsTest {
     @Test
     public void testInterplanarAngle() {
         // Problem 2.15
-        Vector3D plane1 = new Vector3D(1, 0, 0);
-        Vector3D plane2 = new Vector3D(1, 1, 0);
+        Vector3D plane1 = new Vector3D(1.0, 0.0, 0.0);
+        Vector3D plane2 = new Vector3D(1.0, 1.0, 0.0);
 
         double angle = Calculations.interplanarAngle(plane1, plane2, unitCell4);
         angle *= 180 / PI;
@@ -356,12 +357,12 @@ public class CalculationsTest {
                         Calculations.interplanarAngle(plane1, plane2, cubic);
 
                 // Calculation using equation
-                double h1 = plane1.get(0);
-                double h2 = plane2.get(0);
-                double k1 = plane1.get(1);
-                double k2 = plane2.get(1);
-                double l1 = plane1.get(2);
-                double l2 = plane2.get(2);
+                double h1 = plane1.getX();
+                double h2 = plane2.getX();
+                double k1 = plane1.getY();
+                double k2 = plane2.getY();
+                double l1 = plane1.getZ();
+                double l2 = plane2.getZ();
 
                 double cosangle =
                         (h1 * h2 + k1 * k2 + l1 * l2)
@@ -385,12 +386,12 @@ public class CalculationsTest {
                         Calculations.interplanarAngle(plane1, plane2, hexagonal);
 
                 // Calculation using equation
-                double h1 = plane1.get(0);
-                double h2 = plane2.get(0);
-                double k1 = plane1.get(1);
-                double k2 = plane2.get(1);
-                double l1 = plane1.get(2);
-                double l2 = plane2.get(2);
+                double h1 = plane1.getX();
+                double h2 = plane2.getX();
+                double k1 = plane1.getY();
+                double k2 = plane2.getY();
+                double l1 = plane1.getZ();
+                double l2 = plane2.getZ();
 
                 double a = hexagonal.a;
                 double c = hexagonal.c;
@@ -423,12 +424,12 @@ public class CalculationsTest {
                                 monoclinic);
 
                 // Calculation using equation
-                double h1 = plane1.get(0);
-                double h2 = plane2.get(0);
-                double k1 = plane1.get(1);
-                double k2 = plane2.get(1);
-                double l1 = plane1.get(2);
-                double l2 = plane2.get(2);
+                double h1 = plane1.getX();
+                double h2 = plane2.getX();
+                double k1 = plane1.getY();
+                double k2 = plane2.getY();
+                double l1 = plane1.getZ();
+                double l2 = plane2.getZ();
 
                 double a = monoclinic.a;
                 double b = monoclinic.b;
@@ -465,12 +466,12 @@ public class CalculationsTest {
                                 orthorhombic);
 
                 // Calculation using equation
-                double h1 = plane1.get(0);
-                double h2 = plane2.get(0);
-                double k1 = plane1.get(1);
-                double k2 = plane2.get(1);
-                double l1 = plane1.get(2);
-                double l2 = plane2.get(2);
+                double h1 = plane1.getX();
+                double h2 = plane2.getX();
+                double k1 = plane1.getY();
+                double k2 = plane2.getY();
+                double l1 = plane1.getZ();
+                double l2 = plane2.getZ();
 
                 double a = orthorhombic.a;
                 double b = orthorhombic.b;
@@ -503,12 +504,12 @@ public class CalculationsTest {
                                 tetragonal);
 
                 // Calculation using equation
-                double h1 = plane1.get(0);
-                double h2 = plane2.get(0);
-                double k1 = plane1.get(1);
-                double k2 = plane2.get(1);
-                double l1 = plane1.get(2);
-                double l2 = plane2.get(2);
+                double h1 = plane1.getX();
+                double h2 = plane2.getX();
+                double k1 = plane1.getY();
+                double k2 = plane2.getY();
+                double l1 = plane1.getZ();
+                double l2 = plane2.getZ();
 
                 double a = tetragonal.a;
                 double c = tetragonal.c;
@@ -538,12 +539,12 @@ public class CalculationsTest {
                         Calculations.interplanarAngle(plane1, plane2, triclinic);
 
                 // Calculation using equation
-                double h1 = plane1.get(0);
-                double h2 = plane2.get(0);
-                double k1 = plane1.get(1);
-                double k2 = plane2.get(1);
-                double l1 = plane1.get(2);
-                double l2 = plane2.get(2);
+                double h1 = plane1.getX();
+                double h2 = plane2.getX();
+                double k1 = plane1.getY();
+                double k2 = plane2.getY();
+                double l1 = plane1.getZ();
+                double l2 = plane2.getZ();
 
                 double a = triclinic.a;
                 double b = triclinic.b;
@@ -603,12 +604,12 @@ public class CalculationsTest {
                         Calculations.interplanarAngle(plane1, plane2, trigonal);
 
                 // Calculation using equation
-                double h1 = plane1.get(0);
-                double h2 = plane2.get(0);
-                double k1 = plane1.get(1);
-                double k2 = plane2.get(1);
-                double l1 = plane1.get(2);
-                double l2 = plane2.get(2);
+                double h1 = plane1.getX();
+                double h2 = plane2.getX();
+                double k1 = plane1.getY();
+                double k2 = plane2.getY();
+                double l1 = plane1.getZ();
+                double l2 = plane2.getZ();
 
                 double a = trigonal.a;
                 double alpha = trigonal.alpha;
@@ -736,9 +737,9 @@ public class CalculationsTest {
             double spacing = Calculations.planeSpacing(plane, cubic);
 
             // Calculation using equation
-            double h = plane.get(0);
-            double k = plane.get(1);
-            double l = plane.get(2);
+            double h = plane.getX();
+            double k = plane.getY();
+            double l = plane.getZ();
 
             double a = cubic.a;
 
@@ -759,9 +760,9 @@ public class CalculationsTest {
             double spacing = Calculations.planeSpacing(plane, hexagonal);
 
             // Calculation using equation
-            double h = plane.get(0);
-            double k = plane.get(1);
-            double l = plane.get(2);
+            double h = plane.getX();
+            double k = plane.getY();
+            double l = plane.getZ();
 
             double a = hexagonal.a;
             double c = hexagonal.c;
@@ -785,9 +786,9 @@ public class CalculationsTest {
             double spacing = Calculations.planeSpacing(plane, monoclinic);
 
             // Calculation using equation
-            double h = plane.get(0);
-            double k = plane.get(1);
-            double l = plane.get(2);
+            double h = plane.getX();
+            double k = plane.getY();
+            double l = plane.getZ();
 
             double a = monoclinic.a;
             double b = monoclinic.b;
@@ -816,9 +817,9 @@ public class CalculationsTest {
             double spacing = Calculations.planeSpacing(plane, orthorhombic);
 
             // Calculation using equation
-            double h = plane.get(0);
-            double k = plane.get(1);
-            double l = plane.get(2);
+            double h = plane.getX();
+            double k = plane.getY();
+            double l = plane.getZ();
 
             double a = orthorhombic.a;
             double b = orthorhombic.b;
@@ -843,9 +844,9 @@ public class CalculationsTest {
             double spacing = Calculations.planeSpacing(plane, tetragonal);
 
             // Calculation using equation
-            double h = plane.get(0);
-            double k = plane.get(1);
-            double l = plane.get(2);
+            double h = plane.getX();
+            double k = plane.getY();
+            double l = plane.getZ();
 
             double a = tetragonal.a;
             double c = tetragonal.c;
@@ -868,9 +869,9 @@ public class CalculationsTest {
             double spacing = Calculations.planeSpacing(plane, triclinic);
 
             // Calculation using equation
-            double h = plane.get(0);
-            double k = plane.get(1);
-            double l = plane.get(2);
+            double h = plane.getX();
+            double k = plane.getY();
+            double l = plane.getZ();
 
             double a = triclinic.a;
             double b = triclinic.b;
@@ -917,9 +918,9 @@ public class CalculationsTest {
             double spacing = Calculations.planeSpacing(plane, trigonal);
 
             // Calculation using equation
-            double h = plane.get(0);
-            double k = plane.get(1);
-            double l = plane.get(2);
+            double h = plane.getX();
+            double k = plane.getY();
+            double l = plane.getZ();
 
             double a = trigonal.a;
             double alpha = trigonal.alpha;
@@ -953,7 +954,7 @@ public class CalculationsTest {
         zone = Calculations.zoneAxis(plane1, plane2, unitCell3);
         expectedZone = new Vector3D(1.0219, 0.8478, 0.0888);
 
-        assertTrue(zone.equals(expectedZone, 1e-3));
+        assertEquals(expectedZone, zone, 1e-3);
 
         // Problem 2.9
         plane1 = new Vector3D(0.1166, 0.0968, 0.0101);
@@ -962,28 +963,28 @@ public class CalculationsTest {
         zone = Calculations.zoneAxis(plane1, plane2, unitCell3);
         expectedZone = new Vector3D(0.0895, -0.097, -0.0030);
 
-        assertTrue(zone.equals(expectedZone, 1e-3));
+        assertEquals(expectedZone, zone, 1e-3);
     }
 
 
 
     @Test
-    public void testReduce() {
+    public void testReduce() throws NotARotationMatrixException {
         // From A.D. Rollett, Misorientations and Grain Boundaries, Lectures
         // Slides, 2007
-        Matrix3D m =
-                new Matrix3D(-0.667, 0.333, 0.667, 0.333, -0.667, 0.667, 0.667,
-                        0.667, 0.333);
-        Quaternion q = new Quaternion(m, 1e-3);
+        double[][] m =
+                new double[][] { { -0.667, 0.333, 0.667 },
+                        { 0.333, -0.667, 0.667 }, { 0.667, 0.667, 0.333 } };
+        Rotation q = new Rotation(m, 1e-3);
 
-        Quaternion out = Calculations.reduce(q, LaueGroup.LGm3m);
+        Rotation out = Calculations.reduce(q, LaueGroup.LGm3m);
 
-        AxisAngle aa = out.toAxisAngle();
-        assertEquals(60.0 / 180 * PI, aa.angle, 1e-3);
+        assertEquals(60.0 / 180 * PI, out.getAngle(), 1e-3);
         // axis should be in the {111} plane family
-        assertEquals(sqrt(3) / 3.0, abs(aa.axis.get(0)), 1e-3);
-        assertEquals(sqrt(3) / 3.0, abs(aa.axis.get(1)), 1e-3);
-        assertEquals(sqrt(3) / 3.0, abs(aa.axis.get(2)), 1e-3);
+        Vector3D axis = out.getAxis().normalize();
+        assertEquals(sqrt(3) / 3.0, abs(axis.getX()), 1e-3);
+        assertEquals(sqrt(3) / 3.0, abs(axis.getY()), 1e-3);
+        assertEquals(sqrt(3) / 3.0, abs(axis.getZ()), 1e-3);
     }
 
 
@@ -996,6 +997,6 @@ public class CalculationsTest {
                 Calculations.equivalentPositions(atoms, SpaceGroups2.SG216);
 
         assertEquals(4, results.size());
-        assertEquals(atomsfcc, results);
+        assertEquals(atomsfcc, results, 1e-6);
     }
 }

@@ -32,6 +32,28 @@ import junittools.core.AlmostEquable;
  */
 public class AtomSites extends ArrayList<AtomSite> implements AlmostEquable {
 
+    /** How close two atoms can be next to each other. */
+    private final double delta;
+
+
+
+    /**
+     * Creates a new <code>AtomSites</code> to store the position of all atoms
+     * of a unit cell. Use {@link #add(AtomSite)}, {@link #add(int, AtomSite)},
+     * {@link #addAll(Collection)} or {@link #addAll(int, Collection)} to add
+     * {@link AtomSite} to the <code>AtomSites</code>.
+     * 
+     * @param delta
+     *            how close two atoms can be next to each other
+     */
+    public AtomSites(double delta) {
+        if (Double.isNaN(delta))
+            throw new IllegalArgumentException("Delta cannot be NaN.");
+        this.delta = delta;
+    }
+
+
+
     /**
      * Creates a new <code>AtomSites</code> to store the position of all atoms
      * of a unit cell. Use {@link #add(AtomSite)}, {@link #add(int, AtomSite)},
@@ -39,6 +61,7 @@ public class AtomSites extends ArrayList<AtomSite> implements AlmostEquable {
      * {@link AtomSite} to the <code>AtomSites</code>.
      */
     public AtomSites() {
+        this(1e-6);
     }
 
 
@@ -134,7 +157,9 @@ public class AtomSites extends ArrayList<AtomSite> implements AlmostEquable {
      */
     private void assertNewItem(AtomSite item) {
         for (AtomSite atom : this)
-            if (atom.position.equals(item.position, 1e-5))
+            if (Math.abs(atom.position.getX() - item.position.getX()) <= delta
+                    && Math.abs(atom.position.getY() - item.position.getY()) <= delta
+                    && Math.abs(atom.position.getZ() - item.position.getZ()) <= delta)
                 throw new AtomSitePositionException("Position already exists");
     }
 

@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import net.jcip.annotations.Immutable;
-import ptpshared.utility.Arrays;
+import ptpshared.util.Arrays;
 
 /**
  * List of <code>Reflector</code>s of a crystal. The class finds all the

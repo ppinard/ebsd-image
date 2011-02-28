@@ -2,17 +2,17 @@
    <unitCell a="5.43" b="5.43" c="5.43" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="1.5707963267948966"/>
    <atoms>
       <atom atomicNumber="14" occupancy="1.0">
-         <position x="0.0" y="0.0" z="0.0"/>
+         <position>0.0;0.0;0.0</position>
       </atom>
       <atom atomicNumber="14" occupancy="1.0">
-         <position x="0.0" y="0.5" z="0.5"/>
+         <position>0.0;0.5;0.5</position>
       </atom>
       <atom atomicNumber="14" occupancy="1.0">
-         <position x="0.5" y="0.0" z="0.5"/>
+         <position>0.5;0.0;0.5</position>
       </atom>
       <atom atomicNumber="14" occupancy="1.0">
-         <position x="0.5" y="0.5" z="0.0"/>
+         <position>0.5;0.5;0.0</position>
       </atom>
    </atoms>
-   <spaceGroup index="216"/>
+   <spaceGroup>216</spaceGroup>
 </crystal>

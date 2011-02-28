@@ -21,9 +21,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.simplexml.ApacheCommonMathMatcher;
+import ptpshared.util.simplexml.XmlLoader;
 import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
+import crystallography.io.simplexml.SpaceGroupMatcher;
 
 /**
  * Utilities related to <code>Crystal</code>.
@@ -49,6 +51,8 @@ public class CrystalUtil {
         Arrays.sort(crystalFiles);
 
         XmlLoader loader = new XmlLoader();
+        loader.matchers.registerMatcher(new ApacheCommonMathMatcher());
+        loader.matchers.registerMatcher(new SpaceGroupMatcher());
         for (File crystalFile : crystalFiles) {
             Crystal crystal;
 

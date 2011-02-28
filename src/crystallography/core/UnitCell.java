@@ -23,9 +23,8 @@ import net.jcip.annotations.Immutable;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
-import ptpshared.core.math.Matrix3D;
-import static ptpshared.core.math.Math.acos;
-import static ptpshared.core.math.Math.sqrt;
+import static ptpshared.math.Math.acos;
+import static ptpshared.math.Math.sqrt;
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.cos;
@@ -103,10 +102,10 @@ public class UnitCell implements AlmostEquable {
     public final double volumeR;
 
     /** Metrical matrix. */
-    public final Matrix3D metricalMatrix;
+    public final double[][] metricalMatrix;
 
     /** Cartesian matrix. */
-    public final Matrix3D cartesianMatrix;
+    public final double[][] cartesianMatrix;
 
 
 
@@ -180,7 +179,8 @@ public class UnitCell implements AlmostEquable {
         double g33 = c * c;
 
         metricalMatrix =
-                new Matrix3D(g11, g12, g13, g21, g22, g23, g31, g32, g33);
+                new double[][] { { g11, g12, g13 }, { g21, g22, g23 },
+                        { g31, g32, g33 } };
 
         // Calculate cartesian matrix
         double h11 = a * sin(beta);
@@ -194,10 +194,16 @@ public class UnitCell implements AlmostEquable {
         double h33 = c;
 
         cartesianMatrix =
-                new Matrix3D(h11, h12, h13, h21, h22, h23, h31, h32, h33);
+                new double[][] { { h11, h12, h13 }, { h21, h22, h23 },
+                        { h31, h32, h33 } };
 
         // Calculate volume
-        volume = sqrt(metricalMatrix.det());
+        double[][] m = metricalMatrix;
+        double det =
+                m[0][0] * (m[1][1] * m[2][2] - m[2][1] * m[1][2]) - m[1][0]
+                        * (m[0][1] * m[2][2] - m[2][1] * m[0][2]) + m[2][0]
+                        * (m[0][1] * m[1][2] - m[1][1] * m[0][2]);
+        volume = sqrt(det);
 
         // Calculate reciprocal volume
         volumeR = 1.0 / volume;
@@ -206,42 +212,6 @@ public class UnitCell implements AlmostEquable {
         aR = b * c * sin(alpha) / volume;
         bR = a * c * sin(beta) / volume;
         cR = a * b * sin(gamma) / volume;
-    }
-
-
-
-    /**
-     * Checks if this <code>UnitCell</code> is exactly equal to the specified
-     * one.
-     * 
-     * @param obj
-     *            other <code>UnitCell</code> to check equality
-     * @return whether the two <code>UnitCell</code> are equal
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-
-        UnitCell other = (UnitCell) obj;
-        if (Double.doubleToLongBits(a) != Double.doubleToLongBits(other.a))
-            return false;
-        if (Double.doubleToLongBits(alpha) != Double.doubleToLongBits(other.alpha))
-            return false;
-        if (Double.doubleToLongBits(b) != Double.doubleToLongBits(other.b))
-            return false;
-        if (Double.doubleToLongBits(beta) != Double.doubleToLongBits(other.beta))
-            return false;
-        if (Double.doubleToLongBits(c) != Double.doubleToLongBits(other.c))
-            return false;
-        if (Double.doubleToLongBits(gamma) != Double.doubleToLongBits(other.gamma))
-            return false;
-
-        return true;
     }
 
 
@@ -293,33 +263,6 @@ public class UnitCell implements AlmostEquable {
             return false;
 
         return true;
-    }
-
-
-
-    /**
-     * Returns the hash code for this <code>UnitCell</code>.
-     * 
-     * @return hash code
-     */
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        long temp;
-        temp = Double.doubleToLongBits(a);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(alpha);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(b);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(beta);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(c);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(gamma);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        return result;
     }
 
 

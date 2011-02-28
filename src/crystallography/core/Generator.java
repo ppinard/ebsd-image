@@ -17,35 +17,46 @@
  */
 package crystallography.core;
 
-import ptpshared.core.math.Matrix3D;
-import ptpshared.core.math.Vector3D;
+import net.jcip.annotations.Immutable;
+
+import org.apache.commons.math.geometry.Vector3D;
 
 /**
  * Space group's generator to calculate equivalent positions.
  * 
  * @author Philippe T. Pinard
  */
+@Immutable
 public class Generator {
 
     /** Rotation matrix. */
-    public final Matrix3D matrix;
+    public final double[][] m;
 
     /** Translation vector. */
-    public final Vector3D translation;
+    public final double[] t;
 
 
 
     /**
      * Creates a new <code>Generator</code>.
      * 
-     * @param matrix
+     * @param m
      *            rotation matrix
-     * @param translation
+     * @param t
      *            translation vector
      */
-    public Generator(Matrix3D matrix, Vector3D translation) {
-        this.matrix = matrix;
-        this.translation = translation;
+    public Generator(double[][] m, double[] t) {
+        // dimension check
+        if ((m.length != 3) || (m[0].length != 3) || (m[1].length != 3)
+                || (m[2].length != 3))
+            throw new IllegalArgumentException(
+                    "The matrix must be a 3x3 matrix.");
+        if (t.length != 3)
+            throw new IllegalArgumentException("The translation array ("
+                    + t.length + ") must have a length of 3.");
+
+        this.m = m;
+        this.t = t;
     }
 
 
@@ -58,47 +69,15 @@ public class Generator {
      * @return resultant atom after applying the generator
      */
     public AtomSite apply(AtomSite atom) {
-        Vector3D position = matrix.multiply(atom.position).plus(translation);
+        double px = atom.position.getX();
+        double py = atom.position.getY();
+        double pz = atom.position.getZ();
 
-        return new AtomSite(atom.atomicNumber, position);
+        double x = m[0][0] * px + m[0][1] * py + m[0][2] * pz + t[0];
+        double y = m[1][0] * px + m[1][1] * py + m[1][2] * pz + t[1];
+        double z = m[2][0] * px + m[2][1] * py + m[2][2] * pz + t[2];
+
+        return new AtomSite(atom.atomicNumber, new Vector3D(x, y, z));
     }
 
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-
-        Generator other = (Generator) obj;
-        if (matrix == null) {
-            if (other.matrix != null)
-                return false;
-        } else if (!matrix.equals(other.matrix))
-            return false;
-        if (translation == null) {
-            if (other.translation != null)
-                return false;
-        } else if (!translation.equals(other.translation))
-            return false;
-
-        return true;
-    }
-
-
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((matrix == null) ? 0 : matrix.hashCode());
-        result =
-                prime * result
-                        + ((translation == null) ? 0 : translation.hashCode());
-        return result;
-    }
 }

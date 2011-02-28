@@ -17,11 +17,11 @@
  */
 package crystallography.core;
 
-import ptpshared.core.math.Quaternion;
-import ptpshared.core.math.QuaternionMath;
-import ptpshared.core.math.Vector3D;
+import org.apache.commons.math.geometry.Rotation;
+import org.apache.commons.math.geometry.Vector3D;
+
 import rmlimage.module.real.core.RealMap;
-import static ptpshared.core.math.Math.acos;
+import static ptpshared.math.Math.acos;
 import static java.lang.Math.*;
 
 /**
@@ -89,19 +89,19 @@ public class PoleFigureMap extends RealMap {
      * @param rotation
      *            a rotation
      */
-    public void drawRotation(Quaternion rotation) {
-        for (Quaternion op : crystal.spaceGroup.getOperators()) {
-            Quaternion equiv = rotation.multiply(op);
+    public void drawRotation(Rotation rotation) {
+        for (Rotation op : crystal.spaceGroup.getOperators()) {
+            Rotation equiv = rotation.applyTo(op);
 
-            Vector3D out = QuaternionMath.rotate(pole, equiv);
+            Vector3D out = equiv.applyTo(pole);
 
-            double alpha = acos(out.get(2));
+            double alpha = acos(out.getZ());
 
             double beta;
             if (alpha < 1e-7)
                 beta = 0;
             else
-                beta = atan2(out.get(1) / sin(alpha), out.get(0) / sin(alpha));
+                beta = atan2(out.getY() / sin(alpha), out.getX() / sin(alpha));
 
             if (alpha > PI / 2) {
                 alpha = PI - alpha;

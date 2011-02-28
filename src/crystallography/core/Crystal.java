@@ -156,56 +156,6 @@ public class Crystal implements AlmostEquable {
 
 
     /**
-     * Checks if this <code>Crystal</code> is exactly equal to the specified
-     * one.
-     * 
-     * @param obj
-     *            other <code>Crystal</code> to check equality
-     * @return whether the two <code>Crystal</code> are equal
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-
-        Crystal other = (Crystal) obj;
-        if (!name.equals(other.name))
-            return false;
-        if (!unitCell.equals(other.unitCell))
-            return false;
-        if (!atoms.equals(other.atoms))
-            return false;
-        if (!(spaceGroup.equals(other.spaceGroup)))
-            return false;
-
-        return true;
-    }
-
-
-
-    /**
-     * Returns the hash code for this <code>Crystal</code>.
-     * 
-     * @return hash code
-     */
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + atoms.hashCode();
-        result = prime * result + name.hashCode();
-        result = prime * result + unitCell.hashCode();
-        result = prime * result + spaceGroup.hashCode();
-        return result;
-    }
-
-
-
-    /**
      * Returns a representation of the <code>Crystal</code>, suitable for
      * debugging.
      * 

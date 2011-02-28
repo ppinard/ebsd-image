@@ -19,17 +19,20 @@ package crystallography.core;
 
 import java.io.File;
 
+import org.apache.commons.math.geometry.Vector3D;
 import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.core.math.Vector3D;
-import ptpshared.util.xml.XmlLoader;
-import ptpshared.util.xml.XmlSaver;
+import ptpshared.util.simplexml.ApacheCommonMathMatcher;
+import ptpshared.util.simplexml.XmlLoader;
+import ptpshared.util.simplexml.XmlSaver;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import static ptpshared.geom.Assert.assertEquals;
 
 import static junittools.test.Assert.assertEquals;
 
@@ -162,26 +165,6 @@ public class AtomSiteTest extends TestCase {
 
 
     @Test
-    public void testEqualsObject() {
-        assertTrue(atom1.equals(atom1));
-
-        assertFalse(atom1.equals(null));
-
-        assertFalse(atom1.equals(new Object()));
-
-        assertTrue(atom1.equals(new AtomSite(13, 0.0, 0.5, 1.5)));
-        assertTrue(atom2.equals(new AtomSite(14, 0.3, -0.8, 0.1)));
-
-        assertFalse(atom1.equals(new AtomSite(14, 0.0, 0.5, 1.5)));
-
-        assertFalse(atom1.equals(new AtomSite(13, 0.5, 0.5, 1.5)));
-
-        assertFalse(atom1.equals(new AtomSite(13, 0.0, 0.5, 1.5, 0.1)));
-    }
-
-
-
-    @Test
     public void testEqualsObjectDouble() {
         assertTrue(atom1.equals(atom1, 1e-4));
 
@@ -201,14 +184,6 @@ public class AtomSiteTest extends TestCase {
 
 
     @Test
-    public void testHashCode() {
-        assertEquals(atom1.hashCode(),
-                new AtomSite(13, 0.0, 0.5, 1.5).hashCode());
-    }
-
-
-
-    @Test
     public void testRefinePosition() {
         AtomSite atom = new AtomSite(13, 1.1, 1.2, 1.3);
         assertEquals(new AtomSite(13, 0.1, 0.2, 0.3), atom, 1e-3);
@@ -221,9 +196,8 @@ public class AtomSiteTest extends TestCase {
 
     @Test
     public void testToString() {
-        assertEquals(atom1.toString(), "Al->(0.0;0.5;0.5) [100%]");
-        assertEquals(atom2.toString(),
-                "Si->(0.3;0.19999999999999996;0.1) [100%]");
+        assertEquals(atom1.toString(), "Al->{0; 0.5; 0.5} [100%]");
+        assertEquals(atom2.toString(), "Si->{0.3; 0.2; 0.1} [100%]");
     }
 
 
@@ -233,10 +207,14 @@ public class AtomSiteTest extends TestCase {
         File tmpFile = createTempFile();
 
         // Write
-        new XmlSaver().save(atom1, tmpFile);
+        XmlSaver saver = new XmlSaver();
+        saver.matchers.registerMatcher(new ApacheCommonMathMatcher());
+        saver.save(atom1, tmpFile);
 
         // Read
-        AtomSite other = new XmlLoader().load(AtomSite.class, tmpFile);
+        XmlLoader loader = new XmlLoader();
+        loader.matchers.registerMatcher(new ApacheCommonMathMatcher());
+        AtomSite other = loader.load(AtomSite.class, tmpFile);
         assertEquals(atom1, other, 1e-7);
     }
 

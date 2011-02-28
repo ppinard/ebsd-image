@@ -21,8 +21,10 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 import net.jcip.annotations.Immutable;
-import ptpshared.core.geom.Plane;
-import ptpshared.core.math.Vector3D;
+
+import org.apache.commons.math.geometry.Vector3D;
+
+import ptpshared.geom.Plane;
 
 /**
  * Defines a diffracting plane. The difference between the object
@@ -269,7 +271,7 @@ public class Reflector {
      * @return crystallographic plane
      */
     public Plane getPlane() {
-        return new Plane(new Vector3D(), getNormal());
+        return new Plane(new Vector3D(0.0, 0.0, 0.0), getNormal());
     }
 
 

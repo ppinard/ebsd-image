@@ -18,16 +18,20 @@
 package crystallography.core;
 
 import org.apache.commons.math.complex.Complex;
+import org.apache.commons.math.geometry.Rotation;
+import org.apache.commons.math.geometry.Vector3D;
+import org.apache.commons.math.linear.LUDecompositionImpl;
+import org.apache.commons.math.linear.RealMatrix;
+import org.apache.commons.math.linear.RealVector;
 
-import ptpshared.core.math.Matrix3D;
-import ptpshared.core.math.Quaternion;
-import ptpshared.core.math.Vector3D;
-import ptpshared.core.math.Vector3DMath;
+import ptpshared.geom.Vector3DUtils;
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
-import static ptpshared.core.math.Constants.C;
-import static ptpshared.core.math.Constants.CHARGE_ELECTRON;
-import static ptpshared.core.math.Constants.H;
-import static ptpshared.core.math.Constants.MASS_ELECTRON;
+import static org.apache.commons.math.linear.MatrixUtils.createRealMatrix;
+import static ptpshared.math.Constants.C;
+import static ptpshared.math.Constants.CHARGE_ELECTRON;
+import static ptpshared.math.Constants.H;
+import static ptpshared.math.Constants.MASS_ELECTRON;
+import static ptpshared.math.RealMatrixUtils.postMultiply;
 import static java.lang.Math.*;
 
 /**
@@ -69,14 +73,17 @@ public class Calculations {
         Vector3D atom1Vector = atom1.position;
         Vector3D atom2Vector = atom2.position;
         Vector3D atom3Vector = atom3.position;
-        Matrix3D metricalMatrix = unitCell.metricalMatrix;
+        RealMatrix metricalMatrix = createRealMatrix(unitCell.metricalMatrix);
 
         // Inter-atoms vectors
-        Vector3D vector12 = new Vector3D(atom1Vector.minus(atom2Vector));
-        Vector3D vector13 = new Vector3D(atom1Vector.minus(atom3Vector));
+        RealVector vector12 =
+                Vector3DUtils.toRealVector(atom1Vector.subtract(atom2Vector));
+        RealVector vector13 =
+                Vector3DUtils.toRealVector(atom1Vector.subtract(atom3Vector));
 
         // Dot product
-        double dotproduct = vector12.dot(metricalMatrix.multiply(vector13));
+        double dotproduct =
+                vector12.dotProduct(postMultiply(metricalMatrix, vector13));
 
         // Bond distance
         double bonddistance12 = bondDistance(atom1, atom2, unitCell);
@@ -114,13 +121,15 @@ public class Calculations {
             UnitCell unitCell) {
         Vector3D atom1vector = atom1.position;
         Vector3D atom2vector = atom2.position;
-        Matrix3D metricalMatrix = unitCell.metricalMatrix;
+        RealMatrix metricalMatrix = createRealMatrix(unitCell.metricalMatrix);
 
         // Vector between atom1 and atom2
-        Vector3D vector = new Vector3D(atom2vector.minus(atom1vector));
+        RealVector vector =
+                Vector3DUtils.toRealVector(atom2vector.subtract(atom1vector));
 
         // Distance square
-        double distanceSquare = vector.dot(metricalMatrix.multiply(vector));
+        double distanceSquare =
+                vector.dotProduct(postMultiply(metricalMatrix, vector));
 
         // Distance
         double distance = sqrt(distanceSquare);
@@ -263,7 +272,9 @@ public class Calculations {
             double fi =
                     scatteringFactors.getFromPlaneSpacing(atom.atomicNumber, d)
                             * atom.occupancy;
-            Complex x = new Complex(0.0, 2 * PI * plane.dot(atom.position));
+            Complex x =
+                    new Complex(0.0, 2 * PI
+                            * Vector3D.dotProduct(plane, atom.position));
 
             f = f.add(x.exp().multiply(fi)); // f += fi * exp(x);
         }
@@ -287,8 +298,8 @@ public class Calculations {
      */
     public static double interplanarAngle(Vector3D plane1, Vector3D plane2,
             UnitCell unitCell) {
-        return Vector3DMath.angle(interplanarDirectionCosine(plane1, plane2,
-                unitCell));
+        return ptpshared.math.Math.acos(interplanarDirectionCosine(plane1,
+                plane2, unitCell));
     }
 
 
@@ -307,13 +318,17 @@ public class Calculations {
      */
     public static double interplanarDirectionCosine(Vector3D plane1,
             Vector3D plane2, UnitCell unitCell) {
-        Matrix3D cartesianMatrix = unitCell.cartesianMatrix;
-        Matrix3D b = cartesianMatrix.transpose().inverse();
+        RealMatrix cartesianMatrix = createRealMatrix(unitCell.cartesianMatrix);
+        RealMatrix b =
+                new LUDecompositionImpl(cartesianMatrix.transpose()).getSolver().getInverse();
 
-        Vector3D plane1C = b.multiply(plane1);
-        Vector3D plane2C = b.multiply(plane2);
+        RealVector plane1C =
+                postMultiply(b, Vector3DUtils.toRealVector(plane1));
+        RealVector plane2C =
+                postMultiply(b, Vector3DUtils.toRealVector(plane2));
 
-        return Vector3DMath.directionCosine(plane1C, plane2C);
+        return plane1C.dotProduct(plane2C)
+                / (plane1C.getNorm() * plane2C.getNorm());
     }
 
 
@@ -445,10 +460,13 @@ public class Calculations {
      * @return plane spacing
      */
     public static double planeSpacing(Vector3D plane, UnitCell unitCell) {
-        Matrix3D matrix = unitCell.metricalMatrix.inverse();
+        RealMatrix metricalMatrix = createRealMatrix(unitCell.metricalMatrix);
+        RealMatrix matrix =
+                new LUDecompositionImpl(metricalMatrix).getSolver().getInverse();
+        RealVector p = Vector3DUtils.toRealVector(plane);
 
         // s square (d = 1/s^2)
-        double sSquare = plane.dot(matrix.multiply(plane));
+        double sSquare = p.dotProduct(postMultiply(matrix, p));
 
         // plane spacing d
         double d = 1.0 / sqrt(sSquare);
@@ -469,12 +487,14 @@ public class Calculations {
      * @return reduced rotation
      */
     @CheckReturnValue
-    public static Quaternion reduce(Quaternion q, LaueGroup lg) {
-        Quaternion equiv = q.clone();
+    public static Rotation reduce(Rotation q, LaueGroup lg) {
+        Rotation equiv =
+                new Rotation(q.getQ0(), q.getQ1(), q.getQ2(), q.getQ3(), false);
 
-        for (Quaternion op : lg.getOperators()) {
-            Quaternion out = q.multiply(op);
-            if (out.scalar > equiv.scalar)
+        Rotation out;
+        for (Rotation op : lg.getOperators()) {
+            out = op.applyTo(q);
+            if (Math.abs(out.getQ0()) > Math.abs(equiv.getQ0()))
                 equiv = out;
         }
 
@@ -494,7 +514,7 @@ public class Calculations {
      * @return reduced rotation
      */
     @CheckReturnValue
-    public static Quaternion reduce(Quaternion q, SpaceGroup sg) {
+    public static Rotation reduce(Rotation q, SpaceGroup sg) {
         return reduce(q, sg.laueGroup);
     }
 
@@ -519,17 +539,19 @@ public class Calculations {
      */
     public static Vector3D zoneAxis(Vector3D plane1, Vector3D plane2,
             UnitCell unitCell) {
-        Matrix3D metricalMatrix = unitCell.metricalMatrix;
         double volumeReciprocal = unitCell.volumeR; // reciprocal volume
+        RealMatrix metricalMatrix = createRealMatrix(unitCell.metricalMatrix);
+        RealVector p1 = Vector3DUtils.toRealVector(plane1);
+        RealVector p2 = Vector3DUtils.toRealVector(plane2);
 
-        Vector3D s1 = metricalMatrix.multiply(plane1);
-        Vector3D s2 = metricalMatrix.multiply(plane2);
+        Vector3D s1 =
+                Vector3DUtils.toVector3D(postMultiply(metricalMatrix, p1));
+        Vector3D s2 =
+                Vector3DUtils.toVector3D(postMultiply(metricalMatrix, p2));
 
-        Vector3D crossproduct = s1.cross(s2);
+        Vector3D crossproduct = Vector3D.crossProduct(s1, s2);
 
-        Vector3D zone = new Vector3D(crossproduct.multiply(volumeReciprocal));
-
-        return zone;
+        return crossproduct.scalarMultiply(volumeReciprocal);
     }
 
 }

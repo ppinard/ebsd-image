@@ -8,8 +8,8 @@ import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.util.xml.XmlLoader;
-import ptpshared.util.xml.XmlSaver;
+import ptpshared.util.simplexml.XmlLoader;
+import ptpshared.util.simplexml.XmlSaver;
 
 public class ScatteringFactorsEnumTest extends TestCase {
 

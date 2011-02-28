@@ -3,7 +3,9 @@ package crystallography.core;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import ptpshared.core.math.Vector3D;
+import org.apache.commons.math.geometry.Vector3D;
+
+import ptpshared.geom.Vector3DUtils;
 import rmlshared.thread.Reflection;
 
 /**
@@ -63,7 +65,7 @@ public class ReflectorsFactory {
                     // Create plane
                     // Only look at positive planes since negative plane are
                     // equivalent
-                    Vector3D p = new Vector3D(h, k, l).positive();
+                    Vector3D p = Vector3DUtils.positive(new Vector3D(h, k, l));
 
                     // Calculate the intensities
                     double intensity =

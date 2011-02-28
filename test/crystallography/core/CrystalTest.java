@@ -23,8 +23,10 @@ import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.util.xml.XmlLoader;
-import ptpshared.util.xml.XmlSaver;
+import ptpshared.util.simplexml.ApacheCommonMathMatcher;
+import ptpshared.util.simplexml.XmlLoader;
+import ptpshared.util.simplexml.XmlSaver;
+import crystallography.io.simplexml.SpaceGroupMatcher;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -103,31 +105,6 @@ public class CrystalTest extends TestCase {
 
 
     @Test
-    public void testEqualsObject() {
-        assertTrue(crystal.equals(crystal));
-
-        assertFalse(crystal.equals(null));
-
-        assertFalse(crystal.equals(new Object()));
-
-        assertFalse(crystal.equals(new Crystal("other", unitCell, atoms, sg)));
-
-        UnitCell otherUnitCell = UnitCellFactory.cubic(3.0);
-        assertFalse(crystal.equals(new Crystal(name, otherUnitCell, atoms, sg)));
-
-        AtomSites otherAtomSites = AtomSitesFactory.atomSitesFCC(15);
-        assertFalse(crystal.equals(new Crystal(name, unitCell, otherAtomSites,
-                sg)));
-
-        assertFalse(crystal.equals(new Crystal(name, unitCell, atoms,
-                SpaceGroups2.SG215)));
-
-        assertTrue(crystal.equals(new Crystal(name, unitCell, atoms, sg)));
-    }
-
-
-
-    @Test
     public void testEqualsObjectDouble() {
         assertTrue(crystal.equals(crystal, 1e-3));
 
@@ -162,22 +139,20 @@ public class CrystalTest extends TestCase {
 
 
     @Test
-    public void testHashCode() {
-        Crystal other = new Crystal(name, unitCell, atoms, sg);
-        assertEquals(crystal.hashCode(), other.hashCode());
-    }
-
-
-
-    @Test
     public void testXML() throws Exception {
         File tmpFile = createTempFile();
 
         // Write
-        new XmlSaver().save(crystal, tmpFile);
+        XmlSaver saver = new XmlSaver();
+        saver.matchers.registerMatcher(new ApacheCommonMathMatcher());
+        saver.matchers.registerMatcher(new SpaceGroupMatcher());
+        saver.save(crystal, tmpFile);
 
         // Read
-        Crystal other = new XmlLoader().load(Crystal.class, tmpFile);
+        XmlLoader loader = new XmlLoader();
+        loader.matchers.registerMatcher(new ApacheCommonMathMatcher());
+        loader.matchers.registerMatcher(new SpaceGroupMatcher());
+        Crystal other = loader.load(Crystal.class, tmpFile);
         assertEquals(crystal, other, 1e-6);
     }
 }

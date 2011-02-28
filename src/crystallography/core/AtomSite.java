@@ -20,11 +20,11 @@ package crystallography.core;
 import junittools.core.AlmostEquable;
 import net.jcip.annotations.Immutable;
 
+import org.apache.commons.math.geometry.Vector3D;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
-import ptpshared.core.math.Vector3D;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import static ptpshared.util.ElementProperties.getSymbol;
 import static java.lang.Math.abs;
@@ -51,9 +51,9 @@ public class AtomSite implements AlmostEquable {
      * @return refine position vector
      */
     private static Vector3D refinePosition(Vector3D position) {
-        double x = position.get(0);
-        double y = position.get(1);
-        double z = position.get(2);
+        double x = position.getX();
+        double y = position.getY();
+        double z = position.getZ();
 
         while (x < 0)
             x += 1;
@@ -193,36 +193,6 @@ public class AtomSite implements AlmostEquable {
 
 
     /**
-     * Checks if this <code>AtomSite</code> is exactly equal to the specified
-     * one.
-     * 
-     * @param obj
-     *            other <code>AtomSite</code> to check equality
-     * @return whether the two <code>AtomSite</code> are equal
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-
-        AtomSite other = (AtomSite) obj;
-        if (atomicNumber != other.atomicNumber)
-            return false;
-        if (!position.equals(other.position))
-            return false;
-        if (Double.doubleToLongBits(occupancy) != Double.doubleToLongBits(other.occupancy))
-            return false;
-
-        return true;
-    }
-
-
-
-    /**
      * Checks if this <code>AtomSite</code> is almost equal to the specified one
      * with the given precision.
      * 
@@ -256,33 +226,18 @@ public class AtomSite implements AlmostEquable {
         AtomSite other = (AtomSite) obj;
         if (atomicNumber != other.atomicNumber)
             return false;
-        if (!position.equals(other.position, precision))
+
+        if (Math.abs(position.getX() - other.position.getX()) > delta)
             return false;
+        if (Math.abs(position.getY() - other.position.getY()) > delta)
+            return false;
+        if (Math.abs(position.getZ() - other.position.getZ()) > delta)
+            return false;
+
         if (abs(occupancy - other.occupancy) > delta)
             return false;
 
         return true;
-    }
-
-
-
-    /**
-     * Returns the hash code for this <code>AtomSite</code>.
-     * 
-     * @return hash code
-     */
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        long temp;
-
-        result = prime * result + atomicNumber;
-        result = prime * result + position.hashCode();
-        temp = Double.doubleToLongBits(occupancy);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-
-        return result;
     }
 
 

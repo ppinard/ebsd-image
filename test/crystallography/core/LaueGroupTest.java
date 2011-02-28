@@ -17,12 +17,11 @@
  */
 package crystallography.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
+import org.apache.commons.math.geometry.Rotation;
 import org.junit.Test;
 
-import ptpshared.core.math.Quaternion;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class LaueGroupTest {
 
@@ -189,11 +188,11 @@ public class LaueGroupTest {
 
 
 
-    private void allOperationsUnique(Quaternion[] ops) {
-        for (Quaternion op1 : ops) {
+    private void allOperationsUnique(Rotation[] ops) {
+        for (Rotation op1 : ops) {
             int count = 0;
 
-            for (Quaternion op2 : ops)
+            for (Rotation op2 : ops)
                 if (op1.equals(op2))
                     count += 1;
 
