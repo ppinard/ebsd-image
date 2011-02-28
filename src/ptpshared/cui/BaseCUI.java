@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 
 import org.apache.commons.cli.*;
 
-import ptpshared.utility.LoggerUtil;
+import ptpshared.util.LoggerUtil;
 import rmlshared.cui.Console;
 import rmlshared.cui.ErrorDialog;
 import rmlshared.cui.MessageDialog;
