@@ -1,0 +1,71 @@
+{#
+    sphinxdoc/layout.html
+    ~~~~~~~~~~~~~~~~~~~~~
+
+    Sphinx layout template for the sphinxdoc theme.
+
+    :copyright: Copyright 2007-2010 by the Sphinx team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
+#}
+{% extends "basic/layout.html" %}
+
+{%- block header %}
+<div id="searchbox">
+    <form class="search" action="{{ pathto('search') }}" method="get">
+        <input type="text" name="q" size="18" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+
+<div class="header">
+<a href="{{ pathto(master_doc) }}"><img src="{{ pathto('_static/logo.png', 1) }}" alt="" />EBSD-Image</a>
+</div>
+{% endblock %}
+
+{% block rootrellink %}
+  <li><a href="{{ pathto(master_doc) }}">home</a>{{ reldelim2 }}</li>
+  <li><a href="{{ pathto('documentation') }}">documentation</a>{{ reldelim2 }}</li>
+  <li><a href="{{ pathto('collaboration') }}">collaboration</a>{{ reldelim2 }}</li>
+  <li><a href="{{ pathto('download') }}">download</a>{{ reldelim1 }}</li>
+{% endblock %}
+
+{# put the sidebar before the body #}
+{% block sidebar1 %}{% endblock %}
+{% block sidebar2 %}{% endblock %}
+
+{%- block footer %}
+    <div class="footer">
+    <a href="http://sourceforge.net/projects/ebsd-image"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=316228&amp;type=12" width="120" height="30" alt="Get EBSD-Image at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
+    <a href="https://launchpad.net/ebsd-image"><img src="{{ pathto('_static/launchpad.png', 1) }}" width="113" height="25" alt="EBSD-Image at Launchpad.net" /></a>
+    
+    {%- if show_copyright %}
+      {%- if hasdoc('copyright') %}
+        {% trans path=pathto('copyright'), copyright=copyright|e %}&copy; <a href="{{ path }}">Copyright</a> {{ copyright }}.{% endtrans %}
+      {%- else %}
+        {% trans copyright=copyright|e %}&copy; Copyright {{ copyright }}.{% endtrans %}
+      {%- endif %}
+    {%- endif %}
+    {%- if last_updated %}
+      {% trans last_updated=last_updated|e %}Last updated on {{ last_updated }}.{% endtrans %}
+    {%- endif %}
+    {%- if show_sphinx %}
+      {% trans sphinx_version=sphinx_version|e %}Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> {{ sphinx_version }}.{% endtrans %}
+    {%- endif %}
+    </div>
+    
+    <!-- Piwik -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://sourceforge.net/apps/piwik/ebsd-image/" : "http://sourceforge.net/apps/piwik/ebsd-image/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="http://sourceforge.net/apps/piwik/ebsd-image/piwik.php?idsite=1" style="border:0" alt=""/></p></noscript>
+<!-- End Piwik Tag -->
+{%- endblock %}
+
