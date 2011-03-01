@@ -110,9 +110,8 @@ public class AffineTransform3D implements AlmostEquable {
      * @param translation
      *            translation vector
      */
-    public AffineTransform3D(double[][] rotation, Vector3D translation) {
-        this(rotation, new double[] { translation.getX(), translation.getY(),
-                translation.getZ() });
+    public AffineTransform3D(Rotation rotation, Vector3D translation) {
+        this(rotation.getMatrix(), Vector3DUtils.toArray(translation));
     }
 
 

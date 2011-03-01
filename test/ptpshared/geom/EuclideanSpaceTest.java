@@ -4,9 +4,7 @@ import org.apache.commons.math.geometry.Vector3D;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.geom.AffineTransform3D;
-import ptpshared.geom.EuclideanSpace;
-import ptpshared.geom.Line3D;
+import static org.junit.Assert.assertArrayEquals;
 
 import static ptpshared.geom.Assert.assertEquals;
 
@@ -46,7 +44,7 @@ public class EuclideanSpaceTest {
         Vector3D iExpected = new Vector3D(0, -1, 0);
         Vector3D jExpected = new Vector3D(1, 0, 0);
         Vector3D kExpected = new Vector3D(0, 0, 1);
-        Vector3D tExpected = new Vector3D(0, 5, 0);
+        double[] tExpected = new double[] { 0, 5, 0 };
         double[][] mExpected =
                 new double[][] { { 0, 1, 0 }, { -1, 0, 0 }, { 0, 0, 1 } };
         AffineTransform3D transformExpected =
@@ -55,7 +53,8 @@ public class EuclideanSpaceTest {
         assertEquals(iExpected, e1.i, 1e-6);
         assertEquals(jExpected, e1.j, 1e-6);
         assertEquals(kExpected, e1.k, 1e-6);
-        assertEquals(tExpected, e1.translation, 1e-6);
+        assertArrayEquals(tExpected, Vector3DUtils.toArray(e1.translation),
+                1e-6);
         assertEquals(mExpected, e1.basisMatrix, 1e-6);
         assertEquals(transformExpected.getMatrix(),
                 e1.affineTransformation.getMatrix(), 1e-6);
@@ -73,7 +72,7 @@ public class EuclideanSpaceTest {
         double[][] mExpected =
                 new double[][] { { 0, 0, 1 }, { 0, 1, 0 }, { -1, 0, 0 } };
         AffineTransform3D transformExpected =
-                new AffineTransform3D(mExpected, new Vector3D(0.0, 0.0, 0.0));
+                new AffineTransform3D(mExpected, new double[] { 0.0, 0.0, 0.0 });
 
         assertEquals(i, e.i, 1e-6);
         assertEquals(j, e.j, 1e-6);

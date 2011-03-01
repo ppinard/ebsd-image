@@ -160,4 +160,17 @@ public class Vector3DUtils {
         return new Vector3D(v.getEntry(0), v.getEntry(1), v.getEntry(2));
     }
 
+
+
+    /**
+     * Returns an array representation of the specified vector.
+     * 
+     * @param v
+     *            a vector
+     * @return a array of length 3
+     */
+    public static double[] toArray(Vector3D v) {
+        return new double[] { v.getX(), v.getY(), v.getZ() };
+    }
+
 }

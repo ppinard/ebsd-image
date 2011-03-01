@@ -6,8 +6,7 @@ import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.geom.AffineTransform3D;
-
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -22,14 +21,14 @@ public class AffineTransform3DTest extends TestCase {
 
     private double[][] m;
 
-    private Vector3D t;
+    private double[] t;
 
 
 
     @Before
     public void setUp() throws Exception {
         m = new double[][] { { 0, 0, 1 }, { 0, 1, 0 }, { -1, 0, 0 } };
-        t = new Vector3D(1, 2, 3);
+        t = new double[] { 1, 2, 3 };
         transform = new AffineTransform3D(m, t);
     }
 
@@ -42,7 +41,8 @@ public class AffineTransform3DTest extends TestCase {
                         { 0, 1, 0, 2 }, { -1, 0, 0, 3 }, { 0, 0, 0, 1 } });
 
         assertEquals(m, transform.getRotationMatrix(), 1e-6);
-        assertEquals(t, transform.getTranslation(), 1e-6);
+        assertArrayEquals(t, Vector3DUtils.toArray(transform.getTranslation()),
+                1e-6);
     }
 
 
@@ -50,7 +50,8 @@ public class AffineTransform3DTest extends TestCase {
     @Test
     public void testAffineTransform3DMatrix3DVector3D() {
         assertEquals(m, transform.getRotationMatrix(), 1e-6);
-        assertEquals(t, transform.getTranslation(), 1e-6);
+        assertArrayEquals(t, Vector3DUtils.toArray(transform.getTranslation()),
+                1e-6);
     }
 
 
@@ -61,11 +62,11 @@ public class AffineTransform3DTest extends TestCase {
         assertFalse(transform.equals(null, 1e-6));
         assertFalse(transform.equals(new Object(), 1e-6));
 
-        Vector3D t1 = new Vector3D(99, 99, 99);
+        double[] t1 = new double[] { 99, 99, 99 };
         AffineTransform3D diff = new AffineTransform3D(m, t1);
         assertFalse(transform.equals(diff, 1e-6));
 
-        t1 = new Vector3D(1.01, 2.01, 3.01);
+        t1 = new double[] { 1.01, 2.01, 3.01 };
         AffineTransform3D same = new AffineTransform3D(m, t1);
         assertTrue(transform.equals(same, 1e-1));
     }
@@ -89,7 +90,8 @@ public class AffineTransform3DTest extends TestCase {
 
     @Test
     public void testGetTranslation() {
-        assertEquals(t, transform.getTranslation(), 1e-6);
+        assertArrayEquals(t, Vector3DUtils.toArray(transform.getTranslation()),
+                1e-6);
     }
 
 
@@ -112,7 +114,7 @@ public class AffineTransform3DTest extends TestCase {
     public void testInverse2() {
         double[][] m =
                 new double[][] { { 0, 1, 0 }, { -1, 0, 0 }, { 0, 0, 1 } };
-        Vector3D t = new Vector3D(2, 5, -3);
+        double[] t = new double[] { 2, 5, -3 };
 
         AffineTransform3D actual = new AffineTransform3D(m, t).inverse();
 

@@ -102,7 +102,8 @@ public class EuclideanSpace implements AlmostEquable {
                         { i.getY(), j.getY(), k.getY() },
                         { i.getZ(), j.getZ(), k.getZ() } };
 
-        affineTransformation = new AffineTransform3D(basisMatrix, t);
+        affineTransformation =
+                new AffineTransform3D(basisMatrix, Vector3DUtils.toArray(t));
     }
 
 

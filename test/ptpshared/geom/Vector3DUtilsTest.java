@@ -23,8 +23,6 @@ import org.apache.commons.math.linear.RealVector;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.geom.Vector3DUtils;
-
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -132,5 +130,15 @@ public class Vector3DUtilsTest {
         assertEquals(u.getX(), actual.getX(), 1e-6);
         assertEquals(u.getY(), actual.getY(), 1e-6);
         assertEquals(u.getZ(), actual.getZ(), 1e-6);
+    }
+
+
+
+    @Test
+    public void testToArray() {
+        double[] expected = new double[] { 1, 2, 3 };
+        double[] actual = Vector3DUtils.toArray(u);
+
+        assertArrayEquals(expected, actual, 1e-6);
     }
 }
