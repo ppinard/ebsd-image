@@ -3,7 +3,7 @@
 Download
 ========
 
-**The current version of EBSD-Image is |version|.**
+**The current version of EBSD-Image is 0.1.2.**
 For older versions, please refer to the 
 `download section <https://sourceforge.net/projects/ebsd-image/files/>`_ of our 
 SourceForge project.

@@ -303,14 +303,27 @@ div.topic {
     max-width: 50%;
 }
 
-table {
+table.docutils {
     border-collapse: collapse;
     margin: 0 -0.5em 0 -0.5em;
 }
 
-table td, table th {
+table.docutils td, table.docutils th {
     padding: 0.2em 0.5em 0.2em 0.5em;
 }
+
+table.docutils th {
+    border-bottom: 2px solid black;
+}
+
+table.docutils td {
+    border-bottom: 1px solid gray;
+}
+
+table.docutils tbody tr:hover td {
+    background-color: #e0e0e0;
+}
+
 
 div.admonition, div.warning {
     font-size: 0.9em;
@@ -388,6 +401,11 @@ div.viewcode-block:target {
 
 .align-left {
     float: left;
+}
+
+p.caption {
+    font-style: italic;
+    color: #767676;
 }
 
 /* admonition */

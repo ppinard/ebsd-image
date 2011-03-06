@@ -11,8 +11,6 @@ If you feel that a feature requires more explanation, don't hesitate to send a
 First-time users
 ----------------
 
-Here is a couple of pages that are a most for first-time users: 
-
 .. toctree::
    :glob:
    :maxdepth: 1
@@ -28,20 +26,20 @@ Reference material
    
    documentation/reference/*
    
-Advanced users / Developers
----------------------------
+Advanced users
+--------------
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+   
+   documentation/advanced/*
+   
+Developers
+----------
 
 .. toctree::
    :glob:
    :maxdepth: 1
    
    documentation/developers/*
-
-Extras
-------
-
-.. toctree::
-   :glob:
-   :maxdepth: 1
-   
-   documentation/extras/*

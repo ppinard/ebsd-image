@@ -16,7 +16,8 @@ extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest',
               'sphinx.ext.intersphinx', 'sphinx.ext.todo',
               'sphinx.ext.coverage', 'sphinx.ext.pngmath',
               'sphinx.ext.ifconfig', 'sphinx.ext.graphviz',
-              'sphinx.ext.inheritance_diagram']
+              'sphinx.ext.inheritance_diagram',
+              'sphinxtools.ext.bibtex']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -197,3 +198,7 @@ todo_include_todos = True
 pngmath_latex_preamble = latex_preamble
 
 autoclass_content = "both"
+
+bibtex_path = 'bib/references.bib'
+bibtex_style = ('apa', 'apalike')
+bibtex_styles_path = ['/home/ppinard/documents/workspace/pydev/sphinxtools/ext/bibtex/styles']

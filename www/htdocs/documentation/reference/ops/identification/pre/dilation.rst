@@ -1,0 +1,13 @@
+
+.. _dilation:
+
+Dilation
+========
+
+The *Dilation* operation is used to increase the size of the detected Hough 
+peaks before the identification operation. 
+After the detection operation such as the :ref:`automatictophat`, it often 
+happens that the area detected to represent a peak does not cover the whole 
+peak. 
+By increasing this area, one can make sure that the identification operation 
+will be able to properly identify the location of the peaks and its intensity.

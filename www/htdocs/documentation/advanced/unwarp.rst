@@ -173,7 +173,7 @@ The interface of the software is slightly unconventional.
 Here is a quick overview.
 All the routines are accessed through the main menu bar.
 
-.. image:: /images/unwarp1.png
+.. image:: /images/unwarp/unwarp1.png
    :align: center
    :width: 80%
    
@@ -182,7 +182,7 @@ By repetitively clicking on the *E1* button at the extremity of the menu bar
 until the label of this button becomes *S*, the zoom options and default
 read and write directories can be changed.
 
-.. image:: /images/unwarp2.png
+.. image:: /images/unwarp/unwarp2.png
    :align: center
 
 In the newly expanded menu, click on *Set Read Directory* and browse to the
@@ -198,7 +198,7 @@ With our read and write directories setup, we can start the unwarping.
 This feature is under the menu *Tools* and *Data Cube*.
 The following window should appear.
 
-.. image:: /images/unwarp3.png
+.. image:: /images/unwarp/unwarp3.png
    :align: center
 
 Change the write format to ``jpeg`` by clicking on *Write* button in the 
@@ -212,7 +212,7 @@ Enter any name or leave the default.
 A window with one of the image should appear as well as a slider at the 
 bottom.
 
-.. image:: /images/unwarp4.png
+.. image:: /images/unwarp/unwarp4.png
    :align: center
    
 By moving the slider, you can see the two diffraction patterns.
@@ -235,7 +235,7 @@ Before starting the collection of tie points, you can zoom in on the
 diffraction patterns to better see the pixels.
 Click on the button *In* in the expanded menu bar.
 
-.. image:: /images/unwarp5.png
+.. image:: /images/unwarp/unwarp5.png
    :align: center
 
 To start collecting tie points, click on the *Warp* button in the *Data Cube*
@@ -248,7 +248,7 @@ the unwarped diffraction pattern, press and hold *Shift* and click on the
 pixel in the warped diffraction pattern.
 A yellow line (the shift vector) will appear on the diffraction pattern.
 
-.. image:: /images/unwarp6.png
+.. image:: /images/unwarp/unwarp6.png
    :align: center
    :width: 60%
    
@@ -265,7 +265,7 @@ A few important points about collecting tie points:
 
 Here is a typical result you would obtain:
 
-.. image:: /images/unwarp7.png
+.. image:: /images/unwarp/unwarp7.png
    :align: center
    :width: 60%
 
@@ -292,7 +292,7 @@ The resultant diffraction pattern will appear in a new window.
 You need to save this diffraction pattern (*File* -> *Save Image as JPEG*) 
 since it will be used to establish a new calibration.
 
-.. image:: /images/unwarp8.png
+.. image:: /images/unwarp/unwarp8.png
    :align: center
    
 Unwarping
@@ -325,7 +325,7 @@ We will tell EBSD-Image to save the unwarp diffraction patterns in this folder.
 Open EBSD-Image and from the menu *PlugIns*, select *EBSD* -> *UnWarp*.
 A dialog will appear:
 
-.. image:: /images/unwarp9.png
+.. image:: /images/unwarp/unwarp9.png
    :align: center
    
 The *source directory* is the folder of the original diffraction patterns
@@ -383,7 +383,7 @@ A dialog will appear asking you to select a project to re-analyze.
 Browse to the ``CorrectedProjects`` directory and select the project CPR file.
 The following dialog will then appear:
 
-.. image:: /images/unwarp10.png
+.. image:: /images/unwarp/unwarp10.png
    :align: center
 
 Uncheck the following options:
@@ -396,10 +396,10 @@ the re-analyzed project to use our new calibration and region of interest.
 
 The following dialogs may appear:
 
-.. image:: /images/unwarp11.png
+.. image:: /images/unwarp/unwarp11.png
    :align: center
    
-.. image:: /images/unwarp12.png
+.. image:: /images/unwarp/unwarp12.png
    :align: center
    
 Click *OK* or *YES*.
@@ -411,7 +411,7 @@ You can always run again the re-analysis.
 That's it!
 
 
-
+----------
 
 .. [#f0] Hitachi S4700 and SU8000 are a registered trademark of Hitachi
    High-Technologies Inc.

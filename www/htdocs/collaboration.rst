@@ -3,8 +3,6 @@
 Collaboration
 =============
 
-|version|
-
 There are many ways to collaborate to the EBSD-Image project. 
 Don't hesitate to contact us (pinard AT gfe DOT rwth-aachen DOT de) 
 if you find a bug, would like to request a new operation or have a comment 
