@@ -60,15 +60,21 @@ public class HoughMap extends ByteMap {
      *            distance increment (width of a pixel)
      * @param deltaRho
      *            distance increment (height of a pixel)
+     * @param unitsRho
+     *            units of rho
      * @param height
      *            height of the map
      * @return the calibration
      */
-    protected static Calibration calculateCalibration(Magnitude deltaTheta,
-            Magnitude deltaRho, int height) {
-        Magnitude x0 = deltaTheta.multiply(0);
-        Magnitude y0 = deltaRho.multiply(height / 2);
-        return new Calibration(x0, deltaTheta, false, y0, deltaRho, true);
+    protected static Calibration calculateCalibration(double deltaTheta,
+            double deltaRho, String unitsRho, int height) {
+        /*
+         * Important that the height division is in integer to have a row of
+         * pixel at rho = 0
+         */
+        double y0 = deltaRho * (height / 2);
+        return new Calibration(0, deltaTheta, "rad", false, y0, deltaRho,
+                unitsRho, true);
     }
 
 
@@ -89,28 +95,20 @@ public class HoughMap extends ByteMap {
      * @throws IllegalArgumentException
      *             if deltaR is greater than rMax
      */
-    protected static int calculateHeight(Magnitude rhoMax, Magnitude deltaRho) {
-        if (!rhoMax.areSameUnits(deltaRho))
-            throw new IllegalArgumentException("rMax ("
-                    + rhoMax.getBaseUnitsLabel()
-                    + ") must have the same units as deltaR ("
-                    + deltaRho.getBaseUnitsLabel() + ").");
-
-        if (rhoMax.getBaseUnitsValue() <= 0)
+    protected static int calculateHeight(double rhoMax, double deltaRho) {
+        if (rhoMax <= 0)
             throw new IllegalArgumentException("rMax ( " + rhoMax
                     + ") must be > 0");
 
-        if (deltaRho.getBaseUnitsValue() <= 0)
+        if (deltaRho <= 0)
             throw new IllegalArgumentException("deltaR (" + deltaRho
                     + ") must be > 0");
 
-        if (deltaRho.compareTo(rhoMax) > 0)
+        if (deltaRho > rhoMax)
             throw new IllegalArgumentException("deltaR (" + deltaRho
                     + ") must be lower than rMax (" + rhoMax + ')');
 
-        // Division of rMax by deltaR is unitless because they have the same
-        // units
-        return 2 * (int) ceil(rhoMax.div(deltaRho).getValue("")) + 1;
+        return 2 * (int) ceil(rhoMax / deltaRho) + 1;
     }
 
 
@@ -127,18 +125,13 @@ public class HoughMap extends ByteMap {
      * @throws IllegalArgumentException
      *             if deltaTheta is less or equal to zero
      */
-    protected static int calculateWidth(Magnitude deltaTheta) {
-        if (!deltaTheta.areUnits("rad"))
-            throw new IllegalArgumentException("Delta theta units ("
-                    + deltaTheta.getBaseUnitsLabel()
-                    + ") cannot be expressed as \"rad\".");
-
-        if (deltaTheta.getBaseUnitsValue() <= 0)
+    protected static int calculateWidth(double deltaTheta) {
+        if (deltaTheta <= 0)
             throw new IllegalArgumentException("deltaTheta (" + deltaTheta
                     + ") must be > 0");
 
         // Calculate the width
-        double widthDouble = Math.PI / deltaTheta.getValue("rad") + 1;
+        double widthDouble = Math.PI / deltaTheta + 1;
         double widthInteger = Math.floor(widthDouble);
 
         // If the width is a round number, decrease it by 1 because
@@ -168,30 +161,31 @@ public class HoughMap extends ByteMap {
      *            a map calibrated as a <code>HoughMap</code>
      * @param index
      *            index of the pixel to get <code>rho</code> coordinate from
-     * @return the <code>rho</code> coordinate
+     * @return the <code>rho</code> coordinate in units of map's y coordinate
      * @throws IllegalArgumentException
      *             if the index is outside the map
      * @throws IllegalArgumentException
      *             if the map incorrectly calibrated
      */
-    public static Magnitude getRho(Map map, int index) {
+    public static double getRho(Map map, int index) {
         if (index < 0 || index >= map.size)
             throw new IllegalArgumentException("index (" + index
                     + ") must be between 0 and " + (map.size - 1));
 
-        if (!map.getCalibration().getDX().areUnits("rad"))
+        Calibration cal = map.getCalibration();
+
+        if (!cal.getDX().areUnits("rad"))
             throw new IllegalArgumentException("Invalid map, delta x units ("
-                    + map.getCalibration().getDX().getBaseUnitsLabel()
+                    + cal.getDX().getBaseUnitsLabel()
                     + ") cannot be expressed as \"rad\".");
 
-        Magnitude theta = map.getCalibratedX(index);
-        Magnitude rho = map.getCalibratedY(index);
+        double theta = cal.getCalibratedX(map.getX(index));
+        double rho = cal.getCalibratedY(map.getY(index));
 
         // factor = -1 ^ (theta / PI)
-        Magnitude piMag = magnitude.core.Math.PI;
-        double factor = Math.pow(-1, (int) (theta.div(piMag).getValue("")));
+        double factor = Math.pow(-1, (int) (theta / Math.PI));
 
-        return rho.multiply(factor);
+        return rho * factor;
     }
 
 
@@ -208,38 +202,40 @@ public class HoughMap extends ByteMap {
      *            a map calibrated as a <code>HoughMap</code>
      * @param index
      *            index of the pixel to get <code>theta</code> coordinate from
-     * @return the <code>theta</code> coordinate
+     * @return the <code>theta</code> coordinate in radians
      * @throws IllegalArgumentException
      *             if the index is outside the map
      * @throws IllegalArgumentException
      *             if the map incorrectly calibrated
      */
-    public static Magnitude getTheta(Map map, int index) {
+    public static double getTheta(Map map, int index) {
         if (index < 0 || index >= map.size)
             throw new IllegalArgumentException("index (" + index
                     + ") must be between 0 and " + (map.size - 1));
 
-        if (!map.getCalibration().getDX().areUnits("rad"))
+        Calibration cal = map.getCalibration();
+
+        if (!cal.getDX().areUnits("rad"))
             throw new IllegalArgumentException("Invalid map, delta x units ("
-                    + map.getCalibration().getDX().getBaseUnitsLabel()
+                    + cal.getDX().getBaseUnitsLabel()
                     + ") cannot be expressed as \"rad\".");
 
-        Magnitude theta = map.getCalibratedX(index);
+        double theta = cal.getCalibratedX(map.getX(index));
 
-        return theta.modulo(magnitude.core.Math.PI);
+        return theta % Math.PI;
     }
 
-    /** Maximum value of the distance axis (y = 0). */
-    protected Magnitude rhoMax;
+    /** Maximum value of the distance axis (y = 0) in rho units. */
+    protected double rhoMax;
 
-    /** Minimum value of the distance axis (y = height-1). */
-    protected Magnitude rhoMin;
+    /** Minimum value of the distance axis (y = height-1) in rho units. */
+    protected double rhoMin;
 
-    /** Maximum value of the angle axis (x = width-1). */
-    protected Magnitude thetaMax;
+    /** Maximum value of the angle axis (x = width-1) in radians. */
+    protected double thetaMax;
 
-    /** Minimum value of the angle axis (x = 0). */
-    protected Magnitude thetaMin;
+    /** Minimum value of the angle axis (x = 0) in radians. */
+    protected double thetaMin;
 
 
 
@@ -256,15 +252,17 @@ public class HoughMap extends ByteMap {
      * <code>rMin == -1*rMax</code>).
      * 
      * @param rhoMax
-     *            distance axis (vertical) range in pixel
+     *            distance axis (vertical) range in pixels
      * @param deltaRho
      *            distance increment in pixel (i.e. height of a pixel)
      * @param deltaTheta
      *            angle increment in radians (i.e. width of a pixel)
      */
     public HoughMap(double deltaTheta, double deltaRho, double rhoMax) {
-        this(new Magnitude(deltaTheta, "rad"), new Magnitude(deltaRho, "px"),
-                new Magnitude(rhoMax, "px"));
+        super(calculateWidth(deltaTheta), calculateHeight(rhoMax, deltaRho));
+        assert (height % 2 != 0) : "height (" + height + ") should be odd";
+
+        setCalibration(calculateCalibration(deltaTheta, deltaRho, "px", height));
     }
 
 
@@ -294,7 +292,7 @@ public class HoughMap extends ByteMap {
      * @param height
      *            height of the map
      * @param deltaRho
-     *            distance increment in pixel (i.e. height of a pixel)
+     *            distance increment in pixels (i.e. height of a pixel)
      * @param deltaTheta
      *            angle increment in radians (i.e. width of a pixel)
      * @throws IllegalArgumentException
@@ -304,8 +302,19 @@ public class HoughMap extends ByteMap {
      *             match the specified width
      */
     public HoughMap(int width, int height, double deltaTheta, double deltaRho) {
-        this(width, height, new Magnitude(deltaTheta, "rad"), new Magnitude(
-                deltaRho, "px"));
+        super(width, height);
+        if (height % 2 == 0)
+            throw new IllegalArgumentException("height (" + height
+                    + ") must be odd");
+
+        // NOTE: Commented out since the Hough map is still valid without this
+        // restriction. The operation ThetaExpand requires to set a different
+        // width which extends beyond 180 deg theta max limit.
+        // if (calculateWidth(deltaTheta) != width)
+        // throw new IllegalArgumentException("width (" + width
+        // + ") should be " + calculateWidth(deltaTheta));
+
+        setCalibration(calculateCalibration(deltaTheta, deltaRho, "px", height));
     }
 
 
@@ -339,7 +348,9 @@ public class HoughMap extends ByteMap {
         // throw new IllegalArgumentException("width (" + width
         // + ") should be " + calculateWidth(deltaTheta));
 
-        setCalibration(calculateCalibration(deltaTheta, deltaRho, height));
+        setCalibration(calculateCalibration(deltaTheta.getValue("rad"),
+                deltaRho.getPreferredUnitsValue(),
+                deltaRho.getPreferredUnitsLabel(), height));
     }
 
 
@@ -364,10 +375,19 @@ public class HoughMap extends ByteMap {
      *            angle increment (i.e. width of a pixel)
      */
     public HoughMap(Magnitude deltaTheta, Magnitude deltaRho, Magnitude rMax) {
-        super(calculateWidth(deltaTheta), calculateHeight(rMax, deltaRho));
+        super(calculateWidth(deltaTheta.getValue("rad")), calculateHeight(
+                rMax.getPreferredUnitsValue(),
+                deltaRho.getPreferredUnitsValue()));
         assert (height % 2 != 0) : "height (" + height + ") should be odd";
 
-        setCalibration(calculateCalibration(deltaTheta, deltaRho, height));
+        if (!deltaRho.areSameUnits(rMax))
+            throw new IllegalArgumentException("Delta rho ("
+                    + deltaRho.getBaseUnitsLabel() + ") and rMax ("
+                    + rMax.getBaseUnitsLabel() + ") must have the same units.");
+
+        setCalibration(calculateCalibration(deltaTheta.getValue("rad"),
+                deltaRho.getPreferredUnitsValue(),
+                deltaRho.getPreferredUnitsLabel(), height));
     }
 
 
@@ -385,7 +405,7 @@ public class HoughMap extends ByteMap {
 
 
     /**
-     * Returns the distance increment.
+     * Returns the distance increment. Wrap around {@link Calibration#getDY()}.
      * 
      * @return height of the pixels in this <code>HoughMap</code>
      */
@@ -396,12 +416,31 @@ public class HoughMap extends ByteMap {
 
 
     /**
-     * Returns the angle increment in radians.
+     * Returns the angle increment in radians. Wrap around
+     * {@link Calibration#getDX()}.
      * 
      * @return width of the pixels in this <code>HoughMap</code>
      */
     public Magnitude getDeltaTheta() {
         return getCalibration().getDX();
+    }
+
+
+
+    /**
+     * Return the index in the pixArray of the specified point.
+     * 
+     * @param rho
+     *            rho coordinate in units of delta rho
+     * @param theta
+     *            theta coordinate in radians
+     * @return the index in the pixArray
+     * @throws IllegalArgumentException
+     *             if either <code>rho</code> or <code>theta</code> are outside
+     *             the <code>HougMap</code>
+     */
+    public int getIndex(double theta, double rho) {
+        return getIndex(getX(theta), getY(rho));
     }
 
 
@@ -427,14 +466,22 @@ public class HoughMap extends ByteMap {
     @Override
     public String getPixelInfoLabel(int index) {
         StringBuilder str = new StringBuilder();
-        str = str.append(super.getPixelInfoLabel(index));
+        Calibration cal = getCalibration();
 
-        str.append("  \u03c1 = ");
-        Magnitude rho = getRho(index);
-        str.append(rho.toString(4, rho.getPreferredUnitsLabel()));
+        int x = getX(index);
+        str.append("  \u03b8=");
+        rmlshared.math.Double.format(Math.toDegrees(cal.getCalibratedX(x)), 1,
+                str);
+        str.append("\u00b0");
 
-        str.append("  \u03b8 = ");
-        str.append(getTheta(index).toString(1, "deg"));
+        int y = getY(index);
+        str.append("  \u03c1=");
+        rmlshared.math.Double.format(cal.getCalibratedY(y), 4, str);
+        str.append(cal.unitsY);
+
+        int value = pixArray[index] & 0xff;
+        str.append("  value=");
+        str.append(value);
 
         return str.toString();
     }
@@ -442,7 +489,8 @@ public class HoughMap extends ByteMap {
 
 
     /**
-     * Returns the <code>rho</code> value of the specified index.
+     * Returns the <code>rho</code> value of the specified index. Wrap around
+     * {@link #getCalibratedY(int)}.
      * 
      * @param index
      *            index
@@ -456,48 +504,30 @@ public class HoughMap extends ByteMap {
 
 
     /**
-     * Returns the <code>rho</code> value of the specified coordinates.
+     * Returns the maximum coordinate of rho in rho units.
      * 
-     * @param x
-     *            x coordinate
-     * @param y
-     *            y coordinate
-     * @return the <code>rho</code> value of the specified index
-     * @throws IllegalArgumentException
-     *             if either <code>x</code> or <code>y</code> are outside the
-     *             <code>HougMap</code>
-     * @see #getRho(int)
+     * @return maximum coordinate of rho in rho units
      */
-    public Magnitude getRho(int x, int y) {
-        return getRho(getPixArrayIndex(x, y));
-    }
-
-
-
-    /**
-     * Returns the maximum rho value of this <code>HoughMap</code>.
-     * 
-     * @return maximum rho
-     */
-    public Magnitude getRhoMax() {
+    public double getRhoMax() {
         return rhoMax;
     }
 
 
 
     /**
-     * Returns the minimum rho value of this <code>HoughMap</code>.
+     * Returns the minimum coordinate of rho in rho units.
      * 
-     * @return minimum rho
+     * @return minimum coordinate of rho in rho units
      */
-    public Magnitude getRhoMin() {
+    public double getRhoMin() {
         return rhoMin;
     }
 
 
 
     /**
-     * Returns the <code>theta</code> value of the specified index.
+     * Returns the <code>theta</code> value of the specified index. Wrap around
+     * {@link #getCalibratedX(int)}.
      * 
      * @param index
      *            index
@@ -514,41 +544,22 @@ public class HoughMap extends ByteMap {
 
 
     /**
-     * Returns the <code>theta</code> value of the specified coordinates.
+     * Returns the maximum coordinate of theta in radians.
      * 
-     * @param x
-     *            x coordinate
-     * @param y
-     *            y coordinate
-     * @return the <code>theta</code> value in radians
-     * @throws IllegalArgumentException
-     *             if either <code>x</code> or <code>y</code> are outside the
-     *             <code>HougMap</code>
-     * @see #getTheta(int)
+     * @return maximum coordinate of theta in radians
      */
-    public Magnitude getTheta(int x, int y) {
-        return getTheta(getPixArrayIndex(x, y));
-    }
-
-
-
-    /**
-     * Returns the maximum theta value of this <code>HoughMap</code>.
-     * 
-     * @return minimum theta
-     */
-    public Magnitude getThetaMax() {
+    public double getThetaMax() {
         return thetaMax;
     }
 
 
 
     /**
-     * Returns the minimum theta value of this <code>HoughMap</code>.
+     * Returns the minimum coordinate of theta in radians.
      * 
-     * @return minimum theta
+     * @return minimum coordinate of theta in radians
      */
-    public Magnitude getThetaMin() {
+    public double getThetaMin() {
         return thetaMin;
     }
 
@@ -569,28 +580,72 @@ public class HoughMap extends ByteMap {
      * coordinate.
      * 
      * @param theta
-     *            theta coordinate to convert
+     *            theta coordinate to convert in radians
      * @return the corresponding x coordinate
      * @throws IllegalArgumentException
      *             if <code>theta</code> is not between {@link #thetaMin} and
      *             {@link #thetaMax}
      */
-    public int getX(Magnitude theta) {
-        if (!theta.areUnits("rad"))
-            throw new IllegalArgumentException("Theta units ("
-                    + theta.getBaseUnitsLabel()
-                    + ") cannot be expressed as \"rad\".");
+    public int getX(double theta) {
+        double deltaTheta = getCalibration().dx;
 
-        Magnitude deltaTheta = getCalibration().getDX();
-
-        if (theta.compareTo(thetaMin.minus(deltaTheta.div(2.0))) < 0
-                || theta.compareTo(thetaMax.add(deltaTheta.div(2.0))) > 0)
+        if (theta < thetaMin - deltaTheta / 2.0
+                || theta > thetaMax + deltaTheta / 2.0)
             throw new IllegalArgumentException("theta (" + theta
                     + ") must be between " + thetaMin + " and " + thetaMax);
 
         // (theta - thetaMin) / deltaTheta
         // the result is unitless all magnitude have the same units
-        return (int) ((theta.minus(thetaMin)).div(deltaTheta).getValue("") + 0.5);
+        return (int) ((theta - thetaMin) / deltaTheta + 0.5);
+    }
+
+
+
+    /**
+     * Converts the specified theta coordinate into the corresponding x
+     * coordinate.
+     * 
+     * @param theta
+     *            theta coordinate to convert in radians
+     * @return the corresponding x coordinate
+     * @throws IllegalArgumentException
+     *             if <code>theta</code> is not between {@link #thetaMin} and
+     *             {@link #thetaMax}
+     * @throws IllegalArgumentException
+     *             if the units of theta are not radians
+     */
+    public int getX(Magnitude theta) {
+        if (!theta.areUnits("rad"))
+            throw new IllegalArgumentException("Theta units must be radians.");
+
+        return getX(theta.getValue("rad"));
+    }
+
+
+
+    /**
+     * Converts the specified <code>rho</code> coordinate into the corresponding
+     * y coordinate.
+     * 
+     * @param rho
+     *            <code>rho</code> coordinate to convert in units of delta rho
+     * @return the corresponding y coordinate
+     * @throws IllegalArgumentException
+     *             if <code>rho</code> is not between {@link #rhoMin} and
+     *             {@link #rhoMax}
+     */
+    public int getY(double rho) {
+        double deltaRho = getCalibration().dy;
+
+        if (rho < (rhoMin - deltaRho / 2.0) || rho > (rhoMax + deltaRho / 2.0))
+            throw new IllegalArgumentException("rho (" + rho
+                    + ") must be between " + rhoMin + " and " + rhoMax);
+
+        // If r < 0, need to round toward the bottom (thus the - 0.5)
+        if (rho >= 0)
+            return height / 2 - (int) (rho / deltaRho + 0.5);
+        else
+            return height / 2 - (int) (rho / deltaRho - 0.5);
     }
 
 
@@ -609,27 +664,12 @@ public class HoughMap extends ByteMap {
      *             if r do not have the same units as deltaR
      */
     public int getY(Magnitude rho) {
-        Magnitude deltaRho = getDeltaRho();
-
-        if (!rho.areSameUnits(deltaRho))
+        if (!rho.areSameUnits(getDeltaRho()))
             throw new IllegalArgumentException("r (" + rho.getBaseUnitsLabel()
                     + ") must have the same units as deltaR ("
-                    + deltaRho.getBaseUnitsLabel() + ").");
+                    + getDeltaRho().getBaseUnitsLabel() + ").");
 
-        if (rho.compareTo(rhoMin.minus(deltaRho.div(2.0))) < 0
-                || rho.compareTo(rhoMax.add(deltaRho.div(2.0))) > 0)
-            throw new IllegalArgumentException("rho (" + rho
-                    + ") must be between " + rhoMin + " and " + rhoMax);
-
-        // If r < 0, need to round toward the bottom (thus the - 0.5)
-        if (rho.getBaseUnitsValue() >= 0)
-            // r / deltaR + 0.5
-            // the result is unitless since deltaR and r have the same units
-            return height / 2 - (int) (rho.div(deltaRho).getValue("") + 0.5);
-        else
-            // r / deltaR - 0.5
-            // the result is unitless since deltaR and r have the same units
-            return height / 2 - (int) (rho.div(deltaRho).getValue("") - 0.5);
+        return getY(rho.getBaseUnitsValue());
     }
 
 
@@ -660,12 +700,11 @@ public class HoughMap extends ByteMap {
         super.setCalibration(calibration);
 
         // Re-calculate rMin, rMax, thetaMin and thetaMax
-        // TODO: Check if it could also be deltaRho.multiply((height-1) / 2)
-        rhoMax = deltaRho.multiply(height / 2);
-        rhoMin = rhoMax.multiply(-1);
+        rhoMax = deltaRho.getBaseUnitsValue() * ((height - 1) / 2);
+        rhoMin = -rhoMax;
 
-        thetaMin = deltaTheta.multiply(0);
-        thetaMax = deltaTheta.multiply(width - 1);
+        thetaMin = 0.0;
+        thetaMax = deltaTheta.getValue("rad") * (width - 1);
     }
 
 }
