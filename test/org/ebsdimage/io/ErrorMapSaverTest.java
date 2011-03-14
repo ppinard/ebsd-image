@@ -17,10 +17,10 @@
  */
 package org.ebsdimage.io;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.ErrorCode;
@@ -28,12 +28,18 @@ import org.ebsdimage.core.ErrorMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.simplexml.XmlLoader;
 import rmlimage.core.ByteMap;
 import rmlimage.io.BasicBmpLoader;
 import rmlshared.io.FileUtil;
 
+import static org.junit.Assert.assertEquals;
+
 public class ErrorMapSaverTest extends TestCase {
+
+    private ErrorCode errorCode1;
+
+    private ErrorCode errorCode2;
 
     private ErrorMapSaver saver;
 
@@ -45,14 +51,16 @@ public class ErrorMapSaverTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        ErrorCode[] codes =
-                new ErrorCode[] {
-                        new ErrorCode(1, "Error1", "First test error"),
-                        new ErrorCode(2, "Error2", "Second test error") };
-        byte[] pixArray = new byte[] { 0, 1, 2, 1 };
+        errorCode1 = new ErrorCode("Error1");
+        errorCode2 = new ErrorCode("Error3", "Desc3");
 
-        map = new ErrorMap(2, 2, pixArray, codes);
+        HashMap<Integer, ErrorCode> items = new HashMap<Integer, ErrorCode>();
+        items.put(1, errorCode1);
+        items.put(3, errorCode2);
+
+        map = new ErrorMap(2, 2, new byte[] { 0, 1, 3, 1 }, items);
         saver = new ErrorMapSaver();
+
         file = new File(createTempDir(), "errormap.bmp");
     }
 
@@ -101,7 +109,7 @@ public class ErrorMapSaverTest extends TestCase {
 
         assertEquals(0, byteMap.pixArray[0]);
         assertEquals(1, byteMap.pixArray[1]);
-        assertEquals(2, byteMap.pixArray[2]);
+        assertEquals(3, byteMap.pixArray[2]);
         assertEquals(1, byteMap.pixArray[3]);
     }
 
@@ -109,9 +117,13 @@ public class ErrorMapSaverTest extends TestCase {
 
     private void testErrorMapXml() throws IOException {
         File xmlFile = FileUtil.setExtension(file, "xml");
-        ErrorCode[] codes = new XmlLoader().loadArray(ErrorCode.class, xmlFile);
+        Map<Integer, ErrorCode> items =
+                new XmlLoader().loadMap(Integer.class, ErrorCode.class, xmlFile);
 
-        assertEquals(3, codes.length);
+        assertEquals(3, items.size());
+        assertEquals(ErrorMap.NO_ERROR, items.get(0));
+        assertEquals(errorCode1, items.get(1));
+        assertEquals(errorCode2, items.get(3));
     }
 
 }

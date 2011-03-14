@@ -1,43 +1,25 @@
-/*
- * EBSD-Image
- * Copyright (C) 2010 Philippe T. Pinard
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package org.ebsdimage.io;
-
-import static org.ebsdimage.core.PhasesMap.FILE_HEADER;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.ebsdimage.core.PhasesMap;
+import org.ebsdimage.core.IndexedByteMap;
 
-import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.simplexml.XmlLoader;
 import rmlimage.core.Map;
 import rmlimage.io.BasicBmpLoader;
 import rmlshared.io.FileUtil;
 import rmlshared.io.TextFileReader;
-import crystallography.core.Crystal;
 
 /**
- * Loader for <code>PhasesMap</code>.
+ * Loader for <code>IndexedByteMap</code>.
  * 
- * @author Philippe T. Pinard
+ * @param <Item>
+ *            type of item
+ * @author ppinard
  */
-public class PhasesMapLoader extends BasicBmpLoader {
+public abstract class IndexedByteMapLoader<Item> extends BasicBmpLoader {
 
     @Override
     public boolean canLoad(File file) {
@@ -49,6 +31,15 @@ public class PhasesMapLoader extends BasicBmpLoader {
 
         return true;
     }
+
+
+
+    /**
+     * Returns the file header.
+     * 
+     * @return file header
+     */
+    protected abstract String getFileHeader();
 
 
 
@@ -103,10 +94,10 @@ public class PhasesMapLoader extends BasicBmpLoader {
 
         header = header.substring(1); // Trim comment char
 
-        if (!header.startsWith(FILE_HEADER))
+        String fileHeader = getFileHeader();
+        if (!header.startsWith(fileHeader))
             return "Header of prop file (" + header
-                    + ") does not match expected header for PhasesMap ("
-                    + FILE_HEADER + ").";
+                    + ") does not match expected header (" + fileHeader + ").";
 
         // If we have reached this point, then the file is valid
         return "";
@@ -120,37 +111,79 @@ public class PhasesMapLoader extends BasicBmpLoader {
 
 
     @Override
-    public PhasesMap load(File file) throws IOException {
+    public IndexedByteMap<Item> load(File file) throws IOException {
         return load(file, null);
     }
 
 
 
+    /**
+     * Returns the class of the item type.
+     * 
+     * @return class of the item type.
+     */
+    protected abstract Class<? extends Item> getItemClass();
+
+
+
+    /**
+     * Creates a new <code>IndexedByteMap</code> from the specified parameters.
+     * 
+     * @param width
+     *            width of the map
+     * @param height
+     *            height of the map
+     * @param items
+     *            items
+     * @return new map
+     */
+    protected abstract IndexedByteMap<Item> createMap(int width, int height,
+            java.util.Map<Integer, Item> items);
+
+
+
+    /**
+     * Load items from an XML.
+     * 
+     * @param file
+     *            file of the map
+     * @return items
+     * @throws IOException
+     *             if an error occurs while loading
+     */
+    protected java.util.Map<Integer, Item> loadItems(File file)
+            throws IOException {
+        File xmlFile = FileUtil.setExtension(file, "xml");
+        return new XmlLoader().loadMap(Integer.class, getItemClass(), xmlFile);
+    }
+
+
+
+    @SuppressWarnings("unchecked")
     @Override
-    public PhasesMap load(File file, Map map) throws IOException {
+    public IndexedByteMap<Item> load(File file, Map map) throws IOException {
         if (!canLoad(file))
             throw new IOException(getValidationMessage(file));
 
         // Load XML file
-        File xmlFile = FileUtil.setExtension(file, "xml");
-        Crystal[] phases = new XmlLoader().loadArray(Crystal.class, xmlFile);
+        java.util.Map<Integer, Item> items = loadItems(file);
 
         // Create empty map
-        PhasesMap phasesMap;
+        IndexedByteMap<Item> indexedByteMap;
         if (map == null)
-            phasesMap = new PhasesMap(1, 1, phases);
+            indexedByteMap = createMap(1, 1, items);
         else
-            phasesMap = new PhasesMap(map.width, map.height, phases);
+            indexedByteMap = createMap(map.width, map.height, items);
 
-        map = super.load(file, phasesMap);
+        map = super.load(file, indexedByteMap);
 
-        return (PhasesMap) map;
+        return (IndexedByteMap<Item>) map;
     }
 
 
 
     @Override
-    public PhasesMap load(File file, Object map) throws IOException {
+    public IndexedByteMap<Item> load(File file, Object map) throws IOException {
         return load(file, (Map) map);
     }
 
@@ -159,7 +192,7 @@ public class PhasesMapLoader extends BasicBmpLoader {
     @Override
     public Map load(InputStream inStream) throws IOException {
         throw new IOException(
-                "A PhasesMap cannot be loaded from an input stream.");
+                "An Indexed ByteMap cannot be loaded from an input stream.");
     }
 
 
@@ -181,16 +214,19 @@ public class PhasesMapLoader extends BasicBmpLoader {
         if (map == null)
             throw new NullPointerException("Cannot validate a null map.");
 
-        if (!(map instanceof PhasesMap))
+        if (!(map instanceof IndexedByteMap))
             throw new IllegalArgumentException(
-                    "Map should be an PhasesMap, not a " + map.getType() + ".");
+                    "Map should be an IndexedByteMap, not a " + map.getType()
+                            + ".");
 
-        if (map.width != biWidth || map.height != biHeight)
-            map =
-                    new PhasesMap(biWidth, biHeight,
-                            ((PhasesMap) map).getPhases());
+        if (map.width != biWidth || map.height != biHeight) {
+            @SuppressWarnings("unchecked")
+            java.util.Map<Integer, Item> items =
+                    ((IndexedByteMap<Item>) map).getItems();
+
+            map = createMap(biWidth, biHeight, items);
+        }
 
         return map;
     }
-
 }

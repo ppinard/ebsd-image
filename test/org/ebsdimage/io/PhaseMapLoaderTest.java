@@ -17,22 +17,25 @@
  */
 package org.ebsdimage.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
-import org.ebsdimage.core.PhasesMap;
+import org.ebsdimage.TestCase;
+import org.ebsdimage.core.PhaseMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import rmlshared.io.FileUtil;
+import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
 
-public class PhasesMapLoaderTest {
+import static org.junit.Assert.assertEquals;
 
-    private PhasesMapLoader loader;
+import static junittools.test.Assert.assertEquals;
+
+public class PhaseMapLoaderTest extends TestCase {
+
+    private PhaseMapLoader loader;
 
     private File file;
 
@@ -40,8 +43,8 @@ public class PhasesMapLoaderTest {
 
     @Before
     public void setUp() throws Exception {
-        file = FileUtil.getFile("org/ebsdimage/testdata/phasesmap.bmp");
-        loader = new PhasesMapLoader();
+        file = getFile("org/ebsdimage/testdata/phasemap.bmp");
+        loader = new PhaseMapLoader();
     }
 
 
@@ -55,7 +58,7 @@ public class PhasesMapLoaderTest {
 
     @Test
     public void testLoadFile() throws IOException {
-        PhasesMap map = loader.load(file);
+        PhaseMap map = loader.load(file);
         testPhasesMap(map);
     }
 
@@ -63,25 +66,27 @@ public class PhasesMapLoaderTest {
 
     @Test
     public void testLoadFileMap() throws IOException {
-        PhasesMap map = loader.load(file, null);
+        PhaseMap map = loader.load(file, null);
         testPhasesMap(map);
     }
 
 
 
-    private void testPhasesMap(PhasesMap map) {
+    private void testPhasesMap(PhaseMap map) {
         assertEquals(2, map.width);
         assertEquals(2, map.height);
         assertEquals(4, map.size);
 
         assertEquals(0, map.pixArray[0]);
         assertEquals(1, map.pixArray[1]);
-        assertEquals(2, map.pixArray[2]);
+        assertEquals(3, map.pixArray[2]);
         assertEquals(1, map.pixArray[3]);
 
-        assertEquals(2, map.getPhases().length);
-        assertTrue(CrystalFactory.silicon().equals(map.getPhases()[0], 1e-6));
-        assertTrue(CrystalFactory.ferrite().equals(map.getPhases()[1], 1e-6));
+        Map<Integer, Crystal> items = map.getItems();
+        assertEquals(3, items.size());
+        assertEquals(PhaseMap.NO_PHASE, items.get(0), 1e-6);
+        assertEquals(CrystalFactory.silicon(), items.get(1), 1e-6);
+        assertEquals(CrystalFactory.ferrite(), items.get(3), 1e-6);
     }
 
 }

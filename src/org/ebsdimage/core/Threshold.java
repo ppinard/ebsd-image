@@ -17,10 +17,9 @@
  */
 package org.ebsdimage.core;
 
-import java.io.File;
-
-import rmlimage.core.*;
-import rmlshared.io.FileUtil;
+import rmlimage.core.BinMap;
+import rmlimage.core.ByteMap;
+import rmlimage.core.MathMorph;
 
 /**
  * Threshold of EBSD specific maps (e.g. <code>HoughMap</code>).
@@ -209,101 +208,81 @@ public class Threshold {
 
 
     /**
-     * Thresholds a specified phase id from a <code>PhasesMap</code>.
+     * Thresholds a specified item from an <code>IndexedByteMap</code>.
      * 
      * @param map
      *            source <code>PhasesMap</code>
-     * @param phaseId
-     *            phase id to threshold
+     * @param id
+     *            id of the item to threshold in the <code>IndexedByteMap</code>
      * @return the thresholded map
-     * @throws NullPointerException
-     *             if the phases map is null
      * @throws IllegalArgumentException
-     *             if the phase id is less than 0 or greater than the number of
-     *             phases defined in the phases map
+     *             if the id corresponds to an unregistered item dimensions
      */
-    public static BinMap phase(PhasesMap map, int phaseId) {
-        if (map == null)
-            throw new NullPointerException("Source phases map cannot be null.");
+    public static BinMap item(IndexedByteMap<?> map, int id) {
+        if (!map.isRegistered(id))
+            throw new IllegalArgumentException("Id (" + id
+                    + ") is not a registered id of the source map ("
+                    + map.getName() + ").");
 
-        if (phaseId < 0 || phaseId > map.getPhases().length)
-            throw new IllegalArgumentException("Phase id must be between [0, "
-                    + map.getPhases().length + "].");
-
-        BinMap binMap = new BinMap(map.width, map.height);
-
-        String phaseName;
-        if (phaseId == 0)
-            phaseName = "Non-indexed";
-        else
-            phaseName = map.getPhases()[phaseId - 1].name;
-        File file =
-                FileUtil.appendBeforeNumber(map.getFile(), "(Phase_"
-                        + phaseName + ')');
-        file = FileUtil.setExtension(file, "bmp");
-        binMap.setFile(file);
-
-        phase(map, phaseId, binMap);
-
-        return binMap;
+        return rmlimage.core.Threshold.densitySlice(map, id, id);
     }
 
 
 
     /**
-     * Thresholds a specified phase id from a <code>PhasesMap</code>.
+     * Thresholds a specified item from an <code>IndexedByteMap</code>.
+     * 
+     * @param <Item>
+     *            type of item in the <code>IndexedByteMap</code>
+     * @param map
+     *            source <code>PhasesMap</code>
+     * @param item
+     *            item to threshold in the <code>IndexedByteMap</code>
+     * @return the thresholded map
+     */
+    public static <Item> BinMap item(IndexedByteMap<Item> map, Item item) {
+        return item(map, map.getItemId(item));
+    }
+
+
+
+    /**
+     * Thresholds a specified item from an <code>IndexedByteMap</code>.
      * 
      * @param src
-     *            source <code>PhasesMap</code>
-     * @param phaseId
-     *            phase id to threshold
+     *            source <code>IndexedByteMap</code>
+     * @param id
+     *            id of the item to threshold in the <code>IndexedByteMap</code>
      * @param dest
      *            destination map
-     * @throws NullPointerException
-     *             if the source or destination map is null
      * @throws IllegalArgumentException
-     *             if the phase id is less than 0 or greater than the number of
-     *             phases defined in the phases map
-     * @throws IllegalArgumentException
-     *             if the source and destination map don't have the same
-     *             dimensions
+     *             if the id corresponds to an unregistered item dimensions
      */
-    public static void phase(PhasesMap src, int phaseId, BinMap dest) {
-        if (src == null)
-            throw new NullPointerException("Source phases map cannot be null.");
-        if (dest == null)
-            throw new NullPointerException("Destination map cannot be null.");
+    public static void item(IndexedByteMap<?> src, int id, BinMap dest) {
+        if (!src.isRegistered(id))
+            throw new IllegalArgumentException("Id (" + id
+                    + ") is not a registered id of the source map ("
+                    + src.getName() + ").");
 
-        if (phaseId < 0 || phaseId > src.getPhases().length)
-            throw new IllegalArgumentException("Phase id must be between [0, "
-                    + src.getPhases().length + "].");
+        rmlimage.core.Threshold.densitySlice(src, id, id, dest);
+    }
 
-        if (!dest.isSameSize(src))
-            throw new IllegalArgumentException("dest (" + dest.getName() + ")("
-                    + dest.getDimensionLabel()
-                    + ") must be the same size as src (" + src.getName() + ")("
-                    + src.getDimensionLabel() + ')');
 
-        byte[] srcPixArray = src.pixArray;
-        byte[] destPixArray = dest.pixArray;
 
-        int size = src.size;
-
-        int pixValue;
-
-        for (int n = 0; n < size; n++) {
-            pixValue = srcPixArray[n] & 0xff;
-            destPixArray[n] = (pixValue == phaseId) ? (byte) 1 : (byte) 0;
-        }
-
-        // Copy the properties from the source ByteMap
-        dest.clearProperties();
-        dest.setProperties(src);
-
-        // Save the min and max threshold in the prop file
-        dest.setProperty(Constants.MIN_THRESHOLD, phaseId);
-        dest.setProperty(Constants.MAX_THRESHOLD, phaseId);
-
-        dest.setChanged(Map.MAP_CHANGED);
+    /**
+     * Thresholds a specified item from an <code>IndexedByteMap</code>.
+     * 
+     * @param <Item>
+     *            type of item in the <code>IndexedByteMap</code>
+     * @param map
+     *            source <code>PhasesMap</code>
+     * @param item
+     *            item to threshold in the <code>IndexedByteMap</code>
+     * @param dest
+     *            destination map
+     */
+    public static <Item> void item(IndexedByteMap<Item> map, Item item,
+            BinMap dest) {
+        item(map, map.getItemId(item), dest);
     }
 }

@@ -17,6 +17,8 @@
  */
 package org.ebsdimage.core;
 
+import java.util.Map.Entry;
+
 import rmlimage.core.BinMap;
 import rmlimage.core.Map;
 import rmlimage.core.handler.MapMathHandler;
@@ -29,68 +31,47 @@ import rmlimage.core.handler.MapMathHandler;
 public class MapMath implements MapMathHandler {
 
     /**
-     * Does an addition operation on two <code>PhasesMap</code> such that:
+     * Does an addition operation on two <code>IndexedByteMap</code> such that:
      * <code>(src1 + src2) = dest</code>.
      * <p/>
-     * The destination <code>PhasesMap</code> must already contains the array of
-     * defined phases.
+     * The destination <code>IndexedByteMap</code> must already contains the
+     * array of defined phases.
      * <p/>
-     * The destination <code>PhasesMap</code> is validated to assess that the
-     * number of phases is valid.
+     * The destination <code>IndexedByteMap</code> is validated to assess that
+     * the number of phases is valid.
      * 
+     * @param <Item>
+     *            type of item for the <code>IndexedByteMap</code>
      * @param src1
-     *            source <code>PhasesMap</code>
+     *            source <code>IndexedByteMap</code>
      * @param src2
-     *            source <code>PhasesMap</code>
+     *            source <code>IndexedByteMap</code>
+     * @param multValue
+     *            scaling
+     * @param addValue
+     *            offset
      * @param dest
-     *            <code>PhasesMap</code> to put the result into
+     *            <code>IndexedByteMap</code> to put the result into
      * @throws NullPointerException
      *             if a source map or destination is null
      * @throws IllegalArgumentException
      *             if the size of the three <code>Map</code>s are not the same
      */
-    public static void addition(PhasesMap src1, PhasesMap src2, PhasesMap dest) {
-        if (src1 == null)
-            throw new NullPointerException(
-                    "Source phases map 1 cannot be null.");
-        if (src2 == null)
-            throw new NullPointerException(
-                    "Source phases map 2 cannot be null.");
-        if (dest == null)
-            throw new NullPointerException(
-                    "Destination phases map cannot be null.");
+    public static <Item> void addition(IndexedByteMap<Item> src1,
+            IndexedByteMap<Item> src2, double multValue, double addValue,
+            IndexedByteMap<Item> dest) {
+        rmlimage.core.MapMath.addition(src1, src2, multValue, addValue, dest);
 
-        if (!src1.isSameSize(src2))
-            throw new IllegalArgumentException("src1 size (" + src1.getName()
-                    + ")(" + src1.getDimensionLabel()
-                    + ") is different than src2 size (" + src2.getName() + ")("
-                    + src2.getDimensionLabel() + ")");
-        if (!src1.isSameSize(dest))
-            throw new IllegalArgumentException("src1 size (" + src1.getName()
-                    + ")(" + src1.getDimensionLabel()
-                    + ") is different than dest size (" + dest.getName() + ")("
-                    + dest.getDimensionLabel() + ")");
+        // Update items
+        for (Entry<Integer, Item> entry : src1.getItems().entrySet())
+            if (!dest.isRegistered(entry.getKey()))
+                dest.register(entry.getKey(), entry.getValue());
 
-        byte[] src1PixArray = src1.pixArray;
-        byte[] src2PixArray = src2.pixArray;
-        byte[] destPixArray = dest.pixArray;
-        int pixValue;
-        int size = src1.size;
-        for (int n = 0; n < size; n++) {
-            pixValue = (src1PixArray[n] & 0xff) + (src2PixArray[n] & 0xff);
-
-            // Truncate
-            if (pixValue < 0)
-                pixValue = 0;
-            else if (pixValue > 255)
-                pixValue = 255;
-
-            destPixArray[n] = (byte) pixValue;
-        }
+        for (Entry<Integer, Item> entry : src2.getItems().entrySet())
+            if (!dest.isRegistered(entry.getKey()))
+                dest.register(entry.getKey(), entry.getValue());
 
         dest.validate();
-
-        dest.setChanged(Map.MAP_CHANGED);
     }
 
 
@@ -99,65 +80,42 @@ public class MapMath implements MapMathHandler {
      * Does an <code>AND</code> operation such that:
      * <code>src1 AND src2 = dest</code>.
      * 
+     * @param <Item>
+     *            type of item for the <code>IndexedByteMap</code>
      * @param src1
-     *            source <code>PhasesMap</code>
+     *            source <code>IndexedByteMap</code>
      * @param src2
      *            source <code>BinMap</code> (i.e. mask)
      * @param dest
-     *            <code>PhasesMap</code> to put the result into
+     *            <code>IndexedByteMap</code> to put the result into
      * @throws NullPointerException
      *             if a source map or destination is null
      * @throws IllegalArgumentException
      *             if the size of the three <code>Map</code>s are not the same
      */
-    public static void and(PhasesMap src1, BinMap src2, PhasesMap dest) {
-        if (src1 == null)
-            throw new NullPointerException("Source phases map cannot be null.");
-        if (src2 == null)
-            throw new NullPointerException("Source BinMap cannot be null.");
-        if (dest == null)
-            throw new NullPointerException(
-                    "Destination phases map cannot be null.");
+    public static <Item> void and(IndexedByteMap<Item> src1, BinMap src2,
+            IndexedByteMap<Item> dest) {
+        rmlimage.core.MapMath.and(src1, src2, dest);
 
-        if (!src1.isSameSize(src2))
-            throw new IllegalArgumentException("src1 size (" + src1.getName()
-                    + ")(" + src1.getDimensionLabel()
-                    + ") is different than src2 size (" + src2.getName() + ")("
-                    + src2.getDimensionLabel() + ")");
-        if (!src1.isSameSize(dest))
-            throw new IllegalArgumentException("src1 size (" + src1.getName()
-                    + ")(" + src1.getDimensionLabel()
-                    + ") is different than dest size (" + dest.getName() + ")("
-                    + dest.getDimensionLabel() + ")");
-
-        byte[] src1PixArray = src1.pixArray;
-        byte[] src2PixArray = src2.pixArray;
-        byte[] destPixArray = dest.pixArray;
-        int size = src1.size;
-        for (int n = 0; n < size; n++)
-            destPixArray[n] =
-                    (src2PixArray[n] == 1) ? src1PixArray[n] : (byte) 0;
-
-        // Copy the props and phases
-        if (dest != src1) {
-            dest.clearProperties();
-            dest.setProperties(src1);
-            dest.setPhases(src1.getPhases());
-        }
+        // Update items
+        for (Entry<Integer, Item> entry : src1.getItems().entrySet())
+            if (!dest.isRegistered(entry.getKey()))
+                dest.register(entry.getKey(), entry.getValue());
 
         dest.validate();
-
-        dest.setChanged(Map.MAP_CHANGED);
     }
 
 
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public boolean addition(Map src1, Map src2, double multValue,
             double addValue, Map dest) {
-        if ((src1 instanceof PhasesMap) && (src2 instanceof PhasesMap)
-                && (dest instanceof PhasesMap)) {
-            addition((PhasesMap) src1, (PhasesMap) src2, (PhasesMap) dest);
+        if ((src1 instanceof IndexedByteMap)
+                && (src2 instanceof IndexedByteMap)
+                && (dest instanceof IndexedByteMap)) {
+            addition((IndexedByteMap) src1, (IndexedByteMap) src2, multValue,
+                    addValue, (IndexedByteMap) dest);
             return true;
         } else {
             return false;
@@ -166,11 +124,12 @@ public class MapMath implements MapMathHandler {
 
 
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public boolean and(Map src1, Map src2, Map dest) {
-        if ((src1 instanceof PhasesMap) && (src2 instanceof BinMap)
-                && (dest instanceof PhasesMap)) {
-            and((PhasesMap) src1, (BinMap) src2, (PhasesMap) dest);
+        if ((src1 instanceof IndexedByteMap) && (src2 instanceof BinMap)
+                && (dest instanceof IndexedByteMap)) {
+            and((IndexedByteMap) src1, (BinMap) src2, (IndexedByteMap) dest);
             return true;
         } else {
             return false;

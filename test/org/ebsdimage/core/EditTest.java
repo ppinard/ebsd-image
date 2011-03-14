@@ -18,46 +18,61 @@
 package org.ebsdimage.core;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.logging.Logger;
-
-import magnitude.core.Magnitude;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.io.HoughMapLoader;
+import org.junit.Before;
 import org.junit.Test;
 
 import rmlimage.core.ByteMap;
+import rmlimage.core.Map;
 import rmlimage.core.ROI;
-import crystallography.core.Crystal;
-import crystallography.core.CrystalFactory;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import static java.lang.Math.toRadians;
 
+import static junittools.test.Assert.assertEquals;
+
 public class EditTest extends TestCase {
 
-    private PhasesMap createPhasesMap() {
-        Crystal[] phases =
-                new Crystal[] { CrystalFactory.silicon(),
-                        CrystalFactory.ferrite() };
+    private ItemMock item0;
+
+    private ItemMock item1;
+
+    private ItemMock item2;
+
+    private IndexedByteMap<ItemMock> indexedMap;
+
+
+
+    @Before
+    public void setUp() throws Exception {
+        item0 = new ItemMock("No item");
+        item1 = new ItemMock("Item1");
+        item2 = new ItemMock("Item2");
+
+        HashMap<Integer, ItemMock> items = new HashMap<Integer, ItemMock>();
+        items.put(1, item1);
+        items.put(2, item2);
+
         byte[] pixArray = new byte[] { 0, 1, 2, 1, 0, 0, 0, 0, 2 };
-        return new PhasesMap(3, 3, pixArray, phases);
+
+        indexedMap = new IndexedByteMap<ItemMock>(3, 3, pixArray, item0, items);
     }
 
 
 
     @Test
-    public void testCopyPhasesMapROIPhasesMapIntInt() {
-        // Source phases map
-        PhasesMap srcMap = createPhasesMap();
-
-        // Destination phases map
-        PhasesMap destMap = new PhasesMap(2, 2);
+    public void testCopyIndexedByteMapROIIndexedByteMapIntInt() {
+        IndexedByteMap<ItemMock> destMap =
+                new IndexedByteMap<ItemMock>(2, 2, item0);
 
         // Copy
-        Edit.copy(srcMap, new ROI(0, 0, 1, 1), destMap, 0, 0);
+        Edit.copy(indexedMap, new ROI(0, 0, 1, 1), destMap, 0, 0);
 
         // Test
         assertEquals(2, destMap.height);
@@ -66,8 +81,91 @@ public class EditTest extends TestCase {
         assertEquals(1, destMap.pixArray[1]);
         assertEquals(1, destMap.pixArray[2]);
         assertEquals(0, destMap.pixArray[3]);
-        assertEquals(2, destMap.getPhases().length);
+
+        java.util.Map<Integer, ItemMock> items = destMap.getItems();
+        assertEquals(3, items.size());
+        assertEquals(item0, items.get(0));
+        assertEquals(item1, items.get(1));
+        assertEquals(item2, items.get(2));
+
         assertTrue(destMap.isCorrect());
+    }
+
+
+
+    @Test
+    public void testCopyMapROIMapIntInt() {
+        // Add handler
+        rmlimage.core.Edit.addHandler(Edit.class);
+
+        IndexedByteMap<ItemMock> destMap =
+                new IndexedByteMap<ItemMock>(2, 2, item0);
+
+        // Copy
+        rmlimage.core.Edit.copy((Map) indexedMap, new ROI(0, 0, 1, 1),
+                (Map) destMap, 0, 0);
+
+        // Test
+        assertEquals(2, destMap.height);
+        assertEquals(2, destMap.width);
+        assertEquals(0, destMap.pixArray[0]);
+        assertEquals(1, destMap.pixArray[1]);
+        assertEquals(1, destMap.pixArray[2]);
+        assertEquals(0, destMap.pixArray[3]);
+
+        java.util.Map<Integer, ItemMock> items = destMap.getItems();
+        assertEquals(3, items.size());
+        assertEquals(item0, items.get(0));
+        assertEquals(item1, items.get(1));
+        assertEquals(item2, items.get(2));
+
+        assertTrue(destMap.isCorrect());
+    }
+
+
+
+    @Test
+    public void testCropIndexedByteMapROI() {
+        IndexedByteMap<ItemMock> cropMap =
+                Edit.crop(indexedMap, new ROI(0, 0, 1, 1));
+
+        assertEquals(2, cropMap.height);
+        assertEquals(2, cropMap.width);
+        assertEquals(0, cropMap.pixArray[0]);
+        assertEquals(1, cropMap.pixArray[1]);
+        assertEquals(1, cropMap.pixArray[2]);
+        assertEquals(0, cropMap.pixArray[3]);
+
+        java.util.Map<Integer, ItemMock> items = cropMap.getItems();
+        assertEquals(3, items.size());
+        assertEquals(item0, items.get(0));
+        assertEquals(item1, items.get(1));
+        assertEquals(item2, items.get(2));
+    }
+
+
+
+    @Test
+    public void testCropMapROIErrorMap() {
+        // Add handler
+        rmlimage.core.Edit.addHandler(Edit.class);
+
+        IndexedByteMap<?> cropMap =
+                (IndexedByteMap<?>) rmlimage.core.Edit.crop((Map) indexedMap,
+                        new ROI(0, 0, 1, 1));
+
+        assertEquals(2, cropMap.height);
+        assertEquals(2, cropMap.width);
+        assertEquals(0, cropMap.pixArray[0]);
+        assertEquals(1, cropMap.pixArray[1]);
+        assertEquals(1, cropMap.pixArray[2]);
+        assertEquals(0, cropMap.pixArray[3]);
+
+        java.util.Map<Integer, ?> items = cropMap.getItems();
+        assertEquals(3, items.size());
+        assertEquals(item0, items.get(0));
+        assertEquals(item1, items.get(1));
+        assertEquals(item2, items.get(2));
     }
 
 
@@ -78,10 +176,10 @@ public class EditTest extends TestCase {
         HoughMap houghMap =
                 new HoughMapLoader().load(getFile("org/ebsdimage/testdata/houghmap.bmp"));
 
-        HoughMap croppedMap = Edit.crop(houghMap, new Magnitude(50.0, "px"));
+        HoughMap croppedMap = Edit.crop(houghMap, 50.0);
         assertEquals(houghMap.width, croppedMap.width);
         assertEquals(55, croppedMap.height);
-        assertEquals(50.80506, croppedMap.rhoMax.getValue("px"), 0.001);
+        assertEquals(50.80506, croppedMap.rhoMax, 0.001);
         assertTrue(houghMap.getDeltaRho().equals(croppedMap.getDeltaRho(),
                 0.001));
 
@@ -99,59 +197,14 @@ public class EditTest extends TestCase {
                 (ByteMap) load("org/ebsdimage/testdata/pattern_masked.bmp");
         HoughMap houghMap = Transform.hough(pattern, toRadians(0.5));
 
-        for (int i = 1; i <= (int) houghMap.rhoMax.getValue("px"); i++) {
+        for (int i = 1; i <= (int) houghMap.getRhoMax(); i++) {
             Logger.getLogger("ebsd").info("Cropping radius: " + i);
-            HoughMap croppedMap = Edit.crop(houghMap, new Magnitude(i, "px"));
+            HoughMap croppedMap = Edit.crop(houghMap, i);
 
-            assertTrue(houghMap.getDeltaRho().equals(croppedMap.getDeltaRho(),
-                    1e-6));
-            assertTrue(houghMap.getDeltaTheta().equals(
-                    croppedMap.getDeltaTheta(), 1e-6));
+            assertEquals(houghMap.getDeltaRho(), croppedMap.getDeltaRho(), 1e-6);
+            assertEquals(houghMap.getDeltaTheta(), croppedMap.getDeltaTheta(),
+                    1e-6);
         }
-    }
-
-
-
-    @Test
-    public void testCropMapROIPhasesMap() {
-        // Add handler
-        rmlimage.core.Edit.addHandler(Edit.class);
-
-        // Original phases map
-        PhasesMap map = createPhasesMap();
-
-        // Crop
-        PhasesMap cropMap =
-                (PhasesMap) rmlimage.core.Edit.crop(map, new ROI(0, 0, 1, 1));
-
-        // Test
-        testCropPhasesMap(cropMap);
-    }
-
-
-
-    private void testCropPhasesMap(PhasesMap cropMap) {
-        assertEquals(2, cropMap.height);
-        assertEquals(2, cropMap.width);
-        assertEquals(0, cropMap.pixArray[0]);
-        assertEquals(1, cropMap.pixArray[1]);
-        assertEquals(1, cropMap.pixArray[2]);
-        assertEquals(0, cropMap.pixArray[3]);
-        assertEquals(2, cropMap.getPhases().length);
-    }
-
-
-
-    @Test
-    public void testCropPhasesMapROI() {
-        // Original phases map
-        PhasesMap map = createPhasesMap();
-
-        // Crop
-        PhasesMap cropMap = Edit.crop(map, new ROI(0, 0, 1, 1));
-
-        // Test
-        testCropPhasesMap(cropMap);
     }
 
 }

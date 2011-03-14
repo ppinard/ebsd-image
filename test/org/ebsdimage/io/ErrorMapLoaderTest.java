@@ -17,18 +17,19 @@
  */
 package org.ebsdimage.io;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
+import org.ebsdimage.TestCase;
+import org.ebsdimage.core.ErrorCode;
 import org.ebsdimage.core.ErrorMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import rmlshared.io.FileUtil;
+import static org.junit.Assert.assertEquals;
 
-public class ErrorMapLoaderTest {
+public class ErrorMapLoaderTest extends TestCase {
 
     private ErrorMapLoader loader;
 
@@ -38,7 +39,7 @@ public class ErrorMapLoaderTest {
 
     @Before
     public void setUp() throws Exception {
-        file = FileUtil.getFile("org/ebsdimage/testdata/errormap.bmp");
+        file = getFile("org/ebsdimage/testdata/errormap.bmp");
         loader = new ErrorMapLoader();
     }
 
@@ -74,18 +75,14 @@ public class ErrorMapLoaderTest {
 
         assertEquals(0, map.pixArray[0]);
         assertEquals(1, map.pixArray[1]);
-        assertEquals(2, map.pixArray[2]);
+        assertEquals(3, map.pixArray[2]);
         assertEquals(1, map.pixArray[3]);
 
-        assertEquals(3, map.getErrorCodes().length);
-
-        assertEquals(1, map.getErrorCodes()[1].id);
-        assertEquals("Error1", map.getErrorCodes()[1].type);
-        assertEquals("First test error", map.getErrorCodes()[1].description);
-
-        assertEquals(2, map.getErrorCodes()[2].id);
-        assertEquals("Error2", map.getErrorCodes()[2].type);
-        assertEquals("Second test error", map.getErrorCodes()[2].description);
+        Map<Integer, ErrorCode> items = map.getItems();
+        assertEquals(3, items.size());
+        assertEquals(ErrorMap.NO_ERROR, items.get(0));
+        assertEquals(new ErrorCode("Error1"), items.get(1));
+        assertEquals(new ErrorCode("Error3", "Desc3"), items.get(3));
     }
 
 }

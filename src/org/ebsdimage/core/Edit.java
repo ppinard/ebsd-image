@@ -17,14 +17,12 @@
  */
 package org.ebsdimage.core;
 
-import java.util.ArrayList;
+import java.util.Map.Entry;
 
-import magnitude.core.Magnitude;
+import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
 import rmlimage.core.ROI;
 import rmlimage.core.handler.EditHandler;
-import crystallography.core.Crystal;
-import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 
 /**
@@ -35,24 +33,27 @@ import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 public class Edit implements EditHandler {
 
     /**
-     * Copy the specified region from the source <code>PhasesMap</code> to the
-     * specified location in the destination <code>PhasesMap</code>. The method
-     * does not do any clipping. So the source region and its destination must
-     * be completely inside their respective <code>PhasesMap</code>s or an
-     * exception will be thrown.
+     * Copy the specified region from the source <code>IndexedByteMap</code> to
+     * the specified location in the destination <code>IndexedByteMap</code>.
+     * The method does not do any clipping. So the source region and its
+     * destination must be completely inside their respective
+     * <code>IndexedByteMap</code>s or an exception will be thrown.
      * 
+     * @param <Item>
+     *            type of item of the <code>IndexedByteMap</code>
      * @param src
-     *            source <code>PhasesMap</code>
+     *            source <code>IndexedByteMap</code>
      * @param roi
      *            region to copy
      * @param dest
-     *            destination <code>PhasesMap</code>
+     *            destination <code>IndexedByteMap</code>
      * @param xx1
      *            x coordinate of the upper left corner of the region where to
      *            paste the source pixels
      * @param yy1
      *            y coordinate of the upper left corner of the region where to
      *            paste the source pixels
+     * @return
      * @throws IllegalArgumentException
      *             if the region defined by <code>x1</code>, <code>y1</code>,
      *             <code>x2</code> and <code>y2</code> is not completely inside
@@ -66,54 +67,16 @@ public class Edit implements EditHandler {
      * @throws NullPointerException
      *             if destination map is null
      */
-    public static void copy(PhasesMap src, ROI roi, PhasesMap dest, int xx1,
-            int yy1) {
-        if (src == null)
-            throw new NullPointerException("Src map cannot be null");
-        if (dest == null)
-            throw new NullPointerException("Dest map cannot be null");
+    public static <Item> void copy(IndexedByteMap<Item> src, ROI roi,
+            IndexedByteMap<Item> dest, int xx1, int yy1) {
+        rmlimage.core.Edit.copy(src, roi, dest, xx1, yy1);
 
-        // Check if the ROI is completely inside src
-        if (!roi.isInside(src))
-            throw new IllegalArgumentException("roi (" + roi.getExtentLabel()
-                    + ") is not completely inside src (" + src.getExtentLabel()
-                    + ").");
+        // Update items
+        for (Entry<Integer, Item> entry : src.getItems().entrySet())
+            if (!dest.isRegistered(entry.getKey()))
+                dest.register(entry.getKey(), entry.getValue());
 
-        // Check if putting the ROI at xx1;yy1 would put it partly outside dest
-        ROI destROI = new ROI(roi);
-        destROI.x = xx1;
-        destROI.y = yy1;
-        if (!destROI.isInside(dest))
-            throw new IllegalArgumentException("Putting roi ("
-                    + roi.getExtentLabel() + ") at (" + xx1 + ';' + yy1
-                    + ") will put it partly outside dest ("
-                    + dest.getExtentLabel() + ").");
-
-        byte[] srcPixArray = src.pixArray;
-        byte[] destPixArray = dest.pixArray;
-        int roiWidth = roi.width;
-        int roiHeight = roi.height;
-        int srcStartIndex = roi.getYMin() * src.width + roi.getXMin();
-        int destStartIndex = yy1 * dest.width + xx1;
-        for (int n = 0; n < roiHeight; n++) {
-            System.arraycopy(srcPixArray, srcStartIndex, destPixArray,
-                    destStartIndex, roiWidth);
-            srcStartIndex += src.width;
-            destStartIndex += dest.width;
-        }
-
-        // Update destination phases
-        ArrayList<Crystal> phases = new ArrayList<Crystal>();
-        for (Crystal phase : dest.getPhases())
-            phases.add(phase);
-
-        for (Crystal phase : src.getPhases())
-            if (!phases.contains(phase))
-                phases.add(phase);
-
-        dest.setPhases(phases.toArray(new Crystal[0]));
-
-        dest.setChanged(Map.MAP_CHANGED);
+        dest.validate();
     }
 
 
@@ -138,7 +101,7 @@ public class Edit implements EditHandler {
      * @param map
      *            <code>HoughMap</code> to crop.
      * @param r
-     *            distance above an below which to crop
+     *            distance above an below which to crop in rho preferred units
      * @return the cropped <code>HoughMap</code>.
      * @throws IllegalArgumentException
      *             if <code>r</code> is <= 0 or if <code>r</code> is >
@@ -148,49 +111,54 @@ public class Edit implements EditHandler {
      * @see HoughMap#rhoMax
      */
     @CheckReturnValue
-    public static HoughMap crop(HoughMap map, Magnitude r) {
+    public static HoughMap crop(HoughMap map, double r) {
         if (map == null)
             throw new NullPointerException("Hough map cannot be null.");
-
-        if (r.getBaseUnitsValue() <= 0)
+        if (r <= 0)
             throw new IllegalArgumentException("r (" + r + ") must be > 0.");
-
-        if (r.compareTo(map.rhoMax) > 0)
+        if (r > map.rhoMax)
             throw new IllegalArgumentException("r (" + r
                     + ") must be <= rMax of " + map.getName() + " ("
                     + map.rhoMax + ").");
 
         // Get the cropping coordinates
         int yMin = map.getY(r);
-        int yMax = map.getY(r.multiply(-1));
-
-        // Create the new HoughMap
-        HoughMap croppedMap =
-                new HoughMap(map.width, yMax - yMin + 1, map.getDeltaTheta(),
-                        map.getDeltaRho());
-
-        // Calculate the cropping roi
+        int yMax = map.getY(-r);
         ROI roi = new ROI(0, yMin, map.width - 1, yMax);
+
+        // Create the new ByteMap to store the crop results
+        // Note: Cannot use a HoughMap since the calibration has to be NONE
+        ByteMap croppedMap = new ByteMap(map.width, yMax - yMin + 1);
 
         rmlimage.core.Edit.copy(map, roi, croppedMap, 0, 0);
 
-        return croppedMap;
+        // Create destination HoughMap
+        HoughMap dest =
+                new HoughMap(map.width, yMax - yMin + 1, map.getDeltaTheta(),
+                        map.getDeltaRho());
+        System.arraycopy(croppedMap.pixArray, 0, dest.pixArray, 0,
+                croppedMap.size);
+
+        return dest;
     }
 
 
 
     /**
-     * Crops the <code>PhasesMap</code> to the specified <code>ROI</code>. The
-     * <code>ROI</code> coordinates are inclusive. The <code>Properties</code>
-     * of the original <code>PhasesMap</code> will be copied to the cropped one.
+     * Crops the <code>IndexedByteMap</code> to the specified <code>ROI</code>.
+     * The <code>ROI</code> coordinates are inclusive. The
+     * <code>Properties</code> of the original <code>IndexedByteMap</code> will
+     * be copied to the cropped one.
      * 
+     * @param <Item>
+     *            type of item of the <code>IndexedByteMap</code>
      * @param map
-     *            <code>PhasesMap</code> to crop
+     *            <code>IndexedByteMap</code> to crop
      * @param roi
      *            <code>ROI</code> to crop to
      * @return a new <code>PhasesMap</code> holding the cropped area. If the
      *         <code>ROI</code> is the whole image, a copy of the
-     *         <code>PhasesMap</code> is returned
+     *         <code>IndexedByteMap</code> is returned
      * @throws IllegalArgumentException
      *             if <code>ROI</code> is not completely inside the
      *             <code>map</code>
@@ -198,25 +166,16 @@ public class Edit implements EditHandler {
      *             if the map or the ROI is null
      */
     @CheckReturnValue
-    public static PhasesMap crop(PhasesMap map, ROI roi) {
-        if (map == null)
-            throw new NullPointerException("Map cannot be null.");
-        if (roi == null)
-            throw new NullPointerException("ROI cannot be null.");
+    public static <Item> IndexedByteMap<Item> crop(IndexedByteMap<Item> map,
+            ROI roi) {
+        @SuppressWarnings("unchecked")
+        IndexedByteMap<Item> cropMap =
+                (IndexedByteMap<Item>) rmlimage.core.Edit.crop(map, roi);
 
-        // If the roi is global
-        if (roi.isGlobal(map))
-            return map.duplicate();
-
-        // Create an empty PhasesMap of the correct dimension
-        // and with the same properties
-        PhasesMap cropMap = map.createMap(roi.width, roi.height);
-        cropMap.setProperties(map);
-
-        // Copy the phases
-        cropMap.setPhases(map.getPhases());
-
-        copy(map, roi, cropMap, 0, 0);
+        // Copy the items
+        for (Entry<Integer, Item> entry : map.getItems().entrySet())
+            if (!cropMap.isRegistered(entry.getKey()))
+                cropMap.register(entry.getKey(), entry.getValue());
 
         cropMap.validate();
 
@@ -225,22 +184,22 @@ public class Edit implements EditHandler {
 
 
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    @CheckReturnValue
-    @CheckForNull
     public Map crop(Map map, ROI roi) {
-        if (map instanceof PhasesMap)
-            return crop((PhasesMap) map, roi);
+        if (map instanceof IndexedByteMap)
+            return crop((IndexedByteMap) map, roi);
         else
             return null;
     }
 
 
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public boolean copy(Map src, ROI roi, Map dest, int xx1, int yy1) {
-        if (src instanceof PhasesMap && dest instanceof PhasesMap) {
-            copy((PhasesMap) src, roi, (PhasesMap) dest, xx1, yy1);
+        if (src instanceof IndexedByteMap && dest instanceof IndexedByteMap) {
+            copy((IndexedByteMap) src, roi, (IndexedByteMap) dest, xx1, yy1);
             return true;
         }
 

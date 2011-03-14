@@ -21,6 +21,7 @@ import java.util.HashMap;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.exp.ExpMMap;
+import org.junit.Before;
 import org.junit.Test;
 
 import rmlimage.core.ByteMap;
@@ -37,20 +38,28 @@ import static java.lang.Math.toRadians;
 
 public class ConversionTest extends TestCase {
 
-    private PhasesMap createPhasesMap() {
-        Crystal[] phases =
-                new Crystal[] { CrystalFactory.silicon(),
-                        CrystalFactory.ferrite() };
-        byte[] pixArray = new byte[] { 0, 1, 2, 1 };
+    private IndexedByteMap<ItemMock> indexedMap;
 
-        return new PhasesMap(2, 2, pixArray, phases);
+
+
+    @Before
+    public void setUp() throws Exception {
+        ItemMock item0 = new ItemMock("No item");
+
+        HashMap<Integer, ItemMock> items = new HashMap<Integer, ItemMock>();
+        items.put(1, new ItemMock("Item1"));
+        items.put(2, new ItemMock("Item2"));
+
+        byte[] pixArray = new byte[] { 0, 1, 2, 1, 0, 0, 0, 0, 2 };
+
+        indexedMap = new IndexedByteMap<ItemMock>(3, 3, pixArray, item0, items);
     }
 
 
 
     @Test
     // Test call to handler
-    public void testToByteMaMapHoughMap() {
+    public void testToByteMapMapHoughMap() {
         rmlimage.core.Conversion.addHandler(org.ebsdimage.core.Conversion.class);
 
         // Create a HoughMap
@@ -110,41 +119,37 @@ public class ConversionTest extends TestCase {
 
 
     @Test
-    public void testToByteMapMapPhasesMap() {
+    public void testToByteMapMapIndexedByteMap() {
         rmlimage.core.Conversion.addHandler(org.ebsdimage.core.Conversion.class);
 
-        PhasesMap map = createPhasesMap();
+        ByteMap byteMap = rmlimage.core.Conversion.toByteMap(indexedMap);
 
-        ByteMap byteMap = rmlimage.core.Conversion.toByteMap(map);
+        assertEquals(indexedMap.width, byteMap.width);
+        assertEquals(indexedMap.height, byteMap.height);
 
-        assertEquals(map.width, byteMap.width);
-        assertEquals(map.height, byteMap.height);
+        assertEquals(indexedMap.pixArray[0], byteMap.pixArray[0]);
+        assertEquals(indexedMap.pixArray[1], byteMap.pixArray[1]);
+        assertEquals(indexedMap.pixArray[2], byteMap.pixArray[2]);
+        assertEquals(indexedMap.pixArray[3], byteMap.pixArray[3]);
 
-        assertEquals(map.pixArray[0], byteMap.pixArray[0]);
-        assertEquals(map.pixArray[1], byteMap.pixArray[1]);
-        assertEquals(map.pixArray[2], byteMap.pixArray[2]);
-        assertEquals(map.pixArray[3], byteMap.pixArray[3]);
-
-        map.getLUT().assertEquals(byteMap.getLUT());
+        indexedMap.getLUT().assertEquals(byteMap.getLUT());
     }
 
 
 
     @Test
-    public void testToByteMapPhasesMap() {
-        PhasesMap map = createPhasesMap();
+    public void testToByteMapIndexedByteMap() {
+        ByteMap byteMap = Conversion.toByteMap(indexedMap);
 
-        ByteMap byteMap = Conversion.toByteMap(map);
+        assertEquals(indexedMap.width, byteMap.width);
+        assertEquals(indexedMap.height, byteMap.height);
 
-        assertEquals(map.width, byteMap.width);
-        assertEquals(map.height, byteMap.height);
+        assertEquals(indexedMap.pixArray[0], byteMap.pixArray[0]);
+        assertEquals(indexedMap.pixArray[1], byteMap.pixArray[1]);
+        assertEquals(indexedMap.pixArray[2], byteMap.pixArray[2]);
+        assertEquals(indexedMap.pixArray[3], byteMap.pixArray[3]);
 
-        assertEquals(map.pixArray[0], byteMap.pixArray[0]);
-        assertEquals(map.pixArray[1], byteMap.pixArray[1]);
-        assertEquals(map.pixArray[2], byteMap.pixArray[2]);
-        assertEquals(map.pixArray[3], byteMap.pixArray[3]);
-
-        map.getLUT().assertEquals(byteMap.getLUT());
+        indexedMap.getLUT().assertEquals(byteMap.getLUT());
     }
 
 
@@ -164,12 +169,12 @@ public class ConversionTest extends TestCase {
         assertEquals(180, destMap.width);
         assertEquals(227, destMap.height);
 
-        assertEquals(212.628585835, destMap.rhoMax.getValue("px"), 0.001);
-        assertEquals(-212.628585835, destMap.rhoMin.getValue("px"), 0.001);
+        assertEquals(212.628585835, destMap.getRhoMax(), 0.001);
+        assertEquals(-212.628585835, destMap.getRhoMin(), 0.001);
         assertEquals(1.8816689, destMap.getDeltaRho().getValue("px"), 0.001);
 
-        assertEquals(0.0, destMap.thetaMin.getValue("rad"), 0.001);
-        assertEquals(3.12414, destMap.thetaMax.getValue("rad"), 0.001);
+        assertEquals(0.0, destMap.getThetaMin(), 0.001);
+        assertEquals(3.12414, destMap.getThetaMax(), 0.001);
         assertEquals(1.0, destMap.getDeltaTheta().getValue("deg"), 0.001);
 
         assertArrayEquals(destMap.pixArray, byteMap.pixArray);
@@ -179,29 +184,31 @@ public class ConversionTest extends TestCase {
 
     @Test
     public void testToRGBMap() {
-        // Create ExpMMap
+        float S2_2 = (float) (Math.sqrt(2) / 2.0);
 
+        // Create ExpMMap
         HashMap<String, Map> mapList = new HashMap<String, Map>();
 
-        RealMap q0Map = new RealMap(2, 2);
-        q0Map.pixArray[0] = 1.0f;
+        float[] pixArray = new float[] { 0.0f, 0.0f, 0.0f, S2_2 };
+        RealMap q0Map = new RealMap(2, 2, pixArray);
         mapList.put(EbsdMMap.Q0, q0Map);
 
-        RealMap q1Map = new RealMap(2, 2);
-        q1Map.pixArray[1] = 1.0f;
+        pixArray = new float[] { S2_2, S2_2, 0.0f, 0.0f };
+        RealMap q1Map = new RealMap(2, 2, pixArray);
         mapList.put(EbsdMMap.Q1, q1Map);
 
-        RealMap q2Map = new RealMap(2, 2);
-        q2Map.pixArray[2] = 1.0f;
+        pixArray = new float[] { S2_2, 0.0f, S2_2, 0.0f };
+        RealMap q2Map = new RealMap(2, 2, pixArray);
         mapList.put(EbsdMMap.Q2, q2Map);
 
-        RealMap q3Map = new RealMap(2, 2);
-        q3Map.pixArray[3] = 1.0f;
+        pixArray = new float[] { 0.0f, S2_2, S2_2, S2_2 };
+        RealMap q3Map = new RealMap(2, 2, pixArray);
         mapList.put(EbsdMMap.Q3, q3Map);
 
-        PhasesMap phasesMap =
-                new PhasesMap(2, 2, new byte[] { 0, 1, 2, 1 }, new Crystal[] {
-                        CrystalFactory.silicon(), CrystalFactory.ferrite() });
+        HashMap<Integer, Crystal> items = new HashMap<Integer, Crystal>();
+        items.put(1, CrystalFactory.silicon());
+        PhaseMap phasesMap =
+                new PhaseMap(2, 2, new byte[] { 1, 1, 0, 1 }, items);
         mapList.put(EbsdMMap.PHASES, phasesMap);
 
         ExpMMap mmap = new ExpMMap(2, 2, mapList);
@@ -210,9 +217,9 @@ public class ConversionTest extends TestCase {
         RGBMap rgbMap = Conversion.toRGBMap(mmap);
 
         // Test
-        assertEquals(0, rgbMap.pixArray[0]); // No phase
-        assertEquals(8454016, rgbMap.pixArray[1]);
-        assertEquals(16777088, rgbMap.pixArray[2]);
+        assertEquals(0, rgbMap.pixArray[0]); // singularity
+        assertEquals(12550335, rgbMap.pixArray[1]);
+        assertEquals(0, rgbMap.pixArray[2]); // no phase
         assertEquals(16711808, rgbMap.pixArray[3]);
     }
 }

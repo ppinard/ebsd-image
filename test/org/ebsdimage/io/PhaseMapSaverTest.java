@@ -17,28 +17,38 @@
  */
 package org.ebsdimage.io;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.ebsdimage.TestCase;
-import org.ebsdimage.core.PhasesMap;
+import org.ebsdimage.core.PhaseMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.simplexml.ApacheCommonMathMatcher;
+import ptpshared.util.simplexml.XmlLoader;
 import rmlimage.core.ByteMap;
 import rmlimage.io.BasicBmpLoader;
 import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
+import crystallography.io.simplexml.SpaceGroupMatcher;
 
-public class PhasesMapSaverTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
-    private PhasesMapSaver saver;
+import static junittools.test.Assert.assertEquals;
 
-    private PhasesMap map;
+public class PhaseMapSaverTest extends TestCase {
+
+    private PhaseMapSaver saver;
+
+    private PhaseMap phaseMap;
+
+    private Crystal phase1;
+
+    private Crystal phase2;
 
     private File file;
 
@@ -46,14 +56,17 @@ public class PhasesMapSaverTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        Crystal[] phases =
-                new Crystal[] { CrystalFactory.silicon(),
-                        CrystalFactory.ferrite() };
-        byte[] pixArray = new byte[] { 0, 1, 2, 1 };
+        phase1 = CrystalFactory.silicon();
+        phase2 = CrystalFactory.ferrite();
 
-        map = new PhasesMap(2, 2, pixArray, phases);
-        saver = new PhasesMapSaver();
-        file = new File(createTempDir(), "phasesmap.bmp");
+        HashMap<Integer, Crystal> items = new HashMap<Integer, Crystal>();
+        items.put(1, phase1);
+        items.put(3, phase2);
+
+        phaseMap = new PhaseMap(2, 2, new byte[] { 0, 1, 3, 1 }, items);
+
+        saver = new PhaseMapSaver();
+        file = new File(createTempDir(), "phasemap.bmp");
     }
 
 
@@ -67,7 +80,7 @@ public class PhasesMapSaverTest extends TestCase {
 
     @Test
     public void testSaveObjectFile() throws IOException {
-        saver.save((Object) map, file);
+        saver.save((Object) phaseMap, file);
 
         testPhasesMap();
         testPhasesMapXml();
@@ -77,7 +90,7 @@ public class PhasesMapSaverTest extends TestCase {
 
     @Test
     public void testSavePhasesMapFile() throws IOException {
-        saver.save(map, file);
+        saver.save(phaseMap, file);
 
         testPhasesMap();
         testPhasesMapXml();
@@ -87,8 +100,8 @@ public class PhasesMapSaverTest extends TestCase {
 
     @Test
     public void testSavePhasesMap() throws IOException {
-        map.setFile(file);
-        saver.save(map);
+        phaseMap.setFile(file);
+        saver.save(phaseMap);
 
         testPhasesMap();
         testPhasesMapXml();
@@ -101,7 +114,7 @@ public class PhasesMapSaverTest extends TestCase {
 
         assertEquals(0, byteMap.pixArray[0]);
         assertEquals(1, byteMap.pixArray[1]);
-        assertEquals(2, byteMap.pixArray[2]);
+        assertEquals(3, byteMap.pixArray[2]);
         assertEquals(1, byteMap.pixArray[3]);
     }
 
@@ -109,9 +122,16 @@ public class PhasesMapSaverTest extends TestCase {
 
     private void testPhasesMapXml() throws IOException {
         File xmlFile = FileUtil.setExtension(file, "xml");
-        Crystal[] phases = new XmlLoader().loadArray(Crystal.class, xmlFile);
+        XmlLoader loader = new XmlLoader();
+        loader.matchers.registerMatcher(new ApacheCommonMathMatcher());
+        loader.matchers.registerMatcher(new SpaceGroupMatcher());
+        Map<Integer, Crystal> items =
+                loader.loadMap(Integer.class, Crystal.class, xmlFile);
 
-        assertEquals(2, phases.length);
+        assertEquals(3, items.size());
+        assertEquals(PhaseMap.NO_PHASE, items.get(0), 1e-6);
+        assertEquals(phase1, items.get(1), 1e-6);
+        assertEquals(phase2, items.get(3), 1e-6);
     }
 
 }

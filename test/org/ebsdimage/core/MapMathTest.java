@@ -17,40 +17,53 @@
  */
 package org.ebsdimage.core;
 
-import static org.junit.Assert.assertEquals;
+import java.util.HashMap;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import rmlimage.core.BinMap;
-import crystallography.core.Crystal;
-import crystallography.core.CrystalFactory;
+import rmlimage.core.Map;
+
+import static org.junit.Assert.assertEquals;
 
 public class MapMathTest {
 
-    private PhasesMap createSrc1PhasesMap() {
-        Crystal[] phases =
-                new Crystal[] { CrystalFactory.silicon(),
-                        CrystalFactory.ferrite() };
+    private ItemMock item0;
+
+    private ItemMock item1;
+
+    private ItemMock item2;
+
+    private ItemMock item3;
+
+    private IndexedByteMap<ItemMock> src1;
+
+    private BinMap src2;
+
+    private IndexedByteMap<ItemMock> src3;
+
+
+
+    @Before
+    public void setUp() throws Exception {
+        item0 = new ItemMock("No item");
+        item1 = new ItemMock("Item1");
+        item2 = new ItemMock("Item2");
+        item3 = new ItemMock("Item3");
+
+        HashMap<Integer, ItemMock> items = new HashMap<Integer, ItemMock>();
+        items.put(1, item1);
+        items.put(2, item2);
         byte[] pixArray = new byte[] { 0, 1, 2, 1 };
+        src1 = new IndexedByteMap<ItemMock>(2, 2, pixArray, item0, items);
 
-        return new PhasesMap(2, 2, pixArray, phases);
-    }
+        src2 = new BinMap(2, 2, new byte[] { 1, 0, 1, 0 });
 
-
-
-    private BinMap createSrc2BinMap() {
-        return new BinMap(2, 2, new byte[] { 1, 0, 1, 0 });
-    }
-
-
-
-    private PhasesMap createSrc2PhasesMap() {
-        Crystal[] phases =
-                new Crystal[] { CrystalFactory.silicon(),
-                        CrystalFactory.ferrite() };
-        byte[] pixArray = new byte[] { 2, 0, 0, 0 };
-
-        return new PhasesMap(2, 2, pixArray, phases);
+        items = new HashMap<Integer, ItemMock>();
+        items.put(3, item3);
+        pixArray = new byte[] { 3, 0, 0, 0 };
+        src3 = new IndexedByteMap<ItemMock>(2, 2, pixArray, item0, items);
     }
 
 
@@ -59,40 +72,49 @@ public class MapMathTest {
     public void testAdditionMapMapDoubleDoubleMap() {
         rmlimage.core.MapMath.addHandler(MapMath.class);
 
-        PhasesMap src1 = createSrc1PhasesMap();
-        PhasesMap src2 = createSrc2PhasesMap();
-        PhasesMap dest = src1.createMap(src1.width, src1.height);
+        IndexedByteMap<ItemMock> dest = src1.createMap(src1.width, src1.height);
 
-        rmlimage.core.MapMath.addition(src1, src2, 1.0, 0.0, dest);
+        rmlimage.core.MapMath.addition((Map) src1, (Map) src3, 1.0, 0.0,
+                (Map) dest);
 
-        testAdditionPhasesMap(dest);
-    }
-
-
-
-    private void testAdditionPhasesMap(PhasesMap dest) {
         assertEquals(2, dest.width);
         assertEquals(2, dest.height);
 
-        assertEquals(2, dest.pixArray[0]);
+        assertEquals(3, dest.pixArray[0]);
         assertEquals(1, dest.pixArray[1]);
         assertEquals(2, dest.pixArray[2]);
         assertEquals(1, dest.pixArray[3]);
 
-        assertEquals(2, dest.getPhases().length);
+        java.util.Map<Integer, ItemMock> items = dest.getItems();
+        assertEquals(4, items.size());
+        assertEquals(item0, items.get(0));
+        assertEquals(item1, items.get(1));
+        assertEquals(item2, items.get(2));
+        assertEquals(item3, items.get(3));
     }
 
 
 
     @Test
-    public void testAdditionPhasesMapPhasesMapPhasesMap() {
-        PhasesMap src1 = createSrc1PhasesMap();
-        PhasesMap src2 = createSrc2PhasesMap();
-        PhasesMap dest = src1.createMap(src1.width, src1.height);
+    public void testAdditionIndexedByteMapIndexedByteMapDoubleDoubleIndexedByteMap() {
+        IndexedByteMap<ItemMock> dest = src1.createMap(src1.width, src1.height);
 
-        MapMath.addition(src1, src2, dest);
+        MapMath.addition(src1, src3, 1.0, 0.0, dest);
 
-        testAdditionPhasesMap(dest);
+        assertEquals(2, dest.width);
+        assertEquals(2, dest.height);
+
+        assertEquals(3, dest.pixArray[0]);
+        assertEquals(1, dest.pixArray[1]);
+        assertEquals(2, dest.pixArray[2]);
+        assertEquals(1, dest.pixArray[3]);
+
+        java.util.Map<Integer, ItemMock> items = dest.getItems();
+        assertEquals(4, items.size());
+        assertEquals(item0, items.get(0));
+        assertEquals(item1, items.get(1));
+        assertEquals(item2, items.get(2));
+        assertEquals(item3, items.get(3));
     }
 
 
@@ -102,18 +124,10 @@ public class MapMathTest {
         // Add handler
         rmlimage.core.MapMath.addHandler(MapMath.class);
 
-        PhasesMap src1 = createSrc1PhasesMap();
-        BinMap src2 = createSrc2BinMap();
-        PhasesMap dest = src1.duplicate();
+        IndexedByteMap<ItemMock> dest = src1.duplicate();
 
-        rmlimage.core.MapMath.and(src1, src2, dest);
+        rmlimage.core.MapMath.and((Map) src1, (Map) src2, dest);
 
-        testAndPhasesMap(dest);
-    }
-
-
-
-    private void testAndPhasesMap(PhasesMap dest) {
         assertEquals(2, dest.width);
         assertEquals(2, dest.height);
 
@@ -122,20 +136,34 @@ public class MapMathTest {
         assertEquals(2, dest.pixArray[2]);
         assertEquals(0, dest.pixArray[3]);
 
-        assertEquals(2, dest.getPhases().length);
+        java.util.Map<Integer, ItemMock> items = dest.getItems();
+        assertEquals(3, items.size());
+        assertEquals(item0, items.get(0));
+        assertEquals(item1, items.get(1));
+        assertEquals(item2, items.get(2));
     }
 
 
 
     @Test
-    public void testAndPhasesMapBinMapPhasesMap() {
-        PhasesMap src1 = createSrc1PhasesMap();
-        BinMap src2 = createSrc2BinMap();
-        PhasesMap dest = src1.duplicate();
+    public void testAndIndexedByteMapBinMapIndexedByteMap() {
+        IndexedByteMap<ItemMock> dest = src1.duplicate();
 
         MapMath.and(src1, src2, dest);
 
-        testAndPhasesMap(dest);
+        assertEquals(2, dest.width);
+        assertEquals(2, dest.height);
+
+        assertEquals(0, dest.pixArray[0]);
+        assertEquals(0, dest.pixArray[1]);
+        assertEquals(2, dest.pixArray[2]);
+        assertEquals(0, dest.pixArray[3]);
+
+        java.util.Map<Integer, ItemMock> items = dest.getItems();
+        assertEquals(3, items.size());
+        assertEquals(item0, items.get(0));
+        assertEquals(item1, items.get(1));
+        assertEquals(item2, items.get(2));
     }
 
 }

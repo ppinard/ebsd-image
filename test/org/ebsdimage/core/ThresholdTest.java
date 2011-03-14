@@ -17,22 +17,49 @@
  */
 package org.ebsdimage.core;
 
-import static org.ebsdimage.core.Threshold.*;
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.io.HoughMapLoader;
+import org.junit.Before;
 import org.junit.Test;
 
 import rmlimage.core.BinMap;
 import rmlshared.io.FileUtil;
 import rmlshared.util.Properties;
-import crystallography.core.Crystal;
-import crystallography.core.CrystalFactory;
+import static org.ebsdimage.core.Threshold.*;
+
+import static org.junit.Assert.assertEquals;
 
 public class ThresholdTest extends TestCase {
+
+    private ItemMock item0;
+
+    private ItemMock item1;
+
+    private ItemMock item2;
+
+    private IndexedByteMap<ItemMock> indexedMap;
+
+
+
+    @Before
+    public void setUp() throws Exception {
+        item0 = new ItemMock("No item");
+
+        item1 = new ItemMock("Item1");
+        item2 = new ItemMock("Item3");
+        HashMap<Integer, ItemMock> items = new HashMap<Integer, ItemMock>();
+        items.put(1, item1);
+        items.put(3, item2);
+
+        byte[] pixArray = new byte[] { 0, 1, 3, 1 };
+
+        indexedMap = new IndexedByteMap<ItemMock>(2, 2, pixArray, item0, items);
+    }
+
+
 
     @Test
     public void testAutomaticTopHat() throws IOException {
@@ -80,12 +107,11 @@ public class ThresholdTest extends TestCase {
 
 
     @Test
-    public void testPhasePhasesMapIntBinMap() {
-        PhasesMap srcMap = createPhasesMap();
+    public void testItemIndexedByteMapIntBinMap() {
         BinMap destMap = new BinMap(2, 2);
 
-        // Test (phaseId = 0)
-        Threshold.phase(srcMap, 0, destMap);
+        // Test (id = 0)
+        Threshold.item(indexedMap, 0, destMap);
         assertEquals(2, destMap.width);
         assertEquals(2, destMap.height);
         assertEquals(1, destMap.pixArray[0]);
@@ -93,8 +119,8 @@ public class ThresholdTest extends TestCase {
         assertEquals(0, destMap.pixArray[2]);
         assertEquals(0, destMap.pixArray[3]);
 
-        // Test (phaseId = 1)
-        Threshold.phase(srcMap, 1, destMap);
+        // Test (id = 1)
+        Threshold.item(indexedMap, 1, destMap);
         assertEquals(2, destMap.width);
         assertEquals(2, destMap.height);
         assertEquals(0, destMap.pixArray[0]);
@@ -102,8 +128,8 @@ public class ThresholdTest extends TestCase {
         assertEquals(0, destMap.pixArray[2]);
         assertEquals(1, destMap.pixArray[3]);
 
-        // Test (phaseId = 2)
-        Threshold.phase(srcMap, 2, destMap);
+        // Test (id = 3)
+        Threshold.item(indexedMap, 3, destMap);
         assertEquals(2, destMap.width);
         assertEquals(2, destMap.height);
         assertEquals(0, destMap.pixArray[0]);
@@ -115,11 +141,9 @@ public class ThresholdTest extends TestCase {
 
 
     @Test
-    public void testPhasePhasesMapInt() {
-        PhasesMap srcMap = createPhasesMap();
-
-        // Test (phaseId = 0)
-        BinMap destMap = Threshold.phase(srcMap, 0);
+    public void testItemIndexedByteMapInt() {
+        // Test (id = 0)
+        BinMap destMap = Threshold.item(indexedMap, 0);
         assertEquals(2, destMap.width);
         assertEquals(2, destMap.height);
         assertEquals(1, destMap.pixArray[0]);
@@ -127,8 +151,8 @@ public class ThresholdTest extends TestCase {
         assertEquals(0, destMap.pixArray[2]);
         assertEquals(0, destMap.pixArray[3]);
 
-        // Test (phaseId = 1)
-        destMap = Threshold.phase(srcMap, 1);
+        // Test (id = 1)
+        destMap = Threshold.item(indexedMap, 1);
         assertEquals(2, destMap.width);
         assertEquals(2, destMap.height);
         assertEquals(0, destMap.pixArray[0]);
@@ -136,8 +160,8 @@ public class ThresholdTest extends TestCase {
         assertEquals(0, destMap.pixArray[2]);
         assertEquals(1, destMap.pixArray[3]);
 
-        // Test (phaseId = 2)
-        destMap = Threshold.phase(srcMap, 2);
+        // Test (id = 3)
+        destMap = Threshold.item(indexedMap, 3);
         assertEquals(2, destMap.width);
         assertEquals(2, destMap.height);
         assertEquals(0, destMap.pixArray[0]);
@@ -148,13 +172,68 @@ public class ThresholdTest extends TestCase {
 
 
 
-    private PhasesMap createPhasesMap() {
-        Crystal[] phases =
-                new Crystal[] { CrystalFactory.silicon(),
-                        CrystalFactory.ferrite() };
-        byte[] pixArray = new byte[] { 0, 1, 2, 1 };
+    @Test
+    public void testItemIndexedByteMapItemBinMap() {
+        BinMap destMap = new BinMap(2, 2);
 
-        return new PhasesMap(2, 2, pixArray, phases);
+        // Test (item = item0)
+        Threshold.item(indexedMap, item0, destMap);
+        assertEquals(2, destMap.width);
+        assertEquals(2, destMap.height);
+        assertEquals(1, destMap.pixArray[0]);
+        assertEquals(0, destMap.pixArray[1]);
+        assertEquals(0, destMap.pixArray[2]);
+        assertEquals(0, destMap.pixArray[3]);
+
+        // Test (item = item1)
+        Threshold.item(indexedMap, item1, destMap);
+        assertEquals(2, destMap.width);
+        assertEquals(2, destMap.height);
+        assertEquals(0, destMap.pixArray[0]);
+        assertEquals(1, destMap.pixArray[1]);
+        assertEquals(0, destMap.pixArray[2]);
+        assertEquals(1, destMap.pixArray[3]);
+
+        // Test (item = item2)
+        Threshold.item(indexedMap, item2, destMap);
+        assertEquals(2, destMap.width);
+        assertEquals(2, destMap.height);
+        assertEquals(0, destMap.pixArray[0]);
+        assertEquals(0, destMap.pixArray[1]);
+        assertEquals(1, destMap.pixArray[2]);
+        assertEquals(0, destMap.pixArray[3]);
+    }
+
+
+
+    @Test
+    public void testItemIndexedByteMapItem() {
+        // Test (item = item0)
+        BinMap destMap = Threshold.item(indexedMap, item0);
+        assertEquals(2, destMap.width);
+        assertEquals(2, destMap.height);
+        assertEquals(1, destMap.pixArray[0]);
+        assertEquals(0, destMap.pixArray[1]);
+        assertEquals(0, destMap.pixArray[2]);
+        assertEquals(0, destMap.pixArray[3]);
+
+        // Test (item = item1)
+        destMap = Threshold.item(indexedMap, item1);
+        assertEquals(2, destMap.width);
+        assertEquals(2, destMap.height);
+        assertEquals(0, destMap.pixArray[0]);
+        assertEquals(1, destMap.pixArray[1]);
+        assertEquals(0, destMap.pixArray[2]);
+        assertEquals(1, destMap.pixArray[3]);
+
+        // Test (item = item2)
+        destMap = Threshold.item(indexedMap, item2);
+        assertEquals(2, destMap.width);
+        assertEquals(2, destMap.height);
+        assertEquals(0, destMap.pixArray[0]);
+        assertEquals(0, destMap.pixArray[1]);
+        assertEquals(1, destMap.pixArray[2]);
+        assertEquals(0, destMap.pixArray[3]);
     }
 
 }

@@ -17,14 +17,17 @@
  */
 package org.ebsdimage.core;
 
-import static java.lang.Math.PI;
-import ptpshared.core.math.Eulers;
+import org.apache.commons.math.geometry.CardanEulerSingularityException;
+import org.apache.commons.math.geometry.Rotation;
+import org.apache.commons.math.geometry.RotationOrder;
+
 import rmlimage.core.ByteMap;
 import rmlimage.core.Calibration;
 import rmlimage.core.Map;
 import rmlimage.core.RGBMap;
 import rmlimage.core.handler.ConversionHandler;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
+import static java.lang.Math.PI;
 
 /**
  * Convert one type of map to another.
@@ -75,15 +78,15 @@ public class Conversion implements ConversionHandler {
 
 
     /**
-     * Converts a <code>PhasesMap</code> to a <code>ByteMap</code>. The
-     * information about the phases is lost. Only the <code>PhasesMap</code>
-     * pixArray and LUT are copied.
+     * Converts a <code>IndexedByteMap</code> to a <code>ByteMap</code>. The
+     * information about the phases is lost. Only the
+     * <code>IndexedByteMap</code> pixArray and LUT are copied.
      * 
      * @param src
-     *            <code>PhasesMap</code> to convert
+     *            <code>IndexedByteMap</code> to convert
      * @return converted map
      */
-    public static ByteMap toByteMap(PhasesMap src) {
+    public static ByteMap toByteMap(IndexedByteMap<?> src) {
         ByteMap dest = new ByteMap(src.width, src.height);
         toByteMap(src, dest);
 
@@ -96,16 +99,16 @@ public class Conversion implements ConversionHandler {
 
 
     /**
-     * Converts a <code>PhasesMap</code> to a <code>ByteMap</code>. The
-     * information about the phases is lost. Only the <code>PhasesMap</code>
-     * pixArray and LUT are copied.
+     * Converts a <code>IndexedByteMap</code> to a <code>ByteMap</code>. The
+     * information about the phases is lost. Only the
+     * <code>IndexedByteMap</code> pixArray and LUT are copied.
      * 
      * @param src
-     *            <code>PhasesMap</code> to convert
+     *            <code>IndexedByteMap</code> to convert
      * @param dest
-     *            <code>PhasesMap</code> to put the result in
+     *            <code>ByteMap</code> to put the result in
      */
-    public static void toByteMap(PhasesMap src, ByteMap dest) {
+    public static void toByteMap(IndexedByteMap<?> src, ByteMap dest) {
         rmlimage.core.Conversion.validate(src, dest);
 
         // Copy pixArray
@@ -137,7 +140,6 @@ public class Conversion implements ConversionHandler {
      *             if the calibration of the <code>ByteMap</code> does not have
      *             the same units as the deltaR of the <code>HoughMap</code>
      */
-    // TODO: Fix toHoughMap with new HoughMap calibration
     public static void toHoughMap(ByteMap src, HoughMap dest) {
         // Validate maps' dimensions
         rmlimage.core.Conversion.validate(src, dest);
@@ -207,25 +209,13 @@ public class Conversion implements ConversionHandler {
         for (int n = 0; n < size; n++) {
             if (src.getPhaseId(n) == 0) {
                 red = 0;
-                blue = 0;
                 green = 0;
+                blue = 0;
             } else {
-                Eulers eulers = src.getRotation(n).toEuler();
-
-                red = (int) ((eulers.theta1 + PI) / (2 * PI) * 255 + 0.5);
-                assert (red >= 0 && red <= 255) : "Invalid euler1 ("
-                        + eulers.theta1 + ") for index " + n + ".\n"
-                        + "Should be between -PI and PI.";
-
-                green = (int) (eulers.theta2 / PI * 255 + 0.5);
-                assert (green >= 0 && green <= 255) : "Invalid euler2 ("
-                        + eulers.theta2 + ") for index " + n + ".\n"
-                        + "Should be between 0 and PI.";
-
-                blue = (int) ((eulers.theta3 + PI) / (2 * PI) * 255 + 0.5);
-                assert (blue >= 0 && blue <= 255) : "Invalid euler3 ("
-                        + eulers.theta3 + ") for index " + n + ".\n"
-                        + "Should be between -PI and PI.";
+                int[] rgb = getRGBFromRotation(src.getRotation(n), n);
+                red = rgb[0];
+                green = rgb[1];
+                blue = rgb[2];
             }
 
             dest.pixArray[n] = (red << 16) | (green << 8) | blue;
@@ -235,6 +225,42 @@ public class Conversion implements ConversionHandler {
         dest.cloneMetadataFrom(src);
 
         dest.setChanged(Map.MAP_CHANGED);
+    }
+
+
+
+    /**
+     * Converts the rotation to Euler angles in the Bunge convention (ZXZ) and
+     * returns an array of three integers for the red, green and blue color.
+     * 
+     * @param rotation
+     *            rotation
+     * @param n
+     *            index of the pixel (for exception message)
+     * @return array of three integers for the red, green and blue color
+     */
+    private static int[] getRGBFromRotation(Rotation rotation, int n) {
+        double[] eulers;
+
+        try {
+            eulers = rotation.getAngles(RotationOrder.ZXZ);
+        } catch (CardanEulerSingularityException e) {
+            return new int[] { 0, 0, 0 };
+        }
+
+        int red = (int) ((eulers[0] + PI) / (2 * PI) * 255 + 0.5);
+        assert (red >= 0 && red <= 255) : "Invalid euler1 (" + eulers[0]
+                + ") for index " + n + ".\n" + "Should be between -PI and PI.";
+
+        int green = (int) (eulers[1] / PI * 255 + 0.5);
+        assert (green >= 0 && green <= 255) : "Invalid euler2 (" + eulers[1]
+                + ") for index " + n + ".\n" + "Should be between 0 and PI.";
+
+        int blue = (int) ((eulers[2] + PI) / (2 * PI) * 255 + 0.5);
+        assert (blue >= 0 && blue <= 255) : "Invalid euler3 (" + eulers[2]
+                + ") for index " + n + ".\n" + "Should be between -PI and PI.";
+
+        return new int[] { red, green, blue };
     }
 
 
@@ -256,8 +282,8 @@ public class Conversion implements ConversionHandler {
             return toByteMap((HoughMap) map);
         else if (map instanceof EbsdMMap && toType == RGBMap.class)
             return toRGBMap((EbsdMMap) map);
-        else if (map instanceof PhasesMap && toType == ByteMap.class)
-            return toByteMap((PhasesMap) map);
+        else if (map instanceof IndexedByteMap && toType == ByteMap.class)
+            return toByteMap((IndexedByteMap<?>) map);
         else
             return null;
     }
@@ -272,8 +298,9 @@ public class Conversion implements ConversionHandler {
         } else if (src instanceof EbsdMMap && dest.getClass() == RGBMap.class) {
             toRGBMap((EbsdMMap) src, (RGBMap) dest);
             return true;
-        } else if (src instanceof PhasesMap && dest.getClass() == ByteMap.class) {
-            toByteMap((PhasesMap) src, (ByteMap) dest);
+        } else if (src instanceof IndexedByteMap
+                && dest.getClass() == ByteMap.class) {
+            toByteMap((IndexedByteMap<?>) src, (ByteMap) dest);
             return true;
         } else
             return false;
