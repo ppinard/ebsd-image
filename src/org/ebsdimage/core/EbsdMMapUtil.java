@@ -17,11 +17,6 @@
  */
 package org.ebsdimage.core;
 
-import static rmlimage.utility.MicroscopeConstants.CLASS;
-import static rmlimage.utility.MicroscopeConstants.ENERGY;
-import static rmlimage.utility.MicroscopeConstants.MAGNIFICATION;
-import static rmlimage.utility.MicroscopeConstants.WORKING_DISTANCE;
-
 import java.util.Map.Entry;
 
 import rmlimage.core.*;
@@ -29,6 +24,10 @@ import rmlimage.core.Conversion;
 import rmlimage.core.Transform;
 import rmlimage.module.multi.core.BasicMultiMap;
 import rmlimage.utility.MicronBar;
+import static rmlimage.utility.MicroscopeConstants.CLASS;
+import static rmlimage.utility.MicroscopeConstants.ENERGY;
+import static rmlimage.utility.MicroscopeConstants.MAGNIFICATION;
+import static rmlimage.utility.MicroscopeConstants.WORKING_DISTANCE;
 
 /**
  * Utilities applying on <code>EbsdMMap</code>.
@@ -93,10 +92,10 @@ public class EbsdMMapUtil {
             // Set properties
             map.setProperty(CLASS, mmap.getName());
             // map.setProperty(DETECTOR, alias);
-            EbsdMetadata metadata = mmap.getMetadata();
-            map.setProperty(ENERGY, metadata.beamEnergy);
-            map.setProperty(MAGNIFICATION, metadata.magnification);
-            map.setProperty(WORKING_DISTANCE, metadata.workingDistance);
+            Microscope microscope = mmap.getMicroscope();
+            map.setProperty(ENERGY, microscope.getBeamEnergy());
+            map.setProperty(MAGNIFICATION, microscope.getMagnification());
+            map.setProperty(WORKING_DISTANCE, microscope.getWorkingDistance());
 
             // Paste micron bar
             if (map instanceof ByteMap)
