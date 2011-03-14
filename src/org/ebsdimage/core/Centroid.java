@@ -45,36 +45,17 @@ public class Centroid extends Result {
 
     /**
      * Creates a new <code>Centroid</code> to hold the <code>x</code>,
-     * <code>y</code> and <code>intensity</code> values. The specified units are
-     * assigned to the x and y coordinate.
+     * <code>y</code> and <code>intensity</code> values. The units of x is fixed
+     * to radians and the y coordinate is the specified units.
      * 
      * @param nbValues
      *            number of values to store
-     * @param calibUnits
-     *            units for the x and y coordinate
-     */
-    public Centroid(int nbValues, String calibUnits) {
-        this(nbValues, calibUnits, calibUnits);
-    }
-
-
-
-    /**
-     * Creates a new <code>Centroid</code> to hold the <code>x</code>,
-     * <code>y</code> and <code>intensity</code> values.
-     * 
-     * @param nbValues
-     *            number of values to store
-     * @param calibUnitsX
-     *            units of the x coordinate
      * @param calibUnitsY
-     *            units of the y coordinate
+     *            units for y coordinate
      */
-    public Centroid(int nbValues, String calibUnitsX, String calibUnitsY) {
+    public Centroid(int nbValues, String calibUnitsY) {
         super(3, nbValues);
 
-        if (calibUnitsX == null)
-            throw new NullPointerException("x units cannot be null.");
         if (calibUnitsY == null)
             throw new NullPointerException("y units cannot be null.");
 
@@ -82,7 +63,7 @@ public class Centroid extends Result {
         name[Y] = "Centroid Y";
         name[INTENSITY] = "Intensity";
 
-        units[X] = calibUnitsX;
+        units[X] = "rad";
         units[Y] = calibUnitsY;
         units[INTENSITY] = "";
 
@@ -95,10 +76,26 @@ public class Centroid extends Result {
 
     @Override
     public Centroid duplicate() {
-        Centroid dup = new Centroid(x.length, units[X], units[Y]);
+        Centroid dup = new Centroid(x.length, units[Y]);
         System.arraycopy(x, 0, dup.x, 0, x.length);
         System.arraycopy(y, 0, dup.y, 0, y.length);
         System.arraycopy(intensity, 0, dup.intensity, 0, intensity.length);
         return dup;
+    }
+
+
+
+    /**
+     * Returns an array of <code>HoughPeak</code> based on these results.
+     * 
+     * @return array of <code>HoughPeak</code>
+     */
+    public HoughPeak[] toHoughPeakArray() {
+        HoughPeak[] peaks = new HoughPeak[getValueCount()];
+
+        for (int i = 0; i < getValueCount(); i++)
+            peaks[i] = new HoughPeak(x[i], y[i], units[Y], intensity[i]);
+
+        return peaks;
     }
 }

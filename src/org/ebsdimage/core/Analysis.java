@@ -49,10 +49,8 @@ public class Analysis {
 
         int nbObjects = peaksMap.getObjectCount();
 
-        // Calculate the calibration factors
         Calibration cal = peaksMap.getCalibration();
-
-        Centroid result = new Centroid(nbObjects, cal.unitsX, cal.unitsY);
+        Centroid result = new Centroid(nbObjects, cal.unitsY);
 
         // If there are no objects, return an empty result
         if (nbObjects <= 0)
@@ -123,6 +121,13 @@ public class Analysis {
 
         int nbObjects = peaksMap.getObjectCount();
 
+        Calibration cal = peaksMap.getCalibration();
+        Centroid result = new Centroid(nbObjects, cal.unitsY);
+
+        // If there are no objects, return an empty result
+        if (nbObjects <= 0)
+            return result;
+
         // +1 for object 0 (background)
         int[] xs = new int[nbObjects + 1];
         int[] ys = new int[nbObjects + 1];
@@ -155,10 +160,7 @@ public class Analysis {
             }
         }
 
-        // Create result
-        Calibration cal = peaksMap.getCalibration();
-        Centroid result = new Centroid(nbObjects, cal.unitsX, cal.unitsY);
-
+        // Assemble result
         n = 0;
         double theta;
         double rho;
@@ -207,6 +209,13 @@ public class Analysis {
 
         int nbObjects = peaksMap.getObjectCount();
 
+        Calibration cal = peaksMap.getCalibration();
+        Centroid result = new Centroid(nbObjects, cal.unitsY);
+
+        // If there are no objects, return an empty result
+        if (nbObjects <= 0)
+            return result;
+
         // +1 for object 0 (background)
         int[] maximums = new int[nbObjects + 1];
         int[] xs = new int[nbObjects + 1];
@@ -243,10 +252,7 @@ public class Analysis {
             }
         }
 
-        // Create results
-        Calibration cal = peaksMap.getCalibration();
-        Centroid result = new Centroid(nbObjects, cal.unitsX, cal.unitsY);
-
+        // Assemble results
         for (n = 1; n <= nbObjects; n++) {
             result.x[n - 1] = (float) cal.getCalibratedX(xs[n]);
             result.y[n - 1] = (float) cal.getCalibratedY(ys[n]);
