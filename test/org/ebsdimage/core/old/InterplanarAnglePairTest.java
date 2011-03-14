@@ -15,10 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.core;
+package org.ebsdimage.core.old;
 
 import static org.junit.Assert.assertEquals;
 
+import org.ebsdimage.core.InterplanarAnglePair;
+import org.ebsdimage.core.old.InterplanarAnglePair;
 import org.junit.Before;
 import org.junit.Test;
 

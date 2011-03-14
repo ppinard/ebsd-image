@@ -20,11 +20,14 @@ package org.ebsdimage.core;
 import static java.lang.Math.PI;
 import static org.junit.Assert.assertEquals;
 
+import org.ebsdimage.core.HoughMath;
+import org.ebsdimage.core.HoughPeak;
+import org.ebsdimage.core.old.HoughPeakPair;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.core.geom.LinePlane;
-import ptpshared.core.math.Vector3D;
+import ptpshared.geom.LinePlane;
+import ptpshared.math.old.Vector3D;
 
 public class HoughPeakPairTest {
 

@@ -24,9 +24,9 @@ import org.ebsdimage.core.Solution;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.core.math.Quaternion;
-import ptpshared.util.xml.XmlLoader;
-import ptpshared.util.xml.XmlSaver;
+import ptpshared.math.old.Quaternion;
+import ptpshared.util.simplexml.XmlLoader;
+import ptpshared.util.simplexml.XmlSaver;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
 

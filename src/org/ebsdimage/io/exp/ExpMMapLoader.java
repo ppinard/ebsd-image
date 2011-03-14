@@ -24,7 +24,6 @@ import java.util.HashMap;
 import org.ebsdimage.core.EbsdMetadata;
 import org.ebsdimage.core.exp.ExpMMap;
 import org.ebsdimage.io.EbsdMMapLoader;
-import org.jdom.Document;
 
 import rmlimage.core.Map;
 import rmlimage.module.multi.core.MultiMap;
@@ -45,39 +44,32 @@ public class ExpMMapLoader extends EbsdMMapLoader {
 
     @Override
     public ExpMMap load(File file) throws IOException {
-        ExpMMap map = (ExpMMap) super.load(file);
-
-        // Load metadata
-        EbsdMetadata metadata = getMetadata(file, EbsdMetadata.class);
-        map.setMetadata(metadata);
-
-        return map;
+        return (ExpMMap) super.load(file);
     }
 
 
 
     @Override
     public ExpMMap load(File file, Object obj) throws IOException {
-        return load(file);
-    }
-
-
-
-    @Override
-    public boolean canLoad(File file) {
-        // TODO Auto-generated method stub
-        return false;
+        return (ExpMMap) super.load(file);
     }
 
 
 
     @Override
     protected MultiMap createMap(int version, int width, int height,
-            HashMap<String, Map> mapList, Document metadata) {
+            HashMap<String, Map> mapList) {
         if (version != ExpMMap.VERSION)
             throw new IllegalArgumentException("Invalid version: " + version);
 
         return new ExpMMap(width, height, mapList);
+    }
+
+
+
+    @Override
+    protected Class<? extends EbsdMetadata> getMetadataClass() {
+        return EbsdMetadata.class;
     }
 
 }

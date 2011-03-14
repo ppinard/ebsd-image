@@ -22,7 +22,7 @@ import java.io.IOException;
 
 import org.ebsdimage.core.sim.Sim;
 
-import ptpshared.util.xml.XmlSaver;
+import ptpshared.util.simplexml.XmlSaver;
 import rmlshared.io.Saver;
 
 /**

@@ -17,8 +17,8 @@
  */
 package org.ebsdimage.core.sim;
 
-import ptpshared.core.math.Matrix3D;
-import ptpshared.core.math.Quaternion;
+import ptpshared.math.old.Matrix3D;
+import ptpshared.math.old.Quaternion;
 
 /**
  * Conversion of a rotation between different coordinates system.

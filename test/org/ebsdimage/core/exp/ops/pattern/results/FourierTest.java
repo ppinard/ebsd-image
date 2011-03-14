@@ -24,8 +24,8 @@ import org.ebsdimage.core.exp.OpResult;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.util.xml.XmlLoader;
-import ptpshared.util.xml.XmlSaver;
+import ptpshared.util.simplexml.XmlLoader;
+import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.core.ByteMap;
 
 import static org.junit.Assert.assertEquals;
@@ -53,6 +53,17 @@ public class FourierTest extends TestCase {
         OpResult result = op.calculate(null, srcMap)[0];
 
         assertEquals(0.63938926, result.value.doubleValue(), 1e-7);
+    }
+
+
+
+    @Test
+    public void testCalculate2() {
+        ByteMap srcMap =
+                (ByteMap) load("org/ebsdimage/testdata/pattern_masked.bmp");
+        OpResult result = op.calculate(null, srcMap)[0];
+
+        assertEquals(0.60047537134, result.value.doubleValue(), 1e-7);
     }
 
 

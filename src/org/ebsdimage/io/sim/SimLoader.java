@@ -22,7 +22,7 @@ import java.io.IOException;
 
 import org.ebsdimage.core.sim.Sim;
 
-import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.simplexml.XmlLoader;
 import rmlshared.io.FileUtil;
 import rmlshared.io.Loader;
 import rmlshared.io.TextFileReader;

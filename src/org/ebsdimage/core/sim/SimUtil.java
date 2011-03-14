@@ -23,7 +23,7 @@ import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.run.OperationGenerator;
 
-import ptpshared.core.math.Quaternion;
+import ptpshared.math.old.Quaternion;
 import crystallography.core.Crystal;
 
 /**

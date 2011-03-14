@@ -17,12 +17,16 @@
  */
 package org.ebsdimage.core.exp.ops.identification.results;
 
+import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
-import org.ebsdimage.core.QualityIndex;
+import org.ebsdimage.core.HoughPeakIntensityComparator;
+import org.ebsdimage.core.MapStats;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 
 import rmlimage.module.real.core.RealMap;
+import static ptpshared.util.Arrays.reverse;
+import static java.util.Arrays.sort;
 
 /**
  * Result operation to calculate Oxford's INCA pattern quality index.
@@ -39,10 +43,39 @@ public class PatternQuality extends IdentificationResultsOps {
     @Override
     public OpResult[] calculate(Exp exp, HoughPeak[] srcPeaks) {
         OpResult result =
-                new OpResult(getName(), QualityIndex.patternQuality(srcPeaks,
+                new OpResult(getName(), calculate(srcPeaks,
                         exp.getSourceHoughMap()), RealMap.class);
 
         return new OpResult[] { result };
+    }
+
+
+
+    /**
+     * Calculate Oxford's INCA pattern quality index. It consists of the sum of
+     * the three most intense peaks divided by 3 times the standard deviation of
+     * the Hough map.
+     * 
+     * @param peaks
+     *            list of peaks
+     * @param houghMap
+     *            hough map
+     * @return pattern quality index (PQI)
+     */
+    public double calculate(HoughPeak[] peaks, HoughMap houghMap) {
+        if (peaks.length < 3)
+            return 0.0;
+
+        double houghStdDev = MapStats.standardDeviation(houghMap);
+
+        sort(peaks, new HoughPeakIntensityComparator());
+        reverse(peaks);
+
+        double quality = 0.0;
+        for (int i = 0; i < 3; i++)
+            quality += peaks[i].intensity;
+
+        return quality / (3.0 * houghStdDev);
     }
 
 

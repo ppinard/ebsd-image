@@ -19,16 +19,14 @@ package org.ebsdimage.core.exp.ops.identification.results;
 
 import java.io.File;
 
-import magnitude.core.Magnitude;
-
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.OpResult;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.util.xml.XmlLoader;
-import ptpshared.util.xml.XmlSaver;
+import ptpshared.util.simplexml.XmlLoader;
+import ptpshared.util.simplexml.XmlSaver;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -53,17 +51,9 @@ public class ImageQualityTest extends TestCase {
     @Before
     public void setUp() throws Exception {
 
-        Magnitude theta = new Magnitude(0.5, "rad");
-        Magnitude rho = new Magnitude(3.0, "px");
-        HoughPeak peak1 = new HoughPeak(theta, rho, 1);
-
-        theta = new Magnitude(1.5, "rad");
-        rho = new Magnitude(5.0, "px");
-        HoughPeak peak2 = new HoughPeak(theta, rho, 3);
-
-        theta = new Magnitude(1.0, "rad");
-        rho = new Magnitude(4.0, "px");
-        HoughPeak peak3 = new HoughPeak(theta, rho, 2);
+        peak1 = new HoughPeak(0.5, 3.0, 1);
+        peak2 = new HoughPeak(1.5, 5.0, 3);
+        peak3 = new HoughPeak(1.0, 4.0, 2);
 
         peaks = new HoughPeak[] { peak1, peak2, peak3 };
 

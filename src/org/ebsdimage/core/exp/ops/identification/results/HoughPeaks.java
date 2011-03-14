@@ -7,7 +7,7 @@ import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 
-import ptpshared.util.xml.XmlSaver;
+import ptpshared.util.simplexml.XmlSaver;
 
 /**
  * Operation to save the identified Hough peaks to a XML file.

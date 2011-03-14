@@ -25,8 +25,8 @@ import org.ebsdimage.core.Camera;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.core.geom.Line;
-import ptpshared.core.math.Quaternion;
+import ptpshared.geom.Line;
+import ptpshared.math.old.Quaternion;
 import crystallography.core.*;
 
 public class BandTest {

@@ -27,8 +27,8 @@ import org.ebsdimage.core.Solution;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.util.xml.XmlLoader;
-import ptpshared.util.xml.XmlSaver;
+import ptpshared.util.simplexml.XmlLoader;
+import ptpshared.util.simplexml.XmlSaver;
 import crystallography.core.ScatteringFactorsEnum;
 
 import static org.junit.Assert.assertEquals;

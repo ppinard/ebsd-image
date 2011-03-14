@@ -22,9 +22,9 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import ptpshared.core.math.Eulers;
-import ptpshared.core.math.Quaternion;
-import ptpshared.core.math.Vector3D;
+import ptpshared.math.old.Eulers;
+import ptpshared.math.old.Quaternion;
+import ptpshared.math.old.Vector3D;
 
 public class ConversionTest {
 

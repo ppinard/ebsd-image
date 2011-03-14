@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.core;
+package org.ebsdimage.core.old;
 
 import static java.lang.Math.toDegrees;
 import net.jcip.annotations.Immutable;
-import ptpshared.core.math.Vector3D;
-import ptpshared.core.math.Vector3DMath;
+import ptpshared.geom.Vector3DUtils;
+import ptpshared.math.old.Vector3D;
 
 /**
  * Abstract class to store a pair of normals and the direction cosine between
@@ -86,7 +86,7 @@ public abstract class Pair {
     @Override
     public String toString() {
         return normal0.toString() + "\t" + normal1.toString() + "\t"
-                + toDegrees(Vector3DMath.angle(directionCosine)) + " deg";
+                + toDegrees(Vector3DUtils.angle(directionCosine)) + " deg";
     }
 
 }

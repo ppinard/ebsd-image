@@ -17,29 +17,18 @@
  */
 package org.ebsdimage.core.sim.ops.patternsim;
 
-import static java.lang.Math.ceil;
-
-import java.awt.geom.Line2D;
-
 import org.ebsdimage.core.sim.Band;
 import org.simpleframework.xml.Attribute;
 
 import rmlimage.module.real.core.Drawing;
 import rmlimage.module.real.core.RealMap;
-import crystallography.core.ScatteringFactorsEnum;
 
 /**
  * Generates a pattern with only the center of the bands.
  * 
  * @author Philippe T. Pinard
  */
-public class PatternBandCenter extends PatternSimOp {
-
-    /** Default operation. */
-    public static final PatternBandCenter DEFAULT = new PatternBandCenter(1344,
-            1024, 6, ScatteringFactorsEnum.XRAY);
-
-
+public class PatternBandCenter extends PatternLinearBand {
 
     /**
      * Creates a new <code>PatternBandCenter</code>.
@@ -48,30 +37,14 @@ public class PatternBandCenter extends PatternSimOp {
      *            width of the pattern to simulate
      * @param height
      *            height of the pattern to simulate
-     * @param maxIndex
-     *            maximum index of the reflectors to use in the pattern simulate
-     * @param scatterType
-     *            type of scattering factors
      * @throws IllegalArgumentException
      *             if the width is less than zero
      * @throws IllegalArgumentException
      *             if the height is less than zero
-     * @throws IllegalArgumentException
-     *             if the maximum index is less than zero
      */
     public PatternBandCenter(@Attribute(name = "width") int width,
-            @Attribute(name = "height") int height,
-            @Attribute(name = "maxIndex") int maxIndex,
-            @Attribute(name = "scatterType") ScatteringFactorsEnum scatterType) {
-        super(width, height, maxIndex, scatterType);
-    }
-
-
-
-    @Override
-    public String toString() {
-        return "PatternBandCenter [" + width + ", " + height + ", " + maxIndex
-                + ", " + scatterType + "]";
+            @Attribute(name = "height") int height) {
+        super(width, height);
     }
 
 
@@ -94,18 +67,7 @@ public class PatternBandCenter extends PatternSimOp {
      */
     @Override
     protected void drawBand(RealMap canvas, Band band) {
-        // Get coordinates
-        Line2D.Double coords = band.line.toLine2D(width, height);
-        if (coords == null)
-            return; // Band outside image
-
-        int x1 = (int) ceil(coords.x1);
-        int y1 = (int) ceil(coords.y1);
-        int x2 = (int) ceil(coords.x2);
-        int y2 = (int) ceil(coords.y2);
-
-        // Draw line on top of patternMap
-        Drawing.line(canvas, x1, y1, x2, y2, 1.0f);
+        Drawing.shape(canvas, band.middle, 1.0f);
     }
 
 }

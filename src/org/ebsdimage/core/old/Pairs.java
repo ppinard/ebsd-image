@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.core;
+package org.ebsdimage.core.old;
 
 import static java.lang.Math.abs;
 import static java.util.Arrays.sort;
-import static ptpshared.utility.Arrays.reverse;
+import static ptpshared.util.Arrays.reverse;
 
 import java.io.Serializable;
 import java.util.ArrayList;

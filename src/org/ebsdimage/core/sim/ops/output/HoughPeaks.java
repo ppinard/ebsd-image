@@ -25,7 +25,7 @@ import org.ebsdimage.core.sim.Band;
 import org.ebsdimage.core.sim.Sim;
 import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
 
-import ptpshared.util.xml.XmlSaver;
+import ptpshared.util.simplexml.XmlSaver;
 
 /**
  * Operation to save the Hough peaks of the simulated pattern. These theoretical

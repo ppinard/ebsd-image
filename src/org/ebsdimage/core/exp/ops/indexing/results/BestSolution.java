@@ -18,7 +18,7 @@
 package org.ebsdimage.core.exp.ops.indexing.results;
 
 import org.ebsdimage.core.EbsdMMap;
-import org.ebsdimage.core.PhasesMap;
+import org.ebsdimage.core.PhaseMap;
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
@@ -83,7 +83,7 @@ public class BestSolution extends IndexingResultsOps {
                         + ") cannot be found in the EbsdMMap's phases.");
 
             OpResult phaseResult =
-                    new OpResult(EbsdMMap.PHASES, phaseId + 1, PhasesMap.class);
+                    new OpResult(EbsdMMap.PHASES, phaseId + 1, PhaseMap.class);
 
             // Save fit
             OpResult fitResult =

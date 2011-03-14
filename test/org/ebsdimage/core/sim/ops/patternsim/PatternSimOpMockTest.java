@@ -25,9 +25,9 @@ import org.ebsdimage.core.sim.Energy;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.core.math.Quaternion;
-import ptpshared.util.xml.XmlLoader;
-import ptpshared.util.xml.XmlSaver;
+import ptpshared.math.old.Quaternion;
+import ptpshared.util.simplexml.XmlLoader;
+import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.core.ByteMap;
 import crystallography.core.CrystalFactory;
 import crystallography.core.Reflectors;

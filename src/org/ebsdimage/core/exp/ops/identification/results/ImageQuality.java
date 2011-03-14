@@ -56,10 +56,33 @@ public class ImageQuality extends IdentificationResultsOps {
     @Override
     public OpResult[] calculate(Exp exp, HoughPeak[] peaks) {
         OpResult result =
-                new OpResult(getName(), QualityIndex.imageQuality(peaks),
-                        RealMap.class);
+                new OpResult(getName(), calculate(peaks), RealMap.class);
 
         return new OpResult[] { result };
+    }
+
+
+
+    /**
+     * Returns the image quality (as calculated by TSL OIM software).
+     * 
+     * @param peaks
+     *            <code>HoughPeaks</code>
+     * @return image quality index
+     */
+    public double calculate(HoughPeak[] peaks) {
+        int numberPeaks = peaks.length;
+
+        if (numberPeaks == 0)
+            return Double.NaN;
+
+        double value = 0.0;
+        for (HoughPeak peak : peaks)
+            value += peak.intensity;
+
+        value /= numberPeaks;
+
+        return value;
     }
 
 }

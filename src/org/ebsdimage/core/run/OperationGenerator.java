@@ -25,7 +25,7 @@ import java.util.Map.Entry;
 import org.simpleframework.xml.ElementArray;
 import org.simpleframework.xml.Root;
 
-import ptpshared.utility.MultipleLoop;
+import ptpshared.util.MultipleLoop;
 
 /**
  * Abstract class to create a generator from a list of items. An item is defined

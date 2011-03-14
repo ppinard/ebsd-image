@@ -15,12 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.core;
+package org.ebsdimage.core.old;
 
 import java.util.ArrayList;
 
-import ptpshared.core.math.Vector3D;
-import static ptpshared.utility.Arrays.reverse;
+import org.ebsdimage.core.Camera;
+import org.ebsdimage.core.HoughPeak;
+import org.ebsdimage.core.HoughPeakIntensityComparator;
+
+import ptpshared.math.old.Vector3D;
+import static ptpshared.util.Arrays.reverse;
 import static java.util.Arrays.sort;
 
 /**

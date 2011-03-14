@@ -562,8 +562,8 @@ public class Exp extends Run {
             ByteMap map = new ByteMap(mmap.width, mmap.height);
             map.clear(0);
             return map;
-        } else if (type.equals(PhasesMap.class)) {
-            PhasesMap map = new PhasesMap(mmap.width, mmap.height);
+        } else if (type.equals(PhaseMap.class)) {
+            PhaseMap map = new PhaseMap(mmap.width, mmap.height);
             map.clear(0);
             return map;
         } else if (type.equals(BinMap.class)) {
@@ -1760,8 +1760,8 @@ public class Exp extends Run {
             ((RealMap) map).pixArray[currentIndex] = result.value.floatValue();
         else if (result.type.equals(ByteMap.class))
             ((ByteMap) map).pixArray[currentIndex] = result.value.byteValue();
-        else if (result.type.equals(PhasesMap.class))
-            ((PhasesMap) map).pixArray[currentIndex] = result.value.byteValue();
+        else if (result.type.equals(PhaseMap.class))
+            ((PhaseMap) map).pixArray[currentIndex] = result.value.byteValue();
         else if (result.type.equals(BinMap.class))
             ((BinMap) map).pixArray[currentIndex] =
                     (result.value.intValue() == 0) ? (byte) 0 : (byte) 1;

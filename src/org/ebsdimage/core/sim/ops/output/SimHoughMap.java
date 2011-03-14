@@ -13,7 +13,7 @@ import org.ebsdimage.core.sim.Sim;
 import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
 import org.ebsdimage.io.HoughMapSaver;
 
-import ptpshared.utility.Arrays;
+import ptpshared.util.Arrays;
 import static java.lang.Math.ceil;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;

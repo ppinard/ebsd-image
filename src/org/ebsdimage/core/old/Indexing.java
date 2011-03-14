@@ -15,16 +15,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.core;
+package org.ebsdimage.core.old;
 
 import static java.lang.Math.abs;
-import static ptpshared.core.math.Math.sign;
+import static ptpshared.math.Math.sign;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-import ptpshared.core.math.*;
+import org.ebsdimage.core.Camera;
+import org.ebsdimage.core.HoughPeak;
+import org.ebsdimage.core.Solution;
+
+import ptpshared.geom.Vector3DUtils;
+import ptpshared.math.*;
+import ptpshared.math.old.Matrix3D;
+import ptpshared.math.old.Quaternion;
+import ptpshared.math.old.QuaternionMath;
+import ptpshared.math.old.Vector3D;
 import rmlshared.math.Stats;
 import rmlshared.ui.Monitorable;
 import crystallography.core.Calculations;
@@ -102,14 +111,14 @@ public class Indexing implements Monitorable {
 
             // Positive refl
             double tmpAngularDev =
-                    Vector3DMath.angle(exp, QuaternionMath.rotate(u, rotation));
+                    Vector3DUtils.angle(exp, QuaternionMath.rotate(u, rotation));
 
             if (tmpAngularDev < angularDev)
                 angularDev = tmpAngularDev;
 
             // Negative refl
             tmpAngularDev =
-                    Vector3DMath.angle(exp,
+                    Vector3DUtils.angle(exp,
                             QuaternionMath.rotate(u.negate(), rotation));
 
             if (tmpAngularDev < angularDev)
@@ -290,7 +299,7 @@ public class Indexing implements Monitorable {
             Vector3D u = refl.plane.toVector3D();
 
             double tmpFit =
-                    abs(Vector3DMath.directionCosine(exp,
+                    abs(Vector3DUtils.directionCosine(exp,
                             QuaternionMath.rotate(u, rotation)));
 
             if (tmpFit > fit)

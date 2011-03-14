@@ -20,6 +20,10 @@ package org.ebsdimage.core;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.ebsdimage.core.InterplanarAnglePair;
+import org.ebsdimage.core.InterplanarAnglePairs;
+import org.ebsdimage.core.old.InterplanarAnglePair;
+import org.ebsdimage.core.old.InterplanarAnglePairs;
 import org.junit.Before;
 import org.junit.Test;
 

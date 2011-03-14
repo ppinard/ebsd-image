@@ -23,7 +23,7 @@ import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 import org.ebsdimage.core.run.Operation;
 
-import ptpshared.utility.Arrays;
+import ptpshared.util.Arrays;
 
 /**
  * Superclass of operation to calculate result(s) from the Hough peaks.

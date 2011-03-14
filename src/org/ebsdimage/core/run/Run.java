@@ -27,7 +27,7 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.PersistenceException;
 
-import ptpshared.utility.LoggerUtil;
+import ptpshared.util.LoggerUtil;
 import rmlshared.io.FileUtil;
 import rmlshared.ui.Monitorable;
 

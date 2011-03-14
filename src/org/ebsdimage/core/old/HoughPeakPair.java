@@ -15,12 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.core;
+package org.ebsdimage.core.old;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.toDegrees;
-import ptpshared.core.math.Vector3D;
-import ptpshared.core.math.Vector3DMath;
+
+import org.ebsdimage.core.HoughPeak;
+
+import ptpshared.geom.Vector3DUtils;
+import ptpshared.math.old.Vector3D;
 
 /**
  * Pair of Hough peaks.
@@ -61,7 +64,7 @@ public class HoughPeakPair extends Pair {
      */
     protected HoughPeakPair(HoughPeak peak0, Vector3D normal0, HoughPeak peak1,
             Vector3D normal1) {
-        super(normal0, normal1, abs(Vector3DMath.directionCosine(normal0,
+        super(normal0, normal1, abs(Vector3DUtils.directionCosine(normal0,
                 normal1)));
 
         if (peak0 == null)
@@ -86,7 +89,7 @@ public class HoughPeakPair extends Pair {
     @Override
     public String toString() {
         return peak0.toString() + "\t" + peak1.toString() + "\t"
-                + toDegrees(Vector3DMath.angle(directionCosine)) + " deg";
+                + toDegrees(Vector3DUtils.angle(directionCosine)) + " deg";
     }
 
 }

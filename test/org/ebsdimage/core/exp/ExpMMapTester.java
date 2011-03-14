@@ -23,10 +23,10 @@ import java.util.HashMap;
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.*;
 import org.ebsdimage.io.ErrorMapLoader;
-import org.ebsdimage.io.PhasesMapLoader;
+import org.ebsdimage.io.PhaseMapLoader;
 import org.junit.Test;
 
-import ptpshared.core.math.Quaternion;
+import ptpshared.math.old.Quaternion;
 import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
 import rmlimage.module.real.core.RealMap;
@@ -72,8 +72,8 @@ public abstract class ExpMMapTester extends TestCase {
         q3Map.pixArray[3] = 1.0f;
         mapList.put(EbsdMMap.Q3, q3Map);
 
-        PhasesMap phasesMap =
-                new PhasesMap(2, 2, new byte[] { 0, 1, 2, 1 }, new Crystal[] {
+        PhaseMap phasesMap =
+                new PhaseMap(2, 2, new byte[] { 0, 1, 2, 1 }, new Crystal[] {
                         CrystalFactory.silicon(), CrystalFactory.ferrite() });
         mapList.put(EbsdMMap.PHASES, phasesMap);
 
@@ -115,7 +115,7 @@ public abstract class ExpMMapTester extends TestCase {
         assertEquals(2, q3Map.width);
         assertEquals(2, q3Map.height);
 
-        PhasesMap phasesMap = other.getPhasesMap();
+        PhaseMap phasesMap = other.getPhasesMap();
         assertEquals(2, phasesMap.width);
         assertEquals(2, phasesMap.height);
         assertEquals(0, phasesMap.getPhases().length);
@@ -326,10 +326,10 @@ public abstract class ExpMMapTester extends TestCase {
 
     @Test
     public void testGetPhasesMap() throws IOException {
-        PhasesMap phasesMap = mmap.getPhasesMap();
+        PhaseMap phasesMap = mmap.getPhasesMap();
 
-        PhasesMap expectedPhasesMap =
-                new PhasesMapLoader().load(getFile("org/ebsdimage/testdata/Phases.bmp"));
+        PhaseMap expectedPhasesMap =
+                new PhaseMapLoader().load(getFile("org/ebsdimage/testdata/Phases.bmp"));
 
         phasesMap.assertEquals(expectedPhasesMap);
 
@@ -355,7 +355,7 @@ public abstract class ExpMMapTester extends TestCase {
         assertEquals(2, errorCodes.length);
 
         assertEquals(1, errorCodes[1].id);
-        assertEquals("Error1", errorCodes[1].type);
+        assertEquals("Error1", errorCodes[1].name);
         assertEquals("First test error", errorCodes[1].description);
     }
 

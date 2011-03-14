@@ -23,8 +23,8 @@ import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.sim.ops.patternsim.PatternFilledBand;
 
-import ptpshared.core.math.Eulers;
-import ptpshared.core.math.Quaternion;
+import ptpshared.math.old.Eulers;
+import ptpshared.math.old.Quaternion;
 import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;

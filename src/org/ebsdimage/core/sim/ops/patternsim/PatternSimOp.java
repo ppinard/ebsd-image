@@ -20,21 +20,18 @@ package org.ebsdimage.core.sim.ops.patternsim;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import org.ebsdimage.core.Camera;
+import org.apache.commons.math.geometry.Rotation;
+import org.ebsdimage.core.Microscope;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.sim.Band;
-import org.ebsdimage.core.sim.BandException;
-import org.ebsdimage.core.sim.Energy;
 import org.ebsdimage.core.sim.Sim;
 import org.simpleframework.xml.Attribute;
 
-import ptpshared.core.math.Quaternion;
 import rmlimage.core.ByteMap;
-import rmlimage.module.real.core.Contrast;
 import rmlimage.module.real.core.Conversion;
 import rmlimage.module.real.core.RealMap;
 import rmlimage.module.real.core.ThreeSigmaRenderer;
-import crystallography.core.*;
+import crystallography.core.Reflectors;
 
 /**
  * Superclass of operation to simulate a pattern.
@@ -47,76 +44,12 @@ public abstract class PatternSimOp extends Operation {
     @Attribute(name = "width")
     public final int width;
 
-
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + height;
-        result = prime * result + maxIndex;
-        result =
-                prime * result
-                        + ((scatterType == null) ? 0 : scatterType.hashCode());
-        result = prime * result + width;
-        return result;
-    }
-
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!super.equals(obj))
-            return false;
-
-        PatternSimOp other = (PatternSimOp) obj;
-        if (height != other.height)
-            return false;
-        if (maxIndex != other.maxIndex)
-            return false;
-        if (scatterType != other.scatterType)
-            return false;
-        if (width != other.width)
-            return false;
-
-        return true;
-    }
-
-
-
-    @Override
-    public boolean equals(Object obj, Object precision) {
-        if (!super.equals(obj, precision))
-            return false;
-
-        double delta = ((Number) precision).doubleValue();
-        PatternSimOp other = (PatternSimOp) obj;
-        if (Math.abs(height - other.height) > delta)
-            return false;
-        if (Math.abs(width - other.width) > delta)
-            return false;
-        if (scatterType != other.scatterType)
-            return false;
-        if (Math.abs(maxIndex - other.maxIndex) > delta)
-            return false;
-
-        return true;
-    }
-
     /** Height of the pattern. */
     @Attribute(name = "height")
     public final int height;
 
-    /** Maximum reflector index. */
-    @Attribute(name = "maxIndex")
-    public final int maxIndex;
-
-    /** Type of scattering factors. */
-    @Attribute(name = "scatterType")
-    public final ScatteringFactorsEnum scatterType;
-
     /** List of bands. */
-    protected ArrayList<Band> bands;
+    protected ArrayList<Band> bands = new ArrayList<Band>();
 
     /** Pattern's <code>ByteMap</code>. */
     protected ByteMap patternMap;
@@ -133,33 +66,21 @@ public abstract class PatternSimOp extends Operation {
      *            width of the pattern to simulate
      * @param height
      *            height of the pattern to simulate
-     * @param maxIndex
-     *            maximum index of the reflectors to use in the pattern simulate
-     * @param scatterType
-     *            type of scattering factors
      * @throws IllegalArgumentException
      *             if the width is less than zero
      * @throws IllegalArgumentException
      *             if the height is less than zero
-     * @throws IllegalArgumentException
-     *             if the maximum index is less than zero
      */
-    public PatternSimOp(int width, int height, int maxIndex,
-            ScatteringFactorsEnum scatterType) {
+    public PatternSimOp(int width, int height) {
         if (width < 0)
             throw new IllegalArgumentException("Width (" + width
                     + ") must be greater than zero.");
         if (height < 0)
             throw new IllegalArgumentException("Height (" + height
                     + ") must be greater than zero.");
-        if (maxIndex < 0)
-            throw new IllegalArgumentException("Max index (" + maxIndex
-                    + ") must be greater than zero.");
 
         this.width = width;
         this.height = height;
-        this.maxIndex = maxIndex;
-        this.scatterType = scatterType;
     }
 
 
@@ -169,49 +90,13 @@ public abstract class PatternSimOp extends Operation {
      * 
      * @param reflectors
      *            reflectors of the crystal
-     * @param camera
-     *            camera parameters
-     * @param energy
-     *            energy object for the beam energy (in eV)
+     * @param microscope
+     *            microscope parameters
      * @param rotation
-     *            rotation of the pattern
+     *            rotation of the crystal
      */
-    protected void calculateBands(Camera camera, Reflectors reflectors,
-            Energy energy, Quaternion rotation) {
-        // Clear bands previously created.
-        bands = new ArrayList<Band>();
-
-        // Sort reflectors by decreasing order of intensity.
-        reflectors.sortByIntensity(true);
-
-        // Create bands
-        for (Reflector reflector : reflectors) {
-            // Create band and calculate half-widths, edge intercepts and full
-            // width
-            Band band;
-            try {
-                band = new Band(reflector, rotation, camera, energy.value);
-            } catch (BandException e) {
-                continue;
-            }
-
-            // Add band to Array
-            bands.add(band);
-        }
-    }
-
-
-
-    /**
-     * Calculates the reflectors for the crystal.
-     * 
-     * @param crystal
-     *            a crystal
-     * @return reflectors
-     */
-    public Reflectors calculateReflectors(Crystal crystal) {
-        return ReflectorsFactory.generate(crystal, scatterType, maxIndex);
-    }
+    protected abstract void calculateBands(Microscope microscope,
+            Reflectors reflectors, Rotation rotation);
 
 
 
@@ -241,17 +126,15 @@ public abstract class PatternSimOp extends Operation {
      * 
      * @param reflectors
      *            reflectors of the crystal
-     * @param camera
-     *            camera parameters
-     * @param energy
-     *            energy object for the beam energy (in eV)
+     * @param microscope
+     *            microscope parameters
      * @param rotation
      *            rotation of the pattern
      * @return simulated pattern
      */
-    private RealMap drawRealMap(Camera camera, Reflectors reflectors,
-            Energy energy, Quaternion rotation) {
-        calculateBands(camera, reflectors, energy, rotation);
+    private RealMap drawRealMap(Microscope microscope, Reflectors reflectors,
+            Rotation rotation) {
+        calculateBands(microscope, reflectors, rotation);
 
         RealMap canvas = createPatternMap();
 
@@ -262,6 +145,39 @@ public abstract class PatternSimOp extends Operation {
             drawBand(canvas, band);
 
         return canvas;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!super.equals(obj))
+            return false;
+
+        PatternSimOp other = (PatternSimOp) obj;
+        if (height != other.height)
+            return false;
+        if (width != other.width)
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj, Object precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        double delta = ((Number) precision).doubleValue();
+        PatternSimOp other = (PatternSimOp) obj;
+        if (Math.abs(height - other.height) > delta)
+            return false;
+        if (Math.abs(width - other.width) > delta)
+            return false;
+
+        return true;
     }
 
 
@@ -308,27 +224,13 @@ public abstract class PatternSimOp extends Operation {
 
 
 
-    /**
-     * Simulates a new pattern with the specified variables.
-     * 
-     * @param sim
-     *            simulation executing this method
-     * @param reflectors
-     *            reflectors of the crystal
-     * @param camera
-     *            camera parameters
-     * @param energy
-     *            energy object for the beam energy (in eV)
-     * @param rotation
-     *            rotation of the pattern
-     */
-    public void simulate(Sim sim, Camera camera, Reflectors reflectors,
-            Energy energy, Quaternion rotation) {
-        patternRealMap = drawRealMap(camera, reflectors, energy, rotation);
-
-        // Use 3-sigma rendered
-        patternRealMap.setMapRenderer(new ThreeSigmaRenderer());
-        patternMap = Conversion.toByteMap(patternRealMap);
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + height;
+        result = prime * result + width;
+        return result;
     }
 
 
@@ -336,19 +238,22 @@ public abstract class PatternSimOp extends Operation {
     /**
      * Simulates a new pattern with the specified variables.
      * 
+     * @param sim
+     *            simulation executing this method
      * @param reflectors
      *            reflectors of the crystal
-     * @param camera
-     *            camera parameters
-     * @param energy
-     *            energy object for the beam energy (in eV)
+     * @param microscope
+     *            microscope parameters
      * @param rotation
      *            rotation of the pattern
      */
-    public void simulate(Camera camera, Reflectors reflectors, Energy energy,
-            Quaternion rotation) {
-        patternRealMap = drawRealMap(camera, reflectors, energy, rotation);
-        patternMap = Contrast.expansion(patternRealMap);
+    public void simulate(Sim sim, Microscope microscope, Reflectors reflectors,
+            Rotation rotation) {
+        patternRealMap = drawRealMap(microscope, reflectors, rotation);
+
+        // Use 3-sigma rendered
+        patternRealMap.setMapRenderer(new ThreeSigmaRenderer());
+        patternMap = Conversion.toByteMap(patternRealMap);
     }
 
 }

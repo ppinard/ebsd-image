@@ -33,7 +33,7 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.core.Persist;
 import org.simpleframework.xml.core.Validate;
 
-import ptpshared.core.math.Quaternion;
+import ptpshared.math.old.Quaternion;
 import rmlshared.ui.Monitorable;
 import crystallography.core.Crystal;
 import crystallography.core.Reflectors;

@@ -18,11 +18,14 @@
 package org.ebsdimage.core.exp.ops.identification.results;
 
 import org.ebsdimage.core.HoughPeak;
+import org.ebsdimage.core.HoughPeakIntensityComparator;
 import org.ebsdimage.core.QualityIndex;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 
 import rmlimage.module.real.core.RealMap;
+import static ptpshared.util.Arrays.reverse;
+import static java.util.Arrays.sort;
 
 /**
  * Operation to calculate the image quality index (INCA).
@@ -56,9 +59,35 @@ public class ImageQualityInca extends IdentificationResultsOps {
     @Override
     public OpResult[] calculate(Exp exp, HoughPeak[] peaks) {
         OpResult result =
-                new OpResult(getName(), QualityIndex.imageQualityInca(peaks),
-                        RealMap.class);
+                new OpResult(getName(), calculate(peaks), RealMap.class);
 
         return new OpResult[] { result };
+    }
+
+
+
+    /**
+     * Returns the image quality (as calculated by Oxford INCA Crystal).
+     * 
+     * @param peaks
+     *            <code>HoughPeaks</code>
+     * @return image quality index
+     */
+    public double calculate(HoughPeak[] peaks) {
+        if (peaks.length < 2)
+            return 0.0;
+
+        sort(peaks, new HoughPeakIntensityComparator());
+        reverse(peaks);
+
+        double minimum;
+        if (peaks.length >= 7)
+            minimum = peaks[6].intensity;
+        else
+            minimum = peaks[peaks.length - 1].intensity;
+
+        double maximum = peaks[0].intensity;
+
+        return maximum - minimum;
     }
 }

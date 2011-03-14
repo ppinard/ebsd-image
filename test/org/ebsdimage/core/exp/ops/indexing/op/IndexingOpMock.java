@@ -22,7 +22,7 @@ import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.exp.Exp;
 import org.simpleframework.xml.Root;
 
-import ptpshared.core.math.Quaternion;
+import ptpshared.math.old.Quaternion;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
 

@@ -15,12 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.core;
+package org.ebsdimage.core.old;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.sqrt;
 import static org.junit.Assert.assertEquals;
 
+import org.ebsdimage.core.Camera;
+import org.ebsdimage.core.HoughPeak;
+import org.ebsdimage.core.old.HoughPeakPair;
+import org.ebsdimage.core.old.HoughPeakPairs;
 import org.junit.Before;
 import org.junit.Test;
 

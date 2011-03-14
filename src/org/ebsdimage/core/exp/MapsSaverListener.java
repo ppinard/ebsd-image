@@ -28,7 +28,7 @@ import org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps;
 import org.ebsdimage.core.exp.ops.pattern.results.PatternResultsOps;
 import org.ebsdimage.core.run.Operation;
 
-import ptpshared.utility.Arrays;
+import ptpshared.util.Arrays;
 import rmlimage.core.BinMap;
 import rmlimage.core.ByteMap;
 import rmlimage.core.Map;

@@ -18,7 +18,7 @@
 package org.ebsdimage.core.exp.ops.indexing.pre;
 
 import static java.util.Arrays.sort;
-import static ptpshared.utility.Arrays.reverse;
+import static ptpshared.util.Arrays.reverse;
 
 import java.util.Arrays;
 

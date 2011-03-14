@@ -9,8 +9,8 @@ import org.ebsdimage.core.exp.ops.pattern.results.PatternResultsOpsMock;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.util.xml.XmlLoader;
-import ptpshared.util.xml.XmlSaver;
+import ptpshared.util.simplexml.XmlLoader;
+import ptpshared.util.simplexml.XmlSaver;
 
 import static org.junit.Assert.assertEquals;
 

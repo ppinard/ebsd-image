@@ -22,9 +22,9 @@ import magnitude.geom.Line2D;
 
 import org.junit.Test;
 
-import ptpshared.core.geom.Line;
-import ptpshared.core.math.AxisAngle;
-import ptpshared.core.math.Quaternion;
+import ptpshared.geom.Line;
+import ptpshared.math.old.AxisAngle;
+import ptpshared.math.old.Quaternion;
 import crystallography.core.Plane;
 
 import static org.junit.Assert.assertEquals;

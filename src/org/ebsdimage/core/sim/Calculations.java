@@ -23,11 +23,12 @@ import magnitude.core.Magnitude;
 import magnitude.geom.Line2D;
 import magnitude.geom.Line2DUtil;
 import magnitude.geom.Vector2D;
-import ptpshared.core.geom.Line;
-import ptpshared.core.math.Quaternion;
-import ptpshared.core.math.QuaternionMath;
-import ptpshared.core.math.Vector3D;
-import ptpshared.core.math.Vector3DMath;
+import ptpshared.geom.Line;
+import ptpshared.geom.Plane;
+import ptpshared.geom.Vector3DUtils;
+import ptpshared.math.old.Quaternion;
+import ptpshared.math.old.QuaternionMath;
+import ptpshared.math.old.Vector3D;
 import static crystallography.core.Calculations.diffractionAngle;
 import static crystallography.core.Calculations.electronWavelength;
 
@@ -91,7 +92,7 @@ public class Calculations {
         double d = n.norm() / v1.norm();
 
         // Angle between the vector n and s
-        double alpha = Vector3DMath.angle(n, s);
+        double alpha = Vector3DUtils.angle(n, s);
 
         /* Calculate the diffraction angle */
         double wavelength = electronWavelength(energy);
@@ -205,8 +206,8 @@ public class Calculations {
      *            <code>Quaternion</code> representing the rotation
      * @return middle line of the band
      */
-    public static Line getLineFromPlane(Vector3D plane,
-            double detectorDistance, Quaternion rotation) {
+    public static Line getLineFromPlane(Plane plane, double detectorDistance,
+            Quaternion rotation) {
         // Apply rotation
         Vector3D reflRotated = QuaternionMath.rotate(plane, rotation);
 

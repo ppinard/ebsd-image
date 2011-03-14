@@ -35,10 +35,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.core.math.Eulers;
-import ptpshared.core.math.Quaternion;
-import ptpshared.util.xml.XmlLoader;
-import ptpshared.util.xml.XmlSaver;
+import ptpshared.math.old.Eulers;
+import ptpshared.math.old.Quaternion;
+import ptpshared.util.simplexml.XmlLoader;
+import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.core.Map;
 import rmlimage.module.real.core.RealMap;
 import rmlshared.io.FileUtil;

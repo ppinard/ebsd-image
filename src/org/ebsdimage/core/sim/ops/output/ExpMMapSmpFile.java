@@ -29,7 +29,7 @@ import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
 import org.ebsdimage.io.SmpOutputStream;
 import org.ebsdimage.io.exp.ExpMMapSaver;
 
-import ptpshared.core.math.Quaternion;
+import ptpshared.math.old.Quaternion;
 import rmlimage.module.real.core.RealMap;
 
 /**

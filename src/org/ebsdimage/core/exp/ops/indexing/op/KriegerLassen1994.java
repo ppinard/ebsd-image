@@ -21,9 +21,9 @@ import java.io.IOException;
 
 import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.HoughPeak;
-import org.ebsdimage.core.Indexing;
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.exp.Exp;
+import org.ebsdimage.core.old.Indexing;
 import org.ebsdimage.core.run.Run;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;

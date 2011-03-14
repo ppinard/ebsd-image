@@ -30,7 +30,7 @@ import org.ebsdimage.TestCase;
 import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.EbsdMetadata;
-import org.ebsdimage.core.PhasesMap;
+import org.ebsdimage.core.PhaseMap;
 import org.ebsdimage.core.exp.ops.detection.op.DetectionOpMock;
 import org.ebsdimage.core.exp.ops.detection.post.DetectionPostOpsMock;
 import org.ebsdimage.core.exp.ops.detection.pre.DetectionPreOpsMock;
@@ -54,7 +54,7 @@ import org.ebsdimage.core.run.Operation;
 import org.junit.After;
 import org.junit.Test;
 
-import ptpshared.core.math.Quaternion;
+import ptpshared.math.old.Quaternion;
 import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
 import rmlimage.module.real.core.RealMap;
@@ -395,7 +395,7 @@ public abstract class ExpTester extends TestCase {
         // Phases
         map = exp.mmap.getMap(EbsdMMap.PHASES);
         assertNotNull(map);
-        assertEquals(PhasesMap.class, map.getClass());
+        assertEquals(PhaseMap.class, map.getClass());
 
         // PatternResultsOpsMock
         map = exp.mmap.getMap(PatternResultsOpsMock.class.getSimpleName());
