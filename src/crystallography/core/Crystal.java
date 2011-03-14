@@ -25,6 +25,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+import rmlshared.util.Labeled;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
@@ -43,7 +44,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
  */
 @Root
 @Immutable
-public class Crystal implements AlmostEquable {
+public class Crystal implements AlmostEquable, Labeled {
 
     /** Given name of the crystal. */
     @NonNull
@@ -163,6 +164,13 @@ public class Crystal implements AlmostEquable {
      */
     @Override
     public String toString() {
+        return name;
+    }
+
+
+
+    @Override
+    public String getLabel() {
         return name;
     }
 
