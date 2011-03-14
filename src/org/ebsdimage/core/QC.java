@@ -17,6 +17,8 @@
  */
 package org.ebsdimage.core;
 
+import java.awt.geom.Line2D;
+
 import rmlimage.core.*;
 import rmlimage.core.MapMath;
 
@@ -47,10 +49,15 @@ public class QC {
         patternMap.lut.shiftDown(1);
         patternMap.setLUT(255, rgb.red, rgb.green, rgb.blue);
 
+        Line2D line;
+        HoughPeak peak;
+        String rhoUnits = centroids.units[rmlimage.core.Centroid.Y];
         int nbPeaks = centroids.getValueCount();
-        for (int n = 0; n < nbPeaks; n++)
-            Drawing.line(patternMap, centroids.x[n], centroids.y[n], 255);
-
+        for (int n = 0; n < nbPeaks; n++) {
+            peak = new HoughPeak(centroids.x[n], centroids.x[n], rhoUnits, 0.0);
+            line = HoughMath.getLine2D(peak, patternMap);
+            rmlimage.core.Drawing.line(patternMap, line, 255);
+        }
     }
 
 }
