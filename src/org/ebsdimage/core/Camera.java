@@ -21,9 +21,12 @@ import junittools.core.AlmostEquable;
 import magnitude.core.Magnitude;
 import net.jcip.annotations.Immutable;
 
+import org.apache.commons.math.geometry.Vector3D;
+import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
-import ptpshared.core.math.Vector3D;
+import ptpshared.geom.Vector3DUtils;
+import rmlimage.core.Calibration;
 
 /**
  * Calibration of the EBSD camera.
@@ -34,73 +37,137 @@ import ptpshared.core.math.Vector3D;
 @Immutable
 public class Camera implements AlmostEquable {
 
-    /** Translation of the camera. */
-    public final Vector3D t;
+    /** When no camera is defined. */
+    public static final Camera NO_CAMERA = new Camera(new Vector3D(1, 0, 0),
+            new Vector3D(0, -1, 0), 0.0, 0.0);
 
-    /** Normal of the camera plane. */
+    /** Normal of the camera plane with respect to the microscope CS. */
+    @Element(name = "n")
     public final Vector3D n;
 
+    /** Direction of the camera plane with respect to the microscope CS. */
+    @Element(name = "x")
+    public final Vector3D x;
+
+    /** Width of the camera in unit length (in meters). */
+    @Element(name = "width")
+    public final double width;
+
+    /** Height of the camera in unit length (in meters). */
+    @Element(name = "height")
+    public final double height;
+
 
 
     /**
-     * Creates a new EBSD camera.
-     * <p/>
-     * A pattern centre of <code>(0.0, 0.0)</code> is centred.
+     * Creates a new <code>Camera</code>. A camera is defined by:
+     * <ul>
+     * <li>a normal vector to the camera's plane
+     * <li>a direction vector representing the orientation of the camera with
+     * respect to the microscope coordinate system (i.e. rotation around the
+     * normal)</li>
+     * <li>a translation vector of the camera from the origin of the microscope
+     * coordinate system</li>
+     * <li>the pixel calibration in the direction parallel and perpendicular to
+     * the direction vector</li>
+     * </ul>
      * 
-     * @param patternCenterH
-     *            location of the pattern centre in the horizontal direction
-     * @param patternCenterV
-     *            location of the pattern centre in the vertical direction
-     * @param detectorDistance
-     *            distance between the sample and the detector window
-     * @throws IllegalArgumentException
-     *             if a value is not a number (NaN)
-     * @throws IllegalArgumentException
-     *             if a value is infinite
+     * @param n
+     *            normal of the camera plane with respect to the microscope
+     *            coordinate system
+     * @param x
+     *            direction of the camera plane with respect to the microscope
+     *            coordinate system
+     * @param width
+     *            Width of the camera in unit length (in meters).
+     * @param height
+     *            Height of the camera in unit length (in meters).
      */
-    public Camera(Magnitude patternCenterH, Magnitude patternCenterV,
-            Magnitude detectorDistance) {
-        if (Magnitude.isNaN(patternCenterH))
+    public Camera(@Element(name = "n") Vector3D n,
+            @Element(name = "x") Vector3D x,
+            @Element(name = "width") double width,
+            @Element(name = "height") double height) {
+        if (n == null)
+            throw new NullPointerException("The normal vector cannot be null.");
+        if (n.getNorm() == 0)
             throw new IllegalArgumentException(
-                    "The horizontal coordinate of the pattern center cannot be NaN.");
-        if (Magnitude.isInfinite(patternCenterH))
-            throw new IllegalArgumentException(
-                    "The horizontal coordinate of the pattern center cannot be infinite.");
+                    "The normal of the camera cannot be a null vector.");
 
-        if (Magnitude.isNaN(patternCenterV))
+        if (x == null)
+            throw new NullPointerException(
+                    "The direction vector cannot be null.");
+        if (x.getNorm() == 0)
             throw new IllegalArgumentException(
-                    "The vertical coordinate of the pattern center cannot be NaN.");
-        if (Magnitude.isInfinite(patternCenterV))
-            throw new IllegalArgumentException(
-                    "The vertical coordinate of the pattern center cannot be infinite.");
+                    "The direction of the camera cannot be a null vector.");
 
-        if (Magnitude.isNaN(detectorDistance))
+        if (Double.isNaN(width))
             throw new IllegalArgumentException(
-                    "The detector distance cannot be NaN.");
-        if (Magnitude.isInfinite(detectorDistance))
+                    "The value of the width cannot be NaN.");
+        if (Double.isInfinite(width))
             throw new IllegalArgumentException(
-                    "The detector distance cannot be infinite.");
+                    "The value of the width cannot be infinite.");
+        if (width < 0)
+            throw new IllegalArgumentException(
+                    "Width cannot be less than zero.");
 
+        if (Double.isNaN(height))
+            throw new IllegalArgumentException(
+                    "The value of the height cannot be NaN.");
+        if (Double.isInfinite(height))
+            throw new IllegalArgumentException(
+                    "The value of the height cannot be infinite.");
+        if (height < 0)
+            throw new IllegalArgumentException(
+                    "Height cannot be less than zero.");
+
+        this.n = n;
+        this.x = x;
+        this.width = width;
+        this.height = height;
     }
 
 
 
     /**
-     * Checks if this <code>Camera</code> is almost equal to the specified one
-     * with the given precision.
+     * Creates a new <code>Camera</code>. A camera is defined by:
+     * <ul>
+     * <li>a normal vector to the camera's plane
+     * <li>a direction vector representing the orientation of the camera with
+     * respect to the microscope coordinate system (i.e. rotation around the
+     * normal)</li>
+     * <li>a translation vector of the camera from the origin of the microscope
+     * coordinate system</li>
+     * <li>the pixel calibration in the direction parallel and perpendicular to
+     * the direction vector</li>
+     * </ul>
      * 
-     * @param obj
-     *            other <code>Camera</code> to check equality
-     * @param precision
-     *            level of precision
-     * @return whether the two <code>Camera</code> are almost equal
-     * @throws IllegalArgumentException
-     *             if the precision is less than 0.0
-     * @throws IllegalArgumentException
-     *             if the precision is not a number (NaN)
+     * @param n
+     *            normal of the camera plane with respect to the microscope
+     *            coordinate system
+     * @param x
+     *            direction of the camera plane with respect to the microscope
+     *            coordinate system
+     * @param width
+     *            Width of the camera in unit length (in meters).
+     * @param height
+     *            Height of the camera in unit length (in meters).
      */
+    public Camera(Vector3D n, Vector3D x, Magnitude width, Magnitude height) {
+        this(n, x, width.getValue("m"), height.getValue("m"));
+    }
+
+
+
     @Override
     public boolean equals(Object obj, Object precision) {
+        double delta = ((Number) precision).doubleValue();
+        if (delta < 0)
+            throw new IllegalArgumentException(
+                    "The precision has to be greater or equal to 0.0.");
+        if (Double.isNaN(delta))
+            throw new IllegalArgumentException(
+                    "The precision must be a number.");
+
         if (this == obj)
             return true;
         if (obj == null)
@@ -109,67 +176,45 @@ public class Camera implements AlmostEquable {
             return false;
 
         Camera other = (Camera) obj;
-        if (!detectorDistance.equals(other.detectorDistance, precision))
+        if (!Vector3DUtils.equals(n, other.n, delta))
             return false;
-        if (!patternCenterH.equals(other.patternCenterH, precision))
+        if (!Vector3DUtils.equals(x, other.x, delta))
             return false;
-        if (!patternCenterV.equals(other.patternCenterV, precision))
+        if (Math.abs(width - other.width) > delta)
             return false;
-
-        return true;
-    }
-
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-
-        Camera other = (Camera) obj;
-        if (!detectorDistance.equals(other.detectorDistance))
-            return false;
-        if (!patternCenterH.equals(other.patternCenterH))
-            return false;
-        if (!patternCenterV.equals(other.patternCenterV))
+        if (Math.abs(height - other.height) > delta)
             return false;
 
         return true;
-    }
-
-
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + detectorDistance.hashCode();
-        result = prime * result + patternCenterH.hashCode();
-        result = prime * result + patternCenterV.hashCode();
-        return result;
     }
 
 
 
     /**
-     * Returns a <code>String</code> representation of the <code>Camera</code>,
-     * suitable for debugging.
+     * Returns the calibration of the diffraction patterns for this camera based
+     * on its resolution.
      * 
-     * @return information about the <code>Camera</code>
+     * @param mapWidth
+     *            width of the diffraction pattern
+     * @param mapHeight
+     *            height of the diffraction pattern
+     * @return calibration of the diffraction patterns
      */
-    @Override
-    public String toString() {
-        StringBuilder str = new StringBuilder(128);
+    public Calibration getCalibration(int mapWidth, int mapHeight) {
+        if (mapWidth < 1)
+            throw new IllegalArgumentException(
+                    "Diffraction pattern's width must be greater or equal to 1.");
+        if (mapHeight < 1)
+            throw new IllegalArgumentException(
+                    "Diffraction pattern's height must be greater or equal to 1.");
 
-        str.append("PCh:" + patternCenterH + " ");
-        str.append("PCv:" + patternCenterV + " ");
-        str.append("DD:" + detectorDistance);
+        // No camera
+        if (width == 0.0 && height == 0.0)
+            return Calibration.NONE;
 
-        return str.toString();
+        double dx = width / mapWidth;
+        double dy = height / mapHeight;
+        return new Calibration(dx, dy, "m");
     }
 
 }

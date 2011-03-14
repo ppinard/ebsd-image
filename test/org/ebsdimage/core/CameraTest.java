@@ -17,13 +17,26 @@
  */
 package org.ebsdimage.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import java.io.File;
+import java.io.IOException;
 
+import magnitude.core.Magnitude;
+
+import org.apache.commons.math.geometry.Vector3D;
+import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-public class CameraTest {
+import ptpshared.util.simplexml.ApacheCommonMathMatcher;
+import ptpshared.util.simplexml.XmlLoader;
+import ptpshared.util.simplexml.XmlSaver;
+import rmlimage.core.Calibration;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+public class CameraTest extends TestCase {
 
     private Camera camera;
 
@@ -31,60 +44,116 @@ public class CameraTest {
 
     @Before
     public void setUp() throws Exception {
-        camera = new Camera(0.3, 0.4, 0.5);
+        Vector3D n = new Vector3D(1, 0, 0);
+        Vector3D x = new Vector3D(0, -1, 0);
+        camera = new Camera(n, x, 0.04, 0.03);
     }
 
 
 
     @Test
-    public void testCameraDoubleDoubleDouble() {
-        assertEquals(0.3, camera.patternCenterH, 1e-7);
-        assertEquals(0.4, camera.patternCenterV, 1e-7);
-        assertEquals(0.5, camera.detectorDistance, 1e-7);
+    public void testCameraVector3DVector3DDoubleDouble() {
+        assertEquals(new Vector3D(1, 0, 0), camera.n);
+        assertEquals(new Vector3D(0, -1, 0), camera.x);
+        assertEquals(0.04, camera.width, 1e-6);
+        assertEquals(0.03, camera.height, 1e-6);
+    }
+
+
+
+    @Test
+    public void testCameraVector3DVector3DMagnitudeMagnitude() {
+        Vector3D n = new Vector3D(1, 0, 0);
+        Vector3D x = new Vector3D(0, -1, 0);
+        Magnitude width = new Magnitude(4, "cm");
+        Magnitude height = new Magnitude(3, "cm");
+        Camera camera = new Camera(n, x, width, height);
+
+        assertEquals(n, camera.n);
+        assertEquals(x, camera.x);
+        assertEquals(0.04, camera.width, 1e-6);
+        assertEquals(0.03, camera.height, 1e-6);
+    }
+
+
+
+    @Test
+    public void testEqualsCameraObjectObject() {
+        assertTrue(camera.equals(camera, 1e-3));
+        assertFalse(camera.equals(null, 1e-3));
+        assertFalse(camera.equals(new Object(), 1e-3));
+
+        Camera other =
+                new Camera(new Vector3D(1.1, 0.001, 0.001), new Vector3D(0.001,
+                        -1.001, 0.001), 0.0401, 0.0301);
+        assertFalse(camera.equals(other, 1e-3));
+
+        other =
+                new Camera(new Vector3D(1.001, 0.001, 0.001), new Vector3D(0.1,
+                        -1.001, 0.001), 0.0401, 0.0301);
+        assertFalse(camera.equals(other, 1e-3));
+
+        other =
+                new Camera(new Vector3D(1.001, 0.001, 0.001), new Vector3D(
+                        0.001, -1.001, 0.001), 0.041, 0.0301);
+        assertFalse(camera.equals(other, 1e-3));
+
+        other =
+                new Camera(new Vector3D(1.001, 0.001, 0.001), new Vector3D(
+                        0.001, -1.001, 0.001), 0.0401, 0.031);
+        assertFalse(camera.equals(other, 1e-3));
+
+        other =
+                new Camera(new Vector3D(1.001, 0.001, 0.001), new Vector3D(
+                        0.001, -1.001, 0.001), 0.0401, 0.0301);
+        assertTrue(camera.equals(other, 1e-3));
+    }
+
+
+
+    @Test
+    public void testGetCalibration() {
+        Calibration cal = camera.getCalibration(400, 300);
+        assertEquals(0.0001, cal.dx, 1e-6);
+        assertEquals(0.0001, cal.dy, 1e-6);
+
+        cal = camera.getCalibration(200, 150);
+        assertEquals(0.0002, cal.dx, 1e-6);
+        assertEquals(0.0002, cal.dy, 1e-6);
     }
 
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void testCameraDoubleDoubleDoubleException1() {
-        new Camera(-1.0, 0.0, 0.3); // Throw exception
+    public void testGetCalibrationException1() {
+        camera.getCalibration(-1, 300);
     }
 
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void testCameraDoubleDoubleDoubleException2() {
-        new Camera(0.0, -1.0, 0.3); // Throw exception
-    }
-
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCameraDoubleDoubleDoubleException3() {
-        new Camera(0.0, 0.0, -1.0); // Throw exception
+    public void testGetCalibrationException2() {
+        camera.getCalibration(400, -1);
     }
 
 
 
     @Test
-    public void testEqualsCamera() {
-        Camera camera = new Camera(0.4, 0.4, 0.3);
-        assertTrue(camera.equals(camera));
-    }
+    public void testXML() throws IOException {
+        File file = createTempFile();
 
+        XmlSaver saver = new XmlSaver();
+        saver.matchers.registerMatcher(new ApacheCommonMathMatcher());
+        saver.save(camera, file);
 
+        XmlLoader loader = new XmlLoader();
+        loader.matchers.registerMatcher(new ApacheCommonMathMatcher());
+        Camera other = loader.load(Camera.class, file);
 
-    @Test
-    public void testEqualsCameraDouble() {
-        Camera camera = new Camera(0.401, 0.4, 0.3);
-        assertTrue(camera.equals(camera, 1e-2));
-    }
-
-
-
-    @Test
-    public void testToString() {
-        assertEquals("PCh:0.3 PCv:0.4 DD:0.5", camera.toString());
+        assertEquals(new Vector3D(1, 0, 0), other.n);
+        assertEquals(new Vector3D(0, -1, 0), other.x);
+        assertEquals(0.04, other.width, 1e-6);
+        assertEquals(0.03, other.height, 1e-6);
     }
 
 }
