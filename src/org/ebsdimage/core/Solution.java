@@ -17,7 +17,8 @@
  */
 package org.ebsdimage.core;
 
-import ptpshared.core.math.Quaternion;
+import org.apache.commons.math.geometry.Rotation;
+
 import crystallography.core.Crystal;
 
 /**
@@ -31,7 +32,7 @@ public class Solution {
     public final Crystal phase;
 
     /** Lattice orientation. */
-    public final Quaternion rotation;
+    public final Rotation rotation;
 
     /** Evaluation of the goodness of a solution. */
     public final double fit;
@@ -51,7 +52,7 @@ public class Solution {
      * @throws IllegalArgumentException
      *             if the fit is less than 0 or greater than 1
      */
-    public Solution(Crystal phase, Quaternion rotation, double fit) {
+    public Solution(Crystal phase, Rotation rotation, double fit) {
         if (fit < -1e-6 || (fit - 1) > 1e-6)
             throw new IllegalArgumentException("Fit must be between [0, 1].");
 
@@ -69,7 +70,8 @@ public class Solution {
      */
     @Override
     public String toString() {
-        return phase.name + "\t" + rotation.toAxisAngle() + "\t" + fit;
+        return phase.name + "\t" + rotation.getAxis().toString() + "\t"
+                + Math.toDegrees(rotation.getAngle()) + "\t" + fit;
     }
 
 }

@@ -17,16 +17,19 @@
  */
 package org.ebsdimage.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
+import org.apache.commons.math.geometry.Rotation;
+import org.apache.commons.math.geometry.RotationOrder;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.core.math.Eulers;
-import ptpshared.core.math.Quaternion;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
+
+import static org.junit.Assert.assertEquals;
+
+import static ptpshared.geom.Assert.assertEquals;
+
+import static junittools.test.Assert.assertEquals;
 
 public class SolutionTest {
 
@@ -34,7 +37,7 @@ public class SolutionTest {
 
     private Crystal crystal;
 
-    private Quaternion rotation;
+    private Rotation rotation;
 
     private double fit;
 
@@ -43,7 +46,7 @@ public class SolutionTest {
     @Before
     public void setUp() throws Exception {
         crystal = CrystalFactory.silicon();
-        rotation = new Quaternion(new Eulers(0.5, 0.6, 0.7));
+        rotation = new Rotation(RotationOrder.ZXZ, 0.5, 0.6, 0.7);
         fit = 0.5;
 
         solution = new Solution(crystal, rotation, fit);
@@ -53,8 +56,8 @@ public class SolutionTest {
 
     @Test
     public void testSolution() {
-        assertTrue(crystal.equals(solution.phase, 1e-6));
-        assertTrue(rotation.equals(solution.rotation, 1e-6));
+        assertEquals(crystal, solution.phase, 1e-6);
+        assertEquals(rotation, solution.rotation, 1e-6);
         assertEquals(fit, solution.fit, 1e-6);
     }
 
@@ -63,7 +66,7 @@ public class SolutionTest {
     @Test
     public void testToString() {
         String expected =
-                "Silicon\tAxisAngle [angle=75.91387921717522, axis=(0.47806636403682407;-0.04796663187071836;0.8770129724260584)]\t0.5";
+                "Silicon\t{0.48; -0.05; 0.88}\t75.91387921717521\t0.5";
         assertEquals(expected, solution.toString());
     }
 
