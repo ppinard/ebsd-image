@@ -19,13 +19,12 @@ package org.ebsdimage.io;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
+import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.EbsdMetadata;
 
-import ptpshared.util.xml.XmlLoader;
+import ptpshared.util.simplexml.XmlLoader;
+import rmlimage.module.multi.core.MultiMap;
 import rmlimage.module.multi.io.ZipLoader;
 
 /**
@@ -37,39 +36,35 @@ public abstract class EbsdMMapLoader extends ZipLoader {
 
     static {
         rmlimage.io.IO.addLoader(rmlimage.module.real.io.RmpLoader.class);
-        rmlimage.io.IO.addLoader(org.ebsdimage.io.PhasesMapLoader.class);
+        rmlimage.io.IO.addLoader(org.ebsdimage.io.PhaseMapLoader.class);
         rmlimage.io.IO.addLoader(org.ebsdimage.io.ErrorMapLoader.class);
     }
 
 
 
     /**
-     * Returns the metadata inside a EbsdMMap.
+     * Returns the class of the <code>EbsdMetadata</code> for this
+     * <code>EbsdMMap</code>.
      * 
-     * @param file
-     *            file of the EbsdMMap
-     * @param metadataClasz
-     *            class of the metadata to read
-     * @return metadata
-     * @throws IOException
-     *             if an error occurs while reading the zip and extracting the
-     *             metadata
+     * @return class of the <code>EbsdMetadata</code>
      */
-    protected EbsdMetadata getMetadata(File file,
-            Class<? extends EbsdMetadata> metadataClasz) throws IOException {
-        ZipFile zipFile = new ZipFile(file);
+    protected abstract Class<? extends EbsdMetadata> getMetadataClass();
 
-        ZipEntry metadataEntry = zipFile.getEntry("metadata.xml");
-        if (metadataEntry == null)
+
+
+    @Override
+    protected void loadOtherFiles(MultiMap mmap, File zipDir)
+            throws IOException {
+        super.loadOtherFiles(mmap, zipDir);
+
+        File metadataFile = new File(zipDir, "metadata.xml");
+        if (!metadataFile.exists())
             throw new IOException(
                     "The EbsdMMap does not contain a metadata.xml file.");
 
-        InputStream in = zipFile.getInputStream(metadataEntry);
-        EbsdMetadata metdata = new XmlLoader().load(metadataClasz, in);
-
-        zipFile.close();
-
-        return metdata;
+        EbsdMetadata metadata =
+                new XmlLoader().load(getMetadataClass(), metadataFile);
+        ((EbsdMMap) mmap).setMetadata(metadata);
     }
 
 }

@@ -20,7 +20,8 @@ package org.ebsdimage.core;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import ptpshared.core.math.Quaternion;
+import org.apache.commons.math.geometry.Rotation;
+
 import rmlimage.core.Calibration;
 import rmlimage.core.Map;
 import rmlimage.module.multi.core.MultiMap;
@@ -38,7 +39,7 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
  */
 public abstract class EbsdMMap extends MultiMap {
 
-    /** Header for the zip file containing an EbsdMMap. */
+    /** Header for the ZIP file containing an EbsdMMap. */
     public static final String FILE_HEADER = "EBSD";
 
     /**
@@ -71,7 +72,7 @@ public abstract class EbsdMMap extends MultiMap {
     /** Alias of the error map. */
     public static final String ERRORS = "Errors";
 
-    /** Metadata. */
+    /** Microscope parameters. */
     private EbsdMetadata metadata;
 
 
@@ -158,12 +159,12 @@ public abstract class EbsdMMap extends MultiMap {
                     "Fourth quaternion component map must be a RealMap.");
 
         if (!mapList.containsKey(PHASES)) {
-            PhasesMap phasesMap = new PhasesMap(width, height);
+            PhaseMap phasesMap = new PhaseMap(width, height);
             phasesMap.clear((byte) 0);
             phasesMap.cloneMetadataFrom(this);
             mapList.put(PHASES, phasesMap);
         }
-        if (!mapList.get(PHASES).getClass().equals(PhasesMap.class))
+        if (!mapList.get(PHASES).getClass().equals(PhaseMap.class))
             throw new IllegalArgumentException(
                     "Phases map must be a PhasesMap.");
 
@@ -272,8 +273,8 @@ public abstract class EbsdMMap extends MultiMap {
      * 
      * @return phases map
      */
-    public PhasesMap getPhasesMap() {
-        return (PhasesMap) getMap(PHASES);
+    public PhaseMap getPhasesMap() {
+        return (PhaseMap) getMap(PHASES);
     }
 
 
@@ -333,14 +334,25 @@ public abstract class EbsdMMap extends MultiMap {
      *            index in the map
      * @return rotation
      */
-    public Quaternion getRotation(int index) {
+    public Rotation getRotation(int index) {
         if (index < 0 || index >= size)
             throw new IllegalArgumentException(
                     "The index has to be between [0," + size + "[");
 
-        return new Quaternion(getQ0Map().pixArray[index],
+        return new Rotation(getQ0Map().pixArray[index],
                 getQ1Map().pixArray[index], getQ2Map().pixArray[index],
-                getQ3Map().pixArray[index]);
+                getQ3Map().pixArray[index], false);
+    }
+
+
+
+    /**
+     * Returns the microscope parameters from the metadata.
+     * 
+     * @return microscope parameters
+     */
+    public Microscope getMicroscope() {
+        return getMetadata().microscope;
     }
 
 
