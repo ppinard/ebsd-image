@@ -225,6 +225,19 @@ public class HoughMapTest extends TestCase {
 
 
     @Test
+    public void testGetHoughPeak() {
+        HoughPeak expected = new HoughPeak(toRadians(80.5), -92.328, 0.0);
+        HoughPeak actual = mapEven.getHoughPeak(88721);
+        assertEquals(expected, actual, 1e-3);
+
+        expected = new HoughPeak(toRadians(80.3), 331.176, 0.0);
+        actual = mapOdd.getHoughPeak(2697);
+        assertEquals(expected, actual, 1e-3);
+    }
+
+
+
+    @Test
     public void testGetPixelInfoLabel() {
         String expected = "  \u03b8=0.0\u00b0  \u03c1=401.4257px  value=0";
         assertEquals(expected, mapEven.getPixelInfoLabel(0));

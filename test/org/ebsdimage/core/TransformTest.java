@@ -17,13 +17,14 @@
  */
 package org.ebsdimage.core;
 
-import static java.lang.Math.toRadians;
-import static org.junit.Assert.assertEquals;
-
 import org.ebsdimage.TestCase;
 import org.junit.Test;
 
 import rmlimage.core.ByteMap;
+
+import static org.junit.Assert.assertEquals;
+
+import static java.lang.Math.toRadians;
 
 public class TransformTest extends TestCase {
 
@@ -43,8 +44,8 @@ public class TransformTest extends TestCase {
         assertEquals(227, houghMap.height);
 
         // Check the HoughMap parameters
-        assertEquals(212.628585835, houghMap.rhoMax.getValue("px"), 1e-3);
-        assertEquals(-212.628585835, houghMap.rhoMin.getValue("px"), 1e-3);
+        assertEquals(212.628585835, houghMap.getRhoMax(), 1e-3);
+        assertEquals(-212.628585835, houghMap.getRhoMin(), 1e-3);
         assertEquals(1.8816689, houghMap.getDeltaRho().getValue("px"), 1e-3);
         assertEquals(1.0, houghMap.getDeltaTheta().getValue("deg"), 1e-3);
 
@@ -72,8 +73,8 @@ public class TransformTest extends TestCase {
         assertEquals(425, houghMap.height);
 
         // Check the HoughMap parameters
-        assertEquals(212.0, houghMap.rhoMax.getValue("px"), 1e-3);
-        assertEquals(-212.0, houghMap.rhoMin.getValue("px"), 1e-3);
+        assertEquals(212.0, houghMap.getRhoMax(), 1e-3);
+        assertEquals(-212.0, houghMap.getRhoMin(), 1e-3);
         assertEquals(1.0, houghMap.getDeltaRho().getValue("px"), 1e-3);
         assertEquals(1.0, houghMap.getDeltaTheta().getValue("deg"), 1e-3);
 

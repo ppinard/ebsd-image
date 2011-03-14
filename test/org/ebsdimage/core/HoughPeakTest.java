@@ -17,8 +17,6 @@
  */
 package org.ebsdimage.core;
 
-import magnitude.core.Magnitude;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,77 +34,82 @@ public class HoughPeakTest {
 
     @Before
     public void setUp() throws Exception {
-        Magnitude theta = new Magnitude(0.5, "rad");
-        Magnitude rho = new Magnitude(3.0, "px");
-        peak1 = new HoughPeak(theta, rho);
-
-        theta = new Magnitude(0.1, "rad");
-        rho = new Magnitude(5.0, "px");
-        peak2 = new HoughPeak(theta, rho);
+        peak1 = new HoughPeak(0.5, 3.0, 1.5);
+        peak2 = new HoughPeak(0.1, 5.0, 55);
     }
 
 
 
     @Test
-    public void testEqualsObject() {
-        Magnitude theta = new Magnitude(0.5, "rad");
-        Magnitude rho = new Magnitude(3.0, "px");
-        HoughPeak peak = new HoughPeak(theta, rho);
-        assertEquals(peak, peak1);
+    public void testEqualsObjectObject() {
+        assertTrue(peak1.equals(peak1, 1e-3));
+        assertFalse(peak1.equals(null, 1e-3));
+        assertFalse(peak1.equals(new Object(), 1e-3));
 
-        assertFalse(peak1.equals(peak2));
+        HoughPeak other = new HoughPeak(0.51, 3.0001, 1.5001);
+        assertFalse(other.equals(peak1, 1e-3));
+
+        other = new HoughPeak(0.5001, 3.1, 1.5001);
+        assertFalse(other.equals(peak1, 1e-3));
+
+        other = new HoughPeak(0.5001, 3.0001, 1.51);
+        assertFalse(other.equals(peak1, 1e-3));
+
+        other = new HoughPeak(0.5001, 3.0001, 1.5001);
+        assertTrue(other.equals(peak1, 1e-3));
     }
 
 
 
     @Test
-    public void testEqualsPeakDouble() {
-        Magnitude theta = new Magnitude(0.5, "rad");
-        Magnitude rho = new Magnitude(3.001, "px");
-        HoughPeak peak = new HoughPeak(theta, rho);
-        assertTrue(peak1.equals(peak, 1e-3));
+    public void testEquivalent() {
+        assertTrue(peak1.equivalent(peak1, 1e-3, 1e-2));
+        assertFalse(peak1.equivalent(null, 1e-3, 1e-2));
+
+        HoughPeak other = new HoughPeak(0.5001, 3.1, 99);
+        assertFalse(other.equivalent(peak1, 1e-3, 1e-2));
+
+        other = new HoughPeak(0.51, 3.001, 99);
+        assertFalse(other.equivalent(peak1, 1e-3, 1e-2));
+
+        other = new HoughPeak(0.5001, 3.001, 99);
+        assertTrue(other.equivalent(peak1, 1e-3, 1e-2));
     }
 
 
 
     @Test
-    public void testHoughPeakDoubleDouble() {
-        assertEquals(0.5, peak1.theta.getValue("rad"), 1e-7);
-        assertEquals(3.0, peak1.rho.getValue("px"), 1e-7);
+    public void testHoughPeak() {
+        assertEquals(0.5, peak1.theta, 1e-7);
+        assertEquals(3.0, peak1.rho, 1e-7);
 
-        assertEquals(0.1, peak2.theta.getValue("rad"), 1e-7);
-        assertEquals(5.0, peak2.rho.getValue("px"), 1e-7);
+        assertEquals(0.1, peak2.theta, 1e-7);
+        assertEquals(5.0, peak2.rho, 1e-7);
     }
 
 
 
     @Test
-    public void testThetaOutsidePI() {
-        Magnitude theta = new Magnitude(Math.PI + 1.25, "rad");
-        Magnitude rho = new Magnitude(4, "px");
-        HoughPeak other = new HoughPeak(theta, rho);
-        assertEquals(1.25, other.theta.getValue("rad"), 1e-6);
-        assertEquals(-4, other.rho.getValue("px"), 1e-6);
+    public void testHoughPeakThetaOutsidePI() {
+        HoughPeak other = new HoughPeak(Math.PI + 1.25, 4, 1);
+        assertEquals(1.25, other.theta, 1e-6);
+        assertEquals(-4, other.rho, 1e-6);
 
-        theta = new Magnitude(Math.PI * 2 + 1.25, "rad");
-        rho = new Magnitude(4, "px");
-        other = new HoughPeak(theta, rho);
-        assertEquals(1.25, other.theta.getValue("rad"), 1e-6);
-        assertEquals(4, other.rho.getValue("px"), 1e-6);
+        other = new HoughPeak(Math.PI * 2 + 1.25, 4, 1);
+        assertEquals(1.25, other.theta, 1e-6);
+        assertEquals(4, other.rho, 1e-6);
 
-        theta = new Magnitude(Math.PI * 3 + 1.25, "rad");
-        rho = new Magnitude(4, "px");
-        other = new HoughPeak(theta, rho);
-        assertEquals(1.25, other.theta.getValue("rad"), 1e-6);
-        assertEquals(-4, other.rho.getValue("px"), 1e-6);
+        other = new HoughPeak(Math.PI * 3 + 1.25, 4, 1);
+        assertEquals(1.25, other.theta, 1e-6);
+        assertEquals(-4, other.rho, 1e-6);
     }
 
 
 
     @Test
     public void testToString() {
-        assertEquals("(28.65 deg, 3.0 px)", peak1.toString());
-        assertEquals("(5.73 deg, 5.0 px)", peak2.toString());
+        assertEquals("(28.65 deg, 3.00 px): 1.5", peak1.toString());
+        assertEquals("(5.73 deg, 5.00 px): 55.0", peak2.toString());
     }
 
 }

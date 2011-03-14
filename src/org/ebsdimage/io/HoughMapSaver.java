@@ -17,15 +17,14 @@
  */
 package org.ebsdimage.io;
 
-import static org.ebsdimage.core.HoughMap.FILE_HEADER;
-
 import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.core.HoughMap;
-import org.ebsdimage.core.PhasesMap;
+import org.ebsdimage.core.PhaseMap;
 
 import rmlimage.io.BasicBmpSaver;
+import static org.ebsdimage.core.HoughMap.FILE_HEADER;
 
 /**
  * Saver for a <code>HoughMap</code> to a bmp file and prop file containing the
@@ -36,8 +35,8 @@ import rmlimage.io.BasicBmpSaver;
 public class HoughMapSaver extends BasicBmpSaver {
 
     @Override
-    public boolean canSave(Object obj) {
-        return obj instanceof HoughMap;
+    public boolean canSave(Object obj, String fileFormat) {
+        return fileFormat.equalsIgnoreCase("bmp") && (obj instanceof HoughMap);
     }
 
 
@@ -45,7 +44,7 @@ public class HoughMapSaver extends BasicBmpSaver {
     /**
      * Saves a <code>HoughMAp</code> to a bmp file and prop file containing the
      * Hough properties. The location where to save the files is taken from
-     * {@link PhasesMap#getFile()}.
+     * {@link PhaseMap#getFile()}.
      * 
      * @param map
      *            <code>HoughMap</code> to save

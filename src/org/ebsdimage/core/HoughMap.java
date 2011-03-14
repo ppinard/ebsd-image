@@ -404,6 +404,13 @@ public class HoughMap extends ByteMap {
 
 
 
+    @Override
+    public HoughMap createMap(int width, int height) {
+        return new HoughMap(width, height, getDeltaTheta(), getDeltaRho());
+    }
+
+
+
     /**
      * Returns the distance increment. Wrap around {@link Calibration#getDY()}.
      * 
@@ -459,6 +466,32 @@ public class HoughMap extends ByteMap {
      */
     public int getIndex(Magnitude theta, Magnitude rho) {
         return getIndex(getX(theta), getY(rho));
+    }
+
+
+
+    /**
+     * Returns a <code>HoughPeak</code> for the specified index.
+     * 
+     * @param index
+     *            index of a pixel in the map
+     * @return a <code>HoughPeak</code>
+     * @throws IllegalArgumentException
+     *             if the index is outside the map
+     */
+    public HoughPeak getHoughPeak(int index) {
+        if (index < 0 || index >= size)
+            throw new IllegalArgumentException("index (" + index
+                    + ") must be between 0 and " + (size - 1));
+
+        Calibration cal = getCalibration();
+
+        double theta = cal.getCalibratedX(getX(index));
+        double rho = cal.getCalibratedY(getY(index));
+        String rhoUnits = cal.unitsY;
+        double intensity = pixArray[index] & 0xff;
+
+        return new HoughPeak(theta, rho, rhoUnits, intensity);
     }
 
 

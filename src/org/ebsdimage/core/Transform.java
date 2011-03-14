@@ -17,8 +17,6 @@
  */
 package org.ebsdimage.core;
 
-import static java.lang.Math.min;
-
 import java.util.Arrays;
 
 import magnitude.core.Magnitude;
@@ -26,10 +24,11 @@ import magnitude.core.Magnitude;
 import org.apache.commons.math.FunctionEvaluationException;
 import org.apache.commons.math.analysis.UnivariateRealFunction;
 
-import ptpshared.core.math.Quad;
+import ptpshared.math.Quad;
 import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
 import rmlshared.ui.Monitorable;
+import static java.lang.Math.min;
 
 /**
  * Transformation of one map into another.
@@ -445,7 +444,7 @@ public class Transform implements Monitorable {
         }
 
         // Pre-calculations of variables
-        double thetaMin = houghMap.getThetaMin().getValue("rad");
+        double thetaMin = houghMap.thetaMin;
         double thetaMinOverDeltaTheta = thetaMin / deltaTheta;
         int houghHeightOver2 = houghMap.height / 2;
 
@@ -555,4 +554,5 @@ public class Transform implements Monitorable {
     private synchronized boolean isInterrupted() {
         return isInterrupted;
     }
+
 }

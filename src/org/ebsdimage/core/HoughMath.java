@@ -17,13 +17,14 @@
  */
 package org.ebsdimage.core;
 
-import magnitude.core.Magnitude;
-import magnitude.geom.Line2D;
+import java.awt.Rectangle;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
+
+import rmlimage.core.Calibration;
+import rmlimage.core.Map;
+import rmlshared.geom.LineUtil;
 import rmlshared.math.Stats;
-import static magnitude.core.Math.PI;
-import static magnitude.core.Math.atan;
-import static magnitude.core.Math.cos;
-import static magnitude.core.Math.sin;
 
 /**
  * Miscellaneous calculations in Hough space.
@@ -54,21 +55,17 @@ public class HoughMath {
         double[] distances = new double[peaks1.length];
 
         double tmpTheta;
-        Magnitude tmpThetaMag;
         double tmpRho;
-        Magnitude tmpRhoMag;
         for (int i = 0; i < peaks1.length; i++) {
             HoughPeak peak1 = peaks1[i];
             double distance = Double.POSITIVE_INFINITY;
 
             for (HoughPeak peak2 : peaks2) {
                 // (peak1.theta - peak2.theta)^2
-                tmpThetaMag = peak1.theta.minus(peak2.theta).power(2);
-                tmpTheta = tmpThetaMag.getPreferredUnitsValue();
+                tmpTheta = Math.pow(peak1.theta - peak2.theta, 2);
 
                 // (peak1.rho - peak2.rho)^2
-                tmpRhoMag = peak1.rho.minus(peak2.rho).power(2);
-                tmpRho = tmpRhoMag.getPreferredUnitsValue();
+                tmpRho = Math.pow(peak1.rho - peak2.rho, 2);
 
                 distance = Math.min(distance, tmpTheta + tmpRho);
             }
@@ -96,35 +93,11 @@ public class HoughMath {
 
         // -cos(theta) / sin(theta)
         // unitless by definition
-        m =
-                cos(peak.theta).multiply(-1).div(sin(peak.theta)).getBaseUnitsValue();
+        m = -Math.cos(peak.theta) / Math.sin(peak.theta);
         if (Double.isInfinite(m))
             m = Double.POSITIVE_INFINITY;
 
         return m;
-    }
-
-
-
-    /**
-     * Returns the intercept of the line in the image space represented by the
-     * specified Hough Peak.
-     * <p/>
-     * For vertical lines, the intercept along the x axis is returned (i.e.
-     * <code>b</code> in <code>x = b</code>).
-     * 
-     * @param peak
-     *            a Hough peak
-     * @return slope of the line in the image space
-     */
-    public static Magnitude getIntercept(HoughPeak peak) {
-        Magnitude b;
-
-        b = peak.rho.div(sin(peak.theta));
-        if (b.isInfinite() || b.isNaN())
-            b = peak.rho;
-
-        return b;
     }
 
 
@@ -135,10 +108,39 @@ public class HoughMath {
      * 
      * @param peak
      *            a Hough peak
+     * @param map
+     *            map where the <code>Line2D</code> will be drawn
      * @return a <code>Line2D</code> of the Hough peak
      */
-    public static Line2D getLine(HoughPeak peak) {
-        return Line2D.fromSlopeIntercept(getSlope(peak), getIntercept(peak));
+    public static Line2D getLine2D(HoughPeak peak, Map map) {
+        Calibration cal = map.getCalibration();
+
+        // Assert calibration Y units and rho units are the same
+        if (peak.rhoUnits != cal.unitsY)
+            throw new IllegalArgumentException("Map's calibration Y units ("
+                    + cal.unitsY + ") and peak's rho units (" + peak.rhoUnits
+                    + ") must be equal.");
+
+        // Create the line perpendicular to the specified vector
+        double slope = getSlope(peak);
+        double x0 = cal.getUncalibratedX(peak.rho * Math.cos(peak.theta));
+        double y0 = cal.getUncalibratedY(peak.rho * Math.sin(peak.theta));
+        Point2D.Double center = new Point2D.Double(x0, y0);
+        Line2D.Double line = new Line2D.Double();
+        LineUtil.setAnalyticalLine(line, slope, center, map.width);
+
+        // Translate the origin from the center of the image
+        // to the upper left corner
+        // and invert the y axis to have the positive going down
+        LineUtil.translate(line, map.width / 2, map.height / 2);
+        line.y1 = map.height - 1 - line.y1;
+        line.y2 = map.height - 1 - line.y2;
+
+        // Extends the line to fit the whole map
+        Rectangle frame = new Rectangle(0, 0, map.width - 1, map.height - 1);
+        LineUtil.extendTo(line, frame);
+
+        return line;
     }
 
 
@@ -152,48 +154,39 @@ public class HoughMath {
      * 
      * @param line
      *            a <code>Line</code>
-     * @param intensity
-     *            intensity of the Hough peak
+     * @param map
+     *            map containing the line
      * @return a hough peak
      */
-    public static HoughPeak getHoughPeak(Line2D line, double intensity) {
-        Magnitude rho;
-        Magnitude theta;
+    public static HoughPeak getHoughPeak(Line2D line, Map map) {
+        Line2D.Double adjustedLine =
+                new Line2D.Double(line.getP1(), line.getP2());
 
-        Magnitude m = line.getSlope();
+        // Translate the origin from the upper left corner
+        // to the center of the image
+        // and invert the y axis to have the positive going up
+        adjustedLine.y1 = map.height - 1 - adjustedLine.y1;
+        adjustedLine.y2 = map.height - 1 - adjustedLine.y2;
+        LineUtil.translate(adjustedLine, -map.width / 2, -map.height / 2);
 
-        if (Magnitude.isInfinite(m)) { // Vertical line
-            theta = new Magnitude(0.0, "rad");
-            rho = line.getInterceptX();
+        // Calculate theta and rho
+        double theta;
+        double rho;
+
+        if (LineUtil.isVertical(adjustedLine)) {
+            theta = 0.0;
+            rho = adjustedLine.getX1();
         } else { // Any other line
             // theta = -arccot(m) = PI / 2 + atan(m)
-            theta = PI.div(2.0).add(atan(m));
+            theta = Math.PI / 2.0 + Math.atan(LineUtil.getSlope(adjustedLine));
 
             // rho = x*cos(theta) + y*sin(theta)
             // if x == 0: rho = y*sin(theta)
-            rho = line.getInterceptY().multiply(sin(theta));
+            rho = LineUtil.getY(adjustedLine, 0.0) * Math.sin(theta);
         }
 
-        return new HoughPeak(theta, rho, intensity);
+        Calibration cal = map.getCalibration();
+        return new HoughPeak(theta, cal.getCalibratedY(rho), cal.unitsY, 0.0);
     }
 
-    // TODO: Fix when calibration is fully implemented
-    // /**
-    // * Converts a list of bands to a list of Hough peaks.
-    // *
-    // * @param bands
-    // * list of bands
-    // * @return list of Hough peaks
-    // */
-    // public static HoughPeak[] bandsToHoughPeaks(Band[] bands) {
-    // HoughPeak[] peaks = new HoughPeak[bands.length];
-    //
-    // for (int i = 0; i < bands.length; i++) {
-    // peaks[i] =
-    // HoughMath.lineSpaceToHoughSpace(bands[i].line,
-    // bands[i].intensity);
-    // }
-    //
-    // return peaks;
-    // }
 }
