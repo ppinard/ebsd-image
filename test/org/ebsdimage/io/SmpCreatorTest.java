@@ -17,8 +17,6 @@
  */
 package org.ebsdimage.io;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -28,18 +26,20 @@ import org.junit.Test;
 import rmlimage.core.ByteMap;
 import rmlshared.io.FileUtil;
 
+import static org.junit.Assert.assertEquals;
+
 public class SmpCreatorTest extends TestCase {
 
     @Test
     // Create from a list of files
-    public void create() throws IOException {
+    public void testCreate() throws IOException {
         File[] files = new File[4];
-        files[0] = getFile("org/ebsdimage/io/Lena.bmp");
-        files[1] = getFile("org/ebsdimage/io/Lena_Rotate90deg.bmp");
-        files[2] = getFile("org/ebsdimage/io/Lena_Rotate180deg.bmp");
-        files[3] = getFile("org/ebsdimage/io/Lena_Rotate270deg.bmp");
+        files[0] = getFile("org/ebsdimage/testdata/Lena.bmp");
+        files[1] = getFile("org/ebsdimage/testdata/Lena_Rotate90deg.bmp");
+        files[2] = getFile("org/ebsdimage/testdata/Lena_Rotate180deg.bmp");
+        files[3] = getFile("org/ebsdimage/testdata/Lena_Rotate270deg.bmp");
 
-        File smpFile = new File(FileUtil.getTempDir(), "SmpCreatorTest.smp");
+        File smpFile = new File(createTempDir(), "SmpCreatorTest.smp");
         new SmpCreator().create(smpFile, files);
 
         // Read the maps back
@@ -62,28 +62,24 @@ public class SmpCreatorTest extends TestCase {
         map.assertEquals(expected);
 
         inStream.close();
-
-        if (!(smpFile.delete()))
-            throw new RuntimeException("File (" + smpFile.getAbsolutePath()
-                    + ") cannot be deleted.");
     }
 
 
 
     @Test
     // Create from a directory
-    public void create2() throws IOException {
+    public void testCreate2() throws IOException {
         // Copy the test maps to a new directory
-        File tmpDir = FileUtil.createTempDir("SmpCreatorTest");
+        File tmpDir = createTempDir();
         File[] files = new File[5];
-        files[0] = getFile("org/ebsdimage/io/Lena.bmp");
-        files[1] = getFile("org/ebsdimage/io/Lena_Rotate90deg.bmp");
-        files[2] = getFile("org/ebsdimage/io/Lena_Rotate180deg.bmp");
-        files[3] = getFile("org/ebsdimage/io/Lena_Rotate270deg.bmp");
-        files[4] = getFile("org/ebsdimage/io/warp-x-map.raw");
+        files[0] = getFile("org/ebsdimage/testdata/Lena.bmp");
+        files[1] = getFile("org/ebsdimage/testdata/Lena_Rotate90deg.bmp");
+        files[2] = getFile("org/ebsdimage/testdata/Lena_Rotate180deg.bmp");
+        files[3] = getFile("org/ebsdimage/testdata/Lena_Rotate270deg.bmp");
+        files[4] = getFile("org/ebsdimage/testdata/warp-x-map.raw");
         FileUtil.copy(files, tmpDir);
 
-        File smpFile = new File(FileUtil.getTempDir(), "SmpCreatorTest.smp");
+        File smpFile = new File(createTempDir(), "SmpCreatorTest.smp");
         new SmpCreator().create(smpFile, tmpDir);
 
         // Read the maps back
@@ -108,49 +104,36 @@ public class SmpCreatorTest extends TestCase {
         map.assertEquals(expected);
 
         inStream.close();
-
-        // Clean up
-        if (!(smpFile.delete()))
-            throw new RuntimeException("File (" + smpFile.getAbsolutePath()
-                    + ") cannot be deleted.");
-        FileUtil.rmdir(tmpDir);
     }
 
 
 
     @Test
-    public void extract() throws IOException {
+    public void testExtract() throws IOException {
         // Create a source smp file
         File[] files = new File[4];
-        files[0] = getFile("org/ebsdimage/io/Lena.bmp");
-        files[1] = getFile("org/ebsdimage/io/Lena_Rotate90deg.bmp");
-        files[2] = getFile("org/ebsdimage/io/Lena_Rotate180deg.bmp");
-        files[3] = getFile("org/ebsdimage/io/Lena_Rotate270deg.bmp");
-        File srcFile = new File(FileUtil.getTempDir(), "SmpCreatorTest.smp");
+        files[0] = getFile("org/ebsdimage/testdata/Lena.bmp");
+        files[1] = getFile("org/ebsdimage/testdata/Lena_Rotate90deg.bmp");
+        files[2] = getFile("org/ebsdimage/testdata/Lena_Rotate180deg.bmp");
+        files[3] = getFile("org/ebsdimage/testdata/Lena_Rotate270deg.bmp");
+        File srcFile = new File(createTempDir(), "SmpCreatorTest.smp");
         new SmpCreator().create(srcFile, files);
 
         // Extract the second and third map
-        File destFile = new File(FileUtil.getTempDir(), "SmpExtractorTest.smp");
+        File destFile = new File(createTempDir(), "SmpExtractorTest.smp");
         new SmpCreator().extract(srcFile, 1, 2, destFile);
 
         // Test that the map were properly extracted
         SmpInputStream inStream = new SmpInputStream(destFile);
         ByteMap map = (ByteMap) inStream.readMap(1);
         ByteMap expected =
-                (ByteMap) load("org/ebsdimage/io/Lena_Rotate90deg.bmp");
+                (ByteMap) load("org/ebsdimage/testdata/Lena_Rotate90deg.bmp");
         map.assertEquals(expected);
         map = (ByteMap) inStream.readMap(2);
-        expected = (ByteMap) load("org/ebsdimage/io/Lena_Rotate180deg.bmp");
+        expected =
+                (ByteMap) load("org/ebsdimage/testdata/Lena_Rotate180deg.bmp");
         map.assertEquals(expected);
         inStream.close();
-
-        // Cleanup
-        if (!(srcFile.delete()))
-            throw new RuntimeException("File (" + srcFile.getAbsolutePath()
-                    + ") cannot be deleted.");
-        if (!(destFile.delete()))
-            throw new RuntimeException("File (" + destFile.getAbsolutePath()
-                    + ") cannot be deleted.");
     }
 
 }

@@ -17,8 +17,6 @@
  */
 package org.ebsdimage.io;
 
-import static java.lang.Math.PI;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -48,8 +46,8 @@ public class HoughMapSaverTest extends TestCase {
 
     @Test
     public void testSaveHoughMapFile() throws IOException {
-        ByteMap original = (ByteMap) load("org/ebsdimage/io/Lena.bmp");
-        HoughMap map = Transform.hough(original, 1.5 / 180 * PI);
+        ByteMap original = (ByteMap) load("org/ebsdimage/testdata/Lena.bmp");
+        HoughMap map = Transform.hough(original, Math.toRadians(1.5));
 
         saver.save(map, file);
 

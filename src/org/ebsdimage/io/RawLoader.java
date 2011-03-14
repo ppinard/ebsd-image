@@ -39,7 +39,7 @@ public class RawLoader extends MapLoader {
 
     @Override
     public boolean canLoad(File file) {
-        return getValidationMessage(file).length() == 0;
+        return getValidationMessage(file).isEmpty();
     }
 
 

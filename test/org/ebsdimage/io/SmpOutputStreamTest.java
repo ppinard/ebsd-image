@@ -21,13 +21,11 @@ import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.TestCase;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import rmlimage.core.BinMap;
 import rmlimage.core.ByteMap;
-import rmlshared.io.FileUtil;
 
 public class SmpOutputStreamTest extends TestCase {
 
@@ -37,34 +35,25 @@ public class SmpOutputStreamTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        file = new File(FileUtil.getTempDir(), "SmpOutputStreamTest.smp");
-    }
-
-
-
-    @After
-    public void tearDown() throws Exception {
-        if (!(file.delete()))
-            throw new RuntimeException("File (" + file.getAbsolutePath()
-                    + ") cannot be deleted.");
+        file = new File(createTempDir(), "SmpOutputStreamTest.smp");
     }
 
 
 
     @Test
-    public void writemap() throws IOException {
+    public void testWriteMap() throws IOException {
         // Create an Map Stream with four maps in it
         SmpOutputStream outStream = new SmpOutputStream(file);
-        ByteMap lena = (ByteMap) load("org/ebsdimage/io/Lena.bmp");
+        ByteMap lena = (ByteMap) load("org/ebsdimage/testdata/Lena.bmp");
         outStream.writeMap(lena);
         ByteMap lena90 =
-                (ByteMap) load("org/ebsdimage/io/Lena_Rotate90deg.bmp");
+                (ByteMap) load("org/ebsdimage/testdata/Lena_Rotate90deg.bmp");
         outStream.writeMap(lena90);
         ByteMap lena180 =
-                (ByteMap) load("org/ebsdimage/io/Lena_Rotate180deg.bmp");
+                (ByteMap) load("org/ebsdimage/testdata/Lena_Rotate180deg.bmp");
         outStream.writeMap(lena180);
         ByteMap lena270 =
-                (ByteMap) load("org/ebsdimage/io/Lena_Rotate270deg.bmp");
+                (ByteMap) load("org/ebsdimage/testdata/Lena_Rotate270deg.bmp");
         outStream.writeMap(lena270);
         outStream.close();
 
@@ -85,7 +74,7 @@ public class SmpOutputStreamTest extends TestCase {
 
     // Write map bad size
     @Test(expected = IllegalArgumentException.class)
-    public void write2() throws IOException {
+    public void testWriteMapException1() throws IOException {
         // Create an Map Stream with four maps in it
         SmpOutputStream outStream = new SmpOutputStream(file);
         ByteMap map = new ByteMap(320, 240);
@@ -103,7 +92,7 @@ public class SmpOutputStreamTest extends TestCase {
 
     // Write map bad type
     @Test(expected = IllegalArgumentException.class)
-    public void write3() throws IOException {
+    public void testWriteMapException2() throws IOException {
         // Create an Map Stream with four maps in it
         SmpOutputStream outStream = new SmpOutputStream(file);
         ByteMap map = new ByteMap(320, 240);

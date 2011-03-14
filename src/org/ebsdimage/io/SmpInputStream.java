@@ -87,6 +87,7 @@ public class SmpInputStream {
      * @throws IOException
      *             if an error occurs while reading the header of the smp file
      */
+    @SuppressWarnings("unchecked")
     public SmpInputStream(File file) throws IOException {
         this.file = file;
         raf = new RandomAccessFile(file, "r");
