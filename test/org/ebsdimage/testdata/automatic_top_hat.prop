@@ -1,11 +1,16 @@
-#RML-Image Property File
-#Tue Oct 05 10:01:50 EDT 2010
+#RML-Image Property File - Calib: (0.017453292rad;50.80506,1.8816689px)
+#Mon Mar 14 16:02:33 CET 2011
 threshold.min=18
-Hough.dr=4611153102534928811
-Hough.dtheta=4580687790476533049
+calibration.flip.y=true
+calibration.flip.x=false
+calibration.y0=4632346994038276096
 EBSD.threshold.automatic.threshold=18
-Hough.height=55
+calibration.dy=4611153102643396608
 EBSD.threshold.automatic.kapur=26
+calibration.dx=4580687790437564416
 threshold.max=255
-Hough.width=180
+calibration.x0=0
+calibration.units.y=px
+calibration.origin.set=true
 EBSD.threshold.automatic.minError=11
+calibration.units.x=rad

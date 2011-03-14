@@ -1,10 +1,11 @@
 #HoughMap2 - Calib: (0.017453292rad;50.80506,1.8816689px)
-#Tue Dec 07 08:41:12 EST 2010
+#Mon Mar 14 15:36:08 CET 2011
 calibration.flip.y=true
-calibration.units.y=px
-calibration.y0=4632346994038276096
 calibration.flip.x=false
-calibration.units.x=rad
+calibration.y0=4632346994038276096
 calibration.dy=4611153102643396608
 calibration.dx=4580687790437564416
 calibration.x0=0
+calibration.units.y=px
+calibration.origin.set=true
+calibration.units.x=rad
