@@ -64,11 +64,11 @@ public class BestSolutionTest extends TestCase {
         Crystal phase3 = CrystalFactory.zirconium();
 
         ExpMMap mmap = new ExpMMap(1, 1);
-        mmap.getPhasesMap().register(1, phase1);
-        mmap.getPhasesMap().register(2, phase2);
-        mmap.getPhasesMap().register(3, phase3);
+        mmap.getPhaseMap().register(1, phase1);
+        mmap.getPhaseMap().register(2, phase2);
+        mmap.getPhaseMap().register(3, phase3);
 
-        exp = new Exp(mmap, new Operation[] { new PatternOpMock() });
+        exp = new Exp(mmap, new Operation[] { new PatternOpMock(1) });
 
         Rotation rotation1 = new Rotation(S2_2, 0, 0, S2_2, false);
         Rotation rotation2 = new Rotation(0, S2_2, S2_2, 0, false);

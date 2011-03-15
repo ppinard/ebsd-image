@@ -40,7 +40,7 @@ public class PatternOpMockTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        op = new PatternOpMock();
+        op = new PatternOpMock(1);
     }
 
 
