@@ -18,7 +18,6 @@
 package org.ebsdimage.core.exp.ops.identification.results;
 
 import org.ebsdimage.core.HoughPeak;
-import org.ebsdimage.core.QualityIndex;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 
@@ -33,13 +32,6 @@ public class ImageQuality extends IdentificationResultsOps {
 
     /** Default operation. */
     public static final ImageQuality DEFAULT = new ImageQuality();
-
-
-
-    @Override
-    public String toString() {
-        return "Image Quality";
-    }
 
 
 
@@ -83,6 +75,13 @@ public class ImageQuality extends IdentificationResultsOps {
         value /= numberPeaks;
 
         return value;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Image Quality";
     }
 
 }

@@ -55,6 +55,18 @@ public class NoiseTest extends TestCase {
 
 
     @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertFalse(op.equals(new Noise(25.1), 1e-2));
+        assertTrue(op.equals(new Noise(25.001), 1e-2));
+    }
+
+
+
+    @Test
     public void testNoiseInt() {
         assertEquals(25.0, op.stdDev, 1e-7);
     }
@@ -79,37 +91,6 @@ public class NoiseTest extends TestCase {
     @Test
     public void testToString() {
         assertEquals(op.toString(), "Noise [std. dev.=25.0]");
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertFalse(op.equals(new Noise(26.0)));
-        assertTrue(op.equals(new Noise(25.0)));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertFalse(op.equals(new Noise(25.1), 1e-2));
-        assertTrue(op.equals(new Noise(25.001), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(-878662649, op.hashCode());
     }
 
 

@@ -32,8 +32,6 @@ import ptpshared.util.simplexml.XmlSaver;
 import rmlshared.io.FileUtil;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import static junittools.test.Assert.assertEquals;
 
@@ -64,35 +62,6 @@ public class RangeTest extends TestCase {
     @Test
     public void testToString() {
         assertEquals(op.toString(), "Range");
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertTrue(op.equals(new Range()));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new Range(), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(78727484, op.hashCode());
     }
 
 

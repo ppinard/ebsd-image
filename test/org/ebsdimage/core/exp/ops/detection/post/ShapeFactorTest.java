@@ -52,43 +52,6 @@ public class ShapeFactorTest extends TestCase {
 
 
     @Test
-    public void testToString() {
-        String expected = "ShapeFactor [aspectRatio=1.5]";
-        assertEquals(expected, op.toString());
-    }
-
-
-
-    @Test
-    public void testProcess() throws Exception {
-        assertEquals(9, Identification.identify(srcMap).getObjectCount());
-
-        BinMap destMap = op.process(null, srcMap);
-        assertEquals(4, Identification.identify(destMap).getObjectCount());
-    }
-
-
-
-    @Test
-    public void testShapeFactorDouble() {
-        assertEquals(1.5, op.aspectRatio, 1e-6);
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertFalse(op.equals(new ShapeFactor(2.0)));
-        assertTrue(op.equals(new ShapeFactor(1.5)));
-    }
-
-
-
-    @Test
     public void testEqualsObjectDouble() {
         assertTrue(op.equals(op, 1e-2));
         assertFalse(op.equals(null, 1e-2));
@@ -101,8 +64,27 @@ public class ShapeFactorTest extends TestCase {
 
 
     @Test
-    public void testHashCode() {
-        assertEquals(-952620655, op.hashCode());
+    public void testProcess() throws Exception {
+        assertEquals(9, Identification.identify(srcMap).getObjectCount());
+
+        BinMap destMap = op.process(null, srcMap);
+        assertEquals(4, Identification.identify(destMap).getObjectCount());
+        destMap.getCalibration().assertEquals(srcMap.getCalibration(), 1e-6);
+    }
+
+
+
+    @Test
+    public void testShapeFactorDouble() {
+        assertEquals(1.5, op.aspectRatio, 1e-6);
+    }
+
+
+
+    @Test
+    public void testToString() {
+        String expected = "ShapeFactor [aspectRatio=1.5]";
+        assertEquals(expected, op.toString());
     }
 
 

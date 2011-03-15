@@ -3,8 +3,6 @@ package org.ebsdimage.core.exp.ops.identification.results;
 import java.io.File;
 import java.io.IOException;
 
-import magnitude.core.Magnitude;
-
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.Exp;
@@ -51,13 +49,6 @@ public class PeaksHoughMap extends IdentificationResultsOps {
 
 
     @Override
-    public String toString() {
-        return "Peaks HoughMap [count=" + count + "]";
-    }
-
-
-
-    @Override
     public OpResult[] calculate(Exp exp, HoughPeak[] srcPeaks) {
         HoughPeak[] peaks = srcPeaks.clone();
 
@@ -74,45 +65,6 @@ public class PeaksHoughMap extends IdentificationResultsOps {
         }
 
         return new OpResult[0];
-    }
-
-
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + count;
-        return result;
-    }
-
-
-
-    @Override
-    public boolean equals(Object obj, Object precision) {
-        if (!super.equals(obj, precision))
-            return false;
-
-        double delta = ((Number) precision).doubleValue();
-        PeaksHoughMap other = (PeaksHoughMap) obj;
-        if (Math.abs(count - other.count) > delta)
-            return false;
-
-        return true;
-    }
-
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!super.equals(obj))
-            return false;
-
-        PeaksHoughMap other = (PeaksHoughMap) obj;
-        if (count != other.count)
-            return false;
-
-        return true;
     }
 
 
@@ -142,8 +94,8 @@ public class PeaksHoughMap extends IdentificationResultsOps {
             thresholdIntensity = peaks[count - 1].intensity;
 
         int index;
-        Magnitude rho;
-        Magnitude theta;
+        double rho;
+        double theta;
         for (HoughPeak peak : peaks) {
             rho = peak.rho;
             theta = peak.theta;
@@ -153,19 +105,48 @@ public class PeaksHoughMap extends IdentificationResultsOps {
                 break;
 
             // Check that the peak is located inside the map
-            if (rho.compareTo(map.getRhoMax()) > 0
-                    || rho.compareTo(map.getRhoMin()) < 0)
+            if (rho > map.getRhoMax() || rho < map.getRhoMin())
                 continue;
-            if (theta.compareTo(map.getThetaMax()) > 0
-                    || theta.compareTo(map.getThetaMin()) < 0)
+            if (theta > map.getThetaMax() || theta < map.getThetaMin())
                 continue;
 
             // Get index of the peak and assign a white pixel
-            index = map.getIndex(rho, theta);
+            index = map.getIndex(theta, rho);
             map.pixArray[index] = (byte) 255;
         }
 
         map.setFile(file);
         new HoughMapSaver().save(map);
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!super.equals(obj))
+            return false;
+
+        PeaksHoughMap other = (PeaksHoughMap) obj;
+        if (count != other.count)
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + count;
+        return result;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Peaks HoughMap [count=" + count + "]";
     }
 }

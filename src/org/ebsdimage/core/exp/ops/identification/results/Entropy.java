@@ -100,20 +100,6 @@ public class Entropy extends IdentificationResultsOps {
         Entropy other = (Entropy) obj;
         if (max != other.max)
             return false;
-        return true;
-    }
-
-
-
-    @Override
-    public boolean equals(Object obj, Object precision) {
-        if (!super.equals(obj, precision))
-            return false;
-
-        double delta = ((Number) precision).doubleValue();
-        Entropy other = (Entropy) obj;
-        if (Math.abs(max - other.max) > delta)
-            return false;
 
         return true;
     }

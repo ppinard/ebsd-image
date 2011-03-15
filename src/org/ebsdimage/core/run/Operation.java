@@ -43,15 +43,6 @@ public abstract class Operation implements AlmostEquable {
 
 
 
-    /**
-     * Checks if this <code>Operation</code> is equal to the specified one. If
-     * no other argument is defined, two operations are equal if they have the
-     * same tag name.
-     * 
-     * @param obj
-     *            an <code>Operation</code>
-     * @return <code>true</code> if two operations are equal
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -59,10 +50,6 @@ public abstract class Operation implements AlmostEquable {
         if (obj == null)
             return false;
         if (getClass() != obj.getClass())
-            return false;
-
-        Operation other = (Operation) obj;
-        if (!getName().equals(other.getName()))
             return false;
 
         return true;
@@ -77,10 +64,6 @@ public abstract class Operation implements AlmostEquable {
         if (obj == null)
             return false;
         if (getClass() != obj.getClass())
-            return false;
-
-        Operation other = (Operation) obj;
-        if (!getName().equals(other.getName()))
             return false;
 
         return true;
@@ -125,12 +108,6 @@ public abstract class Operation implements AlmostEquable {
 
 
 
-    /**
-     * Returns the hash code of this operation which is calculated using
-     * {@link #getName()}.
-     * 
-     * @return hash code
-     */
     @Override
     public int hashCode() {
         final int prime = 31;

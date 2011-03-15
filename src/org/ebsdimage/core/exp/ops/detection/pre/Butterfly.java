@@ -17,8 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.detection.pre;
 
-import static java.lang.Math.abs;
-
 import org.ebsdimage.core.Conversion;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.exp.Exp;
@@ -30,6 +28,7 @@ import rmlimage.module.real.core.Contrast;
 import rmlimage.module.real.core.Convolution;
 import rmlimage.module.real.core.Edit;
 import rmlimage.module.real.core.RealMap;
+import static java.lang.Math.abs;
 
 /**
  * Operation to apply a butterfly filter on the Hough map.
@@ -45,25 +44,6 @@ public class Butterfly extends DetectionPreOps {
     /** Lower limit of the flattening operation. */
     @Attribute(name = "flattenLowerLimit")
     public final float flattenLowerLimit;
-
-
-
-    @Override
-    public boolean equals(Object obj, Object precision) {
-        if (!super.equals(obj, precision))
-            return false;
-
-        double delta = ((Number) precision).doubleValue();
-        Butterfly other = (Butterfly) obj;
-        if (abs(kernelSize - other.kernelSize) > delta)
-            return false;
-        if (abs(flattenLowerLimit - other.flattenLowerLimit) > delta)
-            return false;
-        if (abs(flattenUpperLimit - other.flattenUpperLimit) > delta)
-            return false;
-
-        return true;
-    }
 
     /** Upper limit of the flattening operation. */
     @Attribute(name = "flattenUpperLimit")
@@ -103,31 +83,20 @@ public class Butterfly extends DetectionPreOps {
 
 
     @Override
-    public boolean equals(Object obj) {
-        if (!super.equals(obj))
+    public boolean equals(Object obj, Object precision) {
+        if (!super.equals(obj, precision))
             return false;
 
+        double delta = ((Number) precision).doubleValue();
         Butterfly other = (Butterfly) obj;
-        if (Float.floatToIntBits(flattenLowerLimit) != Float.floatToIntBits(other.flattenLowerLimit))
+        if (abs(kernelSize - other.kernelSize) > delta)
             return false;
-        if (Float.floatToIntBits(flattenUpperLimit) != Float.floatToIntBits(other.flattenUpperLimit))
+        if (abs(flattenLowerLimit - other.flattenLowerLimit) > delta)
             return false;
-        if (kernelSize != other.kernelSize)
+        if (abs(flattenUpperLimit - other.flattenUpperLimit) > delta)
             return false;
 
         return true;
-    }
-
-
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + Float.floatToIntBits(flattenLowerLimit);
-        result = prime * result + Float.floatToIntBits(flattenUpperLimit);
-        result = prime * result + kernelSize;
-        return result;
     }
 
 

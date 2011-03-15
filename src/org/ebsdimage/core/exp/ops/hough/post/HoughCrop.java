@@ -17,9 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.hough.post;
 
-import static java.lang.Math.min;
-import magnitude.core.Magnitude;
-
 import org.ebsdimage.core.Edit;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.MaskDisc;
@@ -27,6 +24,7 @@ import org.ebsdimage.core.exp.Exp;
 import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
+import static java.lang.Math.min;
 
 /**
  * Operation to crop the Hough map to a specified radius.
@@ -38,21 +36,6 @@ public class HoughCrop extends HoughPostOps {
     /** Radius cropping limit. */
     @Attribute(name = "radius")
     public final int radius;
-
-
-
-    @Override
-    public boolean equals(Object obj, Object precision) {
-        if (!super.equals(obj, precision))
-            return false;
-
-        double delta = ((Number) precision).doubleValue();
-        HoughCrop other = (HoughCrop) obj;
-        if (Math.abs(radius - other.radius) > delta)
-            return false;
-
-        return true;
-    }
 
     /** Default operation. */
     public static final HoughCrop DEFAULT = new HoughCrop(-1);
@@ -132,8 +115,10 @@ public class HoughCrop extends HoughPostOps {
             radius += this.radius + 1;
         }
 
-        Magnitude radiusMag = srcMap.getDeltaRho().multiply(radius);
-        HoughMap destMap = Edit.crop(srcMap, radiusMag);
+        // Adjust radius value to be in deltaRho units
+        radius *= srcMap.getCalibration().dy;
+
+        HoughMap destMap = Edit.crop(srcMap, radius);
 
         return destMap;
     }

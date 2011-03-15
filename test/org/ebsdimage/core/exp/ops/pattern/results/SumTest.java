@@ -51,14 +51,6 @@ public class SumTest extends TestCase {
 
 
     @Test
-    public void testCalculateByteMap() {
-        double value = op.calculateSum(patternMap);
-        assertEquals(801235, value, 1e-6);
-    }
-
-
-
-    @Test
     public void testAverageRegionDoubleDoubleDoubleDouble() {
         assertEquals(0.2, op.xmin, 1e-6);
         assertEquals(0.3, op.ymin, 1e-6);
@@ -69,24 +61,9 @@ public class SumTest extends TestCase {
 
 
     @Test
-    public void testToString() {
-        String expected = "Sum [xmin=0.2, ymin=0.3, xmax=0.5, ymax=0.6]";
-        assertEquals(expected, op.toString());
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertFalse(op.equals(new Sum(0.3, 0.3, 0.5, 0.6)));
-        assertFalse(op.equals(new Sum(0.2, 0.4, 0.5, 0.6)));
-        assertFalse(op.equals(new Sum(0.2, 0.3, 0.6, 0.6)));
-        assertFalse(op.equals(new Sum(0.2, 0.3, 0.5, 0.7)));
-        assertTrue(op.equals(new Sum(0.2, 0.3, 0.5, 0.6)));
+    public void testCalculateByteMap() {
+        double value = op.calculateSum(patternMap);
+        assertEquals(801235, value, 1e-6);
     }
 
 
@@ -107,8 +84,9 @@ public class SumTest extends TestCase {
 
 
     @Test
-    public void testHashCode() {
-        assertEquals(377560205, op.hashCode());
+    public void testToString() {
+        String expected = "Sum [xmin=0.2, ymin=0.3, xmax=0.5, ymax=0.6]";
+        assertEquals(expected, op.toString());
     }
 
 

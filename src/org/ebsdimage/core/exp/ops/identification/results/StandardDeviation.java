@@ -108,21 +108,6 @@ public class StandardDeviation extends IdentificationResultsOps {
 
 
     @Override
-    public boolean equals(Object obj, Object precision) {
-        if (!super.equals(obj, precision))
-            return false;
-
-        double delta = ((Number) precision).doubleValue();
-        StandardDeviation other = (StandardDeviation) obj;
-        if (Math.abs(max - other.max) > delta)
-            return false;
-
-        return true;
-    }
-
-
-
-    @Override
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();

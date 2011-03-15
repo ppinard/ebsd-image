@@ -36,10 +36,4 @@ public class HoughOpMock extends HoughOp {
         return destMap;
     }
 
-
-
-    public HoughOpMock() {
-
-    }
-
 }

@@ -194,6 +194,20 @@ public abstract class Run implements Monitorable {
 
 
     /**
+     * Prepares a set of operations by setting their index as their position
+     * within each category's array.
+     * 
+     * @param ops
+     *            operations
+     */
+    protected void prepare(ArrayList<? extends Operation> ops) {
+        for (int i = 0; i < ops.size(); i++)
+            ops.get(i).setIndex(i);
+    }
+
+
+
+    /**
      * Runs and save input in the cache.
      * 
      * @throws IOException
@@ -300,20 +314,6 @@ public abstract class Run implements Monitorable {
             else
                 indexes[i] = index;
         }
-    }
-
-
-
-    /**
-     * Prepares a set of operations by setting their index as their position
-     * within each category's array.
-     * 
-     * @param ops
-     *            operations
-     */
-    protected void prepare(ArrayList<? extends Operation> ops) {
-        for (int i = 0; i < ops.size(); i++)
-            ops.get(i).setIndex(i);
     }
 
 }

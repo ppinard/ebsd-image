@@ -17,14 +17,13 @@
  */
 package org.ebsdimage.core.exp.ops.detection.post;
 
-import static java.lang.Math.abs;
-
 import java.util.ArrayList;
 
 import org.ebsdimage.core.exp.Exp;
 import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.*;
+import static java.lang.Math.abs;
 
 /**
  * Operation to remove peaks which have an aspect ratio greater than a critical
@@ -74,32 +73,6 @@ public class ShapeFactor extends DetectionPostOps {
 
 
 
-    @Override
-    public boolean equals(Object obj) {
-        if (!super.equals(obj))
-            return false;
-
-        ShapeFactor other = (ShapeFactor) obj;
-        if (Double.doubleToLongBits(aspectRatio) != Double.doubleToLongBits(other.aspectRatio))
-            return false;
-
-        return true;
-    }
-
-
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        long temp;
-        temp = Double.doubleToLongBits(aspectRatio);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        return result;
-    }
-
-
-
     /**
      * Process the peaks map to remove peaks with a greater aspect ratio than
      * the specified critical one.
@@ -114,6 +87,7 @@ public class ShapeFactor extends DetectionPostOps {
     public BinMap process(Exp exp, BinMap srcMap) {
         IdentMap identMap = Identification.identify(srcMap);
 
+        identMap.setCalibration(Calibration.NONE);
         Feret ferets = Analysis.getFeret(identMap);
 
         double aspectRatio;
@@ -128,7 +102,10 @@ public class ShapeFactor extends DetectionPostOps {
         Identification.keepObjects(identMap,
                 keepObjects.toArray(new Integer[0]));
 
-        return Conversion.toBinMap(identMap);
+        BinMap destMap = Conversion.toBinMap(identMap);
+        destMap.setCalibration(srcMap);
+
+        return destMap;
     }
 
 

@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.TestCase;
+import org.ebsdimage.core.exp.Exp;
+import org.ebsdimage.core.exp.ExpTester;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,6 +42,8 @@ public class PatternFilesLoaderTest extends TestCase {
 
     private File filepath;
 
+    private Exp exp;
+
 
 
     @Before
@@ -47,6 +51,8 @@ public class PatternFilesLoaderTest extends TestCase {
         filepath = getFile("org/ebsdimage/testdata/patternloader.bmp");
 
         op = new PatternFilesLoader(45, filepath);
+
+        exp = ExpTester.createExp();
     }
 
 
@@ -61,11 +67,32 @@ public class PatternFilesLoaderTest extends TestCase {
 
 
     @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new PatternFilesLoader(44, filepath)));
+        assertTrue(op.equals(new PatternFilesLoader(45, filepath)));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-1091739381, op.hashCode());
+    }
+
+
+
+    @Test
     public void testLoad() throws IOException {
-        ByteMap patternMap = op.load(null, 45);
+        ByteMap patternMap = op.load(exp, 45);
 
         ByteMap expected =
                 (ByteMap) load("org/ebsdimage/testdata/patternloader.bmp");
+        expected.setCalibration(exp.mmap.getMicroscope().getCamera().getCalibration(
+                336, 256));
 
         patternMap.assertEquals(expected);
     }
@@ -92,37 +119,6 @@ public class PatternFilesLoaderTest extends TestCase {
     public void testToString() {
         String expected = "Pattern Files Loader [startIndex=45, size=1]";
         assertEquals(expected, op.toString());
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertFalse(op.equals(new PatternFilesLoader(44, filepath)));
-        assertTrue(op.equals(new PatternFilesLoader(45, filepath)));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 2));
-        assertFalse(op.equals(null, 2));
-        assertFalse(op.equals(new Object(), 2));
-
-        assertFalse(op.equals(new PatternFilesLoader(43, filepath), 2));
-        assertTrue(op.equals(new PatternFilesLoader(44, filepath), 2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(1227302452, op.hashCode());
     }
 
 

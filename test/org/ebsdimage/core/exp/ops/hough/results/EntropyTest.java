@@ -29,11 +29,8 @@ import org.junit.Test;
 
 import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
-import rmlshared.io.FileUtil;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import static junittools.test.Assert.assertEquals;
 
@@ -53,7 +50,7 @@ public class EntropyTest extends TestCase {
     @Test
     public void testCalculate() throws IOException {
         HoughMap srcMap =
-                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
+                new HoughMapLoader().load(getFile("org/ebsdimage/testdata/houghmap.bmp"));
         OpResult result = op.calculate(null, srcMap)[0];
 
         assertEquals(2.926016571945, result.value.doubleValue(), 1e-7);
@@ -64,35 +61,6 @@ public class EntropyTest extends TestCase {
     @Test
     public void testToString() {
         assertEquals(op.toString(), "Entropy");
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertTrue(op.equals(new Entropy()));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new Entropy(), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(73086064, op.hashCode());
     }
 
 

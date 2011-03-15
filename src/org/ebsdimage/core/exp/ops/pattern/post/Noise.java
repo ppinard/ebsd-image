@@ -55,20 +55,6 @@ public class Noise extends PatternPostOps {
 
 
     @Override
-    public boolean equals(Object obj) {
-        if (!super.equals(obj))
-            return false;
-
-        Noise other = (Noise) obj;
-        if (Double.doubleToLongBits(stdDev) != Double.doubleToLongBits(other.stdDev))
-            return false;
-
-        return true;
-    }
-
-
-
-    @Override
     public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
@@ -79,18 +65,6 @@ public class Noise extends PatternPostOps {
             return false;
 
         return true;
-    }
-
-
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        long temp;
-        temp = Double.doubleToLongBits(stdDev);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        return result;
     }
 
 
@@ -110,9 +84,6 @@ public class Noise extends PatternPostOps {
         ByteMap destMap = srcMap.duplicate();
 
         rmlimage.utility.Noise.gaussian(destMap, stdDev);
-
-        // Apply properties of srcMap
-        destMap.setProperties(srcMap);
 
         return destMap;
     }

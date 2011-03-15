@@ -35,8 +35,6 @@ import rmlimage.core.MathMorph;
 import rmlshared.io.FileUtil;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import static junittools.test.Assert.assertEquals;
 
@@ -54,7 +52,7 @@ public class AutomaticTopHatTest extends TestCase {
 
 
     @Test
-    public void testIdentify() throws IOException {
+    public void testDetect() throws IOException {
         HoughMap srcMap =
                 new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap_cropped.bmp"));
         BinMap peaksMap = op.detect(null, srcMap);
@@ -65,6 +63,7 @@ public class AutomaticTopHatTest extends TestCase {
         IdentMap identMap = Identification.identify(peaksMap);
 
         assertEquals(9, identMap.getObjectCount());
+        peaksMap.getCalibration().assertEquals(srcMap.getCalibration(), 1e-6);
     }
 
 
@@ -72,35 +71,6 @@ public class AutomaticTopHatTest extends TestCase {
     @Test
     public void testToString() {
         assertEquals(op.toString(), "Automatic Top Hat");
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertTrue(op.equals(new AutomaticTopHat()));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new AutomaticTopHat(), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(1052419856, op.hashCode());
     }
 
 

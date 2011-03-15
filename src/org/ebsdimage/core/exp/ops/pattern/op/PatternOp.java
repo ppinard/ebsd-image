@@ -38,7 +38,7 @@ public abstract class PatternOp extends Operation {
     public final int startIndex;
 
     /** Number of patterns to load. */
-    @Attribute(name = "size", required = false)
+    @Attribute(name = "size")
     public final int size;
 
 
@@ -85,20 +85,17 @@ public abstract class PatternOp extends Operation {
 
 
 
-    @Override
-    public boolean equals(Object obj, Object precision) {
-        if (!super.equals(obj, precision))
-            return false;
-
-        double delta = ((Number) precision).doubleValue();
-        PatternOp other = (PatternOp) obj;
-        if (Math.abs(size - other.size) > delta)
-            return false;
-        if (Math.abs(startIndex - other.startIndex) > delta)
-            return false;
-
-        return true;
-    }
+    /**
+     * Extracts the current <code>PattenrOp</code> in a smaller
+     * <code>PattenrOp</code> containing less patterns.
+     * 
+     * @param startIndex
+     *            index of the first pattern in the split
+     * @param endIndex
+     *            index of the last pattern in the split
+     * @return reduced <code>PattenrOp</code>
+     */
+    public abstract PatternOp extract(int startIndex, int endIndex);
 
 
 
@@ -125,19 +122,5 @@ public abstract class PatternOp extends Operation {
      *             if an error occurs while loading the pattern
      */
     public abstract ByteMap load(Exp exp, int index) throws IOException;
-
-
-
-    /**
-     * Extracts the current <code>PattenrOp</code> in a smaller
-     * <code>PattenrOp</code> containing less patterns.
-     * 
-     * @param startIndex
-     *            index of the first pattern in the split
-     * @param endIndex
-     *            index of the last pattern in the split
-     * @return reduced <code>PattenrOp</code>
-     */
-    public abstract PatternOp extract(int startIndex, int endIndex);
 
 }

@@ -34,13 +34,6 @@ public class Median extends HoughPreOps {
 
 
 
-    @Override
-    public String toString() {
-        return "Median";
-    }
-
-
-
     /**
      * Performs a median on the pattern map.
      * 
@@ -56,10 +49,14 @@ public class Median extends HoughPreOps {
 
         Filter.median(destMap);
 
-        // Apply properties of srcMap
-        destMap.setProperties(srcMap);
-
         return destMap;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Median";
     }
 
 }

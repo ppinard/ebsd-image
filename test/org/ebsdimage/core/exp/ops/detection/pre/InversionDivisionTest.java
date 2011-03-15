@@ -31,8 +31,6 @@ import ptpshared.util.simplexml.XmlSaver;
 import rmlshared.io.FileUtil;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import static junittools.test.Assert.assertEquals;
 
@@ -53,11 +51,10 @@ public class InversionDivisionTest extends TestCase {
     public void testProcess() throws IOException {
         HoughMap srcMap =
                 new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
-        HoughMap expectedMap =
-                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/inversion_division_op.bmp"));
-
         HoughMap destMap = op.process(null, srcMap);
 
+        HoughMap expectedMap =
+                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/inversion_division_op.bmp"));
         destMap.assertEquals(expectedMap);
     }
 
@@ -66,35 +63,6 @@ public class InversionDivisionTest extends TestCase {
     @Test
     public void testToString() {
         assertEquals(op.toString(), "Inversion Division");
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertTrue(op.equals(new InversionDivision()));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new InversionDivision(), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(-326369825, op.hashCode());
     }
 
 

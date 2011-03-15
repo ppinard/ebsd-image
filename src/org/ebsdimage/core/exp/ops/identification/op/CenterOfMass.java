@@ -17,8 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.identification.op;
 
-import magnitude.core.Magnitude;
-
 import org.ebsdimage.core.Analysis;
 import org.ebsdimage.core.Centroid;
 import org.ebsdimage.core.HoughMap;
@@ -45,26 +43,10 @@ public class CenterOfMass extends IdentificationOp {
     @Override
     public HoughPeak[] identify(Exp exp, BinMap peaksMap, HoughMap houghMap) {
         IdentMap identMap = Identification.identify(peaksMap);
-        System.out.println("identMap:" + identMap.getCalibration());
 
-        // Centre of mass
         Centroid centers = Analysis.getCenterOfMass(identMap, houghMap);
 
-        // Create Hough peaks with intensity at centre of mass
-        HoughPeak[] peaks = new HoughPeak[centers.getValueCount()];
-
-        double intensity;
-        Magnitude theta = new Magnitude(0, centers.units[Centroid.X]);
-        Magnitude rho = new Magnitude(0, centers.units[Centroid.Y]);
-        for (int i = 0; i < centers.getValueCount(); i++) {
-            theta = new Magnitude(centers.x[i], theta);
-            rho = new Magnitude(centers.y[i], rho);
-            intensity = centers.intensity[i];
-
-            peaks[i] = new HoughPeak(theta, rho, intensity);
-        }
-
-        return peaks;
+        return centers.toHoughPeakArray();
     }
 
 

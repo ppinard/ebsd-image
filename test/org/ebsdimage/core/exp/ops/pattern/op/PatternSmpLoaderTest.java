@@ -58,11 +58,34 @@ public class PatternSmpLoaderTest extends TestCase {
 
 
     @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new PatternSmpLoader(1, 4, filepath)));
+        assertFalse(op.equals(new PatternSmpLoader(2, 5, filepath)));
+        assertFalse(op.equals(new PatternSmpLoader(2, 4, new File("test.smp"))));
+        assertTrue(op.equals(new PatternSmpLoader(2, 4, filepath)));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(476584298, op.hashCode());
+    }
+
+
+
+    @Test
     public void testLoad() throws IOException {
         ByteMap patternMap = op.load(exp, 2);
 
         ByteMap expected =
                 (ByteMap) load("org/ebsdimage/testdata/Project19/Project193.jpg");
+        expected.setCalibration(exp.mmap.getMicroscope().getCamera().getCalibration(
+                336, 256));
 
         patternMap.assertEquals(expected);
     }
@@ -105,41 +128,6 @@ public class PatternSmpLoaderTest extends TestCase {
                         + filepath.getParent() + ", filename="
                         + filepath.getName() + "]";
         assertEquals(expected, op.toString());
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertFalse(op.equals(new PatternSmpLoader(1, 4, filepath)));
-        assertFalse(op.equals(new PatternSmpLoader(2, 5, filepath)));
-        assertFalse(op.equals(new PatternSmpLoader(2, 4, new File(""))));
-        assertTrue(op.equals(new PatternSmpLoader(2, 4, filepath)));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 2));
-        assertFalse(op.equals(null, 2));
-        assertFalse(op.equals(new Object(), 2));
-
-        assertFalse(op.equals(new PatternSmpLoader(4, 4, filepath), 2));
-        assertFalse(op.equals(new PatternSmpLoader(2, 6, filepath), 2));
-        assertFalse(op.equals(new PatternSmpLoader(2, 4, new File("")), 2));
-        assertTrue(op.equals(new PatternSmpLoader(2, 4, filepath), 2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(1052419856, op.hashCode());
     }
 
 

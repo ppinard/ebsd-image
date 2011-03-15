@@ -19,21 +19,19 @@ package org.ebsdimage.core.exp.ops.indexing.results;
 
 import java.io.File;
 
+import org.apache.commons.math.geometry.Rotation;
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.exp.OpResult;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.math.old.Quaternion;
 import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import static junittools.test.Assert.assertEquals;
 
@@ -50,7 +48,7 @@ public class IndexingResultsOpsMockTest extends TestCase {
         op = new IndexingResultsOpsMock();
 
         Crystal phase = CrystalFactory.silicon();
-        Quaternion rotation = Quaternion.IDENTITY;
+        Rotation rotation = Rotation.IDENTITY;
         srcSlns =
                 new Solution[] { new Solution(phase, rotation, 0.0),
                         new Solution(phase, rotation, 1.0 / 6.0),
@@ -72,35 +70,6 @@ public class IndexingResultsOpsMockTest extends TestCase {
     @Test
     public void testToString() {
         assertEquals(op.toString(), "IndexingResultsOpsMock []");
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertTrue(op.equals(new IndexingResultsOpsMock()));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new IndexingResultsOpsMock(), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(-1473789771, op.hashCode());
     }
 
 

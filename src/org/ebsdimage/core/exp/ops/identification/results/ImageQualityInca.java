@@ -19,7 +19,6 @@ package org.ebsdimage.core.exp.ops.identification.results;
 
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.HoughPeakIntensityComparator;
-import org.ebsdimage.core.QualityIndex;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 
@@ -36,13 +35,6 @@ public class ImageQualityInca extends IdentificationResultsOps {
 
     /** Default operation. */
     public static final ImageQualityInca DEFAULT = new ImageQualityInca();
-
-
-
-    @Override
-    public String toString() {
-        return "Image Quality (INCA)";
-    }
 
 
 
@@ -89,5 +81,12 @@ public class ImageQualityInca extends IdentificationResultsOps {
         double maximum = peaks[0].intensity;
 
         return maximum - minimum;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Image Quality (INCA)";
     }
 }

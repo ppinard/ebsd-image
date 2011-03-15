@@ -19,23 +19,21 @@ package org.ebsdimage.core.exp.ops.indexing.op;
 
 import java.io.File;
 
-import magnitude.core.Magnitude;
-
+import org.apache.commons.math.geometry.Rotation;
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.Solution;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.math.old.Quaternion;
 import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+
+import static ptpshared.geom.Assert.assertEquals;
 
 import static junittools.test.Assert.assertEquals;
 
@@ -51,17 +49,9 @@ public class IndexingOpMockTest extends TestCase {
     public void setUp() throws Exception {
         op = new IndexingOpMock();
 
-        Magnitude theta = new Magnitude(0.0, "rad");
-        Magnitude rho = new Magnitude(15.0, "px");
-        HoughPeak peak1 = new HoughPeak(theta, rho);
-
-        theta = new Magnitude(1.0, "rad");
-        rho = new Magnitude(23.0, "px");
-        HoughPeak peak2 = new HoughPeak(theta, rho);
-
-        theta = new Magnitude(0.0, "rad");
-        rho = new Magnitude(31.0, "px");
-        HoughPeak peak3 = new HoughPeak(theta, rho);
+        HoughPeak peak1 = new HoughPeak(0.0, 15.0, 1.0);
+        HoughPeak peak2 = new HoughPeak(1.0, 23.0, 2.0);
+        HoughPeak peak3 = new HoughPeak(0.0, 31.0, 3.0);
 
         srcPeaks = new HoughPeak[] { peak1, peak2, peak3 };
     }
@@ -75,10 +65,9 @@ public class IndexingOpMockTest extends TestCase {
         assertEquals(3, slns.length);
 
         Crystal expectedPhase = CrystalFactory.silicon();
-        Quaternion expectedRotation = Quaternion.IDENTITY;
         for (Solution sln : slns) {
-            assertTrue(expectedPhase.equals(sln.phase, 1e-6));
-            assertTrue(expectedRotation.equals(sln.rotation, 1e-6));
+            assertEquals(expectedPhase, sln.phase, 1e-6);
+            assertEquals(Rotation.IDENTITY, sln.rotation, 1e-6);
         }
 
         assertEquals(0.0, slns[0].fit, 1e-6);
@@ -91,35 +80,6 @@ public class IndexingOpMockTest extends TestCase {
     @Test
     public void testToString() {
         assertEquals(op.toString(), "IndexingOpMock []");
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertTrue(op.equals(new IndexingOpMock()));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new IndexingOpMock(), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(1865016634, op.hashCode());
     }
 
 

@@ -85,22 +85,7 @@ public class Opening extends DetectionPostOps {
             return false;
         if (min != other.min)
             return false;
-        return true;
-    }
 
-
-
-    @Override
-    public boolean equals(Object obj, Object precision) {
-        if (!super.equals(obj, precision))
-            return false;
-
-        double delta = ((Number) precision).doubleValue();
-        Opening other = (Opening) obj;
-        if (Math.abs(max - other.max) > delta)
-            return false;
-        if (Math.abs(min - other.min) > delta)
-            return false;
         return true;
     }
 

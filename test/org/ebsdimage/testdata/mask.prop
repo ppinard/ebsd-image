@@ -1,0 +1,5 @@
+#RML-Image Property File
+#Tue Mar 15 11:03:04 CET 2011
+maskdisc.radius=8
+maskdisc.centroid.y=11
+maskdisc.centroid.x=10

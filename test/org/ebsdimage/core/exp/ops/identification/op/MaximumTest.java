@@ -19,8 +19,6 @@ import rmlimage.core.MapMath;
 import rmlshared.io.FileUtil;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import static junittools.test.Assert.assertEquals;
 
@@ -57,65 +55,33 @@ public class MaximumTest extends TestCase {
 
 
     @Test
-    public void testToString() {
-        String expected = "Maximum";
-        assertEquals(expected, op.toString());
-    }
-
-
-
-    @Test
     public void testIdentify() {
         HoughPeak[] destPeaks = op.identify(null, peaksMap, houghMap);
 
         assertEquals(3, destPeaks.length);
 
         // Peak 1
-        assertEquals(50.80506134033203, destPeaks[0].rho.getValue("px"), 1e-6);
-        assertEquals(2.670353651046753, destPeaks[0].theta.getValue("rad"),
-                1e-6);
-        assertEquals(153.0, destPeaks[0].intensity, 1e-6);
+        assertEquals(50.80506134033203, destPeaks[0].rho, 1e-4);
+        assertEquals(2.670353651046753, destPeaks[0].theta, 1e-4);
+        assertEquals(153.0, destPeaks[0].intensity, 1e-4);
 
         // Peak 2
-        assertEquals(39.515045166015625, destPeaks[1].rho.getValue("px"), 1e-6);
-        assertEquals(2.1991147994995117, destPeaks[1].theta.getValue("rad"),
-                1e-6);
-        assertEquals(128.0, destPeaks[1].intensity, 1e-6);
+        assertEquals(39.515045166015625, destPeaks[1].rho, 1e-4);
+        assertEquals(2.1991147994995117, destPeaks[1].theta, 1e-4);
+        assertEquals(128.0, destPeaks[1].intensity, 1e-4);
 
         // Peak 3
-        assertEquals(30.10670280456543, destPeaks[2].rho.getValue("px"), 1e-6);
-        assertEquals(0.5235987901687622, destPeaks[2].theta.getValue("rad"),
-                1e-6);
-        assertEquals(121.0, destPeaks[2].intensity, 1e-6);
+        assertEquals(30.10670280456543, destPeaks[2].rho, 1e-4);
+        assertEquals(0.5235987901687622, destPeaks[2].theta, 1e-4);
+        assertEquals(121.0, destPeaks[2].intensity, 1e-4);
     }
 
 
 
     @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertTrue(op.equals(new Maximum()));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new Maximum(), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(-1785573857, op.hashCode());
+    public void testToString() {
+        String expected = "Maximum";
+        assertEquals(expected, op.toString());
     }
 
 

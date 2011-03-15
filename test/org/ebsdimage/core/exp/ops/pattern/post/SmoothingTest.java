@@ -47,10 +47,20 @@ public class SmoothingTest extends TestCase {
 
 
     @Test
-    public void testEquals() {
-        Smoothing other = new Smoothing(3);
-        assertFalse(op == other);
-        assertEquals(op, other);
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new Smoothing(5)));
+        assertTrue(op.equals(new Smoothing(3)));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(457585392, op.hashCode());
     }
 
 
@@ -85,37 +95,6 @@ public class SmoothingTest extends TestCase {
     @Test
     public void testToString() {
         assertEquals(op.toString(), "Smoothing [kernel size=3]");
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertFalse(op.equals(new Smoothing(5)));
-        assertTrue(op.equals(new Smoothing(3)));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 2));
-        assertFalse(op.equals(null, 2));
-        assertFalse(op.equals(new Object(), 2));
-
-        assertFalse(op.equals(new Smoothing(5), 2));
-        assertTrue(op.equals(new Smoothing(5), 3));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(457585392, op.hashCode());
     }
 
 

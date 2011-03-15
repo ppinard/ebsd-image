@@ -19,8 +19,6 @@ package org.ebsdimage.core.exp.ops.identification.results;
 
 import java.io.File;
 
-import magnitude.core.Magnitude;
-
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.OpResult;
@@ -31,8 +29,6 @@ import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import static junittools.test.Assert.assertEquals;
 
@@ -48,17 +44,9 @@ public class IdentificationResultsOpsMockTest extends TestCase {
     public void setUp() throws Exception {
         op = new IdentificationResultsOpsMock();
 
-        Magnitude theta = new Magnitude(0.0, "rad");
-        Magnitude rho = new Magnitude(14.0, "px");
-        HoughPeak peak1 = new HoughPeak(theta, rho);
-
-        theta = new Magnitude(1.0, "rad");
-        rho = new Magnitude(22.0, "px");
-        HoughPeak peak2 = new HoughPeak(theta, rho);
-
-        theta = new Magnitude(0.0, "rad");
-        rho = new Magnitude(30.0, "px");
-        HoughPeak peak3 = new HoughPeak(theta, rho);
+        HoughPeak peak1 = new HoughPeak(0.0, 14.0, 1.0);
+        HoughPeak peak2 = new HoughPeak(1.0, 22.0, 2.0);
+        HoughPeak peak3 = new HoughPeak(0.0, 30.0, 3.0);
 
         srcPeaks = new HoughPeak[] { peak1, peak2, peak3 };
     }
@@ -71,35 +59,6 @@ public class IdentificationResultsOpsMockTest extends TestCase {
         OpResult result = op.calculate(null, srcPeaks)[0];
 
         assertEquals(expected, result.value.doubleValue(), 1e-6);
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertTrue(op.equals(new IdentificationResultsOpsMock()));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new IdentificationResultsOpsMock(), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(35723475, op.hashCode());
     }
 
 

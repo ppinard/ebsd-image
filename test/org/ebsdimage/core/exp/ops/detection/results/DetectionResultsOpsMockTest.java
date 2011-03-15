@@ -29,8 +29,6 @@ import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.core.BinMap;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import static junittools.test.Assert.assertEquals;
 
@@ -58,35 +56,6 @@ public class DetectionResultsOpsMockTest extends TestCase {
         double expected = 12;
         OpResult result = op.calculate(null, peaksMap)[0];
         assertEquals(expected, result.value.doubleValue(), 1e-6);
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertTrue(op.equals(new DetectionResultsOpsMock()));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new DetectionResultsOpsMock(), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(-266211222, op.hashCode());
     }
 
 

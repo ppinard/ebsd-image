@@ -23,6 +23,7 @@ import org.simpleframework.xml.Attribute;
 import rmlimage.core.ByteMap;
 import rmlimage.core.Convolution;
 import rmlimage.core.Kernel;
+import rmlshared.math.IntUtil;
 
 /**
  * Operation to perform a convolution of a constant value kernel to produce a
@@ -51,7 +52,7 @@ public class Smoothing extends PatternPostOps {
         if (kernelSize <= 0)
             throw new IllegalArgumentException(
                     "Kernel size must be greater than 0.");
-        if (kernelSize % 2 == 0)
+        if (!IntUtil.isOdd(kernelSize))
             throw new IllegalArgumentException("Kernel size (" + kernelSize
                     + ") must be an odd number");
 
@@ -67,21 +68,6 @@ public class Smoothing extends PatternPostOps {
 
         Smoothing other = (Smoothing) obj;
         if (kernelSize != other.kernelSize)
-            return false;
-
-        return true;
-    }
-
-
-
-    @Override
-    public boolean equals(Object obj, Object precision) {
-        if (!super.equals(obj, precision))
-            return false;
-
-        double delta = ((Number) precision).doubleValue();
-        Smoothing other = (Smoothing) obj;
-        if (Math.abs(kernelSize - other.kernelSize) > delta)
             return false;
 
         return true;

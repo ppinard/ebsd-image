@@ -19,8 +19,6 @@ package org.ebsdimage.core.exp.ops.detection.results;
 
 import java.util.Arrays;
 
-import magnitude.core.Magnitude;
-
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
@@ -45,13 +43,6 @@ public class Difference extends DetectionResultsOps {
 
     /** Default operation. */
     public static final Difference DEFAULT = new Difference();
-
-
-
-    @Override
-    public OpResult[] calculate(Exp exp, BinMap peaksMap) {
-        return calculate(peaksMap, exp.getSourceHoughMap());
-    }
 
 
 
@@ -90,20 +81,18 @@ public class Difference extends DetectionResultsOps {
         int width = identMap.width;
         int height = identMap.height;
         short[] pixArray = identMap.pixArray;
-        Magnitude rhoMag;
-        Magnitude thetaMag;
 
+        double theta;
+        double rho;
         int value;
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 objectNumber = pixArray[n];
 
-                rhoMag = HoughMap.getRho(peaksMap, n);
-                thetaMag = HoughMap.getTheta(peaksMap, n);
-
-                value =
-                        houghMap.pixArray[houghMap.getIndex(thetaMag, rhoMag)] & 0xff;
+                theta = HoughMap.getTheta(peaksMap, n);
+                rho = HoughMap.getRho(peaksMap, n);
+                value = houghMap.pixArray[houghMap.getIndex(theta, rho)] & 0xff;
 
                 if (value < minValue[objectNumber])
                     minValue[objectNumber] = value;
@@ -134,6 +123,13 @@ public class Difference extends DetectionResultsOps {
                 new OpResult("Difference Max", (byte) max(diff), ByteMap.class);
 
         return new OpResult[] { average, stddev, min, max };
+    }
+
+
+
+    @Override
+    public OpResult[] calculate(Exp exp, BinMap peaksMap) {
+        return calculate(peaksMap, exp.getSourceHoughMap());
     }
 
 

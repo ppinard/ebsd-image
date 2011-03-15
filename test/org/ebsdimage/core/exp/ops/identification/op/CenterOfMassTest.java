@@ -35,8 +35,6 @@ import rmlimage.core.Identification;
 import rmlimage.core.MapMath;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import static junittools.test.Assert.assertEquals;
 
@@ -68,9 +66,6 @@ public class CenterOfMassTest extends TestCase {
                 peaksMap);
         MapMath.or(peaksMap, Identification.extractObject(identMap, 3),
                 peaksMap);
-
-        System.out.println("houghMap: " + houghMap.getCalibration());
-        System.out.println("peaksMap: " + peaksMap.getCalibration());
     }
 
 
@@ -82,21 +77,19 @@ public class CenterOfMassTest extends TestCase {
         assertEquals(3, destPeaks.length);
 
         // Peak 1
-        assertEquals(48.95774459838867, destPeaks[0].rho.getValue("px"), 1e-6);
-        assertEquals(2.67545223236084, destPeaks[0].theta.getValue("rad"), 1e-6);
-        assertEquals(142.0, destPeaks[0].intensity, 1e-6);
+        assertEquals(48.95774459838867, destPeaks[0].rho, 1e-4);
+        assertEquals(2.67545223236084, destPeaks[0].theta, 1e-4);
+        assertEquals(153.0, destPeaks[0].intensity, 1e-4);
 
         // Peak 2
-        assertEquals(37.75833511352539, destPeaks[1].rho.getValue("px"), 1e-6);
-        assertEquals(2.202118158340454, destPeaks[1].theta.getValue("rad"),
-                1e-6);
-        assertEquals(125.0, destPeaks[1].intensity, 1e-6);
+        assertEquals(37.75833511352539, destPeaks[1].rho, 1e-4);
+        assertEquals(2.202118158340454, destPeaks[1].theta, 1e-4);
+        assertEquals(128.0, destPeaks[1].intensity, 1e-4);
 
         // Peak 3
-        assertEquals(29.368501663208008, destPeaks[2].rho.getValue("px"), 1e-6);
-        assertEquals(0.5339681506156921, destPeaks[2].theta.getValue("rad"),
-                1e-6);
-        assertEquals(121.0, destPeaks[2].intensity, 1e-6);
+        assertEquals(29.368501663208008, destPeaks[2].rho, 1e-4);
+        assertEquals(0.5339681506156921, destPeaks[2].theta, 1e-4);
+        assertEquals(121.0, destPeaks[2].intensity, 1e-4);
     }
 
 
@@ -110,50 +103,12 @@ public class CenterOfMassTest extends TestCase {
 
 
     @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertTrue(op.equals(new CenterOfMass()));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new CenterOfMass(), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(-13140385, op.hashCode());
-    }
-
-
-
-    @Test
     public void testXML() throws Exception {
         File file = createTempFile();
         new XmlSaver().save(op, file);
 
         CenterOfMass other = new XmlLoader().load(CenterOfMass.class, file);
         assertEquals(op, other, 1e-6);
-    }
-
-
-
-    public static void main(String[] args) {
-        double y0 = Double.longBitsToDouble(4632346994038276096l);
-        double dy = Double.longBitsToDouble(4611153102643396608l);
-
-        System.out.println(y0 / dy);
     }
 
 }

@@ -25,13 +25,13 @@ public class PatternPostOpsMock extends PatternPostOps {
 
     @Override
     public ByteMap process(Exp exp, ByteMap srcMap) {
-        byte[] pixArray = srcMap.pixArray.clone();
+        ByteMap destMap = srcMap.duplicate();
 
         // Multiply by 2 all the values in the pixArray
         for (int i = 0; i < srcMap.size; i++)
-            pixArray[i] *= 2;
+            destMap.pixArray[i] *= 2;
 
-        return new ByteMap(srcMap.width, srcMap.height, pixArray);
+        return destMap;
     }
 
 }

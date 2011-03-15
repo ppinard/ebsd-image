@@ -48,17 +48,22 @@ public class Area extends DetectionResultsOps {
 
         // ========= Calculate area ===========
 
-        double[] areas = Analysis.getArea(identMap).val;
+        rmlimage.core.Area result = Analysis.getArea(identMap);
+        double[] areas = result.val;
+        String units = result.units[0];
 
         // ========= Calculate results ===========
 
         OpResult average =
-                new OpResult("Area Average", average(areas), RealMap.class);
+                new OpResult("Area Average", average(areas), units,
+                        RealMap.class);
         OpResult stddev =
                 new OpResult("Area Standard Deviation",
-                        standardDeviation(areas), RealMap.class);
-        OpResult min = new OpResult("Area Min", min(areas), RealMap.class);
-        OpResult max = new OpResult("Area Max", max(areas), RealMap.class);
+                        standardDeviation(areas), units, RealMap.class);
+        OpResult min =
+                new OpResult("Area Min", min(areas), units, RealMap.class);
+        OpResult max =
+                new OpResult("Area Max", max(areas), units, RealMap.class);
 
         return new OpResult[] { average, stddev, min, max };
     }

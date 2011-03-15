@@ -15,6 +15,7 @@ import org.junit.Test;
 import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.core.*;
+import rmlshared.io.FileUtil;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -36,13 +37,6 @@ public class PeaksHoughMapTest extends TestCase {
 
 
     @Test
-    public void testPeaksHoughMap() {
-        assertEquals(5, op.count);
-    }
-
-
-
-    @Test
     public void testCreate() throws IOException {
         // Create
         HoughMap houghMap =
@@ -50,7 +44,7 @@ public class PeaksHoughMapTest extends TestCase {
         HoughPeak[] peaks =
                 new CenterOfMass().identify(null,
                         new AutomaticTopHat().detect(null, houghMap), houghMap);
-        File file = new File("/tmp/houghmap.bmp");
+        File file = FileUtil.setExtension(createTempFile(), "bmp");
 
         houghMap.clear();
         op.create(houghMap, peaks, file);
@@ -58,6 +52,7 @@ public class PeaksHoughMapTest extends TestCase {
         // Test
         BinMap peaksMap =
                 Threshold.densitySlice((ByteMap) load(file), 255, 255);
+        peaksMap.setCalibration(Calibration.NONE);
         Centroid centroid =
                 Analysis.getCentroid(Identification.identify(peaksMap));
 
@@ -82,13 +77,6 @@ public class PeaksHoughMapTest extends TestCase {
 
 
     @Test
-    public void testToString() {
-        assertEquals(op.toString(), "Peaks HoughMap [count=5]");
-    }
-
-
-
-    @Test
     public void testEqualsObject() {
         assertTrue(op.equals(op));
         assertFalse(op.equals(null));
@@ -101,20 +89,22 @@ public class PeaksHoughMapTest extends TestCase {
 
 
     @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 2));
-        assertFalse(op.equals(null, 2));
-        assertFalse(op.equals(new Object(), -2));
-
-        assertFalse(op.equals(new PeaksHoughMap(3), 2));
-        assertTrue(op.equals(new PeaksHoughMap(4), 2));
+    public void testHashCode() {
+        assertEquals(849393477, op.hashCode());
     }
 
 
 
     @Test
-    public void testHashCode() {
-        assertEquals(849393477, op.hashCode());
+    public void testPeaksHoughMap() {
+        assertEquals(5, op.count);
+    }
+
+
+
+    @Test
+    public void testToString() {
+        assertEquals(op.toString(), "Peaks HoughMap [count=5]");
     }
 
 

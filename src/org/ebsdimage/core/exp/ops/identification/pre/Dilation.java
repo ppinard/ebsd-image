@@ -41,49 +41,6 @@ public class Dilation extends IdentificationPreOps {
     @Attribute(name = "min")
     public final int min;
 
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!super.equals(obj))
-            return false;
-
-        Dilation other = (Dilation) obj;
-        if (max != other.max)
-            return false;
-        if (min != other.min)
-            return false;
-        return true;
-    }
-
-
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + max;
-        result = prime * result + min;
-        return result;
-    }
-
-
-
-    @Override
-    public boolean equals(Object obj, Object precision) {
-        if (!super.equals(obj, precision))
-            return false;
-
-        double delta = ((Number) precision).doubleValue();
-        Dilation other = (Dilation) obj;
-        if (Math.abs(min - other.min) > delta)
-            return false;
-        if (Math.abs(max - other.max) > delta)
-            return false;
-
-        return true;
-    }
-
     /**
      * Maximum number of <code>OFF</code> neighbour to an <code>ON</code> pixel
      * for it to be turned to <code>OFF</code>.
@@ -115,6 +72,33 @@ public class Dilation extends IdentificationPreOps {
 
         this.min = min;
         this.max = max;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!super.equals(obj))
+            return false;
+
+        Dilation other = (Dilation) obj;
+        if (max != other.max)
+            return false;
+        if (min != other.min)
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + max;
+        result = prime * result + min;
+        return result;
     }
 
 

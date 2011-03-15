@@ -40,8 +40,8 @@ public class PatternOpMock extends PatternOp {
 
 
     @Override
-    public String toString() {
-        return "PatternOpMock";
+    public PatternOp extract(int startIndex, int endIndex) {
+        return new PatternOpMock(endIndex - startIndex + 1);
     }
 
 
@@ -54,8 +54,8 @@ public class PatternOpMock extends PatternOp {
 
 
     @Override
-    public PatternOp extract(int startIndex, int endIndex) {
-        return new PatternOpMock(endIndex - startIndex + 1);
+    public String toString() {
+        return "PatternOpMock";
     }
 
 }

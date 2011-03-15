@@ -37,13 +37,6 @@ public class InversionDivision extends DetectionPreOps {
 
 
 
-    @Override
-    public String toString() {
-        return "Inversion Division";
-    }
-
-
-
     /**
      * Performs an inversion followed by a division. The output is a
      * <code>HoughMap</code>.
@@ -73,6 +66,13 @@ public class InversionDivision extends DetectionPreOps {
         Conversion.toHoughMap(divisionMap, destMap);
 
         return destMap;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Inversion Division";
     }
 
 }

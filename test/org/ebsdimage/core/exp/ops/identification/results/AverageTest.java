@@ -19,8 +19,6 @@ package org.ebsdimage.core.exp.ops.identification.results;
 
 import java.io.File;
 
-import magnitude.core.Magnitude;
-
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.OpResult;
@@ -48,17 +46,9 @@ public class AverageTest extends TestCase {
     public void setUp() throws Exception {
         op = new Average(2);
 
-        Magnitude theta = new Magnitude(0.5, "rad");
-        Magnitude rho = new Magnitude(3.0, "px");
-        HoughPeak peak1 = new HoughPeak(theta, rho, 1);
-
-        theta = new Magnitude(1.5, "rad");
-        rho = new Magnitude(5.0, "px");
-        HoughPeak peak2 = new HoughPeak(theta, rho, 2);
-
-        theta = new Magnitude(2.5, "rad");
-        rho = new Magnitude(7.0, "px");
-        HoughPeak peak3 = new HoughPeak(theta, rho, 4);
+        HoughPeak peak1 = new HoughPeak(0.5, 3.0, 1);
+        HoughPeak peak2 = new HoughPeak(1.5, 5.0, 2);
+        HoughPeak peak3 = new HoughPeak(2.5, 7.0, 4);
 
         peaks = new HoughPeak[] { peak1, peak2, peak3 };
     }
@@ -66,9 +56,8 @@ public class AverageTest extends TestCase {
 
 
     @Test
-    public void testToString() {
-        String expected = "Average [max=2]";
-        assertEquals(expected, op.toString());
+    public void testAverageInt() {
+        assertEquals(2, op.max);
     }
 
 
@@ -87,13 +76,6 @@ public class AverageTest extends TestCase {
 
 
     @Test
-    public void testAverageInt() {
-        assertEquals(2, op.max);
-    }
-
-
-
-    @Test
     public void testEqualsObject() {
         assertTrue(op.equals(op));
         assertFalse(op.equals(null));
@@ -105,20 +87,16 @@ public class AverageTest extends TestCase {
 
 
     @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 2));
-        assertFalse(op.equals(null, 2));
-        assertFalse(op.equals(new Object(), 2));
-
-        assertFalse(op.equals(new Average(5), 2));
-        assertTrue(op.equals(new Average(1), 2));
+    public void testHashCode() {
+        assertEquals(1964592486, op.hashCode());
     }
 
 
 
     @Test
-    public void testHashCode() {
-        assertEquals(1964592486, op.hashCode());
+    public void testToString() {
+        String expected = "Average [max=2]";
+        assertEquals(expected, op.toString());
     }
 
 

@@ -48,9 +48,20 @@ public class OpeningTest extends TestCase {
 
 
     @Test
-    public void testToString() {
-        String expected = "Opening [min=2, max=8]";
-        assertEquals(expected, op.toString());
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new Opening(1, 7)));
+        assertTrue(op.equals(new Opening(2, 8)));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-735578991, op.hashCode());
     }
 
 
@@ -64,6 +75,15 @@ public class OpeningTest extends TestCase {
         BinMap destMap = op.process(null, srcMap);
 
         assertEquals(10, Identification.identify(destMap).getObjectCount());
+        destMap.getCalibration().assertEquals(srcMap.getCalibration(), 1e-6);
+    }
+
+
+
+    @Test
+    public void testToString() {
+        String expected = "Opening [min=2, max=8]";
+        assertEquals(expected, op.toString());
     }
 
 
@@ -75,37 +95,6 @@ public class OpeningTest extends TestCase {
 
         Opening other = new XmlLoader().load(Opening.class, file);
         assertEquals(op, other, 1e-6);
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertFalse(op.equals(new Opening(1, 7)));
-        assertTrue(op.equals(new Opening(2, 8)));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 2));
-        assertFalse(op.equals(null, 2));
-        assertFalse(op.equals(new Object(), 2));
-
-        assertFalse(op.equals(new Opening(5, 6), 2));
-        assertTrue(op.equals(new Opening(2, 8), 2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(-735578991, op.hashCode());
     }
 
 }

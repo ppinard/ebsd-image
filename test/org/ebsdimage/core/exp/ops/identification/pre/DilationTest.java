@@ -47,34 +47,6 @@ public class DilationTest extends TestCase {
 
 
     @Test
-    public void testToString() {
-        String expected = "Dilation";
-        assertEquals(expected, op.toString());
-    }
-
-
-
-    @Test
-    public void testProcess() {
-        BinMap srcMap =
-                (BinMap) load(getFile("org/ebsdimage/testdata/automatic_stddev.bmp"));
-
-        IdentMap identMap = Identification.identify(srcMap);
-        Area area = Analysis.getArea(identMap);
-        assertEquals(20.0, area.val[0], 1e-6);
-
-        BinMap destMap = op.process(null, srcMap);
-
-        // Test
-        identMap = Identification.identify(destMap);
-        area = Analysis.getArea(identMap);
-
-        assertEquals(10.0, area.val[0], 1e-6);
-    }
-
-
-
-    @Test
     public void testEqualsObject() {
         assertTrue(op.equals(op));
         assertFalse(op.equals(null));
@@ -88,21 +60,41 @@ public class DilationTest extends TestCase {
 
 
     @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 2));
-        assertFalse(op.equals(null, 2));
-        assertFalse(op.equals(new Object(), 2));
-
-        assertFalse(op.equals(new Dilation(4, 8), 2));
-        assertFalse(op.equals(new Dilation(2, 6), 2));
-        assertTrue(op.equals(new Dilation(1, 7), 2));
+    public void testHashCode() {
+        assertEquals(1572686023, op.hashCode());
     }
 
 
 
     @Test
-    public void testHashCode() {
-        assertEquals(1572686023, op.hashCode());
+    public void testProcess() {
+        BinMap srcMap =
+                (BinMap) load(getFile("org/ebsdimage/testdata/automatic_stddev.bmp"));
+
+        IdentMap identMap = Identification.identify(srcMap);
+        identMap.setCalibration(Calibration.NONE);
+
+        Area area = Analysis.getArea(identMap);
+        assertEquals(20.0, area.val[0], 1e-6);
+
+        BinMap destMap = op.process(null, srcMap);
+
+        // Test
+        identMap = Identification.identify(destMap);
+        identMap.setCalibration(Calibration.NONE);
+        area = Analysis.getArea(identMap);
+
+        assertEquals(10.0, area.val[0], 1e-6);
+
+        destMap.getCalibration().assertEquals(srcMap.getCalibration(), 1e-6);
+    }
+
+
+
+    @Test
+    public void testToString() {
+        String expected = "Dilation";
+        assertEquals(expected, op.toString());
     }
 
 

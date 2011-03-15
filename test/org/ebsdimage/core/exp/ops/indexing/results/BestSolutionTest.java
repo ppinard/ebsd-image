@@ -20,6 +20,7 @@ package org.ebsdimage.core.exp.ops.indexing.results;
 import java.io.File;
 import java.util.Arrays;
 
+import org.apache.commons.math.geometry.Rotation;
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.Solution;
@@ -32,16 +33,14 @@ import org.ebsdimage.core.run.Operation;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.math.old.Quaternion;
 import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
+import static ptpshared.math.Constants.S2_2;
 import static ptpshared.util.Arrays.reverse;
 
 import static junittools.test.Assert.assertEquals;
@@ -60,20 +59,25 @@ public class BestSolutionTest extends TestCase {
     public void setUp() throws Exception {
         op = new BestSolution();
 
-        Crystal[] phases =
-                new Crystal[] { CrystalFactory.silicon(),
-                        CrystalFactory.ferrite(), CrystalFactory.zirconium() };
+        Crystal phase1 = CrystalFactory.silicon();
+        Crystal phase2 = CrystalFactory.ferrite();
+        Crystal phase3 = CrystalFactory.zirconium();
 
         ExpMMap mmap = new ExpMMap(1, 1);
-        mmap.getPhasesMap().setPhases(phases);
+        mmap.getPhasesMap().register(1, phase1);
+        mmap.getPhasesMap().register(2, phase2);
+        mmap.getPhasesMap().register(3, phase3);
 
         exp = new Exp(mmap, new Operation[] { new PatternOpMock() });
 
+        Rotation rotation1 = new Rotation(S2_2, 0, 0, S2_2, false);
+        Rotation rotation2 = new Rotation(0, S2_2, S2_2, 0, false);
+        Rotation rotation3 = new Rotation(S2_2, S2_2, 0, 0, false);
+
         srcSlns =
-                new Solution[] {
-                        new Solution(phases[0], new Quaternion(1, 2, 3, 4), 0.4),
-                        new Solution(phases[0], new Quaternion(2, 3, 4, 5), 0.7),
-                        new Solution(phases[1], new Quaternion(3, 4, 5, 6), 0.1) };
+                new Solution[] { new Solution(phase1, rotation1, 0.4),
+                        new Solution(phase1, rotation2, 0.7),
+                        new Solution(phase2, rotation3, 0.1) };
         Arrays.sort(srcSlns, new SolutionFitComparator());
         reverse(srcSlns);
     }
@@ -87,22 +91,22 @@ public class BestSolutionTest extends TestCase {
         // Q0
         OpResult result = results[0];
         assertEquals(EbsdMMap.Q0, result.alias);
-        assertEquals(2.0, result.value.doubleValue(), 1e-6);
+        assertEquals(0.0, result.value.doubleValue(), 1e-6);
 
         // Q1
         result = results[1];
         assertEquals(EbsdMMap.Q1, result.alias);
-        assertEquals(3.0, result.value.doubleValue(), 1e-6);
+        assertEquals(S2_2, result.value.doubleValue(), 1e-6);
 
         // Q2
         result = results[2];
         assertEquals(EbsdMMap.Q2, result.alias);
-        assertEquals(4.0, result.value.doubleValue(), 1e-6);
+        assertEquals(S2_2, result.value.doubleValue(), 1e-6);
 
         // Q3
         result = results[3];
         assertEquals(EbsdMMap.Q3, result.alias);
-        assertEquals(5.0, result.value.doubleValue(), 1e-6);
+        assertEquals(0.0, result.value.doubleValue(), 1e-6);
 
         // Phase
         result = results[4];
@@ -121,35 +125,6 @@ public class BestSolutionTest extends TestCase {
     public void testToString() {
         String expected = "Best Solution";
         assertEquals(expected, op.toString());
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertTrue(op.equals(new BestSolution()));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new BestSolution(), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(47118268, op.hashCode());
     }
 
 

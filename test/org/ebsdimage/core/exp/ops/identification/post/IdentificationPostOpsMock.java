@@ -28,8 +28,8 @@ public class IdentificationPostOpsMock extends IdentificationPostOps {
 
         for (int i = 0; i < srcPeaks.length; i++)
             destPeaks[i] =
-                    new HoughPeak(srcPeaks[i].theta,
-                            srcPeaks[i].rho.multiply(2));
+                    new HoughPeak(srcPeaks[i].theta, srcPeaks[i].rho * 2,
+                            srcPeaks[i].intensity);
 
         return destPeaks;
     }

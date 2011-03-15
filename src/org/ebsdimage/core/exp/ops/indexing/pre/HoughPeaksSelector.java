@@ -17,15 +17,15 @@
  */
 package org.ebsdimage.core.exp.ops.indexing.pre;
 
-import static java.util.Arrays.sort;
-import static ptpshared.util.Arrays.reverse;
-
 import java.util.Arrays;
 
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.HoughPeakIntensityComparator;
 import org.ebsdimage.core.exp.Exp;
 import org.simpleframework.xml.Attribute;
+
+import static ptpshared.util.Arrays.reverse;
+import static java.util.Arrays.sort;
 
 /**
  * Operation to select the number of Hough Peaks for the indexing operation.
@@ -41,50 +41,6 @@ public class HoughPeaksSelector extends IndexingPreOps {
     /** Minimum number of Hough peaks. */
     @Attribute(name = "min")
     public final int min;
-
-
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + max;
-        result = prime * result + min;
-        return result;
-    }
-
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!super.equals(obj))
-            return false;
-
-        HoughPeaksSelector other = (HoughPeaksSelector) obj;
-        if (max != other.max)
-            return false;
-        if (min != other.min)
-            return false;
-
-        return true;
-    }
-
-
-
-    @Override
-    public boolean equals(Object obj, Object precision) {
-        if (!super.equals(obj, precision))
-            return false;
-
-        double delta = ((Number) precision).doubleValue();
-        HoughPeaksSelector other = (HoughPeaksSelector) obj;
-        if (Math.abs(max - other.max) > delta)
-            return false;
-        if (Math.abs(min - other.min) > delta)
-            return false;
-
-        return true;
-    }
 
     /** Maximum number of Hough Peaks. */
     @Attribute(name = "max")
@@ -122,6 +78,33 @@ public class HoughPeaksSelector extends IndexingPreOps {
 
         this.min = min;
         this.max = max;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!super.equals(obj))
+            return false;
+
+        HoughPeaksSelector other = (HoughPeaksSelector) obj;
+        if (max != other.max)
+            return false;
+        if (min != other.min)
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + max;
+        result = prime * result + min;
+        return result;
     }
 
 

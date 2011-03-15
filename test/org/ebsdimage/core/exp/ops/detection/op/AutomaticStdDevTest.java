@@ -61,7 +61,7 @@ public class AutomaticStdDevTest extends TestCase {
 
 
     @Test
-    public void testIdentify() throws IOException {
+    public void testDetect() throws IOException {
         HoughMap srcMap =
                 new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap_cropped.bmp"));
         BinMap peaksMap = op.detect(null, srcMap);
@@ -72,18 +72,7 @@ public class AutomaticStdDevTest extends TestCase {
         IdentMap identMap = Identification.identify(peaksMap);
 
         assertEquals(9, identMap.getObjectCount());
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertFalse(op.equals(new AutomaticStdDev(1.5)));
-        assertTrue(op.equals(new AutomaticStdDev(2.0)));
+        peaksMap.getCalibration().assertEquals(srcMap.getCalibration(), 1e-6);
     }
 
 
@@ -96,13 +85,6 @@ public class AutomaticStdDevTest extends TestCase {
 
         assertFalse(op.equals(new AutomaticStdDev(2.1), 1e-2));
         assertTrue(op.equals(new AutomaticStdDev(2.01), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(-1416536444, op.hashCode());
     }
 
 

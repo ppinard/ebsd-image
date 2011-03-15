@@ -41,11 +41,17 @@ import ptpshared.util.MultipleLoop;
 @Root
 public class OperationGenerator {
 
-    /** HashMap of the items containing a key and an array of operations. */
-    protected HashMap<String, Operation[]> items =
-            new HashMap<String, Operation[]>();
-
-
+    /**
+     * Return the order from a key.
+     * 
+     * @param key
+     *            item key
+     * @return order
+     */
+    public static int getOrderFromKey(String key) {
+        String[] split = key.split(":");
+        return Integer.parseInt(split[0]);
+    }
 
     // /**
     // * Creates a new generator that stores a list of items. This allows to
@@ -57,6 +63,12 @@ public class OperationGenerator {
     // public OperationGenerator() {
     //
     // }
+
+    /** HashMap of the items containing a key and an array of operations. */
+    protected HashMap<String, Operation[]> items =
+            new HashMap<String, Operation[]>();
+
+
 
     /**
      * Add an operation to the items.
@@ -120,17 +132,6 @@ public class OperationGenerator {
      */
     protected String createItemKey(int order, Operation op) {
         return String.format("%04d", order) + ":" + op.getClass().getName();
-    }
-
-
-
-    /**
-     * Returns the items added to this generator.
-     * 
-     * @return items (key, array of operations)
-     */
-    public HashMap<String, Operation[]> getItems() {
-        return new HashMap<String, Operation[]>(items);
     }
 
 
@@ -204,26 +205,23 @@ public class OperationGenerator {
 
 
     /**
+     * Returns the items added to this generator.
+     * 
+     * @return items (key, array of operations)
+     */
+    public HashMap<String, Operation[]> getItems() {
+        return new HashMap<String, Operation[]>(items);
+    }
+
+
+
+    /**
      * Returns the keys of the items defined.
      * 
      * @return array of keys
      */
     public String[] getKeys() {
         return items.keySet().toArray(new String[0]);
-    }
-
-
-
-    /**
-     * Return the order from a key.
-     * 
-     * @param key
-     *            item key
-     * @return order
-     */
-    public static int getOrderFromKey(String key) {
-        String[] split = key.split(":");
-        return Integer.parseInt(split[0]);
     }
 
 

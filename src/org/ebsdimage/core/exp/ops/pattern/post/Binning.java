@@ -74,21 +74,6 @@ public class Binning extends PatternPostOps {
 
 
     @Override
-    public boolean equals(Object obj, Object precision) {
-        if (!super.equals(obj, precision))
-            return false;
-
-        double delta = ((Number) precision).doubleValue();
-        Binning other = (Binning) obj;
-        if (Math.abs(factor - other.factor) > delta)
-            return false;
-
-        return true;
-    }
-
-
-
-    @Override
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
@@ -111,9 +96,6 @@ public class Binning extends PatternPostOps {
     @Override
     public ByteMap process(Exp exp, ByteMap srcMap) {
         ByteMap destMap = Transform.binning(srcMap, factor, factor);
-
-        // Apply properties of srcMap
-        destMap.setProperties(srcMap);
 
         return destMap;
     }

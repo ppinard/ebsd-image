@@ -62,6 +62,18 @@ public class ThetaExpandTest extends TestCase {
 
 
     @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertFalse(op.equals(new ThetaExpand(1.1), 1e-2));
+        assertTrue(op.equals(new ThetaExpand(1.001), 1e-2));
+    }
+
+
+
+    @Test
     public void testProcess() throws IOException {
         HoughMap destMap = op.process(null, houghMap);
 
@@ -81,6 +93,8 @@ public class ThetaExpandTest extends TestCase {
         assertEquals(8, destMap.pixArray[9]);
         assertEquals(9, destMap.pixArray[10]);
         assertEquals(1, destMap.pixArray[11]);
+
+        destMap.getCalibration().assertEquals(houghMap.getCalibration(), 1e-6);
     }
 
 
@@ -96,37 +110,6 @@ public class ThetaExpandTest extends TestCase {
     public void testToString() {
         String expected = "ThetaExpand [increment=57.29577951308232 deg]";
         assertEquals(expected, op.toString());
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertFalse(op.equals(new ThetaExpand(2)));
-        assertTrue(op.equals(new ThetaExpand(1)));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertFalse(op.equals(new ThetaExpand(1.1), 1e-2));
-        assertTrue(op.equals(new ThetaExpand(1.001), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(1151098889, op.hashCode());
     }
 
 

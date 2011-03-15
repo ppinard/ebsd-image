@@ -17,14 +17,13 @@
  */
 package org.ebsdimage.core.exp.ops.pattern.post;
 
-import static java.lang.Math.min;
-
 import org.ebsdimage.core.exp.Exp;
 import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.BinMap;
 import rmlimage.core.ByteMap;
 import rmlimage.core.MapMath;
+import static java.lang.Math.min;
 
 /**
  * Operation to apply a disc mask on the pattern map.
@@ -102,25 +101,6 @@ public class MaskDisc extends PatternPostOps {
 
 
     @Override
-    public boolean equals(Object obj, Object precision) {
-        if (!super.equals(obj, precision))
-            return false;
-
-        double delta = ((Number) precision).doubleValue();
-        MaskDisc other = (MaskDisc) obj;
-        if (Math.abs(centroidX - other.centroidX) > delta)
-            return false;
-        if (Math.abs(centroidY - other.centroidY) > delta)
-            return false;
-        if (Math.abs(radius - other.radius) > delta)
-            return false;
-
-        return true;
-    }
-
-
-
-    @Override
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
@@ -181,9 +161,6 @@ public class MaskDisc extends PatternPostOps {
         // Apply mask
         ByteMap destMap = new ByteMap(srcMap.width, srcMap.height);
         MapMath.and(srcMap, maskDisc, destMap);
-
-        destMap.setProperties(maskDisc);
-        destMap.setProperties(srcMap);
 
         return destMap;
     }

@@ -48,9 +48,42 @@ public class RadialNoiseTest extends TestCase {
 
 
     @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertFalse(op.equals(new RadialNoise(3, 3, 4, 5, 6, 7), 1e-2));
+        assertFalse(op.equals(new RadialNoise(2, 4, 4, 5, 6, 7), 1e-2));
+        assertFalse(op.equals(new RadialNoise(2, 3, 4.1, 5, 6, 7), 1e-2));
+        assertFalse(op.equals(new RadialNoise(2, 3, 4, 5.1, 6, 7), 1e-2));
+        assertFalse(op.equals(new RadialNoise(2, 3, 4, 5, 6.1, 7), 1e-2));
+        assertFalse(op.equals(new RadialNoise(2, 3, 4, 5, 6, 7.1), 1e-2));
+        assertTrue(op.equals(new RadialNoise(2, 3, 4.001, 5.001, 6.001, 7.001),
+                1e-2));
+    }
+
+
+
+    @Test
     public void testProcess() {
         // Impossible to test because of the random seed for the gaussian noise
         assertTrue(true);
+    }
+
+
+
+    @Test
+    public void testRadialNoise() throws IOException {
+        ByteMap expected =
+                (ByteMap) load("org/ebsdimage/testdata/noise_radialnoise.bmp");
+
+        ByteMap map = new ByteMap(100, 100);
+        map.clear(128);
+
+        op.radialNoise(map, 0, -30, 50, 100, 1.0, 15.0, 1);
+
+        map.assertEquals(expected);
     }
 
 
@@ -91,69 +124,12 @@ public class RadialNoiseTest extends TestCase {
 
 
     @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertFalse(op.equals(new RadialNoise(3, 3, 4, 5, 6, 7)));
-        assertFalse(op.equals(new RadialNoise(2, 4, 4, 5, 6, 7)));
-        assertFalse(op.equals(new RadialNoise(2, 3, 5, 5, 6, 7)));
-        assertFalse(op.equals(new RadialNoise(2, 3, 4, 6, 6, 7)));
-        assertFalse(op.equals(new RadialNoise(2, 3, 4, 5, 7, 7)));
-        assertFalse(op.equals(new RadialNoise(2, 3, 4, 5, 6, 8)));
-        assertTrue(op.equals(new RadialNoise(2, 3, 4, 5, 6, 7)));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertFalse(op.equals(new RadialNoise(3, 3, 4, 5, 6, 7), 1e-2));
-        assertFalse(op.equals(new RadialNoise(2, 4, 4, 5, 6, 7), 1e-2));
-        assertFalse(op.equals(new RadialNoise(2, 3, 4.1, 5, 6, 7), 1e-2));
-        assertFalse(op.equals(new RadialNoise(2, 3, 4, 5.1, 6, 7), 1e-2));
-        assertFalse(op.equals(new RadialNoise(2, 3, 4, 5, 6.1, 7), 1e-2));
-        assertFalse(op.equals(new RadialNoise(2, 3, 4, 5, 6, 7.1), 1e-2));
-        assertTrue(op.equals(new RadialNoise(2, 3, 4.001, 5.001, 6.001, 7.001),
-                1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(736648443, op.hashCode());
-    }
-
-
-
-    @Test
     public void testXML() throws Exception {
         File file = createTempFile();
         new XmlSaver().save(op, file);
 
         RadialNoise other = new XmlLoader().load(RadialNoise.class, file);
         assertEquals(op, other, 1e-6);
-    }
-
-
-
-    @Test
-    public void testRadialNoise() throws IOException {
-        ByteMap expected =
-                (ByteMap) load("org/ebsdimage/testdata/noise_radialnoise.bmp");
-
-        ByteMap map = new ByteMap(100, 100);
-        map.clear(128);
-
-        op.radialNoise(map, 0, -30, 50, 100, 1.0, 15.0, 1);
-
-        map.assertEquals(expected);
     }
 
 }

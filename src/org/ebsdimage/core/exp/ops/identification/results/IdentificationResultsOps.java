@@ -46,18 +46,6 @@ public abstract class IdentificationResultsOps extends Operation {
 
 
     /**
-     * Sort peaks from the most intense to the least intense peak.
-     * 
-     * @param peaks
-     *            array of <code>HoughPeak</code>
-     */
-    protected void sortDescending(HoughPeak[] peaks) {
-        Arrays.sort(peaks, new HoughPeakIntensityComparator(), true);
-    }
-
-
-
-    /**
      * Returns the last index to consider in the calculations. If
      * <code>max</code> is negative, all peaks are considered. If
      * <code>max</code> is positive, the minimum between the maximum number of
@@ -84,5 +72,17 @@ public abstract class IdentificationResultsOps extends Operation {
             return peaks.length - 1;
         else
             return Math.min(max, peaks.length) - 1;
+    }
+
+
+
+    /**
+     * Sort peaks from the most intense to the least intense peak.
+     * 
+     * @param peaks
+     *            array of <code>HoughPeak</code>
+     */
+    protected void sortDescending(HoughPeak[] peaks) {
+        Arrays.sort(peaks, new HoughPeakIntensityComparator(), true);
     }
 }

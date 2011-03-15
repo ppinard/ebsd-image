@@ -106,30 +106,6 @@ public class RadialNoise extends PatternPostOps {
 
 
     @Override
-    public boolean equals(Object obj) {
-        if (!super.equals(obj))
-            return false;
-
-        RadialNoise other = (RadialNoise) obj;
-        if (Double.doubleToLongBits(finalNoiseStdDev) != Double.doubleToLongBits(other.finalNoiseStdDev))
-            return false;
-        if (Double.doubleToLongBits(initialNoiseStdDev) != Double.doubleToLongBits(other.initialNoiseStdDev))
-            return false;
-        if (Double.doubleToLongBits(stdDevX) != Double.doubleToLongBits(other.stdDevX))
-            return false;
-        if (Double.doubleToLongBits(stdDevY) != Double.doubleToLongBits(other.stdDevY))
-            return false;
-        if (x != other.x)
-            return false;
-        if (y != other.y)
-            return false;
-
-        return true;
-    }
-
-
-
-    @Override
     public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
@@ -150,26 +126,6 @@ public class RadialNoise extends PatternPostOps {
             return false;
 
         return true;
-    }
-
-
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        long temp;
-        temp = Double.doubleToLongBits(finalNoiseStdDev);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(initialNoiseStdDev);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(stdDevX);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(stdDevY);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        result = prime * result + x;
-        result = prime * result + y;
-        return result;
     }
 
 

@@ -31,14 +31,6 @@ public class NoiseCizmar extends PatternPostOps {
 
 
 
-    @Override
-    public String toString() {
-        return "Noise Cizmar [gaussian=" + gaussian + ", poisson=" + poisson
-                + "]";
-    }
-
-
-
     /**
      * Creates a new <code>NoiseCizmar</code> operation. If the seed is less
      * than zero, the seed is taken as the current system time in milliseconds.
@@ -63,39 +55,6 @@ public class NoiseCizmar extends PatternPostOps {
         this.gaussian = sigma;
         this.poisson = poisson;
         this.seed = seed;
-    }
-
-
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        long temp;
-        temp = Double.doubleToLongBits(gaussian);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(poisson);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        result = prime * result + (int) (seed ^ (seed >>> 32));
-        return result;
-    }
-
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!super.equals(obj))
-            return false;
-
-        NoiseCizmar other = (NoiseCizmar) obj;
-        if (Double.doubleToLongBits(gaussian) != Double.doubleToLongBits(other.gaussian))
-            return false;
-        if (Double.doubleToLongBits(poisson) != Double.doubleToLongBits(other.poisson))
-            return false;
-        if (seed != other.seed)
-            return false;
-
-        return true;
     }
 
 
@@ -130,10 +89,15 @@ public class NoiseCizmar extends PatternPostOps {
 
         ByteMap destMap = Conversion.toByteMap(realMap);
 
-        // Apply properties of srcMap
-        destMap.setProperties(srcMap);
-
         return destMap;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Noise Cizmar [gaussian=" + gaussian + ", poisson=" + poisson
+                + "]";
     }
 
 }

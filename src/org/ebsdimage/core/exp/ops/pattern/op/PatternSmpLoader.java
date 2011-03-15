@@ -25,19 +25,20 @@ import org.ebsdimage.io.SmpInputStream;
 import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
+import rmlshared.io.FileUtil;
 
 /**
- * Operation to load a pattern from a smp file.
+ * Operation to load a pattern from a SMP file.
  * 
  * @author Philippe T. Pinard
  */
 public class PatternSmpLoader extends PatternOp {
 
-    /** Directory of the smp file. */
+    /** Directory of the SMP file. */
     @Attribute(name = "dir")
     public final String filedir;
 
-    /** File name to the smp file. */
+    /** File name to the SMP file. */
     @Attribute(name = "filename")
     public final String filename;
 
@@ -52,7 +53,7 @@ public class PatternSmpLoader extends PatternOp {
      * @param size
      *            number of patterns
      * @param filepath
-     *            file path of the smp file
+     *            file path of the SMP file
      */
     public PatternSmpLoader(int startIndex, int size, File filepath) {
         super(startIndex, size);
@@ -73,9 +74,9 @@ public class PatternSmpLoader extends PatternOp {
         if (filename == null)
             throw new NullPointerException("File name cannot be null.");
 
-        if (!filename.endsWith(".smp"))
+        if (!FileUtil.getExtension(filepath).equalsIgnoreCase("smp"))
             throw new IllegalArgumentException(
-                    "The extension of the file name must be \"smp\"");
+                    "The extension of the file name must be \"SMP\"");
 
         this.filename = filename;
     }
@@ -91,15 +92,15 @@ public class PatternSmpLoader extends PatternOp {
      * @param size
      *            number of patterns
      * @param filedir
-     *            directory of the smp file
+     *            directory of the SMP file
      * @param filename
-     *            file name of the smp file
+     *            file name of the SMP file
      * @throws NullPointerException
      *             if the file directory is null
      * @throws NullPointerException
      *             if the file name is null
      * @throws IllegalArgumentException
-     *             if the extension of the file name is not smp.
+     *             if the extension of the file name is not SMP.
      */
     public PatternSmpLoader(@Attribute(name = "startIndex") int startIndex,
             @Attribute(name = "size") int size,
@@ -127,31 +128,35 @@ public class PatternSmpLoader extends PatternOp {
 
 
     @Override
-    public boolean equals(Object obj, Object precision) {
-        if (!super.equals(obj, precision))
-            return false;
+    public PatternOp extract(int startIndex, int endIndex) {
+        if (startIndex < this.startIndex)
+            throw new IllegalArgumentException("Specified start index ("
+                    + startIndex + ") is less than the index of the"
+                    + " first pattern in this operation (" + this.startIndex
+                    + ").");
 
-        PatternSmpLoader other = (PatternSmpLoader) obj;
-        if (!filedir.equals(other.filedir))
-            return false;
-        if (!filename.equals(other.filename))
-            return false;
+        int size = endIndex - startIndex + 1;
 
-        return true;
+        if (size > this.size)
+            throw new IllegalArgumentException("The split size (" + size
+                    + ") is greater than the size of this operation ("
+                    + this.size + ").");
+
+        return new PatternSmpLoader(startIndex, size, filedir, filename);
     }
 
 
 
     /**
-     * Searches for the smp file in the specified directory or the working
+     * Searches for the SMP file in the specified directory or the working
      * directory of the experiment. Returns the file or throws an
      * <code>IOException</code> if the file cannot be found.
      * 
      * @param dir
-     *            other directory to look for the smp file
-     * @return file for the smp
+     *            other directory to look for the SMP file
+     * @return file for the SMP
      * @throws IOException
-     *             if the smp file cannot be found
+     *             if the SMP file cannot be found
      */
     public File getFile(File dir) throws IOException {
         File file = new File(filedir, filename);
@@ -173,15 +178,16 @@ public class PatternSmpLoader extends PatternOp {
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + filedir.hashCode();
-        result = prime * result + filename.hashCode();
+        result = prime * result + ((filedir == null) ? 0 : filedir.hashCode());
+        result =
+                prime * result + ((filename == null) ? 0 : filename.hashCode());
         return result;
     }
 
 
 
     /**
-     * Returns a pattern from the smp file using the specified index.
+     * Returns a pattern from the SMP file using the specified index.
      * 
      * @param exp
      *            experiment executing this method
@@ -189,7 +195,7 @@ public class PatternSmpLoader extends PatternOp {
      *            index of the pattern to load
      * @return the pattern maps
      * @throws IOException
-     *             if an error occurs while opening the smp file
+     *             if an error occurs while opening the SMP file
      */
     @Override
     public ByteMap load(Exp exp, int index) throws IOException {
@@ -203,38 +209,22 @@ public class PatternSmpLoader extends PatternOp {
                     + ").");
         if (index < reader.getStartIndex())
             throw new IllegalArgumentException("Index (" + index
-                    + ") is less than the start index of the smp file ("
+                    + ") is less than the start index of the SMP file ("
                     + reader.getStartIndex() + ").");
         if (index > reader.getEndIndex())
             throw new IllegalArgumentException("Index (" + index
-                    + ") is greater than the end index of the smp file ("
+                    + ") is greater than the end index of the SMP file ("
                     + reader.getEndIndex() + ").");
 
         // Read pattern
         ByteMap patternMap = (ByteMap) reader.readMap(index);
         reader.close();
 
+        // Calibrate diffraction pattern based on camera
+        patternMap.setCalibration(exp.mmap.getMicroscope().getCamera().getCalibration(
+                patternMap.width, patternMap.height));
+
         return patternMap;
-    }
-
-
-
-    @Override
-    public PatternOp extract(int startIndex, int endIndex) {
-        if (startIndex < this.startIndex)
-            throw new IllegalArgumentException("Specified start index ("
-                    + startIndex + ") is less than the index of the"
-                    + " first pattern in this operation (" + this.startIndex
-                    + ").");
-
-        int size = endIndex - startIndex + 1;
-
-        if (size > this.size)
-            throw new IllegalArgumentException("The split size (" + size
-                    + ") is greater than the size of this operation ("
-                    + this.size + ").");
-
-        return new PatternSmpLoader(startIndex, size, filedir, filename);
     }
 
 

@@ -36,14 +36,38 @@ public class PatternPostOps2Mock extends PatternPostOps {
 
 
     @Override
+    public boolean equals(Object obj) {
+        if (!super.equals(obj))
+            return false;
+
+        PatternPostOps2Mock other = (PatternPostOps2Mock) obj;
+        if (var != other.var)
+            return false;
+
+        return true;
+    }
+
+
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + var;
+        return result;
+    }
+
+
+
+    @Override
     public ByteMap process(Exp exp, ByteMap srcMap) {
-        byte[] pixArray = srcMap.pixArray.clone();
+        ByteMap destMap = srcMap.duplicate();
 
         // Multiply by var all the values in the pixArray
         for (int i = 0; i < srcMap.size; i++)
-            pixArray[i] *= var;
+            destMap.pixArray[i] *= var;
 
-        return new ByteMap(srcMap.width, srcMap.height, pixArray);
+        return destMap;
     }
 
 }

@@ -70,27 +70,6 @@ public class BinningTest extends TestCase {
 
 
     @Test
-    public void testProcess() {
-        ByteMap srcMap = (ByteMap) load("org/ebsdimage/testdata/srcMap.bmp");
-        ByteMap expectedMap =
-                (ByteMap) load("org/ebsdimage/testdata/binning.bmp");
-
-        ByteMap destMap = op.process(null, srcMap);
-
-        destMap.assertEquals(expectedMap);
-        assertEquals(destMap.width, srcMap.width / 2);
-    }
-
-
-
-    @Test
-    public void testToString() {
-        assertEquals(op.toString(), "Binning [factor=2]");
-    }
-
-
-
-    @Test
     public void testEqualsObject() {
         assertTrue(op.equals(op));
         assertFalse(op.equals(null));
@@ -103,20 +82,28 @@ public class BinningTest extends TestCase {
 
 
     @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 2));
-        assertFalse(op.equals(null, 2));
-        assertFalse(op.equals(new Object(), 2));
-
-        assertFalse(op.equals(new Binning(4), 2));
-        assertTrue(op.equals(new Binning(1), 2));
+    public void testHashCode() {
+        assertEquals(1014002952, op.hashCode());
     }
 
 
 
     @Test
-    public void testHashCode() {
-        assertEquals(1014002952, op.hashCode());
+    public void testProcess() {
+        ByteMap srcMap = (ByteMap) load("org/ebsdimage/testdata/srcMap.bmp");
+        ByteMap destMap = op.process(null, srcMap);
+
+        ByteMap expectedMap =
+                (ByteMap) load("org/ebsdimage/testdata/binning.bmp");
+        destMap.assertEquals(expectedMap);
+        assertEquals(destMap.width, srcMap.width / 2);
+    }
+
+
+
+    @Test
+    public void testToString() {
+        assertEquals(op.toString(), "Binning [factor=2]");
     }
 
 

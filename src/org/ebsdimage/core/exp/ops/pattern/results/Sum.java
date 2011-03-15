@@ -148,26 +148,6 @@ public class Sum extends PatternResultsOps {
 
 
     @Override
-    public boolean equals(Object obj) {
-        if (!super.equals(obj))
-            return false;
-
-        Sum other = (Sum) obj;
-        if (Double.doubleToLongBits(xmax) != Double.doubleToLongBits(other.xmax))
-            return false;
-        if (Double.doubleToLongBits(xmin) != Double.doubleToLongBits(other.xmin))
-            return false;
-        if (Double.doubleToLongBits(ymax) != Double.doubleToLongBits(other.ymax))
-            return false;
-        if (Double.doubleToLongBits(ymin) != Double.doubleToLongBits(other.ymin))
-            return false;
-
-        return true;
-    }
-
-
-
-    @Override
     public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
@@ -184,24 +164,6 @@ public class Sum extends PatternResultsOps {
             return false;
 
         return true;
-    }
-
-
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        long temp;
-        temp = Double.doubleToLongBits(xmax);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(xmin);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(ymax);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(ymin);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        return result;
     }
 
 

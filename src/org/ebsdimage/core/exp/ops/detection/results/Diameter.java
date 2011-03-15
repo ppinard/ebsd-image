@@ -20,10 +20,7 @@ package org.ebsdimage.core.exp.ops.detection.results;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 
-import rmlimage.core.Analysis;
-import rmlimage.core.BinMap;
-import rmlimage.core.IdentMap;
-import rmlimage.core.Identification;
+import rmlimage.core.*;
 import rmlimage.module.real.core.RealMap;
 import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.average;
 import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.max;
@@ -47,22 +44,29 @@ public class Diameter extends DetectionResultsOps {
     public OpResult[] calculate(Exp exp, BinMap peaksMap) {
         IdentMap identMap = Identification.identify(peaksMap);
 
+        // Cannot keep peaksMap calibration (rad - px)
+        identMap.setCalibration(Calibration.NONE);
+
         // ========= Calculate diameter ===========
 
-        double[] diameters = Analysis.getFeret(identMap).max;
+        rmlimage.core.Feret result = Analysis.getFeret(identMap);
+        double[] diameters = result.max;
+        String units = result.units[rmlimage.core.Feret.MAX];
 
         // ========= Calculate results ===========
 
         OpResult average =
-                new OpResult("Diameter Average", average(diameters),
+                new OpResult("Diameter Average", average(diameters), units,
                         RealMap.class);
         OpResult stddev =
                 new OpResult("Diameter Standard Deviation",
-                        standardDeviation(diameters), RealMap.class);
+                        standardDeviation(diameters), units, RealMap.class);
         OpResult min =
-                new OpResult("Diameter Min", min(diameters), RealMap.class);
+                new OpResult("Diameter Min", min(diameters), units,
+                        RealMap.class);
         OpResult max =
-                new OpResult("Diameter Max", max(diameters), RealMap.class);
+                new OpResult("Diameter Max", max(diameters), units,
+                        RealMap.class);
 
         return new OpResult[] { average, stddev, min, max };
     }

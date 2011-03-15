@@ -17,8 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.identification.op;
 
-import magnitude.core.Magnitude;
-
 import org.ebsdimage.core.Analysis;
 import org.ebsdimage.core.Centroid;
 import org.ebsdimage.core.HoughMap;
@@ -43,13 +41,6 @@ public class LocalCentroid extends IdentificationOp {
 
 
 
-    @Override
-    public String toString() {
-        return "Local Centroid";
-    }
-
-
-
     /**
      * Identifies the Hough peaks with the centroid of each peaks in the peaks
      * map. The intensity is taken as the maximum intensity of each peak in the
@@ -67,23 +58,15 @@ public class LocalCentroid extends IdentificationOp {
     public HoughPeak[] identify(Exp exp, BinMap peaksMap, HoughMap houghMap) {
         IdentMap identMap = Identification.identify(peaksMap);
 
-        // Calculate centroids
         Centroid centroids = Analysis.getCentroid(identMap, houghMap);
 
-        // Create Peak objects with intensity at centroid
-        HoughPeak[] peaks = new HoughPeak[centroids.getValueCount()];
+        return centroids.toHoughPeakArray();
+    }
 
-        double intensity;
-        Magnitude theta = new Magnitude(0, centroids.units[Centroid.X]);
-        Magnitude rho = new Magnitude(0, centroids.units[Centroid.Y]);
-        for (int i = 0; i < centroids.getValueCount(); i++) {
-            theta = new Magnitude(centroids.x[i], theta);
-            rho = new Magnitude(centroids.y[i], rho);
-            intensity = centroids.intensity[i];
 
-            peaks[i] = new HoughPeak(theta, rho, intensity);
-        }
 
-        return peaks;
+    @Override
+    public String toString() {
+        return "Local Centroid";
     }
 }

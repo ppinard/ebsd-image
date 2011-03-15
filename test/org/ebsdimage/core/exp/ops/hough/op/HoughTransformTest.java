@@ -29,7 +29,6 @@ import org.junit.Test;
 import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.core.ByteMap;
-import rmlshared.io.FileUtil;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -52,13 +51,20 @@ public class HoughTransformTest extends TestCase {
 
 
 
-    // @Test
-    // public void testHoughTransformOp() {
-    // HoughTransform tmpHough = new HoughTransform();
-    // assertEquals(HoughTransform.DEFAULT_DELTA_THETA, tmpHough.deltaTheta,
-    // 1e-7);
-    // assertEquals(HoughTransform.DEFAULT_DELTA_RHO, tmpHough.deltaRho, 1e-7);
-    // }
+    @Test
+    public void testEqualsObjectDouble() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertFalse(op.equals(new HoughTransform(toRadians(1.0) + 0.1, 1.0),
+                1e-2));
+        assertFalse(op.equals(new HoughTransform(toRadians(1.0), 1.1), 1e-2));
+        assertTrue(op.equals(new HoughTransform(toRadians(1.0) + 0.001, 1.001),
+                1e-2));
+    }
+
+
 
     @Test
     public void testHoughTransformOpDouble() {
@@ -85,11 +91,10 @@ public class HoughTransformTest extends TestCase {
     @Test
     public void testProcess() throws IOException {
         ByteMap srcMap = (ByteMap) load("org/ebsdimage/testdata/pattern.bmp");
-        HoughMap expectedMap =
-                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghtransformop.bmp"));
-
         HoughMap destMap = op.transform(null, srcMap);
 
+        HoughMap expectedMap =
+                new HoughMapLoader().load(getFile("org/ebsdimage/testdata/houghtransformop.bmp"));
         destMap.assertEquals(expectedMap);
     }
 
@@ -99,41 +104,6 @@ public class HoughTransformTest extends TestCase {
     public void testToString() {
         assertEquals(op.toString(),
                 "Hough Transform [deltaTheta=1.0 deg/px, deltaRho=1.0 px/px]");
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertFalse(op.equals(new HoughTransform(toRadians(1.1), 1.0)));
-        assertFalse(op.equals(new HoughTransform(toRadians(1.0), 1.1)));
-        assertTrue(op.equals(new HoughTransform(toRadians(1.0), 1.0)));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertFalse(op.equals(new HoughTransform(toRadians(1.0) + 0.1, 1.0),
-                1e-2));
-        assertFalse(op.equals(new HoughTransform(toRadians(1.0), 1.1), 1e-2));
-        assertTrue(op.equals(new HoughTransform(toRadians(1.0) + 0.001, 1.001),
-                1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(7866939, op.hashCode());
     }
 
 

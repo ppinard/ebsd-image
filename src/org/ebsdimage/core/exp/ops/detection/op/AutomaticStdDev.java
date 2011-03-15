@@ -17,14 +17,13 @@
  */
 package org.ebsdimage.core.exp.ops.detection.op;
 
-import static java.lang.Math.abs;
-
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.Threshold;
 import org.ebsdimage.core.exp.Exp;
 import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.BinMap;
+import static java.lang.Math.abs;
 
 /**
  * Operation to perform the automatic standard deviation detection algorithm.
@@ -83,20 +82,6 @@ public class AutomaticStdDev extends DetectionOp {
 
 
     @Override
-    public boolean equals(Object obj) {
-        if (!super.equals(obj))
-            return false;
-
-        AutomaticStdDev other = (AutomaticStdDev) obj;
-        if (Double.doubleToLongBits(sigmaFactor) != Double.doubleToLongBits(other.sigmaFactor))
-            return false;
-
-        return true;
-    }
-
-
-
-    @Override
     public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
             return false;
@@ -107,18 +92,6 @@ public class AutomaticStdDev extends DetectionOp {
             return false;
 
         return true;
-    }
-
-
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        long temp;
-        temp = Double.doubleToLongBits(sigmaFactor);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        return result;
     }
 
 

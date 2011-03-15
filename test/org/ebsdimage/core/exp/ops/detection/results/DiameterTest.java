@@ -29,8 +29,6 @@ import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.core.BinMap;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import static junittools.test.Assert.assertEquals;
 
@@ -53,58 +51,33 @@ public class DiameterTest extends TestCase {
 
 
     @Test
-    public void testToString() {
-        assertEquals("Diameter", op.toString());
-    }
-
-
-
-    @Test
     public void testCalculate() {
         OpResult[] results = op.calculate(null, peaksMap);
 
         assertEquals(4, results.length);
 
         // Average
-        assertEquals(13.57892894, results[0].value.doubleValue(), 1e-6);
+        assertEquals(13.57892894, results[0].value.doubleValue(), 1e-4);
+        assertEquals("px", results[0].units);
 
         // Std Dev
-        assertEquals(2.361767530, results[1].value.doubleValue(), 1e-6);
+        assertEquals(2.361767530, results[1].value.doubleValue(), 1e-4);
+        assertEquals("px", results[1].units);
 
         // Min
-        assertEquals(9.245048523, results[2].value.doubleValue(), 1e-6);
+        assertEquals(9.245048523, results[2].value.doubleValue(), 1e-4);
+        assertEquals("px", results[2].units);
 
         // Max
-        assertEquals(15.55825805, results[3].value.doubleValue(), 1e-6);
+        assertEquals(15.55825805, results[3].value.doubleValue(), 1e-4);
+        assertEquals("px", results[3].units);
     }
 
 
 
     @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertTrue(op.equals(new Diameter()));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new Diameter(), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(-168560436, op.hashCode());
+    public void testToString() {
+        assertEquals("Diameter", op.toString());
     }
 
 

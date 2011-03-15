@@ -28,7 +28,6 @@ import org.junit.Test;
 
 import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
-import rmlshared.io.FileUtil;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -50,10 +49,20 @@ public class HoughCropTest extends TestCase {
 
 
     @Test
-    public void testEquals() {
-        HoughCrop other = new HoughCrop(8);
-        assertFalse(op == other);
-        assertEquals(op, other);
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new HoughCrop(7)));
+        assertTrue(op.equals(new HoughCrop(8)));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(1983706858, op.hashCode());
     }
 
 
@@ -68,12 +77,11 @@ public class HoughCropTest extends TestCase {
     @Test
     public void testProcess() throws IOException {
         HoughMap srcMap =
-                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
-        HoughMap expectedMap =
-                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/hough_crop_op.bmp"));
-
+                new HoughMapLoader().load(getFile("org/ebsdimage/testdata/houghmap.bmp"));
         HoughMap destMap = op.process(null, srcMap);
 
+        HoughMap expectedMap =
+                new HoughMapLoader().load(getFile("org/ebsdimage/testdata/hough_crop_op.bmp"));
         destMap.assertEquals(expectedMap);
     }
 
@@ -82,37 +90,6 @@ public class HoughCropTest extends TestCase {
     @Test
     public void testToString() {
         assertEquals(op.toString(), "Hough Crop [radius=8 px]");
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertFalse(op.equals(new HoughCrop(7)));
-        assertTrue(op.equals(new HoughCrop(8)));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 2));
-        assertFalse(op.equals(null, 2));
-        assertFalse(op.equals(new Object(), 2));
-
-        assertFalse(op.equals(new HoughCrop(5), 2));
-        assertTrue(op.equals(new HoughCrop(7), 2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(1983706858, op.hashCode());
     }
 
 

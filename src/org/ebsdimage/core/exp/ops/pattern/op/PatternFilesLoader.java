@@ -44,23 +44,6 @@ public class PatternFilesLoader extends PatternOp {
 
 
     /**
-     * Returns the path of all the defined pattern files.
-     * 
-     * @return path of files
-     */
-    @ElementArray(name = "files")
-    public String[] getFilePaths() {
-        String[] filePaths = new String[files.length];
-
-        for (int i = 0; i < files.length; i++)
-            filePaths[i] = files[i].getPath();
-
-        return filePaths;
-    }
-
-
-
-    /**
      * Creates a new <code>PatternFileLoader</code> from the specified file
      * directory and name.
      * 
@@ -137,16 +120,54 @@ public class PatternFilesLoader extends PatternOp {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
         if (!super.equals(obj))
             return false;
-        if (getClass() != obj.getClass())
-            return false;
+
         PatternFilesLoader other = (PatternFilesLoader) obj;
         if (!Arrays.equals(files, other.files))
             return false;
+
         return true;
+    }
+
+
+
+    @Override
+    public PatternOp extract(int startIndex, int endIndex) {
+        if (startIndex < this.startIndex)
+            throw new IllegalArgumentException("Specified start index ("
+                    + startIndex + ") is less than the index of the"
+                    + " first pattern in this operation (" + this.startIndex
+                    + ").");
+
+        int size = endIndex - startIndex + 1;
+
+        if (size > this.size)
+            throw new IllegalArgumentException("The split (" + size
+                    + ") goes outside the size of this operation (" + this.size
+                    + ").");
+
+        File[] files = new File[size];
+        System.arraycopy(this.files, startIndex, files, 0, size);
+
+        return new PatternFilesLoader(startIndex, files);
+    }
+
+
+
+    /**
+     * Returns the path of all the defined pattern files.
+     * 
+     * @return path of files
+     */
+    @ElementArray(name = "files")
+    public String[] getFilePaths() {
+        String[] filePaths = new String[files.length];
+
+        for (int i = 0; i < files.length; i++)
+            filePaths[i] = files[i].getPath();
+
+        return filePaths;
     }
 
 
@@ -208,35 +229,16 @@ public class PatternFilesLoader extends PatternOp {
         /* Load pattern map */
         Map map = IO.load(file);
 
+        // Calibrate diffraction pattern based on camera
+        map.setCalibration(exp.mmap.getMicroscope().getCamera().getCalibration(
+                map.width, map.height));
+
         if (map instanceof ByteMap)
             return (ByteMap) map;
         else if (map instanceof RGBMap)
             return Transform.getBlueLayer((RGBMap) map);
         else
             throw new RuntimeException("Cannot convert map to ByteMap.");
-    }
-
-
-
-    @Override
-    public PatternOp extract(int startIndex, int endIndex) {
-        if (startIndex < this.startIndex)
-            throw new IllegalArgumentException("Specified start index ("
-                    + startIndex + ") is less than the index of the"
-                    + " first pattern in this operation (" + this.startIndex
-                    + ").");
-
-        int size = endIndex - startIndex + 1;
-
-        if (size > this.size)
-            throw new IllegalArgumentException("The split (" + size
-                    + ") goes outside the size of this operation (" + this.size
-                    + ").");
-
-        File[] files = new File[size];
-        System.arraycopy(this.files, startIndex, files, 0, size);
-
-        return new PatternFilesLoader(startIndex, files);
     }
 
 

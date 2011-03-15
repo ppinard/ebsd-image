@@ -29,8 +29,6 @@ import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.core.ByteMap;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import static junittools.test.Assert.assertEquals;
 
@@ -62,35 +60,6 @@ public class HoughOpMockTest extends TestCase {
         byte[] srcPixArray = new byte[] { 3, 5, 7, 9 };
         for (int i = 0; i < result.pixArray.length; i++)
             assertEquals(srcPixArray[i % 4], result.pixArray[i]);
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertTrue(op.equals(new HoughOpMock()));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new HoughOpMock(), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(1706032537, op.hashCode());
     }
 
 

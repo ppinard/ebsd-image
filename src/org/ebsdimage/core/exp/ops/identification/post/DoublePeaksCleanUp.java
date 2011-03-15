@@ -17,13 +17,12 @@
  */
 package org.ebsdimage.core.exp.ops.identification.post;
 
-import magnitude.core.Magnitude;
-
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.HoughPeakIntensityComparator;
 import org.ebsdimage.core.exp.Exp;
 import org.simpleframework.xml.Attribute;
 
+import rmlimage.core.Calibration;
 import rmlshared.util.ArrayList;
 import static java.util.Arrays.sort;
 
@@ -91,23 +90,6 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
 
 
     @Override
-    public boolean equals(Object obj, Object precision) {
-        if (!super.equals(obj, precision))
-            return false;
-
-        double delta = ((Number) precision).doubleValue();
-        DoublePeaksCleanUp other = (DoublePeaksCleanUp) obj;
-        if (Math.abs(spacingRho - other.spacingRho) > delta)
-            return false;
-        if (Math.abs(spacingTheta - other.spacingTheta) > delta)
-            return false;
-
-        return true;
-    }
-
-
-
-    @Override
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
@@ -132,10 +114,8 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
      */
     @Override
     public HoughPeak[] process(Exp exp, HoughPeak[] srcPeaks) {
-        Magnitude deltaRho = exp.getCurrentHoughMap().getDeltaRho();
-        Magnitude deltaTheta = exp.getCurrentHoughMap().getDeltaTheta();
-
-        return process(srcPeaks, deltaTheta, deltaRho);
+        Calibration cal = exp.getCurrentHoughMap().getCalibration();
+        return process(srcPeaks, cal.dx, cal.dy);
     }
 
 
@@ -152,16 +132,18 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
      *            resolution in theta
      * @return list of <code>HoughPeak</code> without duplicates
      */
-    protected HoughPeak[] process(HoughPeak[] srcPeaks, Magnitude deltaTheta,
-            Magnitude deltaRho) {
+    protected HoughPeak[] process(HoughPeak[] srcPeaks, double deltaTheta,
+            double deltaRho) {
         ArrayList<HoughPeak> destPeaks = new ArrayList<HoughPeak>();
+
+        sort(srcPeaks, new HoughPeakIntensityComparator());
+
+        double precisionTheta = deltaTheta * spacingTheta;
+        double precisionRho = deltaRho * spacingRho;
 
         HoughPeak peak0;
         HoughPeak peak1;
         boolean same;
-
-        sort(srcPeaks, new HoughPeakIntensityComparator());
-
         for (int i = 0; i < srcPeaks.length; i++) {
             peak0 = srcPeaks[i];
             same = false;
@@ -169,8 +151,7 @@ public class DoublePeaksCleanUp extends IdentificationPostOps {
             for (int j = i + 1; j < srcPeaks.length; j++) {
                 peak1 = srcPeaks[j];
 
-                if (peak0.equivalent(peak1, deltaRho.multiply(spacingRho),
-                        deltaTheta.multiply(spacingTheta)))
+                if (peak0.equivalent(peak1, precisionTheta, precisionRho))
                     same = true;
             }
 

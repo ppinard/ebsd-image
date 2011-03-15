@@ -29,11 +29,8 @@ import org.junit.Test;
 
 import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
-import rmlshared.io.FileUtil;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import static junittools.test.Assert.assertEquals;
 
@@ -53,7 +50,7 @@ public class AverageTest extends TestCase {
     @Test
     public void testCalculate() throws IOException {
         HoughMap srcMap =
-                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
+                new HoughMapLoader().load(getFile("org/ebsdimage/testdata/houghmap.bmp"));
         OpResult result = op.calculate(null, srcMap)[0];
 
         assertEquals(102.92008196, result.value.doubleValue(), 1e-7);
@@ -64,35 +61,6 @@ public class AverageTest extends TestCase {
     @Test
     public void testToString() {
         assertEquals(op.toString(), "Average");
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertTrue(op.equals(new Average()));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new Average(), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(103320576, op.hashCode());
     }
 
 

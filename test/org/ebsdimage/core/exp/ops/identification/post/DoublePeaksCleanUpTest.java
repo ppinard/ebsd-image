@@ -19,8 +19,6 @@ package org.ebsdimage.core.exp.ops.identification.post;
 
 import java.io.File;
 
-import magnitude.core.Magnitude;
-
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
 import org.junit.Before;
@@ -55,49 +53,12 @@ public class DoublePeaksCleanUpTest extends TestCase {
     public void setUp() throws Exception {
         op = new DoublePeaksCleanUp(2, 3);
 
-        Magnitude theta = new Magnitude(0.2, "rad");
-        Magnitude rho = new Magnitude(0.1, "px");
-        peak1 = new HoughPeak(theta, rho, 1);
-
-        theta = new Magnitude(0.6, "rad");
-        rho = new Magnitude(0.3, "px");
-        peak2 = new HoughPeak(theta, rho, 2);
-
-        theta = new Magnitude(0.7, "rad");
-        rho = new Magnitude(0.4, "px");
-        peak3 = new HoughPeak(theta, rho, 3);
-
-        theta = new Magnitude(0.7, "rad");
-        rho = new Magnitude(0.0, "px");
-        peak4 = new HoughPeak(theta, rho, 4);
+        peak1 = new HoughPeak(0.2, 0.1, 1);
+        peak2 = new HoughPeak(0.6, 0.3, 2);
+        peak3 = new HoughPeak(0.7, 0.4, 3);
+        peak4 = new HoughPeak(0.7, 0.0, 4);
 
         srcPeaks = new HoughPeak[] { peak1, peak2, peak3, peak4 };
-    }
-
-
-
-    @Test
-    public void testToString() {
-        String expected = "DoublePeaksCleanUp [spacingRho=2, spacingTheta=3]";
-        assertEquals(expected, op.toString());
-    }
-
-
-
-    @Test
-    public void testProcess() {
-        Magnitude deltaTheta = new Magnitude(0.1, "rad");
-        Magnitude deltaRho = new Magnitude(0.1, "px");
-
-        HoughPeak[] destPeaks = op.process(srcPeaks, deltaTheta, deltaRho);
-
-        // peak2 is equivalent to peak3
-        // peak3 is kept because it has a higher intensity
-
-        assertEquals(3, destPeaks.length);
-        assertEquals(peak1, destPeaks[0], 1e-6);
-        assertEquals(peak3, destPeaks[1], 1e-6);
-        assertEquals(peak4, destPeaks[2], 1e-6);
     }
 
 
@@ -124,21 +85,31 @@ public class DoublePeaksCleanUpTest extends TestCase {
 
 
     @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 2));
-        assertFalse(op.equals(null, 2));
-        assertFalse(op.equals(new Object(), 2));
-
-        assertFalse(op.equals(new DoublePeaksCleanUp(5, 3), 2));
-        assertFalse(op.equals(new DoublePeaksCleanUp(2, 6), 2));
-        assertTrue(op.equals(new DoublePeaksCleanUp(4, 5), 2));
+    public void testHashCode() {
+        assertEquals(-972408927, op.hashCode());
     }
 
 
 
     @Test
-    public void testHashCode() {
-        assertEquals(-972408927, op.hashCode());
+    public void testProcess() {
+        HoughPeak[] destPeaks = op.process(srcPeaks, 0.1, 0.1);
+
+        // peak2 is equivalent to peak3
+        // peak3 is kept because it has a higher intensity
+
+        assertEquals(3, destPeaks.length);
+        assertEquals(peak1, destPeaks[0], 1e-6);
+        assertEquals(peak3, destPeaks[1], 1e-6);
+        assertEquals(peak4, destPeaks[2], 1e-6);
+    }
+
+
+
+    @Test
+    public void testToString() {
+        String expected = "DoublePeaksCleanUp [spacingRho=2, spacingTheta=3]";
+        assertEquals(expected, op.toString());
     }
 
 

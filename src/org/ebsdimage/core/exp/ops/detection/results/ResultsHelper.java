@@ -44,16 +44,16 @@ public class ResultsHelper {
 
 
     /**
-     * Calculates the standard deviation of the array. If the array doesn't
-     * contain at least 2 values, <code>Float.NaN</code> is returned.
+     * Calculates the maximum value of the array. If the array doesn't contain
+     * at least 2 values, <code>Float.NaN</code> is returned.
      * 
      * @param data
      *            set of data
      * @return standard deviation
      */
-    public static double standardDeviation(double[] data) {
+    public static double max(double[] data) {
         if (data.length > 1)
-            return Stats.standardDeviation(data);
+            return Stats.max(data);
         else
             return Float.NaN;
     }
@@ -78,16 +78,16 @@ public class ResultsHelper {
 
 
     /**
-     * Calculates the maximum value of the array. If the array doesn't contain
-     * at least 2 values, <code>Float.NaN</code> is returned.
+     * Calculates the standard deviation of the array. If the array doesn't
+     * contain at least 2 values, <code>Float.NaN</code> is returned.
      * 
      * @param data
      *            set of data
      * @return standard deviation
      */
-    public static double max(double[] data) {
+    public static double standardDeviation(double[] data) {
         if (data.length > 1)
-            return Stats.max(data);
+            return Stats.standardDeviation(data);
         else
             return Float.NaN;
     }

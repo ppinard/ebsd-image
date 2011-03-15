@@ -17,8 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.detection.pre;
 
-import static java.lang.Math.abs;
-
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.exp.Exp;
 import org.simpleframework.xml.Attribute;
@@ -27,6 +25,7 @@ import rmlimage.core.ByteMap;
 import rmlimage.core.Edit;
 import rmlimage.core.ROI;
 import rmlimage.core.Transform;
+import static java.lang.Math.abs;
 
 /**
  * Operation to increase the theta range of the Hough by copying the left side
@@ -48,21 +47,6 @@ public class ThetaExpand extends DetectionPreOps {
 
 
 
-    @Override
-    public boolean equals(Object obj, Object precision) {
-        if (!super.equals(obj, precision))
-            return false;
-
-        double delta = ((Number) precision).doubleValue();
-        ThetaExpand other = (ThetaExpand) obj;
-        if (abs(increment - other.increment) > delta)
-            return false;
-
-        return true;
-    }
-
-
-
     /**
      * Creates a new <code>ThetaExpand</code> with the specified increment.
      * 
@@ -76,6 +60,21 @@ public class ThetaExpand extends DetectionPreOps {
                     + ") must be between [0, PI].");
 
         this.increment = increment;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj, Object precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        double delta = ((Number) precision).doubleValue();
+        ThetaExpand other = (ThetaExpand) obj;
+        if (abs(increment - other.increment) > delta)
+            return false;
+
+        return true;
     }
 
 
@@ -116,32 +115,6 @@ public class ThetaExpand extends DetectionPreOps {
         Edit.copy(slice, slice.getROI(), destMap, width, 0);
 
         return destMap;
-    }
-
-
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        long temp;
-        temp = Double.doubleToLongBits(increment);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        return result;
-    }
-
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!super.equals(obj))
-            return false;
-
-        ThetaExpand other = (ThetaExpand) obj;
-        if (Double.doubleToLongBits(increment) != Double.doubleToLongBits(other.increment))
-            return false;
-
-        return true;
     }
 
 

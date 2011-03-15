@@ -1,7 +1,5 @@
 package org.ebsdimage.core.exp.ops.identification.op;
 
-import magnitude.core.Magnitude;
-
 import org.ebsdimage.core.Analysis;
 import org.ebsdimage.core.Centroid;
 import org.ebsdimage.core.HoughMap;
@@ -26,34 +24,19 @@ public class Maximum extends IdentificationOp {
 
 
     @Override
-    public String toString() {
-        return "Maximum";
+    public HoughPeak[] identify(Exp exp, BinMap peaksMap, HoughMap houghMap) {
+        IdentMap identMap = Identification.identify(peaksMap);
+
+        Centroid maximums = Analysis.getMaximumLocation(identMap, houghMap);
+
+        return maximums.toHoughPeakArray();
     }
 
 
 
     @Override
-    public HoughPeak[] identify(Exp exp, BinMap peaksMap, HoughMap houghMap) {
-        IdentMap identMap = Identification.identify(peaksMap);
-
-        // Calculate maximum location
-        Centroid maximums = Analysis.getMaximumLocation(identMap, houghMap);
-
-        // Create Peak objects with intensity at maximum
-        HoughPeak[] peaks = new HoughPeak[maximums.getValueCount()];
-
-        double intensity;
-        Magnitude theta = new Magnitude(0, maximums.units[Centroid.X]);
-        Magnitude rho = new Magnitude(0, maximums.units[Centroid.Y]);
-        for (int i = 0; i < maximums.getValueCount(); i++) {
-            theta = new Magnitude(maximums.x[i], theta);
-            rho = new Magnitude(maximums.y[i], rho);
-            intensity = maximums.intensity[i];
-
-            peaks[i] = new HoughPeak(theta, rho, intensity);
-        }
-
-        return peaks;
+    public String toString() {
+        return "Maximum";
     }
 
 }

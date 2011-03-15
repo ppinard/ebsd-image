@@ -19,8 +19,6 @@ package org.ebsdimage.core.exp.ops.identification.op;
 
 import java.io.File;
 
-import magnitude.core.Magnitude;
-
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
@@ -32,7 +30,6 @@ import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.core.BinMap;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import static junittools.test.Assert.assertEquals;
@@ -69,49 +66,14 @@ public class IdentificationOpMockTest extends TestCase {
 
         assertEquals(3, destPeaks.length);
 
-        Magnitude theta = new Magnitude(0.0, "rad");
-        Magnitude rho = new Magnitude(0.07, "px");
-        HoughPeak other = new HoughPeak(theta, rho);
+        HoughPeak other = new HoughPeak(0.0, 0.07, 0.0);
         assertTrue(destPeaks[0].equals(other, 1e-6));
 
-        theta = new Magnitude(1.0, "rad");
-        rho = new Magnitude(0.11, "px");
-        other = new HoughPeak(theta, rho);
+        other = new HoughPeak(1.0, 0.11, 1.0);
         assertTrue(destPeaks[1].equals(other, 1e-6));
 
-        theta = new Magnitude(0.0, "rad");
-        rho = new Magnitude(0.15, "px");
-        other = new HoughPeak(theta, rho);
+        other = new HoughPeak(0.0, 0.15, 2.0);
         assertTrue(destPeaks[2].equals(other, 1e-6));
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertTrue(op.equals(new IdentificationOpMock()));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new IdentificationOpMock(), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(-1244382376, op.hashCode());
     }
 
 

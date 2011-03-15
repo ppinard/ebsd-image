@@ -29,8 +29,6 @@ import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.core.BinMap;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import static junittools.test.Assert.assertEquals;
 
@@ -53,13 +51,6 @@ public class AreaTest extends TestCase {
 
 
     @Test
-    public void testToString() {
-        assertEquals("Area", op.toString());
-    }
-
-
-
-    @Test
     public void testCalculate() {
         OpResult[] results = op.calculate(null, peaksMap);
 
@@ -67,44 +58,26 @@ public class AreaTest extends TestCase {
 
         // Average
         assertEquals(67.25, results[0].value.doubleValue(), 1e-6);
+        assertEquals("px2", results[0].units);
 
         // Std Dev
         assertEquals(18.49131012, results[1].value.doubleValue(), 1e-6);
+        assertEquals("px2", results[1].units);
 
         // Min
         assertEquals(40.0, results[2].value.doubleValue(), 1e-6);
+        assertEquals("px2", results[2].units);
 
         // Max
         assertEquals(94.0, results[3].value.doubleValue(), 1e-6);
+        assertEquals("px2", results[3].units);
     }
 
 
 
     @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertTrue(op.equals(new Area()));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new Area(), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(2049228, op.hashCode());
+    public void testToString() {
+        assertEquals("Area", op.toString());
     }
 
 

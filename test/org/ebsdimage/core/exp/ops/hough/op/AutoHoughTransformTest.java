@@ -29,7 +29,6 @@ import org.junit.Test;
 import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.core.ByteMap;
-import rmlshared.io.FileUtil;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -52,13 +51,6 @@ public class AutoHoughTransformTest extends TestCase {
 
 
 
-    // @Test
-    // public void testAutoHoughTransformOp() {
-    // AutoHoughTransform tmpHough = new AutoHoughTransform();
-    // assertEquals(AutoHoughTransform.DEFAULT_DELTA_THETA,
-    // tmpHough.deltaTheta, 1e-7);
-    // }
-
     @Test
     public void testAutoHoughTransformOpDouble() {
         assertEquals(toRadians(1.0), op.deltaTheta, 1e-7);
@@ -74,13 +66,25 @@ public class AutoHoughTransformTest extends TestCase {
 
 
     @Test
+    public void testEqualsObjectObject() {
+        assertTrue(op.equals(op, 1e-2));
+        assertFalse(op.equals(null, 1e-2));
+        assertFalse(op.equals(new Object(), 1e-2));
+
+        assertFalse(op.equals(new AutoHoughTransform(toRadians(1.0) - 0.01),
+                1e-3));
+        assertTrue(op.equals(new AutoHoughTransform(toRadians(1.0)), 1e-2));
+    }
+
+
+
+    @Test
     public void testProcess() throws IOException {
         ByteMap srcMap = (ByteMap) load("org/ebsdimage/testdata/pattern.bmp");
-        HoughMap expectedMap =
-                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/autohoughtransformop.bmp"));
-
         HoughMap destMap = op.transform(null, srcMap);
 
+        HoughMap expectedMap =
+                new HoughMapLoader().load(getFile("org/ebsdimage/testdata/autohoughtransformop.bmp"));
         destMap.assertEquals(expectedMap);
     }
 
@@ -90,38 +94,6 @@ public class AutoHoughTransformTest extends TestCase {
     public void testToString() {
         assertEquals(op.toString(),
                 "Auto Hough Transform [resolution=1.0 deg/px]");
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertFalse(op.equals(new AutoHoughTransform(toRadians(2.0))));
-        assertTrue(op.equals(new AutoHoughTransform(toRadians(1.0))));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertFalse(op.equals(new AutoHoughTransform(toRadians(1.0) - 0.01),
-                1e-2));
-        assertTrue(op.equals(new AutoHoughTransform(toRadians(1.0)), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(-470840940, op.hashCode());
     }
 
 

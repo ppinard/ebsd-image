@@ -82,43 +82,6 @@ public class ButterflyTest extends TestCase {
 
 
     @Test
-    public void testProcess() throws IOException {
-        HoughMap srcMap =
-                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
-        HoughMap expected =
-                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/butterfly_op.bmp"));
-
-        HoughMap destMap = op.process(null, srcMap);
-
-        destMap.assertEquals(expected);
-    }
-
-
-
-    @Test
-    public void testToString() {
-        assertEquals(
-                op.toString(),
-                "Butterfly [flatten lower limit=-500.0, flatten upper limit=500.0, kernel size=9]");
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertFalse(op.equals(new Butterfly(3, -500, 500)));
-        assertFalse(op.equals(new Butterfly(9, -400, 500)));
-        assertFalse(op.equals(new Butterfly(9, -500, 400)));
-        assertTrue(op.equals(new Butterfly(9, -500, 500)));
-    }
-
-
-
-    @Test
     public void testEqualsObjectDouble() {
         assertTrue(op.equals(op, 1e-2));
         assertFalse(op.equals(null, 1e-2));
@@ -133,8 +96,23 @@ public class ButterflyTest extends TestCase {
 
 
     @Test
-    public void testHashCode() {
-        assertEquals(-390040472, op.hashCode());
+    public void testProcess() throws IOException {
+        HoughMap srcMap =
+                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap.bmp"));
+        HoughMap destMap = op.process(null, srcMap);
+
+        HoughMap expected =
+                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/butterfly_op.bmp"));
+        destMap.assertEquals(expected);
+    }
+
+
+
+    @Test
+    public void testToString() {
+        assertEquals(
+                op.toString(),
+                "Butterfly [flatten lower limit=-500.0, flatten upper limit=500.0, kernel size=9]");
     }
 
 

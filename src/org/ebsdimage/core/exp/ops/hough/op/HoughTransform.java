@@ -17,9 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.hough.op;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.toDegrees;
-
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.Transform;
 import org.ebsdimage.core.exp.Exp;
@@ -27,6 +24,8 @@ import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
 import rmlimage.core.Filter;
+import static java.lang.Math.abs;
+import static java.lang.Math.toDegrees;
 
 /**
  * Operation to perform the Hough transform.
@@ -48,13 +47,6 @@ public class HoughTransform extends HoughOp {
             Math.toRadians(0.5), 1.0);
 
 
-
-    // /**
-    // * Creates a new Hough transform operation with the default values.
-    // */
-    // public HoughTransform() {
-    // this(DEFAULT_DELTA_THETA, DEFAULT_DELTA_RHO);
-    // }
 
     /**
      * Creates a new Hough transform operation using the specified resolutions.
@@ -83,58 +75,6 @@ public class HoughTransform extends HoughOp {
 
 
 
-    /**
-     * Performs a Hough transform on the pattern map.
-     * 
-     * @param exp
-     *            experiment executing this method
-     * @param srcMap
-     *            pattern map
-     * @return Hough map
-     * @see Transform#hough(ByteMap, double)
-     */
-    @Override
-    public HoughMap transform(Exp exp, ByteMap srcMap) {
-        HoughMap houghMap = Transform.hough(srcMap, deltaTheta, deltaRho);
-
-        // Apply median to remove gap at theta = 90 deg
-        Filter.median(houghMap);
-
-        return houghMap;
-    }
-
-
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        long temp;
-        temp = Double.doubleToLongBits(deltaRho);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(deltaTheta);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        return result;
-    }
-
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!super.equals(obj))
-            return false;
-
-        HoughTransform other = (HoughTransform) obj;
-        if (Double.doubleToLongBits(deltaRho) != Double.doubleToLongBits(other.deltaRho))
-            return false;
-        if (Double.doubleToLongBits(deltaTheta) != Double.doubleToLongBits(other.deltaTheta))
-            return false;
-
-        return true;
-    }
-
-
-
     @Override
     public boolean equals(Object obj, Object precision) {
         if (!super.equals(obj, precision))
@@ -156,6 +96,28 @@ public class HoughTransform extends HoughOp {
     public String toString() {
         return "Hough Transform [deltaTheta=" + toDegrees(deltaTheta)
                 + " deg/px, deltaRho=" + deltaRho + " px/px]";
+    }
+
+
+
+    /**
+     * Performs a Hough transform on the pattern map.
+     * 
+     * @param exp
+     *            experiment executing this method
+     * @param srcMap
+     *            pattern map
+     * @return Hough map
+     * @see Transform#hough(ByteMap, double)
+     */
+    @Override
+    public HoughMap transform(Exp exp, ByteMap srcMap) {
+        HoughMap houghMap = Transform.hough(srcMap, deltaTheta, deltaRho);
+
+        // Apply median to remove gap at theta = 90 deg
+        Filter.median(houghMap);
+
+        return houghMap;
     }
 
 }

@@ -17,7 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.pattern.results;
 
-import org.ebsdimage.core.QualityIndex;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 

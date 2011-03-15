@@ -28,8 +28,6 @@ import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.core.BinMap;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import static junittools.test.Assert.assertEquals;
 
@@ -59,35 +57,8 @@ public class IdentificationPreOpsMockTest extends TestCase {
 
         for (int i = 0; i < result.size; i++)
             assertEquals(i % 2, result.pixArray[i]);
-    }
 
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertTrue(op.equals(new IdentificationPreOpsMock()));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new IdentificationPreOpsMock(), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(1112374406, op.hashCode());
+        result.getCalibration().assertEquals(srcMap.getCalibration(), 1e-6);
     }
 
 

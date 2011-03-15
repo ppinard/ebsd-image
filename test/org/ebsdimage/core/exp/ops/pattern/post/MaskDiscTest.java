@@ -68,12 +68,32 @@ public class MaskDiscTest extends TestCase {
 
 
     @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new MaskDisc(99, 11, 8)));
+        assertFalse(op.equals(new MaskDisc(10, 99, 8)));
+        assertFalse(op.equals(new MaskDisc(10, 11, 99)));
+        assertTrue(op.equals(new MaskDisc(10, 11, 8)));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(626893831, op.hashCode());
+    }
+
+
+
+    @Test
     public void testProcess() {
         ByteMap srcMap = (ByteMap) load("org/ebsdimage/testdata/srcMap.bmp");
-        ByteMap expectedMap = (ByteMap) load("org/ebsdimage/testdata/mask.bmp");
-
         ByteMap destMap = op.process(null, srcMap);
 
+        ByteMap expectedMap = (ByteMap) load("org/ebsdimage/testdata/mask.bmp");
         destMap.assertEquals(expectedMap);
 
         assertEquals(10, destMap.getProperty(KEY_CENTROID_X, -1));
@@ -101,41 +121,6 @@ public class MaskDiscTest extends TestCase {
     public void testToString() {
         assertEquals(op.toString(),
                 "Mask Disc [centroid X=10 px, centroid Y=11 px, radius=8 px]");
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertFalse(op.equals(new MaskDisc(99, 11, 8)));
-        assertFalse(op.equals(new MaskDisc(10, 99, 8)));
-        assertFalse(op.equals(new MaskDisc(10, 11, 99)));
-        assertTrue(op.equals(new MaskDisc(10, 11, 8)));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 2));
-        assertFalse(op.equals(null, 2));
-        assertFalse(op.equals(new Object(), 2));
-
-        assertFalse(op.equals(new MaskDisc(8, 11, 8), 2));
-        assertFalse(op.equals(new MaskDisc(8, 9, 8), 2));
-        assertFalse(op.equals(new MaskDisc(8, 11, 6), 2));
-        assertTrue(op.equals(new MaskDisc(9, 10, 7), 2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(626893831, op.hashCode());
     }
 
 

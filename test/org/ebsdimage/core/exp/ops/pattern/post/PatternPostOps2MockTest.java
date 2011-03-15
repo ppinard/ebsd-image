@@ -50,15 +50,20 @@ public class PatternPostOps2MockTest extends TestCase {
 
 
     @Test
-    public void testProcess() {
-        ByteMap result = op.process(null, srcMap);
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
 
-        assertEquals(2, result.width);
-        assertEquals(2, result.height);
-        assertEquals(3, result.pixArray[0]);
-        assertEquals(6, result.pixArray[1]);
-        assertEquals(9, result.pixArray[2]);
-        assertEquals(12, result.pixArray[3]);
+        assertFalse(op.equals(new PatternPostOps2Mock(1)));
+        assertTrue(op.equals(new PatternPostOps2Mock(3)));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(-1030637238, op.hashCode());
     }
 
 
@@ -79,30 +84,15 @@ public class PatternPostOps2MockTest extends TestCase {
 
 
     @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
+    public void testProcess() {
+        ByteMap result = op.process(null, srcMap);
 
-        assertTrue(op.equals(new PatternPostOps2Mock(1)));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new PatternPostOps2Mock(1), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(-448888359, op.hashCode());
+        assertEquals(2, result.width);
+        assertEquals(2, result.height);
+        assertEquals(3, result.pixArray[0]);
+        assertEquals(6, result.pixArray[1]);
+        assertEquals(9, result.pixArray[2]);
+        assertEquals(12, result.pixArray[3]);
     }
 
 

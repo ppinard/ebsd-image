@@ -17,12 +17,12 @@
  */
 package org.ebsdimage.core.exp.ops.indexing.op;
 
+import org.apache.commons.math.geometry.Rotation;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.exp.Exp;
 import org.simpleframework.xml.Root;
 
-import ptpshared.math.old.Quaternion;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
 
@@ -34,7 +34,7 @@ public class IndexingOpMock extends IndexingOp {
         Solution[] slns = new Solution[srcPeaks.length];
 
         Crystal phase = CrystalFactory.silicon();
-        Quaternion rotation = Quaternion.IDENTITY;
+        Rotation rotation = Rotation.IDENTITY;
 
         for (int i = 0; i < slns.length; i++)
             slns[i] =

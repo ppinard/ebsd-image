@@ -29,6 +29,7 @@ public class DetectionOpMock extends DetectionOp {
     @Override
     public BinMap detect(Exp exp, HoughMap srcMap) {
         BinMap destMap = new BinMap(srcMap.width, srcMap.height);
+        destMap.setCalibration(srcMap);
 
         for (int i = 0; i < destMap.size; i++)
             destMap.pixArray[i] = 0;
