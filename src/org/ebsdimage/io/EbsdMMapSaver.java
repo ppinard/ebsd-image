@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import org.ebsdimage.core.EbsdMMap;
 
+import ptpshared.util.simplexml.ApacheCommonMathMatcher;
 import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.module.multi.core.MultiMap;
 import rmlimage.module.multi.io.ZipSaver;
@@ -47,6 +48,10 @@ public abstract class EbsdMMapSaver extends ZipSaver {
         super.saveOtherFiles(mmap, zipDir);
 
         File file = new File(zipDir, "metadata.xml");
-        new XmlSaver().save(((EbsdMMap) mmap).getMetadata(), file);
+
+        XmlSaver saver = new XmlSaver();
+        saver.matchers.registerMatcher(new ApacheCommonMathMatcher());
+
+        saver.save(((EbsdMMap) mmap).getMetadata(), file);
     }
 }

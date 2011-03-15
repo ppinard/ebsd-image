@@ -23,6 +23,7 @@ import java.io.IOException;
 import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.EbsdMetadata;
 
+import ptpshared.util.simplexml.ApacheCommonMathMatcher;
 import ptpshared.util.simplexml.XmlLoader;
 import rmlimage.module.multi.core.MultiMap;
 import rmlimage.module.multi.io.ZipLoader;
@@ -62,8 +63,10 @@ public abstract class EbsdMMapLoader extends ZipLoader {
             throw new IOException(
                     "The EbsdMMap does not contain a metadata.xml file.");
 
-        EbsdMetadata metadata =
-                new XmlLoader().load(getMetadataClass(), metadataFile);
+        XmlLoader loader = new XmlLoader();
+        loader.matchers.registerMatcher(new ApacheCommonMathMatcher());
+
+        EbsdMetadata metadata = loader.load(getMetadataClass(), metadataFile);
         ((EbsdMMap) mmap).setMetadata(metadata);
     }
 
