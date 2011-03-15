@@ -173,4 +173,37 @@ public class Vector3DUtils {
         return new double[] { v.getX(), v.getY(), v.getZ() };
     }
 
+
+
+    /**
+     * Checks whether two <code>Vector3D</code> are equal to a certain
+     * precision.
+     * 
+     * @param u
+     *            vector 1
+     * @param v
+     *            vector 2
+     * @param precision
+     *            precision
+     * @return <code>true</code> if the two vectors are equal to the specified
+     *         precision, <code>false</code> otherwise
+     */
+    public static boolean equals(Vector3D u, Vector3D v, double precision) {
+        if (precision < 0)
+            throw new IllegalArgumentException(
+                    "Precision cannot be less than zero.");
+
+        if (u == null || v == null)
+            return false;
+
+        if (!(Math.abs(u.getX() - v.getX()) <= precision))
+            return false;
+        if (!(Math.abs(u.getY() - v.getY()) <= precision))
+            return false;
+        if (!(Math.abs(u.getZ() - v.getZ()) <= precision))
+            return false;
+
+        return true;
+    }
+
 }

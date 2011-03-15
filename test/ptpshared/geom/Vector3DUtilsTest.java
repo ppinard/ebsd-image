@@ -141,4 +141,24 @@ public class Vector3DUtilsTest {
 
         assertArrayEquals(expected, actual, 1e-6);
     }
+
+
+
+    @Test
+    public void testEquals() {
+        assertFalse(Vector3DUtils.equals(u, null, 1e-3));
+        assertFalse(Vector3DUtils.equals(null, v, 1e-3));
+
+        Vector3D other = new Vector3D(1.01, 2.01, 3.01);
+        assertTrue(Vector3DUtils.equals(u, other, 1e-1));
+
+        other = new Vector3D(1.1, 2.01, 3.01);
+        assertFalse(Vector3DUtils.equals(u, other, 1e-1));
+
+        other = new Vector3D(1.01, 2.1, 3.01);
+        assertFalse(Vector3DUtils.equals(u, other, 1e-1));
+
+        other = new Vector3D(1.01, 2.01, 3.1);
+        assertFalse(Vector3DUtils.equals(u, other, 1e-1));
+    }
 }
