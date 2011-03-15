@@ -29,7 +29,7 @@ import rmlshared.io.FileUtil;
 
 public class ExpSaverTest extends ExpTester {
 
-    private static File file = new File(FileUtil.getTempDirFile(), "exp.xml");
+    private static File file = new File(FileUtil.getTempDir(), "exp.xml");
 
 
 

@@ -20,7 +20,6 @@ package org.ebsdimage.core.exp;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.ebsdimage.core.*;
 import org.ebsdimage.core.exp.ops.detection.op.AutomaticTopHat;
@@ -39,7 +38,6 @@ import org.ebsdimage.core.exp.ops.identification.post.IdentificationPostOps;
 import org.ebsdimage.core.exp.ops.identification.pre.IdentificationPreOps;
 import org.ebsdimage.core.exp.ops.identification.results.IdentificationResultsOps;
 import org.ebsdimage.core.exp.ops.indexing.op.IndexingOp;
-import org.ebsdimage.core.exp.ops.indexing.op.KriegerLassen1994;
 import org.ebsdimage.core.exp.ops.indexing.post.IndexingPostOps;
 import org.ebsdimage.core.exp.ops.indexing.pre.IndexingPreOps;
 import org.ebsdimage.core.exp.ops.indexing.results.IndexingResultsOps;
@@ -48,16 +46,13 @@ import org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps;
 import org.ebsdimage.core.exp.ops.pattern.results.PatternResultsOps;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.run.Run;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.core.Persist;
-import org.simpleframework.xml.core.Validate;
+import org.simpleframework.xml.*;
 
 import ptpshared.io.FileUtil;
 import rmlimage.core.BinMap;
 import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
+import rmlimage.module.real.core.Calibration3D;
 import rmlimage.module.real.core.RealMap;
 import crystallography.core.Crystal;
 import static org.ebsdimage.core.exp.ExpConstants.*;
@@ -67,6 +62,14 @@ import static org.ebsdimage.core.exp.ExpConstants.*;
  * 
  * @author Philippe T. Pinard
  */
+@Order(elements = { "listeners", "metadata", "phases", "patternOp",
+        "patternPostOps", "patternResultsOps", "houghPreOps", "houghOp",
+        "houghPostOps", "houghResultsOps", "detectionPreOps", "detectionOp",
+        "detectionPostOps", "detectionResultsOps", "identificationPreOps",
+        "identificationOp", "identificationPostOps",
+        "identificationResultsOps", "indexingPreOps", "indexingOp",
+        "indexingPostOps", "indexingResultsOps" }, attributes = { "name",
+        "dir", "width", "height" })
 public class Exp extends Run {
 
     /** Experiment listeners. */
@@ -101,42 +104,34 @@ public class Exp extends Run {
     protected Solution[] currentSolutions;
 
     /** Pattern operation of the experiment. */
-    @Element(name = "patternOp")
     private PatternOp patternOp = null;
 
     /** List of pattern post operations of the experiment. */
-    @ElementList(name = "patternPostOps")
     private ArrayList<PatternPostOps> patternPostOps =
             new ArrayList<PatternPostOps>();
 
     /** List of pattern results operations of the experiment. */
-    @ElementList(name = "patternResultsOps")
     private ArrayList<PatternResultsOps> patternResultsOps =
             new ArrayList<PatternResultsOps>();
 
     /** List of Hough pre operations of the experiment. */
-    @ElementList(name = "houghPreOps")
     private ArrayList<HoughPreOps> houghPreOps = new ArrayList<HoughPreOps>();
 
     /** Default Hough operation. */
     public static final HoughOp DEFAULT_HOUGH_OP = AutoHoughTransform.DEFAULT;
 
     /** Hough operation. */
-    @Element(name = "houghOp")
     private HoughOp houghOp = DEFAULT_HOUGH_OP;
 
     /** List of Hough post operations of the experiment. */
-    @ElementList(name = "houghPostOps")
     private ArrayList<HoughPostOps> houghPostOps =
             new ArrayList<HoughPostOps>();
 
     /** List of Hough results operations of the experiment. */
-    @ElementList(name = "houghResultsOps")
     private ArrayList<HoughResultsOps> houghResultsOps =
             new ArrayList<HoughResultsOps>();
 
     /** List of detection pre operations of the experiment. */
-    @ElementList(name = "detectionPreOps")
     private ArrayList<DetectionPreOps> detectionPreOps =
             new ArrayList<DetectionPreOps>();
 
@@ -145,21 +140,17 @@ public class Exp extends Run {
             AutomaticTopHat.DEFAULT;
 
     /** Detection operation. */
-    @Element(name = "detectionOp")
     private DetectionOp detectionOp = DEFAULT_DETECTION_OP;
 
     /** List of detection post operations of the experiment. */
-    @ElementList(name = "detectionPostOps")
     private ArrayList<DetectionPostOps> detectionPostOps =
             new ArrayList<DetectionPostOps>();
 
     /** List of detection results operations of the experiment. */
-    @ElementList(name = "detectionResultsOps")
     private ArrayList<DetectionResultsOps> detectionResultsOps =
             new ArrayList<DetectionResultsOps>();
 
     /** List of identification pre operations of the experiment. */
-    @ElementList(name = "identificationPreOps")
     private ArrayList<IdentificationPreOps> identificationPreOps =
             new ArrayList<IdentificationPreOps>();
 
@@ -168,39 +159,31 @@ public class Exp extends Run {
             CenterOfMass.DEFAULT;
 
     /** Identification operation. */
-    @Element(name = "identificationOp")
     private IdentificationOp identificationOp = DEFAULT_IDENTIFICATION_OP;
 
     /** List of identification post operations of the experiment. */
-    @ElementList(name = "identificationPostOps")
     private ArrayList<IdentificationPostOps> identificationPostOps =
             new ArrayList<IdentificationPostOps>();
 
     /** List of identification results operations of the experiment. */
-    @ElementList(name = "identificationResultsOps")
     private ArrayList<IdentificationResultsOps> identificationResultsOps =
             new ArrayList<IdentificationResultsOps>();
 
     /** List of indexing pre operations of the experiment. */
-    @ElementList(name = "indexingPreOps")
     private ArrayList<IndexingPreOps> indexingPreOps =
             new ArrayList<IndexingPreOps>();
 
     /** Default indexing operation. */
-    public static final IndexingOp DEFAULT_INDEXING_OP =
-            KriegerLassen1994.DEFAULT;
+    public static final IndexingOp DEFAULT_INDEXING_OP = null;
 
     /** Indexing operation. */
-    @Element(name = "indexingOp")
     private IndexingOp indexingOp = DEFAULT_INDEXING_OP;
 
     /** List of indexing post operations of the experiment. */
-    @ElementList(name = "indexingPostOps")
     private ArrayList<IndexingPostOps> indexingPostOps =
             new ArrayList<IndexingPostOps>();
 
     /** List of indexing results operations of the experiment. */
-    @ElementList(name = "indexingResultsOps")
     private ArrayList<IndexingResultsOps> indexingResultsOps =
             new ArrayList<IndexingResultsOps>();
 
@@ -325,29 +308,32 @@ public class Exp extends Run {
             @Attribute(name = "width") int width,
             @Attribute(name = "height") int height,
             @Element(name = "metadata") EbsdMetadata metadata,
-            @ElementList(name = "phases") ArrayList<Crystal> phases,
+            @ElementMap(name = "phases") java.util.Map<Integer, Crystal> phases,
             @ElementList(name = "listeners") ArrayList<ExpListener> listeners,
             @Element(name = "patternOp") PatternOp patternOp,
-            @ElementList(name = "patternPostOps") ArrayList<PatternPostOps> patternPostOps,
-            @ElementList(name = "patternResultsOps") ArrayList<PatternResultsOps> patternResultsOps,
-            @ElementList(name = "houghPreOps") ArrayList<HoughPreOps> houghPreOps,
+            @ElementArray(name = "patternPostOps") PatternPostOps[] patternPostOps,
+            @ElementArray(name = "patternResultsOps") PatternResultsOps[] patternResultsOps,
+            @ElementArray(name = "houghPreOps") HoughPreOps[] houghPreOps,
             @Element(name = "houghOp") HoughOp houghOp,
-            @ElementList(name = "houghPostOps") ArrayList<HoughPostOps> houghPostOps,
-            @ElementList(name = "houghResultsOps") ArrayList<HoughResultsOps> houghResultsOps,
-            @ElementList(name = "detectionPreOps") ArrayList<DetectionPreOps> detectionPreOps,
+            @ElementArray(name = "houghPostOps") HoughPostOps[] houghPostOps,
+            @ElementArray(name = "houghResultsOps") HoughResultsOps[] houghResultsOps,
+            @ElementArray(name = "detectionPreOps") DetectionPreOps[] detectionPreOps,
             @Element(name = "detectionOp") DetectionOp detectionOp,
-            @ElementList(name = "detectionPostOps") ArrayList<DetectionPostOps> detectionPostOps,
-            @ElementList(name = "detectionResultsOps") ArrayList<DetectionResultsOps> detectionResultsOps,
-            @ElementList(name = "identificationPreOps") ArrayList<IdentificationPreOps> identificationPreOps,
+            @ElementArray(name = "detectionPostOps") DetectionPostOps[] detectionPostOps,
+            @ElementArray(name = "detectionResultsOps") DetectionResultsOps[] detectionResultsOps,
+            @ElementArray(name = "identificationPreOps") IdentificationPreOps[] identificationPreOps,
             @Element(name = "identificationOp") IdentificationOp identificationOp,
-            @ElementList(name = "identificationPostOps") ArrayList<IdentificationPostOps> identificationPostOps,
-            @ElementList(name = "identificationResultsOps") ArrayList<IdentificationResultsOps> identificationResultsOps,
-            @ElementList(name = "indexingPreOps") ArrayList<IndexingPreOps> indexingPreOps,
+            @ElementArray(name = "identificationPostOps") IdentificationPostOps[] identificationPostOps,
+            @ElementArray(name = "identificationResultsOps") IdentificationResultsOps[] identificationResultsOps,
+            @ElementArray(name = "indexingPreOps") IndexingPreOps[] indexingPreOps,
             @Element(name = "indexingOp") IndexingOp indexingOp,
-            @ElementList(name = "indexingPostOps") ArrayList<IndexingPostOps> indexingPostOps,
-            @ElementList(name = "indexingResultsOps") ArrayList<IndexingResultsOps> indexingResultsOps) {
+            @ElementArray(name = "indexingPostOps") IndexingPostOps[] indexingPostOps,
+            @ElementArray(name = "indexingResultsOps") IndexingResultsOps[] indexingResultsOps) {
         mmap = new ExpMMap(width, height);
         mmap.setMetadata(metadata);
+
+        PhaseMap phaseMap = new PhaseMap(width, height, phases);
+        mmap.put(EbsdMMap.PHASES, phaseMap);
 
         // Listeners
         for (ExpListener listener : listeners)
@@ -528,7 +514,7 @@ public class Exp extends Run {
      * @param ops
      *            operations
      */
-    protected void addOperations(ArrayList<? extends Operation> ops) {
+    protected void addOperations(Operation[] ops) {
         for (Operation op : ops)
             addOperation(op);
     }
@@ -547,32 +533,44 @@ public class Exp extends Run {
     /**
      * Creates a new map of the specified type.
      * 
-     * @param type
-     *            class of the map's type
+     * @param result
+     *            result obtained from an operation
      * @return a new map
      * @throws IllegalArgumentException
-     *             if the map's type is unknown
+     *             if the result's map type is unknown
      */
-    private Map createMap(Class<? extends Map> type) {
-        if (type.equals(RealMap.class)) {
+    private Map createMap(OpResult result) {
+        // RealMap
+        if (result.type.equals(RealMap.class)) {
             RealMap map = new RealMap(mmap.width, mmap.height);
             map.clear(Float.NaN);
+            map.setCalibration(new Calibration3D(mmap.getCalibration(), 0, 1,
+                    result.units, false));
             return map;
-        } else if (type.equals(ByteMap.class)) {
+
+            // ByteMap
+        } else if (result.type.equals(ByteMap.class)) {
             ByteMap map = new ByteMap(mmap.width, mmap.height);
             map.clear(0);
+            map.setCalibration(mmap);
             return map;
-        } else if (type.equals(PhaseMap.class)) {
+
+            // PhaseMap
+        } else if (result.type.equals(PhaseMap.class)) {
             PhaseMap map = new PhaseMap(mmap.width, mmap.height);
             map.clear(0);
+            map.setCalibration(mmap);
             return map;
-        } else if (type.equals(BinMap.class)) {
+
+            // BinMap
+        } else if (result.type.equals(BinMap.class)) {
             BinMap map = new BinMap(mmap.width, mmap.height);
             map.clear(false);
+            map.setCalibration(mmap);
             return map;
         } else
             throw new IllegalArgumentException("Unknown type of map ("
-                    + type.toString() + ").");
+                    + result.type.toString() + ").");
     }
 
 
@@ -992,6 +990,7 @@ public class Exp extends Run {
      * 
      * @return detection operation
      */
+    @Element(name = "detectionOp")
     public DetectionOp getDetectionOp() {
         return detectionOp;
     }
@@ -1003,6 +1002,7 @@ public class Exp extends Run {
      * 
      * @return detection post operations
      */
+    @ElementArray(name = "detectionPostOps")
     public DetectionPostOps[] getDetectionPostOps() {
         return detectionPostOps.toArray(new DetectionPostOps[detectionPostOps.size()]);
     }
@@ -1014,6 +1014,7 @@ public class Exp extends Run {
      * 
      * @return detection pre operations
      */
+    @ElementArray(name = "detectionPreOps")
     public DetectionPreOps[] getDetectionPreOps() {
         return detectionPreOps.toArray(new DetectionPreOps[detectionPreOps.size()]);
     }
@@ -1025,6 +1026,7 @@ public class Exp extends Run {
      * 
      * @return detection results operations
      */
+    @ElementArray(name = "detectionResultsOps")
     public DetectionResultsOps[] getDetectionResultsOps() {
         return detectionResultsOps.toArray(new DetectionResultsOps[detectionResultsOps.size()]);
     }
@@ -1060,6 +1062,7 @@ public class Exp extends Run {
      * 
      * @return Hough operation
      */
+    @Element(name = "houghOp")
     public HoughOp getHoughOp() {
         return houghOp;
     }
@@ -1071,6 +1074,7 @@ public class Exp extends Run {
      * 
      * @return Hough post operations
      */
+    @ElementArray(name = "houghPostOps")
     public HoughPostOps[] getHoughPostOps() {
         return houghPostOps.toArray(new HoughPostOps[houghPostOps.size()]);
     }
@@ -1082,6 +1086,7 @@ public class Exp extends Run {
      * 
      * @return Hough pre operations
      */
+    @ElementArray(name = "houghPreOps")
     public HoughPreOps[] getHoughPreOps() {
         return houghPreOps.toArray(new HoughPreOps[houghPreOps.size()]);
     }
@@ -1093,6 +1098,7 @@ public class Exp extends Run {
      * 
      * @return Hough results operations
      */
+    @ElementArray(name = "houghResultsOps")
     public HoughResultsOps[] getHoughResultsOps() {
         return houghResultsOps.toArray(new HoughResultsOps[houghResultsOps.size()]);
     }
@@ -1104,6 +1110,7 @@ public class Exp extends Run {
      * 
      * @return identification operation
      */
+    @Element(name = "identificationOp")
     public IdentificationOp getIdentificationOp() {
         return identificationOp;
     }
@@ -1115,6 +1122,7 @@ public class Exp extends Run {
      * 
      * @return identification post operations
      */
+    @ElementArray(name = "identificationPostOps")
     public IdentificationPostOps[] getIdentificationPostOps() {
         return identificationPostOps.toArray(new IdentificationPostOps[identificationPostOps.size()]);
     }
@@ -1126,6 +1134,7 @@ public class Exp extends Run {
      * 
      * @return identification pre operations
      */
+    @ElementArray(name = "identificationPreOps")
     public IdentificationPreOps[] getIdentificationPreOps() {
         return identificationPreOps.toArray(new IdentificationPreOps[identificationPreOps.size()]);
     }
@@ -1137,6 +1146,7 @@ public class Exp extends Run {
      * 
      * @return identification results operations
      */
+    @ElementArray(name = "identificationResultsOps")
     public IdentificationResultsOps[] getIdentificationResultsOps() {
         return identificationResultsOps.toArray(new IdentificationResultsOps[identificationResultsOps.size()]);
     }
@@ -1148,6 +1158,7 @@ public class Exp extends Run {
      * 
      * @return indexing operation
      */
+    @Element(name = "indexingOp")
     public IndexingOp getIndexingOp() {
         return indexingOp;
     }
@@ -1159,6 +1170,7 @@ public class Exp extends Run {
      * 
      * @return indexing post operations
      */
+    @ElementArray(name = "indexingPostOps")
     public IndexingPostOps[] getIndexingPostOps() {
         return indexingPostOps.toArray(new IndexingPostOps[indexingPostOps.size()]);
     }
@@ -1170,6 +1182,7 @@ public class Exp extends Run {
      * 
      * @return indexing pre operations
      */
+    @ElementArray(name = "indexingPreOps")
     public IndexingPreOps[] getIndexingPreOps() {
         return indexingPreOps.toArray(new IndexingPreOps[indexingPreOps.size()]);
     }
@@ -1181,6 +1194,7 @@ public class Exp extends Run {
      * 
      * @return indexing results operations
      */
+    @ElementArray(name = "indexingResultsOps")
     public IndexingResultsOps[] getIndexingResultsOps() {
         return indexingResultsOps.toArray(new IndexingResultsOps[indexingResultsOps.size()]);
     }
@@ -1205,6 +1219,7 @@ public class Exp extends Run {
      * 
      * @return pattern operation
      */
+    @Element(name = "patternOp")
     public PatternOp getPatternOp() {
         return patternOp;
     }
@@ -1216,6 +1231,7 @@ public class Exp extends Run {
      * 
      * @return pattern post operations
      */
+    @ElementArray(name = "patternPostOps")
     public PatternPostOps[] getPatternPostOps() {
         return patternPostOps.toArray(new PatternPostOps[patternPostOps.size()]);
     }
@@ -1227,6 +1243,7 @@ public class Exp extends Run {
      * 
      * @return pattern results operations
      */
+    @ElementArray(name = "patternResultsOps")
     public PatternResultsOps[] getPatternResultsOps() {
         return patternResultsOps.toArray(new PatternResultsOps[patternResultsOps.size()]);
     }
@@ -1239,9 +1256,9 @@ public class Exp extends Run {
      * 
      * @return phases
      */
-    @ElementList(name = "phases")
-    public ArrayList<Crystal> getPhases() {
-        return new ArrayList<Crystal>(Arrays.asList(mmap.getPhases().clone()));
+    @ElementMap(name = "phases")
+    public java.util.Map<Integer, Crystal> getPhases() {
+        return mmap.getPhaseMap().getItems();
     }
 
 
@@ -1324,13 +1341,16 @@ public class Exp extends Run {
      *            original map obtained after a "op" operation
      * @param current
      *            current map
+     * @return new source map or original one
      */
-    private void hasMapSizeChanged(Map source, Map current) {
+    private Map updateSourceMap(Map source, Map current) {
         if (source == null)
             source = current.duplicate();
 
         if (!source.isSameSize(current))
             source = current.duplicate();
+
+        return source;
     }
 
 
@@ -1347,35 +1367,6 @@ public class Exp extends Run {
         currentPeaksMap = null;
         currentPeaks = null;
         currentSolutions = null;
-    }
-
-
-
-    /**
-     * Prepares the operations to be serialized by setting their index as their
-     * position within each category's array.
-     */
-    @SuppressWarnings("unused")
-    @Persist
-    private void prepare() {
-        prepare(patternPostOps);
-        prepare(patternResultsOps);
-
-        prepare(houghPreOps);
-        prepare(houghPostOps);
-        prepare(houghResultsOps);
-
-        prepare(detectionPreOps);
-        prepare(detectionPostOps);
-        prepare(detectionResultsOps);
-
-        prepare(identificationPreOps);
-        prepare(identificationPostOps);
-        prepare(identificationResultsOps);
-
-        prepare(indexingPreOps);
-        prepare(indexingPostOps);
-        prepare(indexingResultsOps);
     }
 
 
@@ -1432,6 +1423,8 @@ public class Exp extends Run {
             if (isInterrupted())
                 break;
 
+            initRuntimeVariables();
+
             // Set current index
             currentIndex = index;
 
@@ -1474,7 +1467,8 @@ public class Exp extends Run {
         setStatus("Performing " + patternOp.getName() + " (" + index + ")...");
 
         currentPatternMap = patternOp.load(this, index);
-        hasMapSizeChanged(sourcePatternMap, currentPatternMap);
+        sourcePatternMap =
+                (ByteMap) updateSourceMap(sourcePatternMap, currentPatternMap);
 
         setStatus("Performing " + patternOp.getName() + "... DONE");
 
@@ -1486,7 +1480,9 @@ public class Exp extends Run {
             setStatus("Performing " + op.getName() + "...");
 
             currentPatternMap = op.process(this, currentPatternMap);
-            hasMapSizeChanged(sourcePatternMap, currentPatternMap);
+            sourcePatternMap =
+                    (ByteMap) updateSourceMap(sourcePatternMap,
+                            currentPatternMap);
 
             setStatus("Performing " + op.getName() + "... DONE");
 
@@ -1529,7 +1525,8 @@ public class Exp extends Run {
             setStatus("Performing " + houghOp.getName() + "...");
 
             currentHoughMap = houghOp.transform(this, currentPatternMap);
-            hasMapSizeChanged(sourceHoughMap, currentHoughMap);
+            sourceHoughMap =
+                    (HoughMap) updateSourceMap(sourceHoughMap, currentHoughMap);
 
             setStatus("Performing " + houghOp.getName() + "... DONE");
 
@@ -1541,7 +1538,9 @@ public class Exp extends Run {
                 setStatus("Performing " + op.getName() + "...");
 
                 currentHoughMap = op.process(this, currentHoughMap);
-                hasMapSizeChanged(sourceHoughMap, currentHoughMap);
+                sourceHoughMap =
+                        (HoughMap) updateSourceMap(sourceHoughMap,
+                                currentHoughMap);
 
                 setStatus("Performing " + op.getName() + "... DONE");
 
@@ -1584,7 +1583,9 @@ public class Exp extends Run {
                 setStatus("Performing " + detectionOp.getName() + "...");
 
                 currentPeaksMap = detectionOp.detect(this, currentHoughMap);
-                hasMapSizeChanged(sourcePeaksMap, currentPeaksMap);
+                sourcePeaksMap =
+                        (BinMap) updateSourceMap(sourcePeaksMap,
+                                currentPeaksMap);
 
                 setStatus("Performing " + detectionOp.getName() + "... DONE");
 
@@ -1596,7 +1597,9 @@ public class Exp extends Run {
                     setStatus("Performing " + op.getName() + "...");
 
                     currentPeaksMap = op.process(this, currentPeaksMap);
-                    hasMapSizeChanged(sourcePeaksMap, currentPeaksMap);
+                    sourcePeaksMap =
+                            (BinMap) updateSourceMap(sourcePeaksMap,
+                                    currentPeaksMap);
 
                     setStatus("Performing " + op.getName() + "... DONE");
 
@@ -1751,7 +1754,7 @@ public class Exp extends Run {
 
         // Create map if it doesn't exist
         if (map == null) {
-            map = createMap(result.type);
+            map = createMap(result);
             mmap.add(result.alias, map);
         }
 
@@ -1804,38 +1807,6 @@ public class Exp extends Run {
         super.setName(name);
 
         mmap.setName(name);
-    }
-
-
-
-    /**
-     * Validates the operations after the deserialization to check that there is
-     * not two operations with the same index.
-     * 
-     * @throws Exception
-     *             if two operations have the same index
-     */
-    @SuppressWarnings("unused")
-    @Validate
-    private void validate() throws Exception {
-        validate(patternPostOps, PatternPostOps.class);
-        validate(patternResultsOps, PatternResultsOps.class);
-
-        validate(houghPreOps, HoughPreOps.class);
-        validate(houghPostOps, HoughPostOps.class);
-        validate(houghResultsOps, HoughResultsOps.class);
-
-        validate(detectionPreOps, DetectionPreOps.class);
-        validate(detectionPostOps, DetectionPostOps.class);
-        validate(detectionResultsOps, DetectionResultsOps.class);
-
-        validate(identificationPreOps, IdentificationPreOps.class);
-        validate(identificationPostOps, IdentificationPostOps.class);
-        validate(identificationResultsOps, IdentificationResultsOps.class);
-
-        validate(indexingPreOps, IndexingPreOps.class);
-        validate(indexingPostOps, IndexingPostOps.class);
-        validate(indexingResultsOps, IndexingResultsOps.class);
     }
 
 }

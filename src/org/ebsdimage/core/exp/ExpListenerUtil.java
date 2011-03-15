@@ -3,14 +3,9 @@ package org.ebsdimage.core.exp;
 import java.util.Arrays;
 
 import org.ebsdimage.core.*;
-import org.ebsdimage.core.sim.Energy;
-import org.ebsdimage.core.sim.ops.patternsim.PatternBandCenter;
 
 import rmlimage.core.ByteMap;
-import rmlimage.core.Contrast;
 import rmlimage.core.MapMath;
-import crystallography.core.Reflectors;
-import crystallography.core.ScatteringFactorsEnum;
 
 /**
  * Utilities used by the experiment listeners.
@@ -101,34 +96,36 @@ public class ExpListenerUtil {
      */
     public static void drawSolutionOverlay(ByteMap patternMap, Camera camera,
             double beamEnergy, Solution sln) {
-        // Get source pattern map
-        int width = patternMap.width;
-        int height = patternMap.height;
-
-        // Draw simulation pattern
-        PatternBandCenter pattern =
-                new PatternBandCenter(width, height, 2,
-                        ScatteringFactorsEnum.XRAY);
-        Reflectors refls = pattern.calculateReflectors(sln.phase);
-
-        pattern.simulate(camera, refls, new Energy(beamEnergy), sln.rotation);
-
-        ByteMap simPatternMap = pattern.getPatternMap();
-        Contrast.expansion(simPatternMap);
-
-        // Combine simulation pattern with source pattern map
-        MapMath.addition(patternMap, simPatternMap, 1.0, 0.0, patternMap);
-
-        // Draw pattern centre
-        int pcH = (int) ((camera.patternCenterH + 0.5) * width);
-        int pcV = height - (int) ((camera.patternCenterV + 0.5) * height);
-        for (int x = pcH - width / 50; x <= pcH + width / 50; x++)
-            patternMap.setPixValue(x, pcV, 254);
-        for (int y = pcV - height / 50; y <= pcV + height / 50; y++)
-            patternMap.setPixValue(pcH, y, 254);
-
-        // Change colour for solution and pattern centre
-        patternMap.lut.setLUT(255, 255, 0, 0);
-        patternMap.lut.setLUT(254, 0, 255, 0);
+        // FIXME: Change with new simulation pattern operation
+        // // Get source pattern map
+        // int width = patternMap.width;
+        // int height = patternMap.height;
+        //
+        // // Draw simulation pattern
+        // PatternBandCenter pattern =
+        // new PatternBandCenter(width, height, 2,
+        // ScatteringFactorsEnum.XRAY);
+        // Reflectors refls = pattern.calculateReflectors(sln.phase);
+        //
+        // pattern.simulate(camera, refls, new Energy(beamEnergy),
+        // sln.rotation);
+        //
+        // ByteMap simPatternMap = pattern.getPatternMap();
+        // Contrast.expansion(simPatternMap);
+        //
+        // // Combine simulation pattern with source pattern map
+        // MapMath.addition(patternMap, simPatternMap, 1.0, 0.0, patternMap);
+        //
+        // // Draw pattern centre
+        // int pcH = (int) ((camera.patternCenterH + 0.5) * width);
+        // int pcV = height - (int) ((camera.patternCenterV + 0.5) * height);
+        // for (int x = pcH - width / 50; x <= pcH + width / 50; x++)
+        // patternMap.setPixValue(x, pcV, 254);
+        // for (int y = pcV - height / 50; y <= pcV + height / 50; y++)
+        // patternMap.setPixValue(pcH, y, 254);
+        //
+        // // Change colour for solution and pattern centre
+        // patternMap.lut.setLUT(255, 255, 0, 0);
+        // patternMap.lut.setLUT(254, 0, 255, 0);
     }
 }

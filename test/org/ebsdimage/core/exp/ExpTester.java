@@ -17,20 +17,13 @@
  */
 package org.ebsdimage.core.exp;
 
-import static java.lang.Math.toRadians;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.commons.math.geometry.Vector3D;
 import org.ebsdimage.TestCase;
-import org.ebsdimage.core.Camera;
-import org.ebsdimage.core.EbsdMMap;
-import org.ebsdimage.core.EbsdMetadata;
-import org.ebsdimage.core.PhaseMap;
+import org.ebsdimage.core.*;
 import org.ebsdimage.core.exp.ops.detection.op.DetectionOpMock;
 import org.ebsdimage.core.exp.ops.detection.post.DetectionPostOpsMock;
 import org.ebsdimage.core.exp.ops.detection.pre.DetectionPreOpsMock;
@@ -54,13 +47,18 @@ import org.ebsdimage.core.run.Operation;
 import org.junit.After;
 import org.junit.Test;
 
-import ptpshared.math.old.Quaternion;
 import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
 import rmlimage.module.real.core.RealMap;
 import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import static java.lang.Math.toRadians;
 
 public abstract class ExpTester extends TestCase {
 
@@ -98,13 +96,20 @@ public abstract class ExpTester extends TestCase {
     public static ExpMMap createExpMMap(int width, int height) {
         ExpMMap mmap = new ExpMMap(width, height);
 
-        EbsdMetadata metadata =
-                new EbsdMetadata(20e3, 100, toRadians(70), 15e-3, new Camera(
-                        0.1, 0.2, 0.3), new Quaternion(1, 2, 3, 4),
-                        new Quaternion(5, 6, 7, 8));
+        Camera camera =
+                new Camera(new Vector3D(1, 0, 0), new Vector3D(0, -1, 0), 0.04,
+                        0.03);
+        Microscope microscope = new Microscope(camera, new Vector3D(0, 1, 0));
+        microscope.setBeamEnergy(20e3);
+        microscope.setMagnification(100);
+        microscope.setTiltAngle(Math.toRadians(70));
+        microscope.setWorkingDistance(0.015);
+
+        EbsdMetadata metadata = new EbsdMetadata(microscope);
         mmap.setMetadata(metadata);
 
-        mmap.getPhasesMap().setPhases(createPhases());
+        for (Crystal phase : createPhases())
+            mmap.getPhaseMap().register(phase);
 
         return mmap;
     }
@@ -165,16 +170,11 @@ public abstract class ExpTester extends TestCase {
         assertEquals(1, exp.mmap.height);
 
         // Metadata
-        EbsdMetadata metadata = exp.getMetadata();
-        assertEquals(20e3, metadata.beamEnergy, 1e-6);
-        assertEquals(100, metadata.magnification, 1e-6);
-        assertEquals(toRadians(70), metadata.tiltAngle, 1e-6);
-        assertEquals(15e-3, metadata.workingDistance, 1e-6);
-        assertTrue(new Quaternion(1, 2, 3, 4).normalize().equals(
-                metadata.sampleRotation, 1e-6));
-        assertTrue(new Quaternion(5, 6, 7, 8).normalize().equals(
-                metadata.cameraRotation, 1e-6));
-        assertTrue(new Camera(0.1, 0.2, 0.3).equals(metadata.camera, 1e-6));
+        Microscope microscope = exp.getMetadata().microscope;
+        assertEquals(20e3, microscope.getBeamEnergy(), 1e-6);
+        assertEquals(100, microscope.getMagnification(), 1e-6);
+        assertEquals(toRadians(70), microscope.getTiltAngle(), 1e-6);
+        assertEquals(15e-3, microscope.getWorkingDistance(), 1e-6);
 
         // Phases
         assertEquals(1, exp.mmap.getPhases().length);
@@ -322,6 +322,8 @@ public abstract class ExpTester extends TestCase {
 
     @Test
     public void testGetPatternOp() {
+        System.out.println(exp.getPatternOp().size);
+        System.out.println(exp.getPatternOp().startIndex);
         assertEquals(new PatternOpMock(2), exp.getPatternOp());
     }
 
@@ -351,7 +353,7 @@ public abstract class ExpTester extends TestCase {
         exp.run();
 
         // Test save maps
-        assertEquals(20 * 2, FileUtil.listFiles(expPath).length);
+        assertEquals(21 * 2, FileUtil.listFiles(expPath).length);
 
         // Test maps
         assertEquals(11, exp.mmap.getAliases().length);

@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.Solution;
-import org.ebsdimage.core.SolutionFitComparator;
 import org.ebsdimage.core.exp.ops.detection.op.DetectionOp;
 import org.ebsdimage.core.exp.ops.detection.post.DetectionPostOps;
 import org.ebsdimage.core.exp.ops.detection.pre.DetectionPreOps;
@@ -27,8 +26,8 @@ import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
 import org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps;
 import org.ebsdimage.core.exp.ops.pattern.results.PatternResultsOps;
 import org.ebsdimage.core.run.Operation;
+import org.simpleframework.xml.Root;
 
-import ptpshared.util.Arrays;
 import rmlimage.core.BinMap;
 import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
@@ -39,6 +38,7 @@ import rmlimage.io.IO;
  * 
  * @author ppinard
  */
+@Root
 public class MapsSaverListener implements ExpListener {
 
     /** Logger. */
@@ -181,12 +181,13 @@ public class MapsSaverListener implements ExpListener {
 
     @Override
     public void indexingOpPerformed(Exp exp, IndexingOp op, Solution[] solutions) {
-        Arrays.sort(solutions, new SolutionFitComparator(), true);
-        ByteMap slnMap = exp.getSourcePatternMap();
+        // Arrays.sort(solutions, new SolutionFitComparator(), true);
+        // ByteMap slnMap = exp.getSourcePatternMap();
 
-        ExpListenerUtil.drawSolutionOverlay(slnMap, exp.getMetadata().camera,
-                exp.getMetadata().beamEnergy, solutions[0]);
-        saveMap(exp, op, slnMap);
+        // FIXME: Draw solution overlay when simulated patterns are fixed
+        // ExpListenerUtil.drawSolutionOverlay(slnMap, exp.getMetadata().camera,
+        // exp.getMetadata().beamEnergy, solutions[0]);
+        // saveMap(exp, op, slnMap);
     }
 
 
@@ -194,12 +195,13 @@ public class MapsSaverListener implements ExpListener {
     @Override
     public void indexingPostPerformed(Exp exp, IndexingPostOps op,
             Solution[] solutions) {
-        Arrays.sort(solutions, new SolutionFitComparator(), true);
-        ByteMap slnMap = exp.getSourcePatternMap();
+        // Arrays.sort(solutions, new SolutionFitComparator(), true);
+        // ByteMap slnMap = exp.getSourcePatternMap();
 
-        ExpListenerUtil.drawSolutionOverlay(slnMap, exp.getMetadata().camera,
-                exp.getMetadata().beamEnergy, solutions[0]);
-        saveMap(exp, op, slnMap);
+        // FIXME: Draw solution overlay when simulated patterns are fixed
+        // ExpListenerUtil.drawSolutionOverlay(slnMap, exp.getMetadata().camera,
+        // exp.getMetadata().beamEnergy, solutions[0]);
+        // saveMap(exp, op, slnMap);
     }
 
 

@@ -22,8 +22,10 @@ import java.io.IOException;
 
 import org.ebsdimage.core.exp.Exp;
 
+import ptpshared.util.simplexml.ApacheCommonMathMatcher;
 import ptpshared.util.simplexml.XmlSaver;
 import rmlshared.io.Saver;
+import crystallography.io.simplexml.SpaceGroupMatcher;
 
 /**
  * Saves an <code>Exp</code> to an XML file.
@@ -33,7 +35,18 @@ import rmlshared.io.Saver;
 public class ExpSaver implements Saver {
 
     /** XML saver. */
-    private final XmlSaver saver = new XmlSaver();
+    private final XmlSaver saver;
+
+
+
+    /**
+     * Creates a new <code>ExpSaver</code>.
+     */
+    public ExpSaver() {
+        saver = new XmlSaver();
+        saver.matchers.registerMatcher(new ApacheCommonMathMatcher());
+        saver.matchers.registerMatcher(new SpaceGroupMatcher());
+    }
 
 
 
@@ -68,8 +81,8 @@ public class ExpSaver implements Saver {
 
 
     @Override
-    public boolean canSave(Object obj) {
-        return obj instanceof Exp;
+    public boolean canSave(Object obj, String fileFormat) {
+        return (obj instanceof Exp) && fileFormat.equalsIgnoreCase("xml");
     }
 
 }

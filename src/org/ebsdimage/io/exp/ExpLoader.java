@@ -22,10 +22,12 @@ import java.io.IOException;
 
 import org.ebsdimage.core.exp.Exp;
 
+import ptpshared.util.simplexml.ApacheCommonMathMatcher;
 import ptpshared.util.simplexml.XmlLoader;
 import rmlshared.io.FileUtil;
 import rmlshared.io.Loader;
 import rmlshared.io.TextFileReader;
+import crystallography.io.simplexml.SpaceGroupMatcher;
 
 /**
  * Loads an <code>Exp</code> from an XML file.
@@ -35,7 +37,18 @@ import rmlshared.io.TextFileReader;
 public class ExpLoader implements Loader {
 
     /** XML loader. */
-    private final XmlLoader loader = new XmlLoader();
+    private final XmlLoader loader;
+
+
+
+    /**
+     * Creates a new <code>ExpLoader</code>.
+     */
+    public ExpLoader() {
+        loader = new XmlLoader();
+        loader.matchers.registerMatcher(new ApacheCommonMathMatcher());
+        loader.matchers.registerMatcher(new SpaceGroupMatcher());
+    }
 
 
 
@@ -57,15 +70,14 @@ public class ExpLoader implements Loader {
         String header = null;
         try {
             TextFileReader reader = new TextFileReader(file);
-            reader.readLine(); // Skip xml document line
             header = reader.readLine();
             reader.close();
         } catch (IOException ex) {
             return ex.getMessage();
         }
 
-        if (header == null || !header.startsWith("<Exp"))
-            return "Line 2 of the XML file should start wiht '<Exp'.";
+        if (header == null || !header.startsWith("<exp"))
+            return "Line 2 of the XML file should start wiht '<exp'.";
 
         return "";
     }

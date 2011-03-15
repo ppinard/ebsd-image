@@ -23,7 +23,6 @@ import junittools.core.AlmostEquable;
 import net.jcip.annotations.Immutable;
 
 import org.ebsdimage.core.ErrorCode;
-import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
 /**
@@ -34,14 +33,6 @@ import org.simpleframework.xml.Root;
 @Immutable
 @Root
 public abstract class Operation implements AlmostEquable {
-
-    /**
-     * Position of the operation in the array of operations. Used only in
-     * serialization and deserialization.
-     */
-    private int index = 0;
-
-
 
     @Override
     public boolean equals(Object obj) {
@@ -84,19 +75,6 @@ public abstract class Operation implements AlmostEquable {
 
 
     /**
-     * Returns the position of the operation in the array of operations. Used
-     * only in serialization and deserialization.
-     * 
-     * @return position of the operation
-     */
-    @Attribute(name = "opIndex")
-    public int getIndex() {
-        return this.index;
-    }
-
-
-
-    /**
      * Returns the name of this operation which corresponds to the simple name
      * of the class.
      * 
@@ -114,23 +92,6 @@ public abstract class Operation implements AlmostEquable {
         int result = 1;
         result = prime * result + getName().hashCode();
         return result;
-    }
-
-
-
-    /**
-     * Sets the position of the operation in the array of operations. Used only
-     * in serialization and deserialization.
-     * 
-     * @param index
-     *            position of the operation
-     */
-    @Attribute(name = "opIndex")
-    public void setIndex(int index) {
-        if (index < 0)
-            throw new IllegalArgumentException(
-                    "Index must be greater or equal to zero.");
-        this.index = index;
     }
 
 

@@ -3,6 +3,7 @@ package org.ebsdimage.core.run;
 import java.io.File;
 import java.io.IOException;
 
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps2Mock;
 import org.ebsdimage.core.exp.ops.pattern.post.PatternPostOpsMock;
 import org.ebsdimage.core.exp.ops.pattern.results.PatternResultsOpsMock;
@@ -14,7 +15,7 @@ import ptpshared.util.simplexml.XmlSaver;
 
 import static org.junit.Assert.assertEquals;
 
-public class OperationGeneratorTest {
+public class OperationGeneratorTest extends TestCase {
 
     private OperationGenerator generator;
 
@@ -123,7 +124,7 @@ public class OperationGeneratorTest {
 
     @Test
     public void testXML() throws IOException {
-        File tmpFile = new File("/tmp/generator.xml");
+        File tmpFile = createTempFile();
 
         // Write
         new XmlSaver().save(generator, tmpFile);

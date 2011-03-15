@@ -22,7 +22,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import org.simpleframework.xml.ElementArray;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 import ptpshared.util.MultipleLoop;
@@ -227,27 +229,26 @@ public class OperationGenerator {
 
 
     /**
-     * Returns an array of <code>Operation</code> to serialize the operations in
-     * the generator. The order of the operation is set inside the operation.
+     * Returns an array of <code>Item</code> to serialize the operations in the
+     * generator.
      * 
-     * @return array of <code>Operation</code>
+     * @return array of <code>Item</code>
      */
     @SuppressWarnings("unused")
-    @ElementArray(name = "ops")
-    private Operation[] getOperations() {
-        ArrayList<Operation> ops = new ArrayList<Operation>();
+    @ElementList(name = "items")
+    private ArrayList<Item> getOperations() {
+        ArrayList<Item> items = new ArrayList<Item>();
 
         int order;
-        for (Entry<String, Operation[]> item : items.entrySet()) {
+        for (Entry<String, Operation[]> item : this.items.entrySet()) {
             order = getOrderFromKey(item.getKey());
 
             for (Operation op : item.getValue()) {
-                op.setIndex(order);
-                ops.add(op);
+                items.add(new Item(order, op));
             }
         }
 
-        return ops.toArray(new Operation[0]);
+        return items;
     }
 
 
@@ -256,15 +257,49 @@ public class OperationGenerator {
      * Sets the operations inside the generator in the deserialization process.
      * The order is taken as the order saved inside each operation.
      * 
-     * @param ops
-     *            array of <code>Operation</code>
+     * @param items
+     *            array of <code>Item</code>
      */
     @SuppressWarnings("unused")
-    @ElementArray(name = "ops")
-    private void setOperations(Operation[] ops) {
-        for (Operation op : ops) {
-            addItem(op.getIndex(), op);
+    @ElementList(name = "items")
+    private void setOperations(ArrayList<Item> items) {
+        for (Item item : items) {
+            addItem(item.order, item.op);
         }
     }
 
+}
+
+/**
+ * Object use to serialize and deserialize items in the
+ * <code>OperationGenerator</code>. An item combines an operation and its order.
+ * 
+ * @author ppinard
+ */
+@Root
+class Item {
+
+    /** Order of the operation. */
+    @Attribute(name = "order")
+    public final int order;
+
+    /** Operation. */
+    @Element(name = "op")
+    public final Operation op;
+
+
+
+    /**
+     * Creates a new <code>Item</code>.
+     * 
+     * @param order
+     *            order of the operation
+     * @param op
+     *            operation
+     */
+    public Item(@Attribute(name = "order") int order,
+            @Element(name = "op") Operation op) {
+        this.order = order;
+        this.op = op;
+    }
 }

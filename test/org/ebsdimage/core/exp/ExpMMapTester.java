@@ -20,24 +20,27 @@ package org.ebsdimage.core.exp;
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.apache.commons.math.geometry.Rotation;
+import org.apache.commons.math.geometry.Vector3D;
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.*;
 import org.ebsdimage.io.ErrorMapLoader;
 import org.ebsdimage.io.PhaseMapLoader;
 import org.junit.Test;
 
-import ptpshared.math.old.Quaternion;
 import rmlimage.core.ByteMap;
+import rmlimage.core.Calibration;
 import rmlimage.core.Map;
 import rmlimage.module.real.core.RealMap;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import static ptpshared.geom.Assert.assertEquals;
 import static java.lang.Math.toRadians;
 
 import static junittools.test.Assert.assertEquals;
@@ -49,10 +52,16 @@ public abstract class ExpMMapTester extends TestCase {
 
 
     public static ExpMMap createExpMMap() {
-        EbsdMetadata metadata =
-                new EbsdMetadata(20e3, 100, toRadians(70), 15e-3, new Camera(
-                        0.1, 0.2, 0.3), Quaternion.IDENTITY,
-                        Quaternion.IDENTITY);
+        Camera camera =
+                new Camera(new Vector3D(1, 0, 0), new Vector3D(0, -1, 0), 0.04,
+                        0.03);
+        Microscope microscope = new Microscope(camera, new Vector3D(0, 1, 0));
+        microscope.setBeamEnergy(20e3);
+        microscope.setMagnification(100);
+        microscope.setTiltAngle(Math.toRadians(70));
+        microscope.setWorkingDistance(0.015);
+
+        EbsdMetadata metadata = new EbsdMetadata(microscope);
 
         HashMap<String, Map> mapList = new HashMap<String, Map>();
 
@@ -72,18 +81,23 @@ public abstract class ExpMMapTester extends TestCase {
         q3Map.pixArray[3] = 1.0f;
         mapList.put(EbsdMMap.Q3, q3Map);
 
+        HashMap<Integer, Crystal> phases = new HashMap<Integer, Crystal>();
+        phases.put(1, CrystalFactory.silicon());
+        phases.put(2, CrystalFactory.ferrite());
         PhaseMap phasesMap =
-                new PhaseMap(2, 2, new byte[] { 0, 1, 2, 1 }, new Crystal[] {
-                        CrystalFactory.silicon(), CrystalFactory.ferrite() });
+                new PhaseMap(2, 2, new byte[] { 0, 1, 2, 1 }, phases);
         mapList.put(EbsdMMap.PHASES, phasesMap);
 
-        ErrorMap errorMap =
-                new ErrorMap(2, 2, new ErrorCode[] { new ErrorCode(1, "Error1",
-                        "First test error") });
+        HashMap<Integer, ErrorCode> errorCodes =
+                new HashMap<Integer, ErrorCode>();
+        errorCodes.put(1, new ErrorCode("Error1", "First test error"));
+        ErrorMap errorMap = new ErrorMap(2, 2, errorCodes);
         mapList.put(EbsdMMap.ERRORS, errorMap);
 
         ExpMMap mmap = new ExpMMap(2, 2, mapList);
         mmap.setMetadata(metadata);
+
+        mmap.setCalibration(new Calibration(1e-6, 1e-6, "m"));
 
         return mmap;
     }
@@ -115,15 +129,15 @@ public abstract class ExpMMapTester extends TestCase {
         assertEquals(2, q3Map.width);
         assertEquals(2, q3Map.height);
 
-        PhaseMap phasesMap = other.getPhasesMap();
+        PhaseMap phasesMap = other.getPhaseMap();
         assertEquals(2, phasesMap.width);
         assertEquals(2, phasesMap.height);
-        assertEquals(0, phasesMap.getPhases().length);
+        assertEquals(1, phasesMap.getItems().size());
 
         ErrorMap errorMap = other.getErrorMap();
         assertEquals(2, errorMap.width);
         assertEquals(2, errorMap.height);
-        assertEquals(1, errorMap.getErrorCodes().length);
+        assertEquals(1, errorMap.getItems().size());
     }
 
 
@@ -142,7 +156,7 @@ public abstract class ExpMMapTester extends TestCase {
         mmap.getQ1Map().assertEquals(other.getQ1Map());
         mmap.getQ2Map().assertEquals(other.getQ2Map());
         mmap.getQ3Map().assertEquals(other.getQ3Map());
-        mmap.getPhasesMap().assertEquals(other.getPhasesMap());
+        mmap.getPhaseMap().assertEquals(other.getPhaseMap());
     }
 
 
@@ -251,22 +265,19 @@ public abstract class ExpMMapTester extends TestCase {
 
     @Test
     public void testGetMetadata() {
-        EbsdMetadata metadata = mmap.getMetadata();
+        Microscope microscope = mmap.getMicroscope();
 
-        assertEquals(20e3, metadata.beamEnergy, 1e-3);
-        assertEquals(100.0, metadata.magnification, 1e-3);
-        assertEquals(toRadians(70), metadata.tiltAngle, 1e-3);
-        assertEquals(15, metadata.workingDistance * 1000, 1e-3);
-        assertTrue(Quaternion.IDENTITY.equals(metadata.sampleRotation, 1e-3));
-        assertTrue(Quaternion.IDENTITY.equals(metadata.cameraRotation, 1e-3));
-        assertTrue(new Camera(0.1, 0.2, 0.3).equals(metadata.camera, 1e-3));
+        assertEquals(20e3, microscope.getBeamEnergy(), 1e-3);
+        assertEquals(100.0, microscope.getMagnification(), 1e-3);
+        assertEquals(toRadians(70), microscope.getTiltAngle(), 1e-3);
+        assertEquals(15, microscope.getWorkingDistance() * 1000, 1e-3);
     }
 
 
 
     @Test
     public void testGetPhase() {
-        assertNull(mmap.getPhase(0));
+        assertEquals(PhaseMap.NO_PHASE, mmap.getPhase(0), 1e-4);
         assertEquals(CrystalFactory.silicon(), mmap.getPhase(1), 1e-4);
         assertEquals(CrystalFactory.ferrite(), mmap.getPhase(2), 1e-4);
         assertEquals(CrystalFactory.silicon(), mmap.getPhase(3), 1e-4);
@@ -326,18 +337,18 @@ public abstract class ExpMMapTester extends TestCase {
 
     @Test
     public void testGetPhasesMap() throws IOException {
-        PhaseMap phasesMap = mmap.getPhasesMap();
+        PhaseMap phasesMap = mmap.getPhaseMap();
 
         PhaseMap expectedPhasesMap =
                 new PhaseMapLoader().load(getFile("org/ebsdimage/testdata/Phases.bmp"));
 
-        phasesMap.assertEquals(expectedPhasesMap);
+        assertArrayEquals(expectedPhasesMap.pixArray, phasesMap.pixArray);
 
-        Crystal[] phases = phasesMap.getPhases();
-        assertEquals(2, phases.length);
-
-        assertEquals(CrystalFactory.silicon(), phases[0], 1e-3);
-        assertEquals(CrystalFactory.ferrite(), phases[1], 1e-3);
+        java.util.Map<Integer, Crystal> items = phasesMap.getItems();
+        assertEquals(3, items.size());
+        assertEquals(PhaseMap.NO_PHASE, items.get(0), 1e-6);
+        assertEquals(CrystalFactory.silicon(), items.get(1), 1e-6);
+        assertEquals(CrystalFactory.ferrite(), items.get(2), 1e-6);
     }
 
 
@@ -351,12 +362,11 @@ public abstract class ExpMMapTester extends TestCase {
 
         errorMap.assertEquals(expectedErrorMap);
 
-        ErrorCode[] errorCodes = errorMap.getErrorCodes();
-        assertEquals(2, errorCodes.length);
+        java.util.Map<Integer, ErrorCode> errorCodes = errorMap.getItems();
+        assertEquals(2, errorCodes.size());
 
-        assertEquals(1, errorCodes[1].id);
-        assertEquals("Error1", errorCodes[1].name);
-        assertEquals("First test error", errorCodes[1].description);
+        assertEquals("Error1", errorCodes.get(1).name);
+        assertEquals("First test error", errorCodes.get(1).description);
     }
 
 
@@ -411,10 +421,10 @@ public abstract class ExpMMapTester extends TestCase {
 
     @Test
     public void testGetRotation() {
-        assertEquals(new Quaternion(1, 0, 0, 0), mmap.getRotation(0), 1e-6);
-        assertEquals(new Quaternion(0, 1, 0, 0), mmap.getRotation(1), 1e-6);
-        assertEquals(new Quaternion(0, 0, 1, 0), mmap.getRotation(2), 1e-6);
-        assertEquals(new Quaternion(0, 0, 0, 1), mmap.getRotation(3), 1e-6);
+        assertEquals(new Rotation(1, 0, 0, 0, false), mmap.getRotation(0), 1e-6);
+        assertEquals(new Rotation(0, 1, 0, 0, false), mmap.getRotation(1), 1e-6);
+        assertEquals(new Rotation(0, 0, 1, 0, false), mmap.getRotation(2), 1e-6);
+        assertEquals(new Rotation(0, 0, 0, 1, false), mmap.getRotation(3), 1e-6);
     }
 
 
@@ -436,6 +446,8 @@ public abstract class ExpMMapTester extends TestCase {
     @Test
     public void testRemoveMap() {
         ByteMap map = new ByteMap(2, 2);
+        map.setCalibration(new Calibration(1e-6, 1e-6, "m"));
+
         mmap.add("MAP", map);
         assertTrue(mmap.contains("MAP"));
 
@@ -448,6 +460,8 @@ public abstract class ExpMMapTester extends TestCase {
     @Test
     public void testRemoveString() {
         ByteMap map = new ByteMap(2, 2);
+        map.setCalibration(new Calibration(1e-6, 1e-6, "m"));
+
         mmap.add("MAP", map);
         assertTrue(mmap.contains("MAP"));
 

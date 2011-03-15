@@ -19,13 +19,10 @@ package org.ebsdimage.core.run;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Logger;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.PersistenceException;
 
 import ptpshared.util.LoggerUtil;
 import rmlshared.io.FileUtil;
@@ -194,20 +191,6 @@ public abstract class Run implements Monitorable {
 
 
     /**
-     * Prepares a set of operations by setting their index as their position
-     * within each category's array.
-     * 
-     * @param ops
-     *            operations
-     */
-    protected void prepare(ArrayList<? extends Operation> ops) {
-        for (int i = 0; i < ops.size(); i++)
-            ops.get(i).setIndex(i);
-    }
-
-
-
-    /**
      * Runs and save input in the cache.
      * 
      * @throws IOException
@@ -284,36 +267,6 @@ public abstract class Run implements Monitorable {
      */
     public void turnOffLogger() {
         LoggerUtil.turnOffLogger(logger);
-    }
-
-
-
-    /**
-     * Validates a set of operations to check that there is not two operations
-     * with the same index.
-     * 
-     * @param ops
-     *            operations
-     * @param clasz
-     *            class of the operation (required to return meaningful
-     *            exception message)
-     * @throws Exception
-     *             if two operations have the same index
-     */
-    protected void validate(ArrayList<? extends Operation> ops,
-            Class<? extends Operation> clasz) throws Exception {
-        int[] indexes = new int[ops.size()];
-        Arrays.fill(indexes, -1);
-
-        int index;
-        for (int i = 0; i < ops.size(); i++) {
-            index = ops.get(i).getIndex();
-            if (Arrays.binarySearch(indexes, index) >= 0)
-                throw new PersistenceException("Two " + clasz.getSimpleName()
-                        + " have the same index (" + index + ").");
-            else
-                indexes[i] = index;
-        }
     }
 
 }

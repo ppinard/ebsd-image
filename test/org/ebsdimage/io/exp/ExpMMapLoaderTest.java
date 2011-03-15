@@ -17,13 +17,13 @@
  */
 package org.ebsdimage.io.exp;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
 import org.ebsdimage.core.exp.ExpMMapTester;
 import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class ExpMMapLoaderTest extends ExpMMapTester {
 
@@ -42,7 +42,7 @@ public class ExpMMapLoaderTest extends ExpMMapTester {
 
 
     @Test
-    public void testIsExpMMap() {
+    public void testCanLoad() {
         assertTrue(loader.canLoad(file));
         assertFalse(loader.canLoad(getFile("org/ebsdimage/testdata/houghmap.bmp")));
     }
