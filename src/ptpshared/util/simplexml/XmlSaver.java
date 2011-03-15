@@ -19,6 +19,7 @@ package ptpshared.util.simplexml;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
@@ -88,6 +89,23 @@ public class XmlSaver implements Monitorable {
      */
     public void saveArray(Object[] obj, File file) throws IOException {
         save(new ArrayXML(obj), file);
+    }
+
+
+
+    /**
+     * Saves a key-value map to an XML file. The keys and values must be
+     * serializable by the <code>simplexml</code> library.
+     * 
+     * @param items
+     *            a key-value map
+     * @param file
+     *            XML file
+     * @throws IOException
+     *             if an error occurs during the saving process
+     */
+    public void saveMap(Map<?, ?> items, File file) throws IOException {
+        save(new MapXML(items), file);
     }
 
 

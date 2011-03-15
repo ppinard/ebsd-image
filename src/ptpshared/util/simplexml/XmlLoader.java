@@ -21,6 +21,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
@@ -113,6 +116,37 @@ public class XmlLoader implements Monitorable {
         }
 
         return a;
+    }
+
+
+
+    /**
+     * Loads a key-value map saved in a XML file.
+     * 
+     * @param <K>
+     *            type of the keys
+     * @param <V>
+     *            type of the values
+     * @param key
+     *            class of the keys
+     * @param value
+     *            class of the values
+     * @param source
+     *            source file of the XML
+     * @return Deserialized key-value map
+     * @throws IOException
+     *             if an error occurs in the process
+     */
+    @SuppressWarnings("unchecked")
+    public <K, V> Map<K, V> loadMap(Class<? extends K> key,
+            Class<? extends V> value, File source) throws IOException {
+        Map<K, V> items = new HashMap<K, V>();
+
+        MapXML map = load(MapXML.class, source);
+        for (Entry<?, ?> entry : map.items.entrySet())
+            items.put((K) entry.getKey(), (V) entry.getValue());
+
+        return items;
     }
 
 
