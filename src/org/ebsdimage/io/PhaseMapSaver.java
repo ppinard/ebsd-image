@@ -37,6 +37,13 @@ import crystallography.io.simplexml.SpaceGroupMatcher;
 public class PhaseMapSaver extends IndexedByteMapSaver<Crystal> {
 
     @Override
+    public boolean canSave(Object obj, String fileFormat) {
+        return (obj instanceof PhaseMap) && fileFormat.equalsIgnoreCase("bmp");
+    }
+
+
+
+    @Override
     public void saveItems(java.util.Map<Integer, Crystal> items, File file)
             throws IOException {
         File xmlFile = FileUtil.setExtension(file, "xml");

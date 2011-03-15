@@ -29,6 +29,13 @@ import org.ebsdimage.core.ErrorMap;
 public class ErrorMapSaver extends IndexedByteMapSaver<ErrorCode> {
 
     @Override
+    public boolean canSave(Object obj, String fileFormat) {
+        return (obj instanceof ErrorMap) && fileFormat.equalsIgnoreCase("bmp");
+    }
+
+
+
+    @Override
     protected String getFileHeader() {
         return ErrorMap.FILE_HEADER;
     }

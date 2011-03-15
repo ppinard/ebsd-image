@@ -36,14 +36,6 @@ import rmlshared.io.FileUtil;
  */
 public abstract class IndexedByteMapSaver<Item> extends BasicBmpSaver {
 
-    @Override
-    public boolean canSave(Object obj, String fileFormat) {
-        return fileFormat.equalsIgnoreCase("bmp")
-                && (obj instanceof IndexedByteMap);
-    }
-
-
-
     /**
      * Saves an <code>IndexedByteMap</code> to a BMP file and XML file
      * containing the items. The location where to save the files is taken from
