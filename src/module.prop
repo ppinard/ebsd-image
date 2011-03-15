@@ -2,6 +2,11 @@ name = EBSD-Image
 
 package=org.ebsdimage
 
+depends=Real
+depends=Multi
+depends=Stitch
+depends=Complex
+
 init=org.ebsdimage.Init
 init=org.ebsdimage.plugin.Init
 init=org.ebsdimage.vendors.hkl.Init
