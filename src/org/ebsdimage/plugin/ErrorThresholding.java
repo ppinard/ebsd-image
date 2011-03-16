@@ -17,25 +17,25 @@
  */
 package org.ebsdimage.plugin;
 
-import org.ebsdimage.core.PhaseMap;
+import org.ebsdimage.core.ErrorCode;
+import org.ebsdimage.core.ErrorMap;
 import org.ebsdimage.gui.ThresholdPanel;
 
 import rmlimage.core.Map;
 import rmlimage.gui.MapWindow;
 import rmlimage.plugin.builtin.ManualThresholdingHandler;
-import crystallography.core.Crystal;
 
 /**
  * Thresholding handler to be activated when a user selects to threshold a
- * <code>PhaseMap</code>.
+ * <code>ErrorMap</code>.
  * 
  * @author Philippe T. Pinard
  */
-public class PhaseThresholding implements ManualThresholdingHandler {
+public class ErrorThresholding implements ManualThresholdingHandler {
 
     @Override
     public boolean isCorrectType(Map map) {
-        return (map instanceof PhaseMap) ? true : false;
+        return (map instanceof ErrorMap) ? true : false;
     }
 
 
@@ -43,10 +43,10 @@ public class PhaseThresholding implements ManualThresholdingHandler {
     @Override
     public void xRun(MapWindow window) {
         Map map = window.getMap();
-        assert (map instanceof PhaseMap) : "Invalid map type: " + map.getName()
+        assert (map instanceof ErrorMap) : "Invalid map type: " + map.getName()
                 + " = " + map.getClass().getName();
 
-        window.add(new ThresholdPanel<Crystal>((PhaseMap) map, "Phase"),
+        window.add(new ThresholdPanel<ErrorCode>((ErrorMap) map, "Error"),
                 MapWindow.SOUTH);
     }
 

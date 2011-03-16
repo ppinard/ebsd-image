@@ -17,7 +17,6 @@
  */
 package org.ebsdimage.plugin;
 
-
 /**
  * Init class for plugins.
  * 
@@ -37,8 +36,9 @@ public class Init extends rmlimage.module.Init {
             System.out.println("Running postGUI initialisation of the EBSD module");
 
         rmlimage.plugin.builtin.ManualThresholding.addHandler(org.ebsdimage.plugin.PhaseThresholding.class);
+        rmlimage.plugin.builtin.ManualThresholding.addHandler(org.ebsdimage.plugin.ErrorThresholding.class);
 
-        // Adds the hmp and smp filters to the FileDialog
+        // Adds the SMP filters to the FileDialog
         rmlshared.gui.FileDialog.addFilter("*.smp");
     }
 

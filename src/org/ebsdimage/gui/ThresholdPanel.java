@@ -17,8 +17,8 @@
  */
 package org.ebsdimage.gui;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.ebsdimage.core.PhasesMap;
+import org.ebsdimage.core.IndexedByteMap;
 import org.ebsdimage.core.Threshold;
 
 import rmlimage.RMLImage;
@@ -34,24 +34,22 @@ import rmlimage.core.BinMap;
 import rmlimage.gui.MapWindow;
 import rmlimage.gui.MultiDesktop;
 import rmlshared.gui.ComboBox;
-import crystallography.core.Crystal;
 
 /**
- * Panel to appear below a <code>PhasesMap</code> to select which phase to be
- * thresholded.
+ * Panel to appear below an <code>IndexedByteMap</code> to select which item to
+ * be thresholded.
  * 
+ * @param <Item>
+ *            type of item in the <code>IndexedByteMap</code>
  * @author Philippe T. Pinard
  */
-public class ThresholdPanel extends JPanel {
+public class ThresholdPanel<Item> extends JPanel {
 
-    /** Combo box to select a phase. */
-    private ComboBox<String> phaseCBox;
-
-    /** HashMap to access the phases information by their name. */
-    private HashMap<String, Integer> phases;
+    /** Combo box to select a item. */
+    private ComboBox<Item> itemsCBox;
 
     /** Selected map. */
-    private PhasesMap phasesMap;
+    private IndexedByteMap<Item> map;
 
     /** Okay button. */
     private JButton okButton;
@@ -62,37 +60,31 @@ public class ThresholdPanel extends JPanel {
 
 
     /**
-     * Creates a new <code>ThresholdPanel</code> to appear below a
-     * <code>PhasesMap</code> to select which phase to threshold.
+     * Creates a new <code>ThresholdPanel</code> to appear below an
+     * <code>IndexedByteMap</code> to select which item to threshold.
      * 
-     * @param phasesMap
-     *            selected phases map on which the thresholding will apply
+     * @param map
+     *            selected map on which the thresholding will apply
+     * @param label
+     *            label for the combo box to identify the type of item
      */
-    public ThresholdPanel(PhasesMap phasesMap) {
-        this.phasesMap = phasesMap;
-
-        // Fill HashMap with phases
-        Crystal[] phases = phasesMap.getPhases();
-
-        if (phases.length == 0)
-            throw new IllegalArgumentException(
-                    "At least one phase must be defined.");
-
-        this.phases = new HashMap<String, Integer>();
-        this.phases.put("0 - Non-Indexed", 0);
-        for (int i = 0; i < phases.length; i++) {
-            this.phases.put((i + 1) + " - " + phases[i].name, (i + 1));
-        }
+    public ThresholdPanel(IndexedByteMap<Item> map, String label) {
+        this.map = map;
 
         // Layout
         setLayout(new MigLayout());
 
-        String[] phasesName = this.phases.keySet().toArray(new String[0]);
-        Arrays.sort(phasesName);
-        add(new JLabel("Phase:"));
-        phaseCBox = new ComboBox<String>(phasesName);
-        phaseCBox.setSelectedItem(phasesName[0]);
-        add(phaseCBox);
+        add(new JLabel(label));
+        itemsCBox = new ComboBox<Item>();
+
+        java.util.Map<Integer, Item> items = map.getItems();
+        ArrayList<Integer> keys = new ArrayList<Integer>(items.keySet());
+        Collections.sort(keys);
+        for (int key : keys)
+            itemsCBox.addGeneric(items.get(key));
+
+        itemsCBox.setSelectedItem(items.get(keys.get(0)));
+        add(itemsCBox);
 
         okButton = new JButton("OK");
         okButton.addActionListener(new ActionListener());
@@ -109,7 +101,7 @@ public class ThresholdPanel extends JPanel {
      * 
      * @return this panel
      */
-    private ThresholdPanel getPanel() {
+    private ThresholdPanel<Item> getPanel() {
         return this;
     }
 
@@ -122,16 +114,16 @@ public class ThresholdPanel extends JPanel {
         @Override
         public void actionPerformed(java.awt.event.ActionEvent event) {
             if (event.getSource() == okButton) {
-                int phaseId = phases.get(phaseCBox.getSelectedItem());
+                Item item = itemsCBox.getSelectedItem();
 
-                BinMap binMap = Threshold.phase(phasesMap, phaseId);
+                BinMap binMap = Threshold.item(map, item);
 
                 RMLImage.add(binMap);
             }
 
             // Remove the threshold panel from the image panel
             MapWindow window =
-                    ((MultiDesktop) rmlimage.plugin.PlugIn.getDesktop()).getWindow(phasesMap);
+                    ((MultiDesktop) rmlimage.plugin.PlugIn.getDesktop()).getWindow(map);
             window.removeComponent(getPanel());
 
             // Needed to resume the threshold macro
