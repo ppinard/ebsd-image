@@ -17,8 +17,6 @@
  */
 package org.ebsdimage.plugin;
 
-import static java.lang.Math.toDegrees;
-
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,7 +31,7 @@ import javax.swing.table.AbstractTableModel;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.ebsdimage.core.PhasesMap;
+import org.ebsdimage.core.PhaseMap;
 
 import ptpshared.util.ElementProperties;
 import rmlimage.core.Map;
@@ -44,6 +42,7 @@ import rmlshared.gui.Panel;
 import crystallography.core.AtomSite;
 import crystallography.core.AtomSites;
 import crystallography.core.Crystal;
+import static java.lang.Math.toDegrees;
 
 /**
  * Plug-in to display the information about the phases in a
@@ -51,7 +50,7 @@ import crystallography.core.Crystal;
  * 
  * @author Philippe T. Pinard
  */
-public class PhasesInfo extends PlugIn {
+public class PhaseInfo extends PlugIn {
 
     /**
      * Dialog to display the information about the phases.
@@ -129,11 +128,11 @@ public class PhasesInfo extends PlugIn {
                 case 0:
                     return ElementProperties.getSymbol(atomSite.atomicNumber);
                 case 1:
-                    return atomSite.position.get(0);
+                    return atomSite.position.getX();
                 case 2:
-                    return atomSite.position.get(1);
+                    return atomSite.position.getY();
                 case 3:
-                    return atomSite.position.get(2);
+                    return atomSite.position.getZ();
                 case 4:
                     return atomSite.occupancy;
                 default:
@@ -323,10 +322,10 @@ public class PhasesInfo extends PlugIn {
 
         Map map = getSelectedMap();
 
-        if (!isCorrectType(map, PhasesMap.class, true))
+        if (!isCorrectType(map, PhaseMap.class, true))
             return;
 
-        PhasesMap phasesMap = (PhasesMap) map;
+        PhaseMap phasesMap = (PhaseMap) map;
 
         if (phasesMap.getPhases().length == 0) {
             showErrorDialog("No phase in the map.");

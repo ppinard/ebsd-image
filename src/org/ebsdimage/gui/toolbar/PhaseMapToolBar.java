@@ -20,7 +20,7 @@ package org.ebsdimage.gui.toolbar;
 import javax.swing.ImageIcon;
 import javax.swing.JToggleButton;
 
-import org.ebsdimage.plugin.PhasesInfo;
+import org.ebsdimage.plugin.PhaseInfo;
 
 import ptpshared.gui.GuiUtil;
 import rmlimage.gui.toolbar.CropButton;
@@ -32,30 +32,30 @@ import rmlshared.gui.Button;
 import rmlshared.thread.WorkerThread;
 
 /**
- * Tool bar for the <code>PhasesMap</code>.
+ * Tool bar for the <code>PhaseMap</code>.
  * 
  * @author Philippe T. Pinard
  */
-public class PhasesMapToolBar extends MapToolBar {
+public class PhaseMapToolBar extends MapToolBar {
 
     /** Icon for the phases info. */
     private static final ImageIcon INFO_ICON =
-            GuiUtil.loadIcon("org/ebsdimage/plugin/PhasesInfo_(16x16).png");
+            GuiUtil.loadIcon("org/ebsdimage/plugin/PhaseInfo_(16x16).png");
 
 
 
     /**
-     * Creates a new <code>PhasesMapToolBar</code>.
+     * Creates a new <code>PhaseMapToolBar</code>.
      * 
      * @param wThread
      *            worker thread
      */
-    public PhasesMapToolBar(WorkerThread wThread) {
+    public PhaseMapToolBar(WorkerThread wThread) {
         Button infoButton = new Button(INFO_ICON);
         infoButton.setName("Info");
         infoButton.setToolTipText("Info");
         infoButton.setFocusable(false);
-        PlugIn plugInCrop = new PhasesInfo();
+        PlugIn plugInCrop = new PhaseInfo();
         infoButton.setPlugIn(plugInCrop);
         add(infoButton);
 
