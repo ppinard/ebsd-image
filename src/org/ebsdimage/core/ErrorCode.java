@@ -116,7 +116,7 @@ public class ErrorCode implements Labeled {
     @Override
     public String getLabel() {
         if (!description.isEmpty())
-            return name + "(" + description + ")";
+            return name + " (" + description + ")";
         else
             return name;
     }
