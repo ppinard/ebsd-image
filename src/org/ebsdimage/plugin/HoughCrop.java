@@ -22,11 +22,11 @@ import magnitude.core.Magnitude;
 import org.ebsdimage.core.Edit;
 import org.ebsdimage.core.HoughMap;
 
+import ptpshared.gui.CalibratedDoubleField;
 import rmlimage.core.Map;
 import rmlimage.gui.PlugIn;
 import rmlshared.gui.BasicDialog;
 import rmlshared.gui.ColumnPanel;
-import rmlshared.gui.DoubleField;
 import rmlshared.gui.OkCancelDialog;
 import rmlshared.io.FileUtil;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
@@ -48,7 +48,7 @@ public class HoughCrop extends PlugIn {
     private static class Dialog extends BasicDialog {
 
         /** Field for the crop radius. */
-        private DoubleField rhoField;
+        private CalibratedDoubleField rhoField;
 
 
 
@@ -65,11 +65,14 @@ public class HoughCrop extends PlugIn {
             ColumnPanel cPanel = new ColumnPanel(3);
 
             cPanel.add("Positive \u03c1:");
-            double rhoMax = map.getRhoMax().getPreferredUnitsValue();
-            rhoField = new DoubleField("Rho", rhoMax);
-            rhoField.setRange(0.1, rhoMax);
+
+            String rhoUnits = map.getDeltaRho().getPreferredUnitsLabel();
+            String[] units = new String[] { rhoUnits };
+            Magnitude rhoMax = new Magnitude(map.getRhoMax(), rhoUnits);
+
+            rhoField = new CalibratedDoubleField("Rho", 5, rhoMax, units);
+            rhoField.setRange(new Magnitude(0.1, rhoMax), rhoMax);
             cPanel.add(rhoField);
-            cPanel.add("px");
 
             setMainComponent(cPanel);
         }
@@ -82,7 +85,7 @@ public class HoughCrop extends PlugIn {
          * 
          * @return distance in rho
          */
-        public double getRho() {
+        public Magnitude getRho() {
             return rhoField.getValueBFR();
         }
 
@@ -112,7 +115,7 @@ public class HoughCrop extends PlugIn {
         if (dialog.show() != OkCancelDialog.OK)
             return null;
 
-        Magnitude rho = new Magnitude(dialog.getRho(), srcMap.getRhoMax());
+        double rho = dialog.getRho().getPreferredUnitsValue();
         HoughMap cropMap = Edit.crop(srcMap, rho);
 
         cropMap.setFile(FileUtil.append(srcMap.getFile(), "(Crop)"));
