@@ -152,8 +152,8 @@ public class CalibratedDoubleField extends JComponent implements
      * @param step
      *            step of the spinner
      */
-    public void setIncrementalStep(double step) {
-        valueField.setIncrementalStep(step);
+    public void setIncrementalStep(Magnitude step) {
+        valueField.setIncrementalStep(step.getValue(unitsCBox.getSelectedItem()));
     }
 
 
