@@ -20,8 +20,9 @@ package org.ebsdimage.plugin;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
-import org.ebsdimage.core.Drawing;
 import org.ebsdimage.core.HoughMap;
+import org.ebsdimage.core.HoughMath;
+import org.ebsdimage.core.HoughPeak;
 
 import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
@@ -115,13 +116,22 @@ public class LineOverlay extends PlugIn {
 
             if (source instanceof HoughMap) {
                 HoughMap houghMap = (HoughMap) source;
-                double r = houghMap.getRho(x, y).getPreferredUnitsValue();
-                double theta = houghMap.getTheta(x, y).getValue("rad");
+
+                int index = houghMap.getPixArrayIndex(x, y);
+
+                HoughPeak peak = houghMap.getHoughPeak(index);
 
                 ByteMap destination = (ByteMap) destinationWindow.getMap();
-                Line2D line = Drawing.getLine(destination, r, theta);
+
+                Line2D line;
+                try {
+                    line = HoughMath.getLine2D(peak, destination);
+                } catch (IllegalArgumentException ex) {
+                    return;
+                }
                 if (LineUtil.isEmpty(line))
                     return; // If does not exist
+
                 pointer.setLocation(line.getX1(), line.getY1(), line.getX2(),
                         line.getY2());
             }
