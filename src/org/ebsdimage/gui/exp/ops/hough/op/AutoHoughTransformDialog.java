@@ -17,16 +17,15 @@
  */
 package org.ebsdimage.gui.exp.ops.hough.op;
 
-import static java.lang.Math.toDegrees;
-import static java.lang.Math.toRadians;
-
 import javax.swing.JLabel;
+
+import magnitude.core.Magnitude;
 
 import org.ebsdimage.core.exp.ops.hough.op.AutoHoughTransform;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationDialog;
 
-import rmlshared.gui.DoubleField;
+import ptpshared.gui.CalibratedDoubleField;
 import rmlshared.gui.Panel;
 
 /**
@@ -37,7 +36,7 @@ import rmlshared.gui.Panel;
 public class AutoHoughTransformDialog extends OperationDialog {
 
     /** Field for the resolution. */
-    private DoubleField resolutionField;
+    private CalibratedDoubleField resolutionField;
 
 
 
@@ -47,15 +46,19 @@ public class AutoHoughTransformDialog extends OperationDialog {
     public AutoHoughTransformDialog() {
         super("Auto Hough Transform");
 
-        resolutionField =
-                new DoubleField("Resolution",
-                        toDegrees(AutoHoughTransform.DEFAULT.deltaTheta));
-        resolutionField.setRange(0.1, 90.0);
+        String[] units = new String[] { "rad", "deg" };
+        Magnitude value =
+                new Magnitude(AutoHoughTransform.DEFAULT.deltaTheta, "rad");
+        value.setPreferredUnits("deg");
+        Magnitude min = new Magnitude(0.1, "deg");
+        Magnitude max = new Magnitude(180, "deg");
+
+        resolutionField = new CalibratedDoubleField("Resolution", value, units);
+        resolutionField.setRange(min, max);
 
         Panel panel = new Panel();
         panel.add(new JLabel("Theta resolution"));
         panel.add(resolutionField);
-        panel.add(new JLabel("\u00b0/px")); // deg
 
         setMainComponent(panel);
     }
@@ -75,7 +78,8 @@ public class AutoHoughTransformDialog extends OperationDialog {
 
     @Override
     public Operation getOperation() {
-        return new AutoHoughTransform(toRadians(resolutionField.getValueBFR()));
+        return new AutoHoughTransform(resolutionField.getValueBFR().getValue(
+                "rad"));
     }
 
 

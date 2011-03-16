@@ -17,15 +17,15 @@
  */
 package org.ebsdimage.gui.exp.ops.hough.op;
 
-import static java.lang.Math.toDegrees;
-import static java.lang.Math.toRadians;
-
 import javax.swing.JLabel;
+
+import magnitude.core.Magnitude;
 
 import org.ebsdimage.core.exp.ops.hough.op.HoughTransform;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationDialog;
 
+import ptpshared.gui.CalibratedDoubleField;
 import rmlshared.gui.DoubleField;
 import rmlshared.gui.Panel;
 
@@ -37,7 +37,7 @@ import rmlshared.gui.Panel;
 public class HoughTransformDialog extends OperationDialog {
 
     /** Field for the theta resolution. */
-    private DoubleField deltaThetaField;
+    private CalibratedDoubleField deltaThetaField;
 
     /** Field for the rho resolution. */
     private DoubleField deltaRhoField;
@@ -50,10 +50,15 @@ public class HoughTransformDialog extends OperationDialog {
     public HoughTransformDialog() {
         super("Hough Transform");
 
-        deltaThetaField =
-                new DoubleField("deltaTheta",
-                        toDegrees(HoughTransform.DEFAULT.deltaTheta));
-        deltaThetaField.setRange(0.1, 90.0);
+        String[] units = new String[] { "rad", "deg" };
+        Magnitude value =
+                new Magnitude(HoughTransform.DEFAULT.deltaTheta, "rad");
+        value.setPreferredUnits("deg");
+        Magnitude min = new Magnitude(0.1, "deg");
+        Magnitude max = new Magnitude(180, "deg");
+
+        deltaThetaField = new CalibratedDoubleField("deltaTheta", value, units);
+        deltaThetaField.setRange(min, max);
 
         deltaRhoField =
                 new DoubleField("deltaRho", HoughTransform.DEFAULT.deltaRho);
@@ -63,11 +68,11 @@ public class HoughTransformDialog extends OperationDialog {
 
         panel.add(new JLabel("Theta resolution"));
         panel.add(deltaThetaField);
-        panel.add(new JLabel("\u00b0/px")); // deg
+        panel.add("");
 
         panel.add(new JLabel("Rho resolution"));
         panel.add(deltaRhoField);
-        panel.add(new JLabel("px/px")); // deg
+        panel.add(new JLabel("px/px"));
 
         setMainComponent(panel);
     }
@@ -84,7 +89,8 @@ public class HoughTransformDialog extends OperationDialog {
 
     @Override
     public Operation getOperation() {
-        return new HoughTransform(toRadians(deltaThetaField.getValueBFR()),
+        return new HoughTransform(
+                deltaThetaField.getValueBFR().getValue("rad"),
                 deltaRhoField.getValueBFR());
     }
 

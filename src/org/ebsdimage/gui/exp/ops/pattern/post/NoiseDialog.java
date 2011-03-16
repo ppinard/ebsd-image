@@ -24,7 +24,6 @@ import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationDialog;
 
 import rmlshared.gui.DoubleField;
-import rmlshared.gui.IntField;
 import rmlshared.gui.Panel;
 
 /**
@@ -36,9 +35,6 @@ public class NoiseDialog extends OperationDialog {
 
     /** Field for the standard deviation. */
     private DoubleField stdDevField;
-
-    /** Field for the number of iterations. */
-    private IntField countField;
 
 
 
@@ -52,16 +48,10 @@ public class NoiseDialog extends OperationDialog {
                 new DoubleField("Standard Deviation", Noise.DEFAULT.stdDev);
         stdDevField.setRange(0.1, Double.MAX_VALUE);
 
-        countField = new IntField("Iterations", 1);
-        countField.setRange(1, Integer.MAX_VALUE);
-
         Panel panel = new Panel();
 
         panel.add(new JLabel("Standard deviation"));
         panel.add(stdDevField);
-
-        panel.add(new JLabel("Nb of iterations"));
-        panel.add(countField);
 
         setMainComponent(panel);
     }
@@ -78,7 +68,7 @@ public class NoiseDialog extends OperationDialog {
 
     @Override
     public Operation getOperation() {
-        return new Noise(stdDevField.getValueBFR(), countField.getValueBFR());
+        return new Noise(stdDevField.getValueBFR());
     }
 
 

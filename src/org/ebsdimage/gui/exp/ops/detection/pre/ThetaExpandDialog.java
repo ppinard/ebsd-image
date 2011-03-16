@@ -19,12 +19,14 @@ package org.ebsdimage.gui.exp.ops.detection.pre;
 
 import javax.swing.JLabel;
 
+import magnitude.core.Magnitude;
+
 import org.ebsdimage.core.exp.ops.detection.pre.ThetaExpand;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationDialog;
 
+import ptpshared.gui.CalibratedDoubleField;
 import rmlshared.gui.ColumnPanel;
-import rmlshared.gui.DoubleField;
 import rmlshared.gui.Panel;
 
 /**
@@ -35,7 +37,7 @@ import rmlshared.gui.Panel;
 public class ThetaExpandDialog extends OperationDialog {
 
     /** Field for the angular increment. */
-    private DoubleField incrementField;
+    private CalibratedDoubleField incrementField;
 
 
 
@@ -45,16 +47,19 @@ public class ThetaExpandDialog extends OperationDialog {
     public ThetaExpandDialog() {
         super("Theta Expand");
 
-        incrementField =
-                new DoubleField("increment",
-                        Math.toDegrees(ThetaExpand.DEFAULT.increment));
-        incrementField.setRange(0.0, Double.MAX_VALUE);
+        String[] units = new String[] { "rad", "deg" };
+        Magnitude value = new Magnitude(ThetaExpand.DEFAULT.increment, "rad");
+        value.setPreferredUnits("deg");
+        Magnitude min = new Magnitude(0.0, "deg");
+        Magnitude max = new Magnitude(180, "deg");
+
+        incrementField = new CalibratedDoubleField("increment", value, units);
+        incrementField.setRange(min, max);
 
         Panel panel = new ColumnPanel(3);
 
         panel.add(new JLabel("Increment"));
         panel.add(incrementField);
-        panel.add(new JLabel("\u00b0")); // deg
 
         setMainComponent(panel);
     }
@@ -72,7 +77,7 @@ public class ThetaExpandDialog extends OperationDialog {
 
     @Override
     public Operation getOperation() {
-        return new ThetaExpand(Math.toRadians(incrementField.getValueBFR()));
+        return new ThetaExpand(incrementField.getValueBFR().getValue("rad"));
     }
 
 
