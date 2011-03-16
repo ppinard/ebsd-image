@@ -17,8 +17,6 @@
  */
 package org.ebsdimage.plugin;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -30,7 +28,9 @@ import rmlimage.core.ByteMap;
 import rmlimage.module.integer.core.IntMap;
 import rmlshared.io.FileUtil;
 
-public class UnWarpTest {
+import static org.junit.Assert.assertEquals;
+
+public class UnWarpTest extends TestCase {
 
     @Test
     public void getGenericName() {
@@ -44,14 +44,14 @@ public class UnWarpTest {
     @Test
     public void unwarp() throws IOException {
         // Get the src file
-        File srcFile = TestCase.getFile("org/ebsdimage/plugin/UnWarpSrc.jpg");
+        File srcFile = getFile("org/ebsdimage/plugin/UnWarpSrc.jpg");
         ByteMap srcMap = new UnWarp().load(srcFile, null);
 
         // Get the warp files
-        File xWarpFile = TestCase.getFile("org/ebsdimage/io/warp-x-map.raw");
-        IntMap xWarpMap = (IntMap) new RawLoader().load(xWarpFile);
-        File yWarpFile = TestCase.getFile("org/ebsdimage/io/warp-y-map.raw");
-        IntMap yWarpMap = (IntMap) new RawLoader().load(yWarpFile);
+        File xWarpFile = getFile("org/ebsdimage/testdata/warp-x-map.raw");
+        IntMap xWarpMap = new RawLoader().load(xWarpFile);
+        File yWarpFile = getFile("org/ebsdimage/testdata/warp-y-map.raw");
+        IntMap yWarpMap = new RawLoader().load(yWarpFile);
 
         // Get the dest map
         ByteMap destMap = new ByteMap(srcMap.width, srcMap.height);
@@ -60,8 +60,7 @@ public class UnWarpTest {
         new UnWarp().unwarp(srcMap, xWarpMap, yWarpMap, destMap);
 
         // Load the expected map
-        ByteMap xpctMap =
-                (ByteMap) TestCase.load("org/ebsdimage/plugin/UnWarpDest.bmp");
+        ByteMap xpctMap = (ByteMap) load("org/ebsdimage/plugin/UnWarpDest.bmp");
 
         destMap.assertEquals(xpctMap);
     }
