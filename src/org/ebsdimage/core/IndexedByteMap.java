@@ -221,7 +221,8 @@ public class IndexedByteMap<Item> extends ByteMap {
 
 
     /**
-     * Returns a <code>HashMap</code> of the registered items and their ids.
+     * Returns a <code>HashMap</code> of the registered items and their ids. The
+     * item for the pixel with a value of zero is part of the Map.
      * 
      * @return map of items and their ids
      */
