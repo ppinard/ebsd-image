@@ -180,7 +180,7 @@ public class HoughPeak implements AlmostEquable {
             return false;
         if (Math.abs(intensity - other.intensity) > delta)
             return false;
-        if (rhoUnits != other.rhoUnits)
+        if (!rhoUnits.equals(other.rhoUnits))
             return false;
 
         return true;
