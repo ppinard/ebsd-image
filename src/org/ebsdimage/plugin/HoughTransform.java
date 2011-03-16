@@ -17,19 +17,19 @@
  */
 package org.ebsdimage.plugin;
 
-import static java.lang.Math.toRadians;
-
 import java.io.IOException;
+
+import magnitude.core.Magnitude;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.Transform;
 
+import ptpshared.gui.CalibratedDoubleField;
 import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
 import rmlimage.gui.BasicDialog;
 import rmlimage.plugin.PlugIn;
 import rmlshared.gui.ColumnPanel;
-import rmlshared.gui.DoubleField;
 import rmlshared.gui.OkCancelDialog;
 import rmlshared.ui.Monitorable;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
@@ -49,7 +49,7 @@ public class HoughTransform extends PlugIn implements Monitorable {
     private class Dialog extends BasicDialog {
 
         /** Field for the theta resolution. */
-        private DoubleField deltaTheta;
+        private CalibratedDoubleField deltaTheta;
 
 
 
@@ -64,12 +64,16 @@ public class HoughTransform extends PlugIn implements Monitorable {
             ColumnPanel panel = new ColumnPanel(3);
             panel.setAlignment(2, ColumnPanel.LEFT);
 
-            deltaTheta = new DoubleField("delta theta", 0.5);
-            deltaTheta.setRange(0.1, 180);
-            deltaTheta.setIncrementalStep(0.5);
+            String[] units = new String[] { "rad", "deg" };
+            Magnitude value = new Magnitude(0.5, "deg");
+            Magnitude min = new Magnitude(0.1, "deg");
+            Magnitude max = new Magnitude(180, "deg");
+
+            deltaTheta = new CalibratedDoubleField("delta theta", value, units);
+            deltaTheta.setRange(min, max);
+            deltaTheta.setIncrementalStep(value);
             deltaTheta.setDecimalCount(1);
-            panel.add("\u2206theta : ", deltaTheta);
-            panel.add("\u00b0");
+            panel.add("\u2206\u03b8", deltaTheta);
 
             /*
              * deltaR = new DoubleField("\u2206r", 1); deltaR.setRange(0.1,
@@ -95,7 +99,7 @@ public class HoughTransform extends PlugIn implements Monitorable {
          * @return resolution
          */
         public double getDeltaTheta() {
-            return toRadians(deltaTheta.getValueBFR());
+            return deltaTheta.getValueBFR().getValue("rad");
         }
 
         /*
