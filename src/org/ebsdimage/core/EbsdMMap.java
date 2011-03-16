@@ -226,16 +226,7 @@ public abstract class EbsdMMap extends MultiMap {
      */
     @CheckForNull
     public Crystal getPhase(int index) {
-        if (index < 0 || index >= size)
-            throw new IllegalArgumentException(
-                    "The index has to be between [0," + size + "[");
-
-        int phaseId = getPhaseId(index);
-
-        if (phaseId == 0)
-            return null;
-        else
-            return getPhases()[phaseId - 1];
+        return getPhaseMap().getItem(getPhaseId(index));
     }
 
 
@@ -252,7 +243,7 @@ public abstract class EbsdMMap extends MultiMap {
             throw new IllegalArgumentException(
                     "The index has to be between [0," + size + "[");
 
-        return getPhasesMap().pixArray[index];
+        return getPhaseMap().getPixValue(index);
     }
 
 
@@ -263,7 +254,7 @@ public abstract class EbsdMMap extends MultiMap {
      * @return phases
      */
     public Crystal[] getPhases() {
-        return getPhasesMap().getPhases();
+        return getPhaseMap().getPhases();
     }
 
 
@@ -273,7 +264,7 @@ public abstract class EbsdMMap extends MultiMap {
      * 
      * @return phases map
      */
-    public PhaseMap getPhasesMap() {
+    public PhaseMap getPhaseMap() {
         return (PhaseMap) getMap(PHASES);
     }
 
