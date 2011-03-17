@@ -26,17 +26,18 @@ import javax.swing.JLabel;
 import net.miginfocom.swing.MigLayout;
 
 import org.ebsdimage.core.exp.ExpMMap;
-import org.ebsdimage.gui.exp.ExpWizard;
 import org.ebsdimage.gui.exp.MapsGUIListener;
+import org.ebsdimage.gui.exp.wizard.ExpWizard;
 import org.ebsdimage.io.exp.ExpMMapSaver;
 import org.ebsdimage.io.exp.ExpSaver;
 
-import ptpshared.utility.LoggerUtil;
+import ptpshared.util.LoggerUtil;
 import rmlimage.plugin.PlugIn;
 import rmlimage.plugin.builtin.CloseAll;
 import rmlshared.gui.Panel;
 import rmlshared.gui.YesNoCancelDialog;
 import rmlshared.ui.Monitorable;
+import crystallography.core.Crystal;
 
 /**
  * Plug-in for the experiment's engine.
@@ -104,7 +105,10 @@ public class Exp extends PlugIn implements Monitorable {
     private void createExp(ExpWizard wizard) {
         ExpMMap mmap = new ExpMMap(wizard.getWidth(), wizard.getHeight());
         mmap.setMetadata(wizard.getMetadata());
-        mmap.getPhasesMap().setPhases(wizard.getPhases());
+        mmap.setCalibration(wizard.getCalibration());
+
+        for (Crystal crystal : wizard.getPhases())
+            mmap.getPhaseMap().register(crystal);
 
         exp = new org.ebsdimage.core.exp.Exp(mmap, wizard.getOperations());
         exp.setName(wizard.getName());

@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.gui.exp;
-
-import static rmlshared.io.FileUtil.getURL;
+package org.ebsdimage.gui.exp.wizard;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -37,9 +35,11 @@ import org.ebsdimage.gui.PhasesWizardPage;
 
 import ptpshared.gui.Wizard;
 import ptpshared.gui.WizardPage;
+import rmlimage.core.Calibration;
 import rmlshared.cui.ErrorDialog;
 import crystallography.core.Crystal;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
+import static rmlshared.io.FileUtil.getURL;
 
 /**
  * Wizard to setup an experiment.
@@ -55,15 +55,12 @@ public class ExpWizard extends Wizard {
      *             if an error occurs
      */
     public ExpWizard() throws IOException {
-        // super("Experiment", new WizardPage[] { new StartWizardPage(),
-        // new InfoWizardPage(), new AcqMetadataWizardPage(),
-        // new PhasesWizardPage(), new PatternsWizardPage(),
-        // new PatternWizardPage(), new HoughWizardPage(),
-        // new DetectionWizardPage(), new IdentificationWizardPage(),
-        // new IndexingWizardPage(), new OutputWizardPage() });
         super("Experiment", new WizardPage[] { new StartWizardPage(),
                 new InfoWizardPage(), new AcqMetadataWizardPage(),
-                new PatternsWizardPage() });
+                new PhasesWizardPage(), new PatternsWizardPage(),
+                new PatternWizardPage(), new HoughWizardPage(),
+                new DetectionWizardPage(), new IdentificationWizardPage(),
+                new IndexingWizardPage(), new OutputWizardPage() });
 
         BufferedImage image =
                 ImageIO.read(getURL("org/ebsdimage/gui/sidepanel.png"));
@@ -121,6 +118,24 @@ public class ExpWizard extends Wizard {
                     "Could not get the maps' height from wizard.");
 
         return height;
+    }
+
+
+
+    /**
+     * Returns the calibration for the EBSD multimap of the experiment.
+     * 
+     * @return calibration
+     */
+    public Calibration getCalibration() {
+        Calibration calibration =
+                (Calibration) results.get(AcqMetadataWizardPage.KEY_CALIBRATION);
+
+        if (calibration == null)
+            throw new NullPointerException(
+                    "Could not get the calibration from wizard.");
+
+        return calibration;
     }
 
 

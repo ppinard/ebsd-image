@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.gui.exp;
+package org.ebsdimage.gui.exp.wizard;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,6 +31,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.exp.Exp;
+import org.ebsdimage.io.EbsdMMapLoader;
 import org.ebsdimage.io.exp.ExpLoader;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPanelNavResult;
@@ -39,6 +40,7 @@ import ptpshared.gui.SingleFileBrowserField;
 import ptpshared.gui.WizardPage;
 import rmlimage.io.IO;
 import rmlshared.gui.CheckBox;
+import rmlshared.io.Loader;
 import rmlshared.util.Preferences;
 
 /**
@@ -114,8 +116,7 @@ public class StartWizardPage extends WizardPage {
                         + "<br/><br/>"
                         + "For further information on this wizard, please refer to "
                         + "the \"How to run an experiment\" quick-start guide on "
-                        + "our wiki (http://ebsd-image.org/wiki/HowToRunAnExperiment)."
-                        + "</html>";
+                        + "http://ebsd-image.org." + "</html>";
         add(new JLabel(text), "grow, wrap 40");
 
         metadataCBox = new CheckBox("Import metadata");
@@ -174,25 +175,33 @@ public class StartWizardPage extends WizardPage {
             } else {
                 File metadataFile = metadataFileField.getFile();
 
-                rmlimage.core.Map map;
-                try {
-                    map = IO.load(metadataFile);
-
-                    if (map instanceof EbsdMMap)
-                        mmap = (EbsdMMap) map;
-                    else {
+                Loader loader = IO.getLoader(metadataFile);
+                if (loader instanceof EbsdMMapLoader) {
+                    rmlimage.core.Map map;
+                    try {
+                        map = IO.load(metadataFile);
+                    } catch (IOException e) {
                         showErrorDialog("Not a valid EBSD multimap");
                         return false;
                     }
-                } catch (Exception e1) {
-                    // try loading as an experiment
+
+                    mmap = (EbsdMMap) map;
+                }
+
+                loader = new ExpLoader();
+                if (loader.canLoad(metadataFile)) {
                     try {
-                        mmap = new ExpLoader().load(metadataFile).mmap;
-                    } catch (Exception e2) {
+                        mmap = ((ExpLoader) loader).load(metadataFile).mmap;
+                    } catch (IOException e) {
                         showErrorDialog("Could not import the metadata from "
                                 + "the specified file.");
                         return false;
                     }
+                }
+
+                if (mmap == null) {
+                    showErrorDialog("Cannot load (" + metadataFile + ").");
+                    return false;
                 }
             }
         }
@@ -202,11 +211,18 @@ public class StartWizardPage extends WizardPage {
                 showErrorDialog("Specify the file for the operations.");
                 return false;
             } else {
+                File opsFile = opsFileField.getFile();
+
                 try {
-                    exp = new ExpLoader().load(opsFileField.getFile());
+                    exp = new ExpLoader().load(opsFile);
                 } catch (IOException ex) {
                     showErrorDialog("Could not import operations from "
                             + "the specified file.");
+                    return false;
+                }
+
+                if (exp == null) {
+                    showErrorDialog("Cannot load (" + opsFile + ").");
                     return false;
                 }
             }

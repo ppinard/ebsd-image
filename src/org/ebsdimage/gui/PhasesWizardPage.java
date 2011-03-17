@@ -32,7 +32,7 @@ import net.miginfocom.swing.MigLayout;
 import ptpshared.gui.DirBrowserField;
 import ptpshared.gui.GuiUtil;
 import ptpshared.gui.WizardPage;
-import ptpshared.util.xml.XmlSaver;
+import ptpshared.util.simplexml.XmlSaver;
 import rmlshared.gui.*;
 import rmlshared.io.FileUtil;
 import rmlshared.thread.PlugIn;

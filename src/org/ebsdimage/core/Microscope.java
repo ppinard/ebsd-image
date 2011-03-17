@@ -45,7 +45,7 @@ public class Microscope implements AlmostEquable {
 
     /** Magnification. */
     @Element(name = "magnification")
-    private double magnification = 0.0;
+    private double magnification = 1.0;
 
     /** Rotation of the sample. */
     @Element(name = "sampleRotation")

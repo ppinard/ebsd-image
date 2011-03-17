@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.gui.exp;
+package org.ebsdimage.gui.exp.wizard;
 
 import java.io.IOException;
 
@@ -30,25 +30,25 @@ import org.ebsdimage.core.run.Operation;
  * 
  * @author Philippe T. Pinard
  */
-public class IndexingWizardPage extends OperationWizardPage {
+public class DetectionWizardPage extends OperationWizardPage {
 
-    /** Map key for the pre-operations of the indexing. */
-    public static final String KEY_INDEXING_PRE = "indexing.pre";
+    /** Map key for the pre-operations of the detection. */
+    public static final String KEY_DETECTION_PRE = "detection.pre";
 
-    /** Map key for the post-operations of the indexing. */
-    public static final String KEY_INDEXING_POST = "indexing.post";
+    /** Map key for the post-operations of the detection. */
+    public static final String KEY_DETECTION_POST = "detection.post";
 
-    /** Map key for the operation of the indexing. */
-    public static final String KEY_INDEXING_OP = "indexing.op";
+    /** Map key for the operation of the detection. */
+    public static final String KEY_DETECTION_OP = "detection.op";
 
-    /** Map key for the results operations of the indexing. */
-    public static final String KEY_INDEXING_RESULTS = "indexing.results";
+    /** Map key for the results operations of the detection. */
+    public static final String KEY_DETECTION_RESULTS = "detection.results";
 
     /**
      * Map key to store if the data has been previously loaded. It prevents
      * loading the temporary metadata twice.
      */
-    public static final String KEY_LOADED = "indexing.loaded";
+    public static final String KEY_LOADED = "detection.loaded";
 
 
 
@@ -58,19 +58,19 @@ public class IndexingWizardPage extends OperationWizardPage {
      * @return description
      */
     public static final String getDescription() {
-        return "Indexing Operations";
+        return "Peak Detection Operations";
     }
 
 
 
     /**
-     * Creates a new <code>IndexingWizardPage</code> to display in the wizard.
+     * Creates a new <code>DetectionWizardPage</code> to display in the wizard.
      * 
      * @throws IOException
      *             if an error occurs while loading the operations
      */
-    public IndexingWizardPage() throws IOException {
-        super(ExpConstants.INDEXING_GUI_PACKAGE);
+    public DetectionWizardPage() throws IOException {
+        super(ExpConstants.DETECTION_GUI_PACKAGE);
     }
 
 
@@ -91,24 +91,24 @@ public class IndexingWizardPage extends OperationWizardPage {
         // Pre
         DefaultListModel model = prePanel.getUserListModel();
         model.clear();
-        for (Operation op : exp.getIndexingPreOps())
+        for (Operation op : exp.getDetectionPreOps())
             model.addElement(op);
 
         // Op
         model = opPanel.getUserListModel();
         model.clear();
-        model.addElement(exp.getIndexingOp());
+        model.addElement(exp.getDetectionOp());
 
         // Post
         model = postPanel.getUserListModel();
         model.clear();
-        for (Operation op : exp.getIndexingPostOps())
+        for (Operation op : exp.getDetectionPostOps())
             model.addElement(op);
 
         // Results
         model = resultsPanel.getUserListModel();
         model.clear();
-        for (Operation op : exp.getIndexingResultsOps())
+        for (Operation op : exp.getDetectionResultsOps())
             model.addElement(op);
 
         put(KEY_LOADED, 1);
@@ -122,7 +122,7 @@ public class IndexingWizardPage extends OperationWizardPage {
             return false;
 
         int previousOpCount =
-                ((Operation[]) get(IdentificationWizardPage.KEY_IDENTIFICATION_OP)).length;
+                ((Operation[]) get(HoughWizardPage.KEY_HOUGH_OP)).length;
         int preCount = (prePanel.getUserListModel()).size();
         int opCount = (opPanel.getUserListModel()).size();
         int postCount = (postPanel.getUserListModel()).size();
@@ -131,7 +131,7 @@ public class IndexingWizardPage extends OperationWizardPage {
         if (previousOpCount == 0)
             if (preCount > 0 || opCount > 0 || postCount > 0
                     || resultsCount > 0) {
-                showErrorDialog("An identification operation is required.");
+                showErrorDialog("A Hough operation is required.");
                 return false;
             }
 
@@ -146,13 +146,12 @@ public class IndexingWizardPage extends OperationWizardPage {
         }
 
         if (buffer) {
-            put(KEY_INDEXING_PRE, prePanel.getOperations());
-            put(KEY_INDEXING_OP, opPanel.getOperations());
-            put(KEY_INDEXING_POST, postPanel.getOperations());
-            put(KEY_INDEXING_RESULTS, resultsPanel.getOperations());
+            put(KEY_DETECTION_PRE, prePanel.getOperations());
+            put(KEY_DETECTION_OP, opPanel.getOperations());
+            put(KEY_DETECTION_POST, postPanel.getOperations());
+            put(KEY_DETECTION_RESULTS, resultsPanel.getOperations());
         }
 
         return true;
     }
-
 }
