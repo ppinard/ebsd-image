@@ -18,7 +18,8 @@
 package org.ebsdimage.core.exp.ops.detection.post;
 
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpListener;
+import org.ebsdimage.core.exp.ExpOperation;
 
 import rmlimage.core.BinMap;
 
@@ -27,7 +28,7 @@ import rmlimage.core.BinMap;
  * 
  * @author Philippe T. Pinard
  */
-public abstract class DetectionPostOps extends Operation {
+public abstract class DetectionPostOps extends ExpOperation {
 
     /**
      * Returns a processed peaks map.
@@ -39,5 +40,19 @@ public abstract class DetectionPostOps extends Operation {
      * @return output peaks map
      */
     public abstract BinMap process(Exp exp, BinMap srcMap);
+
+
+
+    @Override
+    public final Object execute(Exp exp, Object... args) {
+        return process(exp, (BinMap) args[0]);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
+        listener.detectionPostPerformed(exp, this, (BinMap) result);
+    }
 
 }

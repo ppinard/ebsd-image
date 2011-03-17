@@ -18,7 +18,8 @@
 package org.ebsdimage.core.exp.ops.identification.pre;
 
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpListener;
+import org.ebsdimage.core.exp.ExpOperation;
 
 import rmlimage.core.BinMap;
 
@@ -28,7 +29,21 @@ import rmlimage.core.BinMap;
  * 
  * @author Philippe T. Pinard
  */
-public abstract class IdentificationPreOps extends Operation {
+public abstract class IdentificationPreOps extends ExpOperation {
+
+    @Override
+    public final Object execute(Exp exp, Object... args) {
+        return process(exp, (BinMap) args[0]);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
+        listener.identificationPrePerformed(exp, this, (BinMap) result);
+    }
+
+
 
     /**
      * Returns a processed peaks map.

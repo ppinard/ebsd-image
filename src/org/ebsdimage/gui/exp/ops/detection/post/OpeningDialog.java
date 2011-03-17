@@ -17,8 +17,8 @@
  */
 package org.ebsdimage.gui.exp.ops.detection.post;
 
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.ops.detection.post.Opening;
-import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationDialog;
 
 import rmlshared.gui.ColumnPanel;
@@ -77,7 +77,7 @@ public class OpeningDialog extends OperationDialog {
 
 
     @Override
-    public Operation getOperation() {
+    public ExpOperation getOperation() {
         return new Opening(minField.getValueBFR(), maxField.getValueBFR());
     }
 

@@ -17,8 +17,8 @@
  */
 package org.ebsdimage.gui.exp.ops.indexing.results;
 
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.ops.indexing.results.BestSolution;
-import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationCreator;
 
 /**
@@ -29,7 +29,7 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class BestSolutionCreator implements OperationCreator {
 
     @Override
-    public Operation getOperation() {
+    public ExpOperation getOperation() {
         return new BestSolution();
     }
 

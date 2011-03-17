@@ -3,10 +3,7 @@ package org.ebsdimage.gui.exp;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.Solution;
-import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.exp.ExpListener;
-import org.ebsdimage.core.exp.ExpListenerUtil;
-import org.ebsdimage.core.exp.OpResult;
+import org.ebsdimage.core.exp.*;
 import org.ebsdimage.core.exp.ops.detection.op.DetectionOp;
 import org.ebsdimage.core.exp.ops.detection.post.DetectionPostOps;
 import org.ebsdimage.core.exp.ops.detection.pre.DetectionPreOps;
@@ -26,7 +23,6 @@ import org.ebsdimage.core.exp.ops.indexing.results.IndexingResultsOps;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
 import org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps;
 import org.ebsdimage.core.exp.ops.pattern.results.PatternResultsOps;
-import org.ebsdimage.core.run.Operation;
 import org.simpleframework.xml.Root;
 
 import rmlimage.RMLImage;
@@ -221,7 +217,7 @@ public class MapsGUIListener implements ExpListener {
      * @param map
      *            map to display
      */
-    protected void showMap(Exp exp, Operation op, Map map) {
+    protected void showMap(Exp exp, ExpOperation op, Map map) {
         map.setName(createName(exp, op.getName()));
         map.shouldSave(false);
         RMLImage.getDesktop().add(map);

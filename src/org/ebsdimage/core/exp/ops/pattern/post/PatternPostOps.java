@@ -18,7 +18,8 @@
 package org.ebsdimage.core.exp.ops.pattern.post;
 
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpListener;
+import org.ebsdimage.core.exp.ExpOperation;
 
 import rmlimage.core.ByteMap;
 
@@ -27,7 +28,21 @@ import rmlimage.core.ByteMap;
  * 
  * @author Philippe T. Pinard
  */
-public abstract class PatternPostOps extends Operation {
+public abstract class PatternPostOps extends ExpOperation {
+
+    @Override
+    public final Object execute(Exp exp, Object... args) {
+        return process(exp, (ByteMap) args[0]);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
+        listener.patternPostPerformed(exp, this, (ByteMap) result);
+    }
+
+
 
     /**
      * Returns a processed pattern map.

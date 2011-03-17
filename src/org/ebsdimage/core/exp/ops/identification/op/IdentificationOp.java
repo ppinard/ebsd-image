@@ -20,7 +20,8 @@ package org.ebsdimage.core.exp.ops.identification.op;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpListener;
+import org.ebsdimage.core.exp.ExpOperation;
 
 import rmlimage.core.BinMap;
 
@@ -29,7 +30,21 @@ import rmlimage.core.BinMap;
  * 
  * @author Philippe T. Pinard
  */
-public abstract class IdentificationOp extends Operation {
+public abstract class IdentificationOp extends ExpOperation {
+
+    @Override
+    public final Object execute(Exp exp, Object... args) {
+        return identify(exp, (BinMap) args[0], (HoughMap) args[1]);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
+        listener.identificationOpPerformed(exp, this, (HoughPeak[]) result);
+    }
+
+
 
     /**
      * Identifies the Hough peaks from the peaks and Hough map.

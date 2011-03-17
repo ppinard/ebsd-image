@@ -17,8 +17,8 @@
  */
 package org.ebsdimage.gui.exp.ops.hough.results;
 
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.ops.hough.results.Average;
-import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationCreator;
 
 /**
@@ -29,7 +29,7 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class AverageCreator implements OperationCreator {
 
     @Override
-    public Operation getOperation() {
+    public ExpOperation getOperation() {
         return new Average();
     }
 

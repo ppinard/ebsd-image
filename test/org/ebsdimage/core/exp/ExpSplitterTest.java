@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOpMock;
-import org.ebsdimage.core.run.Operation;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,11 +16,11 @@ public class ExpSplitterTest {
 
     @Before
     public void setUp() throws Exception {
-        ArrayList<Operation> ops = ExpTester.createOperations();
+        ArrayList<ExpOperation> ops = ExpTester.createOperations();
         ops.add(new PatternOpMock(8));
 
         ExpMMap mmap = new ExpMMap(4, 2);
-        exp = new Exp(mmap, ops.toArray(new Operation[ops.size()]));
+        exp = new Exp(mmap, ops.toArray(new ExpOperation[ops.size()]));
 
         assertEquals(8, exp.getPatternOp().size);
     }
@@ -31,11 +30,11 @@ public class ExpSplitterTest {
     @Test(expected = IllegalArgumentException.class)
     public void testExpSplitterException() {
         // Operations
-        ArrayList<Operation> ops = ExpTester.createOperations();
+        ArrayList<ExpOperation> ops = ExpTester.createOperations();
 
         // Experiment
         ExpMMap mmap = new ExpMMap(4, 2);
-        Exp exp = new Exp(mmap, ops.toArray(new Operation[ops.size()]));
+        Exp exp = new Exp(mmap, ops.toArray(new ExpOperation[ops.size()]));
 
         assertEquals(2, exp.getPatternOp().size);
 

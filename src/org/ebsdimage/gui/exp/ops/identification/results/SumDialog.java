@@ -17,8 +17,8 @@
  */
 package org.ebsdimage.gui.exp.ops.identification.results;
 
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.ops.identification.results.Sum;
-import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationDialog;
 
 import rmlshared.gui.ColumnPanel;
@@ -65,7 +65,7 @@ public class SumDialog extends OperationDialog {
 
 
     @Override
-    public Operation getOperation() {
+    public ExpOperation getOperation() {
         return new Sum(maxField.getValueBFR());
     }
 

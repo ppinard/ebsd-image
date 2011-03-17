@@ -17,8 +17,8 @@
  */
 package org.ebsdimage.gui.exp.ops.pattern.results;
 
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.ops.pattern.results.StandardDeviation;
-import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationCreator;
 
 /**
@@ -29,7 +29,7 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class StandardDeviationCreator implements OperationCreator {
 
     @Override
-    public Operation getOperation() {
+    public ExpOperation getOperation() {
         return new StandardDeviation();
     }
 

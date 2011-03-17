@@ -27,10 +27,10 @@ import javax.imageio.ImageIO;
 
 import org.ebsdimage.core.EbsdMetadata;
 import org.ebsdimage.core.exp.ExpUtil;
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternFilesLoader;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternSmpLoader;
-import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.PhasesWizardPage;
 
 import ptpshared.gui.Wizard;
@@ -80,8 +80,8 @@ public class ExpWizard extends Wizard {
      * @param key
      *            key in the <code>results</code> for the operations to add
      */
-    private void addOps(ArrayList<Operation> ops, String key) {
-        Operation[] tmpOps = (Operation[]) results.get(key);
+    private void addOps(ArrayList<ExpOperation> ops, String key) {
+        ExpOperation[] tmpOps = (ExpOperation[]) results.get(key);
         if (tmpOps != null)
             ops.addAll(Arrays.asList(tmpOps));
     }
@@ -180,8 +180,8 @@ public class ExpWizard extends Wizard {
      * 
      * @return operations
      */
-    public Operation[] getOperations() {
-        ArrayList<Operation> ops = new ArrayList<Operation>();
+    public ExpOperation[] getOperations() {
+        ArrayList<ExpOperation> ops = new ArrayList<ExpOperation>();
 
         // Pattern
         PatternOp patternOp = getPatternOperation();
@@ -191,7 +191,7 @@ public class ExpWizard extends Wizard {
         // Other operations
         ops.addAll(Arrays.asList(getOperationsExceptPatternOps()));
 
-        return ops.toArray(new Operation[ops.size()]);
+        return ops.toArray(new ExpOperation[ops.size()]);
     }
 
 
@@ -202,8 +202,8 @@ public class ExpWizard extends Wizard {
      * 
      * @return operations
      */
-    private Operation[] getOperationsExceptPatternOps() {
-        ArrayList<Operation> ops = new ArrayList<Operation>();
+    private ExpOperation[] getOperationsExceptPatternOps() {
+        ArrayList<ExpOperation> ops = new ArrayList<ExpOperation>();
 
         // Pattern
         addOps(ops, PatternWizardPage.KEY_PATTERN_POST);
@@ -233,7 +233,7 @@ public class ExpWizard extends Wizard {
         addOps(ops, IndexingWizardPage.KEY_INDEXING_POST);
         addOps(ops, IndexingWizardPage.KEY_INDEXING_RESULTS);
 
-        return ops.toArray(new Operation[ops.size()]);
+        return ops.toArray(new ExpOperation[ops.size()]);
     }
 
 
@@ -308,8 +308,8 @@ public class ExpWizard extends Wizard {
      * 
      * @return operations
      */
-    public Operation[] getPreviewOperations() {
-        ArrayList<Operation> ops = new ArrayList<Operation>();
+    public ExpOperation[] getPreviewOperations() {
+        ArrayList<ExpOperation> ops = new ArrayList<ExpOperation>();
 
         // Pattern
         ops.addAll(Arrays.asList(getPreviewPatternOperation()));
@@ -317,7 +317,7 @@ public class ExpWizard extends Wizard {
         // Other operations
         ops.addAll(Arrays.asList(getOperationsExceptPatternOps()));
 
-        return ops.toArray(new Operation[ops.size()]);
+        return ops.toArray(new ExpOperation[ops.size()]);
     }
 
 

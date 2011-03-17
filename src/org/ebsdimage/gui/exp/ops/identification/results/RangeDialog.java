@@ -17,8 +17,8 @@
  */
 package org.ebsdimage.gui.exp.ops.identification.results;
 
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.ops.identification.results.Range;
-import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationDialog;
 
 import rmlshared.gui.ColumnPanel;
@@ -66,7 +66,7 @@ public class RangeDialog extends OperationDialog {
 
 
     @Override
-    public Operation getOperation() {
+    public ExpOperation getOperation() {
         return new Range(maxField.getValueBFR());
     }
 

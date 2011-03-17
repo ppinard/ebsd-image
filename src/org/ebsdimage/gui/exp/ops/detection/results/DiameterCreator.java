@@ -17,8 +17,8 @@
  */
 package org.ebsdimage.gui.exp.ops.detection.results;
 
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.ops.detection.results.Diameter;
-import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationCreator;
 
 /**
@@ -37,7 +37,7 @@ public class DiameterCreator implements OperationCreator {
 
 
     @Override
-    public Operation getOperation() {
+    public ExpOperation getOperation() {
         return new Diameter();
     }
 

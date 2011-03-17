@@ -17,8 +17,8 @@
  */
 package org.ebsdimage.gui.exp.ops.detection.op;
 
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.ops.detection.op.AutomaticTopHat;
-import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationCreator;
 
 import rmlshared.gui.OkCancelDialog;
@@ -38,7 +38,7 @@ public class AutomaticTopHatCreator implements OperationCreator {
 
 
     @Override
-    public Operation getOperation() {
+    public ExpOperation getOperation() {
         return new AutomaticTopHat();
     }
 

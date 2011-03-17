@@ -19,8 +19,8 @@ package org.ebsdimage.gui.exp.ops.pattern.post;
 
 import javax.swing.JLabel;
 
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.ops.pattern.post.MaskDisc;
-import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationDialog;
 
 import rmlshared.gui.ColumnPanel;
@@ -88,7 +88,7 @@ public class MaskDiscDialog extends OperationDialog {
 
 
     @Override
-    public Operation getOperation() {
+    public ExpOperation getOperation() {
         return new MaskDisc(centroidXField.getValueBFR(),
                 centroidYField.getValueBFR(), radiusField.getValueBFR());
     }

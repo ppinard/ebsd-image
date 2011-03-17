@@ -17,10 +17,9 @@
  */
 package org.ebsdimage.core.exp.ops.pattern.op;
 
-import java.io.IOException;
-
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpListener;
+import org.ebsdimage.core.exp.ExpOperation;
 import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
@@ -31,11 +30,25 @@ import rmlimage.core.ByteMap;
  * 
  * @author Philippe T. Pinard
  */
-public abstract class PatternOp extends Operation {
+public abstract class PatternOp extends ExpOperation {
 
     /** First index of the patterns. */
     @Attribute(name = "startIndex")
     public final int startIndex;
+
+
+
+    @Override
+    public final Object execute(Exp exp, Object... args) {
+        return load(exp, (Integer) args[0]);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
+        listener.patternOpPerformed(exp, this, (ByteMap) result);
+    }
 
     /** Number of patterns to load. */
     @Attribute(name = "size")
@@ -118,9 +131,7 @@ public abstract class PatternOp extends Operation {
      * @param index
      *            index of the pattern to load
      * @return the pattern map
-     * @throws IOException
-     *             if an error occurs while loading the pattern
      */
-    public abstract ByteMap load(Exp exp, int index) throws IOException;
+    public abstract ByteMap load(Exp exp, int index);
 
 }

@@ -19,14 +19,29 @@ package org.ebsdimage.core.exp.ops.hough.post;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpListener;
+import org.ebsdimage.core.exp.ExpOperation;
 
 /**
  * Superclass of operation to process the Hough map after the Hough operation.
  * 
  * @author Philippe T. Pinard
  */
-public abstract class HoughPostOps extends Operation {
+public abstract class HoughPostOps extends ExpOperation {
+
+    @Override
+    public final Object execute(Exp exp, Object... args) {
+        return process(exp, (HoughMap) args[0]);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
+        listener.houghPostPerformed(exp, this, (HoughMap) result);
+    }
+
+
 
     /**
      * Returns a processed Hough map.

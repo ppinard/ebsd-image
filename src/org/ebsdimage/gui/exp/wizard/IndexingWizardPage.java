@@ -23,7 +23,7 @@ import javax.swing.DefaultListModel;
 
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.ExpConstants;
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpOperation;
 
 /**
  * Wizard page for the detection operations.
@@ -91,7 +91,7 @@ public class IndexingWizardPage extends OperationWizardPage {
         // Pre
         DefaultListModel model = prePanel.getUserListModel();
         model.clear();
-        for (Operation op : exp.getIndexingPreOps())
+        for (ExpOperation op : exp.getIndexingPreOps())
             model.addElement(op);
 
         // Op
@@ -102,13 +102,13 @@ public class IndexingWizardPage extends OperationWizardPage {
         // Post
         model = postPanel.getUserListModel();
         model.clear();
-        for (Operation op : exp.getIndexingPostOps())
+        for (ExpOperation op : exp.getIndexingPostOps())
             model.addElement(op);
 
         // Results
         model = resultsPanel.getUserListModel();
         model.clear();
-        for (Operation op : exp.getIndexingResultsOps())
+        for (ExpOperation op : exp.getIndexingResultsOps())
             model.addElement(op);
 
         put(KEY_LOADED, 1);
@@ -122,7 +122,7 @@ public class IndexingWizardPage extends OperationWizardPage {
             return false;
 
         int previousOpCount =
-                ((Operation[]) get(IdentificationWizardPage.KEY_IDENTIFICATION_OP)).length;
+                ((ExpOperation[]) get(IdentificationWizardPage.KEY_IDENTIFICATION_OP)).length;
         int preCount = (prePanel.getUserListModel()).size();
         int opCount = (opPanel.getUserListModel()).size();
         int postCount = (postPanel.getUserListModel()).size();

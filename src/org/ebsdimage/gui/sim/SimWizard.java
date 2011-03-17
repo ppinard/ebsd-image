@@ -26,12 +26,12 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import org.ebsdimage.core.Camera;
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.sim.Energy;
 
-import ptpshared.core.math.Quaternion;
 import ptpshared.gui.Wizard;
 import ptpshared.gui.WizardPage;
+import ptpshared.math.old.Quaternion;
 import rmlshared.util.ArrayList;
 import crystallography.core.Crystal;
 
@@ -137,13 +137,13 @@ public class SimWizard extends Wizard {
      * 
      * @return operations
      */
-    public Operation[] getOperations() {
-        ArrayList<Operation> ops = new ArrayList<Operation>();
+    public ExpOperation[] getOperations() {
+        ArrayList<ExpOperation> ops = new ArrayList<ExpOperation>();
 
         ops.add(getPatternSimOp());
         ops.addAll(getOutputOps());
 
-        return ops.toArray(new Operation[0]);
+        return ops.toArray(new ExpOperation[0]);
     }
 
 
@@ -153,9 +153,9 @@ public class SimWizard extends Wizard {
      * 
      * @return output operations
      */
-    private Operation[] getOutputOps() {
-        Operation[] ops =
-                (Operation[]) results.get(ParamsWizardPage.KEY_OUTPUT_OPS);
+    private ExpOperation[] getOutputOps() {
+        ExpOperation[] ops =
+                (ExpOperation[]) results.get(ParamsWizardPage.KEY_OUTPUT_OPS);
 
         if (ops == null)
             throw new NullPointerException(
@@ -171,9 +171,9 @@ public class SimWizard extends Wizard {
      * 
      * @return pattern simulation operation
      */
-    private Operation getPatternSimOp() {
-        Operation op =
-                (Operation) results.get(ParamsWizardPage.KEY_PATTERNSIMOP);
+    private ExpOperation getPatternSimOp() {
+        ExpOperation op =
+                (ExpOperation) results.get(ParamsWizardPage.KEY_PATTERNSIMOP);
 
         if (op == null)
             throw new NullPointerException(

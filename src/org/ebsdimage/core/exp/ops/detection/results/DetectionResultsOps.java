@@ -18,8 +18,9 @@
 package org.ebsdimage.core.exp.ops.detection.results;
 
 import org.ebsdimage.core.exp.Exp;
+import org.ebsdimage.core.exp.ExpListener;
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.OpResult;
-import org.ebsdimage.core.run.Operation;
 
 import rmlimage.core.BinMap;
 
@@ -28,7 +29,22 @@ import rmlimage.core.BinMap;
  * 
  * @author Philippe T. Pinard
  */
-public abstract class DetectionResultsOps extends Operation {
+public abstract class DetectionResultsOps extends ExpOperation {
+
+    @Override
+    public final Object execute(Exp exp, Object... args) {
+        return calculate(exp, (BinMap) args[0]);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object results) {
+        for (OpResult result : (OpResult[]) results)
+            listener.detectionResultsPerformed(exp, this, result);
+    }
+
+
 
     /**
      * Calculates the result(s) from the peaks map.

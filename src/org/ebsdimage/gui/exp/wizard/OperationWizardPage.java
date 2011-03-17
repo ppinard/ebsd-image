@@ -23,7 +23,7 @@ import java.io.IOException;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.gui.run.ops.MultipleChoicePanel;
 
 import ptpshared.gui.WizardPage;
@@ -126,15 +126,15 @@ public class OperationWizardPage extends WizardPage {
      * 
      * @return array of <code>Operation</code>s
      */
-    public Operation[] getOperations() {
-        ArrayList<Operation> ops = new ArrayList<Operation>();
+    public ExpOperation[] getOperations() {
+        ArrayList<ExpOperation> ops = new ArrayList<ExpOperation>();
 
         ops.addAll(prePanel.getOperations());
         ops.addAll(opPanel.getOperations());
         ops.addAll(postPanel.getOperations());
         ops.addAll(resultsPanel.getOperations());
 
-        return ops.toArray(new Operation[0]);
+        return ops.toArray(new ExpOperation[0]);
     }
 
 

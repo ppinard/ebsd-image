@@ -19,7 +19,8 @@ package org.ebsdimage.core.exp.ops.identification.post;
 
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpListener;
+import org.ebsdimage.core.exp.ExpOperation;
 
 /**
  * Superclass of operation to process the Hough peaks after the peak
@@ -27,7 +28,7 @@ import org.ebsdimage.core.run.Operation;
  * 
  * @author Philippe T. Pinard
  */
-public abstract class IdentificationPostOps extends Operation {
+public abstract class IdentificationPostOps extends ExpOperation {
 
     /**
      * Returns processed Hough peaks.
@@ -39,4 +40,18 @@ public abstract class IdentificationPostOps extends Operation {
      * @return output Hough peaks
      */
     public abstract HoughPeak[] process(Exp exp, HoughPeak[] srcPeaks);
+
+
+
+    @Override
+    public final Object execute(Exp exp, Object... args) {
+        return process(exp, (HoughPeak[]) args);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
+        listener.identificationPostPerformed(exp, this, (HoughPeak[]) result);
+    }
 }

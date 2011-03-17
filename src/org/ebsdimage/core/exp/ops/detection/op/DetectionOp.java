@@ -19,7 +19,8 @@ package org.ebsdimage.core.exp.ops.detection.op;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpListener;
+import org.ebsdimage.core.exp.ExpOperation;
 
 import rmlimage.core.BinMap;
 
@@ -28,7 +29,7 @@ import rmlimage.core.BinMap;
  * 
  * @author Philippe T. Pinard
  */
-public abstract class DetectionOp extends Operation {
+public abstract class DetectionOp extends ExpOperation {
 
     /**
      * Detects peaks in the Hough map.
@@ -40,5 +41,19 @@ public abstract class DetectionOp extends Operation {
      * @return peaks map
      */
     public abstract BinMap detect(Exp exp, HoughMap srcMap);
+
+
+
+    @Override
+    public final Object execute(Exp exp, Object... args) {
+        return detect(exp, (HoughMap) args[0]);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
+        listener.detectionOpPerformed(exp, this, (BinMap) result);
+    }
 
 }

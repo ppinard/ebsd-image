@@ -19,7 +19,8 @@ package org.ebsdimage.core.exp.ops.indexing.pre;
 
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpListener;
+import org.ebsdimage.core.exp.ExpOperation;
 
 /**
  * Superclass of operation to process the Hough peaks before the indexing
@@ -27,7 +28,21 @@ import org.ebsdimage.core.run.Operation;
  * 
  * @author Philippe T. Pinard
  */
-public abstract class IndexingPreOps extends Operation {
+public abstract class IndexingPreOps extends ExpOperation {
+
+    @Override
+    public final Object execute(Exp exp, Object... args) {
+        return process(exp, (HoughPeak[]) args);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
+        listener.indexingPrePerformed(exp, this, (HoughPeak[]) result);
+    }
+
+
 
     /**
      * Returns processed Hough peaks.

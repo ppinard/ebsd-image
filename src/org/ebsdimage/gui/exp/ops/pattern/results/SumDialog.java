@@ -19,8 +19,8 @@ package org.ebsdimage.gui.exp.ops.pattern.results;
 
 import javax.swing.JLabel;
 
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.ops.pattern.results.Sum;
-import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationDialog;
 
 import rmlshared.gui.ColumnPanel;
@@ -119,7 +119,7 @@ public class SumDialog extends OperationDialog {
 
 
     @Override
-    public Operation getOperation() {
+    public ExpOperation getOperation() {
         return new Sum(xminField.getValueBFR() / 100.0,
                 yminField.getValueBFR() / 100.0,
                 xmaxField.getValueBFR() / 100.0,

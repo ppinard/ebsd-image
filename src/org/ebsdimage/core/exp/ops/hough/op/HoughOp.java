@@ -19,7 +19,8 @@ package org.ebsdimage.core.exp.ops.hough.op;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpListener;
+import org.ebsdimage.core.exp.ExpOperation;
 
 import rmlimage.core.ByteMap;
 
@@ -28,7 +29,21 @@ import rmlimage.core.ByteMap;
  * 
  * @author Philippe T. Pinard
  */
-public abstract class HoughOp extends Operation {
+public abstract class HoughOp extends ExpOperation {
+
+    @Override
+    public final Object execute(Exp exp, Object... args) {
+        return transform(exp, (ByteMap) args[0]);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
+        listener.houghOpPerformed(exp, this, (HoughMap) result);
+    }
+
+
 
     /**
      * Performs a Hough transform on the pattern map.

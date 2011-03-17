@@ -27,7 +27,7 @@ import javax.swing.border.TitledBorder;
 import net.miginfocom.swing.MigLayout;
 
 import org.ebsdimage.core.Camera;
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.sim.Energy;
 import org.ebsdimage.core.sim.Sim;
 import org.ebsdimage.core.sim.SimConstants;
@@ -36,11 +36,11 @@ import org.ebsdimage.gui.run.ops.MultipleChoicePanel;
 import org.ebsdimage.gui.run.ops.OperationCreator;
 import org.ebsdimage.gui.run.ops.OperationCreatorUtil;
 
-import ptpshared.core.math.Eulers;
-import ptpshared.core.math.Quaternion;
-import ptpshared.core.math.QuaternionMath;
 import ptpshared.gui.GuiUtil;
 import ptpshared.gui.WizardPage;
+import ptpshared.math.old.Eulers;
+import ptpshared.math.old.Quaternion;
+import ptpshared.math.old.QuaternionMath;
 import rmlimage.gui.PlugIn;
 import rmlshared.gui.*;
 
@@ -840,7 +840,7 @@ public class ParamsWizardPage extends WizardPage {
         Energy[] energies = energyPanel.getEnergies();
         Quaternion[] rotations = rotationPanel.getRotations();
         PatternSimOp patternSimOp = patternSimOpPanel.getPatternSimOp();
-        Operation[] outputs = outputsPanel.getOperations();
+        ExpOperation[] outputs = outputsPanel.getOperations();
 
         if (cameras.length < 1) {
             showErrorDialog("Please specify a camera");

@@ -23,7 +23,7 @@ import javax.swing.DefaultListModel;
 
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.ExpConstants;
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpOperation;
 
 /**
  * Wizard page for the Hough operations.
@@ -122,7 +122,7 @@ public class HoughWizardPage extends OperationWizardPage {
         // Pre
         DefaultListModel model = prePanel.getUserListModel();
         model.clear();
-        for (Operation op : exp.getHoughPreOps())
+        for (ExpOperation op : exp.getHoughPreOps())
             model.addElement(op);
 
         // Op
@@ -133,13 +133,13 @@ public class HoughWizardPage extends OperationWizardPage {
         // Post
         model = postPanel.getUserListModel();
         model.clear();
-        for (Operation op : exp.getHoughPostOps())
+        for (ExpOperation op : exp.getHoughPostOps())
             model.addElement(op);
 
         // Results
         model = resultsPanel.getUserListModel();
         model.clear();
-        for (Operation op : exp.getHoughResultsOps())
+        for (ExpOperation op : exp.getHoughResultsOps())
             model.addElement(op);
 
         put(KEY_LOADED, 1);

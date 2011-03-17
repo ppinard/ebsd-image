@@ -19,15 +19,31 @@ package org.ebsdimage.core.exp.ops.indexing.results;
 
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.exp.Exp;
+import org.ebsdimage.core.exp.ExpListener;
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.OpResult;
-import org.ebsdimage.core.run.Operation;
 
 /**
  * Superclass of operation to calculate result(s) from the indexing solutions.
  * 
  * @author Philippe T. Pinard
  */
-public abstract class IndexingResultsOps extends Operation {
+public abstract class IndexingResultsOps extends ExpOperation {
+
+    @Override
+    public final Object execute(Exp exp, Object... args) {
+        return calculate(exp, (Solution[]) args);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object results) {
+        for (OpResult result : (OpResult[]) results)
+            listener.indexingResultsPerformed(exp, this, result);
+    }
+
+
 
     /**
      * Calculates the result(s) from the indexing solutions.

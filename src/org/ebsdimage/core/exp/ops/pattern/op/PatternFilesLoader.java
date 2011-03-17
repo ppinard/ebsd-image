@@ -201,11 +201,9 @@ public class PatternFilesLoader extends PatternOp {
      * @param exp
      *            experiment executing this method
      * @return the pattern map
-     * @throws IOException
-     *             if an error occurs while loading the pattern from the file
      */
     @Override
-    public ByteMap load(Exp exp, int index) throws IOException {
+    public ByteMap load(Exp exp, int index) {
         // Assert index
         if (index < startIndex)
             throw new IllegalArgumentException("Index (" + index
@@ -222,12 +220,18 @@ public class PatternFilesLoader extends PatternOp {
             file = new File(exp.getDir(), file.getName());
 
             if (!file.exists())
-                throw new IOException("Cannot find file (" + file.getName()
+                throw new IllegalArgumentException("Cannot find file ("
+                        + file.getName()
                         + ") in the specified directory or working directory.");
         }
 
         /* Load pattern map */
-        Map map = IO.load(file);
+        Map map;
+        try {
+            map = IO.load(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         // Calibrate diffraction pattern based on camera
         map.setCalibration(exp.mmap.getMicroscope().getCamera().getCalibration(

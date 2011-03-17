@@ -43,7 +43,6 @@ import org.ebsdimage.core.exp.ops.indexing.results.IndexingResultsOpsMock;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOpMock;
 import org.ebsdimage.core.exp.ops.pattern.post.PatternPostOpsMock;
 import org.ebsdimage.core.exp.ops.pattern.results.PatternResultsOpsMock;
-import org.ebsdimage.core.run.Operation;
 import org.junit.After;
 import org.junit.Test;
 
@@ -78,11 +77,11 @@ public abstract class ExpTester extends TestCase {
         int width = 2;
         int height = 1;
 
-        ArrayList<Operation> ops = createOperations();
+        ArrayList<ExpOperation> ops = createOperations();
 
         Exp exp =
                 new Exp(createExpMMap(width, height),
-                        ops.toArray(new Operation[ops.size()]));
+                        ops.toArray(new ExpOperation[ops.size()]));
         exp.setName("ExpTester");
         exp.setDir(expPath);
 
@@ -116,8 +115,8 @@ public abstract class ExpTester extends TestCase {
 
 
 
-    public static ArrayList<Operation> createOperations() {
-        ArrayList<Operation> ops = new ArrayList<Operation>();
+    public static ArrayList<ExpOperation> createOperations() {
+        ArrayList<ExpOperation> ops = new ArrayList<ExpOperation>();
 
         ops.add(new PatternOpMock(2));
         ops.add(new PatternPostOpsMock());

@@ -17,8 +17,6 @@
  */
 package org.ebsdimage.core.exp.ops.pattern.op;
 
-import java.io.IOException;
-
 import org.ebsdimage.core.exp.Exp;
 import org.simpleframework.xml.Attribute;
 
@@ -40,7 +38,7 @@ public class PatternOpMock extends PatternOp {
 
 
     @Override
-    public ByteMap load(Exp exp, int index) throws IOException {
+    public ByteMap load(Exp exp, int index) {
         return new ByteMap(2, 2, new byte[] { (byte) index, 2, 3, 4 });
     }
 

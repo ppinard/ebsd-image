@@ -19,15 +19,31 @@ package org.ebsdimage.core.exp.ops.hough.results;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.exp.Exp;
+import org.ebsdimage.core.exp.ExpListener;
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.OpResult;
-import org.ebsdimage.core.run.Operation;
 
 /**
  * Superclass of operation to calculate result(s) from the Hough map.
  * 
  * @author Philippe T. Pinard
  */
-public abstract class HoughResultsOps extends Operation {
+public abstract class HoughResultsOps extends ExpOperation {
+
+    @Override
+    public final Object execute(Exp exp, Object... args) {
+        return calculate(exp, (HoughMap) args[0]);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object results) {
+        for (OpResult result : (OpResult[]) results)
+            listener.houghResultsPerformed(exp, this, result);
+    }
+
+
 
     /**
      * Calculates the result(s) from the Hough map.

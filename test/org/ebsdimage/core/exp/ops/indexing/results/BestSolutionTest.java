@@ -28,8 +28,8 @@ import org.ebsdimage.core.SolutionFitComparator;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.ExpMMap;
 import org.ebsdimage.core.exp.OpResult;
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOpMock;
-import org.ebsdimage.core.run.Operation;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -68,7 +68,7 @@ public class BestSolutionTest extends TestCase {
         mmap.getPhaseMap().register(2, phase2);
         mmap.getPhaseMap().register(3, phase3);
 
-        exp = new Exp(mmap, new Operation[] { new PatternOpMock(1) });
+        exp = new Exp(mmap, new ExpOperation[] { new PatternOpMock(1) });
 
         Rotation rotation1 = new Rotation(S2_2, 0, 0, S2_2, false);
         Rotation rotation2 = new Rotation(0, S2_2, S2_2, 0, false);

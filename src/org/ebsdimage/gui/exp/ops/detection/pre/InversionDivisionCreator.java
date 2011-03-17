@@ -17,8 +17,8 @@
  */
 package org.ebsdimage.gui.exp.ops.detection.pre;
 
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.ops.detection.pre.InversionDivision;
-import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationCreator;
 
 import rmlshared.gui.OkCancelDialog;
@@ -39,7 +39,7 @@ public class InversionDivisionCreator implements OperationCreator {
 
 
     @Override
-    public Operation getOperation() {
+    public ExpOperation getOperation() {
         return new InversionDivision();
     }
 

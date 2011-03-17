@@ -508,8 +508,8 @@ public class Exp extends Run {
 
 
     /**
-     * Adds a list of operations. The method {@link #addOperation(Operation)} is
-     * called for each operation.
+     * Adds a list of operations. The method {@link #addOperation(ExpOperation)}
+     * is called for each operation.
      * 
      * @param ops
      *            operations
@@ -576,310 +576,12 @@ public class Exp extends Run {
 
 
     /**
-     * Fires detection operation action.
-     * 
-     * @param op
-     *            operation
-     * @param peaksMap
-     *            peaks map
-     */
-    private void fireDetectionOpPerformed(DetectionOp op, BinMap peaksMap) {
-        for (ExpListener listener : listeners)
-            listener.detectionOpPerformed(this, op, peaksMap);
-    }
-
-
-
-    /**
-     * Fires detection post-operation action.
-     * 
-     * @param op
-     *            operation
-     * @param peaksMap
-     *            peaks map
-     */
-    private void fireDetectionPostPerformed(DetectionPostOps op, BinMap peaksMap) {
-        for (ExpListener listener : listeners)
-            listener.detectionPostPerformed(this, op, peaksMap);
-    }
-
-
-
-    /**
-     * Fires Hough pre-operation action.
-     * 
-     * @param op
-     *            operation
-     * @param houghMap
-     *            Hough map
-     */
-    private void fireDetectionPrePerformed(DetectionPreOps op, HoughMap houghMap) {
-        for (ExpListener listener : listeners)
-            listener.detectionPrePerformed(this, op, houghMap);
-    }
-
-
-
-    /**
-     * Fires detection result action.
-     * 
-     * @param op
-     *            operation
-     * @param results
-     *            operation result(s)
-     */
-    private void fireDetectionResultPerformed(DetectionResultsOps op,
-            OpResult[] results) {
-        for (ExpListener listener : listeners)
-            for (OpResult result : results)
-                listener.detectionResultsPerformed(this, op, result);
-    }
-
-
-
-    /**
-     * Fires Hough operation action.
-     * 
-     * @param op
-     *            operation
-     * @param houghMap
-     *            Hough map
-     */
-    private void fireHoughOpPerformed(HoughOp op, HoughMap houghMap) {
-        for (ExpListener listener : listeners)
-            listener.houghOpPerformed(this, op, houghMap);
-    }
-
-
-
-    /**
-     * Fires Hough post-operation action.
-     * 
-     * @param op
-     *            operation
-     * @param houghMap
-     *            Hough map
-     */
-    private void fireHoughPostPerformed(HoughPostOps op, HoughMap houghMap) {
-        for (ExpListener listener : listeners)
-            listener.houghPostPerformed(this, op, houghMap);
-    }
-
-
-
-    /**
-     * Fires Hough pre-operation action.
-     * 
-     * @param op
-     *            operation
-     * @param patternMap
-     *            pattern map
-     */
-    private void fireHoughPrePerformed(HoughPreOps op, ByteMap patternMap) {
-        for (ExpListener listener : listeners)
-            listener.houghPrePerformed(this, op, patternMap);
-    }
-
-
-
-    /**
-     * Fires Hough result action.
-     * 
-     * @param op
-     *            operation
-     * @param results
-     *            operation result(s)
-     */
-    private void fireHoughResultPerformed(HoughResultsOps op, OpResult[] results) {
-        for (ExpListener listener : listeners)
-            for (OpResult result : results)
-                listener.houghResultsPerformed(this, op, result);
-    }
-
-
-
-    /**
-     * Fires identification operation action.
-     * 
-     * @param op
-     *            operation
-     * @param peaks
-     *            Hough peaks
-     */
-    private void fireIdentificationOpPerformed(IdentificationOp op,
-            HoughPeak[] peaks) {
-        for (ExpListener listener : listeners)
-            listener.identificationOpPerformed(this, op, peaks);
-    }
-
-
-
-    /**
-     * Fires identification post-operation action.
-     * 
-     * @param op
-     *            operation
-     * @param peaks
-     *            Hough peaks
-     */
-    private void fireIdentificationPostPerformed(IdentificationPostOps op,
-            HoughPeak[] peaks) {
-        for (ExpListener listener : listeners)
-            listener.identificationPostPerformed(this, op, peaks);
-    }
-
-
-
-    /**
-     * Fires identification pre-operation action.
-     * 
-     * @param op
-     *            operation
-     * @param peaksMap
-     *            peaks map
-     */
-    private void fireIdentificationPrePerformed(IdentificationPreOps op,
-            BinMap peaksMap) {
-        for (ExpListener listener : listeners)
-            listener.identificationPrePerformed(this, op, peaksMap);
-    }
-
-
-
-    /**
-     * Fires identification result action.
-     * 
-     * @param op
-     *            operation
-     * @param results
-     *            operation result(s)
-     */
-    private void fireIdentificationResultPerformed(IdentificationResultsOps op,
-            OpResult[] results) {
-        for (ExpListener listener : listeners)
-            for (OpResult result : results)
-                listener.identificationResultsPerformed(this, op, result);
-    }
-
-
-
-    /**
-     * Fires indexing operation action.
-     * 
-     * @param op
-     *            operation
-     * @param solutions
-     *            solutions
-     */
-    private void fireIndexingOpPerformed(IndexingOp op, Solution[] solutions) {
-        for (ExpListener listener : listeners)
-            listener.indexingOpPerformed(this, op, solutions);
-    }
-
-
-
-    /**
-     * Fires indexing post-operation action.
-     * 
-     * @param op
-     *            operation
-     * @param solutions
-     *            solutions
-     */
-    private void fireIndexingPostPerformed(IndexingPostOps op,
-            Solution[] solutions) {
-        for (ExpListener listener : listeners)
-            listener.indexingPostPerformed(this, op, solutions);
-    }
-
-
-
-    /**
-     * Fires indexing pre-operation action.
-     * 
-     * @param op
-     *            operation
-     * @param peaks
-     *            Hough peaks
-     */
-    private void fireIndexingPrePerformed(IndexingPreOps op, HoughPeak[] peaks) {
-        for (ExpListener listener : listeners)
-            listener.indexingPrePerformed(this, op, peaks);
-    }
-
-
-
-    /**
-     * Fires indexing result action.
-     * 
-     * @param op
-     *            operation
-     * @param results
-     *            operation result(s)
-     */
-    private void fireIndexingResultPerformed(IndexingResultsOps op,
-            OpResult[] results) {
-        for (ExpListener listener : listeners)
-            for (OpResult result : results)
-                listener.indexingResultsPerformed(this, op, result);
-    }
-
-
-
-    /**
-     * Fires pattern operation action.
-     * 
-     * @param op
-     *            operation
-     * @param patternMap
-     *            pattern map
-     */
-    private void firePatternOpPerformed(PatternOp op, ByteMap patternMap) {
-        for (ExpListener listener : listeners)
-            listener.patternOpPerformed(this, op, patternMap);
-    }
-
-
-
-    /**
-     * Fires pattern post-operation action.
-     * 
-     * @param op
-     *            operation
-     * @param patternMap
-     *            pattern map
-     */
-    private void firePatternPostPerformed(PatternPostOps op, ByteMap patternMap) {
-        for (ExpListener listener : listeners)
-            listener.patternPostPerformed(this, op, patternMap);
-    }
-
-
-
-    /**
-     * Fires pattern result action.
-     * 
-     * @param op
-     *            operation
-     * @param results
-     *            operation result(s)
-     */
-    private void firePatternResultPerformed(PatternResultsOps op,
-            OpResult[] results) {
-        for (ExpListener listener : listeners)
-            for (OpResult result : results)
-                listener.patternResultsPerformed(this, op, result);
-    }
-
-
-
-    /**
      * Returns a list of all the defined operations in this experiment.
      * 
      * @return operations
      */
-    public ArrayList<Operation> getAllOperations() {
-        ArrayList<Operation> ops = new ArrayList<Operation>();
+    public ArrayList<ExpOperation> getAllOperations() {
+        ArrayList<ExpOperation> ops = new ArrayList<ExpOperation>();
 
         ops.add(patternOp);
         ops.addAll(patternPostOps);
@@ -1406,11 +1108,11 @@ public class Exp extends Run {
         createDir();
 
         // Get all operations
-        ArrayList<Operation> ops = getAllOperations();
+        ArrayList<ExpOperation> ops = getAllOperations();
 
         // Initialize ops
         setStatus("--- Initializing ops ---");
-        for (Operation op : ops)
+        for (ExpOperation op : ops)
             op.setUp(this);
 
         int size = patternOp.size;
@@ -1434,7 +1136,7 @@ public class Exp extends Run {
 
         // Flush ops
         setStatus("--- Flushing ops ---");
-        for (Operation op : ops)
+        for (ExpOperation op : ops)
             op.tearDown(this);
 
         // Reset runtime variables
@@ -1459,48 +1161,26 @@ public class Exp extends Run {
      *             if an error occurs during the run
      */
     private void runOnce(PatternOp patternOp, int index) throws IOException {
-        OpResult[] results;
-
         // Pattern Op
         setStatus("--- Pattern Operation ---");
 
-        setStatus("Performing " + patternOp.getName() + " (" + index + ")...");
-
-        currentPatternMap = patternOp.load(this, index);
+        currentPatternMap = (ByteMap) runOperation(patternOp, index);
         sourcePatternMap =
                 (ByteMap) updateSourceMap(sourcePatternMap, currentPatternMap);
-
-        setStatus("Performing " + patternOp.getName() + "... DONE");
-
-        firePatternOpPerformed(patternOp, getCurrentPatternMap());
 
         // Pattern Post Ops
         setStatus("--- Pattern Post Operations ---");
         for (PatternPostOps op : patternPostOps) {
-            setStatus("Performing " + op.getName() + "...");
-
-            currentPatternMap = op.process(this, currentPatternMap);
+            currentPatternMap = (ByteMap) runOperation(op, currentPatternMap);
             sourcePatternMap =
                     (ByteMap) updateSourceMap(sourcePatternMap,
                             currentPatternMap);
-
-            setStatus("Performing " + op.getName() + "... DONE");
-
-            firePatternPostPerformed(op, getCurrentPatternMap());
         }
 
         // Pattern Results Ops
         setStatus("--- Pattern Results Operations ---");
-        for (PatternResultsOps op : patternResultsOps) {
-            setStatus("Calculating " + op.getName() + "...");
-
-            results = op.calculate(this, getCurrentPatternMap());
-            saveResults(results);
-
-            setStatus("Calculating " + op.getName() + "... DONE");
-
-            firePatternResultPerformed(op, results);
-        }
+        for (PatternResultsOps op : patternResultsOps)
+            runResultsOperation(op, currentPatternMap);
 
         // Test to continue
         if (houghResultsOps.size() > 0 || detectionResultsOps.size() > 0
@@ -1509,56 +1189,30 @@ public class Exp extends Run {
 
             // Hough Pre Ops
             setStatus("--- Hough Pre Operations ---");
-            for (HoughPreOps op : houghPreOps) {
-                setStatus("Performing " + op.getName() + "...");
-
-                currentPatternMap = op.process(this, currentPatternMap);
-
-                setStatus("Performing " + op.getName() + "... DONE");
-
-                fireHoughPrePerformed(op, getCurrentPatternMap());
-            }
+            for (HoughPreOps op : houghPreOps)
+                currentPatternMap =
+                        (ByteMap) runOperation(op, currentPatternMap);
 
             // Hough Op
             setStatus("--- Hough Operation ---");
-
-            setStatus("Performing " + houghOp.getName() + "...");
-
-            currentHoughMap = houghOp.transform(this, currentPatternMap);
+            currentHoughMap =
+                    (HoughMap) runOperation(houghOp, currentPatternMap);
             sourceHoughMap =
                     (HoughMap) updateSourceMap(sourceHoughMap, currentHoughMap);
-
-            setStatus("Performing " + houghOp.getName() + "... DONE");
-
-            fireHoughOpPerformed(houghOp, getCurrentHoughMap());
 
             // Hough Post Ops
             setStatus("--- Hough Post Operations ---");
             for (HoughPostOps op : houghPostOps) {
-                setStatus("Performing " + op.getName() + "...");
-
-                currentHoughMap = op.process(this, currentHoughMap);
+                currentHoughMap = (HoughMap) runOperation(op, currentHoughMap);
                 sourceHoughMap =
                         (HoughMap) updateSourceMap(sourceHoughMap,
                                 currentHoughMap);
-
-                setStatus("Performing " + op.getName() + "... DONE");
-
-                fireHoughPostPerformed(op, getCurrentHoughMap());
             }
 
             // Hough Results Ops
             setStatus("--- Hough Results Operations ---");
-            for (HoughResultsOps op : houghResultsOps) {
-                setStatus("Calculating " + op.getName() + "...");
-
-                results = op.calculate(this, currentHoughMap);
-                saveResults(results);
-
-                setStatus("Calculating " + op.getName() + "... DONE");
-
-                fireHoughResultPerformed(op, results);
-            }
+            for (HoughResultsOps op : houghResultsOps)
+                runResultsOperation(op, currentHoughMap);
 
             // Test to continue
             if (detectionResultsOps.size() > 0
@@ -1567,57 +1221,33 @@ public class Exp extends Run {
 
                 // Detection Pre Ops
                 setStatus("--- Detection Pre Operations ---");
-                for (DetectionPreOps op : detectionPreOps) {
-                    setStatus("Performing " + op.getName() + "...");
-
-                    currentHoughMap = op.process(this, currentHoughMap);
-
-                    setStatus("Performing " + op.getName() + "... DONE");
-
-                    fireDetectionPrePerformed(op, getCurrentHoughMap());
-                }
+                for (DetectionPreOps op : detectionPreOps)
+                    currentHoughMap =
+                            (HoughMap) runOperation(op, currentHoughMap);
 
                 // Detection Op
                 setStatus("--- Detection Operation ---");
 
-                setStatus("Performing " + detectionOp.getName() + "...");
-
-                currentPeaksMap = detectionOp.detect(this, currentHoughMap);
+                currentPeaksMap =
+                        (BinMap) runOperation(detectionOp, currentHoughMap);
                 sourcePeaksMap =
                         (BinMap) updateSourceMap(sourcePeaksMap,
                                 currentPeaksMap);
 
-                setStatus("Performing " + detectionOp.getName() + "... DONE");
-
-                fireDetectionOpPerformed(detectionOp, getCurrentPeaksMap());
-
                 // Detection Post Ops
                 setStatus("--- Detection Post Operations ---");
                 for (DetectionPostOps op : detectionPostOps) {
-                    setStatus("Performing " + op.getName() + "...");
-
-                    currentPeaksMap = op.process(this, currentPeaksMap);
+                    currentPeaksMap =
+                            (BinMap) runOperation(op, currentPeaksMap);
                     sourcePeaksMap =
                             (BinMap) updateSourceMap(sourcePeaksMap,
                                     currentPeaksMap);
-
-                    setStatus("Performing " + op.getName() + "... DONE");
-
-                    fireDetectionPostPerformed(op, getCurrentPeaksMap());
                 }
 
                 // Detection Results Ops
                 setStatus("--- Detection Results Operations ---");
-                for (DetectionResultsOps op : detectionResultsOps) {
-                    setStatus("Calculating " + op.getName() + "...");
-
-                    results = op.calculate(this, currentPeaksMap);
-                    saveResults(results);
-
-                    setStatus("Calculating " + op.getName() + "... DONE");
-
-                    fireDetectionResultPerformed(op, results);
-                }
+                for (DetectionResultsOps op : detectionResultsOps)
+                    runResultsOperation(op, currentPeaksMap);
 
                 // Test to continue
                 if (identificationResultsOps.size() > 0
@@ -1625,115 +1255,102 @@ public class Exp extends Run {
 
                     // Identification Pre Ops
                     setStatus("--- Identification Pre Operations ---");
-                    for (IdentificationPreOps op : identificationPreOps) {
-                        setStatus("Performing " + op.getName() + "...");
-
-                        currentPeaksMap = op.process(this, currentPeaksMap);
-
-                        setStatus("Performing " + op.getName() + "... DONE");
-
-                        fireIdentificationPrePerformed(op, getCurrentPeaksMap());
-                    }
+                    for (IdentificationPreOps op : identificationPreOps)
+                        currentPeaksMap =
+                                (BinMap) runOperation(op, currentPeaksMap);
 
                     // Identification Op
                     setStatus("--- Identification Operation ---");
 
-                    setStatus("Performing " + identificationOp.getName()
-                            + "...");
-
                     currentPeaks =
-                            identificationOp.identify(this, currentPeaksMap,
-                                    sourceHoughMap);
-
-                    setStatus("Performing " + identificationOp.getName()
-                            + "... DONE");
-
-                    fireIdentificationOpPerformed(identificationOp,
-                            getCurrentPeaks());
+                            (HoughPeak[]) runOperation(identificationOp,
+                                    currentPeaksMap, sourceHoughMap);
 
                     // Identification Post Ops
                     setStatus("--- Identification Post Operations ---");
-                    for (IdentificationPostOps op : identificationPostOps) {
-                        setStatus("Performing " + op.getName() + "...");
-
-                        currentPeaks = op.process(this, currentPeaks);
-
-                        setStatus("Performing " + op.getName() + "... DONE");
-
-                        fireIdentificationPostPerformed(op, getCurrentPeaks());
-                    }
+                    for (IdentificationPostOps op : identificationPostOps)
+                        currentPeaks =
+                                (HoughPeak[]) runOperation(op,
+                                        (Object[]) currentPeaks);
 
                     // Identification Results Ops
                     setStatus("--- Identification Results Operations ---");
-                    for (IdentificationResultsOps op : identificationResultsOps) {
-                        setStatus("Calculating " + op.getName() + "...");
-
-                        results = op.calculate(this, currentPeaks);
-                        saveResults(results);
-
-                        setStatus("Calculating " + op.getName() + "... DONE");
-
-                        fireIdentificationResultPerformed(op, results);
-                    }
+                    for (IdentificationResultsOps op : identificationResultsOps)
+                        runResultsOperation(op, (Object[]) currentPeaks);
 
                     // Test to continue
                     if (indexingResultsOps.size() > 0) {
 
                         // Indexing Pre Ops
                         setStatus("--- Indexing Pre Operations ---");
-                        for (IndexingPreOps op : indexingPreOps) {
-                            setStatus("Performing " + op.getName() + "...");
-
-                            currentPeaks = op.process(this, currentPeaks);
-
-                            setStatus("Performing " + op.getName() + "... DONE");
-
-                            fireIndexingPrePerformed(op, getCurrentPeaks());
-                        }
+                        for (IndexingPreOps op : indexingPreOps)
+                            currentPeaks =
+                                    (HoughPeak[]) runOperation(op,
+                                            (Object[]) currentPeaks);
 
                         // Indexing Op
                         setStatus("--- Indexing Operation ---");
-
-                        setStatus("Performing " + indexingOp.getName() + "...");
-
-                        currentSolutions = indexingOp.index(this, currentPeaks);
-
-                        fireIndexingOpPerformed(indexingOp,
-                                getCurrentSolutions());
-
-                        setStatus("Performing " + indexingOp.getName()
-                                + "... DONE");
+                        currentSolutions =
+                                (Solution[]) runOperation(indexingOp,
+                                        (Object[]) currentPeaks);
 
                         // Indexing Post Ops
                         setStatus("--- Indexing Post Operations ---");
-                        for (IndexingPostOps op : indexingPostOps) {
-                            setStatus("Performing " + op.getName() + "...");
-
+                        for (IndexingPostOps op : indexingPostOps)
                             currentSolutions =
-                                    op.process(this, currentSolutions);
-
-                            setStatus("Performing " + op.getName() + "... DONE");
-
-                            fireIndexingPostPerformed(op, getCurrentSolutions());
-                        }
+                                    (Solution[]) runOperation(op,
+                                            (Object[]) currentSolutions);
 
                         // Indexing Results Ops
                         setStatus("--- Indexing Results Operations ---");
-                        for (IndexingResultsOps op : indexingResultsOps) {
-                            setStatus("Calculating " + op.getName() + "...");
-
-                            results = op.calculate(this, currentSolutions);
-                            saveResults(results);
-
-                            setStatus("Calculating " + op.getName()
-                                    + "... DONE");
-
-                            fireIndexingResultPerformed(op, results);
-                        }
+                        for (IndexingResultsOps op : indexingResultsOps)
+                            runResultsOperation(op, (Object[]) currentSolutions);
                     }
                 }
             }
         }
+    }
+
+
+
+    /**
+     * Runs the specified operation with the given arguments.
+     * 
+     * @param op
+     *            an operation
+     * @param args
+     *            arguments
+     * @return return of the operation
+     */
+    private Object runOperation(ExpOperation op, Object... args) {
+        setStatus("Executing " + op.getName() + "...");
+
+        Object out = op.execute(this, args);
+
+        for (ExpListener listener : listeners)
+            op.fireExecuted(listener, this, out);
+
+        setStatus("Executing " + op.getName() + "... DONE");
+
+        return out;
+    }
+
+
+
+    /**
+     * Runs a results operation with the given arguments. The results are saved
+     * in the multimap using {@link #saveResult(OpResult)} method.
+     * 
+     * @param op
+     *            a results operation
+     * @param args
+     *            arguments
+     */
+    private void runResultsOperation(ExpOperation op, Object... args) {
+        OpResult[] results = (OpResult[]) runOperation(op, args);
+
+        for (OpResult result : results)
+            saveResult(result);
     }
 
 
@@ -1774,21 +1391,6 @@ public class Exp extends Run {
 
         // Set that the pixArray of the map was modified
         map.setChanged(Map.MAP_CHANGED);
-    }
-
-
-
-    /**
-     * Saves all the results in the <code>HashMap</code>. The method
-     * {@link #saveResult(String, Number)} is called for each result.
-     * 
-     * @param results
-     *            operation's results
-     * @see Exp#saveResult(String, Number)
-     */
-    private void saveResults(OpResult[] results) {
-        for (OpResult result : results)
-            saveResult(result);
     }
 
 

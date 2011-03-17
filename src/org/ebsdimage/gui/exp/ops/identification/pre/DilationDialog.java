@@ -17,9 +17,9 @@
  */
 package org.ebsdimage.gui.exp.ops.identification.pre;
 
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.ops.detection.post.Opening;
 import org.ebsdimage.core.exp.ops.identification.pre.Dilation;
-import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationDialog;
 
 import rmlshared.gui.ColumnPanel;
@@ -79,7 +79,7 @@ public class DilationDialog extends OperationDialog {
 
 
     @Override
-    public Operation getOperation() {
+    public ExpOperation getOperation() {
         return new Dilation(minField.getValueBFR(), maxField.getValueBFR());
     }
 

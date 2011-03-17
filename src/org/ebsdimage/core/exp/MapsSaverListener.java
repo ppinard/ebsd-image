@@ -25,7 +25,6 @@ import org.ebsdimage.core.exp.ops.indexing.results.IndexingResultsOps;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
 import org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps;
 import org.ebsdimage.core.exp.ops.pattern.results.PatternResultsOps;
-import org.ebsdimage.core.run.Operation;
 import org.simpleframework.xml.Root;
 
 import rmlimage.core.BinMap;
@@ -226,7 +225,7 @@ public class MapsSaverListener implements ExpListener {
      * @param map
      *            a map
      */
-    protected void saveMap(Exp exp, Operation op, Map map) {
+    protected void saveMap(Exp exp, ExpOperation op, Map map) {
         map.setDir(exp.getDir());
         map.setName(createName(exp, op.getName()));
 

@@ -19,8 +19,8 @@ package org.ebsdimage.gui.exp.ops.indexing.pre;
 
 import javax.swing.JLabel;
 
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.ops.indexing.pre.HoughPeaksSelector;
-import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationDialog;
 
 import rmlshared.gui.ColumnPanel;
@@ -99,7 +99,7 @@ public class HoughPeaksSelectorDialog extends OperationDialog {
 
 
     @Override
-    public Operation getOperation() {
+    public ExpOperation getOperation() {
         return new HoughPeaksSelector(minimumField.getValueBFR(),
                 maximumField.getValueBFR());
     }

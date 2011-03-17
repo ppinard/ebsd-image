@@ -18,8 +18,9 @@
 package org.ebsdimage.core.exp.ops.pattern.results;
 
 import org.ebsdimage.core.exp.Exp;
+import org.ebsdimage.core.exp.ExpListener;
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.OpResult;
-import org.ebsdimage.core.run.Operation;
 
 import rmlimage.core.ByteMap;
 
@@ -28,7 +29,22 @@ import rmlimage.core.ByteMap;
  * 
  * @author Philippe T. Pinard
  */
-public abstract class PatternResultsOps extends Operation {
+public abstract class PatternResultsOps extends ExpOperation {
+
+    @Override
+    public final Object execute(Exp exp, Object... args) {
+        return calculate(exp, (ByteMap) args[0]);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object results) {
+        for (OpResult result : (OpResult[]) results)
+            listener.patternResultsPerformed(exp, this, result);
+    }
+
+
 
     /**
      * Calculates the result(s) from the pattern map.

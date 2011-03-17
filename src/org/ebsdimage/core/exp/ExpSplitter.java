@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
-import org.ebsdimage.core.run.Operation;
 
 /**
  * Splits a specified experiment into smaller experiments.
@@ -27,7 +26,7 @@ public class ExpSplitter implements Iterator<Exp> {
     private final int expSize;
 
     /** All the operations except PatternOp. */
-    private final ArrayList<Operation> ops;
+    private final ArrayList<ExpOperation> ops;
 
     /** Number of patterns in each split. */
     private final int size;
@@ -65,8 +64,8 @@ public class ExpSplitter implements Iterator<Exp> {
         this.count = count;
 
         // List all the operations except PatternOp
-        ops = new ArrayList<Operation>();
-        for (Operation op : exp.getAllOperations())
+        ops = new ArrayList<ExpOperation>();
+        for (ExpOperation op : exp.getAllOperations())
             if (!(op instanceof PatternOp))
                 ops.add(op);
 
@@ -112,7 +111,7 @@ public class ExpSplitter implements Iterator<Exp> {
         PatternOp patternOp = exp.getPatternOp().extract(startIndex, endIndex);
 
         // Combine pattern operations and other operations
-        ArrayList<Operation> tmpOps = new ArrayList<Operation>();
+        ArrayList<ExpOperation> tmpOps = new ArrayList<ExpOperation>();
         tmpOps.addAll(ops);
         tmpOps.add(patternOp);
 
@@ -121,7 +120,7 @@ public class ExpSplitter implements Iterator<Exp> {
 
         // Create and add new experiment to the array
         Exp splitExp =
-                new Exp(exp.mmap.duplicate(), tmpOps.toArray(new Operation[0]));
+                new Exp(exp.mmap.duplicate(), tmpOps.toArray(new ExpOperation[0]));
 
         splitExp.addExpListeners(exp.getExpListeners());
 

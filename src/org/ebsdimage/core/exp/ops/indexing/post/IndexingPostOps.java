@@ -19,14 +19,29 @@ package org.ebsdimage.core.exp.ops.indexing.post;
 
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpListener;
+import org.ebsdimage.core.exp.ExpOperation;
 
 /**
  * Superclass of operation to process the indexing solutions after the indexing.
  * 
  * @author Philippe T. Pinard
  */
-public abstract class IndexingPostOps extends Operation {
+public abstract class IndexingPostOps extends ExpOperation {
+
+    @Override
+    public final Object execute(Exp exp, Object... args) {
+        return process(exp, (Solution[]) args);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
+        listener.indexingPostPerformed(exp, this, (Solution[]) result);
+    }
+
+
 
     /**
      * Returns processed indexing solutions.

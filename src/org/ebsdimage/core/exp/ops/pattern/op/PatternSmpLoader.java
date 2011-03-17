@@ -156,7 +156,7 @@ public class PatternSmpLoader extends PatternOp {
      *            other directory to look for the SMP file
      * @return file for the SMP
      * @throws IOException
-     *             if the SMP file cannot be found
+     *             if the file cannot be found
      */
     public File getFile(File dir) throws IOException {
         File file = new File(filedir, filename);
@@ -194,13 +194,22 @@ public class PatternSmpLoader extends PatternOp {
      * @param index
      *            index of the pattern to load
      * @return the pattern maps
-     * @throws IOException
-     *             if an error occurs while opening the SMP file
      */
     @Override
-    public ByteMap load(Exp exp, int index) throws IOException {
-        File file = getFile(exp.getDir());
-        SmpInputStream reader = new SmpInputStream(file);
+    public ByteMap load(Exp exp, int index) {
+        File file;
+        try {
+            file = getFile(exp.getDir());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        SmpInputStream reader;
+        try {
+            reader = new SmpInputStream(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         // Assert index
         if (index < startIndex)
@@ -217,8 +226,18 @@ public class PatternSmpLoader extends PatternOp {
                     + reader.getEndIndex() + ").");
 
         // Read pattern
-        ByteMap patternMap = (ByteMap) reader.readMap(index);
-        reader.close();
+        ByteMap patternMap;
+        try {
+            patternMap = (ByteMap) reader.readMap(index);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         // Calibrate diffraction pattern based on camera
         patternMap.setCalibration(exp.mmap.getMicroscope().getCamera().getCalibration(

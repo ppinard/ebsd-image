@@ -19,8 +19,8 @@ package org.ebsdimage.gui.exp.ops.identification.post;
 
 import javax.swing.JLabel;
 
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.ops.identification.post.DoublePeaksCleanUp;
-import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationDialog;
 
 import rmlshared.gui.ColumnPanel;
@@ -81,7 +81,7 @@ public class DoublePeaksCleanUpDialog extends OperationDialog {
 
 
     @Override
-    public Operation getOperation() {
+    public ExpOperation getOperation() {
         return new DoublePeaksCleanUp(spacingRhoField.getValueBFR(),
                 spacingThetaField.getValueBFR());
     }

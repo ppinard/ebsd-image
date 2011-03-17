@@ -20,14 +20,29 @@ package org.ebsdimage.core.exp.ops.indexing.op;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpListener;
+import org.ebsdimage.core.exp.ExpOperation;
 
 /**
  * Superclass of operation to perform the indexing of the Hough peaks.
  * 
  * @author Philippe T. Pinard
  */
-public abstract class IndexingOp extends Operation {
+public abstract class IndexingOp extends ExpOperation {
+
+    @Override
+    public final Object execute(Exp exp, Object... args) {
+        return index(exp, (HoughPeak[]) args);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
+        listener.indexingOpPerformed(exp, this, (Solution[]) result);
+    }
+
+
 
     /**
      * Find solution(s) for the input Hough peaks.

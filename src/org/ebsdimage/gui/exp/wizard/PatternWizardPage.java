@@ -23,7 +23,7 @@ import javax.swing.DefaultListModel;
 
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.ExpConstants;
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpOperation;
 
 /**
  * Wizard page for the pattern operations.
@@ -100,13 +100,13 @@ public class PatternWizardPage extends OperationWizardPage {
         // Post
         DefaultListModel model = postPanel.getUserListModel();
         model.clear();
-        for (Operation op : exp.getPatternPostOps())
+        for (ExpOperation op : exp.getPatternPostOps())
             model.addElement(op);
 
         // Results
         model = resultsPanel.getUserListModel();
         model.clear();
-        for (Operation op : exp.getPatternResultsOps())
+        for (ExpOperation op : exp.getPatternResultsOps())
             model.addElement(op);
 
         put(KEY_LOADED, 1);

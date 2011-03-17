@@ -19,8 +19,8 @@ package org.ebsdimage.gui.exp.ops.detection.post;
 
 import javax.swing.JLabel;
 
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.ops.detection.post.ShapeFactor;
-import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.run.ops.OperationDialog;
 
 import rmlshared.gui.ColumnPanel;
@@ -68,7 +68,7 @@ public class ShapeFactorDialog extends OperationDialog {
 
 
     @Override
-    public Operation getOperation() {
+    public ExpOperation getOperation() {
         return new ShapeFactor(aspectRatioField.getValueBFR());
     }
 

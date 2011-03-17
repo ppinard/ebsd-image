@@ -21,7 +21,7 @@ import java.io.IOException;
 
 import javax.swing.DefaultListModel;
 
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.gui.run.ops.OperationChoicePanel;
 import org.ebsdimage.gui.run.ops.OperationCreator;
 
@@ -53,7 +53,7 @@ public class SingleChoicePanel extends OperationChoicePanel {
                 return;
 
             // Get the operation
-            Operation op = oc.getOperation();
+            ExpOperation op = (ExpOperation) oc.getOperation();
 
             // Add it to the user list
             DefaultListModel model = (DefaultListModel) userList.getModel();

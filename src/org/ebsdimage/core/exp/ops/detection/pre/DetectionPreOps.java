@@ -19,14 +19,15 @@ package org.ebsdimage.core.exp.ops.detection.pre;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.exp.ExpListener;
+import org.ebsdimage.core.exp.ExpOperation;
 
 /**
  * Superclass of operation to process the Hough map before the peak detection.
  * 
  * @author Philippe T. Pinard
  */
-public abstract class DetectionPreOps extends Operation {
+public abstract class DetectionPreOps extends ExpOperation {
 
     /**
      * Returns a processed Hough map.
@@ -38,5 +39,19 @@ public abstract class DetectionPreOps extends Operation {
      * @return output Hough map
      */
     public abstract HoughMap process(Exp exp, HoughMap srcMap);
+
+
+
+    @Override
+    public final Object execute(Exp exp, Object... args) {
+        return process(exp, (HoughMap) args[0]);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
+        listener.detectionPrePerformed(exp, this, (HoughMap) result);
+    }
 
 }
