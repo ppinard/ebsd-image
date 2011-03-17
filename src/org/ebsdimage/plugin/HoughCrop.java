@@ -70,7 +70,7 @@ public class HoughCrop extends PlugIn {
             String[] units = new String[] { rhoUnits };
             Magnitude rhoMax = new Magnitude(map.getRhoMax(), rhoUnits);
 
-            rhoField = new CalibratedDoubleField("Rho", 5, rhoMax, units);
+            rhoField = new CalibratedDoubleField("Rho", 5, rhoMax, units, true);
             rhoField.setRange(new Magnitude(0.1, rhoMax), rhoMax);
             cPanel.add(rhoField);
 
