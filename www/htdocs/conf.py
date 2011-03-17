@@ -178,10 +178,13 @@ latex_documents = [
 
 # For "manual" documents, if this is true, then toplevel headings are parts,
 # not chapters.
-#latex_use_parts = False
+latex_use_parts = True
 
 # Additional stuff for the LaTeX preamble.
 latex_preamble = ''
+
+latex_elements = {}
+latex_elements['preamble'] = '\\usepackage{amsmath}\\usepackage{amsthm}\\usepackage{amssymb}'
 
 # Documents to append as an appendix to all manuals.
 #latex_appendices = []
@@ -202,3 +205,4 @@ autoclass_content = "both"
 bibtex_path = 'bib/references.bib'
 bibtex_style = ('apa', 'apalike')
 bibtex_styles_path = ['/home/ppinard/documents/workspace/pydev/sphinxtools/ext/bibtex/styles']
+
