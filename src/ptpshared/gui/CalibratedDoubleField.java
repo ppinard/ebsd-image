@@ -50,6 +50,9 @@ public class CalibratedDoubleField extends JComponent implements
      *            default value
      * @param validUnits
      *            units that the field should accept
+     * @param showUnitsField
+     *            show the units field, if <code>false</code> the field can be
+     *            placed in a layout using {@link #getUnitsField}.
      * @throws IllegalArgumentException
      *             if the default value cannot be expressed by all the valid
      *             units
@@ -58,7 +61,7 @@ public class CalibratedDoubleField extends JComponent implements
      *             units
      */
     public CalibratedDoubleField(String name, int length,
-            Magnitude defaultValue, String[] validUnits) {
+            Magnitude defaultValue, String[] validUnits, boolean showUnitsField) {
         setLayout(new FlowLayout());
 
         if (name == null)
@@ -90,7 +93,9 @@ public class CalibratedDoubleField extends JComponent implements
         unitsCBox = new ComboBox<String>(validUnits);
         unitsCBox.setName(name + "-units");
         unitsCBox.setSelectedItem(defaultValue.getPreferredUnitsLabel());
-        add(unitsCBox);
+
+        if (showUnitsField)
+            add(unitsCBox);
     }
 
 
@@ -113,7 +118,33 @@ public class CalibratedDoubleField extends JComponent implements
      */
     public CalibratedDoubleField(String name, Magnitude defaultValue,
             String[] validUnits) {
-        this(name, 5, defaultValue, validUnits);
+        this(name, 5, defaultValue, validUnits, true);
+    }
+
+
+
+    /**
+     * Creates a new <code>CalibratedDoubleField</code>.
+     * 
+     * @param name
+     *            name of the field
+     * @param defaultValue
+     *            default value
+     * @param validUnits
+     *            units that the field should accept
+     * @param showUnitsField
+     *            show the units field, if <code>false</code> the field can be
+     *            placed in a layout using {@link #getUnitsField}.
+     * @throws IllegalArgumentException
+     *             if the default value cannot be expressed by all the valid
+     *             units
+     * @throws IllegalArgumentException
+     *             the preferred units of the default value are not in the valid
+     *             units
+     */
+    public CalibratedDoubleField(String name, Magnitude defaultValue,
+            String[] validUnits, boolean showUnitsField) {
+        this(name, 5, defaultValue, validUnits, showUnitsField);
     }
 
 
@@ -165,6 +196,18 @@ public class CalibratedDoubleField extends JComponent implements
      */
     public Magnitude getValue() {
         return new Magnitude(valueField.getValue(), unitsCBox.getSelectedItem());
+    }
+
+
+
+    /**
+     * Returns the combo box where the units are specified.
+     * 
+     * @return combo box for the units
+     */
+    public JComponent getUnitsField() {
+        return unitsCBox;
+
     }
 
 
