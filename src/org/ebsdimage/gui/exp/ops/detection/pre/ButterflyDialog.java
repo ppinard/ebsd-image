@@ -52,12 +52,12 @@ public class ButterflyDialog extends OperationDialog {
         flattenLowerLimitField =
                 new DoubleField("Flatten Lower Limit",
                         Butterfly.DEFAULT.flattenLowerLimit);
-        flattenLowerLimitField.setRange(Float.MIN_VALUE, Float.MAX_VALUE);
+        flattenLowerLimitField.setRange(-Float.MAX_VALUE, Float.MAX_VALUE);
 
         flattenUpperLimitField =
                 new DoubleField("Flatten Upper Limit",
                         Butterfly.DEFAULT.flattenUpperLimit);
-        flattenUpperLimitField.setRange(Float.MIN_VALUE, Float.MAX_VALUE);
+        flattenUpperLimitField.setRange(-Float.MAX_VALUE, Float.MAX_VALUE);
 
         kernelSizeField =
                 new OddIntField("Kernel Size", Butterfly.DEFAULT.kernelSize);

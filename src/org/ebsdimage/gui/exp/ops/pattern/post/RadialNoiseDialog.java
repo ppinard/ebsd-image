@@ -70,12 +70,12 @@ public class RadialNoiseDialog extends OperationDialog {
         stdDevXField =
                 new DoubleField("Standard deviation in X",
                         RadialNoise.DEFAULT.stdDevX);
-        stdDevXField.setRange(Double.MIN_VALUE, Double.MAX_VALUE);
+        stdDevXField.setRange(-Double.MAX_VALUE, Double.MAX_VALUE);
 
         stdDevYField =
                 new DoubleField("Standard deviation in Y",
                         RadialNoise.DEFAULT.stdDevY);
-        stdDevYField.setRange(Double.MIN_VALUE, Double.MAX_VALUE);
+        stdDevYField.setRange(-Double.MAX_VALUE, Double.MAX_VALUE);
 
         initialNoiseStdDevField =
                 new DoubleField("Initial Noise Standard Deviation",
