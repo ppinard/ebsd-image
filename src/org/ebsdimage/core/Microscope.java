@@ -5,6 +5,7 @@ import magnitude.core.Magnitude;
 
 import org.apache.commons.math.geometry.Rotation;
 import org.apache.commons.math.geometry.Vector3D;
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -17,6 +18,10 @@ import ptpshared.geom.*;
  */
 @Root
 public class Microscope implements AlmostEquable {
+
+    /** Name of the microscope setup. */
+    @Attribute(name = "name")
+    private String name = "Unnamed";
 
     /** Definition of the EBSD camera. */
     @Element(name = "camera")
@@ -273,6 +278,17 @@ public class Microscope implements AlmostEquable {
 
 
     /**
+     * Returns the name of this microscope setup.
+     * 
+     * @return name of this microscope setup
+     */
+    public String getName() {
+        return name;
+    }
+
+
+
+    /**
      * Returns the position of the pattern center in the x direction of the
      * diffraction pattern. The position is given as a fraction of the camera's
      * width.
@@ -427,6 +443,23 @@ public class Microscope implements AlmostEquable {
 
 
     /**
+     * Sets the name of this microscope setup.
+     * 
+     * @param name
+     *            name of this microscope setup
+     */
+    public void setName(String name) {
+        if (name == null)
+            throw new NullPointerException("Name cannot be null.");
+        if (name.isEmpty())
+            throw new IllegalArgumentException(
+                    "Name cannot be an empty string.");
+        this.name = name;
+    }
+
+
+
+    /**
      * Sets the pattern center in the x direction. The pattern center should be
      * given as a fraction of the camera's width.
      * 
@@ -546,4 +579,10 @@ public class Microscope implements AlmostEquable {
         setWorkingDistance(wd.getValue("m"));
     }
 
+
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

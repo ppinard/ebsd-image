@@ -43,6 +43,8 @@ public class MicroscopeTest extends TestCase {
         tiltAxis = new Vector3D(0, 1, 0);
         microscope = new Microscope(camera, tiltAxis);
 
+        microscope.setName("Microscope1");
+
         microscope.setBeamEnergy(15e3);
 
         microscope.setCameraDistance(0.02);
@@ -191,6 +193,8 @@ public class MicroscopeTest extends TestCase {
     public void testMicroscope() {
         Microscope microscope = new Microscope();
 
+        assertEquals("Unnamed", microscope.getName());
+
         assertEquals(Camera.NO_CAMERA, microscope.getCamera());
 
         assertEquals(new Vector3D(0, 1, 0), microscope.getTiltAxis(), 1e-6);
@@ -210,6 +214,8 @@ public class MicroscopeTest extends TestCase {
     @Test
     public void testMicroscopeCameraVector3D() {
         Microscope microscope = new Microscope(camera, tiltAxis);
+
+        assertEquals("Unnamed", microscope.getName());
 
         assertEquals(new Vector3D(1, 0, 0), microscope.getCamera().n);
         assertEquals(new Vector3D(0, -1, 0), microscope.getCamera().x);
@@ -444,4 +450,25 @@ public class MicroscopeTest extends TestCase {
         assertEquals(0.015, other.getWorkingDistance(), 1e-6);
     }
 
+
+
+    @Test
+    public void testGetName() {
+        assertEquals("Microscope1", microscope.getName());
+    }
+
+
+
+    @Test
+    public void testSetName() {
+        microscope.setName("DIFF");
+        assertEquals("DIFF", microscope.getName());
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetNameException() {
+        microscope.setName("");
+    }
 }

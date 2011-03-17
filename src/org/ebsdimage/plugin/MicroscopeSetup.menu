@@ -1,0 +1,5 @@
+menu=PlugIns/EBSD/Microscope Setup
+#icon=rmlimage/gui/ContrastExpansion_(24x24).gif
+#tooltip=Contrast Expansion
+plugin=org.ebsdimage.plugin.MicroscopeSetup
+workerthread=true

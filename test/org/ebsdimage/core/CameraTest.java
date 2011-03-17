@@ -36,6 +36,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import static junittools.test.Assert.assertEquals;
+
 public class CameraTest extends TestCase {
 
     private Camera camera;
@@ -134,6 +136,22 @@ public class CameraTest extends TestCase {
     @Test(expected = IllegalArgumentException.class)
     public void testGetCalibrationException2() {
         camera.getCalibration(400, -1);
+    }
+
+
+
+    @Test
+    public void testGetWidth() {
+        Magnitude expected = new Magnitude(4, "cm");
+        assertEquals(expected, camera.getWidth(), 1e-6);
+    }
+
+
+
+    @Test
+    public void testGetHeight() {
+        Magnitude expected = new Magnitude(3, "cm");
+        assertEquals(expected, camera.getHeight(), 1e-6);
     }
 
 

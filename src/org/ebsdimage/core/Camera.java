@@ -100,6 +100,10 @@ public class Camera implements AlmostEquable {
             throw new IllegalArgumentException(
                     "The direction of the camera cannot be a null vector.");
 
+        if (Vector3DUtils.areParallel(n, x, 1e-6))
+            throw new IllegalArgumentException(
+                    "Normal and direction vector cannot be parallel.");
+
         if (Double.isNaN(width))
             throw new IllegalArgumentException(
                     "The value of the width cannot be NaN.");
@@ -215,6 +219,28 @@ public class Camera implements AlmostEquable {
         double dx = width / mapWidth;
         double dy = height / mapHeight;
         return new Calibration(dx, dy, "m");
+    }
+
+
+
+    /**
+     * Returns the width of the camera in unit length (meters).
+     * 
+     * @return width of the camera
+     */
+    public Magnitude getWidth() {
+        return new Magnitude(width, "m");
+    }
+
+
+
+    /**
+     * Returns the height of the camera in unit length (meters).
+     * 
+     * @return height of the camera
+     */
+    public Magnitude getHeight() {
+        return new Magnitude(height, "m");
     }
 
 }
