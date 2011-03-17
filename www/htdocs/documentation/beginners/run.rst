@@ -25,13 +25,6 @@ pattern images and/or the EBSD acquisition parameters and results from:
     for this software.
   * Any diffraction patterns, refer to the :ref:`import-smp` guide.
 
-.. toctree::
-   :hidden:
-   
-   import/hkl.rst
-   import/tsl.rst
-   import/smp.rst
-
 Wizard
 ------
 
@@ -284,3 +277,10 @@ The maps are refreshed very second.
 .. [#f1] HKL Channel 5 is a trademark of Oxford Instruments plc.
 
 .. [#f2] TSL OIM is a trademark of Ametek Inc.
+
+.. toctree::
+   :hidden:
+   
+   import/hkl.rst
+   import/tsl.rst
+   import/smp.rst

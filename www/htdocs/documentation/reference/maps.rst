@@ -4,12 +4,6 @@
 Maps
 ====
 
-.. toctree::
-   :hidden:
-   :glob:
-   
-   maps/*
-
 The term *Map* is an abstraction used to describe any kind of image or two 
 dimensional array of data loaded in EBSD-Image. 
 By definition, a map has a specified width and height and contains an array 
@@ -41,3 +35,9 @@ Map                                   Type of pixel       Uses
 :ref:`tslmmap` (TSL OIM)              N/A                 An EBSD multimap adapted for TSL 
                                                           OIM mappings 
 ===================================== =================== ====================================
+
+.. toctree::
+   :hidden:
+   :glob:
+   
+   maps/*

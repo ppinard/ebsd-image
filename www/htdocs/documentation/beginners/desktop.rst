@@ -4,12 +4,6 @@
 How to use the desktop
 ======================
 
-.. toctree::
-   :hidden:
-   :glob:
-   
-   desktop/*
-
 The desktop is what we call the whole program area.
 
 .. image:: /images/desktop/desktop_annotated.png
@@ -40,3 +34,9 @@ There are several items composing the desktop:
      show any progress.
   8. :ref:`map-window`:
      Button and information around a map window.
+
+.. toctree::
+   :hidden:
+   :glob:
+   
+   desktop/*
