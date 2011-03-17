@@ -17,10 +17,6 @@
  */
 package org.ebsdimage.gui;
 
-import static crystallography.core.LaueGroup.*;
-import static java.lang.Math.toDegrees;
-import static java.lang.Math.toRadians;
-
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,6 +34,9 @@ import rmlimage.gui.BasicDialog;
 import rmlshared.gui.*;
 import rmlshared.thread.PlugIn;
 import crystallography.core.*;
+import static crystallography.core.LaueGroup.*;
+import static java.lang.Math.toDegrees;
+import static java.lang.Math.toRadians;
 
 /**
  * Dialog to create a new phase.
@@ -161,11 +160,11 @@ public class NewPhaseDialog extends BasicDialog {
             case 0:
                 return ElementProperties.getSymbol(atomSite.atomicNumber);
             case 1:
-                return atomSite.position.get(0);
+                return atomSite.position.getX();
             case 2:
-                return atomSite.position.get(1);
+                return atomSite.position.getY();
             case 3:
-                return atomSite.position.get(2);
+                return atomSite.position.getZ();
             case 4:
                 return atomSite.occupancy;
             default:
@@ -467,7 +466,7 @@ public class NewPhaseDialog extends BasicDialog {
      * 
      * @return crystal
      */
-    protected Crystal getCrystal() {
+    public Crystal getCrystal() {
         return new Crystal(nameField.getText(), getUnitCell(), getAtomSites(),
                 getSpaceGroup());
     }
