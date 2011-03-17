@@ -1,32 +1,46 @@
-<array>
-   <object class="crystallography.core.Crystal" name="Silicon">
-      <unitCell a="5.43" b="5.43" c="5.43" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="1.5707963267948966"/>
-      <atoms>
-         <atom atomicNumber="14" occupancy="1.0">
-            <position x="0.0" y="0.0" z="0.0"/>
-         </atom>
-         <atom atomicNumber="14" occupancy="1.0">
-            <position x="0.0" y="0.5" z="0.5"/>
-         </atom>
-         <atom atomicNumber="14" occupancy="1.0">
-            <position x="0.5" y="0.0" z="0.5"/>
-         </atom>
-         <atom atomicNumber="14" occupancy="1.0">
-            <position x="0.5" y="0.5" z="0.0"/>
-         </atom>
-      </atoms>
-      <spaceGroup index="216"/>
-   </object>
-   <object class="crystallography.core.Crystal" name="Ferrite">
-      <unitCell a="2.87" b="2.87" c="2.87" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="1.5707963267948966"/>
-      <atoms>
-         <atom atomicNumber="26" occupancy="1.0">
-            <position x="0.0" y="0.0" z="0.0"/>
-         </atom>
-         <atom atomicNumber="26" occupancy="1.0">
-            <position x="0.5" y="0.5" z="0.5"/>
-         </atom>
-      </atoms>
-      <spaceGroup index="229"/>
-   </object>
-</array>
+<map>
+   <item>
+      <key class="java.lang.Integer">0</key>
+      <value class="crystallography.core.Crystal" name="Unindexed">
+         <unitCell a="1.0" b="1.0" c="1.0" alpha="1.0" beta="1.0" gamma="1.0"/>
+         <atoms/>
+         <spaceGroup>1</spaceGroup>
+      </value>
+   </item>
+   <item>
+      <key class="java.lang.Integer">1</key>
+      <value class="crystallography.core.Crystal" name="Silicon">
+         <unitCell a="5.43" b="5.43" c="5.43" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="1.5707963267948966"/>
+         <atoms>
+            <atom atomicNumber="14" occupancy="1.0">
+               <position>0.0;0.0;0.0</position>
+            </atom>
+            <atom atomicNumber="14" occupancy="1.0">
+               <position>0.0;0.5;0.5</position>
+            </atom>
+            <atom atomicNumber="14" occupancy="1.0">
+               <position>0.5;0.0;0.5</position>
+            </atom>
+            <atom atomicNumber="14" occupancy="1.0">
+               <position>0.5;0.5;0.0</position>
+            </atom>
+         </atoms>
+         <spaceGroup>216</spaceGroup>
+      </value>
+   </item>
+   <item>
+      <key class="java.lang.Integer">2</key>
+      <value class="crystallography.core.Crystal" name="Ferrite">
+         <unitCell a="2.87" b="2.87" c="2.87" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="1.5707963267948966"/>
+         <atoms>
+            <atom atomicNumber="26" occupancy="1.0">
+               <position>0.0;0.0;0.0</position>
+            </atom>
+            <atom atomicNumber="26" occupancy="1.0">
+               <position>0.5;0.5;0.5</position>
+            </atom>
+         </atoms>
+         <spaceGroup>229</spaceGroup>
+      </value>
+   </item>
+</map>

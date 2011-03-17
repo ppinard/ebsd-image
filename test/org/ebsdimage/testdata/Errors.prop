@@ -1,2 +1,9 @@
-#ErrorMap1
-#Fri Nov 26 11:39:08 EST 2010
+#ErrorMap2 - Calib: (1.0E-6m;1.0E-6m)
+#Tue Mar 15 14:55:02 CET 2011
+calibration.flip.y=false
+calibration.units.y=m
+calibration.flip.x=false
+calibration.units.x=m
+calibration.origin.set=false
+calibration.dy=4517329193096183808
+calibration.dx=4517329193096183808

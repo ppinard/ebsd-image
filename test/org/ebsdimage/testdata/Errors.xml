@@ -1,4 +1,10 @@
-<array>
-   <object class="org.ebsdimage.core.ErrorCode" id="0" type="No error" description=""/>
-   <object class="org.ebsdimage.core.ErrorCode" id="1" type="Error1" description="First test error"/>
-</array>
+<map>
+   <item>
+      <key class="java.lang.Integer">0</key>
+      <value class="org.ebsdimage.core.ErrorCode" name="No error" description=""/>
+   </item>
+   <item>
+      <key class="java.lang.Integer">1</key>
+      <value class="org.ebsdimage.core.ErrorCode" name="Error1" description="First test error"/>
+   </item>
+</map>

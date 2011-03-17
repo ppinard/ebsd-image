@@ -1,11 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ExpMetadata>
-  <BeamEnergy units="eV">20000.0</BeamEnergy>
-  <Magnification>100.0</Magnification>
-  <TiltAngle units="rad">1.2217304763960306</TiltAngle>
-  <WorkingDistance units="m">0.015</WorkingDistance>
-  <PixelDimension width="1.0E-6" height="1.0E-6" units="m" />
-  <SampleRotation q0="1.0" q1="0.0" q2="0.0" q3="0.0" />
-  <Calibration patternCenterH="0.1" patternCenterV="0.2" detectorDistance="0.3" />
-</ExpMetadata>
-
+<metadata>
+   <microscope>
+      <camera>
+         <n>1.0;0.0;0.0</n>
+         <x>0.0;-1.0;0.0</x>
+         <width>0.04</width>
+         <height>0.03</height>
+      </camera>
+      <tiltAxis>0.0;1.0;0.0</tiltAxis>
+      <tiltAngle>1.2217304763960306</tiltAngle>
+      <workingDistance>0.015</workingDistance>
+      <beamEnergy>20000.0</beamEnergy>
+      <magnification>100.0</magnification>
+      <sampleRotation>1.0;0.0;0.0;0.0</sampleRotation>
+      <patternCenterX>0.0</patternCenterX>
+      <patternCenterY>0.0</patternCenterY>
+      <cameraDistance>0.0</cameraDistance>
+   </microscope>
+</metadata>

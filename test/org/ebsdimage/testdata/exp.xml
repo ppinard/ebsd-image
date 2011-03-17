@@ -1,95 +1,102 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Exp name="ExpTester" path="/tmp/exp1" width="2" height="1">
-  <ExpMetadata>
-    <BeamEnergy units="eV">20000.0</BeamEnergy>
-    <Magnification>100.0</Magnification>
-    <TiltAngle units="rad">1.2217304763960306</TiltAngle>
-    <WorkingDistance units="m">0.015</WorkingDistance>
-    <PixelDimension width="1.0E-6" height="2.0E-6" units="m" />
-    <SampleRotation q0="0.18257418583505539" q1="0.36514837167011077" q2="0.5477225575051662" q3="0.7302967433402215" />
-    <Calibration patternCenterH="0.1" patternCenterV="0.2" detectorDistance="0.3" />
-  </ExpMetadata>
-  <Phases>
-    <Crystal name="Silicon" id="1">
-      <UnitCell a="5.43" b="5.43" c="5.43" dimUnits="angstrom" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="1.5707963267948966" angleUnits="rad" />
-      <AtomSites>
-        <AtomSite>
-          <Element atomicNumber="14" />
-          <Position x="0.0" y="0.0" z="0.0" />
-        </AtomSite>
-        <AtomSite>
-          <Element atomicNumber="14" />
-          <Position x="0.0" y="0.5" z="0.5" />
-        </AtomSite>
-        <AtomSite>
-          <Element atomicNumber="14" />
-          <Position x="0.5" y="0.0" z="0.5" />
-        </AtomSite>
-        <AtomSite>
-          <Element atomicNumber="14" />
-          <Position x="0.5" y="0.5" z="0.0" />
-        </AtomSite>
-      </AtomSites>
-      <SpaceGroup index="216" />
-    </Crystal>
-  </Phases>
-  <CurrentMapsFileSaver saveAllMaps="true" savePatternMap="true" saveHoughMap="true" savePeaksMap="true" saveSolutionOverlay="true" />
-  <PatternOp>
-    <PatternOpMock startIndex="0" size="2" />
-  </PatternOp>
-  <PatternPostOps>
-    <PatternPostOpsMock>0</PatternPostOpsMock>
-  </PatternPostOps>
-  <PatternResultsOps>
-    <PatternResultsOpsMock>0</PatternResultsOpsMock>
-  </PatternResultsOps>
-  <HoughPreOps>
-    <HoughPreOpsMock>0</HoughPreOpsMock>
-  </HoughPreOps>
-  <HoughOp>
-    <HoughOpMock />
-  </HoughOp>
-  <HoughPostOps>
-    <HoughPostOpsMock>0</HoughPostOpsMock>
-  </HoughPostOps>
-  <HoughResultsOps>
-    <HoughResultsOpsMock>0</HoughResultsOpsMock>
-  </HoughResultsOps>
-  <DetectionPreOps>
-    <DetectionPreOpsMock>0</DetectionPreOpsMock>
-  </DetectionPreOps>
-  <DetectionOp>
-    <DetectionOpMock />
-  </DetectionOp>
-  <DetectionPostOps>
-    <DetectionPostOpsMock>0</DetectionPostOpsMock>
-  </DetectionPostOps>
-  <DetectionResultsOps>
-    <DetectionResultsOpsMock>0</DetectionResultsOpsMock>
-  </DetectionResultsOps>
-  <IdentificationPreOps>
-    <IdentificationPreOpsMock>0</IdentificationPreOpsMock>
-  </IdentificationPreOps>
-  <IdentificationOp>
-    <IdentificationOpMock />
-  </IdentificationOp>
-  <IdentificationPostOps>
-    <IdentificationPostOpsMock>0</IdentificationPostOpsMock>
-  </IdentificationPostOps>
-  <IdentificationResultsOps>
-    <IdentificationResultsOpsMock>0</IdentificationResultsOpsMock>
-  </IdentificationResultsOps>
-  <IndexingPreOps>
-    <IndexingPreOpsMock>0</IndexingPreOpsMock>
-  </IndexingPreOps>
-  <IndexingOp>
-    <IndexingOpMock />
-  </IndexingOp>
-  <IndexingPostOps>
-    <IndexingPostOpsMock>0</IndexingPostOpsMock>
-  </IndexingPostOps>
-  <IndexingResultsOps>
-    <IndexingResultsOpsMock>0</IndexingResultsOpsMock>
-  </IndexingResultsOps>
-</Exp>
-
+<exp name="ExpTester" dir="/tmp/exp1" width="2" height="1">
+   <listeners>
+      <expListener class="org.ebsdimage.core.exp.MapsSaverListener"/>
+   </listeners>
+   <metadata>
+      <microscope>
+         <camera>
+            <n>1.0;0.0;0.0</n>
+            <x>0.0;-1.0;0.0</x>
+            <width>0.04</width>
+            <height>0.03</height>
+         </camera>
+         <tiltAxis>0.0;1.0;0.0</tiltAxis>
+         <tiltAngle>1.2217304763960306</tiltAngle>
+         <workingDistance>0.015</workingDistance>
+         <beamEnergy>20000.0</beamEnergy>
+         <magnification>100.0</magnification>
+         <sampleRotation>1.0;0.0;0.0;0.0</sampleRotation>
+         <patternCenterX>0.0</patternCenterX>
+         <patternCenterY>0.0</patternCenterY>
+         <cameraDistance>0.0</cameraDistance>
+      </microscope>
+   </metadata>
+   <phases class="java.util.HashMap">
+      <entry>
+         <integer>0</integer>
+         <crystal name="Unindexed">
+            <unitCell a="1.0" b="1.0" c="1.0" alpha="1.0" beta="1.0" gamma="1.0"/>
+            <atoms/>
+            <spaceGroup>1</spaceGroup>
+         </crystal>
+      </entry>
+      <entry>
+         <integer>1</integer>
+         <crystal name="Silicon">
+            <unitCell a="5.43" b="5.43" c="5.43" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="1.5707963267948966"/>
+            <atoms>
+               <atom atomicNumber="14" occupancy="1.0">
+                  <position>0.0;0.0;0.0</position>
+               </atom>
+               <atom atomicNumber="14" occupancy="1.0">
+                  <position>0.0;0.5;0.5</position>
+               </atom>
+               <atom atomicNumber="14" occupancy="1.0">
+                  <position>0.5;0.0;0.5</position>
+               </atom>
+               <atom atomicNumber="14" occupancy="1.0">
+                  <position>0.5;0.5;0.0</position>
+               </atom>
+            </atoms>
+            <spaceGroup>216</spaceGroup>
+         </crystal>
+      </entry>
+   </phases>
+   <patternOp class="org.ebsdimage.core.exp.ops.pattern.op.PatternOpMock" startIndex="0" size="2"/>
+   <patternPostOps length="1">
+      <operation class="org.ebsdimage.core.exp.ops.pattern.post.PatternPostOpsMock"/>
+   </patternPostOps>
+   <patternResultsOps length="1">
+      <operation class="org.ebsdimage.core.exp.ops.pattern.results.PatternResultsOpsMock"/>
+   </patternResultsOps>
+   <houghPreOps length="1">
+      <operation class="org.ebsdimage.core.exp.ops.hough.pre.HoughPreOpsMock"/>
+   </houghPreOps>
+   <houghOp class="org.ebsdimage.core.exp.ops.hough.op.HoughOpMock"/>
+   <houghPostOps length="1">
+      <operation class="org.ebsdimage.core.exp.ops.hough.post.HoughPostOpsMock"/>
+   </houghPostOps>
+   <houghResultsOps length="1">
+      <operation class="org.ebsdimage.core.exp.ops.hough.results.HoughResultsOpsMock"/>
+   </houghResultsOps>
+   <detectionPreOps length="1">
+      <operation class="org.ebsdimage.core.exp.ops.detection.pre.DetectionPreOpsMock"/>
+   </detectionPreOps>
+   <detectionOp class="org.ebsdimage.core.exp.ops.detection.op.DetectionOpMock"/>
+   <detectionPostOps length="1">
+      <operation class="org.ebsdimage.core.exp.ops.detection.post.DetectionPostOpsMock"/>
+   </detectionPostOps>
+   <detectionResultsOps length="1">
+      <operation class="org.ebsdimage.core.exp.ops.detection.results.DetectionResultsOpsMock"/>
+   </detectionResultsOps>
+   <identificationPreOps length="1">
+      <operation class="org.ebsdimage.core.exp.ops.identification.pre.IdentificationPreOpsMock"/>
+   </identificationPreOps>
+   <identificationOp class="org.ebsdimage.core.exp.ops.identification.op.IdentificationOpMock"/>
+   <identificationPostOps length="1">
+      <operation class="org.ebsdimage.core.exp.ops.identification.post.IdentificationPostOpsMock"/>
+   </identificationPostOps>
+   <identificationResultsOps length="1">
+      <operation class="org.ebsdimage.core.exp.ops.identification.results.IdentificationResultsOpsMock"/>
+   </identificationResultsOps>
+   <indexingPreOps length="1">
+      <operation class="org.ebsdimage.core.exp.ops.indexing.pre.IndexingPreOpsMock"/>
+   </indexingPreOps>
+   <indexingOp class="org.ebsdimage.core.exp.ops.indexing.op.IndexingOpMock"/>
+   <indexingPostOps length="1">
+      <operation class="org.ebsdimage.core.exp.ops.indexing.post.IndexingPostOpsMock"/>
+   </indexingPostOps>
+   <indexingResultsOps length="1">
+      <operation class="org.ebsdimage.core.exp.ops.indexing.results.IndexingResultsOpsMock"/>
+   </indexingResultsOps>
+</exp>
