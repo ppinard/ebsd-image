@@ -3,8 +3,6 @@ package org.ebsdimage.plugin;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -17,13 +15,13 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.math.geometry.Vector3D;
 import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.Microscope;
+import org.ebsdimage.io.MicroscopeUtil;
 
 import ptpshared.geom.Vector3DUtils;
 import ptpshared.gui.CalibratedDoubleField;
 import ptpshared.gui.GuiUtil;
 import ptpshared.gui.Vector3DField;
 import ptpshared.util.simplexml.ApacheCommonMathMatcher;
-import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.gui.BasicDialog;
 import rmlimage.gui.PlugIn;
@@ -239,7 +237,8 @@ public class MicroscopeSetup extends PlugIn {
              */
             private File getMicroscopeFile(Microscope microscope) {
                 File file =
-                        new File(getMicroscopeBasedir(), microscope.getName());
+                        new File(MicroscopeUtil.getMicroscopeBasedir(),
+                                microscope.getName());
                 return FileUtil.setExtension(file, "xml");
             }
 
@@ -426,60 +425,9 @@ public class MicroscopeSetup extends PlugIn {
 
             model.clear();
 
-            for (Microscope microscope : getMicroscopes())
+            for (Microscope microscope : MicroscopeUtil.getMicroscopes())
                 model.addElement(microscope);
         }
-    }
-
-
-
-    /**
-     * Returns the directory where all the microscope configurations are saved.
-     * 
-     * @return directory where all the microscope configurations are saved
-     */
-    public static File getMicroscopeBasedir() {
-        File dir = new File(rmlimage.RMLImage.getConfigDir(), "microscope");
-
-        if (!dir.exists())
-            dir.mkdirs();
-
-        return dir;
-    }
-
-
-
-    /**
-     * Returns an array of all the microscope configurations saved in the
-     * microscope configuration directory.
-     * 
-     * @return array of microscope configurations defined by the user
-     */
-    public static Microscope[] getMicroscopes() {
-        File dir = getMicroscopeBasedir();
-        if (!dir.exists())
-            return new Microscope[0];
-
-        ArrayList<Microscope> microscopes = new ArrayList<Microscope>();
-
-        File[] files = FileUtil.listFilesOnly(dir, "*.xml");
-        Arrays.sort(files);
-
-        XmlLoader loader = new XmlLoader();
-        loader.matchers.registerMatcher(new ApacheCommonMathMatcher());
-
-        Microscope microscope;
-        for (File file : files) {
-            try {
-                microscope = loader.load(Microscope.class, file);
-            } catch (Exception e) {
-                continue;
-            }
-
-            microscopes.add(microscope);
-        }
-
-        return microscopes.toArray(new Microscope[0]);
     }
 
 
