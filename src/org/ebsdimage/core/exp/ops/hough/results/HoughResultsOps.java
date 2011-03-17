@@ -18,10 +18,7 @@
 package org.ebsdimage.core.exp.ops.hough.results;
 
 import org.ebsdimage.core.HoughMap;
-import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.exp.ExpListener;
-import org.ebsdimage.core.exp.ExpOperation;
-import org.ebsdimage.core.exp.OpResult;
+import org.ebsdimage.core.exp.*;
 
 /**
  * Superclass of operation to calculate result(s) from the Hough map.
@@ -31,7 +28,7 @@ import org.ebsdimage.core.exp.OpResult;
 public abstract class HoughResultsOps extends ExpOperation {
 
     @Override
-    public final Object execute(Exp exp, Object... args) {
+    public final Object execute(Exp exp, Object... args) throws ExpError {
         return calculate(exp, (HoughMap) args[0]);
     }
 
@@ -53,6 +50,9 @@ public abstract class HoughResultsOps extends ExpOperation {
      * @param srcMap
      *            source Hough map
      * @return result(s)
+     * @throws ExpError
+     *             if an error occurs during the execution
      */
-    public abstract OpResult[] calculate(Exp exp, HoughMap srcMap);
+    public abstract OpResult[] calculate(Exp exp, HoughMap srcMap)
+            throws ExpError;
 }

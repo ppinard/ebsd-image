@@ -18,7 +18,6 @@
 package org.ebsdimage.core.exp;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.ebsdimage.core.*;
@@ -1096,12 +1095,9 @@ public class Exp extends Run {
      * experiment, they will be automatically initialize before the run. The
      * results are saved based on the given parameters. Info through out the
      * execution is given by the logger ebsd.
-     * 
-     * @throws IOException
-     *             if an error occurs during the run
      */
     @Override
-    public void run() throws IOException {
+    public void run() {
         setStatus("--- START ---");
 
         // Create directory for the experiment results
@@ -1131,7 +1127,11 @@ public class Exp extends Run {
             currentIndex = index;
 
             // Run
-            runOnce(patternOp, index);
+            try {
+                runOnce(patternOp, index);
+            } catch (ExpError ex) {
+                saveError(ex);
+            }
         }
 
         // Flush ops
@@ -1157,10 +1157,10 @@ public class Exp extends Run {
      *            current pattern operation
      * @param index
      *            index of the pattern to load from the pattern operation
-     * @throws IOException
+     * @throws ExpError
      *             if an error occurs during the run
      */
-    private void runOnce(PatternOp patternOp, int index) throws IOException {
+    private void runOnce(PatternOp patternOp, int index) throws ExpError {
         // Pattern Op
         setStatus("--- Pattern Operation ---");
 
@@ -1321,8 +1321,11 @@ public class Exp extends Run {
      * @param args
      *            arguments
      * @return return of the operation
+     * @throws ExpError
+     *             if an error occurs during the run
      */
-    private Object runOperation(ExpOperation op, Object... args) {
+    private Object runOperation(ExpOperation op, Object... args)
+            throws ExpError {
         setStatus("Executing " + op.getName() + "...");
 
         Object out = op.execute(this, args);
@@ -1345,8 +1348,11 @@ public class Exp extends Run {
      *            a results operation
      * @param args
      *            arguments
+     * @throws ExpError
+     *             if an error occurs during the run
      */
-    private void runResultsOperation(ExpOperation op, Object... args) {
+    private void runResultsOperation(ExpOperation op, Object... args)
+            throws ExpError {
         OpResult[] results = (OpResult[]) runOperation(op, args);
 
         for (OpResult result : results)
@@ -1391,6 +1397,18 @@ public class Exp extends Run {
 
         // Set that the pixArray of the map was modified
         map.setChanged(Map.MAP_CHANGED);
+    }
+
+
+
+    /**
+     * Saves error in <code>ErrorMap</code>.
+     * 
+     * @param ex
+     *            exception thrown
+     */
+    private void saveError(ExpError ex) {
+        mmap.getErrorMap().throwError(currentIndex, ex.getErrorCode());
     }
 
 

@@ -18,6 +18,7 @@
 package org.ebsdimage.core.exp.ops.pattern.op;
 
 import org.ebsdimage.core.exp.Exp;
+import org.ebsdimage.core.exp.ExpError;
 import org.ebsdimage.core.exp.ExpListener;
 import org.ebsdimage.core.exp.ExpOperation;
 import org.simpleframework.xml.Attribute;
@@ -39,7 +40,7 @@ public abstract class PatternOp extends ExpOperation {
 
 
     @Override
-    public final Object execute(Exp exp, Object... args) {
+    public final Object execute(Exp exp, Object... args) throws ExpError {
         return load(exp, (Integer) args[0]);
     }
 
@@ -131,7 +132,9 @@ public abstract class PatternOp extends ExpOperation {
      * @param index
      *            index of the pattern to load
      * @return the pattern map
+     * @throws ExpError
+     *             if an error occurs during the execution
      */
-    public abstract ByteMap load(Exp exp, int index);
+    public abstract ByteMap load(Exp exp, int index) throws ExpError;
 
 }

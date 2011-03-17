@@ -20,6 +20,7 @@ package org.ebsdimage.core.exp.ops.identification.op;
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.Exp;
+import org.ebsdimage.core.exp.ExpError;
 import org.ebsdimage.core.exp.ExpListener;
 import org.ebsdimage.core.exp.ExpOperation;
 
@@ -33,7 +34,7 @@ import rmlimage.core.BinMap;
 public abstract class IdentificationOp extends ExpOperation {
 
     @Override
-    public final Object execute(Exp exp, Object... args) {
+    public final Object execute(Exp exp, Object... args) throws ExpError {
         return identify(exp, (BinMap) args[0], (HoughMap) args[1]);
     }
 
@@ -56,7 +57,9 @@ public abstract class IdentificationOp extends ExpOperation {
      * @param houghMap
      *            Hough map
      * @return Hough peaks
+     * @throws ExpError
+     *             if an error occurs during the execution
      */
     public abstract HoughPeak[] identify(Exp exp, BinMap peaksMap,
-            HoughMap houghMap);
+            HoughMap houghMap) throws ExpError;
 }

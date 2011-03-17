@@ -18,10 +18,7 @@
 package org.ebsdimage.core.exp.ops.indexing.results;
 
 import org.ebsdimage.core.Solution;
-import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.exp.ExpListener;
-import org.ebsdimage.core.exp.ExpOperation;
-import org.ebsdimage.core.exp.OpResult;
+import org.ebsdimage.core.exp.*;
 
 /**
  * Superclass of operation to calculate result(s) from the indexing solutions.
@@ -31,7 +28,7 @@ import org.ebsdimage.core.exp.OpResult;
 public abstract class IndexingResultsOps extends ExpOperation {
 
     @Override
-    public final Object execute(Exp exp, Object... args) {
+    public final Object execute(Exp exp, Object... args) throws ExpError {
         return calculate(exp, (Solution[]) args);
     }
 
@@ -53,6 +50,9 @@ public abstract class IndexingResultsOps extends ExpOperation {
      * @param solutions
      *            indexing solutions
      * @return result(s)
+     * @throws ExpError
+     *             if an error occurs during the execution
      */
-    public abstract OpResult[] calculate(Exp exp, Solution[] solutions);
+    public abstract OpResult[] calculate(Exp exp, Solution[] solutions)
+            throws ExpError;
 }

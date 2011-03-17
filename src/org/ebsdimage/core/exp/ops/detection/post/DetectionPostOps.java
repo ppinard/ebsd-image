@@ -18,6 +18,7 @@
 package org.ebsdimage.core.exp.ops.detection.post;
 
 import org.ebsdimage.core.exp.Exp;
+import org.ebsdimage.core.exp.ExpError;
 import org.ebsdimage.core.exp.ExpListener;
 import org.ebsdimage.core.exp.ExpOperation;
 
@@ -38,13 +39,15 @@ public abstract class DetectionPostOps extends ExpOperation {
      * @param srcMap
      *            input peaks map
      * @return output peaks map
+     * @throws ExpError
+     *             if an error occurs during the execution
      */
-    public abstract BinMap process(Exp exp, BinMap srcMap);
+    public abstract BinMap process(Exp exp, BinMap srcMap) throws ExpError;
 
 
 
     @Override
-    public final Object execute(Exp exp, Object... args) {
+    public final Object execute(Exp exp, Object... args) throws ExpError {
         return process(exp, (BinMap) args[0]);
     }
 

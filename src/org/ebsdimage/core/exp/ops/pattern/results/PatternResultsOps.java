@@ -17,10 +17,7 @@
  */
 package org.ebsdimage.core.exp.ops.pattern.results;
 
-import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.exp.ExpListener;
-import org.ebsdimage.core.exp.ExpOperation;
-import org.ebsdimage.core.exp.OpResult;
+import org.ebsdimage.core.exp.*;
 
 import rmlimage.core.ByteMap;
 
@@ -32,7 +29,7 @@ import rmlimage.core.ByteMap;
 public abstract class PatternResultsOps extends ExpOperation {
 
     @Override
-    public final Object execute(Exp exp, Object... args) {
+    public final Object execute(Exp exp, Object... args) throws ExpError {
         return calculate(exp, (ByteMap) args[0]);
     }
 
@@ -54,7 +51,10 @@ public abstract class PatternResultsOps extends ExpOperation {
      * @param srcMap
      *            source map
      * @return result(s)
+     * @throws ExpError
+     *             if an error occurs during the execution
      */
-    public abstract OpResult[] calculate(Exp exp, ByteMap srcMap);
+    public abstract OpResult[] calculate(Exp exp, ByteMap srcMap)
+            throws ExpError;
 
 }

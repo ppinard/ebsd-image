@@ -20,6 +20,7 @@ package org.ebsdimage.core.exp.ops.indexing.op;
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.exp.Exp;
+import org.ebsdimage.core.exp.ExpError;
 import org.ebsdimage.core.exp.ExpListener;
 import org.ebsdimage.core.exp.ExpOperation;
 
@@ -31,7 +32,7 @@ import org.ebsdimage.core.exp.ExpOperation;
 public abstract class IndexingOp extends ExpOperation {
 
     @Override
-    public final Object execute(Exp exp, Object... args) {
+    public final Object execute(Exp exp, Object... args) throws ExpError {
         return index(exp, (HoughPeak[]) args);
     }
 
@@ -52,7 +53,10 @@ public abstract class IndexingOp extends ExpOperation {
      * @param srcPeaks
      *            Hough peaks
      * @return solutions
+     * @throws ExpError
+     *             if an error occurs during the execution
      */
-    public abstract Solution[] index(Exp exp, HoughPeak[] srcPeaks);
+    public abstract Solution[] index(Exp exp, HoughPeak[] srcPeaks)
+            throws ExpError;
 
 }

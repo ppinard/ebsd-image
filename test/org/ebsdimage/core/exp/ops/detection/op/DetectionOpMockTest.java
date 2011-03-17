@@ -34,7 +34,7 @@ import static junittools.test.Assert.assertEquals;
 
 public class DetectionOpMockTest extends TestCase {
 
-    private DetectionOp op;
+    private DetectionOpMock op;
 
     private HoughMap srcMap;
 

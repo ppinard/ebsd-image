@@ -19,6 +19,7 @@ package org.ebsdimage.core.exp.ops.detection.op;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.exp.Exp;
+import org.ebsdimage.core.exp.ExpError;
 import org.ebsdimage.core.exp.ExpListener;
 import org.ebsdimage.core.exp.ExpOperation;
 
@@ -39,13 +40,15 @@ public abstract class DetectionOp extends ExpOperation {
      * @param srcMap
      *            Hough map
      * @return peaks map
+     * @throws ExpError
+     *             if an error occurs during the execution
      */
-    public abstract BinMap detect(Exp exp, HoughMap srcMap);
+    public abstract BinMap detect(Exp exp, HoughMap srcMap) throws ExpError;
 
 
 
     @Override
-    public final Object execute(Exp exp, Object... args) {
+    public final Object execute(Exp exp, Object... args) throws ExpError {
         return detect(exp, (HoughMap) args[0]);
     }
 

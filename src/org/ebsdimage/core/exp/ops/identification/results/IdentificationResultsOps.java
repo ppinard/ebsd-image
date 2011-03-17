@@ -19,10 +19,7 @@ package org.ebsdimage.core.exp.ops.identification.results;
 
 import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.HoughPeakIntensityComparator;
-import org.ebsdimage.core.exp.Exp;
-import org.ebsdimage.core.exp.ExpListener;
-import org.ebsdimage.core.exp.ExpOperation;
-import org.ebsdimage.core.exp.OpResult;
+import org.ebsdimage.core.exp.*;
 
 import ptpshared.util.Arrays;
 
@@ -34,7 +31,7 @@ import ptpshared.util.Arrays;
 public abstract class IdentificationResultsOps extends ExpOperation {
 
     @Override
-    public final Object execute(Exp exp, Object... args) {
+    public final Object execute(Exp exp, Object... args) throws ExpError {
         return calculate(exp, (HoughPeak[]) args);
     }
 
@@ -56,8 +53,11 @@ public abstract class IdentificationResultsOps extends ExpOperation {
      * @param srcPeaks
      *            Hough peaks
      * @return result(s)
+     * @throws ExpError
+     *             if an error occurs during the execution
      */
-    public abstract OpResult[] calculate(Exp exp, HoughPeak[] srcPeaks);
+    public abstract OpResult[] calculate(Exp exp, HoughPeak[] srcPeaks)
+            throws ExpError;
 
 
 

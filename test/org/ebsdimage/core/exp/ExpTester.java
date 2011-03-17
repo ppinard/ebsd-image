@@ -18,7 +18,6 @@
 package org.ebsdimage.core.exp;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.apache.commons.math.geometry.Vector3D;
@@ -34,6 +33,7 @@ import org.ebsdimage.core.exp.ops.hough.pre.HoughPreOpsMock;
 import org.ebsdimage.core.exp.ops.hough.results.HoughResultsOpsMock;
 import org.ebsdimage.core.exp.ops.identification.op.IdentificationOpMock;
 import org.ebsdimage.core.exp.ops.identification.post.IdentificationPostOpsMock;
+import org.ebsdimage.core.exp.ops.identification.post.IdentificationPostOpsMock2;
 import org.ebsdimage.core.exp.ops.identification.pre.IdentificationPreOpsMock;
 import org.ebsdimage.core.exp.ops.identification.results.IdentificationResultsOpsMock;
 import org.ebsdimage.core.exp.ops.indexing.op.IndexingOpMock;
@@ -60,11 +60,6 @@ import static org.junit.Assert.assertTrue;
 import static java.lang.Math.toRadians;
 
 public abstract class ExpTester extends TestCase {
-
-    // static {
-    // rmlimage.io.IO.addHandler(org.ebsdimage.io.IO.class);
-    // rmlimage.io.IO.addHandler(rmlimage.module.real.io.IO.class);
-    // }
 
     protected Exp exp;
 
@@ -345,7 +340,7 @@ public abstract class ExpTester extends TestCase {
 
 
     @Test
-    public void testRun() throws IOException {
+    public void testRun() {
         // Make sure it is in the temporary folder
         exp.setDir(expPath);
 
@@ -443,6 +438,120 @@ public abstract class ExpTester extends TestCase {
         realMap = (RealMap) map;
         assertEquals(0.5, realMap.pixArray[0], 1e-6);
         assertEquals(0.5, realMap.pixArray[1], 1e-6);
+    }
+
+
+
+    @Test
+    public void testRunWithExpError() {
+        // Make sure it is in the temporary folder
+        exp.setDir(expPath);
+
+        // Add operation that throws ExpError
+        exp.addOperation(new IdentificationPostOpsMock2());
+
+        exp.run();
+
+        // Test maps
+        assertEquals(11, exp.mmap.getAliases().length);
+
+        // Q0
+        Map map = exp.mmap.getMap(EbsdMMap.Q0);
+        assertNotNull(map);
+        assertEquals(RealMap.class, map.getClass());
+
+        RealMap realMap = (RealMap) map;
+        assertEquals(Float.NaN, realMap.pixArray[0], 1e-6);
+        assertEquals(Float.NaN, realMap.pixArray[1], 1e-6);
+
+        // Q1
+        map = exp.mmap.getMap(EbsdMMap.Q1);
+        assertNotNull(map);
+        assertEquals(RealMap.class, map.getClass());
+
+        realMap = (RealMap) map;
+        assertEquals(Float.NaN, realMap.pixArray[0], 1e-6);
+        assertEquals(Float.NaN, realMap.pixArray[1], 1e-6);
+
+        // Q2
+        map = exp.mmap.getMap(EbsdMMap.Q2);
+        assertNotNull(map);
+        assertEquals(RealMap.class, map.getClass());
+
+        realMap = (RealMap) map;
+        assertEquals(Float.NaN, realMap.pixArray[0], 1e-6);
+        assertEquals(Float.NaN, realMap.pixArray[1], 1e-6);
+
+        // Q3
+        map = exp.mmap.getMap(EbsdMMap.Q3);
+        assertNotNull(map);
+        assertEquals(RealMap.class, map.getClass());
+
+        realMap = (RealMap) map;
+        assertEquals(Float.NaN, realMap.pixArray[0], 1e-6);
+        assertEquals(Float.NaN, realMap.pixArray[1], 1e-6);
+
+        // Phases
+        map = exp.mmap.getMap(EbsdMMap.PHASES);
+        assertNotNull(map);
+        assertEquals(PhaseMap.class, map.getClass());
+
+        // Errors
+        map = exp.mmap.getMap(EbsdMMap.ERRORS);
+        assertNotNull(map);
+        assertEquals(ErrorMap.class, map.getClass());
+
+        ErrorMap errorMap = (ErrorMap) map;
+        assertEquals(0, errorMap.pixArray[0]);
+        assertEquals(1, errorMap.pixArray[1]);
+
+        assertEquals(IdentificationPostOpsMock2.Error1, errorMap.getItem(1));
+
+        // PatternResultsOpsMock
+        map = exp.mmap.getMap(PatternResultsOpsMock.class.getSimpleName());
+        assertNotNull(map);
+        assertEquals(ByteMap.class, map.getClass());
+
+        ByteMap byteMap = (ByteMap) map;
+        assertEquals(18, byteMap.pixArray[0]);
+        assertEquals(20, byteMap.pixArray[1]);
+
+        // HoughResultsOpsMock
+        map = exp.mmap.getMap(HoughResultsOpsMock.class.getSimpleName());
+        assertNotNull(map);
+        assertEquals(RealMap.class, map.getClass());
+
+        realMap = (RealMap) map;
+        assertEquals(132, realMap.pixArray[0], 1e-6);
+        assertEquals(144, realMap.pixArray[1], 1e-6);
+
+        // DetectionResultsOpsMock
+        map = exp.mmap.getMap(DetectionResultsOpsMock.class.getSimpleName());
+        assertNotNull(map);
+        assertEquals(RealMap.class, map.getClass());
+
+        realMap = (RealMap) map;
+        assertEquals(12, realMap.pixArray[0], 1e-6);
+        assertEquals(12, realMap.pixArray[1], 1e-6);
+
+        // IdentificationResultsOpsMock
+        map =
+                exp.mmap.getMap(IdentificationResultsOpsMock.class.getSimpleName());
+        assertNotNull(map);
+        assertEquals(RealMap.class, map.getClass());
+
+        realMap = (RealMap) map;
+        assertEquals(0.26, realMap.pixArray[0], 1e-6);
+        assertEquals(Float.NaN, realMap.pixArray[1], 1e-6);
+
+        // IndexingResultsOpsMock
+        map = exp.mmap.getMap(IndexingResultsOpsMock.class.getSimpleName());
+        assertNotNull(map);
+        assertEquals(RealMap.class, map.getClass());
+
+        realMap = (RealMap) map;
+        assertEquals(0.5, realMap.pixArray[0], 1e-6);
+        assertEquals(Float.NaN, realMap.pixArray[1], 1e-6);
     }
 
 }

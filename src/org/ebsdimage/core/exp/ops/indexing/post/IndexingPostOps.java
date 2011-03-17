@@ -19,6 +19,7 @@ package org.ebsdimage.core.exp.ops.indexing.post;
 
 import org.ebsdimage.core.Solution;
 import org.ebsdimage.core.exp.Exp;
+import org.ebsdimage.core.exp.ExpError;
 import org.ebsdimage.core.exp.ExpListener;
 import org.ebsdimage.core.exp.ExpOperation;
 
@@ -30,7 +31,7 @@ import org.ebsdimage.core.exp.ExpOperation;
 public abstract class IndexingPostOps extends ExpOperation {
 
     @Override
-    public final Object execute(Exp exp, Object... args) {
+    public final Object execute(Exp exp, Object... args) throws ExpError {
         return process(exp, (Solution[]) args);
     }
 
@@ -51,6 +52,9 @@ public abstract class IndexingPostOps extends ExpOperation {
      * @param srcSolutions
      *            input solutions
      * @return output solutions
+     * @throws ExpError
+     *             if an error occurs during the execution
      */
-    public abstract Solution[] process(Exp exp, Solution[] srcSolutions);
+    public abstract Solution[] process(Exp exp, Solution[] srcSolutions)
+            throws ExpError;
 }

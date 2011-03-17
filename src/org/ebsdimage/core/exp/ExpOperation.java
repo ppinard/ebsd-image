@@ -21,6 +21,7 @@ import junittools.core.AlmostEquable;
 import net.jcip.annotations.Immutable;
 
 import org.ebsdimage.core.ErrorCode;
+import org.ebsdimage.core.ErrorMap;
 import org.ebsdimage.core.run.Operation;
 import org.simpleframework.xml.Root;
 
@@ -69,8 +70,10 @@ public abstract class ExpOperation implements AlmostEquable, Operation {
      * @param args
      *            arguments
      * @return return of the operation
+     * @throws ExpError
+     *             if an error occurs during the execution
      */
-    public abstract Object execute(Exp exp, Object... args);
+    public abstract Object execute(Exp exp, Object... args) throws ExpError;
 
 
 
@@ -131,6 +134,10 @@ public abstract class ExpOperation implements AlmostEquable, Operation {
      *            experiment executing this method
      */
     public void setUp(Exp exp) {
+        // Register error code
+        ErrorMap errorMap = exp.mmap.getErrorMap();
+        for (ErrorCode errorCode : getErrorCodes())
+            errorMap.register(errorCode);
     }
 
 

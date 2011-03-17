@@ -19,6 +19,7 @@ package org.ebsdimage.core.exp.ops.hough.op;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.exp.Exp;
+import org.ebsdimage.core.exp.ExpError;
 import org.ebsdimage.core.exp.ExpListener;
 import org.ebsdimage.core.exp.ExpOperation;
 
@@ -32,7 +33,7 @@ import rmlimage.core.ByteMap;
 public abstract class HoughOp extends ExpOperation {
 
     @Override
-    public final Object execute(Exp exp, Object... args) {
+    public final Object execute(Exp exp, Object... args) throws ExpError {
         return transform(exp, (ByteMap) args[0]);
     }
 
@@ -53,7 +54,9 @@ public abstract class HoughOp extends ExpOperation {
      * @param srcMap
      *            pattern map
      * @return Hough map
+     * @throws ExpError
+     *             if an error occurs during the execution
      */
-    public abstract HoughMap transform(Exp exp, ByteMap srcMap);
+    public abstract HoughMap transform(Exp exp, ByteMap srcMap) throws ExpError;
 
 }

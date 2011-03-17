@@ -19,6 +19,7 @@ package org.ebsdimage.core.exp.ops.hough.post;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.exp.Exp;
+import org.ebsdimage.core.exp.ExpError;
 import org.ebsdimage.core.exp.ExpListener;
 import org.ebsdimage.core.exp.ExpOperation;
 
@@ -30,7 +31,7 @@ import org.ebsdimage.core.exp.ExpOperation;
 public abstract class HoughPostOps extends ExpOperation {
 
     @Override
-    public final Object execute(Exp exp, Object... args) {
+    public final Object execute(Exp exp, Object... args) throws ExpError {
         return process(exp, (HoughMap) args[0]);
     }
 
@@ -51,6 +52,8 @@ public abstract class HoughPostOps extends ExpOperation {
      * @param srcMap
      *            input Hough map
      * @return output Hough map
+     * @throws ExpError
+     *             if an error occurs during the execution
      */
-    public abstract HoughMap process(Exp exp, HoughMap srcMap);
+    public abstract HoughMap process(Exp exp, HoughMap srcMap) throws ExpError;
 }
