@@ -17,8 +17,6 @@
  */
 package org.ebsdimage.gui.exp.wizard;
 
-import java.io.IOException;
-
 import javax.swing.DefaultListModel;
 
 import org.ebsdimage.core.exp.ExpOperation;
@@ -104,12 +102,8 @@ public class SingleChoicePanel extends OperationChoicePanel {
      *            title of the panel
      * @param packageName
      *            name of the package for the operations
-     * @throws IOException
-     *             if an error occurs while listing the operations
      */
-    public SingleChoicePanel(String title, String packageName)
-            throws IOException {
-
+    public SingleChoicePanel(String title, String packageName) {
         super(title, packageName);
     }
 

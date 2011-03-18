@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 import org.ebsdimage.io.FileUtil;
 
+import rmlshared.gui.ErrorDialog;
 import rmlshared.thread.Reflection;
 
 /**
@@ -38,16 +39,20 @@ public class OperationCreatorUtil {
      * @param packageName
      *            name of the package for the operations
      * @return <code>OperationCreator</code>s
-     * @throws IOException
-     *             if an error occurs while listing the
-     *             <code>OperationCreator</code>
      */
-    public static OperationCreator[] getOperationCreators(String packageName)
-            throws IOException {
+    public static OperationCreator[] getOperationCreators(String packageName) {
         ArrayList<OperationCreator> operationCreators =
                 new ArrayList<OperationCreator>();
 
-        for (Class<?> clasz : FileUtil.getClasses(packageName))
+        Class<?>[] classes;
+        try {
+            classes = FileUtil.getClasses(packageName);
+        } catch (IOException e) {
+            ErrorDialog.show(e.getMessage());
+            return new OperationCreator[0];
+        }
+
+        for (Class<?> clasz : classes)
             if (OperationCreator.class.isAssignableFrom(clasz)
                     && !Modifier.isAbstract(clasz.getModifiers()))
                 operationCreators.add((OperationCreator) Reflection.newInstance(clasz));

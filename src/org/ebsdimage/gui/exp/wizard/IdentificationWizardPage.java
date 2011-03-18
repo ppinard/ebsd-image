@@ -17,8 +17,6 @@
  */
 package org.ebsdimage.gui.exp.wizard;
 
-import java.io.IOException;
-
 import javax.swing.DefaultListModel;
 
 import org.ebsdimage.core.exp.Exp;
@@ -67,11 +65,8 @@ public class IdentificationWizardPage extends OperationWizardPage {
     /**
      * Creates a new <code>IdentificationWizardPage</code> to display in the
      * wizard.
-     * 
-     * @throws IOException
-     *             if an error occurs while loading the operations
      */
-    public IdentificationWizardPage() throws IOException {
+    public IdentificationWizardPage() {
         super(ExpConstants.IDENTIFICATION_GUI_PACKAGE);
     }
 

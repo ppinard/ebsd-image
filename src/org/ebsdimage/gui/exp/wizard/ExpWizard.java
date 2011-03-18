@@ -26,8 +26,8 @@ import java.util.Arrays;
 import javax.imageio.ImageIO;
 
 import org.ebsdimage.core.EbsdMetadata;
-import org.ebsdimage.core.exp.ExpUtil;
 import org.ebsdimage.core.exp.ExpOperation;
+import org.ebsdimage.core.exp.ExpUtil;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternFilesLoader;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternSmpLoader;
@@ -50,11 +50,8 @@ public class ExpWizard extends Wizard {
 
     /**
      * Creates a new wizard for the experiment.
-     * 
-     * @throws IOException
-     *             if an error occurs
      */
-    public ExpWizard() throws IOException {
+    public ExpWizard() {
         super("Experiment", new WizardPage[] { new StartWizardPage(),
                 new InfoWizardPage(), new AcqMetadataWizardPage(),
                 new PhasesWizardPage(), new PatternsWizardPage(),
@@ -62,9 +59,12 @@ public class ExpWizard extends Wizard {
                 new DetectionWizardPage(), new IdentificationWizardPage(),
                 new IndexingWizardPage(), new OutputWizardPage() });
 
-        BufferedImage image =
-                ImageIO.read(getURL("org/ebsdimage/gui/sidepanel.png"));
-        setSidePanelBackground(image);
+        try {
+            BufferedImage image =
+                    ImageIO.read(getURL("org/ebsdimage/gui/sidepanel.png"));
+            setSidePanelBackground(image);
+        } catch (IOException e) {
+        }
 
         setPreferredWidth(800);
     }

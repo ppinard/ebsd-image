@@ -18,7 +18,6 @@
 package org.ebsdimage.gui.run.ops;
 
 import java.awt.Dimension;
-import java.io.IOException;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -77,11 +76,8 @@ public abstract class OperationChoicePanel extends JPanel {
      *            title of the panel
      * @param packageName
      *            name of the package for the operations
-     * @throws IOException
-     *             if an error occurs while listing the operations
      */
-    public OperationChoicePanel(String title, String packageName)
-            throws IOException {
+    public OperationChoicePanel(String title, String packageName) {
 
         setBorder(new TitledBorder(title));
 

@@ -17,10 +17,6 @@
  */
 package org.ebsdimage.gui.exp.wizard;
 
-import static ptpshared.io.FileUtil.joinPackageNames;
-
-import java.io.IOException;
-
 import net.miginfocom.swing.MigLayout;
 
 import org.ebsdimage.core.exp.ExpOperation;
@@ -29,6 +25,7 @@ import org.ebsdimage.gui.run.ops.MultipleChoicePanel;
 import ptpshared.gui.WizardPage;
 import rmlshared.util.ArrayList;
 import rmlshared.util.Preferences;
+import static ptpshared.io.FileUtil.joinPackageNames;
 
 /**
  * Template for the experiment's wizard page.
@@ -75,11 +72,9 @@ public class OperationWizardPage extends WizardPage {
      *            if <code>true</code> the post-operations panel is displayed
      * @param results
      *            if <code>true</code> the results-operations panel is displayed
-     * @throws IOException
-     *             if an error occurs
      */
     public OperationWizardPage(String opsDialogPackage, boolean pre,
-            boolean op, boolean post, boolean results) throws IOException {
+            boolean op, boolean post, boolean results) {
         setLayout(new MigLayout("flowy, fill"));
 
         String preDialogPackage = joinPackageNames(opsDialogPackage, "pre");
@@ -112,10 +107,8 @@ public class OperationWizardPage extends WizardPage {
      * 
      * @param opsDialogPackage
      *            root package for the operations
-     * @throws IOException
-     *             if an error occurs
      */
-    public OperationWizardPage(String opsDialogPackage) throws IOException {
+    public OperationWizardPage(String opsDialogPackage) {
         this(opsDialogPackage, true, true, true, true);
     }
 

@@ -17,8 +17,6 @@
  */
 package org.ebsdimage.gui.exp.wizard;
 
-import java.io.IOException;
-
 import javax.swing.DefaultListModel;
 
 import org.ebsdimage.core.exp.Exp;
@@ -59,11 +57,8 @@ public class PatternWizardPage extends OperationWizardPage {
 
     /**
      * Creates a new <code>PatternWizardPage</code> to display in the wizard.
-     * 
-     * @throws IOException
-     *             if an error occurs while loading the operations
      */
-    public PatternWizardPage() throws IOException {
+    public PatternWizardPage() {
         super(ExpConstants.PATTERN_GUI_PACKAGE, false, false, true, true);
     }
 

@@ -17,8 +17,6 @@
  */
 package org.ebsdimage.gui.run.ops;
 
-import java.io.IOException;
-
 import javax.swing.DefaultListModel;
 
 import org.ebsdimage.core.run.Operation;
@@ -183,12 +181,8 @@ public class MultipleChoicePanel extends OperationChoicePanel {
      *            title of the panel
      * @param packageName
      *            name of the package for the operations
-     * @throws IOException
-     *             if an error occurs while listing the operations
      */
-    public MultipleChoicePanel(String title, String packageName)
-            throws IOException {
-
+    public MultipleChoicePanel(String title, String packageName) {
         super(title, packageName);
     }
 
