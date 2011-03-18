@@ -1,5 +1,7 @@
 package org.ebsdimage.core.run;
 
+import net.jcip.annotations.Immutable;
+
 import org.simpleframework.xml.Root;
 
 /**
@@ -7,6 +9,7 @@ import org.simpleframework.xml.Root;
  * 
  * @author ppinard
  */
+@Immutable
 @Root
 public interface Operation {
 
