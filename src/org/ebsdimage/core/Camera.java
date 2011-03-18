@@ -216,9 +216,17 @@ public class Camera implements AlmostEquable {
         if (width == 0.0 && height == 0.0)
             return Calibration.NONE;
 
+        double mapAspectRatio = (double) mapWidth / (double) mapHeight;
+        double cameraAspectRatio = width / height;
+
+        if (Math.abs(mapAspectRatio - cameraAspectRatio) > 1e-6)
+            throw new IllegalArgumentException("The aspect ratio of the map ("
+                    + mapAspectRatio
+                    + ") cannot be different than the aspect ratio of "
+                    + "the camera (" + cameraAspectRatio + ").");
+
         double dx = width / mapWidth;
-        double dy = height / mapHeight;
-        return new Calibration(dx, dy, "m");
+        return new Calibration(dx, dx, "m");
     }
 
 

@@ -140,6 +140,13 @@ public class CameraTest extends TestCase {
 
 
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetCalibrationException3() {
+        camera.getCalibration(400, 400);
+    }
+
+
+
     @Test
     public void testGetWidth() {
         Magnitude expected = new Magnitude(4, "cm");
