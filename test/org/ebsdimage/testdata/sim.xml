@@ -1,0 +1,52 @@
+<sim name="Sim1" dir="/tmp/sim1">
+   <listeners/>
+   <metadata>
+      <microscope name="Unnamed">
+         <camera>
+            <n>1.0;0.0;0.0</n>
+            <x>0.0;-1.0;0.0</x>
+            <width>0.04</width>
+            <height>0.04</height>
+         </camera>
+         <tiltAxis>0.0;1.0;0.0</tiltAxis>
+         <tiltAngle>0.0</tiltAngle>
+         <workingDistance>0.015</workingDistance>
+         <beamEnergy>20000.0</beamEnergy>
+         <magnification>1.0</magnification>
+         <sampleRotation>1.0;0.0;0.0;0.0</sampleRotation>
+         <patternCenterX>0.5</patternCenterX>
+         <patternCenterY>0.5</patternCenterY>
+         <cameraDistance>0.02</cameraDistance>
+      </microscope>
+      <scatteringFactors>XRAY</scatteringFactors>
+      <maxIndex>2</maxIndex>
+   </metadata>
+   <phases length="1">
+      <crystal name="Silicon">
+         <unitCell a="5.43" b="5.43" c="5.43" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="1.5707963267948966"/>
+         <atoms>
+            <atom atomicNumber="14" occupancy="1.0">
+               <position>0.0;0.0;0.0</position>
+            </atom>
+            <atom atomicNumber="14" occupancy="1.0">
+               <position>0.0;0.5;0.5</position>
+            </atom>
+            <atom atomicNumber="14" occupancy="1.0">
+               <position>0.5;0.0;0.5</position>
+            </atom>
+            <atom atomicNumber="14" occupancy="1.0">
+               <position>0.5;0.5;0.0</position>
+            </atom>
+         </atoms>
+         <spaceGroup>216</spaceGroup>
+      </crystal>
+   </phases>
+   <rotations length="1">
+      <rotation>0.975170327201816;-0.09933466539753061;0.009966711079379183;-0.1976768116540839</rotation>
+   </rotations>
+   <patternSimOp class="org.ebsdimage.core.sim.ops.patternsim.PatternSimOpMock" width="2" height="2"/>
+   <outputOps length="2">
+      <simOperation class="org.ebsdimage.core.sim.ops.output.OutputOpsMock"/>
+      <simOperation class="org.ebsdimage.core.sim.ops.output.OutputOps2Mock"/>
+   </outputOps>
+</sim>

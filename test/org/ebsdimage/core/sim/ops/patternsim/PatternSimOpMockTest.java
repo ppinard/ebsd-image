@@ -19,87 +19,56 @@ package org.ebsdimage.core.sim.ops.patternsim;
 
 import java.io.File;
 
+import org.apache.commons.math.geometry.Rotation;
 import org.ebsdimage.TestCase;
-import org.ebsdimage.core.Camera;
-import org.ebsdimage.core.sim.Energy;
+import org.ebsdimage.core.Microscope;
+import org.ebsdimage.core.sim.SimTester;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.math.old.Quaternion;
 import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.core.ByteMap;
 import crystallography.core.CrystalFactory;
 import crystallography.core.Reflectors;
+import crystallography.core.ReflectorsFactory;
+import crystallography.core.ScatteringFactorsEnum;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import static junittools.test.Assert.assertEquals;
 
 public class PatternSimOpMockTest extends TestCase {
 
     private PatternSimOp op;
 
-    private Camera camera;
-
     private Reflectors reflectors;
 
-    private Energy energy;
+    private Rotation rotation;
 
-    private Quaternion rotation;
+    private Microscope microscope;
 
 
 
     @Before
     public void setUp() throws Exception {
         op = new PatternSimOpMock();
-        camera = new Camera(0, 0, 0.5);
-        reflectors = op.calculateReflectors(CrystalFactory.silicon());
-        energy = new Energy(20e3);
-        rotation = Quaternion.IDENTITY;
+
+        reflectors =
+                ReflectorsFactory.generate(CrystalFactory.silicon(),
+                        ScatteringFactorsEnum.XRAY, 1);
+        rotation = Rotation.IDENTITY;
+        microscope = SimTester.createMetadata().microscope;
     }
 
 
 
     @Test
     public void testGetPattern() {
-        op.simulate(null, camera, reflectors, energy, rotation);
+        op.simulate(null, microscope, reflectors, rotation);
 
         ByteMap pattern = op.getPatternMap();
         assertEquals(2, pattern.width);
         assertEquals(2, pattern.height);
         assertEquals(4, op.getBands().length);
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertTrue(op.equals(new PatternSimOpMock()));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new PatternSimOpMock(), 1e-2));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(79939921, op.hashCode());
     }
 
 
@@ -111,7 +80,7 @@ public class PatternSimOpMockTest extends TestCase {
 
         PatternSimOpMock other =
                 new XmlLoader().load(PatternSimOpMock.class, file);
-        assertEquals(op, other, 1e-6);
+        assertEquals(op, other);
     }
 
 }

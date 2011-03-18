@@ -18,6 +18,7 @@
 package org.ebsdimage.core.sim;
 
 import java.awt.Shape;
+import java.awt.geom.Line2D;
 
 import net.jcip.annotations.Immutable;
 import crystallography.core.Reflector;
@@ -32,13 +33,16 @@ import crystallography.core.Reflector;
 @Immutable
 public class Band {
 
+    /** Reflector associated with this band. */
     public final Reflector reflector;
 
     /** Line representing the middle of this band. */
-    public final Shape middle;
+    public final Line2D middle;
 
+    /** Shape of one edge of this band. */
     public final Shape edge1;
 
+    /** Shape of one edge of this band. */
     public final Shape edge2;
 
 
@@ -49,11 +53,28 @@ public class Band {
      * 
      * @param reflector
      *            reflector of the band
+     * @param middle
+     *            line passing through the center of this band
+     * @param edge1
+     *            shape representing one edge of this band
+     * @param edge2
+     *            shape representing one edge of this band
      */
-    public Band(Reflector reflector, Shape middle, Shape edge1, Shape edge2) {
+    public Band(Reflector reflector, Line2D middle, Shape edge1, Shape edge2) {
         this.reflector = reflector;
         this.middle = middle;
         this.edge1 = edge1;
         this.edge2 = edge2;
+    }
+
+
+
+    /**
+     * Returns the minimal width between the two edges.
+     * 
+     * @return minimal width
+     */
+    public double getWidth() {
+        return 0.0;
     }
 }

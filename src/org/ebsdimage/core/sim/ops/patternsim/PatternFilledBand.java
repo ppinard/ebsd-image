@@ -17,18 +17,12 @@
  */
 package org.ebsdimage.core.sim.ops.patternsim;
 
-import static java.lang.Math.ceil;
-
-import java.awt.geom.Line2D;
-import java.util.logging.Logger;
-
 import org.ebsdimage.core.sim.Band;
+import org.ebsdimage.core.sim.BandsCalculator;
+import org.ebsdimage.core.sim.LinearBandsCalculator;
 import org.simpleframework.xml.Attribute;
 
-import rmlimage.module.real.core.Drawing;
-import rmlimage.module.real.core.MapMath;
 import rmlimage.module.real.core.RealMap;
-import crystallography.core.ScatteringFactorsEnum;
 
 /**
  * Operation to draw a filled band pattern using x-rays scattering factors.
@@ -37,12 +31,6 @@ import crystallography.core.ScatteringFactorsEnum;
  */
 public class PatternFilledBand extends PatternSimOp {
 
-    /** Default operation. */
-    public static final PatternFilledBand DEFAULT = new PatternFilledBand(1344,
-            1024, 6, ScatteringFactorsEnum.XRAY);
-
-
-
     /**
      * Creates a new <code>PatternFilledBand</code>.
      * 
@@ -50,30 +38,21 @@ public class PatternFilledBand extends PatternSimOp {
      *            width of the pattern to simulate
      * @param height
      *            height of the pattern to simulate
-     * @param maxIndex
-     *            maximum index of the reflectors to use in the pattern simulate
-     * @param scatterType
-     *            type of scattering factors
      * @throws IllegalArgumentException
      *             if the width is less than zero
      * @throws IllegalArgumentException
      *             if the height is less than zero
-     * @throws IllegalArgumentException
-     *             if the maximum index is less than zero
      */
     public PatternFilledBand(@Attribute(name = "width") int width,
-            @Attribute(name = "height") int height,
-            @Attribute(name = "maxIndex") int maxIndex,
-            @Attribute(name = "scatterType") ScatteringFactorsEnum scatterType) {
-        super(width, height, maxIndex, scatterType);
+            @Attribute(name = "height") int height) {
+        super(width, height);
     }
 
 
 
     @Override
     public String toString() {
-        return "PatternFilledBand [" + width + ", " + height + ", " + maxIndex
-                + ", " + scatterType + "]";
+        return "PatternFilledBand [width=" + width + ", height=" + height + "]";
     }
 
 
@@ -97,54 +76,14 @@ public class PatternFilledBand extends PatternSimOp {
      */
     @Override
     protected void drawBand(RealMap canvas, Band band) {
-        // Get coordinates
-        Line2D.Double coords = band.line.toLine2D(width, height);
-        if (coords == null)
-            return; // Band outside image
-
-        int x1 = (int) ceil(coords.x1);
-        int y1 = (int) ceil(coords.y1);
-        int x2 = (int) ceil(coords.x2);
-        int y2 = (int) ceil(coords.y2);
-
-        // Get color array
-        float[] colorArray = getBandColorArray(band);
-
-        // Create temporary map to store the band
-        RealMap tmpMap = new RealMap(width, height);
-        try {
-            Drawing.line(tmpMap, x1, y1, x2, y2, colorArray);
-        } catch (IllegalArgumentException e) {
-            // Ignore line that are too tick
-            Logger logger = Logger.getLogger("ebsd");
-            logger.warning(e.getMessage());
-        }
-
-        // Add temporary map to the canvas
-        MapMath.addition(canvas, tmpMap, canvas);
+        // TODO: PatternFilledBand drawBand when new fill method is created
     }
 
 
 
-    /**
-     * Creates an array that represents the band thickness (length) and the
-     * colour across the band. The colour is kept constant across the thickness.
-     * The normalised intensity is used.
-     * 
-     * @param band
-     *            a band
-     * @return array of float
-     */
-    private float[] getBandColorArray(Band band) {
-        int thickness = (int) (band.width * width + 1);
-        double intensity = band.normalizedIntensity;
-
-        float[] colorArray = new float[thickness];
-
-        for (int i = 0; i < thickness; i++)
-            colorArray[i] = (float) intensity;
-
-        return colorArray;
+    @Override
+    protected BandsCalculator getBandsCalculator() {
+        return new LinearBandsCalculator();
     }
 
 }

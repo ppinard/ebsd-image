@@ -22,10 +22,12 @@ import java.io.IOException;
 
 import org.ebsdimage.core.sim.Sim;
 
+import ptpshared.util.simplexml.ApacheCommonMathMatcher;
 import ptpshared.util.simplexml.XmlLoader;
 import rmlshared.io.FileUtil;
 import rmlshared.io.Loader;
 import rmlshared.io.TextFileReader;
+import crystallography.io.simplexml.SpaceGroupMatcher;
 
 /**
  * Loads a <code>Sim</code> from an XML file.
@@ -35,13 +37,24 @@ import rmlshared.io.TextFileReader;
 public class SimLoader implements Loader {
 
     /** XML loader. */
-    private final XmlLoader loader = new XmlLoader();
+    private final XmlLoader loader;
+
+
+
+    /**
+     * Creates a new <code>SimLoader</code>.
+     */
+    public SimLoader() {
+        loader = new XmlLoader();
+        loader.matchers.registerMatcher(new ApacheCommonMathMatcher());
+        loader.matchers.registerMatcher(new SpaceGroupMatcher());
+    }
 
 
 
     @Override
     public boolean canLoad(File file) {
-        return getValidationMessage(file).length() == 0;
+        return getValidationMessage(file).isEmpty();
     }
 
 
@@ -71,15 +84,14 @@ public class SimLoader implements Loader {
         String header = null;
         try {
             TextFileReader reader = new TextFileReader(file);
-            reader.readLine(); // Skip XML document line
             header = reader.readLine();
             reader.close();
         } catch (IOException ex) {
             return ex.getMessage();
         }
 
-        if (header == null || !header.startsWith("<Sim"))
-            return "Line 2 of the XML file should start wiht '<Sim'.";
+        if (header == null || !header.startsWith("<sim"))
+            return "Line 2 of the XML file should start wiht '<sim'.";
 
         return "";
     }

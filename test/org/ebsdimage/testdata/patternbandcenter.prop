@@ -1,0 +1,10 @@
+#RML-Image Property File - Calib: (1.0E-4m;1.0E-4m;1.0)
+#Fri Mar 18 16:25:23 CET 2011
+calibration.flip.y=false
+calibration.units.y=m
+calibration.flip.x=false
+calibration.units.x=m
+calibration.origin.set=false
+calibration.dy=4547007121832542208
+calibration.dx=4547007121832542208
+MapRenderer.class=rmlimage.module.real.core.ThreeSigmaRenderer

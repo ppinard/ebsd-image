@@ -15,37 +15,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.core.sim.ops.patternsim;
+package org.ebsdimage.io.sim;
 
-import org.ebsdimage.core.sim.Band;
-import org.ebsdimage.core.sim.BandsCalculator;
-import org.ebsdimage.core.sim.LinearBandsCalculator;
+import java.io.File;
 
-import rmlimage.module.real.core.RealMap;
+import org.ebsdimage.core.sim.SimMMapTester;
+import org.junit.Test;
 
-public class PatternSimOpMock extends PatternSimOp {
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-    public PatternSimOpMock() {
-        super(2, 2);
+public class SimMMapLoaderTest extends SimMMapTester {
+
+    private SimMMapLoader loader;
+
+    private File file;
+
+
+
+    public SimMMapLoaderTest() throws Exception {
+        file = getFile("org/ebsdimage/testdata/simmmap.zip");
+        loader = new SimMMapLoader();
+        mmap = loader.load(file);
     }
 
 
 
-    @Override
-    protected RealMap createPatternMap() {
-        return new RealMap(2, 2);
+    @Test
+    public void testCanLoad() {
+        assertTrue(loader.canLoad(file));
+        assertFalse(loader.canLoad(getFile("org/ebsdimage/testdata/houghmap.bmp")));
     }
 
-
-
-    @Override
-    protected void drawBand(RealMap canvas, Band band) {
-    }
-
-
-
-    @Override
-    protected BandsCalculator getBandsCalculator() {
-        return new LinearBandsCalculator();
-    }
 }

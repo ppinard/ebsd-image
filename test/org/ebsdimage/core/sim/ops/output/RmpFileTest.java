@@ -21,22 +21,20 @@ import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.TestCase;
-import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.sim.Sim;
+import org.ebsdimage.core.sim.SimOperation;
 import org.ebsdimage.core.sim.SimTester;
+import org.ebsdimage.core.sim.ops.patternsim.PatternSimOpMock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
-import rmlshared.io.FileUtil;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import static junittools.test.Assert.assertEquals;
 
 public class RmpFileTest extends TestCase {
 
@@ -54,8 +52,7 @@ public class RmpFileTest extends TestCase {
     @Override
     @After
     public void tearDown() throws Exception {
-        if (SimTester.simPath.exists())
-            FileUtil.rmdir(SimTester.simPath);
+        SimTester.removeSimPath();
     }
 
 
@@ -63,8 +60,7 @@ public class RmpFileTest extends TestCase {
     @Test
     public void testSave() throws IOException {
         // Create simulation
-        Operation[] ops =
-                new Operation[] { SimTester.createPatternSimOp(), op };
+        SimOperation[] ops = new SimOperation[] { new PatternSimOpMock(), op };
         Sim sim = SimTester.createSim(ops);
 
         // Run
@@ -95,17 +91,6 @@ public class RmpFileTest extends TestCase {
 
 
     @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new RmpFile(), 1e-2));
-    }
-
-
-
-    @Test
     public void testHashCode() {
         assertEquals(-1307907920, op.hashCode());
     }
@@ -118,7 +103,7 @@ public class RmpFileTest extends TestCase {
         new XmlSaver().save(op, file);
 
         RmpFile other = new XmlLoader().load(RmpFile.class, file);
-        assertEquals(op, other, 1e-6);
+        assertEquals(op, other);
     }
 
 }

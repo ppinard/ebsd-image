@@ -17,53 +17,12 @@
  */
 package org.ebsdimage.core.sim;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
-import org.junit.Test;
 
-public class EnergyTest {
-
-    private Energy energy;
-
-
+public class SimTest extends SimTester {
 
     @Before
     public void setUp() throws Exception {
-        energy = new Energy(25e3);
+        sim = createSim();
     }
-
-
-
-    @Test
-    public void testEnergyDouble() {
-        assertEquals(25e3, energy.value, 1e-6);
-    }
-
-
-
-    @Test
-    public void testEquals() {
-        Energy other = new Energy(25e3);
-
-        assertFalse(energy == other);
-        assertTrue(energy.equals(other, 1e-6));
-    }
-
-
-
-    @Test
-    public void testGetValue() {
-        assertEquals(25e3, energy.getValue(), 1e-6);
-    }
-
-
-
-    @Test
-    public void testToString() {
-        assertEquals(energy.toString(), "25000.0 eV");
-    }
-
 }

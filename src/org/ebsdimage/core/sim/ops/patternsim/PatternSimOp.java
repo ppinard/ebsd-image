@@ -17,14 +17,14 @@
  */
 package org.ebsdimage.core.sim.ops.patternsim;
 
-import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import org.apache.commons.math.geometry.Rotation;
 import org.ebsdimage.core.Microscope;
-import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.sim.Band;
+import org.ebsdimage.core.sim.BandsCalculator;
 import org.ebsdimage.core.sim.Sim;
+import org.ebsdimage.core.sim.SimOperation;
 import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
@@ -38,7 +38,7 @@ import crystallography.core.Reflectors;
  * 
  * @author Philippe T. Pinard
  */
-public abstract class PatternSimOp extends Operation {
+public abstract class PatternSimOp extends SimOperation {
 
     /** Width of the pattern. */
     @Attribute(name = "width")
@@ -48,14 +48,14 @@ public abstract class PatternSimOp extends Operation {
     @Attribute(name = "height")
     public final int height;
 
-    /** List of bands. */
-    protected ArrayList<Band> bands = new ArrayList<Band>();
-
     /** Pattern's <code>ByteMap</code>. */
-    protected ByteMap patternMap;
+    private ByteMap patternMap;
 
     /** Pattern's <code>RealMap</code>. */
-    protected RealMap patternRealMap;
+    private RealMap patternRealMap;
+
+    /** Pattern's bands. */
+    private Band[] bands;
 
 
 
@@ -86,26 +86,21 @@ public abstract class PatternSimOp extends Operation {
 
 
     /**
-     * Calculates the bands with the given parameters.
-     * 
-     * @param reflectors
-     *            reflectors of the crystal
-     * @param microscope
-     *            microscope parameters
-     * @param rotation
-     *            rotation of the crystal
-     */
-    protected abstract void calculateBands(Microscope microscope,
-            Reflectors reflectors, Rotation rotation);
-
-
-
-    /**
      * Creates a empty <code>RealMap</code> to store the pattern.
      * 
      * @return pattern map
      */
     protected abstract RealMap createPatternMap();
+
+
+
+    /**
+     * Returns the <code>BandsCalculator</code> to use to calculate the bands of
+     * this simulated diffraction pattern.
+     * 
+     * @return <code>BandsCalculator</code>
+     */
+    protected abstract BandsCalculator getBandsCalculator();
 
 
 
@@ -139,12 +134,31 @@ public abstract class PatternSimOp extends Operation {
         RealMap canvas = createPatternMap();
 
         Logger logger = Logger.getLogger("ebsd");
-        logger.info("Number of bands in pattern: " + bands.size());
+        logger.info("Number of bands in pattern: " + bands.length);
 
         for (Band band : bands)
             drawBand(canvas, band);
 
         return canvas;
+    }
+
+
+
+    /**
+     * Calculates the bands using the <code>BandsCalculator</code>.
+     * 
+     * @param reflectors
+     *            reflectors of the crystal
+     * @param microscope
+     *            microscope parameters
+     * @param rotation
+     *            rotation of the pattern
+     */
+    private void calculateBands(Microscope microscope, Reflectors reflectors,
+            Rotation rotation) {
+        bands =
+                getBandsCalculator().calculate(width, height, microscope,
+                        reflectors, rotation);
     }
 
 
@@ -165,40 +179,8 @@ public abstract class PatternSimOp extends Operation {
 
 
 
-    @Override
-    public boolean equals(Object obj, Object precision) {
-        if (!super.equals(obj, precision))
-            return false;
-
-        double delta = ((Number) precision).doubleValue();
-        PatternSimOp other = (PatternSimOp) obj;
-        if (Math.abs(height - other.height) > delta)
-            return false;
-        if (Math.abs(width - other.width) > delta)
-            return false;
-
-        return true;
-    }
-
-
-
     /**
-     * Returns the calculated bands. If they are not previously calculated, they
-     * are automatically calculated.
-     * 
-     * @return calculated bands
-     */
-    public Band[] getBands() {
-        if (bands == null)
-            throw new RuntimeException("Pattern is not yet simulated.");
-        return bands.toArray(new Band[bands.size()]);
-    }
-
-
-
-    /**
-     * Returns the simulated pattern <code>ByteMap</code>. If the pattern was
-     * not generated, it is automatically generated.
+     * Returns the simulated pattern <code>ByteMap</code>.
      * 
      * @return simulated pattern
      */
@@ -211,8 +193,7 @@ public abstract class PatternSimOp extends Operation {
 
 
     /**
-     * Returns the simulated pattern <code>RealMap</code>. If the pattern was
-     * not generated, it is automatically generated.
+     * Returns the simulated pattern <code>RealMap</code>.
      * 
      * @return simulated pattern
      */
@@ -220,6 +201,19 @@ public abstract class PatternSimOp extends Operation {
         if (patternRealMap == null)
             throw new RuntimeException("Pattern is not yet simulated.");
         return patternRealMap;
+    }
+
+
+
+    /**
+     * Returns the calculated bands used in the simulated pattern.
+     * 
+     * @return calculated bands
+     */
+    public Band[] getBands() {
+        if (bands == null)
+            throw new RuntimeException("Pattern is not yet simulated.");
+        return bands;
     }
 
 
@@ -250,6 +244,10 @@ public abstract class PatternSimOp extends Operation {
     public void simulate(Sim sim, Microscope microscope, Reflectors reflectors,
             Rotation rotation) {
         patternRealMap = drawRealMap(microscope, reflectors, rotation);
+
+        // Set calibration
+        patternRealMap.setCalibration(microscope.getCamera().getCalibration(
+                width, height));
 
         // Use 3-sigma rendered
         patternRealMap.setMapRenderer(new ThreeSigmaRenderer());

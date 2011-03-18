@@ -18,88 +18,74 @@
 package org.ebsdimage.core.sim.ops.patternsim;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.apache.commons.math.geometry.Rotation;
 import org.ebsdimage.TestCase;
-import org.ebsdimage.core.Camera;
-import org.ebsdimage.core.sim.Energy;
+import org.ebsdimage.core.Microscope;
+import org.ebsdimage.core.sim.SimTester;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.math.old.Quaternion;
 import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.core.ByteMap;
 import rmlimage.module.real.core.RealMap;
 import crystallography.core.CrystalFactory;
 import crystallography.core.Reflectors;
+import crystallography.core.ReflectorsFactory;
 import crystallography.core.ScatteringFactorsEnum;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import static junittools.test.Assert.assertEquals;
-
 public class PatternBandEdgesTest extends TestCase {
 
     private PatternBandEdges op;
 
+    private Microscope microscope;
+
     private Reflectors reflectors;
 
-    private Camera camera;
-
-    private Energy energy;
-
-    private Quaternion rotation;
+    private Rotation rotation;
 
 
 
     @Before
     public void setUp() throws Exception {
-        op = new PatternBandEdges(336, 256, 4, ScatteringFactorsEnum.XRAY);
+        op = new PatternBandEdges(400, 400);
 
-        reflectors = op.calculateReflectors(CrystalFactory.silicon());
-        camera = new Camera(0.0, 0.0, 0.3);
-        energy = new Energy(20e3);
-        rotation = Quaternion.IDENTITY;
+        microscope = SimTester.createMetadata().microscope;
+        reflectors =
+                ReflectorsFactory.generate(CrystalFactory.silicon(),
+                        ScatteringFactorsEnum.XRAY, 4);
+        rotation = Rotation.IDENTITY;
     }
 
 
 
     @Test
     public void testPatternBandEdgesIntIntIntScatteringFactorsEnum() {
-        assertEquals(336, op.width);
-        assertEquals(256, op.height);
-        assertEquals(4, op.maxIndex);
-        assertEquals(ScatteringFactorsEnum.XRAY, op.scatterType);
-    }
-
-
-
-    @Test
-    public void testCalculateReflectors() {
-        assertEquals(94, reflectors.size());
+        assertEquals(400, op.width);
+        assertEquals(400, op.height);
     }
 
 
 
     @Test
     public void testGetBands() {
-        op.simulate(camera, reflectors, energy, rotation);
-        assertEquals(92, op.getBands().length);
+        op.simulate(null, microscope, reflectors, rotation);
+        assertEquals(72, op.getBands().length);
     }
 
 
 
     @Test
-    public void testGetPatternMap() {
-        op.simulate(camera, reflectors, energy, rotation);
+    public void testGetPatternMap() throws IOException {
+        op.simulate(null, microscope, reflectors, rotation);
 
         ByteMap patternMap = op.getPatternMap();
-
-        // patternMap.setFile(new File(FileUtil.getTempDirFile(),
-        // "patternfilledband.bmp"));
-        // rmlimage.io.IO.save(patternMap);
 
         ByteMap expectedMap =
                 (ByteMap) load("org/ebsdimage/testdata/patternbandedges.bmp");
@@ -110,17 +96,13 @@ public class PatternBandEdgesTest extends TestCase {
 
 
     @Test
-    public void testGetPatternRealMap() {
-        op.simulate(camera, reflectors, energy, rotation);
+    public void testGetPatternRealMap() throws IOException {
+        op.simulate(null, microscope, reflectors, rotation);
 
         RealMap patternMap = op.getPatternRealMap();
 
-        // patternMap.setFile(new File(FileUtil.getTempDirFile(),
-        // "patternfilledband.rmp"));
-        // rmlimage.module.real.io.IO.save(patternMap);
-
         RealMap expectedMap =
-                (RealMap) load("org/ebsdimage/testdata/patternbandedges.rmp");
+                (RealMap) load("org/ebsdimage/testdata/patternbandedges_rmp.rmp");
 
         expectedMap.assertEquals(patternMap);
     }
@@ -133,45 +115,16 @@ public class PatternBandEdgesTest extends TestCase {
         assertFalse(op.equals(null));
         assertFalse(op.equals(new Object()));
 
-        assertFalse(op.equals(new PatternBandEdges(337, 256, 4,
-                ScatteringFactorsEnum.XRAY)));
-        assertFalse(op.equals(new PatternBandEdges(336, 257, 4,
-                ScatteringFactorsEnum.XRAY)));
-        assertFalse(op.equals(new PatternBandEdges(336, 256, 5,
-                ScatteringFactorsEnum.XRAY)));
-        assertFalse(op.equals(new PatternBandEdges(336, 256, 4,
-                ScatteringFactorsEnum.ELECTRON)));
-        assertTrue(op.equals(new PatternBandEdges(336, 256, 4,
-                ScatteringFactorsEnum.XRAY)));
-    }
-
-
-
-    @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 2));
-        assertFalse(op.equals(null, 2));
-        assertFalse(op.equals(new Object(), 2));
-
-        assertFalse(op.equals(new PatternBandEdges(338, 256, 4,
-                ScatteringFactorsEnum.XRAY), 2));
-        assertFalse(op.equals(new PatternBandEdges(336, 258, 4,
-                ScatteringFactorsEnum.XRAY), 2));
-        assertFalse(op.equals(new PatternBandEdges(336, 256, 6,
-                ScatteringFactorsEnum.XRAY), 2));
-        assertFalse(op.equals(new PatternBandEdges(336, 256, 4,
-                ScatteringFactorsEnum.ELECTRON), 2));
-        assertTrue(op.equals(new PatternBandEdges(337, 257, 5,
-                ScatteringFactorsEnum.XRAY), 2));
+        assertFalse(op.equals(new PatternBandEdges(401, 400)));
+        assertFalse(op.equals(new PatternBandEdges(400, 401)));
+        assertTrue(op.equals(new PatternBandEdges(400, 400)));
     }
 
 
 
     @Test
     public void testHashCode() {
-        // Impossible to test the hash code because of the enum
-        assertTrue(true);
-        // assertEquals(1052419856, op.hashCode());
+        assertEquals(-1151570512, op.hashCode());
     }
 
 
@@ -183,7 +136,7 @@ public class PatternBandEdgesTest extends TestCase {
 
         PatternBandEdges other =
                 new XmlLoader().load(PatternBandEdges.class, file);
-        assertEquals(op, other, 1e-6);
+        assertEquals(op, other);
     }
 
 }

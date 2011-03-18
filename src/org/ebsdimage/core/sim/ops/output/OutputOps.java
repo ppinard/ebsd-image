@@ -19,16 +19,21 @@ package org.ebsdimage.core.sim.ops.output;
 
 import java.io.IOException;
 
-import org.ebsdimage.core.run.Operation;
+import org.ebsdimage.core.HoughMath;
+import org.ebsdimage.core.HoughPeak;
+import org.ebsdimage.core.sim.Band;
 import org.ebsdimage.core.sim.Sim;
+import org.ebsdimage.core.sim.SimOperation;
 import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
+
+import rmlimage.core.Map;
 
 /**
  * Superclass of operation to save the output(s).
  * 
  * @author Philippe T. Pinard
  */
-public abstract class OutputOps extends Operation {
+public abstract class OutputOps extends SimOperation {
 
     /**
      * Saves results, operations or parameters of the <code>Sim</code>.
@@ -42,5 +47,29 @@ public abstract class OutputOps extends Operation {
      */
     public abstract void save(Sim sim, PatternSimOp patternSimOp)
             throws IOException;
+
+
+
+    /**
+     * Converts bands calculated in the <code>PatternSimOp</code> to Hough
+     * peaks.
+     * 
+     * @param patternSimOp
+     *            pattern simulation operation
+     * @return array of <code>HoughPeak</code>
+     */
+    protected HoughPeak[] bandsToHoughPeaks(PatternSimOp patternSimOp) {
+        Band[] bands = patternSimOp.getBands();
+        Map patternMap = patternSimOp.getPatternRealMap();
+
+        HoughPeak[] peaks = new HoughPeak[bands.length];
+
+        for (int i = 0; i < bands.length; i++)
+            peaks[i] =
+                    HoughMath.getHoughPeak(bands[i].middle, patternMap,
+                            bands[i].reflector.normalizedIntensity);
+
+        return peaks;
+    }
 
 }

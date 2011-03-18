@@ -18,6 +18,8 @@
 package org.ebsdimage.core.sim.ops.patternsim;
 
 import org.ebsdimage.core.sim.Band;
+import org.ebsdimage.core.sim.BandsCalculator;
+import org.ebsdimage.core.sim.LinearBandsCalculator;
 import org.simpleframework.xml.Attribute;
 
 import rmlimage.module.real.core.Drawing;
@@ -28,7 +30,7 @@ import rmlimage.module.real.core.RealMap;
  * 
  * @author Philippe T. Pinard
  */
-public class PatternBandEdges extends PatternLinearBand {
+public class PatternBandEdges extends PatternSimOp {
 
     /**
      * Creates a new <code>PatternBandCenter</code>.
@@ -69,6 +71,20 @@ public class PatternBandEdges extends PatternLinearBand {
     protected void drawBand(RealMap canvas, Band band) {
         Drawing.shape(canvas, band.edge1, 1.0f);
         Drawing.shape(canvas, band.edge2, 1.0f);
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "PatternBandEdges [width=" + width + ", height=" + height + "]";
+    }
+
+
+
+    @Override
+    protected BandsCalculator getBandsCalculator() {
+        return new LinearBandsCalculator();
     }
 
 }

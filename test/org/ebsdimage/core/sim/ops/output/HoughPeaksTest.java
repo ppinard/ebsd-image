@@ -22,22 +22,20 @@ import java.io.IOException;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.HoughPeak;
-import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.sim.Sim;
+import org.ebsdimage.core.sim.SimOperation;
 import org.ebsdimage.core.sim.SimTester;
+import org.ebsdimage.core.sim.ops.patternsim.PatternSimOpMock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
-import rmlshared.io.FileUtil;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import static junittools.test.Assert.assertEquals;
 
 public class HoughPeaksTest extends TestCase {
 
@@ -55,8 +53,7 @@ public class HoughPeaksTest extends TestCase {
     @Override
     @After
     public void tearDown() throws Exception {
-        if (SimTester.simPath.exists())
-            FileUtil.rmdir(SimTester.simPath);
+        SimTester.removeSimPath();
     }
 
 
@@ -64,8 +61,7 @@ public class HoughPeaksTest extends TestCase {
     @Test
     public void testSave() throws IOException {
         // Create simulation
-        Operation[] ops =
-                new Operation[] { SimTester.createPatternSimOp(), op };
+        SimOperation[] ops = new SimOperation[] { new PatternSimOpMock(), op };
         Sim sim = SimTester.createSim(ops);
 
         // Run
@@ -73,11 +69,10 @@ public class HoughPeaksTest extends TestCase {
 
         // Test
         File file = new File(SimTester.simPath, "Sim1_0.xml");
-
         assertTrue(file.exists());
 
         HoughPeak[] peaks = new XmlLoader().loadArray(HoughPeak.class, file);
-        assertEquals(4, peaks.length);
+        assertEquals(15, peaks.length);
     }
 
 
@@ -101,17 +96,6 @@ public class HoughPeaksTest extends TestCase {
 
 
     @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new HoughPeaks(), 1e-2));
-    }
-
-
-
-    @Test
     public void testHashCode() {
         assertEquals(1995310916, op.hashCode());
     }
@@ -124,7 +108,7 @@ public class HoughPeaksTest extends TestCase {
         new XmlSaver().save(op, file);
 
         HoughPeaks other = new XmlLoader().load(HoughPeaks.class, file);
-        assertEquals(op, other, 1e-6);
+        assertEquals(op, other);
     }
 
 }

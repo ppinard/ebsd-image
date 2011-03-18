@@ -33,8 +33,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import static junittools.test.Assert.assertEquals;
-
 public class OutputOpsMockTest extends TestCase {
 
     private OutputOpsMock op;
@@ -71,17 +69,6 @@ public class OutputOpsMockTest extends TestCase {
 
 
     @Test
-    public void testEqualsObjectDouble() {
-        assertTrue(op.equals(op, 1e-2));
-        assertFalse(op.equals(null, 1e-2));
-        assertFalse(op.equals(new Object(), 1e-2));
-
-        assertTrue(op.equals(new OutputOpsMock(), 1e-2));
-    }
-
-
-
-    @Test
     public void testHashCode() {
         assertEquals(1683320602, op.hashCode());
     }
@@ -94,7 +81,7 @@ public class OutputOpsMockTest extends TestCase {
         new XmlSaver().save(op, file);
 
         OutputOpsMock other = new XmlLoader().load(OutputOpsMock.class, file);
-        assertEquals(op, other, 1e-6);
+        assertEquals(op, other);
     }
 
 }

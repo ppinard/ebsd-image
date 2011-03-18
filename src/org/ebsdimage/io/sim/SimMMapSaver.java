@@ -15,15 +15,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.core.sim;
+package org.ebsdimage.io.sim;
 
-import org.junit.Before;
+import org.ebsdimage.core.sim.SimMMap;
+import org.ebsdimage.io.EbsdMMapSaver;
 
-public class SimsGeneratorTest extends SimsGeneratorTester {
+/**
+ * Saver for a <code>SimMMap</code>. A <code>SimMMap</code> is saved in a human
+ * readable ZIP file.
+ * 
+ * @author Philippe T. Pinard
+ */
+public class SimMMapSaver extends EbsdMMapSaver {
 
-    @Before
-    public void setUp() throws Exception {
-        generator = createSimsGenerator();
+    @Override
+    protected String getHeader() {
+        return SimMMap.FILE_HEADER;
+    }
+
+
+
+    @Override
+    protected int getVersion() {
+        return SimMMap.VERSION;
+    }
+
+
+
+    @Override
+    public boolean canSave(Object obj, String fileFormat) {
+        return (obj instanceof SimMMap) && fileFormat.equalsIgnoreCase("zip");
     }
 
 }

@@ -22,8 +22,10 @@ import java.io.IOException;
 
 import org.ebsdimage.core.sim.Sim;
 
+import ptpshared.util.simplexml.ApacheCommonMathMatcher;
 import ptpshared.util.simplexml.XmlSaver;
 import rmlshared.io.Saver;
+import crystallography.io.simplexml.SpaceGroupMatcher;
 
 /**
  * Saves a <code>Sim</code> to an XML file.
@@ -33,13 +35,31 @@ import rmlshared.io.Saver;
 public class SimSaver implements Saver {
 
     /** XMl saver. */
-    private final XmlSaver saver = new XmlSaver();
+    private final XmlSaver saver;
+
+
+
+    /**
+     * Creates a new <code>SimSaver</code>.
+     */
+    public SimSaver() {
+        saver = new XmlSaver();
+        saver.matchers.registerMatcher(new ApacheCommonMathMatcher());
+        saver.matchers.registerMatcher(new SpaceGroupMatcher());
+    }
 
 
 
     @Override
     public void save(Object obj, File file) throws IOException {
         save((Sim) obj, file);
+    }
+
+
+
+    @Override
+    public boolean canSave(Object obj, String fileFormat) {
+        return (obj instanceof Sim) && fileFormat.equalsIgnoreCase("xml");
     }
 
 
@@ -63,13 +83,6 @@ public class SimSaver implements Saver {
     @Override
     public double getTaskProgress() {
         return saver.getTaskProgress();
-    }
-
-
-
-    @Override
-    public boolean canSave(Object obj) {
-        return obj instanceof Sim;
     }
 
 }

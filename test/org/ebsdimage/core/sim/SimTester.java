@@ -18,19 +18,32 @@
 package org.ebsdimage.core.sim;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.apache.commons.math.geometry.Rotation;
+import org.apache.commons.math.geometry.RotationOrder;
+import org.apache.commons.math.geometry.Vector3D;
+import org.ebsdimage.TestCase;
 import org.ebsdimage.core.Camera;
-import org.ebsdimage.core.run.Operation;
-import org.ebsdimage.core.sim.ops.patternsim.PatternFilledBand;
+import org.ebsdimage.core.Microscope;
+import org.ebsdimage.core.PhaseMap;
+import org.ebsdimage.core.sim.ops.output.OutputOps2Mock;
+import org.ebsdimage.core.sim.ops.output.OutputOpsMock;
+import org.ebsdimage.core.sim.ops.patternsim.PatternSimOpMock;
+import org.junit.After;
+import org.junit.Test;
 
-import ptpshared.math.old.Eulers;
-import ptpshared.math.old.Quaternion;
+import rmlimage.module.real.core.RealMap;
 import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
 import crystallography.core.ScatteringFactorsEnum;
 
-public abstract class SimTester {
+import static org.junit.Assert.assertEquals;
+
+import static junittools.test.Assert.assertEquals;
+
+public abstract class SimTester extends TestCase {
 
     protected Sim sim;
 
@@ -39,14 +52,20 @@ public abstract class SimTester {
 
 
 
-    public static Sim createSim(Operation[] ops) {
-        Crystal[] crystals = new Crystal[] { CrystalFactory.silicon() };
-        Camera[] cameras = new Camera[] { new Camera(0.1, 0.2, 0.3) };
-        Energy[] energies = new Energy[] { new Energy(25e3) };
-        Quaternion[] rotations =
-                new Quaternion[] { new Quaternion(new Eulers(0.1, 0.2, 0.3)) };
+    public static Sim createSim() {
+        return createSim(createOperations());
+    }
 
-        Sim sim = new Sim(ops, cameras, crystals, energies, rotations);
+
+
+    public static Sim createSim(SimOperation[] ops) {
+        Crystal[] phases = new Crystal[] { CrystalFactory.silicon() };
+        Rotation[] rotations =
+                new Rotation[] { new Rotation(RotationOrder.ZXZ, 0.1, 0.2, 0.3) };
+
+        SimMetadata metadata = createMetadata();
+
+        Sim sim = new Sim(metadata, ops, phases, rotations);
         sim.setName("Sim1");
         sim.setDir(simPath);
 
@@ -55,13 +74,92 @@ public abstract class SimTester {
 
 
 
-    public static Sim createSim() {
-        return createSim(new Operation[] { createPatternSimOp() });
+    public static SimMetadata createMetadata() {
+        Camera camera =
+                new Camera(new Vector3D(1, 0, 0), new Vector3D(0, -1, 0), 0.04,
+                        0.04);
+        Vector3D tiltAxis = new Vector3D(0, 1, 0);
+
+        Microscope microscope = new Microscope(camera, tiltAxis);
+        microscope.setBeamEnergy(20e3);
+        microscope.setPatternCenterX(0.5);
+        microscope.setPatternCenterY(0.5);
+        microscope.setWorkingDistance(0.015);
+        microscope.setCameraDistance(0.02);
+        microscope.setTiltAngle(0.0);
+
+        ScatteringFactorsEnum scatteringFactors = ScatteringFactorsEnum.XRAY;
+        int maxIndex = 2;
+
+        return new SimMetadata(microscope, scatteringFactors, maxIndex);
     }
 
 
 
-    public static Operation createPatternSimOp() {
-        return new PatternFilledBand(335, 255, 1, ScatteringFactorsEnum.XRAY);
+    public static void removeSimPath() throws IOException {
+        if (simPath.exists())
+            FileUtil.rmdir(simPath);
+    }
+
+
+
+    @Override
+    @After
+    public void tearDown() throws Exception {
+        removeSimPath();
+    }
+
+
+
+    public static SimOperation[] createOperations() {
+        return new SimOperation[] { new PatternSimOpMock(),
+                new OutputOpsMock(), new OutputOps2Mock() };
+    }
+
+
+
+    @Test
+    public void testGetPatternSimOp() {
+        assertEquals(2, sim.getPatternSimOp().width);
+        assertEquals(2, sim.getPatternSimOp().height);
+    }
+
+
+
+    @Test
+    public void testGetOutputOps() {
+        assertEquals(2, sim.getOutputOps().length);
+    }
+
+
+
+    @Test
+    public void testRun() {
+        // Make sure it is in the temporary folder
+        sim.setDir(simPath);
+
+        sim.run();
+
+        // Test
+        assertEquals(1, sim.mmap.width);
+        assertEquals(1, sim.mmap.height);
+
+        // Rotation
+        Rotation rotation = new Rotation(RotationOrder.ZXZ, 0.1, 0.2, 0.3);
+
+        RealMap realMap = sim.mmap.getQ0Map();
+        assertEquals(rotation.getQ0(), realMap.pixArray[0], 1e-6);
+        realMap = sim.mmap.getQ1Map();
+        assertEquals(rotation.getQ1(), realMap.pixArray[0], 1e-6);
+        realMap = sim.mmap.getQ2Map();
+        assertEquals(rotation.getQ2(), realMap.pixArray[0], 1e-6);
+        realMap = sim.mmap.getQ3Map();
+        assertEquals(rotation.getQ3(), realMap.pixArray[0], 1e-6);
+
+        // Phases
+        PhaseMap phaseMap = sim.mmap.getPhaseMap();
+        assertEquals(1, sim.mmap.getPhases().length);
+        assertEquals(1, phaseMap.pixArray[0]);
+        assertEquals(CrystalFactory.silicon(), phaseMap.getItem(1), 1e-6);
     }
 }

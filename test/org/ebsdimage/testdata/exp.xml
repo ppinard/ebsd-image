@@ -3,7 +3,7 @@
       <expListener class="org.ebsdimage.core.exp.MapsSaverListener"/>
    </listeners>
    <metadata>
-      <microscope>
+      <microscope name="Unnamed">
          <camera>
             <n>1.0;0.0;0.0</n>
             <x>0.0;-1.0;0.0</x>

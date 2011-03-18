@@ -15,37 +15,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.core.sim.ops.patternsim;
+package org.ebsdimage.io.sim;
 
-import org.ebsdimage.core.sim.Band;
-import org.ebsdimage.core.sim.BandsCalculator;
-import org.ebsdimage.core.sim.LinearBandsCalculator;
+import java.io.File;
 
-import rmlimage.module.real.core.RealMap;
+import org.ebsdimage.core.sim.SimTester;
+import org.junit.Before;
 
-public class PatternSimOpMock extends PatternSimOp {
+import rmlshared.io.FileUtil;
 
-    public PatternSimOpMock() {
-        super(2, 2);
+public class SimLoaderTest extends SimTester {
+
+    private static File file =
+            FileUtil.getFile("org/ebsdimage/testdata/sim.xml");
+
+
+
+    @Before
+    public void setUp() throws Exception {
+        sim = new SimLoader().load(file);
     }
 
-
-
-    @Override
-    protected RealMap createPatternMap() {
-        return new RealMap(2, 2);
-    }
-
-
-
-    @Override
-    protected void drawBand(RealMap canvas, Band band) {
-    }
-
-
-
-    @Override
-    protected BandsCalculator getBandsCalculator() {
-        return new LinearBandsCalculator();
-    }
 }
