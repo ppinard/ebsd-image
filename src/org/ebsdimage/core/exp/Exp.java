@@ -76,7 +76,7 @@ public class Exp extends Run {
     private ArrayList<ExpListener> listeners = new ArrayList<ExpListener>();
 
     /** <code>MultiMap</code> holding the result and metadata for the experiment. */
-    public final EbsdMMap mmap;
+    public final ExpMMap mmap;
 
     /** Runtime variable for the source pattern map. */
     protected ByteMap sourcePatternMap;
@@ -225,7 +225,7 @@ public class Exp extends Run {
      * @see EbsdMMap
      * @see CurrentMapsFileSaver
      */
-    public Exp(EbsdMMap mmap, Operation[] ops) {
+    public Exp(ExpMMap mmap, Operation[] ops) {
         if (mmap == null)
             throw new NullPointerException("EBSD multimap cannot be null.");
         if (ops == null)

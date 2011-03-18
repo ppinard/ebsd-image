@@ -26,7 +26,7 @@ import org.ebsdimage.core.run.Operation;
 import org.simpleframework.xml.Root;
 
 /**
- * Superclass for all operations.
+ * Superclass for all operations of an experiment.
  * 
  * @author Philippe T. Pinard
  */

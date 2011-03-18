@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternFilesLoader;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternSmpLoader;
@@ -54,7 +53,7 @@ public class ExpUtil {
      *            experiment listeners
      * @return an array of <code>Exp</code>
      */
-    public static Exp[] createExps(EbsdMMap mmap, OperationGenerator generator,
+    public static Exp[] createExps(ExpMMap mmap, OperationGenerator generator,
             PatternOp[] inputs, ExpListener[] listeners) {
         if (inputs.length < 1)
             throw new IllegalArgumentException(
