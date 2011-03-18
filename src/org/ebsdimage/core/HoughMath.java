@@ -159,6 +159,27 @@ public class HoughMath {
      * @return a hough peak
      */
     public static HoughPeak getHoughPeak(Line2D line, Map map) {
+        return getHoughPeak(line, map, 0.0);
+    }
+
+
+
+    /**
+     * Converts the slope and intercept of a line to a Hough peak. Equations:
+     * <ul>
+     * <li><code>theta = -arccot(m)</code></li>
+     * <li><code>rho = k * sin(theta)</code></li>
+     * </ul>
+     * 
+     * @param line
+     *            a <code>Line</code>
+     * @param map
+     *            map containing the line
+     * @param intensity
+     *            of the peak
+     * @return a hough peak
+     */
+    public static HoughPeak getHoughPeak(Line2D line, Map map, double intensity) {
         Line2D.Double adjustedLine =
                 new Line2D.Double(line.getP1(), line.getP2());
 
@@ -186,7 +207,8 @@ public class HoughMath {
         }
 
         Calibration cal = map.getCalibration();
-        return new HoughPeak(theta, cal.getCalibratedY(rho), cal.unitsY, 0.0);
+        return new HoughPeak(theta, cal.getCalibratedY(rho), cal.unitsY,
+                intensity);
     }
 
 }
