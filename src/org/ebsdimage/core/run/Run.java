@@ -37,7 +37,7 @@ import rmlshared.ui.Monitorable;
 public abstract class Run implements Monitorable {
 
     /** Default directory of the run. */
-    public static final File DEFAULT_DIR = FileUtil.getCurrentDirFile();
+    public static final File DEFAULT_DIR = FileUtil.getHomeDirFile();
 
     /** Directory where to output the results from the run. */
     protected File dir = DEFAULT_DIR;
