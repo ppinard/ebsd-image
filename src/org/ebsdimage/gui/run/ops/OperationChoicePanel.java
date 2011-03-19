@@ -24,7 +24,7 @@ import javax.swing.border.TitledBorder;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.ebsdimage.core.exp.ExpOperation;
+import org.ebsdimage.core.run.Operation;
 
 import ptpshared.gui.GuiUtil;
 import rmlshared.gui.Button;
@@ -168,13 +168,13 @@ public abstract class OperationChoicePanel extends JPanel {
      * 
      * @return operations
      */
-    public ExpOperation[] getOperations() {
+    public Operation[] getOperations() {
         DefaultListModel model = (DefaultListModel) userList.getModel();
         int nbOps = model.getSize();
 
-        ExpOperation[] ops = new ExpOperation[nbOps];
+        Operation[] ops = new Operation[nbOps];
         for (int n = 0; n < nbOps; n++)
-            ops[n] = (ExpOperation) model.get(n);
+            ops[n] = (Operation) model.get(n);
 
         return ops;
     }
