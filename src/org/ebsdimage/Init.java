@@ -18,6 +18,8 @@
 package org.ebsdimage;
 
 import org.ebsdimage.io.*;
+import org.ebsdimage.io.exp.ExpMMapLoader;
+import org.ebsdimage.io.sim.SimMMapLoader;
 
 import rmlimage.RMLImage;
 
@@ -37,14 +39,18 @@ public class Init extends rmlimage.module.Init {
         rmlimage.core.Conversion.addHandler(org.ebsdimage.core.Conversion.class);
 
         // Loader
-        rmlimage.io.IO.addLoader(PhasesMapLoader.class);
+        rmlimage.io.IO.addLoader(PhaseMapLoader.class);
         rmlimage.io.IO.addLoader(ErrorMapLoader.class);
         rmlimage.io.IO.addLoader(HoughMapLoader.class);
+        rmlimage.io.IO.addLoader(ExpMMapLoader.class);
+        rmlimage.io.IO.addLoader(SimMMapLoader.class);
 
         // Saver
-        rmlimage.io.IO.addSaver(PhasesMapSaver.class);
+        rmlimage.io.IO.addSaver(PhaseMapSaver.class);
         rmlimage.io.IO.addSaver(ErrorMapSaver.class);
         rmlimage.io.IO.addSaver(HoughMapSaver.class);
+        rmlimage.io.IO.addLoader(ExpMMapLoader.class);
+        rmlimage.io.IO.addLoader(SimMMapLoader.class);
 
         // Edit
         rmlimage.core.Edit.addHandler(org.ebsdimage.core.Edit.class);
