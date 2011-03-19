@@ -37,6 +37,7 @@ import org.ebsdimage.core.exp.ops.identification.post.IdentificationPostOps;
 import org.ebsdimage.core.exp.ops.identification.pre.IdentificationPreOps;
 import org.ebsdimage.core.exp.ops.identification.results.IdentificationResultsOps;
 import org.ebsdimage.core.exp.ops.indexing.op.IndexingOp;
+import org.ebsdimage.core.exp.ops.indexing.op.IndexingOpNull;
 import org.ebsdimage.core.exp.ops.indexing.post.IndexingPostOps;
 import org.ebsdimage.core.exp.ops.indexing.pre.IndexingPreOps;
 import org.ebsdimage.core.exp.ops.indexing.results.IndexingResultsOps;
@@ -173,7 +174,7 @@ public class Exp extends Run {
             new ArrayList<IndexingPreOps>();
 
     /** Default indexing operation. */
-    public static final IndexingOp DEFAULT_INDEXING_OP = null;
+    public static final IndexingOp DEFAULT_INDEXING_OP = new IndexingOpNull();
 
     /** Indexing operation. */
     private IndexingOp indexingOp = DEFAULT_INDEXING_OP;
