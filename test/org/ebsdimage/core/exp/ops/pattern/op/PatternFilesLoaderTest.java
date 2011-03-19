@@ -20,7 +20,9 @@ package org.ebsdimage.core.exp.ops.pattern.op;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.math.geometry.Vector3D;
 import org.ebsdimage.TestCase;
+import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.ExpTester;
 import org.junit.Before;
@@ -53,6 +55,12 @@ public class PatternFilesLoaderTest extends TestCase {
         op = new PatternFilesLoader(45, filepath);
 
         exp = ExpTester.createExp();
+
+        // Adjust camera to have same aspect ratio
+        Camera camera =
+                new Camera(new Vector3D(1, 0, 0), new Vector3D(0, -1, 0), 336,
+                        256);
+        exp.mmap.getMicroscope().setCamera(camera);
     }
 
 
