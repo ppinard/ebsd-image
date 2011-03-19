@@ -18,12 +18,12 @@
 package crystallography.io;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
 import crystallography.core.CrystalFactory;
 
@@ -39,13 +39,13 @@ public class CrystalUtilTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        dir = FileUtil.getFile("crystallography/testdata/");
+        dir = getFile("crystallography/testdata/");
     }
 
 
 
     @Test
-    public void testListCrystals() {
+    public void testListCrystals() throws IOException {
         Crystal[] crystals = CrystalUtil.listCrystals(dir);
 
         assertEquals(1, crystals.length);
@@ -55,9 +55,9 @@ public class CrystalUtilTest extends TestCase {
 
 
     @Test
-    public void testListCrystals2() {
+    public void testListCrystals2() throws IOException {
         Crystal[] crystals =
-                CrystalUtil.listCrystals(FileUtil.getTempDirFile());
+                CrystalUtil.listCrystals(getFile("crystallography/io/"));
 
         assertEquals(0, crystals.length);
     }

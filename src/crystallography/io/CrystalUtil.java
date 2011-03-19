@@ -18,14 +18,12 @@
 package crystallography.io;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import ptpshared.util.simplexml.ApacheCommonMathMatcher;
-import ptpshared.util.simplexml.XmlLoader;
 import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
-import crystallography.io.simplexml.SpaceGroupMatcher;
 
 /**
  * Utilities related to <code>Crystal</code>.
@@ -40,8 +38,10 @@ public class CrystalUtil {
      * @param dir
      *            directory to search for crystals
      * @return list of crystals
+     * @throws IOException
+     *             if an error occurs while loading a crystal
      */
-    public static Crystal[] listCrystals(File dir) {
+    public static Crystal[] listCrystals(File dir) throws IOException {
         if (dir == null)
             return new Crystal[0];
 
@@ -50,18 +50,14 @@ public class CrystalUtil {
         File[] crystalFiles = FileUtil.listFilesOnly(dir, "*.xml");
         Arrays.sort(crystalFiles);
 
-        XmlLoader loader = new XmlLoader();
-        loader.matchers.registerMatcher(new ApacheCommonMathMatcher());
-        loader.matchers.registerMatcher(new SpaceGroupMatcher());
+        CrystalLoader loader = new CrystalLoader();
+
+        Crystal crystal;
         for (File crystalFile : crystalFiles) {
-            Crystal crystal;
-
-            try {
-                crystal = loader.load(Crystal.class, crystalFile);
-            } catch (Exception e) {
+            if (!loader.canLoad(crystalFile))
                 continue;
-            }
 
+            crystal = loader.load(crystalFile);
             crystals.add(crystal);
         }
 
