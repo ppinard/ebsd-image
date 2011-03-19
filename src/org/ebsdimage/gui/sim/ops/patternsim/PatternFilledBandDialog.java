@@ -17,7 +17,7 @@
  */
 package org.ebsdimage.gui.sim.ops.patternsim;
 
-import org.ebsdimage.core.exp.ExpOperation;
+import org.ebsdimage.core.sim.SimOperation;
 import org.ebsdimage.core.sim.ops.patternsim.PatternFilledBand;
 
 /**
@@ -31,10 +31,7 @@ public class PatternFilledBandDialog extends PatternSimOpDialog {
      * Creates a new <code>PatternFilledBandDialog</code>.
      */
     public PatternFilledBandDialog() {
-        super("Pattern Filled Band", PatternFilledBand.DEFAULT.width,
-                PatternFilledBand.DEFAULT.height,
-                PatternFilledBand.DEFAULT.maxIndex,
-                PatternFilledBand.DEFAULT.scatterType);
+        super("Pattern Filled Band");
     }
 
 
@@ -55,10 +52,9 @@ public class PatternFilledBandDialog extends PatternSimOpDialog {
 
 
     @Override
-    public ExpOperation getOperation() {
+    public SimOperation getOperation() {
         return new PatternFilledBand(widthField.getValueBFR(),
-                heightField.getValueBFR(), maxIndexfield.getValueBFR(),
-                scatterTypeField.getSelectedItemBFR());
+                heightField.getValueBFR());
     }
 
 }

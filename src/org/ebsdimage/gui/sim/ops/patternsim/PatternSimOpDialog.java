@@ -21,10 +21,8 @@ import net.miginfocom.swing.MigLayout;
 
 import org.ebsdimage.gui.run.ops.OperationDialog;
 
-import rmlshared.gui.ComboBox;
 import rmlshared.gui.IntField;
 import rmlshared.gui.Panel;
-import crystallography.core.ScatteringFactorsEnum;
 
 /**
  * Abstract class common to the pattern simulation operations.
@@ -39,12 +37,6 @@ public abstract class PatternSimOpDialog extends OperationDialog {
     /** Field for the height of the simulated pattern. */
     protected IntField heightField;
 
-    /** Field for the maximum index of the reflectors. */
-    protected IntField maxIndexfield;
-
-    /** Field for the type of scattering factors. */
-    protected ComboBox<ScatteringFactorsEnum> scatterTypeField;
-
 
 
     /**
@@ -52,49 +44,29 @@ public abstract class PatternSimOpDialog extends OperationDialog {
      * 
      * @param title
      *            title of the dialog
-     * @param width
-     *            default width
-     * @param height
-     *            default height
-     * @param maxIndex
-     *            default maximum index of the reflectors to use in the pattern
-     *            simulate
-     * @param scatterType
-     *            default type of scattering factors
      */
-    public PatternSimOpDialog(String title, int width, int height,
-            int maxIndex, ScatteringFactorsEnum scatterType) {
+    public PatternSimOpDialog(String title) {
         super(title);
-
-        widthField = new IntField("Width", width);
-        widthField.setRange(1, Integer.MAX_VALUE);
-
-        heightField = new IntField("Height", height);
-        heightField.setRange(1, Integer.MAX_VALUE);
-
-        maxIndexfield = new IntField("Maximum index", maxIndex);
-        maxIndexfield.setRange(1, Integer.MAX_VALUE);
-
-        scatterTypeField =
-                new ComboBox<ScatteringFactorsEnum>(
-                        ScatteringFactorsEnum.values());
-        scatterTypeField.setSelectedItem(scatterType);
 
         Panel panel = new Panel(new MigLayout());
 
+        // Width
         panel.add("Width of the pattern");
+
+        widthField = new IntField("Width", 400);
+        widthField.setRange(1, Integer.MAX_VALUE);
         panel.add(widthField);
+
         panel.add("px", "align left, wrap");
 
+        // Height
         panel.add("Height of the pattern");
+
+        heightField = new IntField("Height", 400);
+        heightField.setRange(1, Integer.MAX_VALUE);
         panel.add(heightField);
+
         panel.add("px", "align left, wrap");
-
-        panel.add("Maximum index of the reflectors");
-        panel.add(maxIndexfield, "wrap");
-
-        panel.add("Type of scattering factors");
-        panel.add(scatterTypeField, "wrap");
 
         setMainComponent(panel);
     }

@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.gui.sim;
-
-import static rmlshared.io.FileUtil.getURL;
+package org.ebsdimage.gui.sim.wizard;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -25,15 +23,16 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import org.ebsdimage.core.Camera;
-import org.ebsdimage.core.exp.ExpOperation;
-import org.ebsdimage.core.sim.Energy;
+import org.apache.commons.math.geometry.Rotation;
+import org.ebsdimage.core.Microscope;
+import org.ebsdimage.core.run.Operation;
 
 import ptpshared.gui.Wizard;
 import ptpshared.gui.WizardPage;
-import ptpshared.math.old.Quaternion;
 import rmlshared.util.ArrayList;
 import crystallography.core.Crystal;
+import crystallography.core.ScatteringFactorsEnum;
+import static rmlshared.io.FileUtil.getURL;
 
 /**
  * Wizard to setup an experiment.
@@ -44,37 +43,20 @@ public class SimWizard extends Wizard {
 
     /**
      * Creates a new wizard for the experiment.
-     * 
-     * @throws IOException
-     *             if an error occurs
      */
-    public SimWizard() throws IOException {
-        super("Simulation", new WizardPage[] { new StartWizardPage(), 
-                new InfoWizardPage(),
+    public SimWizard() {
+        super("Simulation", new WizardPage[] { new StartWizardPage(),
+                new InfoWizardPage(), new MicroscopeWizardPage(),
                 new PhasesWizardPage(), new ParamsWizardPage() });
 
-        BufferedImage image =
-                ImageIO.read(getURL("org/ebsdimage/gui/sidepanel.png"));
-        setSidePanelBackground(image);
+        try {
+            BufferedImage image =
+                    ImageIO.read(getURL("org/ebsdimage/gui/sidepanel.png"));
+            setSidePanelBackground(image);
+        } catch (IOException e) {
+        }
 
         setPreferredWidth(800);
-    }
-
-
-
-    /**
-     * Returns the cameras of the simulation.
-     * 
-     * @return cameras
-     */
-    public Camera[] getCameras() {
-        Camera[] cameras = (Camera[]) results.get(ParamsWizardPage.KEY_CAMERAS);
-
-        if (cameras == null)
-            throw new NullPointerException(
-                    "Could not get the cameras from wizard.");
-
-        return cameras;
     }
 
 
@@ -92,24 +74,6 @@ public class SimWizard extends Wizard {
                     "Could not get the working directory from wizard.");
 
         return dir;
-    }
-
-
-
-    /**
-     * Returns the energies of the simulation.
-     * 
-     * @return energies
-     */
-    public Energy[] getEnergies() {
-        Energy[] energies =
-                (Energy[]) results.get(ParamsWizardPage.KEY_ENERGIES);
-
-        if (energies == null)
-            throw new NullPointerException(
-                    "Could not get the energies from wizard.");
-
-        return energies;
     }
 
 
@@ -137,13 +101,13 @@ public class SimWizard extends Wizard {
      * 
      * @return operations
      */
-    public ExpOperation[] getOperations() {
-        ArrayList<ExpOperation> ops = new ArrayList<ExpOperation>();
+    public Operation[] getOperations() {
+        ArrayList<Operation> ops = new ArrayList<Operation>();
 
         ops.add(getPatternSimOp());
         ops.addAll(getOutputOps());
 
-        return ops.toArray(new ExpOperation[0]);
+        return ops.toArray(new Operation[0]);
     }
 
 
@@ -153,9 +117,9 @@ public class SimWizard extends Wizard {
      * 
      * @return output operations
      */
-    private ExpOperation[] getOutputOps() {
-        ExpOperation[] ops =
-                (ExpOperation[]) results.get(ParamsWizardPage.KEY_OUTPUT_OPS);
+    private Operation[] getOutputOps() {
+        Operation[] ops =
+                (Operation[]) results.get(ParamsWizardPage.KEY_OUTPUT_OPS);
 
         if (ops == null)
             throw new NullPointerException(
@@ -171,9 +135,9 @@ public class SimWizard extends Wizard {
      * 
      * @return pattern simulation operation
      */
-    private ExpOperation getPatternSimOp() {
-        ExpOperation op =
-                (ExpOperation) results.get(ParamsWizardPage.KEY_PATTERNSIMOP);
+    private Operation getPatternSimOp() {
+        Operation op =
+                (Operation) results.get(ParamsWizardPage.KEY_PATTERNSIMOP);
 
         if (op == null)
             throw new NullPointerException(
@@ -203,13 +167,66 @@ public class SimWizard extends Wizard {
 
 
     /**
+     * Returns the microscope of the simulation.
+     * 
+     * @return microscope
+     */
+    public Microscope getMicroscope() {
+        Microscope microscope =
+                (Microscope) results.get(MicroscopeWizardPage.KEY_MICROSCOPE);
+
+        if (microscope == null)
+            throw new NullPointerException(
+                    "Could not get the microscope from wizard.");
+
+        return microscope;
+    }
+
+
+
+    /**
+     * Returns the scattering factors.
+     * 
+     * @return scattering factors
+     */
+    public ScatteringFactorsEnum getScattringFactors() {
+        ScatteringFactorsEnum scatteringFactors =
+                (ScatteringFactorsEnum) results.get(ParamsWizardPage.KEY_SCATTERINGFACTORS);
+
+        if (scatteringFactors == null)
+            throw new NullPointerException(
+                    "Could not get the scattering factors from wizard.");
+
+        return scatteringFactors;
+    }
+
+
+
+    /**
+     * Returns the maximum index of the planes to simulate.
+     * 
+     * @return maximum index
+     */
+    public int getMaxIndex() {
+        Integer maxIndex = (Integer) results.get(ParamsWizardPage.KEY_MAXINDEX);
+
+        if (maxIndex == null)
+            throw new NullPointerException(
+                    "Could not get the maximum index from wizard.");
+
+        return maxIndex;
+    }
+
+
+
+    /**
      * Returns the rotations of the simulation.
      * 
      * @return rotations
      */
-    public Quaternion[] getRotations() {
-        Quaternion[] rotations =
-                (Quaternion[]) results.get(ParamsWizardPage.KEY_ROTATIONS);
+    public Rotation[] getRotations() {
+        Rotation[] rotations =
+                (Rotation[]) results.get(ParamsWizardPage.KEY_ROTATIONS);
 
         if (rotations == null)
             throw new NullPointerException(

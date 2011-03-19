@@ -21,17 +21,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import org.ebsdimage.core.Camera;
+import org.apache.commons.math.geometry.Rotation;
+import org.ebsdimage.core.Microscope;
 import org.ebsdimage.core.run.Operation;
-import org.ebsdimage.core.sim.Energy;
-import org.ebsdimage.gui.sim.SimWizard;
+import org.ebsdimage.core.sim.SimMetadata;
+import org.ebsdimage.gui.sim.wizard.SimWizard;
+import org.ebsdimage.io.sim.SimMMapSaver;
 import org.ebsdimage.io.sim.SimSaver;
 
-import ptpshared.core.math.Quaternion;
-import ptpshared.utility.LoggerUtil;
+import ptpshared.util.LoggerUtil;
 import rmlimage.plugin.PlugIn;
 import rmlshared.ui.Monitorable;
 import crystallography.core.Crystal;
+import crystallography.core.ScatteringFactorsEnum;
 
 /**
  * Plug-in for the simulation engine.
@@ -50,11 +52,8 @@ public class Sim extends PlugIn implements Monitorable {
 
     /**
      * Creates a new <code>Sim</code> plug-in.
-     * 
-     * @throws IOException
-     *             if an error occurs while creating the wizard
      */
-    public Sim() throws IOException {
+    public Sim() {
         setInterruptable(true);
 
         sim = null;
@@ -114,19 +113,20 @@ public class Sim extends PlugIn implements Monitorable {
      *            simulation engine wizard dialog
      */
     private void createSim(SimWizard wizard) {
-        Operation[] ops = wizard.getOperations();
-        Camera[] cameras = wizard.getCameras();
-        Energy[] energies = wizard.getEnergies();
-        Quaternion[] rotations = wizard.getRotations();
-        Crystal[] phases = wizard.getPhases();
-        String name = wizard.getName();
-        File dir = wizard.getDir();
+        Microscope microscope = wizard.getMicroscope();
+        ScatteringFactorsEnum scatteringFactors = wizard.getScattringFactors();
+        int maxIndex = wizard.getMaxIndex();
 
-        sim =
-                new org.ebsdimage.core.sim.Sim(ops, cameras, phases, energies,
-                        rotations);
-        sim.setName(name);
-        sim.setDir(dir);
+        SimMetadata metadata =
+                new SimMetadata(microscope, scatteringFactors, maxIndex);
+
+        Operation[] ops = wizard.getOperations();
+        Rotation[] rotations = wizard.getRotations();
+        Crystal[] phases = wizard.getPhases();
+
+        sim = new org.ebsdimage.core.sim.Sim(metadata, ops, phases, rotations);
+        sim.setName(wizard.getName());
+        sim.setDir(wizard.getDir());
     }
 
 
@@ -147,5 +147,9 @@ public class Sim extends PlugIn implements Monitorable {
         LoggerUtil.turnOffLogger(Logger.getLogger("ebsd"));
 
         sim.run();
+
+        // Saves multimap
+        File file = new File(sim.getDir(), sim.getName() + ".zip");
+        new SimMMapSaver().save(sim.mmap, file);
     }
 }

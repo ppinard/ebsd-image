@@ -17,7 +17,7 @@
  */
 package org.ebsdimage.gui.sim.ops.output;
 
-import org.ebsdimage.core.exp.ExpOperation;
+import org.ebsdimage.core.sim.SimOperation;
 import org.ebsdimage.core.sim.ops.output.BmpFile;
 import org.ebsdimage.gui.run.ops.OperationCreator;
 
@@ -37,13 +37,13 @@ public class BmpFileCreator implements OperationCreator {
 
     @Override
     public String toString() {
-        return "Bmp File";
+        return "BMP File";
     }
 
 
 
     @Override
-    public ExpOperation getOperation() {
+    public SimOperation getOperation() {
         return new BmpFile();
     }
 

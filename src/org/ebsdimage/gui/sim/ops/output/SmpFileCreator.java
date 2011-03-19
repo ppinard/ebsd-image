@@ -17,8 +17,8 @@
  */
 package org.ebsdimage.gui.sim.ops.output;
 
-import org.ebsdimage.core.exp.ExpOperation;
-import org.ebsdimage.core.sim.ops.output.ExpMMapSmpFile;
+import org.ebsdimage.core.sim.SimOperation;
+import org.ebsdimage.core.sim.ops.output.SmpFile;
 import org.ebsdimage.gui.run.ops.OperationCreator;
 
 /**
@@ -26,26 +26,25 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
  * 
  * @author Philippe T. Pinard
  */
-public class ExpMMapSmpFileCreator implements OperationCreator {
+public class SmpFileCreator implements OperationCreator {
 
     @Override
     public String getDescription() {
-        return "Saves all simulated patterns in a SMP file and the "
-                + "parameters in a multimap.";
+        return "Saves all simulated patterns in a SMP file.";
     }
 
 
 
     @Override
     public String toString() {
-        return "ExpMMap and SMP File";
+        return "SMP File";
     }
 
 
 
     @Override
-    public ExpOperation getOperation() {
-        return new ExpMMapSmpFile();
+    public SimOperation getOperation() {
+        return new SmpFile();
     }
 
 

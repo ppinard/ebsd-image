@@ -17,7 +17,7 @@
  */
 package org.ebsdimage.gui.sim.ops.patternsim;
 
-import org.ebsdimage.core.exp.ExpOperation;
+import org.ebsdimage.core.sim.SimOperation;
 import org.ebsdimage.core.sim.ops.patternsim.PatternBandEdges;
 
 /**
@@ -31,10 +31,7 @@ public class PatternBandEdgesDialog extends PatternSimOpDialog {
      * Creates a new <code>PatternBandEdgesDialog</code>.
      */
     public PatternBandEdgesDialog() {
-        super("Pattern Band Edges", PatternBandEdges.DEFAULT.width,
-                PatternBandEdges.DEFAULT.height,
-                PatternBandEdges.DEFAULT.maxIndex,
-                PatternBandEdges.DEFAULT.scatterType);
+        super("Pattern Band Edges");
     }
 
 
@@ -54,10 +51,9 @@ public class PatternBandEdgesDialog extends PatternSimOpDialog {
 
 
     @Override
-    public ExpOperation getOperation() {
+    public SimOperation getOperation() {
         return new PatternBandEdges(widthField.getValueBFR(),
-                heightField.getValueBFR(), maxIndexfield.getValueBFR(),
-                scatterTypeField.getSelectedItemBFR());
+                heightField.getValueBFR());
     }
 
 }

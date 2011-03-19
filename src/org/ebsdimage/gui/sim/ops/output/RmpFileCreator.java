@@ -17,7 +17,7 @@
  */
 package org.ebsdimage.gui.sim.ops.output;
 
-import org.ebsdimage.core.exp.ExpOperation;
+import org.ebsdimage.core.sim.SimOperation;
 import org.ebsdimage.core.sim.ops.output.RmpFile;
 import org.ebsdimage.gui.run.ops.OperationCreator;
 
@@ -43,7 +43,7 @@ public class RmpFileCreator implements OperationCreator {
 
 
     @Override
-    public ExpOperation getOperation() {
+    public SimOperation getOperation() {
         return new RmpFile();
     }
 

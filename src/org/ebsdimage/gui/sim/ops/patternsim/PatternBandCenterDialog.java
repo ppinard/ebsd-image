@@ -17,7 +17,7 @@
  */
 package org.ebsdimage.gui.sim.ops.patternsim;
 
-import org.ebsdimage.core.exp.ExpOperation;
+import org.ebsdimage.core.sim.SimOperation;
 import org.ebsdimage.core.sim.ops.patternsim.PatternBandCenter;
 
 /**
@@ -31,10 +31,7 @@ public class PatternBandCenterDialog extends PatternSimOpDialog {
      * Creates a new <code>PatternBandCenterDialog</code>.
      */
     public PatternBandCenterDialog() {
-        super("Pattern Band Center", PatternBandCenter.DEFAULT.width,
-                PatternBandCenter.DEFAULT.height,
-                PatternBandCenter.DEFAULT.maxIndex,
-                PatternBandCenter.DEFAULT.scatterType);
+        super("Pattern Band Center");
     }
 
 
@@ -54,10 +51,9 @@ public class PatternBandCenterDialog extends PatternSimOpDialog {
 
 
     @Override
-    public ExpOperation getOperation() {
+    public SimOperation getOperation() {
         return new PatternBandCenter(widthField.getValueBFR(),
-                heightField.getValueBFR(), maxIndexfield.getValueBFR(),
-                scatterTypeField.getSelectedItemBFR());
+                heightField.getValueBFR());
     }
 
 }
