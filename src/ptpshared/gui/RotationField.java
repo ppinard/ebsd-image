@@ -65,18 +65,21 @@ public class RotationField extends JComponent implements PreferenceKeeping,
                 new DoubleField(name + "-theta1", Math.toDegrees(eulers[0]));
         theta1Field.setRange(0, 360);
         add(theta1Field, "gapleft 2");
+        add(new JLabel("\u00b0"));
 
         add(new JLabel("\u03b2"));
         theta2Field =
                 new DoubleField(name + "-theta2", Math.toDegrees(eulers[1]));
         theta2Field.setRange(0, 180);
-        add(theta2Field, "gapleft 2");
+        add(theta2Field);
+        add(new JLabel("\u00b0"), "gapleft 2");
 
         add(new JLabel("\u03b3"));
         theta3Field =
                 new DoubleField(name + "-theta3", Math.toDegrees(eulers[2]));
         theta3Field.setRange(0, 360);
-        add(theta3Field, "gapleft 2");
+        add(theta3Field);
+        add(new JLabel("\u00b0"), "gapleft 2");
     }
 
 
