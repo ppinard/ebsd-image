@@ -89,7 +89,7 @@ public class RotationUtils {
         double c = cos(2 * PI * r2) / sqrt(1 - r3);
         double d = sin(2 * PI * r1) / sqrt(r3);
 
-        return new Rotation(a, b, c, d, false);
+        return new Rotation(a, b, c, d, true);
     }
 
 
