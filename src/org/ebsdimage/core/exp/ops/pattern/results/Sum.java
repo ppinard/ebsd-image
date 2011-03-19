@@ -35,7 +35,7 @@ import rmlimage.module.real.core.RealMap;
 public class Sum extends PatternResultsOps {
 
     /** Default operation. */
-    public static final Sum DEFAULT = new Sum(0.0, 1.0, 0.0, 1.0);
+    public static final Sum DEFAULT = new Sum(0.0, 0.0, 1.0, 1.0);
 
     /** Lower x limit as a fraction of the image width. */
     @Attribute(name = "xmin")
@@ -88,16 +88,16 @@ public class Sum extends PatternResultsOps {
             throw new IllegalArgumentException(
                     "Upper y limit must be between [0,1].");
 
-        if (xmin > xmax)
+        if (xmin >= xmax)
             throw new IllegalArgumentException(
                     "Lower x limit cannot be greater than the upper x limit.");
-        if (ymin > ymax)
+        if (ymin >= ymax)
             throw new IllegalArgumentException(
                     "Lower y limit cannot be greater than the upper y limit.");
 
         this.xmin = xmin;
-        this.xmax = xmax;
         this.ymin = ymin;
+        this.xmax = xmax;
         this.ymax = ymax;
     }
 
@@ -132,15 +132,18 @@ public class Sum extends PatternResultsOps {
      * 
      * @param map
      *            diffraction pattern
-     * @return a result named "AverageRegion"
+     * @return sum
      */
     protected double calculateSum(ByteMap map) {
         int width = map.width;
         int height = map.height;
 
-        ROI roi =
-                new ROI((int) (xmin * width), (int) (ymin * height),
-                        (int) (xmax * width) - 1, (int) (ymax * height) - 1);
+        int x1 = (int) (xmin * width);
+        int y1 = (int) (ymin * height);
+        int x2 = (int) (xmax * (width - 1));
+        int y2 = (int) (ymax * (height - 1));
+
+        ROI roi = new ROI(x1, y1, x2, y2);
 
         return MapStats.sum(map, roi);
     }

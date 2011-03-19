@@ -63,7 +63,7 @@ public class SumTest extends TestCase {
     @Test
     public void testCalculateByteMap() {
         double value = op.calculateSum(patternMap);
-        assertEquals(801235, value, 1e-6);
+        assertEquals(811594.0, value, 1e-6);
     }
 
 
