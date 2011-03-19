@@ -19,11 +19,9 @@ package org.ebsdimage.gui.exp.wizard;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.gui.run.ops.MultipleChoicePanel;
 
 import ptpshared.gui.WizardPage;
-import rmlshared.util.ArrayList;
 import rmlshared.util.Preferences;
 import static ptpshared.io.FileUtil.joinPackageNames;
 
@@ -110,24 +108,6 @@ public class OperationWizardPage extends WizardPage {
      */
     public OperationWizardPage(String opsDialogPackage) {
         this(opsDialogPackage, true, true, true, true);
-    }
-
-
-
-    /**
-     * Returns the list of <code>Operation</code>s chosen by the user.
-     * 
-     * @return array of <code>Operation</code>s
-     */
-    public ExpOperation[] getOperations() {
-        ArrayList<ExpOperation> ops = new ArrayList<ExpOperation>();
-
-        ops.addAll(prePanel.getOperations());
-        ops.addAll(opPanel.getOperations());
-        ops.addAll(postPanel.getOperations());
-        ops.addAll(resultsPanel.getOperations());
-
-        return ops.toArray(new ExpOperation[0]);
     }
 
 

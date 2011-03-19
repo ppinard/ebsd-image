@@ -22,6 +22,7 @@ import javax.swing.DefaultListModel;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.ExpConstants;
 import org.ebsdimage.core.exp.ExpOperation;
+import org.ebsdimage.core.run.Operation;
 
 /**
  * Wizard page for the detection operations.
@@ -119,7 +120,7 @@ public class IdentificationWizardPage extends OperationWizardPage {
             return false;
 
         int previousOpCount =
-                ((ExpOperation[]) get(DetectionWizardPage.KEY_DETECTION_OP)).length;
+                ((Operation[]) get(DetectionWizardPage.KEY_DETECTION_OP)).length;
         int preCount = (prePanel.getUserListModel()).size();
         int opCount = (opPanel.getUserListModel()).size();
         int postCount = (postPanel.getUserListModel()).size();

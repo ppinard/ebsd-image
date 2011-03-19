@@ -55,33 +55,41 @@ public class SumDialog extends OperationDialog {
     public SumDialog() {
         super("Sum");
 
+        Panel panel = new ColumnPanel(3);
+
+        // xmin
+        panel.add(new JLabel("Lower x limit"));
+
         xminField = new DoubleField("Lower x limit", Sum.DEFAULT.xmin * 100.0);
         xminField.setRange(0.0, 100.0);
+
+        panel.add(xminField);
+        panel.add(new JLabel("% of the pattern's width"));
+
+        // ymin
+        panel.add(new JLabel("Lower y limit"));
 
         yminField = new DoubleField("Lower y limit", Sum.DEFAULT.ymin * 100.0);
         yminField.setRange(0.0, 100.0);
 
+        panel.add(yminField);
+        panel.add(new JLabel("% of the pattern's height"));
+
+        // xmax
+        panel.add(new JLabel("Upper x limit"));
+
         xmaxField = new DoubleField("Upper x limit", Sum.DEFAULT.xmax * 100.0);
         xmaxField.setRange(0.0, 100.0);
+
+        panel.add(xmaxField);
+        panel.add(new JLabel("% of the pattern's width"));
+
+        // ymax
+        panel.add(new JLabel("Upper y limit"));
 
         ymaxField = new DoubleField("Upper y limit", Sum.DEFAULT.ymax * 100.0);
         ymaxField.setRange(0.0, 100.0);
 
-        Panel panel = new ColumnPanel(3);
-
-        panel.add(new JLabel("Lower x limit"));
-        panel.add(xminField);
-        panel.add(new JLabel("% of the pattern's width"));
-
-        panel.add(new JLabel("Lower y limit"));
-        panel.add(yminField);
-        panel.add(new JLabel("% of the pattern's height"));
-
-        panel.add(new JLabel("Upper x limit"));
-        panel.add(xmaxField);
-        panel.add(new JLabel("% of the pattern's width"));
-
-        panel.add(new JLabel("Upper y limit"));
         panel.add(ymaxField);
         panel.add(new JLabel("% of the pattern's height"));
 
@@ -95,12 +103,12 @@ public class SumDialog extends OperationDialog {
         if (!super.isCorrect())
             return false;
 
-        if (xminField.getValue() > xmaxField.getValue()) {
+        if (xminField.getValue() >= xmaxField.getValue()) {
             ErrorDialog.show("Lower x limit cannot be greater than the upper x limit.");
             return false;
         }
 
-        if (yminField.getValue() > ymaxField.getValue()) {
+        if (yminField.getValue() >= ymaxField.getValue()) {
             ErrorDialog.show("Lower y limit cannot be greater than the upper y limit.");
             return false;
         }

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.gui.exp.wizard;
+package org.ebsdimage.gui;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -23,48 +23,31 @@ import javax.swing.JLabel;
 import magnitude.core.Magnitude;
 import net.miginfocom.swing.MigLayout;
 
-import org.ebsdimage.core.EbsdMMap;
-import org.ebsdimage.core.EbsdMetadata;
 import org.ebsdimage.core.Microscope;
 import org.ebsdimage.io.MicroscopeUtil;
 
 import ptpshared.gui.CalibratedDoubleField;
 import ptpshared.gui.RotationField;
 import ptpshared.gui.WizardPage;
-import rmlimage.core.Calibration;
 import rmlshared.gui.ComboBox;
 import rmlshared.gui.DoubleField;
 import rmlshared.gui.Panel;
 
 /**
- * Template for the acquisition metadata wizard page.
+ * Template for the microscope wizard page.
  * 
  * @author Philippe T. Pinard
  */
-public class AcqMetadataWizardPage extends WizardPage {
-
-    /** Map key for the calibration. */
-    public static final String KEY_CALIBRATION = "calibration";
+public class MicroscopeWizardPage extends WizardPage {
 
     /** Map key for the metadata. */
-    public static final String KEY_METADATA = "metadata";
+    public static final String KEY_MICROSCOPE = "microscope";
 
     /**
      * Map key to store if the data has been previously loaded. It prevents
      * loading the temporary metadata twice.
      */
-    public static final String KEY_LOADED = "metadata.loaded";
-
-
-
-    /**
-     * Returns a description of this step.
-     * 
-     * @return description
-     */
-    public static String getDescription() {
-        return "Acquisition Metadata";
-    }
+    public static final String KEY_LOADED = "microscope.loaded";
 
     /** Combo box to select the microscope configuration. */
     private ComboBox<Microscope> microscopesCBox;
@@ -77,12 +60,6 @@ public class AcqMetadataWizardPage extends WizardPage {
 
     /** Working distance field. */
     private CalibratedDoubleField wdField;
-
-    /** Horizontal step size field. */
-    private CalibratedDoubleField dxField;
-
-    /** Vertical step size field. */
-    private CalibratedDoubleField dyField;
 
     /** Sample tilt field. */
     private CalibratedDoubleField tiltField;
@@ -105,7 +82,7 @@ public class AcqMetadataWizardPage extends WizardPage {
      * Creates a new <code>AcqMetadataWizardPage</code>. This page is to setup
      * all the EBSD metadata.
      */
-    public AcqMetadataWizardPage() {
+    public MicroscopeWizardPage() {
         setLayout(new MigLayout());
 
         Microscope defaultMicroscope = new Microscope();
@@ -121,7 +98,7 @@ public class AcqMetadataWizardPage extends WizardPage {
                     "At least one microscope configuration must exist.");
 
         microscopesCBox = new ComboBox<Microscope>(microscopes);
-        microscopePanel.add(microscopesCBox, "grow, push, wrap");
+        microscopePanel.add(microscopesCBox, "growx, pushx, wrap");
 
         add(microscopePanel, "grow, push, wrap");
 
@@ -170,34 +147,6 @@ public class AcqMetadataWizardPage extends WizardPage {
         columnPanel.add(wdField.getUnitsField(), "wrap");
 
         add(columnPanel, "grow, push, wrap");
-
-        /* Step size */
-        Panel stepSizePanel = new Panel(new MigLayout());
-        stepSizePanel.setName("Step size");
-        stepSizePanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder("Step size"),
-                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-
-        units = new String[] { "nm", "um", "mm" };
-        defaultValue = new Magnitude(1, "um");
-        Magnitude min = new Magnitude(1, "nm");
-        Magnitude max = new Magnitude(1, "cm");
-
-        // Horizontal
-        stepSizePanel.add(new JLabel("\u0394x"));
-
-        dxField = new CalibratedDoubleField("dx", defaultValue, units);
-        dxField.setRange(min, max);
-        stepSizePanel.add(dxField);
-
-        // Vertical
-        stepSizePanel.add(new JLabel("\u0394y"), "gapleft 30");
-
-        dyField = new CalibratedDoubleField("dy", defaultValue, units);
-        dyField.setRange(min, max);
-        stepSizePanel.add(dyField);
-
-        add(stepSizePanel, "grow, push, wrap");
 
         /* Sample */
         Panel samplePanel = new Panel(new MigLayout());
@@ -276,26 +225,13 @@ public class AcqMetadataWizardPage extends WizardPage {
 
 
     /**
-     * Returns the calibration of the EBSD multimap constructed from this page.
-     * The method {@link #isCorrect()} should be called prior to this method to
-     * make sure all the data is correct.
-     * 
-     * @return a <code>Calibration</code>
-     */
-    public Calibration getCalibration() {
-        return new Calibration(dxField.getValue(), dyField.getValue());
-    }
-
-
-
-    /**
      * Returns the metadata constructed from this page. The method
      * {@link #isCorrect()} should be called prior to this method to make sure
      * all the data is correct.
      * 
      * @return a <code>EbsdMetadata</code>
      */
-    public EbsdMetadata getMetadata() {
+    private Microscope getMicroscope() {
         Microscope microscope = microscopesCBox.getSelectedItem();
 
         microscope.setBeamEnergy(energyField.getValue());
@@ -309,7 +245,7 @@ public class AcqMetadataWizardPage extends WizardPage {
         microscope.setPatternCenterY(pcYField.getValue() / 100.0);
         microscope.setCameraDistance(ddField.getValue());
 
-        return new EbsdMetadata(microscope);
+        return microscope;
     }
 
 
@@ -321,11 +257,6 @@ public class AcqMetadataWizardPage extends WizardPage {
         if (!magField.isCorrect())
             return false;
         if (!wdField.isCorrect())
-            return false;
-
-        if (!dxField.isCorrect())
-            return false;
-        if (!dyField.isCorrect())
             return false;
 
         if (!tiltField.isCorrect())
@@ -340,64 +271,48 @@ public class AcqMetadataWizardPage extends WizardPage {
         if (!ddField.isCorrect())
             return false;
 
-        EbsdMetadata metadata;
+        Microscope microscope;
         try {
-            metadata = getMetadata();
+            microscope = getMicroscope();
         } catch (Exception ex) {
             showErrorDialog(ex.getMessage());
             return false;
         }
 
-        Calibration calibration;
-        try {
-            calibration = getCalibration();
-        } catch (Exception ex) {
-            showErrorDialog(ex.getMessage());
-            return false;
-        }
-
-        if (buffer) {
-            put(KEY_METADATA, metadata);
-            put(KEY_CALIBRATION, calibration);
-        }
+        if (buffer)
+            put(KEY_MICROSCOPE, microscope);
 
         return true;
     }
 
 
 
-    @Override
-    protected void renderingPage() {
-        super.renderingPage();
-
-        EbsdMMap mmap = (EbsdMMap) get(StartWizardPage.KEY_TEMP_EBSDMMAP);
-
-        if (mmap == null)
-            return;
-
-        EbsdMetadata metadata = mmap.getMetadata();
-        Microscope microscope = metadata.microscope;
-        Calibration calibration = mmap.getCalibration();
-
-        if (get(KEY_LOADED) != null)
-            if ((Integer) get(KEY_LOADED) > 0)
-                return;
-
-        energyField.setValue(new Magnitude(microscope.getBeamEnergy(), "ev"));
+    /**
+     * Render the page by filling the fields with the values from the specified
+     * microscope.
+     * 
+     * @param microscope
+     *            microscope configuration
+     */
+    protected void renderingPage(Microscope microscope) {
+        energyField.setValue(new Magnitude(microscope.getBeamEnergy(), "eV"));
         magField.setValue(microscope.getMagnification());
-        wdField.setValue(new Magnitude(microscope.getWorkingDistance(), "m"));
 
-        dxField.setValue(calibration.getDX());
-        dyField.setValue(calibration.getDY());
+        Magnitude wd = new Magnitude(microscope.getWorkingDistance(), "m");
+        wd.setPreferredUnits("mm");
+        wdField.setValue(wd);
 
-        tiltField.setValue(new Magnitude(microscope.getTiltAngle(), "rad"));
+        Magnitude tiltAngle = new Magnitude(microscope.getTiltAngle(), "rad");
+        tiltAngle.setPreferredUnits("deg");
+        tiltField.setValue(tiltAngle);
         sampleRotationField.setValue(microscope.getSampleRotation());
 
         pcXField.setValue(microscope.getPatternCenterX() * 100.0);
         pcYField.setValue(microscope.getPatternCenterY() * 100.0);
-        ddField.setValue(new Magnitude(microscope.getCameraDistance(), "m"));
 
-        put(KEY_LOADED, 1);
+        Magnitude dd = new Magnitude(microscope.getCameraDistance(), "m");
+        dd.setPreferredUnits("cm");
+        ddField.setValue(dd);
     }
 
 }

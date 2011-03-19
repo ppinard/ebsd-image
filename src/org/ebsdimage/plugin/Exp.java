@@ -25,6 +25,7 @@ import javax.swing.JLabel;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.ebsdimage.core.EbsdMetadata;
 import org.ebsdimage.core.exp.ExpMMap;
 import org.ebsdimage.gui.exp.MapsGUIListener;
 import org.ebsdimage.gui.exp.wizard.ExpWizard;
@@ -104,7 +105,10 @@ public class Exp extends PlugIn implements Monitorable {
      */
     private void createExp(ExpWizard wizard) {
         ExpMMap mmap = new ExpMMap(wizard.getWidth(), wizard.getHeight());
-        mmap.setMetadata(wizard.getMetadata());
+
+        EbsdMetadata metadata = new EbsdMetadata(wizard.getMicroscope());
+        mmap.setMetadata(metadata);
+
         mmap.setCalibration(wizard.getCalibration());
 
         for (Crystal crystal : wizard.getPhases())
@@ -125,7 +129,22 @@ public class Exp extends PlugIn implements Monitorable {
      *            engine wizard dialog
      */
     private void createExpPreview(ExpWizard wizard) {
-        createExp(wizard);
+        ExpMMap mmap = new ExpMMap(wizard.getWidth(), wizard.getHeight());
+
+        EbsdMetadata metadata = new EbsdMetadata(wizard.getMicroscope());
+        mmap.setMetadata(metadata);
+
+        mmap.setCalibration(wizard.getCalibration());
+
+        for (Crystal crystal : wizard.getPhases())
+            mmap.getPhaseMap().register(crystal);
+
+        exp =
+                new org.ebsdimage.core.exp.Exp(mmap,
+                        wizard.getPreviewOperations());
+        exp.setName(wizard.getName());
+        exp.setDir(wizard.getDir());
+
         exp.addExpListener(new MapsGUIListener());
     }
 

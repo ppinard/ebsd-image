@@ -25,12 +25,12 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
-import org.ebsdimage.core.EbsdMetadata;
-import org.ebsdimage.core.exp.ExpOperation;
+import org.ebsdimage.core.Microscope;
 import org.ebsdimage.core.exp.ExpUtil;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternFilesLoader;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternSmpLoader;
+import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.gui.PhasesWizardPage;
 
 import ptpshared.gui.Wizard;
@@ -53,7 +53,7 @@ public class ExpWizard extends Wizard {
      */
     public ExpWizard() {
         super("Experiment", new WizardPage[] { new StartWizardPage(),
-                new InfoWizardPage(), new AcqMetadataWizardPage(),
+                new InfoWizardPage(), new MicroscopeWizardPage(),
                 new PhasesWizardPage(), new PatternsWizardPage(),
                 new PatternWizardPage(), new HoughWizardPage(),
                 new DetectionWizardPage(), new IdentificationWizardPage(),
@@ -80,8 +80,8 @@ public class ExpWizard extends Wizard {
      * @param key
      *            key in the <code>results</code> for the operations to add
      */
-    private void addOps(ArrayList<ExpOperation> ops, String key) {
-        ExpOperation[] tmpOps = (ExpOperation[]) results.get(key);
+    private void addOps(ArrayList<Operation> ops, String key) {
+        Operation[] tmpOps = (Operation[]) results.get(key);
         if (tmpOps != null)
             ops.addAll(Arrays.asList(tmpOps));
     }
@@ -129,7 +129,7 @@ public class ExpWizard extends Wizard {
      */
     public Calibration getCalibration() {
         Calibration calibration =
-                (Calibration) results.get(AcqMetadataWizardPage.KEY_CALIBRATION);
+                (Calibration) results.get(PatternsWizardPage.KEY_CALIBRATION);
 
         if (calibration == null)
             throw new NullPointerException(
@@ -141,19 +141,19 @@ public class ExpWizard extends Wizard {
 
 
     /**
-     * Returns the metadata of the experiment.
+     * Returns the microscope of the experiment.
      * 
-     * @return metadata
+     * @return microscope
      */
-    public EbsdMetadata getMetadata() {
-        EbsdMetadata metadata =
-                (EbsdMetadata) results.get(AcqMetadataWizardPage.KEY_METADATA);
+    public Microscope getMicroscope() {
+        Microscope microscope =
+                (Microscope) results.get(MicroscopeWizardPage.KEY_MICROSCOPE);
 
-        if (metadata == null)
+        if (microscope == null)
             throw new NullPointerException(
-                    "Could not get the metadata from wizard.");
+                    "Could not get the Microscope from wizard.");
 
-        return metadata;
+        return microscope;
     }
 
 
@@ -180,8 +180,8 @@ public class ExpWizard extends Wizard {
      * 
      * @return operations
      */
-    public ExpOperation[] getOperations() {
-        ArrayList<ExpOperation> ops = new ArrayList<ExpOperation>();
+    public Operation[] getOperations() {
+        ArrayList<Operation> ops = new ArrayList<Operation>();
 
         // Pattern
         PatternOp patternOp = getPatternOperation();
@@ -191,7 +191,7 @@ public class ExpWizard extends Wizard {
         // Other operations
         ops.addAll(Arrays.asList(getOperationsExceptPatternOps()));
 
-        return ops.toArray(new ExpOperation[ops.size()]);
+        return ops.toArray(new Operation[ops.size()]);
     }
 
 
@@ -202,8 +202,8 @@ public class ExpWizard extends Wizard {
      * 
      * @return operations
      */
-    private ExpOperation[] getOperationsExceptPatternOps() {
-        ArrayList<ExpOperation> ops = new ArrayList<ExpOperation>();
+    private Operation[] getOperationsExceptPatternOps() {
+        ArrayList<Operation> ops = new ArrayList<Operation>();
 
         // Pattern
         addOps(ops, PatternWizardPage.KEY_PATTERN_POST);
@@ -233,7 +233,7 @@ public class ExpWizard extends Wizard {
         addOps(ops, IndexingWizardPage.KEY_INDEXING_POST);
         addOps(ops, IndexingWizardPage.KEY_INDEXING_RESULTS);
 
-        return ops.toArray(new ExpOperation[ops.size()]);
+        return ops.toArray(new Operation[ops.size()]);
     }
 
 
@@ -308,8 +308,8 @@ public class ExpWizard extends Wizard {
      * 
      * @return operations
      */
-    public ExpOperation[] getPreviewOperations() {
-        ArrayList<ExpOperation> ops = new ArrayList<ExpOperation>();
+    public Operation[] getPreviewOperations() {
+        ArrayList<Operation> ops = new ArrayList<Operation>();
 
         // Pattern
         ops.addAll(Arrays.asList(getPreviewPatternOperation()));
@@ -317,7 +317,7 @@ public class ExpWizard extends Wizard {
         // Other operations
         ops.addAll(Arrays.asList(getOperationsExceptPatternOps()));
 
-        return ops.toArray(new ExpOperation[ops.size()]);
+        return ops.toArray(new Operation[ops.size()]);
     }
 
 

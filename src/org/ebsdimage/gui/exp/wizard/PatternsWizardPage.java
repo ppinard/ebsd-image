@@ -21,20 +21,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import magnitude.core.Magnitude;
 import net.miginfocom.swing.MigLayout;
 
 import org.ebsdimage.core.EbsdMMap;
 
+import ptpshared.gui.CalibratedDoubleField;
 import ptpshared.gui.DirBrowserField;
 import ptpshared.gui.SingleFileBrowserField;
 import ptpshared.gui.WizardPage;
+import rmlimage.core.Calibration;
 import rmlshared.gui.IntField;
 import rmlshared.gui.RadioButton;
+import rmlshared.ui.InputValidation;
 import rmlshared.util.Preferences;
 
 /**
@@ -43,6 +49,180 @@ import rmlshared.util.Preferences;
  * @author Philippe T. Pinard
  */
 public class PatternsWizardPage extends WizardPage {
+
+    /**
+     * Panel to define the width, height and calibration of a mapping.
+     * 
+     * @author ppinard
+     */
+    private class MappingPanel extends JPanel implements InputValidation {
+
+        /** Field for the width of the map. */
+        private IntField widthField;
+
+        /** Field for the height of the map. */
+        private IntField heightField;
+
+        /** Horizontal step size field. */
+        private CalibratedDoubleField dxField;
+
+        /** Vertical step size field. */
+        private CalibratedDoubleField dyField;
+
+
+
+        /**
+         * Creates a new <code>MappingPanel</code>.
+         * 
+         * @param name
+         *            name of the component
+         * @param title
+         *            title to appear on top of the panel
+         */
+        public MappingPanel(String name, String title) {
+            setLayout(new MigLayout());
+            setName(name);
+            setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createTitledBorder(title),
+                    BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+
+            /* Dimensions */
+            // Width
+            add(new JLabel("width"));
+
+            widthField = new IntField("width", 512);
+            widthField.setRange(1, Integer.MAX_VALUE);
+            add(widthField);
+
+            add(new JLabel("px"));
+
+            // Height
+            add(new JLabel("height"));
+            heightField = new IntField("height", 512);
+            heightField.setRange(1, Integer.MAX_VALUE);
+            add(heightField);
+
+            add(new JLabel("px"), "wrap");
+
+            /* Step size */
+            String[] units = new String[] { "nm", "um", "mm" };
+            Magnitude defaultValue = new Magnitude(1, "um");
+            Magnitude min = new Magnitude(1, "nm");
+            Magnitude max = new Magnitude(1, "cm");
+
+            // Horizontal
+            add(new JLabel("\u0394x"));
+
+            dxField =
+                    new CalibratedDoubleField("dx", defaultValue, units, false);
+            dxField.setRange(min, max);
+            add(dxField);
+
+            add(dxField.getUnitsField());
+
+            // Vertical
+            add(new JLabel("\u0394y"), "gapleft 30");
+
+            dyField =
+                    new CalibratedDoubleField("dy", defaultValue, units, false);
+            dyField.setRange(min, max);
+            add(dyField);
+
+            add(dyField.getUnitsField());
+        }
+
+
+
+        /**
+         * Returns the calibration of the EBSD multimap constructed from this
+         * page. The method {@link #isCorrect()} should be called prior to this
+         * method to make sure all the data is correct.
+         * 
+         * @return a <code>Calibration</code>
+         */
+        public Calibration getCalibration() {
+            return new Calibration(dxField.getValue(), dyField.getValue());
+        }
+
+
+
+        /**
+         * Returns the height of the mapping.
+         * 
+         * @return height
+         */
+        public int getMappingHeight() {
+            return heightField.getValue();
+        }
+
+
+
+        /**
+         * Returns the width of the mapping.
+         * 
+         * @return width
+         */
+        public int getMappingWidth() {
+            return widthField.getValue();
+        }
+
+
+
+        @Override
+        public boolean isCorrect() {
+            return isCorrect(true);
+        }
+
+
+
+        @Override
+        public boolean isCorrect(boolean showErrorDialog) {
+            if (!widthField.isCorrect(showErrorDialog))
+                return false;
+
+            if (!heightField.isCorrect(showErrorDialog))
+                return false;
+
+            if (!dxField.isCorrect(showErrorDialog))
+                return false;
+
+            if (!dyField.isCorrect(showErrorDialog))
+                return false;
+
+            return true;
+        }
+
+
+
+        @Override
+        public void setEnabled(boolean enabled) {
+            super.setEnabled(enabled);
+
+            widthField.setEnabled(enabled);
+            heightField.setEnabled(enabled);
+            dxField.setEnabled(enabled);
+            dyField.setEnabled(enabled);
+        }
+
+
+
+        /**
+         * Sets the values of the panel.
+         * 
+         * @param width
+         *            width of the mapping
+         * @param height
+         *            height of the mapping
+         * @param cal
+         *            calibration of the mapping
+         */
+        public void setValues(int width, int height, Calibration cal) {
+            widthField.setValue(width);
+            heightField.setValue(height);
+            dxField.setValue(cal.getDX());
+            dyField.setValue(cal.getDY());
+        }
+    }
 
     /**
      * Listener to enable/disable the fields.
@@ -59,6 +239,9 @@ public class PatternsWizardPage extends WizardPage {
      * loading the temporary metadata twice.
      */
     public static final String KEY_LOADED = "patterns.loaded";
+
+    /** Map key for the calibration. */
+    public static final String KEY_CALIBRATION = "calibration";
 
     /** Map key for the smp file. */
     public static final String KEY_SMP_FILE = "patterns.smpFile";
@@ -86,11 +269,14 @@ public class PatternsWizardPage extends WizardPage {
         return "Patterns";
     }
 
-    /** Radio button for the smp file selection. */
+    /** Radio button for the SMP file selection. */
     private RadioButton smpFileRButton;
 
-    /** Field for the smp file. */
+    /** Field for the SMP file. */
     private SingleFileBrowserField smpFileField;
+
+    /** Mapping panel for the SMP file selection. */
+    private MappingPanel smpMappingPanel;
 
     /** Radio button for the folder selection. */
     private RadioButton patternFolderRButton;
@@ -98,17 +284,8 @@ public class PatternsWizardPage extends WizardPage {
     /** Field for the folder location. */
     private DirBrowserField patternFolderField;
 
-    /** Field for the width of the map (smp file selection only). */
-    private IntField widthField1;
-
-    /** Field for the height of the map (smp file selection only). */
-    private IntField heightField1;
-
-    /** Field for the width of the map (folder selection only). */
-    private IntField widthField2;
-
-    /** Field for the height of the map (folder selection only). */
-    private IntField heightField2;
+    /** Mapping panel for the folder selection. */
+    private MappingPanel patternFolderMappingPanel;
 
     /** Radio button for the pattern file selection. */
     private RadioButton patternFileRButton;
@@ -127,7 +304,7 @@ public class PatternsWizardPage extends WizardPage {
 
         smpFileRButton = new RadioButton("From an smp file");
         smpFileRButton.addActionListener(new RefreshListener());
-        add(smpFileRButton, "wrap");
+        add(smpFileRButton, "span");
 
         add(new JLabel("File"), "gapleft 35");
 
@@ -137,15 +314,8 @@ public class PatternsWizardPage extends WizardPage {
         smpFileField = new SingleFileBrowserField("SMP file", true, filters);
         add(smpFileField, "growx, pushx, wrap");
 
-        add(new JLabel("Mapping's width"), "gapleft 35");
-        widthField1 = new IntField("width", 512);
-        add(widthField1, "split 5");
-        add(new JLabel("px"));
-
-        add(new JLabel("Mapping's height"), "gapleft 35");
-        heightField1 = new IntField("height", 512);
-        add(heightField1);
-        add(new JLabel("px"), "wrap");
+        smpMappingPanel = new MappingPanel("smp-mapping", "Mapping");
+        add(smpMappingPanel, "gapleft 35, growx, pushx, span");
 
         patternFolderRButton = new RadioButton("From a folder of patterns");
         patternFolderRButton.addActionListener(new RefreshListener());
@@ -155,15 +325,8 @@ public class PatternsWizardPage extends WizardPage {
         patternFolderField = new DirBrowserField("Folder of patterns", true);
         add(patternFolderField, "growx, pushx, wrap");
 
-        add(new JLabel("Mapping's width"), "gapleft 35");
-        widthField2 = new IntField("width", 512);
-        add(widthField2, "split 5");
-        add(new JLabel("px"));
-
-        add(new JLabel("Mapping's height"), "gapleft 35");
-        heightField2 = new IntField("height", 512);
-        add(heightField2);
-        add(new JLabel("px"), "wrap");
+        patternFolderMappingPanel = new MappingPanel("smp-mapping", "Mapping");
+        add(patternFolderMappingPanel, "gapleft 35, growx, pushx, span");
 
         patternFileRButton = new RadioButton("From a single pattern");
         patternFileRButton.addActionListener(new RefreshListener());
@@ -197,6 +360,7 @@ public class PatternsWizardPage extends WizardPage {
         File patternFile = null;
         int width = 0;
         int height = 0;
+        Calibration cal = Calibration.NONE;
 
         if (smpFileRButton.isSelected()) {
             if (smpFileField.getFile() == null) {
@@ -204,30 +368,28 @@ public class PatternsWizardPage extends WizardPage {
                 return false;
             }
 
-            if (!widthField1.isCorrect())
-                return false;
-
-            if (!heightField1.isCorrect())
+            if (!smpMappingPanel.isCorrect())
                 return false;
 
             smpFile = smpFileField.getFile();
-            width = widthField1.getValue();
-            height = heightField1.getValue();
+            width = smpMappingPanel.getMappingWidth();
+            height = smpMappingPanel.getMappingHeight();
+            cal = smpMappingPanel.getCalibration();
+
         } else if (patternFolderRButton.isSelected()) {
             if (patternFolderField.getDir() == null) {
                 showErrorDialog("Please specify a folder.");
                 return false;
             }
 
-            if (!widthField2.isCorrect())
-                return false;
-
-            if (!heightField2.isCorrect())
+            if (!patternFolderMappingPanel.isCorrect())
                 return false;
 
             dir = patternFolderField.getDir();
-            width = widthField2.getValue();
-            height = heightField2.getValue();
+            width = patternFolderMappingPanel.getMappingWidth();
+            height = patternFolderMappingPanel.getMappingHeight();
+            cal = patternFolderMappingPanel.getCalibration();
+
         } else if (patternFileRButton.isSelected()) {
             if (patternFileField.getFile() == null) {
                 showErrorDialog("Please specifiy a file.");
@@ -245,9 +407,25 @@ public class PatternsWizardPage extends WizardPage {
             put(KEY_PATTERN_FILE, patternFile);
             put(KEY_WIDTH, width);
             put(KEY_HEIGHT, height);
+            put(KEY_CALIBRATION, cal);
         }
 
         return true;
+    }
+
+
+
+    /**
+     * Refresh radio buttons and fields.
+     */
+    private void refresh() {
+        smpFileField.setEnabled(smpFileRButton.isSelected());
+        smpMappingPanel.setEnabled(smpFileRButton.isSelected());
+
+        patternFolderField.setEnabled(patternFolderRButton.isSelected());
+        patternFolderMappingPanel.setEnabled(patternFolderRButton.isSelected());
+
+        patternFileField.setEnabled(patternFileRButton.isSelected());
     }
 
 
@@ -265,19 +443,10 @@ public class PatternsWizardPage extends WizardPage {
             if ((Integer) get(KEY_LOADED) > 0)
                 return;
 
-        try {
-            widthField1.setValue(mmap.width);
-            widthField2.setValue(mmap.width);
-        } catch (IllegalArgumentException ex) {
-            showErrorDialog("Width value could not be loaded from EbsdMMap.");
-        }
-
-        try {
-            heightField1.setValue(mmap.height);
-            heightField2.setValue(mmap.height);
-        } catch (IllegalArgumentException ex) {
-            showErrorDialog("Height value could not be loaded from EbsdMMap.");
-        }
+        smpMappingPanel.setValues(mmap.width, mmap.height,
+                mmap.getCalibration());
+        patternFolderMappingPanel.setValues(mmap.width, mmap.height,
+                mmap.getCalibration());
 
         put(KEY_LOADED, 1);
     }
@@ -288,22 +457,5 @@ public class PatternsWizardPage extends WizardPage {
     public void setPreferences(Preferences pref) {
         super.setPreferences(pref);
         refresh();
-    }
-
-
-
-    /**
-     * Refresh radio buttons and fields.
-     */
-    private void refresh() {
-        smpFileField.setEnabled(smpFileRButton.isSelected());
-        widthField1.setEnabled(smpFileRButton.isSelected());
-        heightField1.setEnabled(smpFileRButton.isSelected());
-
-        widthField2.setEnabled(patternFolderRButton.isSelected());
-        heightField2.setEnabled(patternFolderRButton.isSelected());
-        patternFolderField.setEnabled(patternFolderRButton.isSelected());
-
-        patternFileField.setEnabled(patternFileRButton.isSelected());
     }
 }
