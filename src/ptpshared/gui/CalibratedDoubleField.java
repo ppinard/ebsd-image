@@ -1,15 +1,17 @@
 package ptpshared.gui;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.NumberFormat;
+import java.text.ParseException;
+
 import javax.swing.JComponent;
 
 import magnitude.core.Magnitude;
 import rmlshared.gui.ComboBox;
-import rmlshared.gui.DoubleField;
-import rmlshared.gui.FlowLayout;
-import rmlshared.gui.Spacer;
-import rmlshared.ui.InputBuffering;
-import rmlshared.ui.InputValidation;
-import rmlshared.ui.PreferenceKeeping;
+import rmlshared.gui.ErrorDialog;
+import rmlshared.gui.Spinner;
 import rmlshared.util.Arrays;
 import rmlshared.util.Preferences;
 import rmlshared.util.Range;
@@ -22,20 +24,55 @@ import rmlshared.util.Range;
  * 
  * @author ppinard
  */
-public class CalibratedDoubleField extends JComponent implements
-        PreferenceKeeping, InputValidation, InputBuffering {
+public class CalibratedDoubleField extends Spinner {
 
-    /** Preferences. */
-    private Preferences preferences;
+    /**
+     * Listener of the units combo box.
+     * 
+     * @author ppinard
+     */
+    private class UnitsCBoxListener implements ActionListener {
 
-    /** Double field for the value. */
-    private DoubleField valueField;
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String oldUnits = step.getPreferredUnitsLabel();
+            String newUnits = unitsCBox.getSelectedItem();
+
+            if (!oldUnits.equals(newUnits)) {
+                step = new Magnitude(step.getPreferredUnitsValue(), newUnits);
+
+                Magnitude newValue = new Magnitude(getDoubleValue(), oldUnits);
+                newValue.setPreferredUnits(newUnits);
+
+                if (Magnitude.isNaN(newValue))
+                    setValue("NaN");
+                else
+                    setValue(numberFormatter.format(newValue.getPreferredUnitsValue()));
+            }
+        }
+
+    }
+
+    /** Minimum value of the range. */
+    private Magnitude minimum;
+
+    /** Maximum value of the range. */
+    private Magnitude maximum;
+
+    /** Increment of the spinner. */
+    private Magnitude step;
 
     /** Combo box for the units. */
     private ComboBox<String> unitsCBox;
 
     /** Units that the field should accept. */
     private String[] validUnits;
+
+    /** Formatter for the values. */
+    private NumberFormat numberFormatter = NumberFormat.getNumberInstance();
+
+    /** Preference to save the units. */
+    protected static final String PREF_UNITS = "units";
 
 
 
@@ -62,19 +99,7 @@ public class CalibratedDoubleField extends JComponent implements
      */
     public CalibratedDoubleField(String name, int length,
             Magnitude defaultValue, String[] validUnits, boolean showUnitsField) {
-        setLayout(new FlowLayout());
-
-        if (name == null)
-            throw new NullPointerException("name is null.");
-        setName(name);
-
-        // Value
-        valueField =
-                new DoubleField(name + "-value", length,
-                        defaultValue.getPreferredUnitsValue());
-        add(valueField);
-
-        add(new Spacer(5, 5));
+        super(name, length, "");
 
         // Units
         for (String unit : validUnits)
@@ -89,13 +114,39 @@ public class CalibratedDoubleField extends JComponent implements
                             + ") must be in the " + "valid units array ("
                             + java.util.Arrays.toString(validUnits) + ").");
         this.validUnits = validUnits;
+        String preferredUnits = defaultValue.getPreferredUnitsLabel();
 
         unitsCBox = new ComboBox<String>(validUnits);
         unitsCBox.setName(name + "-units");
-        unitsCBox.setSelectedItem(defaultValue.getPreferredUnitsLabel());
+        unitsCBox.setSelectedItem(preferredUnits);
+        unitsCBox.addActionListener(new UnitsCBoxListener());
 
         if (showUnitsField)
-            add(unitsCBox);
+            add(unitsCBox, BorderLayout.EAST);
+
+        // Range and step
+        minimum = new Magnitude(Double.NEGATIVE_INFINITY, preferredUnits);
+        maximum = new Magnitude(Double.POSITIVE_INFINITY, preferredUnits);
+        step = new Magnitude(1, preferredUnits);
+
+        // Value
+        setValue(defaultValue);
+    }
+
+
+
+    /**
+     * Creates a new <code>CalibratedDoubleField</code>. The valid units is set
+     * to the preferred units of the default value.
+     * 
+     * @param name
+     *            name of the field
+     * @param defaultValue
+     *            default value
+     */
+    public CalibratedDoubleField(String name, Magnitude defaultValue) {
+        this(name, defaultValue,
+                new String[] { defaultValue.getPreferredUnitsLabel() });
     }
 
 
@@ -149,186 +200,287 @@ public class CalibratedDoubleField extends JComponent implements
 
 
 
-    /**
-     * Creates a new <code>CalibratedDoubleField</code>. The valid units is set
-     * to the preferred units of the default value.
-     * 
-     * @param name
-     *            name of the field
-     * @param defaultValue
-     *            default value
-     */
-    public CalibratedDoubleField(String name, Magnitude defaultValue) {
-        this(name, defaultValue,
-                new String[] { defaultValue.getPreferredUnitsLabel() });
-    }
-
-
-
-    /**
-     * Wrapper over {@link DoubleField#setDecimalCount(double)}.
-     * 
-     * @param nbDecimals
-     *            number of decimal for the <code>DoubleField</code>
-     */
-    public void setDecimalCount(int nbDecimals) {
-        valueField.setDecimalCount(nbDecimals);
-    }
-
-
-
-    /**
-     * Wrapper over {@link DoubleField#setIncrementalStep(double)}.
-     * 
-     * @param step
-     *            step of the spinner
-     */
-    public void setIncrementalStep(Magnitude step) {
-        valueField.setIncrementalStep(step.getValue(unitsCBox.getSelectedItem()));
-    }
-
-
-
-    /**
-     * Returns the selected value and units.
-     * 
-     * @return selected value and units
-     */
-    public Magnitude getValue() {
-        return new Magnitude(valueField.getValue(), unitsCBox.getSelectedItem());
-    }
-
-
-
-    /**
-     * Returns the combo box where the units are specified.
-     * 
-     * @return combo box for the units
-     */
-    public JComponent getUnitsField() {
-        return unitsCBox;
-
-    }
-
-
-
-    /**
-     * Returns the buffered value and units.
-     * 
-     * @return selected value and units
-     */
-    public Magnitude getValueBFR() {
-        return new Magnitude(valueField.getValueBFR(),
-                unitsCBox.getSelectedItemBFR());
-    }
-
-
-
-    /**
-     * Returns the thread-safe value and units.
-     * 
-     * @return selected value and units
-     */
-    public Magnitude getValueTS() {
-        return new Magnitude(valueField.getValueTS(),
-                unitsCBox.getSelectedItemTS());
-    }
-
-
-
-    /**
-     * Sets the value and the units.
-     * 
-     * @param mag
-     *            a magnitude
-     * @throws IllegalArgumentException
-     *             if the units of the new magnitude are not in the valid units
-     *             array
-     */
-    public void setValue(Magnitude mag) {
-        if (!Arrays.contains(validUnits, mag.getPreferredUnitsLabel()))
-            throw new IllegalArgumentException(
-                    "The preferred units of the new value ("
-                            + mag.getPreferredUnitsLabel()
-                            + ") must be in the " + "valid units array ("
-                            + java.util.Arrays.toString(validUnits) + ").");
-        valueField.setValue(mag.getBaseUnitsValue());
-        unitsCBox.setSelectedItem(mag.getPreferredUnitsLabel());
-    }
-
-
-
     @Override
-    public void bufferInput() {
-        valueField.bufferInput();
-        unitsCBox.bufferInput();
+    protected void decrementPerformed() {
+        // If the value in the field is invalid,
+        // fire the event anyway and let the user deal with it
+        if (!isCorrect(false)) {
+            fireValueChanged();
+            return;
+        }
+
+        // Performed the increment
+        Magnitude oldValue = getValue();
+        Magnitude newValue = oldValue.minus(step);
+
+        // Check if it is not out of range
+        if (newValue.compareTo(minimum) < 0)
+            newValue = minimum;
+
+        newValue.setPreferredUnits(oldValue.getPreferredUnitsLabel());
+
+        if (!newValue.equals(oldValue)) {
+            setValue(newValue);
+            fireValueChanged();
+        }
     }
 
 
 
     /**
-     * Wrapper over {@link DoubleField#getRange()}.
+     * Returns the value of the spinner.
      * 
-     * @return range of the <code>DoubleField</code>
+     * @return double value
+     */
+    private double getDoubleValue() {
+        // Parse the value
+        String text = super.getText();
+
+        if (text.trim().equals("NaN"))
+            return Double.NaN;
+
+        double value;
+        try {
+            value = numberFormatter.parse(text).doubleValue();
+        } catch (ParseException e) {
+            throw new NumberFormatException(getName() + " (" + text
+                    + ") is not an double.");
+        }
+
+        return value;
+    }
+
+
+
+    /**
+     * Returns the range of the field.
+     * 
+     * @return the range of the field
      */
     public Range<Magnitude> getRange() {
-        Range<Double> range = valueField.getRange();
-        String units = unitsCBox.getSelectedItem();
-
-        Magnitude minimum = new Magnitude(range.min, units);
-        Magnitude maximum = new Magnitude(range.max, units);
         return new Range<Magnitude>(minimum, maximum);
     }
 
 
 
     /**
-     * Wrapper over {@link DoubleField#setRange(double, double)}.
+     * Returns the units combo box field.
      * 
-     * @param min
-     *            minimum value of the range
-     * @param max
-     *            maximum value of the range
+     * @return units combo box
      */
-    public void setRange(Magnitude min, Magnitude max) {
-        String units = unitsCBox.getSelectedItem();
-        valueField.setRange(min.getValue(units), max.getValue(units));
+    public JComponent getUnitsField() {
+        return unitsCBox;
+    }
+
+
+
+    /**
+     * Returns the value.
+     * 
+     * @return value
+     * @throws NumberFormatException
+     *             if the text in the field is not an Double
+     * @throws IllegalArgumentException
+     *             if the value in the field is not within the predefined range.
+     */
+    @Override
+    public Magnitude getValue() {
+        return new Magnitude(getDoubleValue(), unitsCBox.getSelectedItem());
     }
 
 
 
     @Override
-    public boolean isCorrect() {
-        return isCorrect(true);
+    public Magnitude getValueBFR() {
+        return (Magnitude) super.getValueBFR();
     }
 
 
 
+    @Override
+    public Magnitude getValueTS() {
+        return (Magnitude) super.getValueTS();
+    }
+
+
+
+    @Override
+    protected void incrementPerformed() {
+        // If the value in the field is invalid,
+        // fire the event anyway and let the user deal with it
+        if (!isCorrect(false)) {
+            fireValueChanged();
+            return;
+        }
+
+        // Performed the increment
+        Magnitude oldValue = getValue();
+        Magnitude newValue = oldValue.add(step);
+
+        // Check if it is not out of range
+        if (newValue.compareTo(maximum) > 0)
+            newValue = maximum;
+
+        newValue.setPreferredUnits(oldValue.getPreferredUnitsLabel());
+
+        if (!newValue.equals(oldValue)) {
+            setValue(newValue);
+            fireValueChanged();
+        }
+    }
+
+
+
+    /*
+     * public boolean isNaN() { String text = getText(); return
+     * (text.indexOf("NaN") >= 0) ? true : false; }
+     */
+
+    /**
+     * {@inheritDoc} For the value to be valid, it must be a double and within
+     * the predefined range.
+     */
     @Override
     public boolean isCorrect(boolean showErrorDialog) {
-        return valueField.isCorrect(showErrorDialog);
+        Magnitude value = getValue();
+        if (value.compareTo(minimum.minus(step.div(2.0))) < 0
+                || value.compareTo(maximum.add(step.div(2.0))) > 0) {
+            if (showErrorDialog)
+                ErrorDialog.show(getName() + " (" + value
+                        + ") is out of range (" + minimum + '-' + maximum
+                        + ").");
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+    /**
+     * Sets the number of decimal used to display the number in the field.
+     * 
+     * @param nbDecimals
+     *            the number of decimal used to display the number in the field.
+     *            If < 0, no format will be applied (default)
+     */
+    public void setDecimalCount(int nbDecimals) {
+        if (nbDecimals < 0)
+            throw new IllegalArgumentException("nbDecimals (" + nbDecimals
+                    + ") must be >= " + 0 + '.');
+
+        if (nbDecimals == 0) {
+            numberFormatter.setParseIntegerOnly(true);
+        } else {
+            numberFormatter.setParseIntegerOnly(false);
+            numberFormatter.setMinimumFractionDigits(nbDecimals);
+            numberFormatter.setMaximumFractionDigits(nbDecimals);
+        }
+    }
+
+
+
+    /**
+     * Sets the incremental step of the spinner.
+     * 
+     * @param step
+     *            incremental step
+     * @throws IllegalArgumentException
+     *             if <code>step</code> is lower than 0
+     */
+    public void setIncrementalStep(Magnitude step) {
+        if (step.getBaseUnitsValue() <= 0)
+            throw new IllegalArgumentException("step (" + step + ") must be > "
+                    + 0 + '.');
+        minimum.validateEqualUnits(step);
+
+        this.step = step;
     }
 
 
 
     @Override
-    public Preferences getPreferences() {
-        return preferences;
+    public void setPreferredDefault() {
+        Preferences pref = getPreferences();
+
+        if (pref.contains(PREF_VALUE) && pref.contains(PREF_UNITS)) {
+            double val = pref.getPreference(PREF_VALUE, 0.0);
+            String units = pref.getPreference(PREF_UNITS, null);
+
+            Magnitude value = new Magnitude(val, units);
+            if (value.compareTo(minimum) >= 0 && value.compareTo(maximum) <= 0)
+                setValue(value);
+        }
     }
 
 
 
-    @Override
-    public void setPreferences(Preferences pref) {
-        valueField.setPreferences(pref);
-        unitsCBox.setPreferences(pref);
+    /**
+     * Sets the valid data range. If the incremental step previously defined is
+     * too big for the range, it is reset to 1. If the default value previously
+     * defined is out of range, it is set to its closest limit
+     * 
+     * @param min
+     *            minimum data value (inclusively)
+     * @param max
+     *            maximum data value (inclusively)
+     * @throws IllegalArgumentException
+     *             if min > max
+     */
+    public void setRange(Magnitude min, Magnitude max) {
+        if (min.compareTo(max) > 0)
+            throw new IllegalArgumentException("min (" + min
+                    + ") is higher than max (" + max + ')');
+
+        minimum = min;
+        maximum = max;
+
+        Magnitude value = getValue();
+        if (value.compareTo(min) < 0)
+            value = min;
+        if (value.compareTo(max) > 0)
+            value = max;
+        setValue(value);
+    }
+
+
+
+    /**
+     * Sets the value shown in the field.
+     * 
+     * @param value
+     *            value to be put in the field
+     * @throws IllegalArgumentException
+     *             if <code>value</code> is not within the predefined range
+     */
+    public void setValue(Magnitude value) {
+        minimum.validateEqualUnits(value);
+        if (value.compareTo(minimum) < 0 || value.compareTo(maximum) > 0)
+            throw new IllegalArgumentException("value (" + value
+                    + ") is not within predefined range (" + minimum + "-"
+                    + maximum + ")");
+
+        // Units
+        if (!Arrays.contains(validUnits, value.getPreferredUnitsLabel()))
+            value.setPreferredUnits(unitsCBox.getSelectedItem());
+        unitsCBox.setSelectedItem(value.getPreferredUnitsLabel());
+
+        // Value
+        if (Magnitude.isNaN(value))
+            super.setValue("NaN");
+        else
+            super.setValue(numberFormatter.format(value.getPreferredUnitsValue()));
     }
 
 
 
     @Override
     public void updatePreferences() {
-        valueField.updatePreferences();
-        unitsCBox.updatePreferences();
+        Preferences pref = getPreferences();
+
+        Magnitude value = getValue();
+        pref.setPreference(PREF_VALUE, value.getPreferredUnitsValue());
+        pref.setPreference(PREF_UNITS, value.getPreferredUnitsLabel());
     }
+
 }
