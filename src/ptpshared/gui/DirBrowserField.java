@@ -113,6 +113,7 @@ public class DirBrowserField extends JComponent implements InputValidation,
      */
     public void clear() {
         nameField.setText(null); // Clear the field
+        dirChooser.setSelectedFile(null);
     }
 
 
@@ -193,7 +194,7 @@ public class DirBrowserField extends JComponent implements InputValidation,
     @Override
     public boolean isCorrect(boolean showErrorDialog) {
         String message = getValidationMessage(getDir());
-        if (message.length() > 0 && showErrorDialog) {
+        if (!message.isEmpty() && showErrorDialog) {
             ErrorDialog.show(message);
             return false;
         } else
@@ -215,6 +216,9 @@ public class DirBrowserField extends JComponent implements InputValidation,
      *         string if the directory is valid
      */
     private String getValidationMessage(File dir) {
+        if (dir == null)
+            return "Please select a directory.";
+
         // Directory exists
         if (!dir.exists()) {
             return "Selected directory (" + dir
@@ -284,11 +288,13 @@ public class DirBrowserField extends JComponent implements InputValidation,
 
         preferences = pref.node(getName());
 
-        String dirname = preferences.getPreference(PREF_VALUE, null);
-        if (dirname == null)
-            clear();
-        else
-            setDir(new File(dirname));
+        if (preferences.contains(PREF_VALUE)) {
+            String dirname = preferences.getPreference(PREF_VALUE, null);
+            if (dirname == null)
+                clear();
+            else
+                setDir(new File(dirname));
+        }
     }
 
 
