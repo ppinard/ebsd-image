@@ -32,12 +32,12 @@ import net.miginfocom.swing.MigLayout;
 import ptpshared.gui.DirBrowserField;
 import ptpshared.gui.GuiUtil;
 import ptpshared.gui.WizardPage;
-import ptpshared.util.simplexml.XmlSaver;
 import rmlshared.gui.*;
 import rmlshared.io.FileUtil;
 import rmlshared.thread.PlugIn;
 import crystallography.core.Crystal;
 import crystallography.io.CifLoader;
+import crystallography.io.CrystalSaver;
 import crystallography.io.CrystalUtil;
 
 /**
@@ -142,7 +142,7 @@ public class PhasesWizardPage extends WizardPage {
             crystalFile = FileUtil.setExtension(crystalFile, "xml");
 
             try {
-                new XmlSaver().save(crystal, crystalFile);
+                new CrystalSaver().save(crystal, crystalFile);
             } catch (IOException e) {
                 ErrorDialog.show("This error occured while saving the XML file for the phase: "
                         + e.getMessage());
@@ -319,7 +319,7 @@ public class PhasesWizardPage extends WizardPage {
             }
 
             try {
-                new XmlSaver().save(crystal, crystalFile);
+                new CrystalSaver().save(crystal, crystalFile);
             } catch (IOException e) {
                 ErrorDialog.show("This error occured while saving the XML file for the phase: "
                         + e.getMessage());
@@ -647,7 +647,13 @@ public class PhasesWizardPage extends WizardPage {
 
         model.clear();
 
-        Crystal[] phases = CrystalUtil.listCrystals(phasesDirField.getDirBFR());
+        Crystal[] phases;
+        try {
+            phases = CrystalUtil.listCrystals(phasesDirField.getDirBFR());
+        } catch (IOException e) {
+            ErrorDialog.show(e.getMessage());
+            return;
+        }
 
         for (Crystal phase : phases)
             model.addElement(phase);
