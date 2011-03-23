@@ -745,7 +745,6 @@ public class AngLoader implements Monitorable {
                 else
                     phaseMap.pixArray[n] = (byte) Integer.parseInt(line[7]);
 
-                // TODO: Verify rotation order in TSL ANG file
                 rotation =
                         new Rotation(RotationOrder.ZXZ, theta1, theta2, theta3);
             }
