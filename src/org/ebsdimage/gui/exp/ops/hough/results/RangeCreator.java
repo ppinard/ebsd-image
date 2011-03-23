@@ -29,17 +29,17 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class RangeCreator implements OperationCreator {
 
     @Override
-    public ExpOperation getOperation() {
-        return new Range();
+    public String getDescription() {
+        return "Quality index on the Hough map. "
+                + "The range is calculated between the most and the least "
+                + "intense pixel in the Hough map.";
     }
 
 
 
     @Override
-    public String getDescription() {
-        return "Quality index on the Hough map. "
-                + "The range is calculated between the most and the least "
-                + "intense pixel in the Hough map.";
+    public ExpOperation getOperation() {
+        return new Range();
     }
 
 

@@ -31,6 +31,20 @@ import org.ebsdimage.core.exp.ExpOperation;
  */
 public abstract class IdentificationPostOps extends ExpOperation {
 
+    @Override
+    public final Object execute(Exp exp, Object... args) throws ExpError {
+        return process(exp, (HoughPeak[]) args);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
+        listener.identificationPostPerformed(exp, this, (HoughPeak[]) result);
+    }
+
+
+
     /**
      * Returns processed Hough peaks.
      * 
@@ -44,18 +58,4 @@ public abstract class IdentificationPostOps extends ExpOperation {
      */
     public abstract HoughPeak[] process(Exp exp, HoughPeak[] srcPeaks)
             throws ExpError;
-
-
-
-    @Override
-    public final Object execute(Exp exp, Object... args) throws ExpError {
-        return process(exp, (HoughPeak[]) args);
-    }
-
-
-
-    @Override
-    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
-        listener.identificationPostPerformed(exp, this, (HoughPeak[]) result);
-    }
 }

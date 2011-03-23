@@ -30,6 +30,40 @@ import org.simpleframework.xml.Root;
 import ptpshared.util.MultipleLoop;
 
 /**
+ * Object use to serialize and deserialize items in the
+ * <code>OperationGenerator</code>. An item combines an operation and its order.
+ * 
+ * @author ppinard
+ */
+@Root
+class Item {
+
+    /** Order of the operation. */
+    @Attribute(name = "order")
+    public final int order;
+
+    /** Operation. */
+    @Element(name = "op")
+    public final Operation op;
+
+
+
+    /**
+     * Creates a new <code>Item</code>.
+     * 
+     * @param order
+     *            order of the operation
+     * @param op
+     *            operation
+     */
+    public Item(@Attribute(name = "order") int order,
+            @Element(name = "op") Operation op) {
+        this.order = order;
+        this.op = op;
+    }
+}
+
+/**
  * Abstract class to create a generator from a list of items. An item is defined
  * as an operation and the order where this operation should be performed. The
  * generator takes all the defined items and creates combinations of these items
@@ -268,38 +302,4 @@ public class OperationGenerator {
         }
     }
 
-}
-
-/**
- * Object use to serialize and deserialize items in the
- * <code>OperationGenerator</code>. An item combines an operation and its order.
- * 
- * @author ppinard
- */
-@Root
-class Item {
-
-    /** Order of the operation. */
-    @Attribute(name = "order")
-    public final int order;
-
-    /** Operation. */
-    @Element(name = "op")
-    public final Operation op;
-
-
-
-    /**
-     * Creates a new <code>Item</code>.
-     * 
-     * @param order
-     *            order of the operation
-     * @param op
-     *            operation
-     */
-    public Item(@Attribute(name = "order") int order,
-            @Element(name = "op") Operation op) {
-        this.order = order;
-        this.op = op;
-    }
 }

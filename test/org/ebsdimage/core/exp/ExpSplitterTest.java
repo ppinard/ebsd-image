@@ -1,12 +1,12 @@
 package org.ebsdimage.core.exp;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOpMock;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class ExpSplitterTest {
 

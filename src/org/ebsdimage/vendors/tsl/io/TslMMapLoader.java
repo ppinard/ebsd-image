@@ -37,6 +37,24 @@ import rmlimage.module.multi.core.MultiMap;
 public class TslMMapLoader extends EbsdMMapLoader {
 
     @Override
+    protected MultiMap createMap(int version, int width, int height,
+            HashMap<String, Map> mapList) {
+        if (version != TslMMap.VERSION)
+            throw new IllegalArgumentException("Invalid version: " + version);
+
+        return new TslMMap(width, height, mapList);
+    }
+
+
+
+    @Override
+    protected Class<? extends EbsdMetadata> getMetadataClass() {
+        return TslMetadata.class;
+    }
+
+
+
+    @Override
     protected String getValidHeader() {
         return TslMMap.FILE_HEADER;
     }
@@ -53,24 +71,6 @@ public class TslMMapLoader extends EbsdMMapLoader {
     @Override
     public TslMMap load(File file, Object obj) throws IOException {
         return (TslMMap) super.load(file);
-    }
-
-
-
-    @Override
-    protected MultiMap createMap(int version, int width, int height,
-            HashMap<String, Map> mapList) {
-        if (version != TslMMap.VERSION)
-            throw new IllegalArgumentException("Invalid version: " + version);
-
-        return new TslMMap(width, height, mapList);
-    }
-
-
-
-    @Override
-    protected Class<? extends EbsdMetadata> getMetadataClass() {
-        return TslMetadata.class;
     }
 
 }

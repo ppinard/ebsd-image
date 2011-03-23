@@ -66,9 +66,14 @@ public class PatternBandEdgesTest extends TestCase {
 
 
     @Test
-    public void testPatternBandEdgesIntIntIntScatteringFactorsEnum() {
-        assertEquals(400, op.width);
-        assertEquals(400, op.height);
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new PatternBandEdges(401, 400)));
+        assertFalse(op.equals(new PatternBandEdges(400, 401)));
+        assertTrue(op.equals(new PatternBandEdges(400, 400)));
     }
 
 
@@ -110,21 +115,16 @@ public class PatternBandEdgesTest extends TestCase {
 
 
     @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertFalse(op.equals(new PatternBandEdges(401, 400)));
-        assertFalse(op.equals(new PatternBandEdges(400, 401)));
-        assertTrue(op.equals(new PatternBandEdges(400, 400)));
+    public void testHashCode() {
+        assertEquals(-1151570512, op.hashCode());
     }
 
 
 
     @Test
-    public void testHashCode() {
-        assertEquals(-1151570512, op.hashCode());
+    public void testPatternBandEdgesIntIntIntScatteringFactorsEnum() {
+        assertEquals(400, op.width);
+        assertEquals(400, op.height);
     }
 
 

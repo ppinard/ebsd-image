@@ -594,13 +594,6 @@ public class PhasesWizardPage extends WizardPage {
 
 
 
-    @Override
-    protected void renderingPage() {
-        refresh();
-    }
-
-
-
     /**
      * Returns the phases in the current list.
      * 
@@ -657,6 +650,13 @@ public class PhasesWizardPage extends WizardPage {
 
         for (Crystal phase : phases)
             model.addElement(phase);
+    }
+
+
+
+    @Override
+    protected void renderingPage() {
+        refresh();
     }
 
 

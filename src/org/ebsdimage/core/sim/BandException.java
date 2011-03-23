@@ -26,6 +26,26 @@ package org.ebsdimage.core.sim;
 public class BandException extends Exception {
 
     /**
+     * Creates a <code>BandException</code> with no detail message.
+     */
+    public BandException() {
+    }
+
+
+
+    /**
+     * Creates a <code>BandException</code> with the specified message.
+     * 
+     * @param message
+     *            the message.
+     */
+    public BandException(String message) {
+        super(message);
+    }
+
+
+
+    /**
      * Creates a <code>BandException</code> with the specified message and cause
      * for this exception.
      * 
@@ -48,26 +68,6 @@ public class BandException extends Exception {
      */
     public BandException(Throwable cause) {
         super(cause);
-    }
-
-
-
-    /**
-     * Creates a <code>BandException</code> with no detail message.
-     */
-    public BandException() {
-    }
-
-
-
-    /**
-     * Creates a <code>BandException</code> with the specified message.
-     * 
-     * @param message
-     *            the message.
-     */
-    public BandException(String message) {
-        super(message);
     }
 
 }

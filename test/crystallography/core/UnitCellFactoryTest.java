@@ -17,13 +17,14 @@
  */
 package crystallography.core;
 
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
 import static java.lang.Math.PI;
 import static java.lang.Math.pow;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
 
 public class UnitCellFactoryTest {
 

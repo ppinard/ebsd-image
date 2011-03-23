@@ -56,7 +56,7 @@ public class QC {
         for (int n = 0; n < nbPeaks; n++) {
             peak = new HoughPeak(centroids.x[n], centroids.x[n], rhoUnits, 0.0);
             line = HoughMath.getLine2D(peak, patternMap);
-            rmlimage.core.Drawing.line(patternMap, line, 255);
+            BasicDrawing.line(patternMap, line, 255);
         }
     }
 

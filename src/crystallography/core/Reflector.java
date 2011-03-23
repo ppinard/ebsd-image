@@ -27,6 +27,48 @@ import org.apache.commons.math.geometry.Vector3D;
 import ptpshared.geom.Plane;
 
 /**
+ * Comparator for <code>Reflector</code> according to their intensity.
+ * 
+ * @author Philippe T. Pinard
+ */
+class IntensityComparator implements Comparator<Reflector>, Serializable {
+
+    @Override
+    public int compare(Reflector refl0, Reflector refl1) {
+        double intensity0 = refl0.intensity;
+        double intensity1 = refl1.intensity;
+
+        if (intensity0 < intensity1)
+            return -1;
+        else if (intensity0 > intensity1)
+            return 1;
+        else
+            return 0;
+    }
+}
+
+/**
+ * Comparator for <code>Reflector</code> according to their plane spacing.
+ * 
+ * @author Philippe T. Pinard
+ */
+class PlaneSpacingComparator implements Comparator<Reflector>, Serializable {
+
+    @Override
+    public int compare(Reflector refl0, Reflector refl1) {
+        double planeSpacing0 = refl0.planeSpacing;
+        double planeSpacing1 = refl1.planeSpacing;
+
+        if (planeSpacing0 < planeSpacing1)
+            return -1;
+        else if (planeSpacing0 > planeSpacing1)
+            return 1;
+        else
+            return 0;
+    }
+}
+
+/**
  * Defines a diffracting plane. The difference between the object
  * <code>Plane</code> and <code>Reflector</code> is that the
  * <code>Reflector</code> stores the plane spacing and diffracting intensity of
@@ -42,6 +84,26 @@ import ptpshared.geom.Plane;
  */
 @Immutable
 public class Reflector {
+
+    /**
+     * Calculates the hash code (unique integer representation) for the indices.
+     * 
+     * @param h
+     *            h index of the crystallographic plane
+     * @param k
+     *            k index of the crystallographic plane
+     * @param l
+     *            l index of the crystallographic plane
+     * @return hash code
+     */
+    protected static int calculateHashCode(int h, int k, int l) {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + h;
+        result = prime * result + k;
+        result = prime * result + l;
+        return result;
+    }
 
     /** Crystallographic plane h index. */
     public final int h;
@@ -63,28 +125,6 @@ public class Reflector {
      * <code>max=1</code>)
      */
     public final double normalizedIntensity;
-
-
-
-    /**
-     * Calculates the hash code (unique integer representation) for the indices.
-     * 
-     * @param h
-     *            h index of the crystallographic plane
-     * @param k
-     *            k index of the crystallographic plane
-     * @param l
-     *            l index of the crystallographic plane
-     * @return hash code
-     */
-    protected static int calculateHashCode(int h, int k, int l) {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + h;
-        result = prime * result + k;
-        result = prime * result + l;
-        return result;
-    }
 
 
 
@@ -185,28 +225,6 @@ public class Reflector {
 
 
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-
-        Reflector other = (Reflector) obj;
-        if (h != other.h)
-            return false;
-        if (k != other.k)
-            return false;
-        if (l != other.l)
-            return false;
-
-        return true;
-    }
-
-
-
     /**
      * Check whether this reflector is made out of the specified indices.
      * 
@@ -233,21 +251,48 @@ public class Reflector {
 
 
     @Override
-    public int hashCode() {
-        return calculateHashCode(h, k, l);
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+
+        Reflector other = (Reflector) obj;
+        if (h != other.h)
+            return false;
+        if (k != other.k)
+            return false;
+        if (l != other.l)
+            return false;
+
+        return true;
     }
 
 
 
     /**
-     * Returns a representation of the <code>Reflector</code>.
+     * Returns the indices of the crystallographic plane using the Bravais
+     * notation.
      * 
-     * @return information about the <code>Reflector</code>
+     * @return indices in the Bravais notation (array of length 4)
      */
-    @Override
-    public String toString() {
-        return "(" + h + ";" + k + ";" + l + ")" + "\t" + planeSpacing + " A"
-                + "\t" + normalizedIntensity * 100 + "%";
+    public int[] getBravaisIndices() {
+        int i = -(h + k);
+        return new int[] { h, k, i, l };
+    }
+
+
+
+    /**
+     * Returns the indices of the crystallographic plane using the Miller
+     * notation.
+     * 
+     * @return indices in the Miller notation (array of length 3)
+     */
+    public int[] getMillerIndices() {
+        return new int[] { h, k, l };
     }
 
 
@@ -276,68 +321,21 @@ public class Reflector {
 
 
 
-    /**
-     * Returns the indices of the crystallographic plane using the Bravais
-     * notation.
-     * 
-     * @return indices in the Bravais notation (array of length 4)
-     */
-    public int[] getBravaisIndices() {
-        int i = -(h + k);
-        return new int[] { h, k, i, l };
+    @Override
+    public int hashCode() {
+        return calculateHashCode(h, k, l);
     }
 
 
 
     /**
-     * Returns the indices of the crystallographic plane using the Miller
-     * notation.
+     * Returns a representation of the <code>Reflector</code>.
      * 
-     * @return indices in the Miller notation (array of length 3)
+     * @return information about the <code>Reflector</code>
      */
-    public int[] getMillerIndices() {
-        return new int[] { h, k, l };
-    }
-}
-
-/**
- * Comparator for <code>Reflector</code> according to their intensity.
- * 
- * @author Philippe T. Pinard
- */
-class IntensityComparator implements Comparator<Reflector>, Serializable {
-
     @Override
-    public int compare(Reflector refl0, Reflector refl1) {
-        double intensity0 = refl0.intensity;
-        double intensity1 = refl1.intensity;
-
-        if (intensity0 < intensity1)
-            return -1;
-        else if (intensity0 > intensity1)
-            return 1;
-        else
-            return 0;
-    }
-}
-
-/**
- * Comparator for <code>Reflector</code> according to their plane spacing.
- * 
- * @author Philippe T. Pinard
- */
-class PlaneSpacingComparator implements Comparator<Reflector>, Serializable {
-
-    @Override
-    public int compare(Reflector refl0, Reflector refl1) {
-        double planeSpacing0 = refl0.planeSpacing;
-        double planeSpacing1 = refl1.planeSpacing;
-
-        if (planeSpacing0 < planeSpacing1)
-            return -1;
-        else if (planeSpacing0 > planeSpacing1)
-            return 1;
-        else
-            return 0;
+    public String toString() {
+        return "(" + h + ";" + k + ";" + l + ")" + "\t" + planeSpacing + " A"
+                + "\t" + normalizedIntensity * 100 + "%";
     }
 }

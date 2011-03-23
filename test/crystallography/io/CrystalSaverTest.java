@@ -32,13 +32,18 @@ public class CrystalSaverTest extends TestCase {
 
 
     @Test
-    public void testSaveObjectFile() throws IOException {
-        File file = createTempFile();
-        file = FileUtil.setExtension(file, "xml");
+    public void testCanSave() {
+        assertTrue(saver.canSave(crystal, "xml"));
+        assertTrue(saver.canSave(crystal, "XML"));
+        assertFalse(saver.canSave(crystal, "zip"));
+        assertFalse(saver.canSave(null, "xml"));
+    }
 
-        saver.save((Object) crystal, file);
 
-        testCrystal(file);
+
+    private void testCrystal(File file) throws IOException {
+        Crystal other = new CrystalLoader().load(file);
+        assertEquals("Silicon", other.name);
     }
 
 
@@ -55,19 +60,14 @@ public class CrystalSaverTest extends TestCase {
 
 
 
-    private void testCrystal(File file) throws IOException {
-        Crystal other = new CrystalLoader().load(file);
-        assertEquals("Silicon", other.name);
-    }
-
-
-
     @Test
-    public void testCanSave() {
-        assertTrue(saver.canSave(crystal, "xml"));
-        assertTrue(saver.canSave(crystal, "XML"));
-        assertFalse(saver.canSave(crystal, "zip"));
-        assertFalse(saver.canSave(null, "xml"));
+    public void testSaveObjectFile() throws IOException {
+        File file = createTempFile();
+        file = FileUtil.setExtension(file, "xml");
+
+        saver.save((Object) crystal, file);
+
+        testCrystal(file);
     }
 
 }

@@ -66,9 +66,14 @@ public class PatternBandCenterTest extends TestCase {
 
 
     @Test
-    public void testPatternBandCenter() {
-        assertEquals(400, op.width);
-        assertEquals(400, op.height);
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new PatternBandCenter(401, 400)));
+        assertFalse(op.equals(new PatternBandCenter(400, 401)));
+        assertTrue(op.equals(new PatternBandCenter(400, 400)));
     }
 
 
@@ -110,21 +115,16 @@ public class PatternBandCenterTest extends TestCase {
 
 
     @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertFalse(op.equals(new PatternBandCenter(401, 400)));
-        assertFalse(op.equals(new PatternBandCenter(400, 401)));
-        assertTrue(op.equals(new PatternBandCenter(400, 400)));
+    public void testHashCode() {
+        assertEquals(570574425, op.hashCode());
     }
 
 
 
     @Test
-    public void testHashCode() {
-        assertEquals(570574425, op.hashCode());
+    public void testPatternBandCenter() {
+        assertEquals(400, op.width);
+        assertEquals(400, op.height);
     }
 
 

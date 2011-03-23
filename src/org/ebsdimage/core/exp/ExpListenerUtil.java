@@ -15,6 +15,35 @@ import rmlimage.core.MapMath;
 public class ExpListenerUtil {
 
     /**
+     * Draw a cross at the position of the Hough peak.
+     * 
+     * @param map
+     *            map to draw in
+     * @param index
+     *            index of the position of the Hough peak
+     * @param value
+     *            value of the cross
+     */
+    private static void drawHoughPeakPosition(HoughMap map, int index,
+            byte value) {
+        if ((index - 1) >= 0)
+            map.pixArray[index - 1] = value;
+
+        map.pixArray[index] = value;
+
+        if ((index + 1) < map.size)
+            map.pixArray[index + 1] = value;
+
+        if ((index - map.width) >= 0)
+            map.pixArray[index - map.width] = value;
+
+        if ((index + map.width) < map.size)
+            map.pixArray[index + map.width] = value;
+    }
+
+
+
+    /**
      * Draws the position of the Hough peaks overlaid on top of the Hough map.
      * 
      * @param houghMap
@@ -49,35 +78,6 @@ public class ExpListenerUtil {
         }
 
         return houghMap;
-    }
-
-
-
-    /**
-     * Draw a cross at the position of the Hough peak.
-     * 
-     * @param map
-     *            map to draw in
-     * @param index
-     *            index of the position of the Hough peak
-     * @param value
-     *            value of the cross
-     */
-    private static void drawHoughPeakPosition(HoughMap map, int index,
-            byte value) {
-        if ((index - 1) >= 0)
-            map.pixArray[index - 1] = value;
-
-        map.pixArray[index] = value;
-
-        if ((index + 1) < map.size)
-            map.pixArray[index + 1] = value;
-
-        if ((index - map.width) >= 0)
-            map.pixArray[index - map.width] = value;
-
-        if ((index + map.width) < map.size)
-            map.pixArray[index + map.width] = value;
     }
 
 

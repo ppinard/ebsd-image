@@ -156,6 +156,13 @@ public class Crystal implements AlmostEquable, Labeled {
 
 
 
+    @Override
+    public String getLabel() {
+        return name;
+    }
+
+
+
     /**
      * Returns a representation of the <code>Crystal</code>, suitable for
      * debugging.
@@ -164,13 +171,6 @@ public class Crystal implements AlmostEquable, Labeled {
      */
     @Override
     public String toString() {
-        return name;
-    }
-
-
-
-    @Override
-    public String getLabel() {
         return name;
     }
 

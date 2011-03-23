@@ -12,6 +12,18 @@ import static org.junit.Assert.assertTrue;
 
 public class MatchersTest {
 
+    private class MockMatcher implements Matcher {
+
+        @SuppressWarnings("rawtypes")
+        @Override
+        public Transform match(Class type) throws Exception {
+            if (type == MockObject.class)
+                return new MockTransform();
+            return null;
+        }
+
+    }
+
     private class MockObject {
 
     }
@@ -32,18 +44,6 @@ public class MatchersTest {
 
     }
 
-    private class MockMatcher implements Matcher {
-
-        @SuppressWarnings("rawtypes")
-        @Override
-        public Transform match(Class type) throws Exception {
-            if (type == MockObject.class)
-                return new MockTransform();
-            return null;
-        }
-
-    }
-
     private Matchers matchers;
 
 
@@ -51,6 +51,43 @@ public class MatchersTest {
     @Before
     public void setUp() throws Exception {
         matchers = new Matchers();
+    }
+
+
+
+    @Test
+    public void testClearMatchers() {
+        Matcher matcher = new MockMatcher();
+        matchers.registerMatcher(matcher);
+        assertTrue(matchers.isRegister(matcher));
+
+        matchers.clearMatchers();
+        assertFalse(matchers.isRegister(matcher));
+    }
+
+
+
+    @Test
+    public void testDeregisterMatcher() {
+        Matcher matcher = new MockMatcher();
+        matchers.registerMatcher(matcher);
+        assertTrue(matchers.isRegister(matcher));
+
+        matchers.deregisterMatcher(matcher);
+        assertFalse(matchers.isRegister(matcher));
+    }
+
+
+
+    @Test
+    public void testMatch() throws Exception {
+        assertNull(matchers.match(MockObject.class));
+
+        Matcher matcher = new MockMatcher();
+        matchers.registerMatcher(matcher);
+
+        assertNotNull(matchers.match(MockObject.class));
+        assertNull(matchers.match(new Object().getClass()));
     }
 
 
@@ -69,43 +106,6 @@ public class MatchersTest {
         Matcher matcher = new MockMatcher();
         matchers.registerMatcher(matcher);
         matchers.registerMatcher(matcher);
-    }
-
-
-
-    @Test
-    public void testDeregisterMatcher() {
-        Matcher matcher = new MockMatcher();
-        matchers.registerMatcher(matcher);
-        assertTrue(matchers.isRegister(matcher));
-
-        matchers.deregisterMatcher(matcher);
-        assertFalse(matchers.isRegister(matcher));
-    }
-
-
-
-    @Test
-    public void testClearMatchers() {
-        Matcher matcher = new MockMatcher();
-        matchers.registerMatcher(matcher);
-        assertTrue(matchers.isRegister(matcher));
-
-        matchers.clearMatchers();
-        assertFalse(matchers.isRegister(matcher));
-    }
-
-
-
-    @Test
-    public void testMatch() throws Exception {
-        assertNull(matchers.match(MockObject.class));
-
-        Matcher matcher = new MockMatcher();
-        matchers.registerMatcher(matcher);
-
-        assertNotNull(matchers.match(MockObject.class));
-        assertNull(matchers.match(new Object().getClass()));
     }
 
 }

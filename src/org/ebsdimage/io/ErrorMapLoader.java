@@ -17,6 +17,14 @@ import rmlimage.core.Map;
 public class ErrorMapLoader extends IndexedByteMapLoader<ErrorCode> {
 
     @Override
+    protected IndexedByteMap<ErrorCode> createMap(int width, int height,
+            java.util.Map<Integer, ErrorCode> items) {
+        return new ErrorMap(width, height, items);
+    }
+
+
+
+    @Override
     protected String getFileHeader() {
         return ErrorMap.FILE_HEADER;
     }
@@ -24,15 +32,15 @@ public class ErrorMapLoader extends IndexedByteMapLoader<ErrorCode> {
 
 
     @Override
-    public ErrorMap load(File file) throws IOException {
-        return (ErrorMap) super.load(file);
+    protected Class<? extends ErrorCode> getItemClass() {
+        return ErrorCode.class;
     }
 
 
 
     @Override
-    protected Class<? extends ErrorCode> getItemClass() {
-        return ErrorCode.class;
+    public ErrorMap load(File file) throws IOException {
+        return (ErrorMap) super.load(file);
     }
 
 
@@ -47,14 +55,6 @@ public class ErrorMapLoader extends IndexedByteMapLoader<ErrorCode> {
     @Override
     public ErrorMap load(File file, Object map) throws IOException {
         return (ErrorMap) super.load(file, map);
-    }
-
-
-
-    @Override
-    protected IndexedByteMap<ErrorCode> createMap(int width, int height,
-            java.util.Map<Integer, ErrorCode> items) {
-        return new ErrorMap(width, height, items);
     }
 
 }

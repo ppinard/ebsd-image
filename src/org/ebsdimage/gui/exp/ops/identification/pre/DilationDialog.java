@@ -47,14 +47,6 @@ public class DilationDialog extends OperationDialog {
 
 
 
-    @Override
-    public String getDescription() {
-        return "Performs a dilation on the peaks in the peaks map to "
-                + "increase their size.";
-    }
-
-
-
     /**
      * Creates a new <code>DilationDialog</code>.
      */
@@ -74,6 +66,14 @@ public class DilationDialog extends OperationDialog {
         panel.add(maxField);
 
         setMainComponent(panel);
+    }
+
+
+
+    @Override
+    public String getDescription() {
+        return "Performs a dilation on the peaks in the peaks map to "
+                + "increase their size.";
     }
 
 

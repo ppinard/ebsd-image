@@ -7,8 +7,6 @@ import org.apache.commons.math.linear.RealVector;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.math.RealMatrixUtils;
-
 import static org.junit.Assert.assertArrayEquals;
 
 public class RealMatrixUtilsTest {

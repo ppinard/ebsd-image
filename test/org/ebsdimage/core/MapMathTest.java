@@ -69,6 +69,30 @@ public class MapMathTest {
 
 
     @Test
+    public void testAdditionIndexedByteMapIndexedByteMapDoubleDoubleIndexedByteMap() {
+        IndexedByteMap<ItemMock> dest = src1.createMap(src1.width, src1.height);
+
+        MapMath.addition(src1, src3, 1.0, 0.0, dest);
+
+        assertEquals(2, dest.width);
+        assertEquals(2, dest.height);
+
+        assertEquals(3, dest.pixArray[0]);
+        assertEquals(1, dest.pixArray[1]);
+        assertEquals(2, dest.pixArray[2]);
+        assertEquals(1, dest.pixArray[3]);
+
+        java.util.Map<Integer, ItemMock> items = dest.getItems();
+        assertEquals(4, items.size());
+        assertEquals(item0, items.get(0));
+        assertEquals(item1, items.get(1));
+        assertEquals(item2, items.get(2));
+        assertEquals(item3, items.get(3));
+    }
+
+
+
+    @Test
     public void testAdditionMapMapDoubleDoubleMap() {
         rmlimage.core.MapMath.addHandler(MapMath.class);
 
@@ -96,37 +120,10 @@ public class MapMathTest {
 
 
     @Test
-    public void testAdditionIndexedByteMapIndexedByteMapDoubleDoubleIndexedByteMap() {
-        IndexedByteMap<ItemMock> dest = src1.createMap(src1.width, src1.height);
-
-        MapMath.addition(src1, src3, 1.0, 0.0, dest);
-
-        assertEquals(2, dest.width);
-        assertEquals(2, dest.height);
-
-        assertEquals(3, dest.pixArray[0]);
-        assertEquals(1, dest.pixArray[1]);
-        assertEquals(2, dest.pixArray[2]);
-        assertEquals(1, dest.pixArray[3]);
-
-        java.util.Map<Integer, ItemMock> items = dest.getItems();
-        assertEquals(4, items.size());
-        assertEquals(item0, items.get(0));
-        assertEquals(item1, items.get(1));
-        assertEquals(item2, items.get(2));
-        assertEquals(item3, items.get(3));
-    }
-
-
-
-    @Test
-    public void testAndMapMapMap() {
-        // Add handler
-        rmlimage.core.MapMath.addHandler(MapMath.class);
-
+    public void testAndIndexedByteMapBinMapIndexedByteMap() {
         IndexedByteMap<ItemMock> dest = src1.duplicate();
 
-        rmlimage.core.MapMath.and((Map) src1, (Map) src2, dest);
+        MapMath.and(src1, src2, dest);
 
         assertEquals(2, dest.width);
         assertEquals(2, dest.height);
@@ -146,10 +143,13 @@ public class MapMathTest {
 
 
     @Test
-    public void testAndIndexedByteMapBinMapIndexedByteMap() {
+    public void testAndMapMapMap() {
+        // Add handler
+        rmlimage.core.MapMath.addHandler(MapMath.class);
+
         IndexedByteMap<ItemMock> dest = src1.duplicate();
 
-        MapMath.and(src1, src2, dest);
+        rmlimage.core.MapMath.and((Map) src1, (Map) src2, dest);
 
         assertEquals(2, dest.width);
         assertEquals(2, dest.height);

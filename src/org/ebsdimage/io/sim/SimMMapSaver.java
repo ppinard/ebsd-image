@@ -29,6 +29,13 @@ import org.ebsdimage.io.EbsdMMapSaver;
 public class SimMMapSaver extends EbsdMMapSaver {
 
     @Override
+    public boolean canSave(Object obj, String fileFormat) {
+        return (obj instanceof SimMMap) && fileFormat.equalsIgnoreCase("zip");
+    }
+
+
+
+    @Override
     protected String getHeader() {
         return SimMMap.FILE_HEADER;
     }
@@ -38,13 +45,6 @@ public class SimMMapSaver extends EbsdMMapSaver {
     @Override
     protected int getVersion() {
         return SimMMap.VERSION;
-    }
-
-
-
-    @Override
-    public boolean canSave(Object obj, String fileFormat) {
-        return (obj instanceof SimMMap) && fileFormat.equalsIgnoreCase("zip");
     }
 
 }

@@ -27,21 +27,6 @@ import org.ebsdimage.core.exp.*;
  */
 public abstract class IndexingResultsOps extends ExpOperation {
 
-    @Override
-    public final Object execute(Exp exp, Object... args) throws ExpError {
-        return calculate(exp, (Solution[]) args);
-    }
-
-
-
-    @Override
-    public final void fireExecuted(ExpListener listener, Exp exp, Object results) {
-        for (OpResult result : (OpResult[]) results)
-            listener.indexingResultsPerformed(exp, this, result);
-    }
-
-
-
     /**
      * Calculates the result(s) from the indexing solutions.
      * 
@@ -55,4 +40,19 @@ public abstract class IndexingResultsOps extends ExpOperation {
      */
     public abstract OpResult[] calculate(Exp exp, Solution[] solutions)
             throws ExpError;
+
+
+
+    @Override
+    public final Object execute(Exp exp, Object... args) throws ExpError {
+        return calculate(exp, (Solution[]) args);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object results) {
+        for (OpResult result : (OpResult[]) results)
+            listener.indexingResultsPerformed(exp, this, result);
+    }
 }

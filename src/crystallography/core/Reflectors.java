@@ -82,30 +82,6 @@ public class Reflectors implements Iterable<Reflector> {
 
 
     /**
-     * Returns a reflector for the given plane.
-     * 
-     * @param h
-     *            h index of the crystallographic plane
-     * @param k
-     *            k index of the crystallographic plane
-     * @param l
-     *            l index of the crystallographic plane
-     * @return reflector associated to the plane
-     */
-    public Reflector get(int h, int k, int l) {
-        int hashCode = Reflector.calculateHashCode(h, k, l);
-
-        Reflector refl = reflectors.get(hashCode);
-        if (refl == null)
-            throw new IllegalArgumentException("Plane (" + h + ";" + k + ";"
-                    + l + ") was not found.");
-        else
-            return refl;
-    }
-
-
-
-    /**
      * Check whether this <code>Reflectors</code> object contains a
      * <code>Reflector</code> with the specified indices.
      * 
@@ -126,24 +102,25 @@ public class Reflectors implements Iterable<Reflector> {
 
 
     /**
-     * Iterates over all the reflectors.
+     * Returns a reflector for the given plane.
      * 
-     * @return an iterator
+     * @param h
+     *            h index of the crystallographic plane
+     * @param k
+     *            k index of the crystallographic plane
+     * @param l
+     *            l index of the crystallographic plane
+     * @return reflector associated to the plane
      */
-    @Override
-    public Iterator<Reflector> iterator() {
-        return reflectors.values().iterator();
-    }
+    public Reflector get(int h, int k, int l) {
+        int hashCode = Reflector.calculateHashCode(h, k, l);
 
-
-
-    /**
-     * Returns the number of defined <code>Reflector</code>.
-     * 
-     * @return number of reflectors
-     */
-    public int size() {
-        return reflectors.size();
+        Reflector refl = reflectors.get(hashCode);
+        if (refl == null)
+            throw new IllegalArgumentException("Plane (" + h + ";" + k + ";"
+                    + l + ") was not found.");
+        else
+            return refl;
     }
 
 
@@ -182,6 +159,29 @@ public class Reflectors implements Iterable<Reflector> {
         Arrays.sort(refls, new PlaneSpacingComparator(), reverse);
 
         return refls;
+    }
+
+
+
+    /**
+     * Iterates over all the reflectors.
+     * 
+     * @return an iterator
+     */
+    @Override
+    public Iterator<Reflector> iterator() {
+        return reflectors.values().iterator();
+    }
+
+
+
+    /**
+     * Returns the number of defined <code>Reflector</code>.
+     * 
+     * @return number of reflectors
+     */
+    public int size() {
+        return reflectors.size();
     }
 
 };

@@ -10,41 +10,6 @@ import org.apache.commons.math.geometry.Vector3D;
 public class PlaneUtil {
 
     /**
-     * Returns the intersection line of two planes.
-     * <p/>
-     * References:
-     * http://www.softsurfer.com/Archive/algorithm_0104/algorithm_0104B.htm
-     * 
-     * @param plane0
-     *            first plane
-     * @param plane1
-     *            second plane
-     * @return intersecting line
-     * @throws ArithmeticException
-     *             if the two planes are parallel
-     */
-    public static Line3D planesIntersection(Plane plane0, Plane plane1) {
-        Vector3D n3 = Vector3D.crossProduct(plane0.n, plane1.n);
-
-        // Check if the planes are parallel
-        if (n3.getNorm() < 1e-6)
-            throw new ArithmeticException("The planes (" + plane0 + " and "
-                    + plane1 + ") are parallel.");
-
-        // Calculate point along the intersecting line
-        // (d2n1 - d1n2) x n3 / (n3^2)
-        Vector3D p =
-                plane0.n.scalarMultiply(plane1.getD()).subtract(
-                        plane1.n.scalarMultiply(plane0.getD()));
-        p = Vector3D.crossProduct(p, n3);
-        p = p.scalarMultiply(1.0 / n3.getNormSq());
-
-        return new Line3D(p, n3);
-    }
-
-
-
-    /**
      * Returns the <code>Point3D</code> where the specified line intersects the
      * specified plane.
      * <p/>
@@ -80,5 +45,40 @@ public class PlaneUtil {
 
         // Return point of intersection
         return line.getPointFromS(s);
+    }
+
+
+
+    /**
+     * Returns the intersection line of two planes.
+     * <p/>
+     * References:
+     * http://www.softsurfer.com/Archive/algorithm_0104/algorithm_0104B.htm
+     * 
+     * @param plane0
+     *            first plane
+     * @param plane1
+     *            second plane
+     * @return intersecting line
+     * @throws ArithmeticException
+     *             if the two planes are parallel
+     */
+    public static Line3D planesIntersection(Plane plane0, Plane plane1) {
+        Vector3D n3 = Vector3D.crossProduct(plane0.n, plane1.n);
+
+        // Check if the planes are parallel
+        if (n3.getNorm() < 1e-6)
+            throw new ArithmeticException("The planes (" + plane0 + " and "
+                    + plane1 + ") are parallel.");
+
+        // Calculate point along the intersecting line
+        // (d2n1 - d1n2) x n3 / (n3^2)
+        Vector3D p =
+                plane0.n.scalarMultiply(plane1.getD()).subtract(
+                        plane1.n.scalarMultiply(plane0.getD()));
+        p = Vector3D.crossProduct(p, n3);
+        p = p.scalarMultiply(1.0 / n3.getNormSq());
+
+        return new Line3D(p, n3);
     }
 }

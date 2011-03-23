@@ -46,19 +46,19 @@ public class SimMMapSaverTest extends SimMMapTester {
 
 
 
-    @Before
-    public void setUp() throws Exception {
-        mmap = new SimMMapLoader().load(zipFile);
-    }
-
-
-
     @AfterClass
     public static void tearDownAfterClass() throws Exception {
         if (zipFile.exists())
             if (!(zipFile.delete()))
                 throw new RuntimeException("File (" + zipFile.getAbsolutePath()
                         + ") cannot be deleted.");
+    }
+
+
+
+    @Before
+    public void setUp() throws Exception {
+        mmap = new SimMMapLoader().load(zipFile);
     }
 
 }

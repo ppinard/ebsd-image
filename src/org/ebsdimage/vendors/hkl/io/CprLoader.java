@@ -36,6 +36,20 @@ public class CprLoader implements Monitorable {
 
 
 
+    @Override
+    public double getTaskProgress() {
+        return 0;
+    }
+
+
+
+    @Override
+    public String getTaskStatus() {
+        return "";
+    }
+
+
+
     /**
      * Loads some parameters inside a CPR file and saves them as a
      * <code>HklMetadata</code>.
@@ -102,20 +116,6 @@ public class CprLoader implements Monitorable {
         microscope.setBeamEnergy(beamEnergy * 1e3);
 
         return new HklMetadata(microscope, projectName, projectPath);
-    }
-
-
-
-    @Override
-    public double getTaskProgress() {
-        return 0;
-    }
-
-
-
-    @Override
-    public String getTaskStatus() {
-        return "";
     }
 
 }

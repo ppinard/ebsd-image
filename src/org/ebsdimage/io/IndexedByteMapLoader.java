@@ -35,11 +35,36 @@ public abstract class IndexedByteMapLoader<Item> extends BasicBmpLoader {
 
 
     /**
+     * Creates a new <code>IndexedByteMap</code> from the specified parameters.
+     * 
+     * @param width
+     *            width of the map
+     * @param height
+     *            height of the map
+     * @param items
+     *            items
+     * @return new map
+     */
+    protected abstract IndexedByteMap<Item> createMap(int width, int height,
+            java.util.Map<Integer, Item> items);
+
+
+
+    /**
      * Returns the file header.
      * 
      * @return file header
      */
     protected abstract String getFileHeader();
+
+
+
+    /**
+     * Returns the class of the item type.
+     * 
+     * @return class of the item type.
+     */
+    protected abstract Class<? extends Item> getItemClass();
 
 
 
@@ -117,48 +142,6 @@ public abstract class IndexedByteMapLoader<Item> extends BasicBmpLoader {
 
 
 
-    /**
-     * Returns the class of the item type.
-     * 
-     * @return class of the item type.
-     */
-    protected abstract Class<? extends Item> getItemClass();
-
-
-
-    /**
-     * Creates a new <code>IndexedByteMap</code> from the specified parameters.
-     * 
-     * @param width
-     *            width of the map
-     * @param height
-     *            height of the map
-     * @param items
-     *            items
-     * @return new map
-     */
-    protected abstract IndexedByteMap<Item> createMap(int width, int height,
-            java.util.Map<Integer, Item> items);
-
-
-
-    /**
-     * Load items from an XML.
-     * 
-     * @param file
-     *            file of the map
-     * @return items
-     * @throws IOException
-     *             if an error occurs while loading
-     */
-    protected java.util.Map<Integer, Item> loadItems(File file)
-            throws IOException {
-        File xmlFile = FileUtil.setExtension(file, "xml");
-        return new XmlLoader().loadMap(Integer.class, getItemClass(), xmlFile);
-    }
-
-
-
     @SuppressWarnings("unchecked")
     @Override
     public IndexedByteMap<Item> load(File file, Map map) throws IOException {
@@ -193,6 +176,23 @@ public abstract class IndexedByteMapLoader<Item> extends BasicBmpLoader {
     public Map load(InputStream inStream) throws IOException {
         throw new IOException(
                 "An Indexed ByteMap cannot be loaded from an input stream.");
+    }
+
+
+
+    /**
+     * Load items from an XML.
+     * 
+     * @param file
+     *            file of the map
+     * @return items
+     * @throws IOException
+     *             if an error occurs while loading
+     */
+    protected java.util.Map<Integer, Item> loadItems(File file)
+            throws IOException {
+        File xmlFile = FileUtil.setExtension(file, "xml");
+        return new XmlLoader().loadMap(Integer.class, getItemClass(), xmlFile);
     }
 
 

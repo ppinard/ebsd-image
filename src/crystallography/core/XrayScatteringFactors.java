@@ -17,10 +17,6 @@
  */
 package crystallography.core;
 
-import static java.lang.Math.exp;
-import static java.lang.Math.pow;
-import static rmlshared.io.FileUtil.getURL;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -28,6 +24,9 @@ import java.util.logging.Logger;
 
 import ptpshared.util.ElementProperties;
 import rmlshared.io.CsvReader;
+import static rmlshared.io.FileUtil.getURL;
+import static java.lang.Math.exp;
+import static java.lang.Math.pow;
 
 /**
  * Scattering factors for x-rays diffraction. The scattering factors are

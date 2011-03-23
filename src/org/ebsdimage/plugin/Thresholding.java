@@ -45,47 +45,6 @@ import rmlshared.gui.RadioButton;
 public class Thresholding extends PlugIn {
 
     /**
-     * Dialog to select the sigma factor for the automatic std. dev.
-     * thresholding.
-     * 
-     * @author Philippe T. Pinard
-     */
-    private static class StdDevDialog extends BasicDialog {
-
-        /** Double field for the sigma factor. */
-        private DoubleField sigmaFactorField;
-
-
-
-        /**
-         * Creates a new dialog.
-         */
-        public StdDevDialog() {
-            super("Standard Deviation Thresholding");
-
-            ColumnPanel panel = new ColumnPanel(2);
-
-            panel.add("Sigma factor");
-            sigmaFactorField = new DoubleField("Sigma factor", 2);
-            sigmaFactorField.setRange(0, Double.MAX_VALUE);
-            panel.add(sigmaFactorField);
-
-            setMainComponent(panel);
-        }
-
-
-
-        /**
-         * Returns the sigma factor value.
-         * 
-         * @return sigma factor
-         */
-        public double getSigmaFactor() {
-            return sigmaFactorField.getValueBFR();
-        }
-    }
-
-    /**
      * Dialog to select the thresholding.
      * 
      * @author Marin Lagac&eacute;
@@ -162,6 +121,47 @@ public class Thresholding extends PlugIn {
 
         /** Standard deviation thresholding. */
         STDDEV
+    }
+
+    /**
+     * Dialog to select the sigma factor for the automatic std. dev.
+     * thresholding.
+     * 
+     * @author Philippe T. Pinard
+     */
+    private static class StdDevDialog extends BasicDialog {
+
+        /** Double field for the sigma factor. */
+        private DoubleField sigmaFactorField;
+
+
+
+        /**
+         * Creates a new dialog.
+         */
+        public StdDevDialog() {
+            super("Standard Deviation Thresholding");
+
+            ColumnPanel panel = new ColumnPanel(2);
+
+            panel.add("Sigma factor");
+            sigmaFactorField = new DoubleField("Sigma factor", 2);
+            sigmaFactorField.setRange(0, Double.MAX_VALUE);
+            panel.add(sigmaFactorField);
+
+            setMainComponent(panel);
+        }
+
+
+
+        /**
+         * Returns the sigma factor value.
+         * 
+         * @return sigma factor
+         */
+        public double getSigmaFactor() {
+            return sigmaFactorField.getValueBFR();
+        }
     }
 
 

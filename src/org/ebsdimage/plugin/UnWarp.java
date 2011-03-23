@@ -204,7 +204,7 @@ public class UnWarp extends PlugIn implements Monitorable {
 
         // Paste the x warp map to the upper left corner
         // and add the label
-        IntMap xWarpMap = (IntMap) new RawLoader().load(xWarpFile);
+        IntMap xWarpMap = new RawLoader().load(xWarpFile);
         ByteMap xWarpByteMap = Conversion.toByteMap(xWarpMap);
         Edit.copy(xWarpByteMap, xWarpByteMap.getROI(), map, 0, 0);
         String2D str = new String2D("X Warp");
@@ -216,7 +216,7 @@ public class UnWarp extends PlugIn implements Monitorable {
 
         // Paste the y warp map to the upper right corner
         // and add the label
-        IntMap yWarpMap = (IntMap) new RawLoader().load(yWarpFile);
+        IntMap yWarpMap = new RawLoader().load(yWarpFile);
         ByteMap yWarpByteMap = Conversion.toByteMap(yWarpMap);
         Edit.copy(yWarpByteMap, yWarpByteMap.getROI(), map, map.width / 2, 0);
         str = new String2D("Y Warp");
@@ -528,8 +528,8 @@ public class UnWarp extends PlugIn implements Monitorable {
                     + destFiles.length + ").");
 
         // Load the warp maps
-        IntMap xWarpMap = (IntMap) new RawLoader().load(xWarpFile);
-        IntMap yWarpMap = (IntMap) new RawLoader().load(yWarpFile);
+        IntMap xWarpMap = new RawLoader().load(xWarpFile);
+        IntMap yWarpMap = new RawLoader().load(yWarpFile);
 
         ByteMap srcMap = null;
         ByteMap destMap = null;

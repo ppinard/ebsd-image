@@ -44,6 +44,13 @@ public class PhaseMapSaver extends IndexedByteMapSaver<Crystal> {
 
 
     @Override
+    protected String getFileHeader() {
+        return PhaseMap.FILE_HEADER;
+    }
+
+
+
+    @Override
     public void saveItems(java.util.Map<Integer, Crystal> items, File file)
             throws IOException {
         File xmlFile = FileUtil.setExtension(file, "xml");
@@ -53,13 +60,6 @@ public class PhaseMapSaver extends IndexedByteMapSaver<Crystal> {
         saver.matchers.registerMatcher(new SpaceGroupMatcher());
 
         saver.saveMap(items, xmlFile);
-    }
-
-
-
-    @Override
-    protected String getFileHeader() {
-        return PhaseMap.FILE_HEADER;
     }
 
 }

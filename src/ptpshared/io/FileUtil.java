@@ -17,15 +17,14 @@
  */
 package ptpshared.io;
 
-import static rmlshared.io.FileUtil.getBaseName;
-import static rmlshared.io.FileUtil.listFilesOnly;
-
 import java.io.File;
 import java.io.IOException;
 
 import rmlshared.io.JarFile;
 import rmlshared.thread.Reflection;
 import rmlshared.util.ArrayList;
+import static rmlshared.io.FileUtil.getBaseName;
+import static rmlshared.io.FileUtil.listFilesOnly;
 
 /**
  * Miscellaneous utilities to deal with files, jars and class path.
@@ -33,69 +32,6 @@ import rmlshared.util.ArrayList;
  * @author Philippe T. Pinard
  */
 public class FileUtil {
-
-    /**
-     * Joins portion of a package name together.
-     * 
-     * @param packageNames
-     *            part of a package name
-     * @return package name
-     */
-    public static String joinPackageNames(String... packageNames) {
-        StringBuilder finalPackageName = new StringBuilder();
-
-        for (String packageName : packageNames) {
-            if (packageName.startsWith("."))
-                packageName = packageName.substring(1);
-            if (packageName.endsWith("."))
-                packageName =
-                        packageName.substring(0, packageName.length() - 1);
-            finalPackageName.append(packageName + ".");
-        }
-
-        finalPackageName.setLength(finalPackageName.length() - 1);
-
-        return finalPackageName.toString();
-    }
-
-
-
-    /**
-     * Checks if the jar file contains the specified package path.
-     * 
-     * @param jarFile
-     *            a jar file
-     * @param packagePath
-     *            package path
-     * @return <code>true</code> if the package path is in the jar file,
-     *         <code>false</code> otherwise
-     */
-    public static boolean jarContainsPackage(JarFile jarFile, String packagePath) {
-        return (jarFile.getEntry(packagePath) != null);
-    }
-
-
-
-    /**
-     * Returns all the jar files in the specified directory.
-     * 
-     * @param dir
-     *            a directory
-     * @return array of jar files
-     * @throws IOException
-     *             if an error occurs while listing the jars
-     */
-    public static JarFile[] getJarFiles(File dir) throws IOException {
-        File[] files = listFilesOnly(dir, "*.jar");
-
-        JarFile[] jarFiles = new JarFile[files.length];
-        for (int i = 0; i < jarFiles.length; i++)
-            jarFiles[i] = new JarFile(files[i]);
-
-        return jarFiles;
-    }
-
-
 
     /**
      * Searches all the jars and returns all the classes in the specified
@@ -171,6 +107,69 @@ public class FileUtil {
         }
 
         return classList.toArray(new Class<?>[0]);
+    }
+
+
+
+    /**
+     * Returns all the jar files in the specified directory.
+     * 
+     * @param dir
+     *            a directory
+     * @return array of jar files
+     * @throws IOException
+     *             if an error occurs while listing the jars
+     */
+    public static JarFile[] getJarFiles(File dir) throws IOException {
+        File[] files = listFilesOnly(dir, "*.jar");
+
+        JarFile[] jarFiles = new JarFile[files.length];
+        for (int i = 0; i < jarFiles.length; i++)
+            jarFiles[i] = new JarFile(files[i]);
+
+        return jarFiles;
+    }
+
+
+
+    /**
+     * Checks if the jar file contains the specified package path.
+     * 
+     * @param jarFile
+     *            a jar file
+     * @param packagePath
+     *            package path
+     * @return <code>true</code> if the package path is in the jar file,
+     *         <code>false</code> otherwise
+     */
+    public static boolean jarContainsPackage(JarFile jarFile, String packagePath) {
+        return (jarFile.getEntry(packagePath) != null);
+    }
+
+
+
+    /**
+     * Joins portion of a package name together.
+     * 
+     * @param packageNames
+     *            part of a package name
+     * @return package name
+     */
+    public static String joinPackageNames(String... packageNames) {
+        StringBuilder finalPackageName = new StringBuilder();
+
+        for (String packageName : packageNames) {
+            if (packageName.startsWith("."))
+                packageName = packageName.substring(1);
+            if (packageName.endsWith("."))
+                packageName =
+                        packageName.substring(0, packageName.length() - 1);
+            finalPackageName.append(packageName + ".");
+        }
+
+        finalPackageName.setLength(finalPackageName.length() - 1);
+
+        return finalPackageName.toString();
     }
 
 }

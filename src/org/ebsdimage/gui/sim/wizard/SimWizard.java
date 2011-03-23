@@ -79,6 +79,41 @@ public class SimWizard extends Wizard {
 
 
     /**
+     * Returns the maximum index of the planes to simulate.
+     * 
+     * @return maximum index
+     */
+    public int getMaxIndex() {
+        Integer maxIndex = (Integer) results.get(ParamsWizardPage.KEY_MAXINDEX);
+
+        if (maxIndex == null)
+            throw new NullPointerException(
+                    "Could not get the maximum index from wizard.");
+
+        return maxIndex;
+    }
+
+
+
+    /**
+     * Returns the microscope of the simulation.
+     * 
+     * @return microscope
+     */
+    public Microscope getMicroscope() {
+        Microscope microscope =
+                (Microscope) results.get(org.ebsdimage.gui.MicroscopeWizardPage.KEY_MICROSCOPE);
+
+        if (microscope == null)
+            throw new NullPointerException(
+                    "Could not get the microscope from wizard.");
+
+        return microscope;
+    }
+
+
+
+    /**
      * Returns the name of the experiment.
      * 
      * @return name
@@ -167,19 +202,19 @@ public class SimWizard extends Wizard {
 
 
     /**
-     * Returns the microscope of the simulation.
+     * Returns the rotations of the simulation.
      * 
-     * @return microscope
+     * @return rotations
      */
-    public Microscope getMicroscope() {
-        Microscope microscope =
-                (Microscope) results.get(MicroscopeWizardPage.KEY_MICROSCOPE);
+    public Rotation[] getRotations() {
+        Rotation[] rotations =
+                (Rotation[]) results.get(ParamsWizardPage.KEY_ROTATIONS);
 
-        if (microscope == null)
+        if (rotations == null)
             throw new NullPointerException(
-                    "Could not get the microscope from wizard.");
+                    "Could not get the rotations from wizard.");
 
-        return microscope;
+        return rotations;
     }
 
 
@@ -198,41 +233,6 @@ public class SimWizard extends Wizard {
                     "Could not get the scattering factors from wizard.");
 
         return scatteringFactors;
-    }
-
-
-
-    /**
-     * Returns the maximum index of the planes to simulate.
-     * 
-     * @return maximum index
-     */
-    public int getMaxIndex() {
-        Integer maxIndex = (Integer) results.get(ParamsWizardPage.KEY_MAXINDEX);
-
-        if (maxIndex == null)
-            throw new NullPointerException(
-                    "Could not get the maximum index from wizard.");
-
-        return maxIndex;
-    }
-
-
-
-    /**
-     * Returns the rotations of the simulation.
-     * 
-     * @return rotations
-     */
-    public Rotation[] getRotations() {
-        Rotation[] rotations =
-                (Rotation[]) results.get(ParamsWizardPage.KEY_ROTATIONS);
-
-        if (rotations == null)
-            throw new NullPointerException(
-                    "Could not get the rotations from wizard.");
-
-        return rotations;
     }
 
 }

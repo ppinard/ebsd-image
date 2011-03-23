@@ -50,26 +50,6 @@ public class Math {
 
 
     /**
-     * Overrides {@link java.lang.Math#sqrt(double)} to prevent rounding errors
-     * when the <code>value</code> is slightly less than 0.0.
-     * 
-     * @param value
-     *            a double value
-     * @return the square root value
-     */
-    public static double sqrt(double value) {
-        if (Double.isNaN(value))
-            throw new IllegalArgumentException("NaN cannot be evaluated");
-
-        if (value < 0.0)
-            return 0.0;
-        else
-            return java.lang.Math.sqrt(value);
-    }
-
-
-
-    /**
      * Returns the sign of the specified double.
      * 
      * @param value
@@ -86,5 +66,25 @@ public class Math {
             return -1;
         else
             return 0;
+    }
+
+
+
+    /**
+     * Overrides {@link java.lang.Math#sqrt(double)} to prevent rounding errors
+     * when the <code>value</code> is slightly less than 0.0.
+     * 
+     * @param value
+     *            a double value
+     * @return the square root value
+     */
+    public static double sqrt(double value) {
+        if (Double.isNaN(value))
+            throw new IllegalArgumentException("NaN cannot be evaluated");
+
+        if (value < 0.0)
+            return 0.0;
+        else
+            return java.lang.Math.sqrt(value);
     }
 }

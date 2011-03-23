@@ -72,47 +72,6 @@ public class IndexingWizardPage extends OperationWizardPage {
 
 
     @Override
-    protected void renderingPage() {
-        super.renderingPage();
-
-        Exp exp = (Exp) get(StartWizardPage.KEY_TEMP_EXP);
-
-        if (exp == null)
-            return;
-
-        if (get(KEY_LOADED) != null)
-            if ((Integer) get(KEY_LOADED) > 0)
-                return;
-
-        // Pre
-        DefaultListModel model = prePanel.getUserListModel();
-        model.clear();
-        for (ExpOperation op : exp.getIndexingPreOps())
-            model.addElement(op);
-
-        // Op
-        model = opPanel.getUserListModel();
-        model.clear();
-        model.addElement(exp.getIndexingOp());
-
-        // Post
-        model = postPanel.getUserListModel();
-        model.clear();
-        for (ExpOperation op : exp.getIndexingPostOps())
-            model.addElement(op);
-
-        // Results
-        model = resultsPanel.getUserListModel();
-        model.clear();
-        for (ExpOperation op : exp.getIndexingResultsOps())
-            model.addElement(op);
-
-        put(KEY_LOADED, 1);
-    }
-
-
-
-    @Override
     public boolean isCorrect(boolean buffer) {
         if (!super.isCorrect(buffer))
             return false;
@@ -149,6 +108,47 @@ public class IndexingWizardPage extends OperationWizardPage {
         }
 
         return true;
+    }
+
+
+
+    @Override
+    protected void renderingPage() {
+        super.renderingPage();
+
+        Exp exp = (Exp) get(StartWizardPage.KEY_TEMP_EXP);
+
+        if (exp == null)
+            return;
+
+        if (get(KEY_LOADED) != null)
+            if ((Integer) get(KEY_LOADED) > 0)
+                return;
+
+        // Pre
+        DefaultListModel model = prePanel.getUserListModel();
+        model.clear();
+        for (ExpOperation op : exp.getIndexingPreOps())
+            model.addElement(op);
+
+        // Op
+        model = opPanel.getUserListModel();
+        model.clear();
+        model.addElement(exp.getIndexingOp());
+
+        // Post
+        model = postPanel.getUserListModel();
+        model.clear();
+        for (ExpOperation op : exp.getIndexingPostOps())
+            model.addElement(op);
+
+        // Results
+        model = resultsPanel.getUserListModel();
+        model.clear();
+        for (ExpOperation op : exp.getIndexingResultsOps())
+            model.addElement(op);
+
+        put(KEY_LOADED, 1);
     }
 
 }

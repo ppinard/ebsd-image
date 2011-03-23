@@ -27,22 +27,6 @@ import java.util.Comparator;
 public class Arrays {
 
     /**
-     * Reverses the order of the array elements.
-     * 
-     * @param array
-     *            an array
-     */
-    public static void reverse(Object[] array) {
-        for (int left = 0, right = array.length - 1; left < right; left++, right--) {
-            Object temp = array[left];
-            array[left] = array[right];
-            array[right] = temp;
-        }
-    }
-
-
-
-    /**
      * Concatenates the values of a string array into a single string.
      * 
      * @param array
@@ -56,6 +40,22 @@ public class Arrays {
             str.append(item);
 
         return str.toString();
+    }
+
+
+
+    /**
+     * Reverses the order of the array elements.
+     * 
+     * @param array
+     *            an array
+     */
+    public static void reverse(Object[] array) {
+        for (int left = 0, right = array.length - 1; left < right; left++, right--) {
+            Object temp = array[left];
+            array[left] = array[right];
+            array[right] = temp;
+        }
     }
 
 

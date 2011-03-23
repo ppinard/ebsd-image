@@ -17,15 +17,15 @@
  */
 package crystallography.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 
 import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class AtomSitesTest extends TestCase {
 
@@ -166,6 +166,18 @@ public class AtomSitesTest extends TestCase {
 
 
     @Test
+    public void testContainsAtomSiteDouble() {
+        atoms.add(atom1);
+        atoms.add(atom2);
+        atoms.add(atom3);
+
+        assertTrue(atoms.contains(new AtomSite(13, 0.0, 0.5002, 0.5), 1e-3));
+        assertFalse(atoms.contains(new AtomSite(14, 0.0, 0.5, 0.5), 1e-3));
+    }
+
+
+
+    @Test
     public void testEqualsObject() {
         atoms.add(atom1);
         atoms.add(atom2);
@@ -253,18 +265,6 @@ public class AtomSitesTest extends TestCase {
         atoms.add(atom3);
 
         assertEquals(1, atoms.indexOf(new AtomSite(13, 0.0, 0.5002, 0.5), 1e-3));
-    }
-
-
-
-    @Test
-    public void testContainsAtomSiteDouble() {
-        atoms.add(atom1);
-        atoms.add(atom2);
-        atoms.add(atom3);
-
-        assertTrue(atoms.contains(new AtomSite(13, 0.0, 0.5002, 0.5), 1e-3));
-        assertFalse(atoms.contains(new AtomSite(14, 0.0, 0.5, 0.5), 1e-3));
     }
 
 

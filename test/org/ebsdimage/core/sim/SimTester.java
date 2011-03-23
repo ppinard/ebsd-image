@@ -45,32 +45,22 @@ import static junittools.test.Assert.assertEquals;
 
 public abstract class SimTester extends TestCase {
 
+    public static SimOperation[] createOperations() {
+        return new SimOperation[] { new PatternSimOpMock(),
+                new OutputOpsMock(), new OutputOps2Mock() };
+    }
+
+
+
+    public static void removeSimPath() throws IOException {
+        if (simPath.exists())
+            FileUtil.rmdir(simPath);
+    }
+
     protected Sim sim;
 
     public static final File simPath = new File(FileUtil.getTempDirFile(),
             "sim1");
-
-
-
-    public static Sim createSim() {
-        return createSim(createOperations());
-    }
-
-
-
-    public static Sim createSim(SimOperation[] ops) {
-        Crystal[] phases = new Crystal[] { CrystalFactory.silicon() };
-        Rotation[] rotations =
-                new Rotation[] { new Rotation(RotationOrder.ZXZ, 0.1, 0.2, 0.3) };
-
-        SimMetadata metadata = createMetadata();
-
-        Sim sim = new Sim(metadata, ops, phases, rotations);
-        sim.setName("Sim1");
-        sim.setDir(simPath);
-
-        return sim;
-    }
 
 
 
@@ -96,9 +86,24 @@ public abstract class SimTester extends TestCase {
 
 
 
-    public static void removeSimPath() throws IOException {
-        if (simPath.exists())
-            FileUtil.rmdir(simPath);
+    public static Sim createSim() {
+        return createSim(createOperations());
+    }
+
+
+
+    public static Sim createSim(SimOperation[] ops) {
+        Crystal[] phases = new Crystal[] { CrystalFactory.silicon() };
+        Rotation[] rotations =
+                new Rotation[] { new Rotation(RotationOrder.ZXZ, 0.1, 0.2, 0.3) };
+
+        SimMetadata metadata = createMetadata();
+
+        Sim sim = new Sim(metadata, ops, phases, rotations);
+        sim.setName("Sim1");
+        sim.setDir(simPath);
+
+        return sim;
     }
 
 
@@ -111,9 +116,9 @@ public abstract class SimTester extends TestCase {
 
 
 
-    public static SimOperation[] createOperations() {
-        return new SimOperation[] { new PatternSimOpMock(),
-                new OutputOpsMock(), new OutputOps2Mock() };
+    @Test
+    public void testGetOutputOps() {
+        assertEquals(2, sim.getOutputOps().length);
     }
 
 
@@ -122,13 +127,6 @@ public abstract class SimTester extends TestCase {
     public void testGetPatternSimOp() {
         assertEquals(2, sim.getPatternSimOp().width);
         assertEquals(2, sim.getPatternSimOp().height);
-    }
-
-
-
-    @Test
-    public void testGetOutputOps() {
-        assertEquals(2, sim.getOutputOps().length);
     }
 
 

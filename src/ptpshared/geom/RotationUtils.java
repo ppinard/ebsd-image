@@ -51,15 +51,50 @@ public class RotationUtils {
 
 
     /**
-     * Returns a string representation of a <code>Rotation</code>.
+     * Returns the Euler angles representation of a rotation in the Bunge
+     * convention.
+     * <ul>
+     * <li>0 < theta1 < 2PI</li>
+     * <li>0 < theta2 < PI</li>
+     * <li>0 < theta3 < 2PI</li>
+     * </ul>
      * 
      * @param r
      *            a rotation
-     * @return string representation
+     * @return array of three numbers
+     * @throws CardanEulerSingularityException
+     *             if the rotation cannot be represented as Euler angles
      */
-    public static String toString(Rotation r) {
-        return "[[" + r.getQ0() + "; " + r.getQ1() + "; " + r.getQ2() + "; "
-                + r.getQ3() + "]]";
+    public static double[] getBungeEulerAngles(Rotation r)
+            throws CardanEulerSingularityException {
+        double[] eulers = r.getAngles(RotationOrder.ZXZ);
+
+        if (eulers[0] < 0)
+            eulers[0] += 2 * Math.PI;
+        if (eulers[2] < 0)
+            eulers[2] += 2 * Math.PI;
+
+        return eulers;
+    }
+
+
+
+    /**
+     * Returns a <code>Rotation</code> of a random rotation. The current time in
+     * milliseconds is used as the seed generator.
+     * <p/>
+     * <b>References:</b>
+     * <ul>
+     * <li><a href="http://neon.materials.cmu.edu/rollett/27750/lecture2.pdf">
+     * Introduction of Group Theory and Rotations in Microstrucutral
+     * Analysis</a>, J. Gruber, CArnegie Mellon University</li>
+     * </ul>
+     * 
+     * @return a random rotation
+     */
+    @CheckReturnValue
+    public static Rotation randomRotation() {
+        return randomRotation(System.currentTimeMillis());
     }
 
 
@@ -97,49 +132,14 @@ public class RotationUtils {
 
 
     /**
-     * Returns a <code>Rotation</code> of a random rotation. The current time in
-     * milliseconds is used as the seed generator.
-     * <p/>
-     * <b>References:</b>
-     * <ul>
-     * <li><a href="http://neon.materials.cmu.edu/rollett/27750/lecture2.pdf">
-     * Introduction of Group Theory and Rotations in Microstrucutral
-     * Analysis</a>, J. Gruber, CArnegie Mellon University</li>
-     * </ul>
-     * 
-     * @return a random rotation
-     */
-    @CheckReturnValue
-    public static Rotation randomRotation() {
-        return randomRotation(System.currentTimeMillis());
-    }
-
-
-
-    /**
-     * Returns the Euler angles representation of a rotation in the Bunge
-     * convention.
-     * <ul>
-     * <li>0 < theta1 < 2PI</li>
-     * <li>0 < theta2 < PI</li>
-     * <li>0 < theta3 < 2PI</li>
-     * </ul>
+     * Returns a string representation of a <code>Rotation</code>.
      * 
      * @param r
      *            a rotation
-     * @return array of three numbers
-     * @throws CardanEulerSingularityException
-     *             if the rotation cannot be represented as Euler angles
+     * @return string representation
      */
-    public static double[] getBungeEulerAngles(Rotation r)
-            throws CardanEulerSingularityException {
-        double[] eulers = r.getAngles(RotationOrder.ZXZ);
-
-        if (eulers[0] < 0)
-            eulers[0] += 2 * Math.PI;
-        if (eulers[2] < 0)
-            eulers[2] += 2 * Math.PI;
-
-        return eulers;
+    public static String toString(Rotation r) {
+        return "[[" + r.getQ0() + "; " + r.getQ1() + "; " + r.getQ2() + "; "
+                + r.getQ3() + "]]";
     }
 }

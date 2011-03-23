@@ -17,9 +17,6 @@
  */
 package org.ebsdimage.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
@@ -31,19 +28,14 @@ import org.junit.Test;
 import rmlimage.core.ByteMap;
 import rmlimage.module.integer.core.IntMap;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+
 public class RawLoaderTest extends TestCase {
 
     private RawLoader loader;
 
     private File file;
-
-
-
-    @Before
-    public void setUp() throws Exception {
-        loader = new RawLoader();
-        file = getFile("org/ebsdimage/testdata/warp-y-map.raw");
-    }
 
 
 
@@ -92,6 +84,14 @@ public class RawLoaderTest extends TestCase {
         xpctMap.clearProperties();
 
         byteMap.assertEquals(xpctMap);
+    }
+
+
+
+    @Before
+    public void setUp() throws Exception {
+        loader = new RawLoader();
+        file = getFile("org/ebsdimage/testdata/warp-y-map.raw");
     }
 
 }

@@ -29,6 +29,14 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class CountCreator implements OperationCreator {
 
     @Override
+    public String getDescription() {
+        return "Quality index on the identified Hough peaks. "
+                + "It corresponds to the number of Hough peaks identified.";
+    }
+
+
+
+    @Override
     public ExpOperation getOperation() {
         return new Count();
     }
@@ -45,14 +53,6 @@ public class CountCreator implements OperationCreator {
     @Override
     public String toString() {
         return "Peaks Count";
-    }
-
-
-
-    @Override
-    public String getDescription() {
-        return "Quality index on the identified Hough peaks. "
-                + "It corresponds to the number of Hough peaks identified.";
     }
 
 }

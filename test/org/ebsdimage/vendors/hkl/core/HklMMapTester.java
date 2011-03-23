@@ -162,6 +162,16 @@ public abstract class HklMMapTester extends TestCase {
 
 
     @Test
+    public void testGetCalibration() {
+        Calibration cal = mmap.getCalibration();
+
+        assertEquals(0.8, cal.getDX().getValue("um"), 1e-6);
+        assertEquals(0.8, cal.getDY().getValue("um"), 1e-6);
+    }
+
+
+
+    @Test
     public void testGetErrorMap() throws IOException {
         ByteMap byteMap = mmap.getErrorMap();
 
@@ -202,16 +212,6 @@ public abstract class HklMMapTester extends TestCase {
         assertEquals(20e3, microscope.getBeamEnergy(), 1e-6);
         assertEquals(70, Math.toDegrees(microscope.getTiltAngle()), 1e-6);
         assertEquals(600, microscope.getMagnification(), 1e-6);
-    }
-
-
-
-    @Test
-    public void testGetCalibration() {
-        Calibration cal = mmap.getCalibration();
-
-        assertEquals(0.8, cal.getDX().getValue("um"), 1e-6);
-        assertEquals(0.8, cal.getDY().getValue("um"), 1e-6);
     }
 
 
@@ -353,7 +353,7 @@ public abstract class HklMMapTester extends TestCase {
         assertTrue(mmap.contains(EbsdMMap.Q2));
         assertTrue(mmap.contains(EbsdMMap.Q3));
         assertTrue(mmap.contains(EbsdMMap.PHASES));
-        assertTrue(mmap.contains(HklMMap.ERRORS));
+        assertTrue(mmap.contains(EbsdMMap.ERRORS));
 
         assertTrue(mmap.contains(HklMMap.BAND_CONTRAST));
         assertTrue(mmap.contains(HklMMap.BAND_COUNT));

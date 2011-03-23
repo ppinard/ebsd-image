@@ -66,6 +66,19 @@ public class ErrorMapSaverTest extends TestCase {
 
 
 
+    private void testErrorMapXml() throws IOException {
+        File xmlFile = FileUtil.setExtension(file, "xml");
+        Map<Integer, ErrorCode> items =
+                new XmlLoader().loadMap(Integer.class, ErrorCode.class, xmlFile);
+
+        assertEquals(3, items.size());
+        assertEquals(ErrorMap.NO_ERROR, items.get(0));
+        assertEquals(errorCode1, items.get(1));
+        assertEquals(errorCode2, items.get(3));
+    }
+
+
+
     @Test
     public void testGetTaskProgress() {
         assertEquals(0.0, saver.getTaskProgress(), 1e-6);
@@ -73,19 +86,20 @@ public class ErrorMapSaverTest extends TestCase {
 
 
 
-    @Test
-    public void testSaveObjectFile() throws IOException {
-        saver.save((Object) map, file);
+    private void testPixArray() throws IOException {
+        ByteMap byteMap = (ByteMap) new BasicBmpLoader().load(file);
 
-        testPixArray();
-        testErrorMapXml();
+        assertEquals(0, byteMap.pixArray[0]);
+        assertEquals(1, byteMap.pixArray[1]);
+        assertEquals(3, byteMap.pixArray[2]);
+        assertEquals(1, byteMap.pixArray[3]);
     }
 
 
 
     @Test
-    public void testSavePhasesMapFile() throws IOException {
-        saver.save(map, file);
+    public void testSaveObjectFile() throws IOException {
+        saver.save((Object) map, file);
 
         testPixArray();
         testErrorMapXml();
@@ -104,26 +118,12 @@ public class ErrorMapSaverTest extends TestCase {
 
 
 
-    private void testPixArray() throws IOException {
-        ByteMap byteMap = (ByteMap) new BasicBmpLoader().load(file);
+    @Test
+    public void testSavePhasesMapFile() throws IOException {
+        saver.save(map, file);
 
-        assertEquals(0, byteMap.pixArray[0]);
-        assertEquals(1, byteMap.pixArray[1]);
-        assertEquals(3, byteMap.pixArray[2]);
-        assertEquals(1, byteMap.pixArray[3]);
-    }
-
-
-
-    private void testErrorMapXml() throws IOException {
-        File xmlFile = FileUtil.setExtension(file, "xml");
-        Map<Integer, ErrorCode> items =
-                new XmlLoader().loadMap(Integer.class, ErrorCode.class, xmlFile);
-
-        assertEquals(3, items.size());
-        assertEquals(ErrorMap.NO_ERROR, items.get(0));
-        assertEquals(errorCode1, items.get(1));
-        assertEquals(errorCode2, items.get(3));
+        testPixArray();
+        testErrorMapXml();
     }
 
 }

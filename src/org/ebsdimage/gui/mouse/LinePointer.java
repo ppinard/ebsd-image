@@ -86,17 +86,6 @@ public class LinePointer extends rmlshared.gui.mouse.LinePointer {
 
 
 
-    @Override
-    public void setPanel(Panel panel) {
-        if (panel instanceof MapPanel)
-            setPanel((MapPanel) panel);
-        else
-            throw new IllegalArgumentException("panel ("
-                    + panel.getClass().getName() + ") must be a MapPanel.");
-    }
-
-
-
     /**
      * Sets the map panel.
      * 
@@ -105,6 +94,17 @@ public class LinePointer extends rmlshared.gui.mouse.LinePointer {
      */
     public void setPanel(MapPanel panel) {
         super.setPanel(panel);
+    }
+
+
+
+    @Override
+    public void setPanel(Panel panel) {
+        if (panel instanceof MapPanel)
+            setPanel((MapPanel) panel);
+        else
+            throw new IllegalArgumentException("panel ("
+                    + panel.getClass().getName() + ") must be a MapPanel.");
     }
 
 }

@@ -29,15 +29,15 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class SumCreator implements OperationCreator {
 
     @Override
-    public ExpOperation getOperation() {
-        return new Sum();
+    public String getDescription() {
+        return "Calculates the total intensity of the Hough map.";
     }
 
 
 
     @Override
-    public String getDescription() {
-        return "Calculates the total intensity of the Hough map.";
+    public ExpOperation getOperation() {
+        return new Sum();
     }
 
 

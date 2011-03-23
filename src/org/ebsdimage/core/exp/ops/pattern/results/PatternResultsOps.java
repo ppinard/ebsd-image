@@ -28,21 +28,6 @@ import rmlimage.core.ByteMap;
  */
 public abstract class PatternResultsOps extends ExpOperation {
 
-    @Override
-    public final Object execute(Exp exp, Object... args) throws ExpError {
-        return calculate(exp, (ByteMap) args[0]);
-    }
-
-
-
-    @Override
-    public final void fireExecuted(ExpListener listener, Exp exp, Object results) {
-        for (OpResult result : (OpResult[]) results)
-            listener.patternResultsPerformed(exp, this, result);
-    }
-
-
-
     /**
      * Calculates the result(s) from the pattern map.
      * 
@@ -56,5 +41,20 @@ public abstract class PatternResultsOps extends ExpOperation {
      */
     public abstract OpResult[] calculate(Exp exp, ByteMap srcMap)
             throws ExpError;
+
+
+
+    @Override
+    public final Object execute(Exp exp, Object... args) throws ExpError {
+        return calculate(exp, (ByteMap) args[0]);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object results) {
+        for (OpResult result : (OpResult[]) results)
+            listener.patternResultsPerformed(exp, this, result);
+    }
 
 }

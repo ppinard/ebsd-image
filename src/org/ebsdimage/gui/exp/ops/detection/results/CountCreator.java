@@ -43,15 +43,15 @@ public class CountCreator implements OperationCreator {
 
 
     @Override
-    public String toString() {
-        return "Count";
+    public int show() {
+        return OperationCreator.OK;
     }
 
 
 
     @Override
-    public int show() {
-        return OperationCreator.OK;
+    public String toString() {
+        return "Count";
     }
 
 }

@@ -143,6 +143,19 @@ public class HoughMapTest extends TestCase {
 
 
     @Test
+    public void testGetHoughPeak() {
+        HoughPeak expected = new HoughPeak(toRadians(80.5), -92.328, 0.0);
+        HoughPeak actual = mapEven.getHoughPeak(88721);
+        assertEquals(expected, actual, 1e-3);
+
+        expected = new HoughPeak(toRadians(80.3), 331.176, 0.0);
+        actual = mapOdd.getHoughPeak(2697);
+        assertEquals(expected, actual, 1e-3);
+    }
+
+
+
+    @Test
     public void testGetIndexDoubleDouble() {
         // Even increments
         assertEquals(88721, mapEven.getIndex(toRadians(80.5), -92.328));
@@ -208,6 +221,14 @@ public class HoughMapTest extends TestCase {
 
 
 
+    @Test
+    public void testGetPixelInfoLabel() {
+        String expected = "  \u03b8=0.0\u00b0  \u03c1=401.4257px  value=0";
+        assertEquals(expected, mapEven.getPixelInfoLabel(0));
+    }
+
+
+
     @Test(expected = IllegalArgumentException.class)
     public void testGetRException1() {
         // Test negative index
@@ -220,27 +241,6 @@ public class HoughMapTest extends TestCase {
     public void testGetRException2() {
         // Test index > max
         mapEven.getRho(144360);
-    }
-
-
-
-    @Test
-    public void testGetHoughPeak() {
-        HoughPeak expected = new HoughPeak(toRadians(80.5), -92.328, 0.0);
-        HoughPeak actual = mapEven.getHoughPeak(88721);
-        assertEquals(expected, actual, 1e-3);
-
-        expected = new HoughPeak(toRadians(80.3), 331.176, 0.0);
-        actual = mapOdd.getHoughPeak(2697);
-        assertEquals(expected, actual, 1e-3);
-    }
-
-
-
-    @Test
-    public void testGetPixelInfoLabel() {
-        String expected = "  \u03b8=0.0\u00b0  \u03c1=401.4257px  value=0";
-        assertEquals(expected, mapEven.getPixelInfoLabel(0));
     }
 
 
@@ -407,18 +407,6 @@ public class HoughMapTest extends TestCase {
 
 
     @Test
-    public void testGetXMagnitude() {
-        assertEquals(160, mapEven.getX(new Magnitude(80.24, "deg")));
-        assertEquals(161, mapEven.getX(new Magnitude(80.26, "deg")));
-        assertEquals(161, mapEven.getX(new Magnitude(80.5, "deg")));
-        assertEquals(161, mapEven.getX(new Magnitude(80.74, "deg")));
-        assertEquals(162, mapEven.getX(new Magnitude(80.76, "deg")));
-        assertEquals(0, mapEven.getX(new Magnitude(0, "deg")));
-    }
-
-
-
-    @Test
     public void testGetXDouble() {
         assertEquals(160, mapEven.getX(toRadians(80.24)));
         assertEquals(161, mapEven.getX(toRadians(80.26)));
@@ -442,6 +430,18 @@ public class HoughMapTest extends TestCase {
     public void testGetXException2() {
         // Test theta > thetaMax
         mapEven.getX(180.0);
+    }
+
+
+
+    @Test
+    public void testGetXMagnitude() {
+        assertEquals(160, mapEven.getX(new Magnitude(80.24, "deg")));
+        assertEquals(161, mapEven.getX(new Magnitude(80.26, "deg")));
+        assertEquals(161, mapEven.getX(new Magnitude(80.5, "deg")));
+        assertEquals(161, mapEven.getX(new Magnitude(80.74, "deg")));
+        assertEquals(162, mapEven.getX(new Magnitude(80.76, "deg")));
+        assertEquals(0, mapEven.getX(new Magnitude(0, "deg")));
     }
 
 

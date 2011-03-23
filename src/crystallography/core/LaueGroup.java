@@ -158,6 +158,13 @@ public enum LaueGroup implements Labeled {
 
 
 
+    @Override
+    public String getLabel() {
+        return symbol;
+    }
+
+
+
     /**
      * Returns the array of symmetry operators (i.e. rotation) associated with
      * this point group.
@@ -166,13 +173,6 @@ public enum LaueGroup implements Labeled {
      */
     public Rotation[] getOperators() {
         return operators;
-    }
-
-
-
-    @Override
-    public String getLabel() {
-        return symbol;
     }
 
 }

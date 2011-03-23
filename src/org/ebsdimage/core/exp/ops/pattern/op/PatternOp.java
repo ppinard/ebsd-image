@@ -37,20 +37,6 @@ public abstract class PatternOp extends ExpOperation {
     @Attribute(name = "startIndex")
     public final int startIndex;
 
-
-
-    @Override
-    public final Object execute(Exp exp, Object... args) throws ExpError {
-        return load(exp, (Integer) args[0]);
-    }
-
-
-
-    @Override
-    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
-        listener.patternOpPerformed(exp, this, (ByteMap) result);
-    }
-
     /** Number of patterns to load. */
     @Attribute(name = "size")
     public final int size;
@@ -99,6 +85,13 @@ public abstract class PatternOp extends ExpOperation {
 
 
 
+    @Override
+    public final Object execute(Exp exp, Object... args) throws ExpError {
+        return load(exp, (Integer) args[0]);
+    }
+
+
+
     /**
      * Extracts the current <code>PattenrOp</code> in a smaller
      * <code>PattenrOp</code> containing less patterns.
@@ -110,6 +103,13 @@ public abstract class PatternOp extends ExpOperation {
      * @return reduced <code>PattenrOp</code>
      */
     public abstract PatternOp extract(int startIndex, int endIndex);
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
+        listener.patternOpPerformed(exp, this, (ByteMap) result);
+    }
 
 
 

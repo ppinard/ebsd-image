@@ -17,12 +17,10 @@
  */
 package ptpshared.util;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 
-import ptpshared.util.DataTypeUtil;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class DataTypeUtilTest {
 

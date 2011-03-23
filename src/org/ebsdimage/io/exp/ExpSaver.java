@@ -51,8 +51,15 @@ public class ExpSaver implements Saver {
 
 
     @Override
-    public void save(Object obj, File file) throws IOException {
-        save((Exp) obj, file);
+    public boolean canSave(Object obj, String fileFormat) {
+        return (obj instanceof Exp) && fileFormat.equalsIgnoreCase("xml");
+    }
+
+
+
+    @Override
+    public double getTaskProgress() {
+        return saver.getTaskProgress();
     }
 
 
@@ -74,15 +81,8 @@ public class ExpSaver implements Saver {
 
 
     @Override
-    public double getTaskProgress() {
-        return saver.getTaskProgress();
-    }
-
-
-
-    @Override
-    public boolean canSave(Object obj, String fileFormat) {
-        return (obj instanceof Exp) && fileFormat.equalsIgnoreCase("xml");
+    public void save(Object obj, File file) throws IOException {
+        save((Exp) obj, file);
     }
 
 }

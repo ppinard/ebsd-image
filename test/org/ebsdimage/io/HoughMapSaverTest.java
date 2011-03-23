@@ -44,6 +44,13 @@ public class HoughMapSaverTest extends TestCase {
 
 
 
+    private void testHoughMap(HoughMap map) throws IOException {
+        HoughMap other = new HoughMapLoader().load(file);
+        other.assertEquals(map);
+    }
+
+
+
     @Test
     public void testSaveHoughMapFile() throws IOException {
         ByteMap original = (ByteMap) load("org/ebsdimage/testdata/Lena.bmp");
@@ -52,13 +59,6 @@ public class HoughMapSaverTest extends TestCase {
         saver.save(map, file);
 
         testHoughMap(map);
-    }
-
-
-
-    private void testHoughMap(HoughMap map) throws IOException {
-        HoughMap other = new HoughMapLoader().load(file);
-        other.assertEquals(map);
     }
 
 }

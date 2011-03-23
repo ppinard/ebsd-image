@@ -96,6 +96,17 @@ public class PhaseMapTest extends TestCase {
 
 
     @Test
+    public void testGetPhases() {
+        Crystal[] phases = phaseMap.getPhases();
+
+        assertEquals(2, phases.length);
+        assertTrue(Arrays.contains(phases, phase1));
+        assertTrue(Arrays.contains(phases, phase2));
+    }
+
+
+
+    @Test
     public void testPhaseMapIntInt() {
         PhaseMap other = new PhaseMap(2, 2);
 
@@ -142,16 +153,5 @@ public class PhaseMapTest extends TestCase {
 
         for (int i = 0; i < 4; i++)
             assertEquals(0, other.getPixValue(i));
-    }
-
-
-
-    @Test
-    public void testGetPhases() {
-        Crystal[] phases = phaseMap.getPhases();
-
-        assertEquals(2, phases.length);
-        assertTrue(Arrays.contains(phases, phase1));
-        assertTrue(Arrays.contains(phases, phase2));
     }
 }

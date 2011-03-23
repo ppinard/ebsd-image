@@ -58,6 +58,24 @@ public class BmpFileTest extends TestCase {
 
 
     @Test
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new BmpFile()));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        assertEquals(1671902368, op.hashCode());
+    }
+
+
+
+    @Test
     public void testSave() throws IOException {
         // Create simulation
         SimOperation[] ops = new SimOperation[] { new PatternSimOpMock(), op };
@@ -75,24 +93,6 @@ public class BmpFileTest extends TestCase {
     @Test
     public void testToString() {
         assertEquals("BmpFile []", op.toString());
-    }
-
-
-
-    @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertTrue(op.equals(new BmpFile()));
-    }
-
-
-
-    @Test
-    public void testHashCode() {
-        assertEquals(1671902368, op.hashCode());
     }
 
 

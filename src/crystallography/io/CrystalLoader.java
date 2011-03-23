@@ -51,6 +51,20 @@ public class CrystalLoader implements Loader {
 
 
 
+    @Override
+    public boolean canLoad(File file) {
+        return getValidationMessage(file).isEmpty();
+    }
+
+
+
+    @Override
+    public double getTaskProgress() {
+        return loader.getTaskProgress();
+    }
+
+
+
     /**
      * Returns the validation message. An empty string is the file is valid; a
      * error message otherwise.
@@ -96,20 +110,6 @@ public class CrystalLoader implements Loader {
     @Override
     public Crystal load(File file, Object obj) throws IOException {
         return loader.load(Crystal.class, file);
-    }
-
-
-
-    @Override
-    public double getTaskProgress() {
-        return loader.getTaskProgress();
-    }
-
-
-
-    @Override
-    public boolean canLoad(File file) {
-        return getValidationMessage(file).isEmpty();
     }
 
 }

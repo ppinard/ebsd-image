@@ -76,15 +76,15 @@ public class PatternBandEdges extends PatternSimOp {
 
 
     @Override
-    public String toString() {
-        return "PatternBandEdges [width=" + width + ", height=" + height + "]";
+    protected BandsCalculator getBandsCalculator() {
+        return new LinearBandsCalculator();
     }
 
 
 
     @Override
-    protected BandsCalculator getBandsCalculator() {
-        return new LinearBandsCalculator();
+    public String toString() {
+        return "PatternBandEdges [width=" + width + ", height=" + height + "]";
     }
 
 }

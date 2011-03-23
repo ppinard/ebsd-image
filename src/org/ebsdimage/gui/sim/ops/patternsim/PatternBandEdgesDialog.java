@@ -37,13 +37,6 @@ public class PatternBandEdgesDialog extends PatternSimOpDialog {
 
 
     @Override
-    public String toString() {
-        return "Pattern Band Edges";
-    }
-
-
-
-    @Override
     public String getDescription() {
         return "Simulate a pattern where the edges of the bands are drawn.";
     }
@@ -54,6 +47,13 @@ public class PatternBandEdgesDialog extends PatternSimOpDialog {
     public SimOperation getOperation() {
         return new PatternBandEdges(widthField.getValueBFR(),
                 heightField.getValueBFR());
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Pattern Band Edges";
     }
 
 }

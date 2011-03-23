@@ -17,9 +17,6 @@
  */
 package crystallography.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -31,6 +28,9 @@ import org.junit.Test;
 import crystallography.core.AtomSite;
 import crystallography.core.Crystal;
 import crystallography.core.SpaceGroups1;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CifLoaderTest extends TestCase {
 

@@ -10,6 +10,7 @@ import ptpshared.util.simplexml.ApacheCommonMathMatcher;
 import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.gui.PlugIn;
 import rmlimage.gui.RMLImage;
+import rmlshared.gui.OkCancelDialog;
 import rmlshared.io.FileUtil;
 import rmlshared.io.WildcardFileFilter;
 import crystallography.core.Crystal;
@@ -27,7 +28,7 @@ public class NewPhase extends PlugIn {
         // Create new phase
         NewPhaseDialog dialog = new NewPhaseDialog();
 
-        if (dialog.show() != NewPhaseDialog.OK)
+        if (dialog.show() != OkCancelDialog.OK)
             return;
 
         Crystal phase = dialog.getCrystal();

@@ -26,6 +26,41 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
 public class SingleFileBrowserField extends JComponent implements
         InputValidation, InputBuffering, PreferenceKeeping {
 
+    /** Action listener for the browse button. */
+    private class BrowseButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Object source = e.getSource();
+
+            assert source == browseButton : "source (" + source
+                    + ") should be " + browseButton;
+
+            // Set selected directory
+            String[] fileNames = nameField.getText().split(";");
+            if (fileNames.length > 0)
+                fileChooser.setCurrentDirectory(new File(fileNames[0]));
+
+            // Show dialog
+            if (fileChooser.showDialog(getParent(), "Select") == JFileChooser.CANCEL_OPTION)
+                return;
+
+            // Check file
+            if (!isCorrect())
+                actionPerformed(e);
+
+            // Set name field
+            StringBuilder text = new StringBuilder();
+            if (fileChooser.isMultiSelectionEnabled())
+                for (File file : fileChooser.getSelectedFiles())
+                    text.append(file.getPath() + ";");
+            else
+                text.append(fileChooser.getSelectedFile().getPath());
+
+            nameField.setText(text.toString());
+        }
+
+    }
+
     /** Field for the file path. */
     private final JTextField nameField;
 
@@ -167,6 +202,31 @@ public class SingleFileBrowserField extends JComponent implements
 
 
     /**
+     * Returns the selected file name as a <code>File</code> object.
+     * 
+     * @return the selected file name
+     */
+    @CheckForNull
+    public File getFile() {
+        return fileChooser.getSelectedFile();
+    }
+
+
+
+    /**
+     * Returns the selected file name as a <code>File</code> object <b>The
+     * method <code>bufferInput()</code> must be called before to read the text
+     * in the field and put it in the buffer.</b>
+     * 
+     * @return the selected file name
+     */
+    public File getFileBFR() {
+        return getFile();
+    }
+
+
+
+    /**
      * Gets the name of the field.
      * 
      * @return name of the field
@@ -272,6 +332,35 @@ public class SingleFileBrowserField extends JComponent implements
 
 
     /**
+     * Sets the file of the field and the selected file in the file chooser. If
+     * the specified file is <code>null</code> the value in the field is
+     * cleared. If the file does not exists, the value in the field is also
+     * cleared.
+     * 
+     * @param file
+     *            a file
+     * @throws IllegalArgumentException
+     *             if the file is invalid
+     */
+    public void setFile(File file) {
+        if (file == null) {
+            clear();
+            return;
+        }
+
+        // File respects file filters
+        if (!fileChooser.accept(file)) {
+            throw new IllegalArgumentException("Selected file (" + file
+                    + ") does not have a valid extension.");
+        }
+
+        nameField.setText(file.getPath());
+        fileChooser.setSelectedFile(file);
+    }
+
+
+
+    /**
      * Sets the name of the field.
      * 
      * @param name
@@ -316,60 +405,6 @@ public class SingleFileBrowserField extends JComponent implements
 
 
 
-    /**
-     * Sets the file of the field and the selected file in the file chooser. If
-     * the specified file is <code>null</code> the value in the field is
-     * cleared. If the file does not exists, the value in the field is also
-     * cleared.
-     * 
-     * @param file
-     *            a file
-     * @throws IllegalArgumentException
-     *             if the file is invalid
-     */
-    public void setFile(File file) {
-        if (file == null) {
-            clear();
-            return;
-        }
-
-        // File respects file filters
-        if (!fileChooser.accept(file)) {
-            throw new IllegalArgumentException("Selected file (" + file
-                    + ") does not have a valid extension.");
-        }
-
-        nameField.setText(file.getPath());
-        fileChooser.setSelectedFile(file);
-    }
-
-
-
-    /**
-     * Returns the selected file name as a <code>File</code> object.
-     * 
-     * @return the selected file name
-     */
-    @CheckForNull
-    public File getFile() {
-        return fileChooser.getSelectedFile();
-    }
-
-
-
-    /**
-     * Returns the selected file name as a <code>File</code> object <b>The
-     * method <code>bufferInput()</code> must be called before to read the text
-     * in the field and put it in the buffer.</b>
-     * 
-     * @return the selected file name
-     */
-    public File getFileBFR() {
-        return getFile();
-    }
-
-
-
     @Override
     public void updatePreferences() {
         if (preferences == null)
@@ -377,41 +412,6 @@ public class SingleFileBrowserField extends JComponent implements
 
         if (getFile() != null)
             preferences.setPreference(PREF_VALUE, getFile().getPath());
-    }
-
-    /** Action listener for the browse button. */
-    private class BrowseButtonListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            Object source = e.getSource();
-
-            assert source == browseButton : "source (" + source
-                    + ") should be " + browseButton;
-
-            // Set selected directory
-            String[] fileNames = nameField.getText().split(";");
-            if (fileNames.length > 0)
-                fileChooser.setCurrentDirectory(new File(fileNames[0]));
-
-            // Show dialog
-            if (fileChooser.showDialog(getParent(), "Select") == JFileChooser.CANCEL_OPTION)
-                return;
-
-            // Check file
-            if (!isCorrect())
-                actionPerformed(e);
-
-            // Set name field
-            StringBuilder text = new StringBuilder();
-            if (fileChooser.isMultiSelectionEnabled())
-                for (File file : fileChooser.getSelectedFiles())
-                    text.append(file.getPath() + ";");
-            else
-                text.append(fileChooser.getSelectedFile().getPath());
-
-            nameField.setText(text.toString());
-        }
-
     }
 
 }

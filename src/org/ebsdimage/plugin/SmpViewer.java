@@ -86,23 +86,23 @@ public class SmpViewer extends PlugIn {
 
 
         /**
-         * Returns the selected smp file.
-         * 
-         * @return smp file
-         */
-        public File getSmpFile() {
-            return fileField.getFileBFR();
-        }
-
-
-
-        /**
          * Returns the index of the pattern.
          * 
          * @return index of the pattern
          */
         public int getIndex() {
             return indexField.getValueBFR();
+        }
+
+
+
+        /**
+         * Returns the selected smp file.
+         * 
+         * @return smp file
+         */
+        public File getSmpFile() {
+            return fileField.getFileBFR();
         }
 
     }

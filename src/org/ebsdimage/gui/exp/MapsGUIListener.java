@@ -38,60 +38,18 @@ import rmlimage.core.Map;
 @Root
 public class MapsGUIListener implements ExpListener {
 
-    @Override
-    public void patternOpPerformed(Exp exp, PatternOp op, ByteMap patternMap) {
-        showMap(exp, op, patternMap);
-    }
-
-
-
-    @Override
-    public void patternPostPerformed(Exp exp, PatternPostOps op,
-            ByteMap patternMap) {
-        showMap(exp, op, patternMap);
-    }
-
-
-
-    @Override
-    public void patternResultsPerformed(Exp exp, PatternResultsOps op,
-            OpResult result) {
-    }
-
-
-
-    @Override
-    public void houghPrePerformed(Exp exp, HoughPreOps op, ByteMap patternMap) {
-        showMap(exp, op, patternMap);
-    }
-
-
-
-    @Override
-    public void houghOpPerformed(Exp exp, HoughOp op, HoughMap houghMap) {
-        showMap(exp, op, houghMap);
-    }
-
-
-
-    @Override
-    public void houghPostPerformed(Exp exp, HoughPostOps op, HoughMap houghMap) {
-        showMap(exp, op, houghMap);
-    }
-
-
-
-    @Override
-    public void houghResultsPerformed(Exp exp, HoughResultsOps op,
-            OpResult result) {
-    }
-
-
-
-    @Override
-    public void detectionPrePerformed(Exp exp, DetectionPreOps op,
-            HoughMap houghMap) {
-        showMap(exp, op, houghMap);
+    /**
+     * Creates a name for a map from the experiment's name, a given name and
+     * experiment's index.
+     * 
+     * @param exp
+     *            an <code>Exp</code>
+     * @param name
+     *            a given name
+     * @return name
+     */
+    private String createName(Exp exp, String name) {
+        return name + "_" + exp.getCurrentIndex();
     }
 
 
@@ -112,6 +70,14 @@ public class MapsGUIListener implements ExpListener {
 
 
     @Override
+    public void detectionPrePerformed(Exp exp, DetectionPreOps op,
+            HoughMap houghMap) {
+        showMap(exp, op, houghMap);
+    }
+
+
+
+    @Override
     public void detectionResultsPerformed(Exp exp, DetectionResultsOps op,
             OpResult result) {
     }
@@ -119,9 +85,29 @@ public class MapsGUIListener implements ExpListener {
 
 
     @Override
-    public void identificationPrePerformed(Exp exp, IdentificationPreOps op,
-            BinMap peaksMap) {
-        showMap(exp, op, peaksMap);
+    public void houghOpPerformed(Exp exp, HoughOp op, HoughMap houghMap) {
+        showMap(exp, op, houghMap);
+    }
+
+
+
+    @Override
+    public void houghPostPerformed(Exp exp, HoughPostOps op, HoughMap houghMap) {
+        showMap(exp, op, houghMap);
+    }
+
+
+
+    @Override
+    public void houghPrePerformed(Exp exp, HoughPreOps op, ByteMap patternMap) {
+        showMap(exp, op, patternMap);
+    }
+
+
+
+    @Override
+    public void houghResultsPerformed(Exp exp, HoughResultsOps op,
+            OpResult result) {
     }
 
 
@@ -147,18 +133,16 @@ public class MapsGUIListener implements ExpListener {
 
 
     @Override
-    public void identificationResultsPerformed(Exp exp,
-            IdentificationResultsOps op, OpResult result) {
+    public void identificationPrePerformed(Exp exp, IdentificationPreOps op,
+            BinMap peaksMap) {
+        showMap(exp, op, peaksMap);
     }
 
 
 
     @Override
-    public void indexingPrePerformed(Exp exp, IndexingPreOps op,
-            HoughPeak[] peaks) {
-        HoughMap houghMap = exp.getSourceHoughMap();
-        ExpListenerUtil.drawHoughPeaksOverlay(houghMap, peaks);
-        showMap(exp, op, houghMap);
+    public void identificationResultsPerformed(Exp exp,
+            IdentificationResultsOps op, OpResult result) {
     }
 
 
@@ -191,7 +175,39 @@ public class MapsGUIListener implements ExpListener {
 
 
     @Override
+    public void indexingPrePerformed(Exp exp, IndexingPreOps op,
+            HoughPeak[] peaks) {
+        HoughMap houghMap = exp.getSourceHoughMap();
+        ExpListenerUtil.drawHoughPeaksOverlay(houghMap, peaks);
+        showMap(exp, op, houghMap);
+    }
+
+
+
+    @Override
     public void indexingResultsPerformed(Exp exp, IndexingResultsOps op,
+            OpResult result) {
+    }
+
+
+
+    @Override
+    public void patternOpPerformed(Exp exp, PatternOp op, ByteMap patternMap) {
+        showMap(exp, op, patternMap);
+    }
+
+
+
+    @Override
+    public void patternPostPerformed(Exp exp, PatternPostOps op,
+            ByteMap patternMap) {
+        showMap(exp, op, patternMap);
+    }
+
+
+
+    @Override
+    public void patternResultsPerformed(Exp exp, PatternResultsOps op,
             OpResult result) {
     }
 
@@ -211,21 +227,5 @@ public class MapsGUIListener implements ExpListener {
         map.setName(createName(exp, op.getName()));
         map.shouldSave(false);
         RMLImage.getDesktop().add(map);
-    }
-
-
-
-    /**
-     * Creates a name for a map from the experiment's name, a given name and
-     * experiment's index.
-     * 
-     * @param exp
-     *            an <code>Exp</code>
-     * @param name
-     *            a given name
-     * @return name
-     */
-    private String createName(Exp exp, String name) {
-        return name + "_" + exp.getCurrentIndex();
     }
 }

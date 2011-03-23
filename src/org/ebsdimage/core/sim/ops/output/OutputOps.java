@@ -36,21 +36,6 @@ import rmlimage.core.Map;
 public abstract class OutputOps extends SimOperation {
 
     /**
-     * Saves results, operations or parameters of the <code>Sim</code>.
-     * 
-     * @param sim
-     *            simulation executing this method
-     * @param patternSimOp
-     *            pattern simulation operation
-     * @throws IOException
-     *             if an error occurs while saving
-     */
-    public abstract void save(Sim sim, PatternSimOp patternSimOp)
-            throws IOException;
-
-
-
-    /**
      * Converts bands calculated in the <code>PatternSimOp</code> to Hough
      * peaks.
      * 
@@ -71,5 +56,20 @@ public abstract class OutputOps extends SimOperation {
 
         return peaks;
     }
+
+
+
+    /**
+     * Saves results, operations or parameters of the <code>Sim</code>.
+     * 
+     * @param sim
+     *            simulation executing this method
+     * @param patternSimOp
+     *            pattern simulation operation
+     * @throws IOException
+     *             if an error occurs while saving
+     */
+    public abstract void save(Sim sim, PatternSimOp patternSimOp)
+            throws IOException;
 
 }

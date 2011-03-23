@@ -125,6 +125,45 @@ public class EditTest extends TestCase {
 
 
     @Test
+    public void testCropHoughMapDouble() throws IOException {
+        // Create a HoughMap
+        HoughMap houghMap =
+                new HoughMapLoader().load(getFile("org/ebsdimage/testdata/houghmap.bmp"));
+
+        HoughMap croppedMap = Edit.crop(houghMap, 50.0);
+        assertEquals(houghMap.width, croppedMap.width);
+        assertEquals(55, croppedMap.height);
+        assertEquals(50.80506, croppedMap.rhoMax, 0.001);
+        assertTrue(houghMap.getDeltaRho().equals(croppedMap.getDeltaRho(),
+                0.001));
+
+        ByteMap expected =
+                (ByteMap) load("org/ebsdimage/testdata/houghmap_cropped.bmp");
+        Conversion.toByteMap(croppedMap).assertEquals(expected);
+    }
+
+
+
+    @Test
+    // Bug #108 (Rounding error in height calculation)
+    public void testCropHoughMapDouble2() {
+        ByteMap pattern =
+                (ByteMap) load("org/ebsdimage/testdata/pattern_masked.bmp");
+        HoughMap houghMap = Transform.hough(pattern, toRadians(0.5));
+
+        for (int i = 1; i <= (int) houghMap.getRhoMax(); i++) {
+            Logger.getLogger("ebsd").info("Cropping radius: " + i);
+            HoughMap croppedMap = Edit.crop(houghMap, i);
+
+            assertEquals(houghMap.getDeltaRho(), croppedMap.getDeltaRho(), 1e-6);
+            assertEquals(houghMap.getDeltaTheta(), croppedMap.getDeltaTheta(),
+                    1e-6);
+        }
+    }
+
+
+
+    @Test
     public void testCropIndexedByteMapROI() {
         IndexedByteMap<ItemMock> cropMap =
                 Edit.crop(indexedMap, new ROI(0, 0, 1, 1));
@@ -166,45 +205,6 @@ public class EditTest extends TestCase {
         assertEquals(item0, items.get(0));
         assertEquals(item1, items.get(1));
         assertEquals(item2, items.get(2));
-    }
-
-
-
-    @Test
-    public void testCropHoughMapDouble() throws IOException {
-        // Create a HoughMap
-        HoughMap houghMap =
-                new HoughMapLoader().load(getFile("org/ebsdimage/testdata/houghmap.bmp"));
-
-        HoughMap croppedMap = Edit.crop(houghMap, 50.0);
-        assertEquals(houghMap.width, croppedMap.width);
-        assertEquals(55, croppedMap.height);
-        assertEquals(50.80506, croppedMap.rhoMax, 0.001);
-        assertTrue(houghMap.getDeltaRho().equals(croppedMap.getDeltaRho(),
-                0.001));
-
-        ByteMap expected =
-                (ByteMap) load("org/ebsdimage/testdata/houghmap_cropped.bmp");
-        Conversion.toByteMap(croppedMap).assertEquals(expected);
-    }
-
-
-
-    @Test
-    // Bug #108 (Rounding error in height calculation)
-    public void testCropHoughMapDouble2() {
-        ByteMap pattern =
-                (ByteMap) load("org/ebsdimage/testdata/pattern_masked.bmp");
-        HoughMap houghMap = Transform.hough(pattern, toRadians(0.5));
-
-        for (int i = 1; i <= (int) houghMap.getRhoMax(); i++) {
-            Logger.getLogger("ebsd").info("Cropping radius: " + i);
-            HoughMap croppedMap = Edit.crop(houghMap, i);
-
-            assertEquals(houghMap.getDeltaRho(), croppedMap.getDeltaRho(), 1e-6);
-            assertEquals(houghMap.getDeltaTheta(), croppedMap.getDeltaTheta(),
-                    1e-6);
-        }
     }
 
 }

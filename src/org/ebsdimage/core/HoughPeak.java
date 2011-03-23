@@ -52,6 +52,24 @@ public class HoughPeak implements AlmostEquable {
 
 
     /**
+     * Creates a new Hough peak. The units of rho are set to be pixels.
+     * 
+     * @param theta
+     *            value of the theta coordinate
+     * @param rho
+     *            value of the rho coordinate
+     * @param intensity
+     *            value for the intensity of the peak
+     * @throws IllegalArgumentException
+     *             if rho, theta or intensity are NaN or infinity
+     */
+    public HoughPeak(double theta, double rho, double intensity) {
+        this(theta, rho, "px", intensity);
+    }
+
+
+
+    /**
      * Creates a new Hough peak.
      * 
      * @param theta
@@ -106,38 +124,9 @@ public class HoughPeak implements AlmostEquable {
      * @throws IllegalArgumentException
      *             if rho, theta or intensity are NaN or infinity
      */
-    public HoughPeak(double theta, double rho, double intensity) {
-        this(theta, rho, "px", intensity);
-    }
-
-
-
-    /**
-     * Creates a new Hough peak. The units of rho are set to be pixels.
-     * 
-     * @param theta
-     *            value of the theta coordinate
-     * @param rho
-     *            value of the rho coordinate
-     * @param intensity
-     *            value for the intensity of the peak
-     * @throws IllegalArgumentException
-     *             if rho, theta or intensity are NaN or infinity
-     */
     public HoughPeak(Magnitude theta, Magnitude rho, double intensity) {
         this(theta.getValue("rad"), rho.getPreferredUnitsValue(),
                 rho.getPreferredUnitsLabel(), intensity);
-    }
-
-
-
-    /**
-     * Returns a <code>Magnitude</code> object of the rho coordinate.
-     * 
-     * @return rho coordinate
-     */
-    public Magnitude getRho() {
-        return new Magnitude(rho, rhoUnits);
     }
 
 
@@ -237,6 +226,17 @@ public class HoughPeak implements AlmostEquable {
             return false;
 
         return true;
+    }
+
+
+
+    /**
+     * Returns a <code>Magnitude</code> object of the rho coordinate.
+     * 
+     * @return rho coordinate
+     */
+    public Magnitude getRho() {
+        return new Magnitude(rho, rhoUnits);
     }
 
 

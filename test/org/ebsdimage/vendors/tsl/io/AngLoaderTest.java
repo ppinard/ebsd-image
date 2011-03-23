@@ -61,12 +61,9 @@ public class AngLoaderTest extends TslMMapTester {
 
 
     @Test
-    public void testLoadPhaseNames() throws IOException {
-        String[] phaseNames = loader.loadPhaseNames(file);
-
-        assertEquals(2, phaseNames.length);
-        assertEquals("TungstenCarbide", phaseNames[0]);
-        assertEquals("Nickel", phaseNames[1]);
+    public void testCanLoad() {
+        assertTrue(loader.canLoad(file));
+        assertFalse(loader.canLoad(getFile("org/ebsdimage/vendors/tsl/testdata/WC.xml")));
     }
 
 
@@ -93,9 +90,12 @@ public class AngLoaderTest extends TslMMapTester {
 
 
     @Test
-    public void testCanLoad() {
-        assertTrue(loader.canLoad(file));
-        assertFalse(loader.canLoad(getFile("org/ebsdimage/vendors/tsl/testdata/WC.xml")));
+    public void testLoadPhaseNames() throws IOException {
+        String[] phaseNames = loader.loadPhaseNames(file);
+
+        assertEquals(2, phaseNames.length);
+        assertEquals("TungstenCarbide", phaseNames[0]);
+        assertEquals("Nickel", phaseNames[1]);
     }
 
 }

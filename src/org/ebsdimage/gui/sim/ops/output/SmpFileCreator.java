@@ -36,13 +36,6 @@ public class SmpFileCreator implements OperationCreator {
 
 
     @Override
-    public String toString() {
-        return "SMP File";
-    }
-
-
-
-    @Override
     public SimOperation getOperation() {
         return new SmpFile();
     }
@@ -52,6 +45,13 @@ public class SmpFileCreator implements OperationCreator {
     @Override
     public int show() {
         return OperationCreator.OK;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "SMP File";
     }
 
 }

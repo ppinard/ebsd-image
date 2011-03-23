@@ -34,43 +34,6 @@ import rmlshared.gui.OkCancelDialog;
  */
 public class MaskDisc extends PlugIn {
 
-    @Override
-    public void xRun() {
-        doMaskDisc();
-    }
-
-
-
-    /**
-     * Creates the mask disc.
-     * 
-     * @return the resultant mask disc
-     */
-    private BinMap doMaskDisc() {
-        if (!areMapsLoaded(true))
-            return null;
-
-        Map map = getSelectedMap();
-
-        if (map == null) {
-            ErrorDialog.show("Select a map.");
-            return null;
-        }
-
-        Dialog dialog = new Dialog(map);
-        if (dialog.show() != OkCancelDialog.OK)
-            return null;
-
-        BinMap maskDisc =
-                new org.ebsdimage.core.MaskDisc(map.width, map.height,
-                        dialog.getCenterX(), dialog.getCenterY(),
-                        dialog.getRadius());
-
-        RMLImage.add(maskDisc);
-
-        return maskDisc;
-    }
-
     /**
      * Dialog to specify the position and size of the disc.
      * 
@@ -159,6 +122,45 @@ public class MaskDisc extends PlugIn {
             return radiusField.getValueBFR();
         }
 
+    }
+
+
+
+    /**
+     * Creates the mask disc.
+     * 
+     * @return the resultant mask disc
+     */
+    private BinMap doMaskDisc() {
+        if (!areMapsLoaded(true))
+            return null;
+
+        Map map = getSelectedMap();
+
+        if (map == null) {
+            ErrorDialog.show("Select a map.");
+            return null;
+        }
+
+        Dialog dialog = new Dialog(map);
+        if (dialog.show() != OkCancelDialog.OK)
+            return null;
+
+        BinMap maskDisc =
+                new org.ebsdimage.core.MaskDisc(map.width, map.height,
+                        dialog.getCenterX(), dialog.getCenterY(),
+                        dialog.getRadius());
+
+        RMLImage.add(maskDisc);
+
+        return maskDisc;
+    }
+
+
+
+    @Override
+    public void xRun() {
+        doMaskDisc();
     }
 
 }

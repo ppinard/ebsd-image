@@ -146,6 +146,13 @@ public class MicroscopeTest extends TestCase {
 
 
     @Test
+    public void testGetName() {
+        assertEquals("Microscope1", microscope.getName());
+    }
+
+
+
+    @Test
     public void testGetPatternCenterX() {
         assertEquals(0.5, microscope.getPatternCenterX(), 1e-6);
     }
@@ -309,6 +316,21 @@ public class MicroscopeTest extends TestCase {
 
 
     @Test
+    public void testSetName() {
+        microscope.setName("DIFF");
+        assertEquals("DIFF", microscope.getName());
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetNameException() {
+        microscope.setName("");
+    }
+
+
+
+    @Test
     public void testSetPatternCenterX() {
         microscope.setPatternCenterX(0.25);
         assertEquals(0.25, microscope.getPatternCenterX(), 1e-6);
@@ -448,27 +470,5 @@ public class MicroscopeTest extends TestCase {
 
         assertEquals(Math.toRadians(45.0), other.getTiltAngle(), 1e-6);
         assertEquals(0.015, other.getWorkingDistance(), 1e-6);
-    }
-
-
-
-    @Test
-    public void testGetName() {
-        assertEquals("Microscope1", microscope.getName());
-    }
-
-
-
-    @Test
-    public void testSetName() {
-        microscope.setName("DIFF");
-        assertEquals("DIFF", microscope.getName());
-    }
-
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testSetNameException() {
-        microscope.setName("");
     }
 }

@@ -37,27 +37,6 @@ public class OperationGeneratorTest extends TestCase {
 
 
     @Test
-    public void testOperationGenerator() {
-        assertEquals(3, generator.getCombinations().size());
-
-        PatternPostOps2Mock op;
-        op =
-                (PatternPostOps2Mock) generator.getCombinations().get(0).get(
-                        "0001:org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps2Mock");
-        assertEquals(1, op.var);
-        op =
-                (PatternPostOps2Mock) generator.getCombinations().get(1).get(
-                        "0001:org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps2Mock");
-        assertEquals(4, op.var);
-        op =
-                (PatternPostOps2Mock) generator.getCombinations().get(2).get(
-                        "0001:org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps2Mock");
-        assertEquals(8, op.var);
-    }
-
-
-
-    @Test
     public void testAddItem() {
         generator.addItem(1, new PatternPostOps2Mock(12));
         assertEquals(4, generator.getCombinations().size());
@@ -84,13 +63,6 @@ public class OperationGeneratorTest extends TestCase {
 
 
     @Test
-    public void testGetItems() {
-        assertEquals(4, generator.getItems().keySet().size());
-    }
-
-
-
-    @Test
     public void testGetCombinations() {
         assertEquals(3, generator.getCombinations().size());
     }
@@ -100,6 +72,13 @@ public class OperationGeneratorTest extends TestCase {
     @Test
     public void testGetCombinationsOperations() {
         assertEquals(3, generator.getCombinationsOperations().size());
+    }
+
+
+
+    @Test
+    public void testGetItems() {
+        assertEquals(4, generator.getItems().keySet().size());
     }
 
 
@@ -118,6 +97,27 @@ public class OperationGeneratorTest extends TestCase {
                 "0005:org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps2Mock";
         assertEquals(5, OperationGenerator.getOrderFromKey(key));
 
+    }
+
+
+
+    @Test
+    public void testOperationGenerator() {
+        assertEquals(3, generator.getCombinations().size());
+
+        PatternPostOps2Mock op;
+        op =
+                (PatternPostOps2Mock) generator.getCombinations().get(0).get(
+                        "0001:org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps2Mock");
+        assertEquals(1, op.var);
+        op =
+                (PatternPostOps2Mock) generator.getCombinations().get(1).get(
+                        "0001:org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps2Mock");
+        assertEquals(4, op.var);
+        op =
+                (PatternPostOps2Mock) generator.getCombinations().get(2).get(
+                        "0001:org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps2Mock");
+        assertEquals(8, op.var);
     }
 
 

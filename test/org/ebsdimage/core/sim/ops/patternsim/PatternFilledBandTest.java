@@ -63,9 +63,14 @@ public class PatternFilledBandTest extends TestCase {
 
 
     @Test
-    public void testPatternFilledBandIntIntIntScatteringFactorsEnum() {
-        assertEquals(400, op.width);
-        assertEquals(400, op.height);
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertFalse(op.equals(new PatternFilledBand(401, 400)));
+        assertFalse(op.equals(new PatternFilledBand(400, 401)));
+        assertTrue(op.equals(new PatternFilledBand(400, 400)));
     }
 
 
@@ -115,21 +120,16 @@ public class PatternFilledBandTest extends TestCase {
 
 
     @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
-
-        assertFalse(op.equals(new PatternFilledBand(401, 400)));
-        assertFalse(op.equals(new PatternFilledBand(400, 401)));
-        assertTrue(op.equals(new PatternFilledBand(400, 400)));
+    public void testHashCode() {
+        assertEquals(-329012506, op.hashCode());
     }
 
 
 
     @Test
-    public void testHashCode() {
-        assertEquals(-329012506, op.hashCode());
+    public void testPatternFilledBandIntIntIntScatteringFactorsEnum() {
+        assertEquals(400, op.width);
+        assertEquals(400, op.height);
     }
 
 

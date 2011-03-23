@@ -37,6 +37,15 @@ import rmlshared.io.FileUtil;
 public abstract class IndexedByteMapSaver<Item> extends BasicBmpSaver {
 
     /**
+     * Returns the file header.
+     * 
+     * @return file header
+     */
+    protected abstract String getFileHeader();
+
+
+
+    /**
      * Saves an <code>IndexedByteMap</code> to a BMP file and XML file
      * containing the items. The location where to save the files is taken from
      * {@link IndexedByteMap#getFile()}.
@@ -49,33 +58,6 @@ public abstract class IndexedByteMapSaver<Item> extends BasicBmpSaver {
     public void save(IndexedByteMap<Item> map) throws IOException {
         save(map, map.getFile());
     }
-
-
-
-    /**
-     * Saves the items as a XML.
-     * 
-     * @param items
-     *            items to save
-     * @param file
-     *            file of the map
-     * @throws IOException
-     *             if an error occurs while saving the items
-     */
-    protected void saveItems(java.util.Map<Integer, Item> items, File file)
-            throws IOException {
-        File xmlFile = FileUtil.setExtension(file, "xml");
-        new XmlSaver().saveMap(items, xmlFile);
-    }
-
-
-
-    /**
-     * Returns the file header.
-     * 
-     * @return file header
-     */
-    protected abstract String getFileHeader();
 
 
 
@@ -114,6 +96,24 @@ public abstract class IndexedByteMapSaver<Item> extends BasicBmpSaver {
     @Override
     public void save(Object obj, File file) throws IOException {
         save((IndexedByteMap<Item>) obj, file);
+    }
+
+
+
+    /**
+     * Saves the items as a XML.
+     * 
+     * @param items
+     *            items to save
+     * @param file
+     *            file of the map
+     * @throws IOException
+     *             if an error occurs while saving the items
+     */
+    protected void saveItems(java.util.Map<Integer, Item> items, File file)
+            throws IOException {
+        File xmlFile = FileUtil.setExtension(file, "xml");
+        new XmlSaver().saveMap(items, xmlFile);
     }
 
 }

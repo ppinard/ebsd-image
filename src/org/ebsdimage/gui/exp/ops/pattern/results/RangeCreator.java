@@ -29,6 +29,13 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class RangeCreator implements OperationCreator {
 
     @Override
+    public String getDescription() {
+        return "Calculates the intensity range in the diffraction pattern.";
+    }
+
+
+
+    @Override
     public ExpOperation getOperation() {
         return new Range();
     }
@@ -45,12 +52,5 @@ public class RangeCreator implements OperationCreator {
     @Override
     public String toString() {
         return "Range";
-    }
-
-
-
-    @Override
-    public String getDescription() {
-        return "Calculates the intensity range in the diffraction pattern.";
     }
 }

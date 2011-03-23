@@ -69,6 +69,41 @@ public class ExpMerge extends BaseCUI {
 
 
     /**
+     * Returns the directory containing all the experiments.
+     * 
+     * @param cmdLine
+     *            command line arguments
+     * @return base directory for the experiments
+     * @throws IOException
+     *             if an error occurs while validating the file
+     */
+    @CheckForNull
+    private File getInputDir(CommandLine cmdLine) throws IOException {
+        if (cmdLine.getArgs().length != 1) {
+            console.println("Please specify only the base directory ("
+                    + cmdLine.getArgs().length + "directory(ies) were given).");
+            return null;
+        }
+
+        File dir = new File(cmdLine.getArgs()[0]);
+
+        if (!dir.exists()) {
+            console.println("Specified directory does not exist.");
+            return null;
+        }
+
+        if (!dir.isDirectory()) {
+            console.println("The specified path is not a directory.");
+            return null;
+        }
+
+        MessageDialog.show("Base directory is: " + dir);
+        return dir;
+    }
+
+
+
+    /**
      * Returns the command line options.
      * 
      * @return command line options
@@ -81,6 +116,63 @@ public class ExpMerge extends BaseCUI {
                 "Output multimap results file"));
 
         return options;
+    }
+
+
+
+    /**
+     * Returns the output multimap results file.
+     * 
+     * @param cmdLine
+     *            command line arguments
+     * @return results file
+     * @throws IOException
+     *             if an error occurs while validating the file
+     */
+    @CheckForNull
+    private File getOutputFile(CommandLine cmdLine) throws IOException {
+        if (cmdLine.hasOption("output")) {
+            if (cmdLine.getOptionValue("output") == null) {
+                ErrorDialog.show("Please specify an output file.");
+                return null;
+            } else {
+                File file = new File(cmdLine.getOptionValue("output"));
+
+                file = FileUtil.setExtension(file, "zip");
+
+                MessageDialog.show("Output file is: " + file);
+                return file;
+            }
+        } else {
+            ErrorDialog.show("The output file is required.");
+            return null;
+        }
+    }
+
+
+
+    /**
+     * Lists all the experiment multimap files located in the directories inside
+     * the specified base directory. The method only searches in one level deep
+     * from the base directory.
+     * 
+     * @param dir
+     *            base directory
+     * @return experiment multimap files
+     */
+    private File[] listExpMMapFiles(File dir) {
+        ArrayList<File> expDirs = new ArrayList<File>();
+
+        ExpMMapLoader loader = new ExpMMapLoader();
+        for (File expDir : FileUtil.listDirectories(dir)) {
+            // List all files in directory
+            for (File file : FileUtil.listFilesOnly(expDir))
+                // Look for Exp multimap zip files
+                if (loader.canLoad(file))
+                    expDirs.add(file);
+        }
+
+        return expDirs.toArray(new File[0]);
     }
 
 
@@ -175,98 +267,6 @@ public class ExpMerge extends BaseCUI {
         new ExpMMapSaver().save(dest, outputFile);
 
         MessageDialog.show("Saving final experiment multimap... DONE");
-    }
-
-
-
-    /**
-     * Returns the directory containing all the experiments.
-     * 
-     * @param cmdLine
-     *            command line arguments
-     * @return base directory for the experiments
-     * @throws IOException
-     *             if an error occurs while validating the file
-     */
-    @CheckForNull
-    private File getInputDir(CommandLine cmdLine) throws IOException {
-        if (cmdLine.getArgs().length != 1) {
-            console.println("Please specify only the base directory ("
-                    + cmdLine.getArgs().length + "directory(ies) were given).");
-            return null;
-        }
-
-        File dir = new File(cmdLine.getArgs()[0]);
-
-        if (!dir.exists()) {
-            console.println("Specified directory does not exist.");
-            return null;
-        }
-
-        if (!dir.isDirectory()) {
-            console.println("The specified path is not a directory.");
-            return null;
-        }
-
-        MessageDialog.show("Base directory is: " + dir);
-        return dir;
-    }
-
-
-
-    /**
-     * Returns the output multimap results file.
-     * 
-     * @param cmdLine
-     *            command line arguments
-     * @return results file
-     * @throws IOException
-     *             if an error occurs while validating the file
-     */
-    @CheckForNull
-    private File getOutputFile(CommandLine cmdLine) throws IOException {
-        if (cmdLine.hasOption("output")) {
-            if (cmdLine.getOptionValue("output") == null) {
-                ErrorDialog.show("Please specify an output file.");
-                return null;
-            } else {
-                File file = new File(cmdLine.getOptionValue("output"));
-
-                file = FileUtil.setExtension(file, "zip");
-
-                MessageDialog.show("Output file is: " + file);
-                return file;
-            }
-        } else {
-            ErrorDialog.show("The output file is required.");
-            return null;
-        }
-    }
-
-
-
-    /**
-     * Lists all the experiment multimap files located in the directories inside
-     * the specified base directory. The method only searches in one level deep
-     * from the base directory.
-     * 
-     * @param dir
-     *            base directory
-     * @return experiment multimap files
-     */
-    private File[] listExpMMapFiles(File dir) {
-        ArrayList<File> expDirs = new ArrayList<File>();
-
-        ExpMMapLoader loader = new ExpMMapLoader();
-        for (File expDir : FileUtil.listDirectories(dir)) {
-            // List all files in directory
-            for (File file : FileUtil.listFilesOnly(expDir))
-                // Look for Exp multimap zip files
-                if (loader.canLoad(file))
-                    expDirs.add(file);
-        }
-
-        return expDirs.toArray(new File[0]);
     }
 
 

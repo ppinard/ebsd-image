@@ -25,12 +25,6 @@ package org.ebsdimage.plugin;
 public class Init extends rmlimage.module.Init {
 
     @Override
-    public void preGUI() {
-    }
-
-
-
-    @Override
     public void postGUI() {
         if (rmlimage.module.Module.DEBUG)
             System.out.println("Running postGUI initialisation of the EBSD module");
@@ -40,6 +34,12 @@ public class Init extends rmlimage.module.Init {
 
         // Adds the SMP filters to the FileDialog
         rmlshared.gui.FileDialog.addFilter("*.smp");
+    }
+
+
+
+    @Override
+    public void preGUI() {
     }
 
 }

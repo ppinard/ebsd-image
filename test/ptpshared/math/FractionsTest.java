@@ -17,11 +17,9 @@
  */
 package ptpshared.math;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
-import ptpshared.math.Fractions;
+import static org.junit.Assert.assertEquals;
 
 public class FractionsTest {
 

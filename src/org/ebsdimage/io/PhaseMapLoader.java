@@ -38,6 +38,14 @@ import crystallography.io.simplexml.SpaceGroupMatcher;
 public class PhaseMapLoader extends IndexedByteMapLoader<Crystal> {
 
     @Override
+    protected IndexedByteMap<Crystal> createMap(int width, int height,
+            java.util.Map<Integer, Crystal> items) {
+        return new PhaseMap(width, height, items);
+    }
+
+
+
+    @Override
     protected String getFileHeader() {
         return PhaseMap.FILE_HEADER;
     }
@@ -45,15 +53,15 @@ public class PhaseMapLoader extends IndexedByteMapLoader<Crystal> {
 
 
     @Override
-    public PhaseMap load(File file) throws IOException {
-        return (PhaseMap) super.load(file);
+    protected Class<? extends Crystal> getItemClass() {
+        return Crystal.class;
     }
 
 
 
     @Override
-    protected Class<? extends Crystal> getItemClass() {
-        return Crystal.class;
+    public PhaseMap load(File file) throws IOException {
+        return (PhaseMap) super.load(file);
     }
 
 
@@ -68,14 +76,6 @@ public class PhaseMapLoader extends IndexedByteMapLoader<Crystal> {
     @Override
     public PhaseMap load(File file, Object map) throws IOException {
         return (PhaseMap) super.load(file, map);
-    }
-
-
-
-    @Override
-    protected IndexedByteMap<Crystal> createMap(int width, int height,
-            java.util.Map<Integer, Crystal> items) {
-        return new PhaseMap(width, height, items);
     }
 
 

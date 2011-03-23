@@ -40,13 +40,12 @@ public class SimUtil {
      * @param generator
      *            simulation generator to generate combinations of
      *            <code>Operation</code>
-     *            @param metadata
+     * @param metadata
      *            simulation metadata
      * @param phases
      *            array of <code>Crystal</code>s
      * @param rotations
      *            array of rotations
-     * 
      * @return an array of <code>Sim</code>
      */
     public static Sim[] createSimulations(OperationGenerator generator,

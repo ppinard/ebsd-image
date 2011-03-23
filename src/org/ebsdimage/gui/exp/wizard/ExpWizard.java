@@ -89,6 +89,24 @@ public class ExpWizard extends Wizard {
 
 
     /**
+     * Returns the calibration for the EBSD multimap of the experiment.
+     * 
+     * @return calibration
+     */
+    public Calibration getCalibration() {
+        Calibration calibration =
+                (Calibration) results.get(PatternsWizardPage.KEY_CALIBRATION);
+
+        if (calibration == null)
+            throw new NullPointerException(
+                    "Could not get the calibration from wizard.");
+
+        return calibration;
+    }
+
+
+
+    /**
      * Returns the working directory of the experiment.
      * 
      * @return working directory
@@ -123,31 +141,13 @@ public class ExpWizard extends Wizard {
 
 
     /**
-     * Returns the calibration for the EBSD multimap of the experiment.
-     * 
-     * @return calibration
-     */
-    public Calibration getCalibration() {
-        Calibration calibration =
-                (Calibration) results.get(PatternsWizardPage.KEY_CALIBRATION);
-
-        if (calibration == null)
-            throw new NullPointerException(
-                    "Could not get the calibration from wizard.");
-
-        return calibration;
-    }
-
-
-
-    /**
      * Returns the microscope of the experiment.
      * 
      * @return microscope
      */
     public Microscope getMicroscope() {
         Microscope microscope =
-                (Microscope) results.get(MicroscopeWizardPage.KEY_MICROSCOPE);
+                (Microscope) results.get(org.ebsdimage.gui.MicroscopeWizardPage.KEY_MICROSCOPE);
 
         if (microscope == null)
             throw new NullPointerException(

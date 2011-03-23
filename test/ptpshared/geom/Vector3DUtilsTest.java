@@ -82,6 +82,26 @@ public class Vector3DUtilsTest {
 
 
     @Test
+    public void testEquals() {
+        assertFalse(Vector3DUtils.equals(u, null, 1e-3));
+        assertFalse(Vector3DUtils.equals(null, v, 1e-3));
+
+        Vector3D other = new Vector3D(1.01, 2.01, 3.01);
+        assertTrue(Vector3DUtils.equals(u, other, 1e-1));
+
+        other = new Vector3D(1.1, 2.01, 3.01);
+        assertFalse(Vector3DUtils.equals(u, other, 1e-1));
+
+        other = new Vector3D(1.01, 2.1, 3.01);
+        assertFalse(Vector3DUtils.equals(u, other, 1e-1));
+
+        other = new Vector3D(1.01, 2.01, 3.1);
+        assertFalse(Vector3DUtils.equals(u, other, 1e-1));
+    }
+
+
+
+    @Test
     public void testPositive() {
         Vector3D v = Vector3DUtils.positive(new Vector3D(0, -1, 1));
         assertEquals(new Vector3D(0, 1, -1), v, 1e-6);
@@ -96,18 +116,11 @@ public class Vector3DUtilsTest {
 
 
     @Test
-    public void testTripleProduct() {
-        double tp = Vector3DUtils.tripleProduct(u, v, w);
-        assertEquals(tp, -3.0, 0.001);
+    public void testToArray() {
+        double[] expected = new double[] { 1, 2, 3 };
+        double[] actual = Vector3DUtils.toArray(u);
 
-        tp = Vector3DUtils.tripleProduct(v, w, u);
-        assertEquals(tp, -3.0, 0.001);
-
-        tp = Vector3DUtils.tripleProduct(w, u, v);
-        assertEquals(tp, -3.0, 0.001);
-
-        tp = Vector3DUtils.tripleProduct(u, w, v);
-        assertEquals(tp, 3.0, 0.001);
+        assertArrayEquals(expected, actual, 1e-6);
     }
 
 
@@ -135,30 +148,17 @@ public class Vector3DUtilsTest {
 
 
     @Test
-    public void testToArray() {
-        double[] expected = new double[] { 1, 2, 3 };
-        double[] actual = Vector3DUtils.toArray(u);
+    public void testTripleProduct() {
+        double tp = Vector3DUtils.tripleProduct(u, v, w);
+        assertEquals(tp, -3.0, 0.001);
 
-        assertArrayEquals(expected, actual, 1e-6);
-    }
+        tp = Vector3DUtils.tripleProduct(v, w, u);
+        assertEquals(tp, -3.0, 0.001);
 
+        tp = Vector3DUtils.tripleProduct(w, u, v);
+        assertEquals(tp, -3.0, 0.001);
 
-
-    @Test
-    public void testEquals() {
-        assertFalse(Vector3DUtils.equals(u, null, 1e-3));
-        assertFalse(Vector3DUtils.equals(null, v, 1e-3));
-
-        Vector3D other = new Vector3D(1.01, 2.01, 3.01);
-        assertTrue(Vector3DUtils.equals(u, other, 1e-1));
-
-        other = new Vector3D(1.1, 2.01, 3.01);
-        assertFalse(Vector3DUtils.equals(u, other, 1e-1));
-
-        other = new Vector3D(1.01, 2.1, 3.01);
-        assertFalse(Vector3DUtils.equals(u, other, 1e-1));
-
-        other = new Vector3D(1.01, 2.01, 3.1);
-        assertFalse(Vector3DUtils.equals(u, other, 1e-1));
+        tp = Vector3DUtils.tripleProduct(u, w, v);
+        assertEquals(tp, 3.0, 0.001);
     }
 }

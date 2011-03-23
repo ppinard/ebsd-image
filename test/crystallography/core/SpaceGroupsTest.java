@@ -17,13 +17,257 @@
  */
 package crystallography.core;
 
-import static crystallography.core.CrystalSystem.*;
-import static crystallography.core.LaueGroup.*;
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
+import static crystallography.core.CrystalSystem.*;
+import static crystallography.core.LaueGroup.*;
+
 public class SpaceGroupsTest {
+
+    @Test
+    public void testCrystalSystem() {
+        assertEquals(TRICLINIC, SpaceGroups.SG1.crystalSystem);
+        assertEquals(TRICLINIC, SpaceGroups.SG2.crystalSystem);
+        assertEquals(MONOCLINIC, SpaceGroups.SG3.crystalSystem);
+        assertEquals(MONOCLINIC, SpaceGroups.SG4.crystalSystem);
+        assertEquals(MONOCLINIC, SpaceGroups.SG5.crystalSystem);
+        assertEquals(MONOCLINIC, SpaceGroups.SG6.crystalSystem);
+        assertEquals(MONOCLINIC, SpaceGroups.SG7.crystalSystem);
+        assertEquals(MONOCLINIC, SpaceGroups.SG8.crystalSystem);
+        assertEquals(MONOCLINIC, SpaceGroups.SG9.crystalSystem);
+        assertEquals(MONOCLINIC, SpaceGroups.SG10.crystalSystem);
+        assertEquals(MONOCLINIC, SpaceGroups.SG11.crystalSystem);
+        assertEquals(MONOCLINIC, SpaceGroups.SG12.crystalSystem);
+        assertEquals(MONOCLINIC, SpaceGroups.SG13.crystalSystem);
+        assertEquals(MONOCLINIC, SpaceGroups.SG14.crystalSystem);
+        assertEquals(MONOCLINIC, SpaceGroups.SG15.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG16.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG17.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG18.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG19.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG20.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG21.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG22.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG23.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG24.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG25.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG26.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG27.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG28.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG29.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG30.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG31.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG32.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG33.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG34.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG35.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG36.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG37.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG38.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG39.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG40.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG41.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG42.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG43.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG44.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG45.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG46.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG47.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG48.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG49.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG50.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG51.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG52.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG53.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG54.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG55.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG56.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG57.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG58.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG59.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG60.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG61.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG62.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG63.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG64.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG65.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG66.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG67.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG68.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG69.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG70.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG71.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG72.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG73.crystalSystem);
+        assertEquals(ORTHORHOMBIC, SpaceGroups.SG74.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG75.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG76.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG77.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG78.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG79.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG80.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG81.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG82.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG83.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG84.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG85.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG86.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG87.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG88.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG89.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG90.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG91.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG92.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG93.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG94.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG95.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG96.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG97.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG98.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG99.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG100.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG101.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG102.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG103.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG104.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG105.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG106.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG107.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG108.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG109.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG110.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG111.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG112.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG113.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG114.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG115.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG116.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG117.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG118.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG119.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG120.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG121.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG122.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG123.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG124.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG125.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG126.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG127.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG128.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG129.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG130.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG131.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG132.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG133.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG134.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG135.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG136.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG137.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG138.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG139.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG140.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG141.crystalSystem);
+        assertEquals(TETRAGONAL, SpaceGroups.SG142.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG143.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG144.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG145.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG146.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG1146.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG147.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG148.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG1148.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG149.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG150.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG151.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG152.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG153.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG154.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG155.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG1155.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG156.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG157.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG158.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG159.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG160.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG1160.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG161.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG1161.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG162.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG163.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG164.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG165.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG166.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG1166.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG167.crystalSystem);
+        assertEquals(TRIGONAL, SpaceGroups.SG1167.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG168.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG169.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG170.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG171.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG172.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG173.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG174.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG175.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG176.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG177.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG178.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG179.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG180.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG181.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG182.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG183.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG184.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG185.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG186.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG187.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG188.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG189.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG190.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG191.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG192.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG193.crystalSystem);
+        assertEquals(HEXAGONAL, SpaceGroups.SG194.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG195.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG196.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG197.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG198.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG199.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG200.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG201.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG202.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG203.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG204.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG205.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG206.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG207.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG208.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG209.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG210.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG211.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG212.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG213.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG214.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG215.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG216.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG217.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG218.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG219.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG220.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG221.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG222.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG223.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG224.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG225.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG226.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG227.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG228.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG229.crystalSystem);
+        assertEquals(CUBIC, SpaceGroups.SG230.crystalSystem);
+    }
+
+
 
     @Test
     public void testFromIndex() {
@@ -40,36 +284,6 @@ public class SpaceGroupsTest {
             sg = SpaceGroups.fromIndex(i);
             assertEquals(i, SpaceGroups.fromSymbol(sg.symbol).index);
         }
-    }
-
-
-
-    @Test
-    public void testListCrystalSystem() {
-        assertEquals(2, SpaceGroups.list(TRICLINIC).length);
-        assertEquals(13, SpaceGroups.list(MONOCLINIC).length);
-        assertEquals(59, SpaceGroups.list(ORTHORHOMBIC).length);
-        assertEquals(68, SpaceGroups.list(TETRAGONAL).length);
-        assertEquals(32, SpaceGroups.list(TRIGONAL).length);
-        assertEquals(27, SpaceGroups.list(HEXAGONAL).length);
-        assertEquals(36, SpaceGroups.list(CUBIC).length);
-    }
-
-
-
-    @Test
-    public void testListLaueGroup() {
-        assertEquals(2, SpaceGroups.list(LG1).length);
-        assertEquals(13, SpaceGroups.list(LG2m).length);
-        assertEquals(59, SpaceGroups.list(LGmmm).length);
-        assertEquals(14, SpaceGroups.list(LG4m).length);
-        assertEquals(54, SpaceGroups.list(LG4mmm).length);
-        assertEquals(8, SpaceGroups.list(LG3).length);
-        assertEquals(24, SpaceGroups.list(LG3m).length);
-        assertEquals(9, SpaceGroups.list(LG6m).length);
-        assertEquals(18, SpaceGroups.list(LG6mmm).length);
-        assertEquals(12, SpaceGroups.list(LGm3).length);
-        assertEquals(24, SpaceGroups.list(LGm3m).length);
     }
 
 
@@ -318,6 +532,36 @@ public class SpaceGroupsTest {
 
 
     @Test
+    public void testListCrystalSystem() {
+        assertEquals(2, SpaceGroups.list(TRICLINIC).length);
+        assertEquals(13, SpaceGroups.list(MONOCLINIC).length);
+        assertEquals(59, SpaceGroups.list(ORTHORHOMBIC).length);
+        assertEquals(68, SpaceGroups.list(TETRAGONAL).length);
+        assertEquals(32, SpaceGroups.list(TRIGONAL).length);
+        assertEquals(27, SpaceGroups.list(HEXAGONAL).length);
+        assertEquals(36, SpaceGroups.list(CUBIC).length);
+    }
+
+
+
+    @Test
+    public void testListLaueGroup() {
+        assertEquals(2, SpaceGroups.list(LG1).length);
+        assertEquals(13, SpaceGroups.list(LG2m).length);
+        assertEquals(59, SpaceGroups.list(LGmmm).length);
+        assertEquals(14, SpaceGroups.list(LG4m).length);
+        assertEquals(54, SpaceGroups.list(LG4mmm).length);
+        assertEquals(8, SpaceGroups.list(LG3).length);
+        assertEquals(24, SpaceGroups.list(LG3m).length);
+        assertEquals(9, SpaceGroups.list(LG6m).length);
+        assertEquals(18, SpaceGroups.list(LG6mmm).length);
+        assertEquals(12, SpaceGroups.list(LGm3).length);
+        assertEquals(24, SpaceGroups.list(LGm3m).length);
+    }
+
+
+
+    @Test
     public void testSymbol() {
         assertEquals("P1", SpaceGroups.SG1.symbol);
         assertEquals("P-1", SpaceGroups.SG2.symbol);
@@ -556,249 +800,6 @@ public class SpaceGroupsTest {
         assertEquals("Fd-3c", SpaceGroups.SG228.symbol);
         assertEquals("Im-3m", SpaceGroups.SG229.symbol);
         assertEquals("Ia-3d", SpaceGroups.SG230.symbol);
-    }
-
-
-
-    @Test
-    public void testCrystalSystem() {
-        assertEquals(TRICLINIC, SpaceGroups.SG1.crystalSystem);
-        assertEquals(TRICLINIC, SpaceGroups.SG2.crystalSystem);
-        assertEquals(MONOCLINIC, SpaceGroups.SG3.crystalSystem);
-        assertEquals(MONOCLINIC, SpaceGroups.SG4.crystalSystem);
-        assertEquals(MONOCLINIC, SpaceGroups.SG5.crystalSystem);
-        assertEquals(MONOCLINIC, SpaceGroups.SG6.crystalSystem);
-        assertEquals(MONOCLINIC, SpaceGroups.SG7.crystalSystem);
-        assertEquals(MONOCLINIC, SpaceGroups.SG8.crystalSystem);
-        assertEquals(MONOCLINIC, SpaceGroups.SG9.crystalSystem);
-        assertEquals(MONOCLINIC, SpaceGroups.SG10.crystalSystem);
-        assertEquals(MONOCLINIC, SpaceGroups.SG11.crystalSystem);
-        assertEquals(MONOCLINIC, SpaceGroups.SG12.crystalSystem);
-        assertEquals(MONOCLINIC, SpaceGroups.SG13.crystalSystem);
-        assertEquals(MONOCLINIC, SpaceGroups.SG14.crystalSystem);
-        assertEquals(MONOCLINIC, SpaceGroups.SG15.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG16.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG17.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG18.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG19.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG20.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG21.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG22.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG23.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG24.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG25.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG26.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG27.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG28.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG29.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG30.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG31.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG32.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG33.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG34.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG35.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG36.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG37.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG38.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG39.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG40.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG41.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG42.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG43.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG44.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG45.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG46.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG47.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG48.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG49.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG50.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG51.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG52.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG53.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG54.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG55.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG56.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG57.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG58.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG59.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG60.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG61.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG62.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG63.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG64.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG65.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG66.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG67.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG68.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG69.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG70.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG71.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG72.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG73.crystalSystem);
-        assertEquals(ORTHORHOMBIC, SpaceGroups.SG74.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG75.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG76.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG77.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG78.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG79.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG80.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG81.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG82.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG83.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG84.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG85.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG86.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG87.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG88.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG89.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG90.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG91.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG92.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG93.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG94.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG95.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG96.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG97.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG98.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG99.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG100.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG101.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG102.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG103.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG104.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG105.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG106.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG107.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG108.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG109.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG110.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG111.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG112.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG113.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG114.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG115.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG116.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG117.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG118.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG119.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG120.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG121.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG122.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG123.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG124.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG125.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG126.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG127.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG128.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG129.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG130.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG131.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG132.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG133.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG134.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG135.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG136.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG137.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG138.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG139.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG140.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG141.crystalSystem);
-        assertEquals(TETRAGONAL, SpaceGroups.SG142.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG143.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG144.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG145.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG146.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG1146.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG147.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG148.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG1148.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG149.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG150.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG151.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG152.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG153.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG154.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG155.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG1155.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG156.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG157.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG158.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG159.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG160.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG1160.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG161.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG1161.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG162.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG163.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG164.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG165.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG166.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG1166.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG167.crystalSystem);
-        assertEquals(TRIGONAL, SpaceGroups.SG1167.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG168.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG169.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG170.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG171.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG172.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG173.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG174.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG175.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG176.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG177.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG178.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG179.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG180.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG181.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG182.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG183.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG184.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG185.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG186.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG187.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG188.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG189.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG190.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG191.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG192.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG193.crystalSystem);
-        assertEquals(HEXAGONAL, SpaceGroups.SG194.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG195.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG196.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG197.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG198.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG199.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG200.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG201.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG202.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG203.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG204.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG205.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG206.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG207.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG208.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG209.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG210.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG211.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG212.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG213.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG214.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG215.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG216.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG217.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG218.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG219.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG220.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG221.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG222.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG223.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG224.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG225.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG226.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG227.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG228.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG229.crystalSystem);
-        assertEquals(CUBIC, SpaceGroups.SG230.crystalSystem);
     }
 
 }

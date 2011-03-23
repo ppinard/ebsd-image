@@ -31,6 +31,18 @@ import rmlimage.RMLImage;
 public class Init extends rmlimage.module.Init {
 
     @Override
+    public void postGUI() {
+        // Activate the Cancel button
+        rmlimage.ui.Desktop desktop = RMLImage.getDesktop();
+        if (desktop instanceof rmlimage.gui.Desktop)
+            ((rmlimage.gui.Desktop) desktop).showCancelButton(true);
+
+        rmlimage.module.stitch.MapStitcherFactory.addStitcher(org.ebsdimage.gui.exp.ExpMMapStitcher.class);
+    }
+
+
+
+    @Override
     public void preGUI() {
         if (rmlimage.module.Module.DEBUG)
             System.out.println("Running preGUI init of the EBSD module");
@@ -57,18 +69,6 @@ public class Init extends rmlimage.module.Init {
 
         // MapMath
         rmlimage.core.MapMath.addHandler(org.ebsdimage.core.MapMath.class);
-    }
-
-
-
-    @Override
-    public void postGUI() {
-        // Activate the Cancel button
-        rmlimage.ui.Desktop desktop = RMLImage.getDesktop();
-        if (desktop instanceof rmlimage.gui.Desktop)
-            ((rmlimage.gui.Desktop) desktop).showCancelButton(true);
-
-        rmlimage.module.stitch.MapStitcherFactory.addStitcher(org.ebsdimage.gui.exp.ExpMMapStitcher.class);
     }
 
 }

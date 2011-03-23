@@ -36,13 +36,6 @@ public class RmpFileCreator implements OperationCreator {
 
 
     @Override
-    public String toString() {
-        return "RMP File";
-    }
-
-
-
-    @Override
     public SimOperation getOperation() {
         return new RmpFile();
     }
@@ -52,6 +45,13 @@ public class RmpFileCreator implements OperationCreator {
     @Override
     public int show() {
         return OperationCreator.OK;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "RMP File";
     }
 
 }

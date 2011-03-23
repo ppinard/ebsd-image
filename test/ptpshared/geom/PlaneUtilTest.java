@@ -4,16 +4,28 @@ import org.apache.commons.math.geometry.Vector3D;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.geom.Line3D;
-import ptpshared.geom.Plane;
-import ptpshared.geom.PlaneUtil;
-
 import static ptpshared.geom.Assert.assertEquals;
 
 public class PlaneUtilTest {
 
     @Before
     public void setUp() throws Exception {
+    }
+
+
+
+    @Test
+    public void testLinePlaneIntersection() {
+        // From
+        // http://www.jtaylor1142001.net/calcjat/Solutions/VPlanes/VPtIntLPlane.htm
+
+        Line3D line =
+                new Line3D(new Vector3D(2, -3, 1), new Vector3D(-3, 1, -2));
+        Plane plane = new Plane(4, -2, 2, -5);
+
+        Vector3D actual = PlaneUtil.linePlaneIntersection(line, plane);
+        Vector3D expected = new Vector3D(1.0 / 6.0, -43.0 / 18.0, -2.0 / 9.0);
+        assertEquals(expected, actual, 1e-6);
     }
 
 
@@ -41,21 +53,5 @@ public class PlaneUtilTest {
         Plane plane0 = new Plane(1, 1, 1, 1);
 
         PlaneUtil.planesIntersection(plane0, plane0);
-    }
-
-
-
-    @Test
-    public void testLinePlaneIntersection() {
-        // From
-        // http://www.jtaylor1142001.net/calcjat/Solutions/VPlanes/VPtIntLPlane.htm
-
-        Line3D line =
-                new Line3D(new Vector3D(2, -3, 1), new Vector3D(-3, 1, -2));
-        Plane plane = new Plane(4, -2, 2, -5);
-
-        Vector3D actual = PlaneUtil.linePlaneIntersection(line, plane);
-        Vector3D expected = new Vector3D(1.0 / 6.0, -43.0 / 18.0, -2.0 / 9.0);
-        assertEquals(expected, actual, 1e-6);
     }
 }

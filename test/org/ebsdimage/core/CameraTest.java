@@ -148,17 +148,17 @@ public class CameraTest extends TestCase {
 
 
     @Test
-    public void testGetWidth() {
-        Magnitude expected = new Magnitude(4, "cm");
-        assertEquals(expected, camera.getWidth(), 1e-6);
+    public void testGetHeight() {
+        Magnitude expected = new Magnitude(3, "cm");
+        assertEquals(expected, camera.getHeight(), 1e-6);
     }
 
 
 
     @Test
-    public void testGetHeight() {
-        Magnitude expected = new Magnitude(3, "cm");
-        assertEquals(expected, camera.getHeight(), 1e-6);
+    public void testGetWidth() {
+        Magnitude expected = new Magnitude(4, "cm");
+        assertEquals(expected, camera.getWidth(), 1e-6);
     }
 
 

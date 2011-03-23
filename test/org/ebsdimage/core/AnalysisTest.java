@@ -46,29 +46,6 @@ public class AnalysisTest {
 
 
     @Test
-    public void testGetCentroid() {
-        Centroid results = Analysis.getCentroid(peaksMap, houghMap);
-
-        assertEquals(1, results.getValueCount());
-        assertEquals(2.0, Math.toDegrees(results.x[0]), 1e-6);
-        assertEquals(-2.0, results.y[0], 1e-6);
-        assertEquals(5, results.intensity[0], 1e-6);
-    }
-
-
-
-    @Test
-    public void testGetCentroidNoPeaks() {
-        IdentMap peaksMap = new IdentMap(5, 5);
-        peaksMap.setCalibration(houghMap);
-        Centroid results = Analysis.getCentroid(peaksMap, houghMap);
-
-        assertEquals(0, results.getValueCount());
-    }
-
-
-
-    @Test
     public void testGetCenterOfMass() {
         Centroid results = Analysis.getCenterOfMass(peaksMap, houghMap);
 
@@ -85,6 +62,29 @@ public class AnalysisTest {
         IdentMap peaksMap = new IdentMap(5, 5);
         peaksMap.setCalibration(houghMap);
         Centroid results = Analysis.getCenterOfMass(peaksMap, houghMap);
+
+        assertEquals(0, results.getValueCount());
+    }
+
+
+
+    @Test
+    public void testGetCentroid() {
+        Centroid results = Analysis.getCentroid(peaksMap, houghMap);
+
+        assertEquals(1, results.getValueCount());
+        assertEquals(2.0, Math.toDegrees(results.x[0]), 1e-6);
+        assertEquals(-2.0, results.y[0], 1e-6);
+        assertEquals(5, results.intensity[0], 1e-6);
+    }
+
+
+
+    @Test
+    public void testGetCentroidNoPeaks() {
+        IdentMap peaksMap = new IdentMap(5, 5);
+        peaksMap.setCalibration(houghMap);
+        Centroid results = Analysis.getCentroid(peaksMap, houghMap);
 
         assertEquals(0, results.getValueCount());
     }

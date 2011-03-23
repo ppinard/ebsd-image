@@ -29,14 +29,6 @@ import java.util.HashMap;
  */
 public class MySQLDatabase {
 
-    /** Connection to database. */
-    public Connection conn = null;
-
-    /** Name of the database. */
-    public final String name;
-
-
-
     /**
      * Returns the connection string to use to connect to the specified
      * database.
@@ -62,6 +54,12 @@ public class MySQLDatabase {
         return "jdbc:mysql:" + connection + "?" + "user=" + username + "&"
                 + "password=" + password;
     }
+
+    /** Connection to database. */
+    public Connection conn = null;
+
+    /** Name of the database. */
+    public final String name;
 
 
 

@@ -25,20 +25,20 @@ package org.ebsdimage.vendors.tsl;
 public class Init extends rmlimage.module.Init {
 
     @Override
+    public void postGUI() {
+
+        rmlimage.module.stitch.MapStitcherFactory.addStitcher(org.ebsdimage.vendors.tsl.gui.TslMMapStitcher.class);
+    }
+
+
+
+    @Override
     public void preGUI() {
         if (rmlimage.module.Module.DEBUG)
             System.out.println("Running preGUI init of the EBSD module");
 
         rmlimage.io.IO.addLoader(org.ebsdimage.vendors.tsl.io.TslMMapLoader.class);
         rmlimage.io.IO.addSaver(org.ebsdimage.vendors.tsl.io.TslMMapSaver.class);
-    }
-
-
-
-    @Override
-    public void postGUI() {
-
-        rmlimage.module.stitch.MapStitcherFactory.addStitcher(org.ebsdimage.vendors.tsl.gui.TslMMapStitcher.class);
     }
 
 }

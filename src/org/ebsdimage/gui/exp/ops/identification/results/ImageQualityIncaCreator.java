@@ -29,6 +29,15 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class ImageQualityIncaCreator implements OperationCreator {
 
     @Override
+    public String getDescription() {
+        return "Quality index on the identified Hough peaks. "
+                + "It corresponds to the image quality (as calculated by "
+                + "Oxford INCA Crystal).";
+    }
+
+
+
+    @Override
     public ExpOperation getOperation() {
         return new ImageQualityInca();
     }
@@ -45,15 +54,6 @@ public class ImageQualityIncaCreator implements OperationCreator {
     @Override
     public String toString() {
         return "Image Quality (INCA)";
-    }
-
-
-
-    @Override
-    public String getDescription() {
-        return "Quality index on the identified Hough peaks. "
-                + "It corresponds to the image quality (as calculated by "
-                + "Oxford INCA Crystal).";
     }
 
 }

@@ -17,10 +17,10 @@
  */
 package org.ebsdimage.core;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.sqrt;
 import rmlimage.core.BinMap;
 import rmlimage.core.Drawing;
+import static java.lang.Math.abs;
+import static java.lang.Math.sqrt;
 
 /**
  * A circular mask. The central pixel is counted in the radius. This means that

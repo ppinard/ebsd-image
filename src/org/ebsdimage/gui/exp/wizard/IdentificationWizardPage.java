@@ -74,47 +74,6 @@ public class IdentificationWizardPage extends OperationWizardPage {
 
 
     @Override
-    protected void renderingPage() {
-        super.renderingPage();
-
-        Exp exp = (Exp) get(StartWizardPage.KEY_TEMP_EXP);
-
-        if (exp == null)
-            return;
-
-        if (get(KEY_LOADED) != null)
-            if ((Integer) get(KEY_LOADED) > 0)
-                return;
-
-        // Pre
-        DefaultListModel model = prePanel.getUserListModel();
-        model.clear();
-        for (ExpOperation op : exp.getIdentificationPreOps())
-            model.addElement(op);
-
-        // Op
-        model = opPanel.getUserListModel();
-        model.clear();
-        model.addElement(exp.getIdentificationOp());
-
-        // Post
-        model = postPanel.getUserListModel();
-        model.clear();
-        for (ExpOperation op : exp.getIdentificationPostOps())
-            model.addElement(op);
-
-        // Results
-        model = resultsPanel.getUserListModel();
-        model.clear();
-        for (ExpOperation op : exp.getIdentificationResultsOps())
-            model.addElement(op);
-
-        put(KEY_LOADED, 1);
-    }
-
-
-
-    @Override
     public boolean isCorrect(boolean buffer) {
         if (!super.isCorrect(buffer))
             return false;
@@ -151,5 +110,46 @@ public class IdentificationWizardPage extends OperationWizardPage {
         }
 
         return true;
+    }
+
+
+
+    @Override
+    protected void renderingPage() {
+        super.renderingPage();
+
+        Exp exp = (Exp) get(StartWizardPage.KEY_TEMP_EXP);
+
+        if (exp == null)
+            return;
+
+        if (get(KEY_LOADED) != null)
+            if ((Integer) get(KEY_LOADED) > 0)
+                return;
+
+        // Pre
+        DefaultListModel model = prePanel.getUserListModel();
+        model.clear();
+        for (ExpOperation op : exp.getIdentificationPreOps())
+            model.addElement(op);
+
+        // Op
+        model = opPanel.getUserListModel();
+        model.clear();
+        model.addElement(exp.getIdentificationOp());
+
+        // Post
+        model = postPanel.getUserListModel();
+        model.clear();
+        for (ExpOperation op : exp.getIdentificationPostOps())
+            model.addElement(op);
+
+        // Results
+        model = resultsPanel.getUserListModel();
+        model.clear();
+        for (ExpOperation op : exp.getIdentificationResultsOps())
+            model.addElement(op);
+
+        put(KEY_LOADED, 1);
     }
 }

@@ -257,17 +257,6 @@ public class ParamsWizardPage extends WizardPage {
      */
     private static class RotationDialog extends BasicDialog {
 
-        @Override
-        public boolean isCorrect() {
-            if (!super.isCorrect())
-                return false;
-
-            if (!rotationField.isCorrect())
-                return false;
-
-            return true;
-        }
-
         /** Euler angles field. */
         private RotationField rotationField;
 
@@ -300,6 +289,19 @@ public class ParamsWizardPage extends WizardPage {
         public Rotation getRotation() {
             return rotationField.getValue();
         }
+
+
+
+        @Override
+        public boolean isCorrect() {
+            if (!super.isCorrect())
+                return false;
+
+            if (!rotationField.isCorrect())
+                return false;
+
+            return true;
+        }
     }
 
     /**
@@ -308,50 +310,6 @@ public class ParamsWizardPage extends WizardPage {
      * @author Philippe T. Pinard
      */
     private class RotationPanel extends JPanel implements InputValidation {
-
-        /**
-         * Temporary rotation object to wrap around the Apache common match
-         * <code>Rotation</code> object and implements a different
-         * {@link #toString()}. This is required for the rotation to be showed
-         * properly in a <code>JList</code>.
-         * 
-         * @author ppinard
-         */
-        private class TmpRotation {
-
-            /** A rotation. */
-            private final Rotation rotation;
-
-
-
-            /**
-             * Creates a new <code>TmpRotation</code>.
-             * 
-             * @param rotation
-             *            a rotation
-             */
-            public TmpRotation(Rotation rotation) {
-                this.rotation = rotation;
-            }
-
-
-
-            /**
-             * Returns the <code>Rotation</code> object.
-             * 
-             * @return <code>Rotation</code> object
-             */
-            public Rotation getValue() {
-                return rotation;
-            }
-
-
-
-            @Override
-            public String toString() {
-                return RotationUtils.toString(rotation);
-            }
-        }
 
         /**
          * Action to add a rotation.
@@ -433,6 +391,50 @@ public class ParamsWizardPage extends WizardPage {
             }
         }
 
+        /**
+         * Temporary rotation object to wrap around the Apache common match
+         * <code>Rotation</code> object and implements a different
+         * {@link #toString()}. This is required for the rotation to be showed
+         * properly in a <code>JList</code>.
+         * 
+         * @author ppinard
+         */
+        private class TmpRotation {
+
+            /** A rotation. */
+            private final Rotation rotation;
+
+
+
+            /**
+             * Creates a new <code>TmpRotation</code>.
+             * 
+             * @param rotation
+             *            a rotation
+             */
+            public TmpRotation(Rotation rotation) {
+                this.rotation = rotation;
+            }
+
+
+
+            /**
+             * Returns the <code>Rotation</code> object.
+             * 
+             * @return <code>Rotation</code> object
+             */
+            public Rotation getValue() {
+                return rotation;
+            }
+
+
+
+            @Override
+            public String toString() {
+                return RotationUtils.toString(rotation);
+            }
+        }
+
         /** List of the parameters. */
         private JList list;
 
@@ -480,21 +482,6 @@ public class ParamsWizardPage extends WizardPage {
 
 
         /**
-         * Sets the rotations inside the list.
-         * 
-         * @param rotations
-         *            rotations
-         */
-        public void setRotations(Rotation[] rotations) {
-            DefaultListModel model = (DefaultListModel) list.getModel();
-            model.clear();
-            for (Rotation rotation : rotations)
-                model.addElement(new TmpRotation(rotation));
-        }
-
-
-
-        /**
          * Returns an array of the rotations in the list.
          * 
          * @return array of rotations
@@ -531,6 +518,21 @@ public class ParamsWizardPage extends WizardPage {
             }
 
             return true;
+        }
+
+
+
+        /**
+         * Sets the rotations inside the list.
+         * 
+         * @param rotations
+         *            rotations
+         */
+        public void setRotations(Rotation[] rotations) {
+            DefaultListModel model = (DefaultListModel) list.getModel();
+            model.clear();
+            for (Rotation rotation : rotations)
+                model.addElement(new TmpRotation(rotation));
         }
 
     }

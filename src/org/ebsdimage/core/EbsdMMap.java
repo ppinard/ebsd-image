@@ -217,6 +217,17 @@ public abstract class EbsdMMap extends MultiMap {
 
 
     /**
+     * Returns the microscope parameters from the metadata.
+     * 
+     * @return microscope parameters
+     */
+    public Microscope getMicroscope() {
+        return getMetadata().getMicroscope();
+    }
+
+
+
+    /**
      * Returns the phase at the specified index. Returns <code>null</code> for
      * non-indexed pixel.
      * 
@@ -249,23 +260,23 @@ public abstract class EbsdMMap extends MultiMap {
 
 
     /**
-     * Returns the phases defined in the phases map.
-     * 
-     * @return phases
-     */
-    public Crystal[] getPhases() {
-        return getPhaseMap().getPhases();
-    }
-
-
-
-    /**
      * Returns the map for the phases.
      * 
      * @return phases map
      */
     public PhaseMap getPhaseMap() {
         return (PhaseMap) getMap(PHASES);
+    }
+
+
+
+    /**
+     * Returns the phases defined in the phases map.
+     * 
+     * @return phases
+     */
+    public Crystal[] getPhases() {
+        return getPhaseMap().getPhases();
     }
 
 
@@ -333,17 +344,6 @@ public abstract class EbsdMMap extends MultiMap {
         return new Rotation(getQ0Map().pixArray[index],
                 getQ1Map().pixArray[index], getQ2Map().pixArray[index],
                 getQ3Map().pixArray[index], false);
-    }
-
-
-
-    /**
-     * Returns the microscope parameters from the metadata.
-     * 
-     * @return microscope parameters
-     */
-    public Microscope getMicroscope() {
-        return getMetadata().getMicroscope();
     }
 
 

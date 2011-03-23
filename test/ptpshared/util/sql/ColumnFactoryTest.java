@@ -17,12 +17,9 @@
  */
 package ptpshared.util.sql;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
-import ptpshared.util.sql.Column;
-import ptpshared.util.sql.ColumnFactory;
+import static org.junit.Assert.assertEquals;
 
 public class ColumnFactoryTest {
 

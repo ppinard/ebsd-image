@@ -17,11 +17,12 @@
  */
 package crystallography.core;
 
-import static java.lang.Math.PI;
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
+import static java.lang.Math.PI;
 
 public class ElectronScatteringFactorsTest {
 

@@ -73,6 +73,26 @@ public class ReflectorsTest {
 
 
     @Test
+    public void testGetPlane() {
+        Reflector refl = reflsFCC.get(1, 1, 1);
+        assertEquals(1, refl.h);
+        assertEquals(1, refl.k);
+        assertEquals(1, refl.l);
+        assertEquals(3.1350119616996683, refl.planeSpacing, 1e-7);
+        assertEquals(0.0859145669508, refl.intensity, 1e-7);
+        assertEquals(1.0, refl.normalizedIntensity, 1e-7);
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetPlaneException() {
+        reflsFCC.get(0, 1, 1);
+    }
+
+
+
+    @Test
     public void testIntensityBCC() {
         Reflector refl;
 
@@ -381,26 +401,6 @@ public class ReflectorsTest {
         Reflector[] refls = reflsFCC.getReflectorsSortedByPlaneSpacing(false);
         assertEquals(1.0, refls[refls.length - 1].normalizedIntensity, 1e-7);
         assertEquals(3.1350119617, refls[refls.length - 1].planeSpacing, 1e-7);
-    }
-
-
-
-    @Test
-    public void testGetPlane() {
-        Reflector refl = reflsFCC.get(1, 1, 1);
-        assertEquals(1, refl.h);
-        assertEquals(1, refl.k);
-        assertEquals(1, refl.l);
-        assertEquals(3.1350119616996683, refl.planeSpacing, 1e-7);
-        assertEquals(0.0859145669508, refl.intensity, 1e-7);
-        assertEquals(1.0, refl.normalizedIntensity, 1e-7);
-    }
-
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetPlaneException() {
-        reflsFCC.get(0, 1, 1);
     }
 
 }

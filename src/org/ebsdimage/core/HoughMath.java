@@ -79,73 +79,6 @@ public class HoughMath {
 
 
     /**
-     * Calculates the slope of the line in the image space represented by the
-     * specified Hough peak.
-     * <p/>
-     * A vertical line has a slope of positive infinity.
-     * 
-     * @param peak
-     *            a Hough peak
-     * @return slope of the line in the image space
-     */
-    public static double getSlope(HoughPeak peak) {
-        double m;
-
-        // -cos(theta) / sin(theta)
-        // unitless by definition
-        m = -Math.cos(peak.theta) / Math.sin(peak.theta);
-        if (Double.isInfinite(m))
-            m = Double.POSITIVE_INFINITY;
-
-        return m;
-    }
-
-
-
-    /**
-     * Returns a <code>Line2D</code> representing the Hough peak in the image
-     * space.
-     * 
-     * @param peak
-     *            a Hough peak
-     * @param map
-     *            map where the <code>Line2D</code> will be drawn
-     * @return a <code>Line2D</code> of the Hough peak
-     */
-    public static Line2D getLine2D(HoughPeak peak, Map map) {
-        Calibration cal = map.getCalibration();
-
-        // Assert calibration Y units and rho units are the same
-        if (peak.rhoUnits != cal.unitsY)
-            throw new IllegalArgumentException("Map's calibration Y units ("
-                    + cal.unitsY + ") and peak's rho units (" + peak.rhoUnits
-                    + ") must be equal.");
-
-        // Create the line perpendicular to the specified vector
-        double slope = getSlope(peak);
-        double x0 = cal.getUncalibratedX(peak.rho * Math.cos(peak.theta));
-        double y0 = cal.getUncalibratedY(peak.rho * Math.sin(peak.theta));
-        Point2D.Double center = new Point2D.Double(x0, y0);
-        Line2D.Double line = new Line2D.Double();
-        LineUtil.setAnalyticalLine(line, slope, center, map.width);
-
-        // Translate the origin from the center of the image
-        // to the upper left corner
-        // and invert the y axis to have the positive going down
-        LineUtil.translate(line, map.width / 2, map.height / 2);
-        line.y1 = map.height - 1 - line.y1;
-        line.y2 = map.height - 1 - line.y2;
-
-        // Extends the line to fit the whole map
-        Rectangle frame = new Rectangle(0, 0, map.width - 1, map.height - 1);
-        LineUtil.extendTo(line, frame);
-
-        return line;
-    }
-
-
-
-    /**
      * Converts the slope and intercept of a line to a Hough peak. Equations:
      * <ul>
      * <li><code>theta = -arccot(m)</code></li>
@@ -209,6 +142,73 @@ public class HoughMath {
         Calibration cal = map.getCalibration();
         return new HoughPeak(theta, cal.getCalibratedY(rho), cal.unitsY,
                 intensity);
+    }
+
+
+
+    /**
+     * Returns a <code>Line2D</code> representing the Hough peak in the image
+     * space.
+     * 
+     * @param peak
+     *            a Hough peak
+     * @param map
+     *            map where the <code>Line2D</code> will be drawn
+     * @return a <code>Line2D</code> of the Hough peak
+     */
+    public static Line2D getLine2D(HoughPeak peak, Map map) {
+        Calibration cal = map.getCalibration();
+
+        // Assert calibration Y units and rho units are the same
+        if (peak.rhoUnits != cal.unitsY)
+            throw new IllegalArgumentException("Map's calibration Y units ("
+                    + cal.unitsY + ") and peak's rho units (" + peak.rhoUnits
+                    + ") must be equal.");
+
+        // Create the line perpendicular to the specified vector
+        double slope = getSlope(peak);
+        double x0 = cal.getUncalibratedX(peak.rho * Math.cos(peak.theta));
+        double y0 = cal.getUncalibratedY(peak.rho * Math.sin(peak.theta));
+        Point2D.Double center = new Point2D.Double(x0, y0);
+        Line2D.Double line = new Line2D.Double();
+        LineUtil.setAnalyticalLine(line, slope, center, map.width);
+
+        // Translate the origin from the center of the image
+        // to the upper left corner
+        // and invert the y axis to have the positive going down
+        LineUtil.translate(line, map.width / 2, map.height / 2);
+        line.y1 = map.height - 1 - line.y1;
+        line.y2 = map.height - 1 - line.y2;
+
+        // Extends the line to fit the whole map
+        Rectangle frame = new Rectangle(0, 0, map.width - 1, map.height - 1);
+        LineUtil.extendTo(line, frame);
+
+        return line;
+    }
+
+
+
+    /**
+     * Calculates the slope of the line in the image space represented by the
+     * specified Hough peak.
+     * <p/>
+     * A vertical line has a slope of positive infinity.
+     * 
+     * @param peak
+     *            a Hough peak
+     * @return slope of the line in the image space
+     */
+    public static double getSlope(HoughPeak peak) {
+        double m;
+
+        // -cos(theta) / sin(theta)
+        // unitless by definition
+        m = -Math.cos(peak.theta) / Math.sin(peak.theta);
+        if (Double.isInfinite(m))
+            m = Double.POSITIVE_INFINITY;
+
+        return m;
     }
 
 }

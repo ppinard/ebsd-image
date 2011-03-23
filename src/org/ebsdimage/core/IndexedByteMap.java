@@ -73,22 +73,6 @@ public class IndexedByteMap<Item> extends ByteMap {
      *            width of the map
      * @param height
      *            height of the map
-     * @param item0
-     *            item for the pixels with a value of 0
-     */
-    public IndexedByteMap(int width, int height, Item item0) {
-        this(width, height, item0, new HashMap<Integer, Item>());
-    }
-
-
-
-    /**
-     * Creates a new <code>ErrorMap</code>.
-     * 
-     * @param width
-     *            width of the map
-     * @param height
-     *            height of the map
      * @param pixArray
      *            pixels in the map
      * @param item0
@@ -113,6 +97,22 @@ public class IndexedByteMap<Item> extends ByteMap {
             register(entry.getKey(), entry.getValue());
 
         validate();
+    }
+
+
+
+    /**
+     * Creates a new <code>ErrorMap</code>.
+     * 
+     * @param width
+     *            width of the map
+     * @param height
+     *            height of the map
+     * @param item0
+     *            item for the pixels with a value of 0
+     */
+    public IndexedByteMap(int width, int height, Item item0) {
+        this(width, height, item0, new HashMap<Integer, Item>());
     }
 
 
@@ -233,6 +233,21 @@ public class IndexedByteMap<Item> extends ByteMap {
         dup.cloneMetadataFrom(this);
 
         return dup;
+    }
+
+
+
+    /**
+     * Returns the id of the first null item in the items array.
+     * 
+     * @return id of the first null item
+     */
+    protected int findFirstNullItem() {
+        for (int id = 0; id < items.length; id++)
+            if (items[id] == null)
+                return id;
+
+        throw new IllegalArgumentException("No more items can be registered.");
     }
 
 
@@ -436,21 +451,6 @@ public class IndexedByteMap<Item> extends ByteMap {
 
 
     /**
-     * Returns the id of the first null item in the items array.
-     * 
-     * @return id of the first null item
-     */
-    protected int findFirstNullItem() {
-        for (int id = 0; id < items.length; id++)
-            if (items[id] == null)
-                return id;
-
-        throw new IllegalArgumentException("No more items can be registered.");
-    }
-
-
-
-    /**
      * Desactivate methods since the LUT is fixed. {@inheritDoc}
      */
     @Override
@@ -478,31 +478,6 @@ public class IndexedByteMap<Item> extends ByteMap {
             throw new IllegalArgumentException("Value (" + id
                     + ") does not match a registered item.");
         super.setPixValue(index, id);
-    }
-
-
-
-    /**
-     * Sets a new value to a pixel corresponding to the id of the specified
-     * item. If the specified item is not registered, the method
-     * {@link #register(Object)} is called and the item is registered.
-     * 
-     * @param index
-     *            index of the pixel
-     * @param item
-     *            an item
-     * @return the id of the item
-     * @throws IllegalArgumentException
-     *             if the index is out of range
-     */
-    public int setPixValue(int index, Item item) {
-        int id = getItemId(item);
-        if (id < 0)
-            id = register(item);
-
-        setPixValue(index, id);
-
-        return id;
     }
 
 
@@ -547,6 +522,31 @@ public class IndexedByteMap<Item> extends ByteMap {
      */
     public int setPixValue(int x, int y, Item item) {
         return setPixValue(getPixArrayIndex(x, y), item);
+    }
+
+
+
+    /**
+     * Sets a new value to a pixel corresponding to the id of the specified
+     * item. If the specified item is not registered, the method
+     * {@link #register(Object)} is called and the item is registered.
+     * 
+     * @param index
+     *            index of the pixel
+     * @param item
+     *            an item
+     * @return the id of the item
+     * @throws IllegalArgumentException
+     *             if the index is out of range
+     */
+    public int setPixValue(int index, Item item) {
+        int id = getItemId(item);
+        if (id < 0)
+            id = register(item);
+
+        setPixValue(index, id);
+
+        return id;
     }
 
 

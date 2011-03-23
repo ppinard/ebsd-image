@@ -29,15 +29,15 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class EntropyCreator implements OperationCreator {
 
     @Override
-    public ExpOperation getOperation() {
-        return new Entropy();
+    public String getDescription() {
+        return "Entropy of the pixels in the Hough map.";
     }
 
 
 
     @Override
-    public String getDescription() {
-        return "Entropy of the pixels in the Hough map.";
+    public ExpOperation getOperation() {
+        return new Entropy();
     }
 
 

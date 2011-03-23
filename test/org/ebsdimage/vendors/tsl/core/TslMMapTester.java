@@ -66,6 +66,16 @@ public abstract class TslMMapTester extends TestCase {
 
 
     @Test
+    public void testCalibration() {
+        Calibration cal = mmap.getCalibration();
+
+        assertEquals(0.07, cal.getDX().getValue("um"), 1e-6);
+        assertEquals(0.07, cal.getDY().getValue("um"), 1e-6);
+    }
+
+
+
+    @Test
     public void testCreateMapIntInt() {
         TslMMap newMMap = mmap.createMap(2, 2);
 
@@ -138,6 +148,17 @@ public abstract class TslMMapTester extends TestCase {
 
 
     @Test
+    public void testGetErrorMap() throws IOException {
+        ByteMap byteMap = mmap.getErrorMap();
+
+        ErrorMap expectedMap =
+                new ErrorMapLoader().load(getFile("org/ebsdimage/vendors/tsl/testdata/Errors.bmp"));
+        byteMap.assertEquals(expectedMap);
+    }
+
+
+
+    @Test
     public void testGetImageQualityMap() {
         RealMap realMap = mmap.getImageQualityMap();
 
@@ -163,16 +184,6 @@ public abstract class TslMMapTester extends TestCase {
 
 
     @Test
-    public void testCalibration() {
-        Calibration cal = mmap.getCalibration();
-
-        assertEquals(0.07, cal.getDX().getValue("um"), 1e-6);
-        assertEquals(0.07, cal.getDY().getValue("um"), 1e-6);
-    }
-
-
-
-    @Test
     public void testGetPhasesMap() throws IOException {
         PhaseMap phasesMap = mmap.getPhaseMap();
 
@@ -186,17 +197,6 @@ public abstract class TslMMapTester extends TestCase {
 
         assertTrue(wcPhase.equals(phases[0], 1e-3));
         assertTrue(nickelPhase.equals(phases[1], 1e-3));
-    }
-
-
-
-    @Test
-    public void testGetErrorMap() throws IOException {
-        ByteMap byteMap = mmap.getErrorMap();
-
-        ErrorMap expectedMap =
-                new ErrorMapLoader().load(getFile("org/ebsdimage/vendors/tsl/testdata/Errors.bmp"));
-        byteMap.assertEquals(expectedMap);
     }
 
 

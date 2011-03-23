@@ -29,6 +29,13 @@ import org.ebsdimage.io.EbsdMMapSaver;
 public class ExpMMapSaver extends EbsdMMapSaver {
 
     @Override
+    public boolean canSave(Object obj, String fileFormat) {
+        return (obj instanceof ExpMMap) && fileFormat.equalsIgnoreCase("zip");
+    }
+
+
+
+    @Override
     protected String getHeader() {
         return ExpMMap.FILE_HEADER;
     }
@@ -38,13 +45,6 @@ public class ExpMMapSaver extends EbsdMMapSaver {
     @Override
     protected int getVersion() {
         return ExpMMap.VERSION;
-    }
-
-
-
-    @Override
-    public boolean canSave(Object obj, String fileFormat) {
-        return (obj instanceof ExpMMap) && fileFormat.equalsIgnoreCase("zip");
     }
 
 }

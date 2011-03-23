@@ -45,20 +45,20 @@ public class HoughMapLoaderTest extends TestCase {
 
 
 
-    @Test
-    public void testLoad() throws IOException {
-        HoughMap map = loader.load(file);
-
-        testHoughMap(map);
-    }
-
-
-
     private void testHoughMap(HoughMap map) throws IOException {
         ByteMap original = (ByteMap) load("org/ebsdimage/testdata/pattern.bmp");
         HoughMap other = Transform.hough(original, toRadians(1.0));
 
         other.assertEquals(map);
+    }
+
+
+
+    @Test
+    public void testLoad() throws IOException {
+        HoughMap map = loader.load(file);
+
+        testHoughMap(map);
     }
 
 }

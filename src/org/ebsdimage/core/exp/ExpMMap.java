@@ -44,6 +44,21 @@ public class ExpMMap extends EbsdMMap {
 
 
     /**
+     * Creates a new <code>ExpMMap</code> with the specified dimensions and
+     * metadata. All the required maps are created but are empty.
+     * 
+     * @param width
+     *            width of the maps
+     * @param height
+     *            height of the maps
+     */
+    public ExpMMap(int width, int height) {
+        super(width, height);
+    }
+
+
+
+    /**
      * Creates a new <code>ExpMMap</code>.
      * 
      * @param width
@@ -59,17 +74,9 @@ public class ExpMMap extends EbsdMMap {
 
 
 
-    /**
-     * Creates a new <code>ExpMMap</code> with the specified dimensions and
-     * metadata. All the required maps are created but are empty.
-     * 
-     * @param width
-     *            width of the maps
-     * @param height
-     *            height of the maps
-     */
-    public ExpMMap(int width, int height) {
-        super(width, height);
+    @Override
+    public ExpMMap createMap(int width, int height) {
+        return new ExpMMap(width, height);
     }
 
 
@@ -87,13 +94,6 @@ public class ExpMMap extends EbsdMMap {
         cloneMetadataFrom(this);
 
         return dup;
-    }
-
-
-
-    @Override
-    public ExpMMap createMap(int width, int height) {
-        return new ExpMMap(width, height);
     }
 
 }

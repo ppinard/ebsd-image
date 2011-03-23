@@ -45,6 +45,35 @@ import rmlshared.gui.ComboBox;
  */
 public class ThresholdPanel<Item> extends JPanel {
 
+    /**
+     * Listener of okay and cancel buttons.
+     * 
+     * @author Philippe T. Pinard
+     */
+    private class ActionListener implements java.awt.event.ActionListener {
+        @Override
+        public void actionPerformed(java.awt.event.ActionEvent event) {
+            if (event.getSource() == okButton) {
+                Item item = itemsCBox.getSelectedItem();
+
+                BinMap binMap = Threshold.item(map, item);
+
+                RMLImage.add(binMap);
+            }
+
+            // Remove the threshold panel from the image panel
+            MapWindow window =
+                    ((MultiDesktop) rmlimage.plugin.PlugIn.getDesktop()).getWindow(map);
+            window.removeComponent(getPanel());
+
+            // Needed to resume the threshold macro
+            // that is waiting for either the OK or CANCEL button to be pressed
+            synchronized (getPanel()) {
+                getPanel().notifyAll();
+            }
+        }
+    }
+
     /** Combo box to select a item. */
     private ComboBox<Item> itemsCBox;
 
@@ -103,35 +132,6 @@ public class ThresholdPanel<Item> extends JPanel {
      */
     private ThresholdPanel<Item> getPanel() {
         return this;
-    }
-
-    /**
-     * Listener of okay and cancel buttons.
-     * 
-     * @author Philippe T. Pinard
-     */
-    private class ActionListener implements java.awt.event.ActionListener {
-        @Override
-        public void actionPerformed(java.awt.event.ActionEvent event) {
-            if (event.getSource() == okButton) {
-                Item item = itemsCBox.getSelectedItem();
-
-                BinMap binMap = Threshold.item(map, item);
-
-                RMLImage.add(binMap);
-            }
-
-            // Remove the threshold panel from the image panel
-            MapWindow window =
-                    ((MultiDesktop) rmlimage.plugin.PlugIn.getDesktop()).getWindow(map);
-            window.removeComponent(getPanel());
-
-            // Needed to resume the threshold macro
-            // that is waiting for either the OK or CANCEL button to be pressed
-            synchronized (getPanel()) {
-                getPanel().notifyAll();
-            }
-        }
     }
 
 }

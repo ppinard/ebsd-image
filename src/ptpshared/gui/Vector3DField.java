@@ -64,30 +64,29 @@ public class Vector3DField extends JComponent implements PreferenceKeeping,
 
 
 
-    /**
-     * Wrapper over {@link DoubleField#setDecimalCount(double)}.
-     * 
-     * @param nbDecimals
-     *            number of decimal for the 3 <code>DoubleField</code>
-     */
-    public void setDecimalCount(int nbDecimals) {
-        xField.setDecimalCount(nbDecimals);
-        yField.setDecimalCount(nbDecimals);
-        zField.setDecimalCount(nbDecimals);
+    @Override
+    public void bufferInput() {
+        xField.bufferInput();
+        yField.bufferInput();
+        zField.bufferInput();
+    }
+
+
+
+    @Override
+    public Preferences getPreferences() {
+        return preferences;
     }
 
 
 
     /**
-     * Wrapper over {@link DoubleField#setIncrementalStep(double)}.
+     * Wrapper over {@link DoubleField#getRange()}.
      * 
-     * @param step
-     *            step of the 3 spinners
+     * @return range of the <code>DoubleField</code>
      */
-    public void setIncrementalStep(double step) {
-        xField.setIncrementalStep(step);
-        yField.setIncrementalStep(step);
-        zField.setIncrementalStep(step);
+    public Range<Double> getRange() {
+        return xField.getRange();
     }
 
 
@@ -128,56 +127,6 @@ public class Vector3DField extends JComponent implements PreferenceKeeping,
 
 
 
-    /**
-     * Sets the values from a <code>Vector3D</code>.
-     * 
-     * @param v
-     *            a vector
-     */
-    public void setValue(Vector3D v) {
-        xField.setValue(v.getX());
-        yField.setValue(v.getY());
-        zField.setValue(v.getZ());
-    }
-
-
-
-    @Override
-    public void bufferInput() {
-        xField.bufferInput();
-        yField.bufferInput();
-        zField.bufferInput();
-    }
-
-
-
-    /**
-     * Wrapper over {@link DoubleField#getRange()}.
-     * 
-     * @return range of the <code>DoubleField</code>
-     */
-    public Range<Double> getRange() {
-        return xField.getRange();
-    }
-
-
-
-    /**
-     * Wrapper over {@link DoubleField#setRange(double, double)}.
-     * 
-     * @param min
-     *            minimum value of the range
-     * @param max
-     *            maximum value of the range
-     */
-    public void setRange(double min, double max) {
-        xField.setRange(min, max);
-        yField.setRange(min, max);
-        zField.setRange(min, max);
-    }
-
-
-
     @Override
     public boolean isCorrect() {
         return isCorrect(true);
@@ -201,9 +150,30 @@ public class Vector3DField extends JComponent implements PreferenceKeeping,
 
 
 
-    @Override
-    public Preferences getPreferences() {
-        return preferences;
+    /**
+     * Wrapper over {@link DoubleField#setDecimalCount(double)}.
+     * 
+     * @param nbDecimals
+     *            number of decimal for the 3 <code>DoubleField</code>
+     */
+    public void setDecimalCount(int nbDecimals) {
+        xField.setDecimalCount(nbDecimals);
+        yField.setDecimalCount(nbDecimals);
+        zField.setDecimalCount(nbDecimals);
+    }
+
+
+
+    /**
+     * Wrapper over {@link DoubleField#setIncrementalStep(double)}.
+     * 
+     * @param step
+     *            step of the 3 spinners
+     */
+    public void setIncrementalStep(double step) {
+        xField.setIncrementalStep(step);
+        yField.setIncrementalStep(step);
+        zField.setIncrementalStep(step);
     }
 
 
@@ -213,6 +183,36 @@ public class Vector3DField extends JComponent implements PreferenceKeeping,
         xField.setPreferences(pref);
         yField.setPreferences(pref);
         zField.setPreferences(pref);
+    }
+
+
+
+    /**
+     * Wrapper over {@link DoubleField#setRange(double, double)}.
+     * 
+     * @param min
+     *            minimum value of the range
+     * @param max
+     *            maximum value of the range
+     */
+    public void setRange(double min, double max) {
+        xField.setRange(min, max);
+        yField.setRange(min, max);
+        zField.setRange(min, max);
+    }
+
+
+
+    /**
+     * Sets the values from a <code>Vector3D</code>.
+     * 
+     * @param v
+     *            a vector
+     */
+    public void setValue(Vector3D v) {
+        xField.setValue(v.getX());
+        yField.setValue(v.getY());
+        zField.setValue(v.getZ());
     }
 
 

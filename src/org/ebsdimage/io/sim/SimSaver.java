@@ -51,15 +51,22 @@ public class SimSaver implements Saver {
 
 
     @Override
-    public void save(Object obj, File file) throws IOException {
-        save((Sim) obj, file);
+    public boolean canSave(Object obj, String fileFormat) {
+        return (obj instanceof Sim) && fileFormat.equalsIgnoreCase("xml");
     }
 
 
 
     @Override
-    public boolean canSave(Object obj, String fileFormat) {
-        return (obj instanceof Sim) && fileFormat.equalsIgnoreCase("xml");
+    public double getTaskProgress() {
+        return saver.getTaskProgress();
+    }
+
+
+
+    @Override
+    public void save(Object obj, File file) throws IOException {
+        save((Sim) obj, file);
     }
 
 
@@ -76,13 +83,6 @@ public class SimSaver implements Saver {
      */
     public void save(Sim sim, File file) throws IOException {
         saver.save(sim, file);
-    }
-
-
-
-    @Override
-    public double getTaskProgress() {
-        return saver.getTaskProgress();
     }
 
 }

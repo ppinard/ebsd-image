@@ -229,6 +229,21 @@ public class MicroscopeSetup extends PlugIn {
         private abstract class ActionPlugIn extends PlugIn {
 
             /**
+             * Deletes a microscope saved on the disk.
+             * 
+             * @param microscope
+             *            a microscope
+             */
+            public void delete(Microscope microscope) {
+                File file = getMicroscopeFile(microscope);
+
+                if (!file.delete())
+                    ErrorDialog.show("Could not delete (" + file + ").");
+            }
+
+
+
+            /**
              * Returns the file where a microscope is saved or will be saved.
              * 
              * @param microscope
@@ -261,21 +276,6 @@ public class MicroscopeSetup extends PlugIn {
                 } catch (IOException e) {
                     ErrorDialog.show("Could not save (" + file + ").");
                 }
-            }
-
-
-
-            /**
-             * Deletes a microscope saved on the disk.
-             * 
-             * @param microscope
-             *            a microscope
-             */
-            public void delete(Microscope microscope) {
-                File file = getMicroscopeFile(microscope);
-
-                if (!file.delete())
-                    ErrorDialog.show("Could not delete (" + file + ").");
             }
 
         }

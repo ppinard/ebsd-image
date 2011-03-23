@@ -29,6 +29,14 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class EntropyCreator implements OperationCreator {
 
     @Override
+    public String getDescription() {
+        return "Quality index on the original pattern map. "
+                + "The information entropy of all the non-zero pixels is taken.";
+    }
+
+
+
+    @Override
     public ExpOperation getOperation() {
         return new Entropy();
     }
@@ -45,14 +53,6 @@ public class EntropyCreator implements OperationCreator {
     @Override
     public String toString() {
         return "Entropy";
-    }
-
-
-
-    @Override
-    public String getDescription() {
-        return "Quality index on the original pattern map. "
-                + "The information entropy of all the non-zero pixels is taken.";
     }
 
 }

@@ -35,19 +35,6 @@ public class SimOperation implements Operation {
 
 
 
-    /**
-     * Returns a representation of this <code>Operation</code>, suitable for
-     * debugging.
-     * 
-     * @return information about this <code>Operation</code>
-     */
-    @Override
-    public String toString() {
-        return getName() + " []";
-    }
-
-
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -76,6 +63,19 @@ public class SimOperation implements Operation {
      *            simulation executing this method
      */
     public void tearDown(Sim sim) {
+    }
+
+
+
+    /**
+     * Returns a representation of this <code>Operation</code>, suitable for
+     * debugging.
+     * 
+     * @return information about this <code>Operation</code>
+     */
+    @Override
+    public String toString() {
+        return getName() + " []";
     }
 
 }

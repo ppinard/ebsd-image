@@ -69,21 +69,19 @@ public class SmpFileTest extends TestCase {
 
 
     @Test
-    public void testTearDown() throws IOException {
-        assertTrue(true); // Tested in testSetUp())
+    public void testEqualsObject() {
+        assertTrue(op.equals(op));
+        assertFalse(op.equals(null));
+        assertFalse(op.equals(new Object()));
+
+        assertTrue(op.equals(new SmpFile()));
     }
 
 
 
     @Test
-    public void testSetUp() throws IOException {
-        SimTester.simPath.mkdirs();
-
-        op.setUp(sim);
-        op.tearDown(sim);
-
-        // Test SMP
-        assertTrue(new File(SimTester.simPath, "Sim1.smp").exists());
+    public void testHashCode() {
+        assertEquals(-420404239, op.hashCode());
     }
 
 
@@ -106,19 +104,21 @@ public class SmpFileTest extends TestCase {
 
 
     @Test
-    public void testEqualsObject() {
-        assertTrue(op.equals(op));
-        assertFalse(op.equals(null));
-        assertFalse(op.equals(new Object()));
+    public void testSetUp() throws IOException {
+        SimTester.simPath.mkdirs();
 
-        assertTrue(op.equals(new SmpFile()));
+        op.setUp(sim);
+        op.tearDown(sim);
+
+        // Test SMP
+        assertTrue(new File(SimTester.simPath, "Sim1.smp").exists());
     }
 
 
 
     @Test
-    public void testHashCode() {
-        assertEquals(-420404239, op.hashCode());
+    public void testTearDown() throws IOException {
+        assertTrue(true); // Tested in testSetUp())
     }
 
 

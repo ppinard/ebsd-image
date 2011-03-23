@@ -17,11 +17,11 @@
  */
 package crystallography.core;
 
-import static crystallography.core.CrystalSystem.*;
-import static crystallography.core.LaueGroup.*;
-
 import java.util.HashMap;
 import java.util.HashSet;
+
+import static crystallography.core.CrystalSystem.*;
+import static crystallography.core.LaueGroup.*;
 
 /**
  * Utilities to get and list space groups.

@@ -21,10 +21,6 @@ import static java.lang.Math.toRadians;
 import static junittools.test.Assert.assertEquals;
 
 public abstract class SimMMapTester extends TestCase {
-    protected SimMMap mmap;
-
-
-
     public static SimMMap createSimMMap() {
         Camera camera =
                 new Camera(new Vector3D(1, 0, 0), new Vector3D(0, -1, 0), 0.04,
@@ -71,33 +67,7 @@ public abstract class SimMMapTester extends TestCase {
         return mmap;
     }
 
-
-
-    @Test
-    public void testDuplicate() {
-        SimMMap other = mmap.duplicate();
-
-        assertEquals(mmap.width, other.width);
-        assertEquals(mmap.height, other.height);
-        assertEquals(mmap.size, other.size);
-
-        assertEquals(mmap.getMetadata(), other.getMetadata(), 1e-6);
-
-        mmap.getQ0Map().assertEquals(other.getQ0Map());
-        mmap.getQ1Map().assertEquals(other.getQ1Map());
-        mmap.getQ2Map().assertEquals(other.getQ2Map());
-        mmap.getQ3Map().assertEquals(other.getQ3Map());
-        mmap.getPhaseMap().assertEquals(other.getPhaseMap());
-    }
-
-
-
-    @Test
-    public void testSimMMap() {
-        assertEquals(2, mmap.width);
-        assertEquals(2, mmap.height);
-        assertEquals(4, mmap.size);
-    }
+    protected SimMMap mmap;
 
 
 
@@ -140,6 +110,25 @@ public abstract class SimMMapTester extends TestCase {
 
 
     @Test
+    public void testDuplicate() {
+        SimMMap other = mmap.duplicate();
+
+        assertEquals(mmap.width, other.width);
+        assertEquals(mmap.height, other.height);
+        assertEquals(mmap.size, other.size);
+
+        assertEquals(mmap.getMetadata(), other.getMetadata(), 1e-6);
+
+        mmap.getQ0Map().assertEquals(other.getQ0Map());
+        mmap.getQ1Map().assertEquals(other.getQ1Map());
+        mmap.getQ2Map().assertEquals(other.getQ2Map());
+        mmap.getQ3Map().assertEquals(other.getQ3Map());
+        mmap.getPhaseMap().assertEquals(other.getPhaseMap());
+    }
+
+
+
+    @Test
     public void testGetMetadata() {
         Microscope microscope = mmap.getMicroscope();
 
@@ -153,5 +142,14 @@ public abstract class SimMMapTester extends TestCase {
         assertEquals(ScatteringFactorsEnum.ELECTRON,
                 metadata.getScatteringFactors());
         assertEquals(3, metadata.getMaxIndex());
+    }
+
+
+
+    @Test
+    public void testSimMMap() {
+        assertEquals(2, mmap.width);
+        assertEquals(2, mmap.height);
+        assertEquals(4, mmap.size);
     }
 }

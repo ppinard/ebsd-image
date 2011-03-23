@@ -29,6 +29,15 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class PatternQualityCreator implements OperationCreator {
 
     @Override
+    public String getDescription() {
+        return "Oxford's INCA pattern quality index. It consists of the sum "
+                + "of the three most intense peaks divided by 3 times the "
+                + "standard deviation of the Hough map.";
+    }
+
+
+
+    @Override
     public ExpOperation getOperation() {
         return new PatternQuality();
     }
@@ -45,15 +54,6 @@ public class PatternQualityCreator implements OperationCreator {
     @Override
     public String toString() {
         return "Pattern Quality";
-    }
-
-
-
-    @Override
-    public String getDescription() {
-        return "Oxford's INCA pattern quality index. It consists of the sum "
-                + "of the three most intense peaks divided by 3 times the "
-                + "standard deviation of the Hough map.";
     }
 
 }

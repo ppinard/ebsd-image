@@ -1035,28 +1035,6 @@ public class Exp extends Run {
 
 
 
-    /**
-     * Checks whether the size of the current map has changed. If so, the source
-     * map is updated to be a duplicate of the current map.
-     * 
-     * @param source
-     *            original map obtained after a "op" operation
-     * @param current
-     *            current map
-     * @return new source map or original one
-     */
-    private Map updateSourceMap(Map source, Map current) {
-        if (source == null)
-            source = current.duplicate();
-
-        if (!source.isSameSize(current))
-            source = current.duplicate();
-
-        return source;
-    }
-
-
-
     @Override
     protected void initRuntimeVariables() {
         super.initRuntimeVariables();
@@ -1363,6 +1341,18 @@ public class Exp extends Run {
 
 
     /**
+     * Saves error in <code>ErrorMap</code>.
+     * 
+     * @param ex
+     *            exception thrown
+     */
+    private void saveError(ExpError ex) {
+        mmap.getErrorMap().throwError(currentIndex, ex.getErrorCode());
+    }
+
+
+
+    /**
      * Saves a result in a map with the given alias in the <code>EbsdMMap</code>
      * . If the map does not exist, it is creates by the method
      * {@link #createEmptyMap(String, Number)}. If the result is a
@@ -1402,18 +1392,6 @@ public class Exp extends Run {
 
 
 
-    /**
-     * Saves error in <code>ErrorMap</code>.
-     * 
-     * @param ex
-     *            exception thrown
-     */
-    private void saveError(ExpError ex) {
-        mmap.getErrorMap().throwError(currentIndex, ex.getErrorCode());
-    }
-
-
-
     @Override
     public void setDir(File dir) {
         super.setDir(dir);
@@ -1428,6 +1406,28 @@ public class Exp extends Run {
         super.setName(name);
 
         mmap.setName(name);
+    }
+
+
+
+    /**
+     * Checks whether the size of the current map has changed. If so, the source
+     * map is updated to be a duplicate of the current map.
+     * 
+     * @param source
+     *            original map obtained after a "op" operation
+     * @param current
+     *            current map
+     * @return new source map or original one
+     */
+    private Map updateSourceMap(Map source, Map current) {
+        if (source == null)
+            source = current.duplicate();
+
+        if (!source.isSameSize(current))
+            source = current.duplicate();
+
+        return source;
     }
 
 }

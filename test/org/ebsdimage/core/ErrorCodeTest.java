@@ -28,8 +28,19 @@ public class ErrorCodeTest extends TestCase {
 
 
     @Test
-    public void testHashCode() {
-        assertEquals(-167186582, errorCode.hashCode());
+    public void testEqualsObject() {
+        assertTrue(errorCode.equals(errorCode));
+        assertFalse(errorCode.equals(null));
+        assertFalse(errorCode.equals(new Object()));
+
+        ErrorCode other = new ErrorCode("Error1", "Desc1");
+        assertTrue(errorCode.equals(other));
+
+        other = new ErrorCode("Error2", "Desc1");
+        assertFalse(errorCode.equals(other));
+
+        other = new ErrorCode("Error1", "Desc2");
+        assertFalse(errorCode.equals(other));
     }
 
 
@@ -53,19 +64,8 @@ public class ErrorCodeTest extends TestCase {
 
 
     @Test
-    public void testEqualsObject() {
-        assertTrue(errorCode.equals(errorCode));
-        assertFalse(errorCode.equals(null));
-        assertFalse(errorCode.equals(new Object()));
-
-        ErrorCode other = new ErrorCode("Error1", "Desc1");
-        assertTrue(errorCode.equals(other));
-
-        other = new ErrorCode("Error2", "Desc1");
-        assertFalse(errorCode.equals(other));
-
-        other = new ErrorCode("Error1", "Desc2");
-        assertFalse(errorCode.equals(other));
+    public void testHashCode() {
+        assertEquals(-167186582, errorCode.hashCode());
     }
 
 

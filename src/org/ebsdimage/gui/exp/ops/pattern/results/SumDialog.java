@@ -99,6 +99,24 @@ public class SumDialog extends OperationDialog {
 
 
     @Override
+    public String getDescription() {
+        return "Calculate the total intensity of a rectangular region of the "
+                + "original diffraction pattern";
+    }
+
+
+
+    @Override
+    public ExpOperation getOperation() {
+        return new Sum(xminField.getValueBFR() / 100.0,
+                yminField.getValueBFR() / 100.0,
+                xmaxField.getValueBFR() / 100.0,
+                ymaxField.getValueBFR() / 100.0);
+    }
+
+
+
+    @Override
     public boolean isCorrect() {
         if (!super.isCorrect())
             return false;
@@ -114,24 +132,6 @@ public class SumDialog extends OperationDialog {
         }
 
         return true;
-    }
-
-
-
-    @Override
-    public String getDescription() {
-        return "Calculate the total intensity of a rectangular region of the "
-                + "original diffraction pattern";
-    }
-
-
-
-    @Override
-    public ExpOperation getOperation() {
-        return new Sum(xminField.getValueBFR() / 100.0,
-                yminField.getValueBFR() / 100.0,
-                xmaxField.getValueBFR() / 100.0,
-                ymaxField.getValueBFR() / 100.0);
     }
 
 

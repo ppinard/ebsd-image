@@ -45,6 +45,25 @@ public class ErrorMapLoaderTest extends TestCase {
 
 
 
+    private void testErrorMap(ErrorMap map) {
+        assertEquals(2, map.width);
+        assertEquals(2, map.height);
+        assertEquals(4, map.size);
+
+        assertEquals(0, map.pixArray[0]);
+        assertEquals(1, map.pixArray[1]);
+        assertEquals(3, map.pixArray[2]);
+        assertEquals(1, map.pixArray[3]);
+
+        Map<Integer, ErrorCode> items = map.getItems();
+        assertEquals(3, items.size());
+        assertEquals(ErrorMap.NO_ERROR, items.get(0));
+        assertEquals(new ErrorCode("Error1"), items.get(1));
+        assertEquals(new ErrorCode("Error3", "Desc3"), items.get(3));
+    }
+
+
+
     @Test
     public void testGetTaskProgress() {
         assertEquals(0, loader.getTaskProgress(), 1e-6);
@@ -64,25 +83,6 @@ public class ErrorMapLoaderTest extends TestCase {
     public void testLoadFileMap() throws IOException {
         ErrorMap map = loader.load(file, null);
         testErrorMap(map);
-    }
-
-
-
-    private void testErrorMap(ErrorMap map) {
-        assertEquals(2, map.width);
-        assertEquals(2, map.height);
-        assertEquals(4, map.size);
-
-        assertEquals(0, map.pixArray[0]);
-        assertEquals(1, map.pixArray[1]);
-        assertEquals(3, map.pixArray[2]);
-        assertEquals(1, map.pixArray[3]);
-
-        Map<Integer, ErrorCode> items = map.getItems();
-        assertEquals(3, items.size());
-        assertEquals(ErrorMap.NO_ERROR, items.get(0));
-        assertEquals(new ErrorCode("Error1"), items.get(1));
-        assertEquals(new ErrorCode("Error3", "Desc3"), items.get(3));
     }
 
 }

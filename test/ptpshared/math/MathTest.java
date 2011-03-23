@@ -17,12 +17,11 @@
  */
 package ptpshared.math;
 
-import static java.lang.Math.PI;
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
-import ptpshared.math.Math;
+import static org.junit.Assert.assertEquals;
+
+import static java.lang.Math.PI;
 
 public class MathTest {
 
@@ -36,10 +35,9 @@ public class MathTest {
 
 
 
-    @Test
-    public void testSqrt() {
-        assertEquals(Math.sqrt(4), 2, 1e-7);
-        assertEquals(Math.sqrt(-4), 0.0, 1e-7);
+    @Test(expected = IllegalArgumentException.class)
+    public void testIsPositiveException() {
+        Math.sign(Double.NaN);
     }
 
 
@@ -55,9 +53,10 @@ public class MathTest {
 
 
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testIsPositiveException() {
-        Math.sign(Double.NaN);
+    @Test
+    public void testSqrt() {
+        assertEquals(Math.sqrt(4), 2, 1e-7);
+        assertEquals(Math.sqrt(-4), 0.0, 1e-7);
     }
 
 }

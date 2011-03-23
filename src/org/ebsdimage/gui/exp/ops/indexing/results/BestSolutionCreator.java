@@ -29,6 +29,13 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class BestSolutionCreator implements OperationCreator {
 
     @Override
+    public String getDescription() {
+        return "Saves the best solution of the indexing.";
+    }
+
+
+
+    @Override
     public ExpOperation getOperation() {
         return new BestSolution();
     }
@@ -50,13 +57,6 @@ public class BestSolutionCreator implements OperationCreator {
     @Override
     public String toString() {
         return "Best Solution";
-    }
-
-
-
-    @Override
-    public String getDescription() {
-        return "Saves the best solution of the indexing.";
     }
 
 }

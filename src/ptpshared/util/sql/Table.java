@@ -142,31 +142,6 @@ public class Table {
 
 
     /**
-     * Returns the SQL command to create the table.
-     * 
-     * @return SQL command
-     */
-    @Override
-    public String toString() {
-        StringBuilder command = new StringBuilder();
-
-        command.append("CREATE TABLE " + name + "(");
-        for (Column column : columns)
-            command.append(column.command + ", ");
-
-        for (Column column : columns)
-            if (column.primaryKey)
-                command.append("PRIMARY KEY (`" + column.name + "`), ");
-
-        command.setLength(command.length() - 2);
-        command.append(")");
-
-        return command.toString();
-    }
-
-
-
-    /**
      * Removes a <code>column</code> from the table.
      * 
      * @param column
@@ -200,6 +175,31 @@ public class Table {
         for (int i = 0; i < columns.size(); i++)
             if (columns.get(i).name.equals(columnName))
                 columns.remove(i);
+    }
+
+
+
+    /**
+     * Returns the SQL command to create the table.
+     * 
+     * @return SQL command
+     */
+    @Override
+    public String toString() {
+        StringBuilder command = new StringBuilder();
+
+        command.append("CREATE TABLE " + name + "(");
+        for (Column column : columns)
+            command.append(column.command + ", ");
+
+        for (Column column : columns)
+            if (column.primaryKey)
+                command.append("PRIMARY KEY (`" + column.name + "`), ");
+
+        command.setLength(command.length() - 2);
+        command.append(")");
+
+        return command.toString();
     }
 
 }

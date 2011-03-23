@@ -37,13 +37,6 @@ public class PatternBandCenterDialog extends PatternSimOpDialog {
 
 
     @Override
-    public String toString() {
-        return "Pattern Band Center";
-    }
-
-
-
-    @Override
     public String getDescription() {
         return "Simulate a pattern where the center of the bands is drawn.";
     }
@@ -54,6 +47,13 @@ public class PatternBandCenterDialog extends PatternSimOpDialog {
     public SimOperation getOperation() {
         return new PatternBandCenter(widthField.getValueBFR(),
                 heightField.getValueBFR());
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Pattern Band Center";
     }
 
 }

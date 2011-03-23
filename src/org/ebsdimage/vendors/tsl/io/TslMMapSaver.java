@@ -29,6 +29,13 @@ import org.ebsdimage.vendors.tsl.core.TslMMap;
 public class TslMMapSaver extends EbsdMMapSaver {
 
     @Override
+    public boolean canSave(Object obj, String fileFormat) {
+        return (obj instanceof TslMMap) && fileFormat.equalsIgnoreCase("zip");
+    }
+
+
+
+    @Override
     protected String getHeader() {
         return TslMMap.FILE_HEADER;
     }
@@ -38,13 +45,6 @@ public class TslMMapSaver extends EbsdMMapSaver {
     @Override
     protected int getVersion() {
         return TslMMap.VERSION;
-    }
-
-
-
-    @Override
-    public boolean canSave(Object obj, String fileFormat) {
-        return (obj instanceof TslMMap) && fileFormat.equalsIgnoreCase("zip");
     }
 
 }

@@ -175,6 +175,25 @@ public class IndexedByteMapTest {
 
 
     @Test
+    public void testIndexedByteMapIntIntByteArrayItemHashMap() {
+        assertEquals(2, indexedMap.width);
+        assertEquals(2, indexedMap.height);
+
+        Map<Integer, ItemMock> items = indexedMap.getItems();
+        assertEquals(3, items.size());
+        assertEquals(item0, items.get(0));
+        assertEquals(item1, items.get(1));
+        assertEquals(item2, items.get(3));
+
+        assertEquals(0, indexedMap.getPixValue(0));
+        assertEquals(1, indexedMap.getPixValue(1));
+        assertEquals(3, indexedMap.getPixValue(2));
+        assertEquals(1, indexedMap.getPixValue(3));
+    }
+
+
+
+    @Test
     public void testIndexedByteMapIntIntItem() {
         IndexedByteMap<ItemMock> other =
                 new IndexedByteMap<ItemMock>(2, 2, item0);
@@ -190,25 +209,6 @@ public class IndexedByteMapTest {
         assertEquals(0, other.getPixValue(1));
         assertEquals(0, other.getPixValue(2));
         assertEquals(0, other.getPixValue(3));
-    }
-
-
-
-    @Test
-    public void testIndexedByteMapIntIntByteArrayItemHashMap() {
-        assertEquals(2, indexedMap.width);
-        assertEquals(2, indexedMap.height);
-
-        Map<Integer, ItemMock> items = indexedMap.getItems();
-        assertEquals(3, items.size());
-        assertEquals(item0, items.get(0));
-        assertEquals(item1, items.get(1));
-        assertEquals(item2, items.get(3));
-
-        assertEquals(0, indexedMap.getPixValue(0));
-        assertEquals(1, indexedMap.getPixValue(1));
-        assertEquals(3, indexedMap.getPixValue(2));
-        assertEquals(1, indexedMap.getPixValue(3));
     }
 
 

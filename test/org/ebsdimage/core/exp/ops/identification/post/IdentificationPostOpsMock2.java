@@ -29,17 +29,17 @@ public class IdentificationPostOpsMock2 extends IdentificationPostOps {
 
 
     @Override
-    public HoughPeak[] process(Exp exp, HoughPeak[] srcPeaks) throws ExpError {
-        if (exp.getCurrentIndex() == 1)
-            throw new ExpError(Error1);
-
-        return srcPeaks.clone();
+    public ErrorCode[] getErrorCodes() {
+        return new ErrorCode[] { Error1 };
     }
 
 
 
     @Override
-    public ErrorCode[] getErrorCodes() {
-        return new ErrorCode[] { Error1 };
+    public HoughPeak[] process(Exp exp, HoughPeak[] srcPeaks) throws ExpError {
+        if (exp.getCurrentIndex() == 1)
+            throw new ExpError(Error1);
+
+        return srcPeaks.clone();
     }
 }

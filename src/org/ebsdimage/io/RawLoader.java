@@ -45,6 +45,32 @@ public class RawLoader extends MapLoader {
 
 
     /**
+     * Returns the dimension of the map based on the properties of the RPL file
+     * attached with the RAW file.
+     * 
+     * @param file
+     *            path to the RAW file
+     * @return dimension of the map
+     * @throws IOException
+     *             if an error occurs while reading the RPL file
+     */
+    public Dimension getDimension(File file) throws IOException {
+        File rplFile = FileUtil.setExtension(file, "rpl");
+        RplFile rpl = new RplLoader().load(rplFile);
+
+        return new Dimension(rpl.width, rpl.height);
+    }
+
+
+
+    @Override
+    public double getTaskProgress() {
+        return progress;
+    }
+
+
+
+    /**
      * Returns the validation message indication if the specified file is a
      * valid <code>RAW</code> file. An empty string if the file is valid. An
      * error message otherwise.
@@ -69,32 +95,6 @@ public class RawLoader extends MapLoader {
             return "The RAW file must be accompanied by a RPL file.";
 
         return "";
-    }
-
-
-
-    /**
-     * Returns the dimension of the map based on the properties of the RPL file
-     * attached with the RAW file.
-     * 
-     * @param file
-     *            path to the RAW file
-     * @return dimension of the map
-     * @throws IOException
-     *             if an error occurs while reading the RPL file
-     */
-    public Dimension getDimension(File file) throws IOException {
-        File rplFile = FileUtil.setExtension(file, "rpl");
-        RplFile rpl = new RplLoader().load(rplFile);
-
-        return new Dimension(rpl.width, rpl.height);
-    }
-
-
-
-    @Override
-    public double getTaskProgress() {
-        return progress;
     }
 
 

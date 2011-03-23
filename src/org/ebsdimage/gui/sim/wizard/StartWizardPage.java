@@ -42,15 +42,6 @@ import rmlshared.gui.FileNameField;
  */
 public class StartWizardPage extends WizardPage {
 
-    @Override
-    public WizardPanelNavResult allowNext(String stepName,
-            @SuppressWarnings("rawtypes") Map settings, Wizard wizard) {
-
-        put(ParamsWizardPage.KEY_LOADED, 0);
-
-        return super.allowNext(stepName, settings, wizard);
-    }
-
     /**
      * Listener to enable/disable the operations file browser field.
      */
@@ -109,6 +100,17 @@ public class StartWizardPage extends WizardPage {
         paramsFileField.setFileFilter("*.xml");
         paramsFileField.setEnabled(false);
         add(paramsFileField, "gapleft 35, wrap");
+    }
+
+
+
+    @Override
+    public WizardPanelNavResult allowNext(String stepName,
+            @SuppressWarnings("rawtypes") Map settings, Wizard wizard) {
+
+        put(ParamsWizardPage.KEY_LOADED, 0);
+
+        return super.allowNext(stepName, settings, wizard);
     }
 
 

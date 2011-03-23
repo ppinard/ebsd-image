@@ -36,13 +36,6 @@ public class BmpFileCreator implements OperationCreator {
 
 
     @Override
-    public String toString() {
-        return "BMP File";
-    }
-
-
-
-    @Override
     public SimOperation getOperation() {
         return new BmpFile();
     }
@@ -52,6 +45,13 @@ public class BmpFileCreator implements OperationCreator {
     @Override
     public int show() {
         return OperationCreator.OK;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "BMP File";
     }
 
 }

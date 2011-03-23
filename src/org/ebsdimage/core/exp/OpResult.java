@@ -47,6 +47,22 @@ public class OpResult {
      *            alias identifying the result
      * @param value
      *            value of the result
+     * @param type
+     *            type of map where to save the result
+     */
+    public OpResult(String alias, Number value, Class<? extends Map> type) {
+        this(alias, value, "", type);
+    }
+
+
+
+    /**
+     * Creates a new <code>OpResult</code>.
+     * 
+     * @param alias
+     *            alias identifying the result
+     * @param value
+     *            value of the result
      * @param units
      *            units of the value
      * @param type
@@ -67,21 +83,5 @@ public class OpResult {
         this.value = value;
         this.units = units;
         this.type = type;
-    }
-
-
-
-    /**
-     * Creates a new <code>OpResult</code>.
-     * 
-     * @param alias
-     *            alias identifying the result
-     * @param value
-     *            value of the result
-     * @param type
-     *            type of map where to save the result
-     */
-    public OpResult(String alias, Number value, Class<? extends Map> type) {
-        this(alias, value, "", type);
     }
 }

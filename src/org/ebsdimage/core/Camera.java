@@ -232,23 +232,23 @@ public class Camera implements AlmostEquable {
 
 
     /**
-     * Returns the width of the camera in unit length (meters).
-     * 
-     * @return width of the camera
-     */
-    public Magnitude getWidth() {
-        return new Magnitude(width, "m");
-    }
-
-
-
-    /**
      * Returns the height of the camera in unit length (meters).
      * 
      * @return height of the camera
      */
     public Magnitude getHeight() {
         return new Magnitude(height, "m");
+    }
+
+
+
+    /**
+     * Returns the width of the camera in unit length (meters).
+     * 
+     * @return width of the camera
+     */
+    public Magnitude getWidth() {
+        return new Magnitude(width, "m");
     }
 
 }

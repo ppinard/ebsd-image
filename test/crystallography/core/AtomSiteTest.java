@@ -99,20 +99,6 @@ public class AtomSiteTest extends TestCase {
 
 
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testAtomSiteIntVector3DException1() {
-        new AtomSite(-1, new Vector3D(0.1, 0.2, 0.3));
-    }
-
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testAtomSiteIntVector3DException2() {
-        new AtomSite(112, new Vector3D(0.1, 0.2, 0.3));
-    }
-
-
-
     @Test
     public void testAtomSiteIntVector3DDouble() {
         assertEquals(16, atom4.atomicNumber);
@@ -153,6 +139,20 @@ public class AtomSiteTest extends TestCase {
     @Test(expected = NullPointerException.class)
     public void testAtomSiteIntVector3DDoubleException5() {
         new AtomSite(16, null, 0.1);
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAtomSiteIntVector3DException1() {
+        new AtomSite(-1, new Vector3D(0.1, 0.2, 0.3));
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAtomSiteIntVector3DException2() {
+        new AtomSite(112, new Vector3D(0.1, 0.2, 0.3));
     }
 
 

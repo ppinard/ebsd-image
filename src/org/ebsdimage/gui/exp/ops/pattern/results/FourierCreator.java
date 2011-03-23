@@ -29,6 +29,15 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class FourierCreator implements OperationCreator {
 
     @Override
+    public String getDescription() {
+        return "Quality index on the original pattern map. "
+                + "It is calculated by taking the Fourier "
+                + "transform of the pattern map. (Krieger Lassen, 1994)";
+    }
+
+
+
+    @Override
     public ExpOperation getOperation() {
         return new Fourier();
     }
@@ -45,14 +54,5 @@ public class FourierCreator implements OperationCreator {
     @Override
     public String toString() {
         return "Fourier";
-    }
-
-
-
-    @Override
-    public String getDescription() {
-        return "Quality index on the original pattern map. "
-                + "It is calculated by taking the Fourier "
-                + "transform of the pattern map. (Krieger Lassen, 1994)";
     }
 }

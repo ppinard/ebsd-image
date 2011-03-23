@@ -33,15 +33,15 @@ import rmlshared.util.Properties;
 public class RplLoader implements Loader {
 
     @Override
-    public double getTaskProgress() {
-        return 0;
+    public boolean canLoad(File file) {
+        return FileUtil.getExtension(file).equalsIgnoreCase("rpl");
     }
 
 
 
     @Override
-    public RplFile load(File file, Object arg) throws IOException {
-        return load(file);
+    public double getTaskProgress() {
+        return 0;
     }
 
 
@@ -125,8 +125,8 @@ public class RplLoader implements Loader {
 
 
     @Override
-    public boolean canLoad(File file) {
-        return FileUtil.getExtension(file).equalsIgnoreCase("rpl");
+    public RplFile load(File file, Object arg) throws IOException {
+        return load(file);
     }
 
 }

@@ -186,17 +186,6 @@ public class Edit implements EditHandler {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public Map crop(Map map, ROI roi) {
-        if (map instanceof IndexedByteMap)
-            return crop((IndexedByteMap) map, roi);
-        else
-            return null;
-    }
-
-
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    @Override
     public boolean copy(Map src, ROI roi, Map dest, int xx1, int yy1) {
         if (src instanceof IndexedByteMap && dest instanceof IndexedByteMap) {
             copy((IndexedByteMap) src, roi, (IndexedByteMap) dest, xx1, yy1);
@@ -204,5 +193,16 @@ public class Edit implements EditHandler {
         }
 
         return false;
+    }
+
+
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    public Map crop(Map map, ROI roi) {
+        if (map instanceof IndexedByteMap)
+            return crop((IndexedByteMap) map, roi);
+        else
+            return null;
     }
 }

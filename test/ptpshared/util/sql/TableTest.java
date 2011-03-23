@@ -17,16 +17,12 @@
  */
 package ptpshared.util.sql;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.util.sql.Column;
-import ptpshared.util.sql.ColumnFactory;
-import ptpshared.util.sql.Table;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class TableTest {
 
@@ -139,21 +135,6 @@ public class TableTest {
 
 
     @Test
-    public void testToString() {
-        table1.addColumn(column1);
-        table1.addColumn(column2);
-        table1.addColumn(column3);
-
-        String expected =
-                "CREATE TABLE table1(col1 TEXT, col2 TEXT NOT NULL "
-                        + "DEFAULT default, col3 INT UNSIGNED)";
-
-        assertEquals(expected, table1.toString());
-    }
-
-
-
-    @Test
     public void testRemoveColumnColumn() {
         table1.addColumn(column1);
         table1.addColumn(column2);
@@ -198,6 +179,21 @@ public class TableTest {
     @Test
     public void testTable() {
         assertEquals("table1", table1.name);
+    }
+
+
+
+    @Test
+    public void testToString() {
+        table1.addColumn(column1);
+        table1.addColumn(column2);
+        table1.addColumn(column3);
+
+        String expected =
+                "CREATE TABLE table1(col1 TEXT, col2 TEXT NOT NULL "
+                        + "DEFAULT default, col3 INT UNSIGNED)";
+
+        assertEquals(expected, table1.toString());
     }
 
 }

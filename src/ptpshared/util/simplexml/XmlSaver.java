@@ -56,6 +56,13 @@ public class XmlSaver implements Monitorable {
 
 
 
+    @Override
+    public String getTaskStatus() {
+        return status;
+    }
+
+
+
     /**
      * Saves the <code>Object</code> to an XMLfile.
      * 
@@ -106,13 +113,6 @@ public class XmlSaver implements Monitorable {
      */
     public void saveMap(Map<?, ?> items, File file) throws IOException {
         save(new MapXML(items), file);
-    }
-
-
-
-    @Override
-    public String getTaskStatus() {
-        return status;
     }
 
 }

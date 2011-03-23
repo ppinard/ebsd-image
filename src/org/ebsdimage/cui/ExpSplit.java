@@ -58,6 +58,76 @@ public class ExpSplit extends BaseCUI {
 
 
     /**
+     * Returns the base directory where to save the smaller experiments.
+     * 
+     * @param cmdLine
+     *            command line arguments
+     * @return directory
+     * @throws IOException
+     *             if an error occurs while validating the file
+     */
+    @CheckForNull
+    private File getDir(CommandLine cmdLine) throws IOException {
+        if (cmdLine.hasOption("dir")) {
+            if (cmdLine.getOptionValue("dir") == null) {
+                ErrorDialog.show("Please specify a base directory.");
+                return null;
+            } else {
+                File dir = new File(cmdLine.getOptionValue("dir"));
+
+                // Create directory if it doesn't exist
+                if (!dir.exists())
+                    if (!dir.mkdirs()) {
+                        ErrorDialog.show("Cannot create directory.");
+                        return null;
+                    }
+
+                MessageDialog.show("Base directory is: " + dir);
+                return dir;
+            }
+        }
+
+        return null;
+    }
+
+
+
+    /**
+     * Returns the experiment input file. The specified file is validated.
+     * 
+     * @param cmdLine
+     *            command line arguments
+     * @return experiment input file
+     * @throws IOException
+     *             if an error occurs while validating the file
+     */
+    @CheckForNull
+    private File getInputFile(CommandLine cmdLine) throws IOException {
+        if (cmdLine.getArgs().length != 1) {
+            ErrorDialog.show("Please specify only one file ("
+                    + cmdLine.getArgs().length + "file(s) were given).");
+            return null;
+        }
+
+        File file = new File(cmdLine.getArgs()[0]);
+
+        if (!file.exists()) {
+            ErrorDialog.show("Specified file does not exist.");
+            return null;
+        }
+
+        if (!"xml".equalsIgnoreCase(FileUtil.getExtension(file))) {
+            ErrorDialog.show("The specified file must have an XML extension.");
+            return null;
+        }
+
+        MessageDialog.show("Loading xml file: " + file);
+        return file;
+    }
+
+
+
+    /**
      * Returns the command line options.
      * 
      * @return command line options
@@ -72,6 +142,34 @@ public class ExpSplit extends BaseCUI {
                 "Split count (i.e. number of smaller experiments wanted)"));
 
         return options;
+    }
+
+
+
+    /**
+     * Returns the split count from the arguments.
+     * 
+     * @param cmdLine
+     *            command line arguments
+     * @return split count
+     * @throws IOException
+     *             if an error occurs
+     */
+    private int getSplitCount(CommandLine cmdLine) throws IOException {
+        if (cmdLine.hasOption("split")) {
+            if (cmdLine.getOptionValue("split") == null) {
+                ErrorDialog.show("Please specify a number of split.");
+                return -1;
+            } else {
+                int splitCount =
+                        Integer.parseInt(cmdLine.getOptionValue("split"));
+                MessageDialog.show("Split count: " + splitCount);
+                return splitCount;
+            }
+        } else {
+            ErrorDialog.show("The split count is required.");
+            return -1;
+        }
     }
 
 
@@ -195,104 +293,6 @@ public class ExpSplit extends BaseCUI {
             }
 
             index++;
-        }
-    }
-
-
-
-    /**
-     * Returns the experiment input file. The specified file is validated.
-     * 
-     * @param cmdLine
-     *            command line arguments
-     * @return experiment input file
-     * @throws IOException
-     *             if an error occurs while validating the file
-     */
-    @CheckForNull
-    private File getInputFile(CommandLine cmdLine) throws IOException {
-        if (cmdLine.getArgs().length != 1) {
-            ErrorDialog.show("Please specify only one file ("
-                    + cmdLine.getArgs().length + "file(s) were given).");
-            return null;
-        }
-
-        File file = new File(cmdLine.getArgs()[0]);
-
-        if (!file.exists()) {
-            ErrorDialog.show("Specified file does not exist.");
-            return null;
-        }
-
-        if (!"xml".equalsIgnoreCase(FileUtil.getExtension(file))) {
-            ErrorDialog.show("The specified file must have an XML extension.");
-            return null;
-        }
-
-        MessageDialog.show("Loading xml file: " + file);
-        return file;
-    }
-
-
-
-    /**
-     * Returns the base directory where to save the smaller experiments.
-     * 
-     * @param cmdLine
-     *            command line arguments
-     * @return directory
-     * @throws IOException
-     *             if an error occurs while validating the file
-     */
-    @CheckForNull
-    private File getDir(CommandLine cmdLine) throws IOException {
-        if (cmdLine.hasOption("dir")) {
-            if (cmdLine.getOptionValue("dir") == null) {
-                ErrorDialog.show("Please specify a base directory.");
-                return null;
-            } else {
-                File dir = new File(cmdLine.getOptionValue("dir"));
-
-                // Create directory if it doesn't exist
-                if (!dir.exists())
-                    if (!dir.mkdirs()) {
-                        ErrorDialog.show("Cannot create directory.");
-                        return null;
-                    }
-
-                MessageDialog.show("Base directory is: " + dir);
-                return dir;
-            }
-        }
-
-        return null;
-    }
-
-
-
-    /**
-     * Returns the split count from the arguments.
-     * 
-     * @param cmdLine
-     *            command line arguments
-     * @return split count
-     * @throws IOException
-     *             if an error occurs
-     */
-    private int getSplitCount(CommandLine cmdLine) throws IOException {
-        if (cmdLine.hasOption("split")) {
-            if (cmdLine.getOptionValue("split") == null) {
-                ErrorDialog.show("Please specify a number of split.");
-                return -1;
-            } else {
-                int splitCount =
-                        Integer.parseInt(cmdLine.getOptionValue("split"));
-                MessageDialog.show("Split count: " + splitCount);
-                return splitCount;
-            }
-        } else {
-            ErrorDialog.show("The split count is required.");
-            return -1;
         }
     }
 

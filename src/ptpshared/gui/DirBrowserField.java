@@ -28,6 +28,41 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
 public class DirBrowserField extends JComponent implements InputValidation,
         InputBuffering, PreferenceKeeping {
 
+    /** Action listener for the browse button. */
+    private class BrowseButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Object source = e.getSource();
+
+            assert source == browseButton : "source (" + source
+                    + ") should be " + browseButton;
+
+            // Set selected directory
+            String[] fileNames = nameField.getText().split(";");
+            if (fileNames.length > 0)
+                dirChooser.setCurrentDirectory(new File(fileNames[0]));
+
+            // Show dialog
+            if (dirChooser.showDialog(getParent(), "Select") == JFileChooser.CANCEL_OPTION)
+                return;
+
+            // Check file
+            if (!isCorrect())
+                actionPerformed(e);
+
+            // Set name field
+            StringBuilder text = new StringBuilder();
+            if (dirChooser.isMultiSelectionEnabled())
+                for (File file : dirChooser.getSelectedFiles())
+                    text.append(file.getPath() + ";");
+            else
+                text.append(dirChooser.getSelectedFile().getPath());
+
+            nameField.setText(text.toString());
+        }
+
+    }
+
     /** Field for the file path. */
     private final JTextField nameField;
 
@@ -140,6 +175,31 @@ public class DirBrowserField extends JComponent implements InputValidation,
 
 
     /**
+     * Returns the selected directory as a <code>File</code> object.
+     * 
+     * @return the selected directory
+     */
+    @CheckForNull
+    public File getDir() {
+        return dirChooser.getSelectedFile();
+    }
+
+
+
+    /**
+     * Returns the selected directory as a <code>File</code> object <b>The
+     * method <code>bufferInput()</code> must be called before to read the text
+     * in the field and put it in the buffer.</b>
+     * 
+     * @return the selected file name
+     */
+    public File getDirBFR() {
+        return getDir();
+    }
+
+
+
+    /**
      * Gets the name of the field.
      * 
      * @return name of the field
@@ -229,6 +289,29 @@ public class DirBrowserField extends JComponent implements InputValidation,
 
 
     /**
+     * Sets the directory of the field and the selected directory in the
+     * directory chooser. If the specified directory is <code>null</code> the
+     * value in the field is cleared. If the directory does not exists, the
+     * value in the field is also cleared.
+     * 
+     * @param dir
+     *            a directory
+     * @throws IllegalArgumentException
+     *             if the directory is invalid
+     */
+    public void setDir(File dir) {
+        if (dir == null) {
+            clear();
+            return;
+        }
+
+        nameField.setText(dir.getPath());
+        dirChooser.setSelectedFile(dir);
+    }
+
+
+
+    /**
      * Enables or disables the components of the <code>FileNameField</code>.
      * 
      * @param state
@@ -290,54 +373,6 @@ public class DirBrowserField extends JComponent implements InputValidation,
 
 
 
-    /**
-     * Sets the directory of the field and the selected directory in the
-     * directory chooser. If the specified directory is <code>null</code> the
-     * value in the field is cleared. If the directory does not exists, the
-     * value in the field is also cleared.
-     * 
-     * @param dir
-     *            a directory
-     * @throws IllegalArgumentException
-     *             if the directory is invalid
-     */
-    public void setDir(File dir) {
-        if (dir == null) {
-            clear();
-            return;
-        }
-
-        nameField.setText(dir.getPath());
-        dirChooser.setSelectedFile(dir);
-    }
-
-
-
-    /**
-     * Returns the selected directory as a <code>File</code> object.
-     * 
-     * @return the selected directory
-     */
-    @CheckForNull
-    public File getDir() {
-        return dirChooser.getSelectedFile();
-    }
-
-
-
-    /**
-     * Returns the selected directory as a <code>File</code> object <b>The
-     * method <code>bufferInput()</code> must be called before to read the text
-     * in the field and put it in the buffer.</b>
-     * 
-     * @return the selected file name
-     */
-    public File getDirBFR() {
-        return getDir();
-    }
-
-
-
     @Override
     public void updatePreferences() {
         if (preferences == null)
@@ -345,41 +380,6 @@ public class DirBrowserField extends JComponent implements InputValidation,
 
         if (getDir() != null)
             preferences.setPreference(PREF_VALUE, getDir().getPath());
-    }
-
-    /** Action listener for the browse button. */
-    private class BrowseButtonListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            Object source = e.getSource();
-
-            assert source == browseButton : "source (" + source
-                    + ") should be " + browseButton;
-
-            // Set selected directory
-            String[] fileNames = nameField.getText().split(";");
-            if (fileNames.length > 0)
-                dirChooser.setCurrentDirectory(new File(fileNames[0]));
-
-            // Show dialog
-            if (dirChooser.showDialog(getParent(), "Select") == JFileChooser.CANCEL_OPTION)
-                return;
-
-            // Check file
-            if (!isCorrect())
-                actionPerformed(e);
-
-            // Set name field
-            StringBuilder text = new StringBuilder();
-            if (dirChooser.isMultiSelectionEnabled())
-                for (File file : dirChooser.getSelectedFiles())
-                    text.append(file.getPath() + ";");
-            else
-                text.append(dirChooser.getSelectedFile().getPath());
-
-            nameField.setText(text.toString());
-        }
-
     }
 
 }

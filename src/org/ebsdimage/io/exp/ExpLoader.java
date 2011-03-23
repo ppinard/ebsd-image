@@ -52,6 +52,20 @@ public class ExpLoader implements Loader {
 
 
 
+    @Override
+    public boolean canLoad(File file) {
+        return getValidationMessage(file).length() == 0;
+    }
+
+
+
+    @Override
+    public double getTaskProgress() {
+        return loader.getTaskProgress();
+    }
+
+
+
     /**
      * Returns the validation message. An empty string is the file is valid; a
      * error message otherwise.
@@ -97,20 +111,6 @@ public class ExpLoader implements Loader {
     @Override
     public Exp load(File file, Object obj) throws IOException {
         return loader.load(Exp.class, file);
-    }
-
-
-
-    @Override
-    public double getTaskProgress() {
-        return loader.getTaskProgress();
-    }
-
-
-
-    @Override
-    public boolean canLoad(File file) {
-        return getValidationMessage(file).length() == 0;
     }
 
 }

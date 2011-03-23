@@ -87,6 +87,39 @@ public class Vector3DUtils {
 
 
     /**
+     * Checks whether two <code>Vector3D</code> are equal to a certain
+     * precision.
+     * 
+     * @param u
+     *            vector 1
+     * @param v
+     *            vector 2
+     * @param precision
+     *            precision
+     * @return <code>true</code> if the two vectors are equal to the specified
+     *         precision, <code>false</code> otherwise
+     */
+    public static boolean equals(Vector3D u, Vector3D v, double precision) {
+        if (precision < 0)
+            throw new IllegalArgumentException(
+                    "Precision cannot be less than zero.");
+
+        if (u == null || v == null)
+            return false;
+
+        if (!(Math.abs(u.getX() - v.getX()) <= precision))
+            return false;
+        if (!(Math.abs(u.getY() - v.getY()) <= precision))
+            return false;
+        if (!(Math.abs(u.getZ() - v.getZ()) <= precision))
+            return false;
+
+        return true;
+    }
+
+
+
+    /**
      * Returns the positive vector of the specified vector. A positive vector is
      * a vector where its first non-zero component is positive.
      * 
@@ -113,20 +146,14 @@ public class Vector3DUtils {
 
 
     /**
-     * Returns the triple product of the three vectors. The triple product is
-     * the cross product of two vectors followed by the dot product of the
-     * resultant vector by the third vector.
+     * Returns an array representation of the specified vector.
      * 
-     * @param v1
-     *            the first vector
-     * @param v2
-     *            the second vector
-     * @param v3
-     *            the third vector
-     * @return triple product
+     * @param v
+     *            a vector
+     * @return a array of length 3
      */
-    public static double tripleProduct(Vector3D v1, Vector3D v2, Vector3D v3) {
-        return Vector3D.dotProduct(Vector3D.crossProduct(v1, v2), v3);
+    public static double[] toArray(Vector3D v) {
+        return new double[] { v.getX(), v.getY(), v.getZ() };
     }
 
 
@@ -163,47 +190,20 @@ public class Vector3DUtils {
 
 
     /**
-     * Returns an array representation of the specified vector.
+     * Returns the triple product of the three vectors. The triple product is
+     * the cross product of two vectors followed by the dot product of the
+     * resultant vector by the third vector.
      * 
-     * @param v
-     *            a vector
-     * @return a array of length 3
+     * @param v1
+     *            the first vector
+     * @param v2
+     *            the second vector
+     * @param v3
+     *            the third vector
+     * @return triple product
      */
-    public static double[] toArray(Vector3D v) {
-        return new double[] { v.getX(), v.getY(), v.getZ() };
-    }
-
-
-
-    /**
-     * Checks whether two <code>Vector3D</code> are equal to a certain
-     * precision.
-     * 
-     * @param u
-     *            vector 1
-     * @param v
-     *            vector 2
-     * @param precision
-     *            precision
-     * @return <code>true</code> if the two vectors are equal to the specified
-     *         precision, <code>false</code> otherwise
-     */
-    public static boolean equals(Vector3D u, Vector3D v, double precision) {
-        if (precision < 0)
-            throw new IllegalArgumentException(
-                    "Precision cannot be less than zero.");
-
-        if (u == null || v == null)
-            return false;
-
-        if (!(Math.abs(u.getX() - v.getX()) <= precision))
-            return false;
-        if (!(Math.abs(u.getY() - v.getY()) <= precision))
-            return false;
-        if (!(Math.abs(u.getZ() - v.getZ()) <= precision))
-            return false;
-
-        return true;
+    public static double tripleProduct(Vector3D v1, Vector3D v2, Vector3D v3) {
+        return Vector3D.dotProduct(Vector3D.crossProduct(v1, v2), v3);
     }
 
 }

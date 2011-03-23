@@ -38,6 +38,24 @@ import rmlimage.module.multi.core.MultiMap;
 public class SimMMapLoader extends EbsdMMapLoader {
 
     @Override
+    protected MultiMap createMap(int version, int width, int height,
+            HashMap<String, Map> mapList) {
+        if (version != ExpMMap.VERSION)
+            throw new IllegalArgumentException("Invalid version: " + version);
+
+        return new SimMMap(width, height, mapList);
+    }
+
+
+
+    @Override
+    protected Class<? extends EbsdMetadata> getMetadataClass() {
+        return SimMetadata.class;
+    }
+
+
+
+    @Override
     protected String getValidHeader() {
         return SimMMap.FILE_HEADER;
     }
@@ -54,24 +72,6 @@ public class SimMMapLoader extends EbsdMMapLoader {
     @Override
     public SimMMap load(File file, Object obj) throws IOException {
         return (SimMMap) super.load(file);
-    }
-
-
-
-    @Override
-    protected MultiMap createMap(int version, int width, int height,
-            HashMap<String, Map> mapList) {
-        if (version != ExpMMap.VERSION)
-            throw new IllegalArgumentException("Invalid version: " + version);
-
-        return new SimMMap(width, height, mapList);
-    }
-
-
-
-    @Override
-    protected Class<? extends EbsdMetadata> getMetadataClass() {
-        return SimMetadata.class;
     }
 
 }

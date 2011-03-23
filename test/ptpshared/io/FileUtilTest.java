@@ -17,11 +17,6 @@
  */
 package ptpshared.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static rmlshared.io.FileUtil.getFile;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -29,23 +24,20 @@ import org.junit.Test;
 
 import rmlshared.io.JarFile;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import static rmlshared.io.FileUtil.getFile;
+
 public class FileUtilTest {
 
     @Test
-    public void testJoinPackageNames() {
-        String expected = "abc.def.ghi";
-
-        String packageName = FileUtil.joinPackageNames("abc", "def", "ghi");
-        assertEquals(expected, packageName);
-
-        packageName = FileUtil.joinPackageNames("abc.", "def.", "ghi.");
-        assertEquals(expected, packageName);
-
-        packageName = FileUtil.joinPackageNames(".abc.", ".def.", ".ghi.");
-        assertEquals(expected, packageName);
-
-        packageName = FileUtil.joinPackageNames(".abc", ".def", ".ghi");
-        assertEquals(expected, packageName);
+    public void testGetJarFiles() throws IOException {
+        JarFile[] jarFiles =
+                FileUtil.getJarFiles(getFile("ptpshared/testdata/"));
+        assertEquals(1, jarFiles.length);
+        assertEquals("test.jar", new File(jarFiles[0].getName()).getName());
     }
 
 
@@ -67,11 +59,20 @@ public class FileUtilTest {
 
 
     @Test
-    public void testGetJarFiles() throws IOException {
-        JarFile[] jarFiles =
-                FileUtil.getJarFiles(getFile("ptpshared/testdata/"));
-        assertEquals(1, jarFiles.length);
-        assertEquals("test.jar", new File(jarFiles[0].getName()).getName());
+    public void testJoinPackageNames() {
+        String expected = "abc.def.ghi";
+
+        String packageName = FileUtil.joinPackageNames("abc", "def", "ghi");
+        assertEquals(expected, packageName);
+
+        packageName = FileUtil.joinPackageNames("abc.", "def.", "ghi.");
+        assertEquals(expected, packageName);
+
+        packageName = FileUtil.joinPackageNames(".abc.", ".def.", ".ghi.");
+        assertEquals(expected, packageName);
+
+        packageName = FileUtil.joinPackageNames(".abc", ".def", ".ghi");
+        assertEquals(expected, packageName);
     }
 
 }

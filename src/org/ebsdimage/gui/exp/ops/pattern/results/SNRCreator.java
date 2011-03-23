@@ -29,6 +29,13 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class SNRCreator implements OperationCreator {
 
     @Override
+    public String getDescription() {
+        return "Calculates the signal to noise ratio of the pattern.";
+    }
+
+
+
+    @Override
     public ExpOperation getOperation() {
         return new SNR();
     }
@@ -45,13 +52,6 @@ public class SNRCreator implements OperationCreator {
     @Override
     public String toString() {
         return "SNR";
-    }
-
-
-
-    @Override
-    public String getDescription() {
-        return "Calculates the signal to noise ratio of the pattern.";
     }
 
 }

@@ -50,14 +50,6 @@ public class OutputOps2MockTest extends TestCase {
 
 
     @Test
-    public void testSave() throws IOException {
-        op.save(null, patternSimOp);
-        assertTrue(true);
-    }
-
-
-
-    @Test
     public void testEqualsObject() {
         assertTrue(op.equals(op));
         assertFalse(op.equals(null));
@@ -71,6 +63,14 @@ public class OutputOps2MockTest extends TestCase {
     @Test
     public void testHashCode() {
         assertEquals(617393610, op.hashCode());
+    }
+
+
+
+    @Test
+    public void testSave() throws IOException {
+        op.save(null, patternSimOp);
+        assertTrue(true);
     }
 
 

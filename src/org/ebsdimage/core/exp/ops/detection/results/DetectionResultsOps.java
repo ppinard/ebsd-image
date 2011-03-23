@@ -28,21 +28,6 @@ import rmlimage.core.BinMap;
  */
 public abstract class DetectionResultsOps extends ExpOperation {
 
-    @Override
-    public final Object execute(Exp exp, Object... args) throws ExpError {
-        return calculate(exp, (BinMap) args[0]);
-    }
-
-
-
-    @Override
-    public final void fireExecuted(ExpListener listener, Exp exp, Object results) {
-        for (OpResult result : (OpResult[]) results)
-            listener.detectionResultsPerformed(exp, this, result);
-    }
-
-
-
     /**
      * Calculates the result(s) from the peaks map.
      * 
@@ -56,5 +41,20 @@ public abstract class DetectionResultsOps extends ExpOperation {
      */
     public abstract OpResult[] calculate(Exp exp, BinMap peaksMap)
             throws ExpError;
+
+
+
+    @Override
+    public final Object execute(Exp exp, Object... args) throws ExpError {
+        return calculate(exp, (BinMap) args[0]);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object results) {
+        for (OpResult result : (OpResult[]) results)
+            listener.detectionResultsPerformed(exp, this, result);
+    }
 
 }

@@ -45,62 +45,18 @@ public class MapsSaverListener implements ExpListener {
 
 
 
-    @Override
-    public void patternOpPerformed(Exp exp, PatternOp op, ByteMap patternMap) {
-        saveMap(exp, op, patternMap);
-    }
-
-
-
-    @Override
-    public void patternPostPerformed(Exp exp, PatternPostOps op,
-            ByteMap patternMap) {
-        saveMap(exp, op, patternMap);
-    }
-
-
-
-    @Override
-    public void patternResultsPerformed(Exp exp, PatternResultsOps op,
-            OpResult result) {
-    }
-
-
-
-    @Override
-    public void houghPrePerformed(Exp exp, HoughPreOps op, ByteMap patternMap) {
-        saveMap(exp, op, patternMap);
-
-    }
-
-
-
-    @Override
-    public void houghOpPerformed(Exp exp, HoughOp op, HoughMap houghMap) {
-        saveMap(exp, op, houghMap);
-    }
-
-
-
-    @Override
-    public void houghPostPerformed(Exp exp, HoughPostOps op, HoughMap houghMap) {
-        saveMap(exp, op, houghMap);
-    }
-
-
-
-    @Override
-    public void houghResultsPerformed(Exp exp, HoughResultsOps op,
-            OpResult result) {
-
-    }
-
-
-
-    @Override
-    public void detectionPrePerformed(Exp exp, DetectionPreOps op,
-            HoughMap houghMap) {
-        saveMap(exp, op, houghMap);
+    /**
+     * Creates a name for a map from the experiment's name, a given name and
+     * experiment's index.
+     * 
+     * @param exp
+     *            an <code>Exp</code>
+     * @param name
+     *            a given name
+     * @return name
+     */
+    private String createName(Exp exp, String name) {
+        return exp.getName() + "_" + name + "_" + exp.getCurrentIndex();
     }
 
 
@@ -121,6 +77,14 @@ public class MapsSaverListener implements ExpListener {
 
 
     @Override
+    public void detectionPrePerformed(Exp exp, DetectionPreOps op,
+            HoughMap houghMap) {
+        saveMap(exp, op, houghMap);
+    }
+
+
+
+    @Override
     public void detectionResultsPerformed(Exp exp, DetectionResultsOps op,
             OpResult result) {
     }
@@ -128,9 +92,31 @@ public class MapsSaverListener implements ExpListener {
 
 
     @Override
-    public void identificationPrePerformed(Exp exp, IdentificationPreOps op,
-            BinMap peaksMap) {
-        saveMap(exp, op, peaksMap);
+    public void houghOpPerformed(Exp exp, HoughOp op, HoughMap houghMap) {
+        saveMap(exp, op, houghMap);
+    }
+
+
+
+    @Override
+    public void houghPostPerformed(Exp exp, HoughPostOps op, HoughMap houghMap) {
+        saveMap(exp, op, houghMap);
+    }
+
+
+
+    @Override
+    public void houghPrePerformed(Exp exp, HoughPreOps op, ByteMap patternMap) {
+        saveMap(exp, op, patternMap);
+
+    }
+
+
+
+    @Override
+    public void houghResultsPerformed(Exp exp, HoughResultsOps op,
+            OpResult result) {
+
     }
 
 
@@ -156,18 +142,16 @@ public class MapsSaverListener implements ExpListener {
 
 
     @Override
-    public void identificationResultsPerformed(Exp exp,
-            IdentificationResultsOps op, OpResult result) {
+    public void identificationPrePerformed(Exp exp, IdentificationPreOps op,
+            BinMap peaksMap) {
+        saveMap(exp, op, peaksMap);
     }
 
 
 
     @Override
-    public void indexingPrePerformed(Exp exp, IndexingPreOps op,
-            HoughPeak[] peaks) {
-        HoughMap houghMap = exp.getSourceHoughMap();
-        ExpListenerUtil.drawHoughPeaksOverlay(houghMap, peaks);
-        saveMap(exp, op, houghMap);
+    public void identificationResultsPerformed(Exp exp,
+            IdentificationResultsOps op, OpResult result) {
     }
 
 
@@ -200,7 +184,39 @@ public class MapsSaverListener implements ExpListener {
 
 
     @Override
+    public void indexingPrePerformed(Exp exp, IndexingPreOps op,
+            HoughPeak[] peaks) {
+        HoughMap houghMap = exp.getSourceHoughMap();
+        ExpListenerUtil.drawHoughPeaksOverlay(houghMap, peaks);
+        saveMap(exp, op, houghMap);
+    }
+
+
+
+    @Override
     public void indexingResultsPerformed(Exp exp, IndexingResultsOps op,
+            OpResult result) {
+    }
+
+
+
+    @Override
+    public void patternOpPerformed(Exp exp, PatternOp op, ByteMap patternMap) {
+        saveMap(exp, op, patternMap);
+    }
+
+
+
+    @Override
+    public void patternPostPerformed(Exp exp, PatternPostOps op,
+            ByteMap patternMap) {
+        saveMap(exp, op, patternMap);
+    }
+
+
+
+    @Override
+    public void patternResultsPerformed(Exp exp, PatternResultsOps op,
             OpResult result) {
     }
 
@@ -229,22 +245,6 @@ public class MapsSaverListener implements ExpListener {
         }
 
         logger.info(op.getName() + " saved at " + map.getFile().getPath());
-    }
-
-
-
-    /**
-     * Creates a name for a map from the experiment's name, a given name and
-     * experiment's index.
-     * 
-     * @param exp
-     *            an <code>Exp</code>
-     * @param name
-     *            a given name
-     * @return name
-     */
-    private String createName(Exp exp, String name) {
-        return exp.getName() + "_" + name + "_" + exp.getCurrentIndex();
     }
 
 }

@@ -29,6 +29,14 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class StandardDeviationCreator implements OperationCreator {
 
     @Override
+    public String getDescription() {
+        return "Quality index on the original pattern map. "
+                + "The standard deviation of all the non-zero pixels is taken.";
+    }
+
+
+
+    @Override
     public ExpOperation getOperation() {
         return new StandardDeviation();
     }
@@ -45,14 +53,6 @@ public class StandardDeviationCreator implements OperationCreator {
     @Override
     public String toString() {
         return "Standard Deviation";
-    }
-
-
-
-    @Override
-    public String getDescription() {
-        return "Quality index on the original pattern map. "
-                + "The standard deviation of all the non-zero pixels is taken.";
     }
 
 }

@@ -29,15 +29,15 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class StandardDeviationCreator implements OperationCreator {
 
     @Override
-    public ExpOperation getOperation() {
-        return new StandardDeviation();
+    public String getDescription() {
+        return "Standard deviation of the pixels in the Hough map.";
     }
 
 
 
     @Override
-    public String getDescription() {
-        return "Standard deviation of the pixels in the Hough map.";
+    public ExpOperation getOperation() {
+        return new StandardDeviation();
     }
 
 

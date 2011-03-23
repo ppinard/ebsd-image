@@ -37,6 +37,42 @@ import static java.lang.Math.PI;
 public class Conversion implements ConversionHandler {
 
     /**
+     * Converts the rotation to Euler angles in the Bunge convention (ZXZ) and
+     * returns an array of three integers for the red, green and blue color.
+     * 
+     * @param rotation
+     *            rotation
+     * @param n
+     *            index of the pixel (for exception message)
+     * @return array of three integers for the red, green and blue color
+     */
+    private static int[] getRGBFromRotation(Rotation rotation, int n) {
+        double[] eulers;
+
+        try {
+            eulers = RotationUtils.getBungeEulerAngles(rotation);
+        } catch (CardanEulerSingularityException e) {
+            return new int[] { 0, 0, 0 };
+        }
+
+        int red = (int) ((eulers[0] + PI) / (2 * PI) * 255 + 0.5);
+        assert (red >= 0 && red <= 255) : "Invalid euler1 (" + eulers[0]
+                + ") for index " + n + ".\n" + "Should be between -PI and PI.";
+
+        int green = (int) (eulers[1] / PI * 255 + 0.5);
+        assert (green >= 0 && green <= 255) : "Invalid euler2 (" + eulers[1]
+                + ") for index " + n + ".\n" + "Should be between 0 and PI.";
+
+        int blue = (int) ((eulers[2] + PI) / (2 * PI) * 255 + 0.5);
+        assert (blue >= 0 && blue <= 255) : "Invalid euler3 (" + eulers[2]
+                + ") for index " + n + ".\n" + "Should be between -PI and PI.";
+
+        return new int[] { red, green, blue };
+    }
+
+
+
+    /**
      * Converts the specified <code>HoughMap</code> to a <code>ByteMap</code>.
      * 
      * @param src
@@ -225,42 +261,6 @@ public class Conversion implements ConversionHandler {
         dest.cloneMetadataFrom(src);
 
         dest.setChanged(Map.MAP_CHANGED);
-    }
-
-
-
-    /**
-     * Converts the rotation to Euler angles in the Bunge convention (ZXZ) and
-     * returns an array of three integers for the red, green and blue color.
-     * 
-     * @param rotation
-     *            rotation
-     * @param n
-     *            index of the pixel (for exception message)
-     * @return array of three integers for the red, green and blue color
-     */
-    private static int[] getRGBFromRotation(Rotation rotation, int n) {
-        double[] eulers;
-
-        try {
-            eulers = RotationUtils.getBungeEulerAngles(rotation);
-        } catch (CardanEulerSingularityException e) {
-            return new int[] { 0, 0, 0 };
-        }
-
-        int red = (int) ((eulers[0] + PI) / (2 * PI) * 255 + 0.5);
-        assert (red >= 0 && red <= 255) : "Invalid euler1 (" + eulers[0]
-                + ") for index " + n + ".\n" + "Should be between -PI and PI.";
-
-        int green = (int) (eulers[1] / PI * 255 + 0.5);
-        assert (green >= 0 && green <= 255) : "Invalid euler2 (" + eulers[1]
-                + ") for index " + n + ".\n" + "Should be between 0 and PI.";
-
-        int blue = (int) ((eulers[2] + PI) / (2 * PI) * 255 + 0.5);
-        assert (blue >= 0 && blue <= 255) : "Invalid euler3 (" + eulers[2]
-                + ") for index " + n + ".\n" + "Should be between -PI and PI.";
-
-        return new int[] { red, green, blue };
     }
 
 

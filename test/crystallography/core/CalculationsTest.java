@@ -291,6 +291,19 @@ public class CalculationsTest {
 
 
     @Test
+    public void testEquivalentPositions() {
+        AtomSites atoms = new AtomSites();
+        atoms.add(new AtomSite(14, 0.0, 0.0, 0.0));
+        AtomSites results =
+                Calculations.equivalentPositions(atoms, SpaceGroups2.SG216);
+
+        assertEquals(4, results.size());
+        assertEquals(atomsfcc, results, 1e-6);
+    }
+
+
+
+    @Test
     public void testFormFactor() {
         Complex f;
         Complex expected;
@@ -941,6 +954,27 @@ public class CalculationsTest {
 
 
     @Test
+    public void testReduce() throws NotARotationMatrixException {
+        // From A.D. Rollett, Misorientations and Grain Boundaries, Lectures
+        // Slides, 2007
+        double[][] m =
+                new double[][] { { -0.667, 0.333, 0.667 },
+                        { 0.333, -0.667, 0.667 }, { 0.667, 0.667, 0.333 } };
+        Rotation q = new Rotation(m, 1e-3);
+
+        Rotation out = Calculations.reduce(q, LaueGroup.LGm3m);
+
+        assertEquals(60.0 / 180 * PI, out.getAngle(), 1e-3);
+        // axis should be in the {111} plane family
+        Vector3D axis = out.getAxis().normalize();
+        assertEquals(sqrt(3) / 3.0, abs(axis.getX()), 1e-3);
+        assertEquals(sqrt(3) / 3.0, abs(axis.getY()), 1e-3);
+        assertEquals(sqrt(3) / 3.0, abs(axis.getZ()), 1e-3);
+    }
+
+
+
+    @Test
     public void testZoneAxis() {
         Vector3D plane1;
         Vector3D plane2;
@@ -964,39 +998,5 @@ public class CalculationsTest {
         expectedZone = new Vector3D(0.0895, -0.097, -0.0030);
 
         assertEquals(expectedZone, zone, 1e-3);
-    }
-
-
-
-    @Test
-    public void testReduce() throws NotARotationMatrixException {
-        // From A.D. Rollett, Misorientations and Grain Boundaries, Lectures
-        // Slides, 2007
-        double[][] m =
-                new double[][] { { -0.667, 0.333, 0.667 },
-                        { 0.333, -0.667, 0.667 }, { 0.667, 0.667, 0.333 } };
-        Rotation q = new Rotation(m, 1e-3);
-
-        Rotation out = Calculations.reduce(q, LaueGroup.LGm3m);
-
-        assertEquals(60.0 / 180 * PI, out.getAngle(), 1e-3);
-        // axis should be in the {111} plane family
-        Vector3D axis = out.getAxis().normalize();
-        assertEquals(sqrt(3) / 3.0, abs(axis.getX()), 1e-3);
-        assertEquals(sqrt(3) / 3.0, abs(axis.getY()), 1e-3);
-        assertEquals(sqrt(3) / 3.0, abs(axis.getZ()), 1e-3);
-    }
-
-
-
-    @Test
-    public void testEquivalentPositions() {
-        AtomSites atoms = new AtomSites();
-        atoms.add(new AtomSite(14, 0.0, 0.0, 0.0));
-        AtomSites results =
-                Calculations.equivalentPositions(atoms, SpaceGroups2.SG216);
-
-        assertEquals(4, results.size());
-        assertEquals(atomsfcc, results, 1e-6);
     }
 }

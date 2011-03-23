@@ -17,8 +17,6 @@
  */
 package org.ebsdimage.gui.toolbar;
 
-import static rmlimage.core.Constants.MULTI_DESKTOP_ENABLED;
-
 import javax.swing.ImageIcon;
 import javax.swing.JToggleButton;
 
@@ -32,6 +30,7 @@ import rmlimage.plugin.PlugIn;
 import rmlshared.gui.Button;
 import rmlshared.gui.ToggleButton;
 import rmlshared.thread.WorkerThread;
+import static rmlimage.core.Constants.MULTI_DESKTOP_ENABLED;
 
 /**
  * Tool bar for Hough Map with the button to toggle the line overlay.

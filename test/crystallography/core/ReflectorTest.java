@@ -56,21 +56,46 @@ public class ReflectorTest {
 
 
     @Test
-    public void testHasCode() {
-        assertEquals(new Reflector(1, -1, 1, 3.0, 0.03512).hashCode(),
-                refl.hashCode());
+    public void testGetBravaisIndices() {
+        // Reflector 1
+        Reflector refl = new Reflector(1, -2, 0, 1.0, 1.0);
+
+        int[] expected = new int[] { 1, -2, 1, 0 };
+        int[] actual = refl.getBravaisIndices();
+        assertArrayEquals(expected, actual);
+
+        // Reflector 2
+        refl = new Reflector(1, 1, 0, 1.0, 1.0);
+
+        expected = new int[] { 1, 1, -2, 0 };
+        actual = refl.getBravaisIndices();
+        assertArrayEquals(expected, actual);
     }
 
 
 
     @Test
-    public void testReflectorPlaneDoubleDoubleDouble() {
-        assertEquals(1, refl.h);
-        assertEquals(-1, refl.k);
-        assertEquals(1, refl.l);
-        assertEquals(3.0, refl.planeSpacing, 1e-7);
-        assertEquals(0.03512, refl.intensity, 1e-7);
-        assertEquals(0.5, refl.normalizedIntensity, 1e-7);
+    public void testGetMillerIndices() {
+        int[] expected = new int[] { 1, -1, 1 };
+        int[] actual = refl.getMillerIndices();
+        assertArrayEquals(expected, actual);
+    }
+
+
+
+    @Test
+    public void testGetPlane() {
+        Vector3D expected = new Vector3D(1, -1, 1);
+        Vector3D actual = refl.getNormal();
+        assertEquals(expected, actual, 1e-6);
+    }
+
+
+
+    @Test
+    public void testHasCode() {
+        assertEquals(new Reflector(1, -1, 1, 3.0, 0.03512).hashCode(),
+                refl.hashCode());
     }
 
 
@@ -96,6 +121,18 @@ public class ReflectorTest {
 
 
     @Test
+    public void testReflectorPlaneDoubleDoubleDouble() {
+        assertEquals(1, refl.h);
+        assertEquals(-1, refl.k);
+        assertEquals(1, refl.l);
+        assertEquals(3.0, refl.planeSpacing, 1e-7);
+        assertEquals(0.03512, refl.intensity, 1e-7);
+        assertEquals(0.5, refl.normalizedIntensity, 1e-7);
+    }
+
+
+
+    @Test
     public void testReflectorReflectorDouble() {
         Reflector other = new Reflector(refl, 1.0);
         assertEquals(1, refl.h);
@@ -104,43 +141,6 @@ public class ReflectorTest {
         assertEquals(refl.planeSpacing, other.planeSpacing, 1e-7);
         assertEquals(refl.intensity, other.intensity, 1e-7);
         assertEquals(1.0, other.normalizedIntensity, 1e-7);
-    }
-
-
-
-    @Test
-    public void testGetPlane() {
-        Vector3D expected = new Vector3D(1, -1, 1);
-        Vector3D actual = refl.getNormal();
-        assertEquals(expected, actual, 1e-6);
-    }
-
-
-
-    @Test
-    public void testGetBravaisIndices() {
-        // Reflector 1
-        Reflector refl = new Reflector(1, -2, 0, 1.0, 1.0);
-
-        int[] expected = new int[] { 1, -2, 1, 0 };
-        int[] actual = refl.getBravaisIndices();
-        assertArrayEquals(expected, actual);
-
-        // Reflector 2
-        refl = new Reflector(1, 1, 0, 1.0, 1.0);
-
-        expected = new int[] { 1, 1, -2, 0 };
-        actual = refl.getBravaisIndices();
-        assertArrayEquals(expected, actual);
-    }
-
-
-
-    @Test
-    public void testGetMillerIndices() {
-        int[] expected = new int[] { 1, -1, 1 };
-        int[] actual = refl.getMillerIndices();
-        assertArrayEquals(expected, actual);
     }
 
 }

@@ -31,6 +31,20 @@ import rmlimage.core.BinMap;
  */
 public abstract class DetectionPostOps extends ExpOperation {
 
+    @Override
+    public final Object execute(Exp exp, Object... args) throws ExpError {
+        return process(exp, (BinMap) args[0]);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
+        listener.detectionPostPerformed(exp, this, (BinMap) result);
+    }
+
+
+
     /**
      * Returns a processed peaks map.
      * 
@@ -43,19 +57,5 @@ public abstract class DetectionPostOps extends ExpOperation {
      *             if an error occurs during the execution
      */
     public abstract BinMap process(Exp exp, BinMap srcMap) throws ExpError;
-
-
-
-    @Override
-    public final Object execute(Exp exp, Object... args) throws ExpError {
-        return process(exp, (BinMap) args[0]);
-    }
-
-
-
-    @Override
-    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
-        listener.detectionPostPerformed(exp, this, (BinMap) result);
-    }
 
 }

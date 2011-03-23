@@ -17,12 +17,12 @@
  */
 package org.ebsdimage.core;
 
-import static org.junit.Assert.assertEquals;
-
 import org.ebsdimage.TestCase;
 import org.junit.Test;
 
 import rmlimage.core.BinMap;
+
+import static org.junit.Assert.assertEquals;
 
 public class MaskDiscTest extends TestCase {
 

@@ -37,6 +37,24 @@ import rmlimage.module.multi.core.MultiMap;
 public class HklMMapLoader extends EbsdMMapLoader {
 
     @Override
+    protected MultiMap createMap(int version, int width, int height,
+            HashMap<String, Map> mapList) {
+        if (version != HklMMap.VERSION)
+            throw new IllegalArgumentException("Invalid version: " + version);
+
+        return new HklMMap(width, height, mapList);
+    }
+
+
+
+    @Override
+    protected Class<? extends EbsdMetadata> getMetadataClass() {
+        return HklMetadata.class;
+    }
+
+
+
+    @Override
     protected String getValidHeader() {
         return HklMMap.FILE_HEADER;
     }
@@ -53,24 +71,6 @@ public class HklMMapLoader extends EbsdMMapLoader {
     @Override
     public HklMMap load(File file, Object obj) throws IOException {
         return (HklMMap) super.load(file);
-    }
-
-
-
-    @Override
-    protected MultiMap createMap(int version, int width, int height,
-            HashMap<String, Map> mapList) {
-        if (version != HklMMap.VERSION)
-            throw new IllegalArgumentException("Invalid version: " + version);
-
-        return new HklMMap(width, height, mapList);
-    }
-
-
-
-    @Override
-    protected Class<? extends EbsdMetadata> getMetadataClass() {
-        return HklMetadata.class;
     }
 
 }

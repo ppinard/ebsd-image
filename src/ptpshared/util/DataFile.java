@@ -26,6 +26,24 @@ import java.util.ArrayList;
  */
 public class DataFile {
 
+    /**
+     * Removes the empty columns corresponding to many white spaces between two
+     * values.
+     * 
+     * @param columns
+     *            a line from the reader
+     * @return an array with only values
+     */
+    public static String[] removeEmptyColumns(String[] columns) {
+        ArrayList<String> newColumns = new ArrayList<String>();
+
+        for (String column : columns)
+            if (column.length() > 0)
+                newColumns.add(column.trim());
+
+        return newColumns.toArray(new String[newColumns.size()]);
+    }
+
     /** Lines from the header. */
     private ArrayList<String[]> headerLines;
 
@@ -56,17 +74,6 @@ public class DataFile {
 
 
     /**
-     * Returns the header lines.
-     * 
-     * @return header lines
-     */
-    public ArrayList<String[]> getHeaderLines() {
-        return headerLines;
-    }
-
-
-
-    /**
      * Returns the data lines.
      * 
      * @return data lines
@@ -78,21 +85,12 @@ public class DataFile {
 
 
     /**
-     * Removes the empty columns corresponding to many white spaces between two
-     * values.
+     * Returns the header lines.
      * 
-     * @param columns
-     *            a line from the reader
-     * @return an array with only values
+     * @return header lines
      */
-    public static String[] removeEmptyColumns(String[] columns) {
-        ArrayList<String> newColumns = new ArrayList<String>();
-
-        for (String column : columns)
-            if (column.length() > 0)
-                newColumns.add(column.trim());
-
-        return newColumns.toArray(new String[newColumns.size()]);
+    public ArrayList<String[]> getHeaderLines() {
+        return headerLines;
     }
 
 }

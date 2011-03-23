@@ -75,17 +75,6 @@ public class MicronBar extends PlugIn {
 
 
         /**
-         * Returns the selected multimap.
-         * 
-         * @return multimap
-         */
-        public EbsdMMap getSelectedMap() {
-            return (EbsdMMap) mmapCBox.getSelectedItem();
-        }
-
-
-
-        /**
          * Returns the scaling factor.
          * 
          * @return scaling factor
@@ -94,13 +83,17 @@ public class MicronBar extends PlugIn {
             return scaleFactorField.getValue();
         }
 
-    }
 
 
+        /**
+         * Returns the selected multimap.
+         * 
+         * @return multimap
+         */
+        public EbsdMMap getSelectedMap() {
+            return (EbsdMMap) mmapCBox.getSelectedItem();
+        }
 
-    @Override
-    protected void xRun() throws Exception {
-        doMicroBar();
     }
 
 
@@ -127,5 +120,12 @@ public class MicronBar extends PlugIn {
         add(dest);
 
         return dest;
+    }
+
+
+
+    @Override
+    protected void xRun() throws Exception {
+        doMicroBar();
     }
 }

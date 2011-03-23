@@ -232,23 +232,6 @@ public class Threshold {
     /**
      * Thresholds a specified item from an <code>IndexedByteMap</code>.
      * 
-     * @param <Item>
-     *            type of item in the <code>IndexedByteMap</code>
-     * @param map
-     *            source <code>PhasesMap</code>
-     * @param item
-     *            item to threshold in the <code>IndexedByteMap</code>
-     * @return the thresholded map
-     */
-    public static <Item> BinMap item(IndexedByteMap<Item> map, Item item) {
-        return item(map, map.getItemId(item));
-    }
-
-
-
-    /**
-     * Thresholds a specified item from an <code>IndexedByteMap</code>.
-     * 
      * @param src
      *            source <code>IndexedByteMap</code>
      * @param id
@@ -265,6 +248,23 @@ public class Threshold {
                     + src.getName() + ").");
 
         rmlimage.core.Threshold.densitySlice(src, id, id, dest);
+    }
+
+
+
+    /**
+     * Thresholds a specified item from an <code>IndexedByteMap</code>.
+     * 
+     * @param <Item>
+     *            type of item in the <code>IndexedByteMap</code>
+     * @param map
+     *            source <code>PhasesMap</code>
+     * @param item
+     *            item to threshold in the <code>IndexedByteMap</code>
+     * @return the thresholded map
+     */
+    public static <Item> BinMap item(IndexedByteMap<Item> map, Item item) {
+        return item(map, map.getItemId(item));
     }
 
 

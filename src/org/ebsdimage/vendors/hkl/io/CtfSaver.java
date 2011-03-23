@@ -49,6 +49,13 @@ public class CtfSaver implements Saver {
 
 
 
+    @Override
+    public boolean canSave(Object obj, String fileFormat) {
+        return (obj instanceof HklMMap) && fileFormat.equalsIgnoreCase("CTF");
+    }
+
+
+
     /**
      * Creates the line for the acquisition eulers.
      * 
@@ -389,13 +396,6 @@ public class CtfSaver implements Saver {
     @Override
     public void save(Object obj, File file) throws IOException {
         save((HklMMap) obj, file);
-    }
-
-
-
-    @Override
-    public boolean canSave(Object obj, String fileFormat) {
-        return (obj instanceof HklMMap) && fileFormat.equalsIgnoreCase("CTF");
     }
 
 }

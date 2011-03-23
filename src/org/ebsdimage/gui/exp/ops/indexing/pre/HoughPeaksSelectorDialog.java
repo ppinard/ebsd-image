@@ -68,22 +68,6 @@ public class HoughPeaksSelectorDialog extends OperationDialog {
 
 
     @Override
-    public boolean isCorrect() {
-        if (!super.isCorrect())
-            return false;
-
-        if (minimumField.getValue() > maximumField.getValue()) {
-            ErrorDialog.show("The maximum number of Hough peaks "
-                    + "cannot be greater than the minimum number.");
-            return false;
-        }
-
-        return true;
-    }
-
-
-
-    @Override
     public String getDescription() {
         return "Operation to select a certain number of Hough peaks. "
                 + "Three cases are possible: "
@@ -102,6 +86,22 @@ public class HoughPeaksSelectorDialog extends OperationDialog {
     public ExpOperation getOperation() {
         return new HoughPeaksSelector(minimumField.getValueBFR(),
                 maximumField.getValueBFR());
+    }
+
+
+
+    @Override
+    public boolean isCorrect() {
+        if (!super.isCorrect())
+            return false;
+
+        if (minimumField.getValue() > maximumField.getValue()) {
+            ErrorDialog.show("The maximum number of Hough peaks "
+                    + "cannot be greater than the minimum number.");
+            return false;
+        }
+
+        return true;
     }
 
 

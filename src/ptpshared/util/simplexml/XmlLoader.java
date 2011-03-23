@@ -92,6 +92,31 @@ public class XmlLoader implements Monitorable {
 
 
     /**
+     * Loads an XML file.
+     * 
+     * @param type
+     *            this is the class type to be deserialized from XML
+     * @param source
+     *            this provides the source of the XML document
+     * @throws IOException
+     *             if an error occurs in the process
+     * @return Deserialized XML object
+     * @param <T>
+     *            class type
+     */
+    public <T> T load(Class<? extends T> type, InputStream source)
+            throws IOException {
+        Serializer persister = new Persister(strategy, matchers);
+        try {
+            return persister.read(type, source);
+        } catch (Exception e) {
+            throw new IOException(e);
+        }
+    }
+
+
+
+    /**
      * Loads an array saved in a XML file.
      * 
      * @param <T>
@@ -147,31 +172,6 @@ public class XmlLoader implements Monitorable {
             items.put((K) entry.getKey(), (V) entry.getValue());
 
         return items;
-    }
-
-
-
-    /**
-     * Loads an XML file.
-     * 
-     * @param type
-     *            this is the class type to be deserialized from XML
-     * @param source
-     *            this provides the source of the XML document
-     * @throws IOException
-     *             if an error occurs in the process
-     * @return Deserialized XML object
-     * @param <T>
-     *            class type
-     */
-    public <T> T load(Class<? extends T> type, InputStream source)
-            throws IOException {
-        Serializer persister = new Persister(strategy, matchers);
-        try {
-            return persister.read(type, source);
-        } catch (Exception e) {
-            throw new IOException(e);
-        }
     }
 
 }

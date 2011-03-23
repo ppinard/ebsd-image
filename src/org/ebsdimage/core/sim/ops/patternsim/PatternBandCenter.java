@@ -52,13 +52,6 @@ public class PatternBandCenter extends PatternSimOp {
 
 
     @Override
-    public String toString() {
-        return "PatternBandCenter [width=" + width + ", height=" + height + "]";
-    }
-
-
-
-    @Override
     protected RealMap createPatternMap() {
         RealMap map = new RealMap(width, height);
         return map;
@@ -84,6 +77,13 @@ public class PatternBandCenter extends PatternSimOp {
     @Override
     protected BandsCalculator getBandsCalculator() {
         return new LinearBandsCalculator();
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "PatternBandCenter [width=" + width + ", height=" + height + "]";
     }
 
 }

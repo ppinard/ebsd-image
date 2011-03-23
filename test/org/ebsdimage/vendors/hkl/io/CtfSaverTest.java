@@ -73,14 +73,14 @@ public class CtfSaverTest extends HklMMapTester {
 
 
     @Test
-    public void testSaveObjectFile() {
+    public void testSaveHklMMapFile() {
+        assertTrue(file.exists());
     }
 
 
 
     @Test
-    public void testSaveHklMMapFile() {
-        assertTrue(file.exists());
+    public void testSaveObjectFile() {
     }
 
 }

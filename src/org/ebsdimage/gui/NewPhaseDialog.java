@@ -46,14 +46,6 @@ import static java.lang.Math.toRadians;
  */
 public class NewPhaseDialog extends BasicDialog {
 
-    /** Icon for the add button. */
-    private static final ImageIcon ADD_ICON =
-            GuiUtil.loadIcon("ptpshared/data/icon/list-add_(22x22).png");
-
-    /** Icon for the remove button. */
-    private static final ImageIcon REMOVE_ICON =
-            GuiUtil.loadIcon("ptpshared/data/icon/list-remove_(22x22).png");
-
     /**
      * Action to insert a new atom site.
      * 
@@ -246,6 +238,14 @@ public class NewPhaseDialog extends BasicDialog {
             ((AtomSiteTableModel) atomSiteTable.getModel()).remove(atomSiteTable.getSelectedRow());
         }
     }
+
+    /** Icon for the add button. */
+    private static final ImageIcon ADD_ICON =
+            GuiUtil.loadIcon("ptpshared/data/icon/list-add_(22x22).png");
+
+    /** Icon for the remove button. */
+    private static final ImageIcon REMOVE_ICON =
+            GuiUtil.loadIcon("ptpshared/data/icon/list-remove_(22x22).png");
 
     /** Field for the crystal's name. */
     private TextField nameField;

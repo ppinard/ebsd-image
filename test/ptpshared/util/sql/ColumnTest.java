@@ -17,17 +17,14 @@
  */
 package ptpshared.util.sql;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.logging.Logger;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import ptpshared.util.LoggerUtil;
-import ptpshared.util.sql.Column;
-import ptpshared.util.sql.ColumnFactory;
-import ptpshared.util.sql.ColumnType;
+
+import static org.junit.Assert.assertEquals;
 
 public class ColumnTest {
 

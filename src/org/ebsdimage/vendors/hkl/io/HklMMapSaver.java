@@ -29,6 +29,13 @@ import org.ebsdimage.vendors.hkl.core.HklMMap;
 public class HklMMapSaver extends EbsdMMapSaver {
 
     @Override
+    public boolean canSave(Object obj, String fileFormat) {
+        return (obj instanceof HklMMap) && fileFormat.equalsIgnoreCase("zip");
+    }
+
+
+
+    @Override
     protected String getHeader() {
         return HklMMap.FILE_HEADER;
     }
@@ -38,13 +45,6 @@ public class HklMMapSaver extends EbsdMMapSaver {
     @Override
     protected int getVersion() {
         return HklMMap.VERSION;
-    }
-
-
-
-    @Override
-    public boolean canSave(Object obj, String fileFormat) {
-        return (obj instanceof HklMMap) && fileFormat.equalsIgnoreCase("zip");
     }
 
 }

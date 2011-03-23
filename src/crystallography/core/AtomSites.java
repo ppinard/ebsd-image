@@ -42,14 +42,9 @@ public class AtomSites extends ArrayList<AtomSite> implements AlmostEquable {
      * of a unit cell. Use {@link #add(AtomSite)}, {@link #add(int, AtomSite)},
      * {@link #addAll(Collection)} or {@link #addAll(int, Collection)} to add
      * {@link AtomSite} to the <code>AtomSites</code>.
-     * 
-     * @param delta
-     *            how close two atoms can be next to each other
      */
-    public AtomSites(double delta) {
-        if (Double.isNaN(delta))
-            throw new IllegalArgumentException("Delta cannot be NaN.");
-        this.delta = delta;
+    public AtomSites() {
+        this(1e-6);
     }
 
 
@@ -59,9 +54,14 @@ public class AtomSites extends ArrayList<AtomSite> implements AlmostEquable {
      * of a unit cell. Use {@link #add(AtomSite)}, {@link #add(int, AtomSite)},
      * {@link #addAll(Collection)} or {@link #addAll(int, Collection)} to add
      * {@link AtomSite} to the <code>AtomSites</code>.
+     * 
+     * @param delta
+     *            how close two atoms can be next to each other
      */
-    public AtomSites() {
-        this(1e-6);
+    public AtomSites(double delta) {
+        if (Double.isNaN(delta))
+            throw new IllegalArgumentException("Delta cannot be NaN.");
+        this.delta = delta;
     }
 
 

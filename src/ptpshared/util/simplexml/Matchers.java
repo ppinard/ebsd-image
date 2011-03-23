@@ -19,18 +19,10 @@ public class Matchers implements Matcher {
 
 
     /**
-     * Register a matcher.
-     * 
-     * @param matcher
-     *            new matcher
+     * Clears all registered matchers.
      */
-    public void registerMatcher(Matcher matcher) {
-        if (matcher == null)
-            throw new NullPointerException("Cannot register a null matcher.");
-        if (matchers.contains(matcher))
-            throw new IllegalArgumentException("Matcher (" + matcher
-                    + ") is already registered.");
-        matchers.add(matcher);
+    public void clearMatchers() {
+        matchers.clear();
     }
 
 
@@ -65,15 +57,6 @@ public class Matchers implements Matcher {
 
 
 
-    /**
-     * Clears all registered matchers.
-     */
-    public void clearMatchers() {
-        matchers.clear();
-    }
-
-
-
     @SuppressWarnings("rawtypes")
     @Override
     public Transform match(Class type) throws Exception {
@@ -83,5 +66,22 @@ public class Matchers implements Matcher {
                 return transform;
         }
         return null;
+    }
+
+
+
+    /**
+     * Register a matcher.
+     * 
+     * @param matcher
+     *            new matcher
+     */
+    public void registerMatcher(Matcher matcher) {
+        if (matcher == null)
+            throw new NullPointerException("Cannot register a null matcher.");
+        if (matchers.contains(matcher))
+            throw new IllegalArgumentException("Matcher (" + matcher
+                    + ") is already registered.");
+        matchers.add(matcher);
     }
 }

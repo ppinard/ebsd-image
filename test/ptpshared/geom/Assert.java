@@ -14,42 +14,25 @@ import static org.junit.Assert.fail;
 public class Assert {
 
     /**
-     * Asserts that two <code>Vector3D</code> are equal.
+     * Asserts that two 2D-arrays are equal.
      * 
      * @param expected
-     *            expected vector
+     *            expected array
      * @param actual
-     *            actual vector
+     *            actual array
      * @param delta
      *            the maximum delta between <code>expected</code> and
-     *            <code>actual</code> for which both <code>Vector3D</code> are
-     *            still considered equal.
+     *            <code>actual</code> for which both arrays are still considered
+     *            equal.
      */
-    public static void assertEquals(Vector3D expected, Vector3D actual,
+    public static void assertEquals(double[][] expected, double[][] actual,
             double delta) {
-        if (!Vector3DUtils.equals(expected, actual, delta))
-            fail(expected + " != " + actual);
-    }
+        if (expected.length != actual.length)
+            fail("Arrays length are different (expected=" + expected.length
+                    + "; actual=" + actual.length + ").");
 
-
-
-    /**
-     * Asserts that two <code>Rotation</code> are equal.
-     * 
-     * @param expected
-     *            expected rotation
-     * @param actual
-     *            actual rotation
-     * @param delta
-     *            the maximum delta between <code>expected</code> and
-     *            <code>actual</code> for which both <code>Rotation</code> are
-     *            still considered equal.
-     */
-    public static void assertEquals(Rotation expected, Rotation actual,
-            double delta) {
-        if (!RotationUtils.equals(expected, actual, delta))
-            fail(RotationUtils.toString(expected) + " != "
-                    + RotationUtils.toString(actual));
+        for (int i = 0; i < expected.length; i++)
+            assertArrayEquals(expected[i], actual[i], delta);
     }
 
 
@@ -95,24 +78,41 @@ public class Assert {
 
 
     /**
-     * Asserts that two 2D-arrays are equal.
+     * Asserts that two <code>Rotation</code> are equal.
      * 
      * @param expected
-     *            expected array
+     *            expected rotation
      * @param actual
-     *            actual array
+     *            actual rotation
      * @param delta
      *            the maximum delta between <code>expected</code> and
-     *            <code>actual</code> for which both arrays are still considered
-     *            equal.
+     *            <code>actual</code> for which both <code>Rotation</code> are
+     *            still considered equal.
      */
-    public static void assertEquals(double[][] expected, double[][] actual,
+    public static void assertEquals(Rotation expected, Rotation actual,
             double delta) {
-        if (expected.length != actual.length)
-            fail("Arrays length are different (expected=" + expected.length
-                    + "; actual=" + actual.length + ").");
+        if (!RotationUtils.equals(expected, actual, delta))
+            fail(RotationUtils.toString(expected) + " != "
+                    + RotationUtils.toString(actual));
+    }
 
-        for (int i = 0; i < expected.length; i++)
-            assertArrayEquals(expected[i], actual[i], delta);
+
+
+    /**
+     * Asserts that two <code>Vector3D</code> are equal.
+     * 
+     * @param expected
+     *            expected vector
+     * @param actual
+     *            actual vector
+     * @param delta
+     *            the maximum delta between <code>expected</code> and
+     *            <code>actual</code> for which both <code>Vector3D</code> are
+     *            still considered equal.
+     */
+    public static void assertEquals(Vector3D expected, Vector3D actual,
+            double delta) {
+        if (!Vector3DUtils.equals(expected, actual, delta))
+            fail(expected + " != " + actual);
     }
 }

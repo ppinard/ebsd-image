@@ -62,13 +62,6 @@ public class About extends PlugIn {
 
 
 
-    @Override
-    protected void xRun() throws Exception {
-        new Dialog().show();
-    }
-
-
-
     /**
      * Returns the version of the application.
      * 
@@ -76,6 +69,13 @@ public class About extends PlugIn {
      */
     protected String getVersion() {
         return getPreferences().getPreference(Constants.APP_VERSION, "x.xx");
+    }
+
+
+
+    @Override
+    protected void xRun() throws Exception {
+        new Dialog().show();
     }
 
 }

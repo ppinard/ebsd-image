@@ -37,13 +37,6 @@ public class PatternFilledBandDialog extends PatternSimOpDialog {
 
 
     @Override
-    public String toString() {
-        return "Pattern Filled Band";
-    }
-
-
-
-    @Override
     public String getDescription() {
         return "Simulate a pattern where the bands are filled with a "
                 + "constant tone of gray.";
@@ -55,6 +48,13 @@ public class PatternFilledBandDialog extends PatternSimOpDialog {
     public SimOperation getOperation() {
         return new PatternFilledBand(widthField.getValueBFR(),
                 heightField.getValueBFR());
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Pattern Filled Band";
     }
 
 }

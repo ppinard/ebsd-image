@@ -58,6 +58,52 @@ public class ConversionTest extends TestCase {
 
 
     @Test
+    public void testToByteMapHoughMap() {
+        // Create a HoughMap
+        ByteMap pattern = (ByteMap) load("org/ebsdimage/testdata/pattern.bmp");
+        HoughMap houghMap = Transform.hough(pattern, toRadians(1.0));
+
+        ByteMap byteMap = Conversion.toByteMap(houghMap);
+
+        assertEquals(houghMap.width, byteMap.width);
+        assertEquals(houghMap.height, byteMap.height);
+
+        // If the pixArray are different
+        byte[] bytePixArray = byteMap.pixArray;
+        byte[] houghPixArray = houghMap.pixArray;
+        int size = byteMap.size;
+        for (int n = 0; n < size; n++)
+            if (bytePixArray[n] != houghPixArray[n])
+                throw new AssertionError("Pixel different at ("
+                        + (n % byteMap.width) + ';' + (n / byteMap.width)
+                        + ") between the ByteMap (" + (bytePixArray[n] & 0xff)
+                        + ") and the HoughMap (" + (houghPixArray[n] & 0xff)
+                        + ')');
+
+        // Calibration
+        byteMap.getCalibration().assertEquals(houghMap.getCalibration());
+    }
+
+
+
+    @Test
+    public void testToByteMapIndexedByteMap() {
+        ByteMap byteMap = Conversion.toByteMap(indexedMap);
+
+        assertEquals(indexedMap.width, byteMap.width);
+        assertEquals(indexedMap.height, byteMap.height);
+
+        assertEquals(indexedMap.pixArray[0], byteMap.pixArray[0]);
+        assertEquals(indexedMap.pixArray[1], byteMap.pixArray[1]);
+        assertEquals(indexedMap.pixArray[2], byteMap.pixArray[2]);
+        assertEquals(indexedMap.pixArray[3], byteMap.pixArray[3]);
+
+        indexedMap.getLUT().assertEquals(byteMap.getLUT());
+    }
+
+
+
+    @Test
     // Test call to handler
     public void testToByteMapMapHoughMap() {
         rmlimage.core.Conversion.addHandler(org.ebsdimage.core.Conversion.class);
@@ -90,56 +136,10 @@ public class ConversionTest extends TestCase {
 
 
     @Test
-    public void testToByteMapHoughMap() {
-        // Create a HoughMap
-        ByteMap pattern = (ByteMap) load("org/ebsdimage/testdata/pattern.bmp");
-        HoughMap houghMap = Transform.hough(pattern, toRadians(1.0));
-
-        ByteMap byteMap = Conversion.toByteMap(houghMap);
-
-        assertEquals(houghMap.width, byteMap.width);
-        assertEquals(houghMap.height, byteMap.height);
-
-        // If the pixArray are different
-        byte[] bytePixArray = byteMap.pixArray;
-        byte[] houghPixArray = houghMap.pixArray;
-        int size = byteMap.size;
-        for (int n = 0; n < size; n++)
-            if (bytePixArray[n] != houghPixArray[n])
-                throw new AssertionError("Pixel different at ("
-                        + (n % byteMap.width) + ';' + (n / byteMap.width)
-                        + ") between the ByteMap (" + (bytePixArray[n] & 0xff)
-                        + ") and the HoughMap (" + (houghPixArray[n] & 0xff)
-                        + ')');
-
-        // Calibration
-        byteMap.getCalibration().assertEquals(houghMap.getCalibration());
-    }
-
-
-
-    @Test
     public void testToByteMapMapIndexedByteMap() {
         rmlimage.core.Conversion.addHandler(org.ebsdimage.core.Conversion.class);
 
         ByteMap byteMap = rmlimage.core.Conversion.toByteMap(indexedMap);
-
-        assertEquals(indexedMap.width, byteMap.width);
-        assertEquals(indexedMap.height, byteMap.height);
-
-        assertEquals(indexedMap.pixArray[0], byteMap.pixArray[0]);
-        assertEquals(indexedMap.pixArray[1], byteMap.pixArray[1]);
-        assertEquals(indexedMap.pixArray[2], byteMap.pixArray[2]);
-        assertEquals(indexedMap.pixArray[3], byteMap.pixArray[3]);
-
-        indexedMap.getLUT().assertEquals(byteMap.getLUT());
-    }
-
-
-
-    @Test
-    public void testToByteMapIndexedByteMap() {
-        ByteMap byteMap = Conversion.toByteMap(indexedMap);
 
         assertEquals(indexedMap.width, byteMap.width);
         assertEquals(indexedMap.height, byteMap.height);

@@ -86,6 +86,29 @@ public class ExpUtil {
 
 
     /**
+     * Creates pattern operations from all the jpg and bmp files inside the
+     * specified directory. For each file, a <code>PatternFileLoader</code> is
+     * created.
+     * 
+     * @param dir
+     *            directory where to search for jpg and bmp files
+     * @return array of operations
+     */
+    public static PatternFilesLoader createPatternOpFromDir(File dir) {
+        File[] jpgFiles = FileUtil.listFilesOnly(dir, "*.jpg");
+        File[] bmpFiles = FileUtil.listFilesOnly(dir, "*.bmp");
+
+        File[] files = new File[jpgFiles.length + bmpFiles.length];
+
+        System.arraycopy(jpgFiles, 0, files, 0, jpgFiles.length);
+        System.arraycopy(bmpFiles, 0, files, jpgFiles.length, bmpFiles.length);
+
+        return new PatternFilesLoader(0, files);
+    }
+
+
+
+    /**
      * Creates pattern operations from an smp file. For each file in the smp, a
      * <code>PatternSmpFile</code> is created.
      * 
@@ -106,29 +129,6 @@ public class ExpUtil {
         smp.close();
 
         return op;
-    }
-
-
-
-    /**
-     * Creates pattern operations from all the jpg and bmp files inside the
-     * specified directory. For each file, a <code>PatternFileLoader</code> is
-     * created.
-     * 
-     * @param dir
-     *            directory where to search for jpg and bmp files
-     * @return array of operations
-     */
-    public static PatternFilesLoader createPatternOpFromDir(File dir) {
-        File[] jpgFiles = FileUtil.listFilesOnly(dir, "*.jpg");
-        File[] bmpFiles = FileUtil.listFilesOnly(dir, "*.bmp");
-
-        File[] files = new File[jpgFiles.length + bmpFiles.length];
-
-        System.arraycopy(jpgFiles, 0, files, 0, jpgFiles.length);
-        System.arraycopy(bmpFiles, 0, files, jpgFiles.length, bmpFiles.length);
-
-        return new PatternFilesLoader(0, files);
     }
 
 }

@@ -62,6 +62,29 @@ public class ThresholdTest extends TestCase {
 
 
     @Test
+    public void testAutomaticStdDev() throws IOException {
+        // Do the operation
+        HoughMap houghMap =
+                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap_cropped.bmp"));
+        BinMap destMap = Threshold.automaticStdDev(houghMap, 1.5);
+
+        // Test the pixArray
+        BinMap expected =
+                (BinMap) load("org/ebsdimage/testdata/automatic_stddev.bmp");
+        destMap.assertEquals(expected);
+
+        // Test the properties
+        Properties props = destMap.getProperties();
+        assertEquals("false", props.getProperty(KEY_OVERFLOW, ""));
+        assertEquals(1.5, props.getProperty(KEY_SIGMAFACTOR, Double.NaN), 1e-3);
+        assertEquals(103.4514, props.getProperty(KEY_AVERAGE, Double.NaN), 1e-3);
+        assertEquals(5.3786, props.getProperty(KEY_STDDEV, Double.NaN), 1e-3);
+        assertEquals(112, props.getProperty(KEY_THRESHOLD, -1));
+    }
+
+
+
+    @Test
     public void testAutomaticTopHat() throws IOException {
         // Do the operation
         HoughMap houghMap =
@@ -84,24 +107,33 @@ public class ThresholdTest extends TestCase {
 
 
     @Test
-    public void testAutomaticStdDev() throws IOException {
-        // Do the operation
-        HoughMap houghMap =
-                new HoughMapLoader().load(FileUtil.getFile("org/ebsdimage/testdata/houghmap_cropped.bmp"));
-        BinMap destMap = Threshold.automaticStdDev(houghMap, 1.5);
+    public void testItemIndexedByteMapInt() {
+        // Test (id = 0)
+        BinMap destMap = Threshold.item(indexedMap, 0);
+        assertEquals(2, destMap.width);
+        assertEquals(2, destMap.height);
+        assertEquals(1, destMap.pixArray[0]);
+        assertEquals(0, destMap.pixArray[1]);
+        assertEquals(0, destMap.pixArray[2]);
+        assertEquals(0, destMap.pixArray[3]);
 
-        // Test the pixArray
-        BinMap expected =
-                (BinMap) load("org/ebsdimage/testdata/automatic_stddev.bmp");
-        destMap.assertEquals(expected);
+        // Test (id = 1)
+        destMap = Threshold.item(indexedMap, 1);
+        assertEquals(2, destMap.width);
+        assertEquals(2, destMap.height);
+        assertEquals(0, destMap.pixArray[0]);
+        assertEquals(1, destMap.pixArray[1]);
+        assertEquals(0, destMap.pixArray[2]);
+        assertEquals(1, destMap.pixArray[3]);
 
-        // Test the properties
-        Properties props = destMap.getProperties();
-        assertEquals("false", props.getProperty(KEY_OVERFLOW, ""));
-        assertEquals(1.5, props.getProperty(KEY_SIGMAFACTOR, Double.NaN), 1e-3);
-        assertEquals(103.4514, props.getProperty(KEY_AVERAGE, Double.NaN), 1e-3);
-        assertEquals(5.3786, props.getProperty(KEY_STDDEV, Double.NaN), 1e-3);
-        assertEquals(112, props.getProperty(KEY_THRESHOLD, -1));
+        // Test (id = 3)
+        destMap = Threshold.item(indexedMap, 3);
+        assertEquals(2, destMap.width);
+        assertEquals(2, destMap.height);
+        assertEquals(0, destMap.pixArray[0]);
+        assertEquals(0, destMap.pixArray[1]);
+        assertEquals(1, destMap.pixArray[2]);
+        assertEquals(0, destMap.pixArray[3]);
     }
 
 
@@ -141,9 +173,9 @@ public class ThresholdTest extends TestCase {
 
 
     @Test
-    public void testItemIndexedByteMapInt() {
-        // Test (id = 0)
-        BinMap destMap = Threshold.item(indexedMap, 0);
+    public void testItemIndexedByteMapItem() {
+        // Test (item = item0)
+        BinMap destMap = Threshold.item(indexedMap, item0);
         assertEquals(2, destMap.width);
         assertEquals(2, destMap.height);
         assertEquals(1, destMap.pixArray[0]);
@@ -151,8 +183,8 @@ public class ThresholdTest extends TestCase {
         assertEquals(0, destMap.pixArray[2]);
         assertEquals(0, destMap.pixArray[3]);
 
-        // Test (id = 1)
-        destMap = Threshold.item(indexedMap, 1);
+        // Test (item = item1)
+        destMap = Threshold.item(indexedMap, item1);
         assertEquals(2, destMap.width);
         assertEquals(2, destMap.height);
         assertEquals(0, destMap.pixArray[0]);
@@ -160,8 +192,8 @@ public class ThresholdTest extends TestCase {
         assertEquals(0, destMap.pixArray[2]);
         assertEquals(1, destMap.pixArray[3]);
 
-        // Test (id = 3)
-        destMap = Threshold.item(indexedMap, 3);
+        // Test (item = item2)
+        destMap = Threshold.item(indexedMap, item2);
         assertEquals(2, destMap.width);
         assertEquals(2, destMap.height);
         assertEquals(0, destMap.pixArray[0]);
@@ -196,38 +228,6 @@ public class ThresholdTest extends TestCase {
 
         // Test (item = item2)
         Threshold.item(indexedMap, item2, destMap);
-        assertEquals(2, destMap.width);
-        assertEquals(2, destMap.height);
-        assertEquals(0, destMap.pixArray[0]);
-        assertEquals(0, destMap.pixArray[1]);
-        assertEquals(1, destMap.pixArray[2]);
-        assertEquals(0, destMap.pixArray[3]);
-    }
-
-
-
-    @Test
-    public void testItemIndexedByteMapItem() {
-        // Test (item = item0)
-        BinMap destMap = Threshold.item(indexedMap, item0);
-        assertEquals(2, destMap.width);
-        assertEquals(2, destMap.height);
-        assertEquals(1, destMap.pixArray[0]);
-        assertEquals(0, destMap.pixArray[1]);
-        assertEquals(0, destMap.pixArray[2]);
-        assertEquals(0, destMap.pixArray[3]);
-
-        // Test (item = item1)
-        destMap = Threshold.item(indexedMap, item1);
-        assertEquals(2, destMap.width);
-        assertEquals(2, destMap.height);
-        assertEquals(0, destMap.pixArray[0]);
-        assertEquals(1, destMap.pixArray[1]);
-        assertEquals(0, destMap.pixArray[2]);
-        assertEquals(1, destMap.pixArray[3]);
-
-        // Test (item = item2)
-        destMap = Threshold.item(indexedMap, item2);
         assertEquals(2, destMap.width);
         assertEquals(2, destMap.height);
         assertEquals(0, destMap.pixArray[0]);

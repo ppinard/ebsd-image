@@ -85,30 +85,18 @@ public class RotationField extends JComponent implements PreferenceKeeping,
 
 
 
-    /**
-     * Wrapper over {@link DoubleField#setDecimalCount(double)}.
-     * 
-     * @param nbDecimals
-     *            number of decimal for the 3 <code>DoubleField</code>
-     */
-    public void setDecimalCount(int nbDecimals) {
-        theta1Field.setDecimalCount(nbDecimals);
-        theta2Field.setDecimalCount(nbDecimals);
-        theta3Field.setDecimalCount(nbDecimals);
+    @Override
+    public void bufferInput() {
+        theta1Field.bufferInput();
+        theta2Field.bufferInput();
+        theta3Field.bufferInput();
     }
 
 
 
-    /**
-     * Wrapper over {@link DoubleField#setIncrementalStep(double)}.
-     * 
-     * @param step
-     *            step of the 3 spinners
-     */
-    public void setIncrementalStep(double step) {
-        theta1Field.setIncrementalStep(step);
-        theta2Field.setIncrementalStep(step);
-        theta3Field.setIncrementalStep(step);
+    @Override
+    public Preferences getPreferences() {
+        return preferences;
     }
 
 
@@ -155,38 +143,6 @@ public class RotationField extends JComponent implements PreferenceKeeping,
 
 
 
-    /**
-     * Sets the values from a <code>Rotation</code>. If a
-     * {@link CardanEulerSingularityException} occurs, the values of the Euler
-     * angles are default back to 0.0, 0.0, 0.0.
-     * 
-     * @param rotation
-     *            a rotation
-     */
-    public void setValue(Rotation rotation) {
-        double eulers[];
-        try {
-            eulers = RotationUtils.getBungeEulerAngles(rotation);
-        } catch (CardanEulerSingularityException e) {
-            eulers = new double[] { 0.0, 0.0, 0.0 };
-        }
-
-        theta1Field.setValue(Math.toDegrees(eulers[0]));
-        theta2Field.setValue(Math.toDegrees(eulers[1]));
-        theta3Field.setValue(Math.toDegrees(eulers[2]));
-    }
-
-
-
-    @Override
-    public void bufferInput() {
-        theta1Field.bufferInput();
-        theta2Field.bufferInput();
-        theta3Field.bufferInput();
-    }
-
-
-
     @Override
     public boolean isCorrect() {
         return isCorrect(true);
@@ -210,9 +166,30 @@ public class RotationField extends JComponent implements PreferenceKeeping,
 
 
 
-    @Override
-    public Preferences getPreferences() {
-        return preferences;
+    /**
+     * Wrapper over {@link DoubleField#setDecimalCount(double)}.
+     * 
+     * @param nbDecimals
+     *            number of decimal for the 3 <code>DoubleField</code>
+     */
+    public void setDecimalCount(int nbDecimals) {
+        theta1Field.setDecimalCount(nbDecimals);
+        theta2Field.setDecimalCount(nbDecimals);
+        theta3Field.setDecimalCount(nbDecimals);
+    }
+
+
+
+    /**
+     * Wrapper over {@link DoubleField#setIncrementalStep(double)}.
+     * 
+     * @param step
+     *            step of the 3 spinners
+     */
+    public void setIncrementalStep(double step) {
+        theta1Field.setIncrementalStep(step);
+        theta2Field.setIncrementalStep(step);
+        theta3Field.setIncrementalStep(step);
     }
 
 
@@ -222,6 +199,29 @@ public class RotationField extends JComponent implements PreferenceKeeping,
         theta1Field.setPreferences(pref);
         theta2Field.setPreferences(pref);
         theta3Field.setPreferences(pref);
+    }
+
+
+
+    /**
+     * Sets the values from a <code>Rotation</code>. If a
+     * {@link CardanEulerSingularityException} occurs, the values of the Euler
+     * angles are default back to 0.0, 0.0, 0.0.
+     * 
+     * @param rotation
+     *            a rotation
+     */
+    public void setValue(Rotation rotation) {
+        double eulers[];
+        try {
+            eulers = RotationUtils.getBungeEulerAngles(rotation);
+        } catch (CardanEulerSingularityException e) {
+            eulers = new double[] { 0.0, 0.0, 0.0 };
+        }
+
+        theta1Field.setValue(Math.toDegrees(eulers[0]));
+        theta2Field.setValue(Math.toDegrees(eulers[1]));
+        theta3Field.setValue(Math.toDegrees(eulers[2]));
     }
 
 

@@ -58,22 +58,22 @@ public class HklMMapSaverTest extends HklMMapTester {
 
 
 
-    @Override
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-
-        mmap = new HklMMapLoader().load(zipFile);
-    }
-
-
-
     @AfterClass
     public static void tearDownAfterClass() throws Exception {
         if (zipFile.exists())
             if (!(zipFile.delete()))
                 throw new RuntimeException("File (" + zipFile.getAbsolutePath()
                         + ") cannot be deleted.");
+    }
+
+
+
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+
+        mmap = new HklMMapLoader().load(zipFile);
     }
 
 }

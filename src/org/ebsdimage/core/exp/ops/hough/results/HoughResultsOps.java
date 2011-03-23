@@ -27,21 +27,6 @@ import org.ebsdimage.core.exp.*;
  */
 public abstract class HoughResultsOps extends ExpOperation {
 
-    @Override
-    public final Object execute(Exp exp, Object... args) throws ExpError {
-        return calculate(exp, (HoughMap) args[0]);
-    }
-
-
-
-    @Override
-    public final void fireExecuted(ExpListener listener, Exp exp, Object results) {
-        for (OpResult result : (OpResult[]) results)
-            listener.houghResultsPerformed(exp, this, result);
-    }
-
-
-
     /**
      * Calculates the result(s) from the Hough map.
      * 
@@ -55,4 +40,19 @@ public abstract class HoughResultsOps extends ExpOperation {
      */
     public abstract OpResult[] calculate(Exp exp, HoughMap srcMap)
             throws ExpError;
+
+
+
+    @Override
+    public final Object execute(Exp exp, Object... args) throws ExpError {
+        return calculate(exp, (HoughMap) args[0]);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object results) {
+        for (OpResult result : (OpResult[]) results)
+            listener.houghResultsPerformed(exp, this, result);
+    }
 }

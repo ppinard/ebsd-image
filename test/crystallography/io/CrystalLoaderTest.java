@@ -30,6 +30,14 @@ public class CrystalLoaderTest extends TestCase {
 
 
     @Test
+    public void testCanLoad() {
+        assertTrue(loader.canLoad(file));
+        assertFalse(loader.canLoad(getFile("crystallography/testdata/forsterite.cif")));
+    }
+
+
+
+    @Test
     public void testLoadFile() throws IOException {
         Crystal crystal = loader.load(file);
         assertEquals("Silicon", crystal.name);
@@ -41,13 +49,5 @@ public class CrystalLoaderTest extends TestCase {
     public void testLoadFileObject() throws IOException {
         Crystal crystal = loader.load(file, null);
         assertEquals("Silicon", crystal.name);
-    }
-
-
-
-    @Test
-    public void testCanLoad() {
-        assertTrue(loader.canLoad(file));
-        assertFalse(loader.canLoad(getFile("crystallography/testdata/forsterite.cif")));
     }
 }

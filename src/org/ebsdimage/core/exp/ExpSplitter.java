@@ -120,7 +120,8 @@ public class ExpSplitter implements Iterator<Exp> {
 
         // Create and add new experiment to the array
         Exp splitExp =
-                new Exp(exp.mmap.duplicate(), tmpOps.toArray(new ExpOperation[0]));
+                new Exp(exp.mmap.duplicate(),
+                        tmpOps.toArray(new ExpOperation[0]));
 
         splitExp.addExpListeners(exp.getExpListeners());
 

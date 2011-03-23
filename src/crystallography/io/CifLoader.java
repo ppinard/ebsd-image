@@ -102,6 +102,13 @@ public class CifLoader implements Loader, Monitorable {
 
 
 
+    @Override
+    public boolean canLoad(File file) {
+        return FileUtil.isExtension(file, "cif");
+    }
+
+
+
     /**
      * Reads all Cif Data from a reader.
      * 
@@ -627,12 +634,5 @@ public class CifLoader implements Loader, Monitorable {
         }
         setString(str);
         return str;
-    }
-
-
-
-    @Override
-    public boolean canLoad(File file) {
-        return FileUtil.isExtension(file, "cif");
     }
 }

@@ -29,6 +29,14 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class AverageCreator implements OperationCreator {
 
     @Override
+    public String getDescription() {
+        return "Quality index on the original pattern map. "
+                + "The average of all the non-zero pixels is taken.";
+    }
+
+
+
+    @Override
     public ExpOperation getOperation() {
         return new Average();
     }
@@ -45,14 +53,6 @@ public class AverageCreator implements OperationCreator {
     @Override
     public String toString() {
         return "Average";
-    }
-
-
-
-    @Override
-    public String getDescription() {
-        return "Quality index on the original pattern map. "
-                + "The average of all the non-zero pixels is taken.";
     }
 
 }

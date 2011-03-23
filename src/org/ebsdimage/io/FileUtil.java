@@ -17,17 +17,16 @@
  */
 package org.ebsdimage.io;
 
-import static ptpshared.io.FileUtil.getClassesInJars;
-import static ptpshared.io.FileUtil.getClassesInPath;
-import static ptpshared.io.FileUtil.getJarFiles;
-import static rmlshared.io.FileUtil.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
 import rmlshared.io.JarFile;
 import rmlshared.util.ArrayList;
+import static ptpshared.io.FileUtil.getClassesInJars;
+import static ptpshared.io.FileUtil.getClassesInPath;
+import static ptpshared.io.FileUtil.getJarFiles;
+import static rmlshared.io.FileUtil.*;
 
 /**
  * Miscellaneous utilities to deal with files, jars and class path.

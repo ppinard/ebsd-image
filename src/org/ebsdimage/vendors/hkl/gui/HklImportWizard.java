@@ -61,23 +61,6 @@ public class HklImportWizard extends Wizard {
 
 
     /**
-     * Returns the CTF file to load.
-     * 
-     * @return CTF file
-     */
-    public File getCtfFile() {
-        File ctfFile = (File) results.get(StartWizardPage.KEY_CTF_FILE);
-
-        if (ctfFile == null)
-            throw new NullPointerException(
-                    "Could not get CTF file from wizard.");
-
-        return ctfFile;
-    }
-
-
-
-    /**
      * Returns the CPR file to load.
      * 
      * @return CPR file
@@ -90,6 +73,23 @@ public class HklImportWizard extends Wizard {
                     "Could not get CPR file from wizard.");
 
         return cprFile;
+    }
+
+
+
+    /**
+     * Returns the CTF file to load.
+     * 
+     * @return CTF file
+     */
+    public File getCtfFile() {
+        File ctfFile = (File) results.get(StartWizardPage.KEY_CTF_FILE);
+
+        if (ctfFile == null)
+            throw new NullPointerException(
+                    "Could not get CTF file from wizard.");
+
+        return ctfFile;
     }
 
 
@@ -110,6 +110,24 @@ public class HklImportWizard extends Wizard {
                     "Could not get the display in GUI value from wizard.");
 
         return displayGUI;
+    }
+
+
+
+    /**
+     * Returns the microscope with the CTF parameters.
+     * 
+     * @return microscope
+     */
+    public Microscope getMicroscope() {
+        Microscope microscope =
+                (Microscope) results.get(org.ebsdimage.gui.MicroscopeWizardPage.KEY_MICROSCOPE);
+
+        if (microscope == null)
+            throw new NullPointerException(
+                    "Could not get the microscope from wizard.");
+
+        return microscope;
     }
 
 
@@ -152,31 +170,14 @@ public class HklImportWizard extends Wizard {
      * @return phases
      */
     public Crystal[] getPhases() {
-        Crystal[] phases = (Crystal[]) results.get(PhasesWizardPage.KEY_PHASES);
+        Crystal[] phases =
+                (Crystal[]) results.get(org.ebsdimage.gui.PhasesWizardPage.KEY_PHASES);
 
         if (phases == null)
             throw new NullPointerException(
                     "Could not get the phases from wizard.");
 
         return phases;
-    }
-
-
-
-    /**
-     * Returns the microscope with the CTF parameters.
-     * 
-     * @return microscope
-     */
-    public Microscope getMicroscope() {
-        Microscope microscope =
-                (Microscope) results.get(MicroscopeWizardPage.KEY_MICROSCOPE);
-
-        if (microscope == null)
-            throw new NullPointerException(
-                    "Could not get the microscope from wizard.");
-
-        return microscope;
     }
 
 }

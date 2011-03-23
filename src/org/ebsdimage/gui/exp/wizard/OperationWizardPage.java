@@ -32,17 +32,6 @@ import static ptpshared.io.FileUtil.joinPackageNames;
  */
 public class OperationWizardPage extends WizardPage {
 
-    /**
-     * Desactives update preferences. The preferences of the operation wizard
-     * pages are not saved.
-     * <p>
-     * {@inheritDoc}
-     */
-    @Override
-    public Preferences getPreferences() {
-        return null;
-    }
-
     /** Panel for the pre operations. */
     protected MultipleChoicePanel prePanel;
 
@@ -54,6 +43,19 @@ public class OperationWizardPage extends WizardPage {
 
     /** Panel for the results operations. */
     protected MultipleChoicePanel resultsPanel;
+
+
+
+    /**
+     * Creates a new <code>EngineWizardPage</code>. All the panels are
+     * displayed.
+     * 
+     * @param opsDialogPackage
+     *            root package for the operations
+     */
+    public OperationWizardPage(String opsDialogPackage) {
+        this(opsDialogPackage, true, true, true, true);
+    }
 
 
 
@@ -100,14 +102,14 @@ public class OperationWizardPage extends WizardPage {
 
 
     /**
-     * Creates a new <code>EngineWizardPage</code>. All the panels are
-     * displayed.
-     * 
-     * @param opsDialogPackage
-     *            root package for the operations
+     * Desactives update preferences. The preferences of the operation wizard
+     * pages are not saved.
+     * <p>
+     * {@inheritDoc}
      */
-    public OperationWizardPage(String opsDialogPackage) {
-        this(opsDialogPackage, true, true, true, true);
+    @Override
+    public Preferences getPreferences() {
+        return null;
     }
 
 

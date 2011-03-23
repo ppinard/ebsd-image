@@ -86,21 +86,30 @@ public abstract class PatternSimOp extends SimOperation {
 
 
     /**
+     * Calculates the bands using the <code>BandsCalculator</code>.
+     * 
+     * @param reflectors
+     *            reflectors of the crystal
+     * @param microscope
+     *            microscope parameters
+     * @param rotation
+     *            rotation of the pattern
+     */
+    private void calculateBands(Microscope microscope, Reflectors reflectors,
+            Rotation rotation) {
+        bands =
+                getBandsCalculator().calculate(width, height, microscope,
+                        reflectors, rotation);
+    }
+
+
+
+    /**
      * Creates a empty <code>RealMap</code> to store the pattern.
      * 
      * @return pattern map
      */
     protected abstract RealMap createPatternMap();
-
-
-
-    /**
-     * Returns the <code>BandsCalculator</code> to use to calculate the bands of
-     * this simulated diffraction pattern.
-     * 
-     * @return <code>BandsCalculator</code>
-     */
-    protected abstract BandsCalculator getBandsCalculator();
 
 
 
@@ -144,25 +153,6 @@ public abstract class PatternSimOp extends SimOperation {
 
 
 
-    /**
-     * Calculates the bands using the <code>BandsCalculator</code>.
-     * 
-     * @param reflectors
-     *            reflectors of the crystal
-     * @param microscope
-     *            microscope parameters
-     * @param rotation
-     *            rotation of the pattern
-     */
-    private void calculateBands(Microscope microscope, Reflectors reflectors,
-            Rotation rotation) {
-        bands =
-                getBandsCalculator().calculate(width, height, microscope,
-                        reflectors, rotation);
-    }
-
-
-
     @Override
     public boolean equals(Object obj) {
         if (!super.equals(obj))
@@ -176,6 +166,29 @@ public abstract class PatternSimOp extends SimOperation {
 
         return true;
     }
+
+
+
+    /**
+     * Returns the calculated bands used in the simulated pattern.
+     * 
+     * @return calculated bands
+     */
+    public Band[] getBands() {
+        if (bands == null)
+            throw new RuntimeException("Pattern is not yet simulated.");
+        return bands;
+    }
+
+
+
+    /**
+     * Returns the <code>BandsCalculator</code> to use to calculate the bands of
+     * this simulated diffraction pattern.
+     * 
+     * @return <code>BandsCalculator</code>
+     */
+    protected abstract BandsCalculator getBandsCalculator();
 
 
 
@@ -201,19 +214,6 @@ public abstract class PatternSimOp extends SimOperation {
         if (patternRealMap == null)
             throw new RuntimeException("Pattern is not yet simulated.");
         return patternRealMap;
-    }
-
-
-
-    /**
-     * Returns the calculated bands used in the simulated pattern.
-     * 
-     * @return calculated bands
-     */
-    public Band[] getBands() {
-        if (bands == null)
-            throw new RuntimeException("Pattern is not yet simulated.");
-        return bands;
     }
 
 

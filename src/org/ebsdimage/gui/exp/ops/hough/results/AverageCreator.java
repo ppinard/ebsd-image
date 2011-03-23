@@ -29,15 +29,15 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class AverageCreator implements OperationCreator {
 
     @Override
-    public ExpOperation getOperation() {
-        return new Average();
+    public String getDescription() {
+        return "Average of the pixels in the Hough map.";
     }
 
 
 
     @Override
-    public String getDescription() {
-        return "Average of the pixels in the Hough map.";
+    public ExpOperation getOperation() {
+        return new Average();
     }
 
 

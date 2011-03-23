@@ -1,8 +1,5 @@
 package org.ebsdimage;
 
-import static org.ebsdimage.core.exp.ExpConstants.*;
-import static ptpshared.io.FileUtil.joinPackageNames;
-
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -14,6 +11,8 @@ import org.ebsdimage.io.FileUtil;
 import org.simpleframework.xml.Root;
 
 import rmlshared.thread.Reflection;
+import static org.ebsdimage.core.exp.ExpConstants.*;
+import static ptpshared.io.FileUtil.joinPackageNames;
 
 /**
  * Validates that the convention used in the experiment operations' definition.
@@ -22,8 +21,137 @@ import rmlshared.thread.Reflection;
  */
 public class InitValidator {
 
+    /**
+     * Quick check of the operations.
+     * 
+     * @param args
+     *            no arguments is required
+     * @throws Exception
+     *             if an exception occurs
+     */
+    public static void main(String[] args) throws Exception {
+        new InitValidator().validate();
+    }
+
     /** Logger for errors and warnings. */
     private final Logger logger = Logger.getLogger("ebsd");
+
+
+
+    /**
+     * Verifies if the class has a <code>DEFAULT</code> public static final
+     * field.
+     * 
+     * @param clasz
+     *            a class
+     * @return <code>true</code> if the class has a public static final field
+     *         named <code>DEFAULT</code>
+     */
+    private boolean hasDefaultField(Class<?> clasz) {
+        // Check if DEFAULT field exists
+        Field field;
+        try {
+            field = clasz.getField("DEFAULT");
+        } catch (NoSuchFieldException e) {
+            return false;
+        }
+
+        // Check if DEFAULT field return the right type of class
+        if (!field.getDeclaringClass().equals(clasz))
+            return false;
+
+        // Check if the DEFAULT field is public static final
+        if (!Modifier.isPublic(field.getModifiers())
+                || !Modifier.isStatic(field.getModifiers())
+                || !Modifier.isFinal(field.getModifiers()))
+            return false;
+
+        return true;
+    }
+
+
+
+    /**
+     * Verifies if the class has related a GUI class. The GUI class must have
+     * the same name as the class with the word <code>Creator</code> or
+     * <code>Dialog</code> as a suffix.
+     * 
+     * @param clasz
+     *            a class
+     * @return <code>true</code> if the class has a related GUI class
+     */
+    private boolean hasGUIClass(Class<?> clasz) {
+        String packageName = clasz.getPackage().getName();
+        if (!packageName.startsWith("org.ebsdimage.core.exp.ops."))
+            throw new IllegalArgumentException("Class (" + clasz
+                    + ") is not an experiment operation.");
+
+        packageName = packageName.replaceFirst(".core.", ".gui.");
+
+        // Find GUI class
+        Class<?> guiClasz;
+        try {
+            guiClasz =
+                    Reflection.forName(packageName + "."
+                            + clasz.getSimpleName() + "Creator");
+        } catch (IllegalArgumentException e1) {
+            try {
+                guiClasz =
+                        Reflection.forName(packageName + "."
+                                + clasz.getSimpleName() + "Dialog");
+            } catch (IllegalArgumentException e2) {
+                return false;
+            }
+        }
+
+        // Check that the GUI class extends OperationCreator
+        if (!OperationCreator.class.isAssignableFrom(guiClasz))
+            return false;
+
+        return true;
+    }
+
+
+
+    /**
+     * Checks whether a class is an operation class. A class must:
+     * <ul>
+     * <li>be derived from <code>Operation</code> class</li>
+     * <li>not be an abstract class</li>
+     * <li>not end with the suffix "Mock" or "Test"</li>
+     * </ul>
+     * 
+     * @param clasz
+     *            a class
+     * @return <code>true</code> if the class is an operation class
+     */
+    private boolean isOperation(Class<?> clasz) {
+        return Operation.class.isAssignableFrom(clasz)
+                && !Modifier.isAbstract(clasz.getModifiers())
+                && !clasz.getSimpleName().endsWith("Mock")
+                && !clasz.getSimpleName().endsWith("Test");
+    }
+
+
+
+    /**
+     * Verifies if the class can be serialized as an XML. The method checks that
+     * the class or one of its parent(s) has the <code>Root</code> annotation.
+     * 
+     * @param clasz
+     *            a class
+     * @return <code>true</code> if the class can be serialized as an XML
+     */
+    private boolean isXMLSerializable(Class<?> clasz) {
+        while (!clasz.equals(Object.class)) {
+            if (clasz.getAnnotation(Root.class) != null)
+                return true;
+
+            clasz = clasz.getSuperclass();
+        }
+
+        return false;
+    }
 
 
 
@@ -116,136 +244,5 @@ public class InitValidator {
                 logger.warning("Class (" + clasz
                         + ") does not have a GUI class.");
         }
-    }
-
-
-
-    /**
-     * Checks whether a class is an operation class. A class must:
-     * <ul>
-     * <li>be derived from <code>Operation</code> class</li>
-     * <li>not be an abstract class</li>
-     * <li>not end with the suffix "Mock" or "Test"</li>
-     * </ul>
-     * 
-     * @param clasz
-     *            a class
-     * @return <code>true</code> if the class is an operation class
-     */
-    private boolean isOperation(Class<?> clasz) {
-        return Operation.class.isAssignableFrom(clasz)
-                && !Modifier.isAbstract(clasz.getModifiers())
-                && !clasz.getSimpleName().endsWith("Mock")
-                && !clasz.getSimpleName().endsWith("Test");
-    }
-
-
-
-    /**
-     * Verifies if the class has a <code>DEFAULT</code> public static final
-     * field.
-     * 
-     * @param clasz
-     *            a class
-     * @return <code>true</code> if the class has a public static final field
-     *         named <code>DEFAULT</code>
-     */
-    private boolean hasDefaultField(Class<?> clasz) {
-        // Check if DEFAULT field exists
-        Field field;
-        try {
-            field = clasz.getField("DEFAULT");
-        } catch (NoSuchFieldException e) {
-            return false;
-        }
-
-        // Check if DEFAULT field return the right type of class
-        if (!field.getDeclaringClass().equals(clasz))
-            return false;
-
-        // Check if the DEFAULT field is public static final
-        if (!Modifier.isPublic(field.getModifiers())
-                || !Modifier.isStatic(field.getModifiers())
-                || !Modifier.isFinal(field.getModifiers()))
-            return false;
-
-        return true;
-    }
-
-
-
-    /**
-     * Verifies if the class can be serialized as an XML. The method checks that
-     * the class or one of its parent(s) has the <code>Root</code> annotation.
-     * 
-     * @param clasz
-     *            a class
-     * @return <code>true</code> if the class can be serialized as an XML
-     */
-    private boolean isXMLSerializable(Class<?> clasz) {
-        while (!clasz.equals(Object.class)) {
-            if (clasz.getAnnotation(Root.class) != null)
-                return true;
-
-            clasz = clasz.getSuperclass();
-        }
-
-        return false;
-    }
-
-
-
-    /**
-     * Verifies if the class has related a GUI class. The GUI class must have
-     * the same name as the class with the word <code>Creator</code> or
-     * <code>Dialog</code> as a suffix.
-     * 
-     * @param clasz
-     *            a class
-     * @return <code>true</code> if the class has a related GUI class
-     */
-    private boolean hasGUIClass(Class<?> clasz) {
-        String packageName = clasz.getPackage().getName();
-        if (!packageName.startsWith("org.ebsdimage.core.exp.ops."))
-            throw new IllegalArgumentException("Class (" + clasz
-                    + ") is not an experiment operation.");
-
-        packageName = packageName.replaceFirst(".core.", ".gui.");
-
-        // Find GUI class
-        Class<?> guiClasz;
-        try {
-            guiClasz =
-                    Reflection.forName(packageName + "."
-                            + clasz.getSimpleName() + "Creator");
-        } catch (IllegalArgumentException e1) {
-            try {
-                guiClasz =
-                        Reflection.forName(packageName + "."
-                                + clasz.getSimpleName() + "Dialog");
-            } catch (IllegalArgumentException e2) {
-                return false;
-            }
-        }
-
-        // Check that the GUI class extends OperationCreator
-        if (!OperationCreator.class.isAssignableFrom(guiClasz))
-            return false;
-
-        return true;
-    }
-
-
-
-    /**
-     * Quick check of the operations.
-     * 
-     * @param args
-     *            no arguments is required
-     * @throws Exception
-     *             if an exception occurs
-     */
-    public static void main(String[] args) throws Exception {
-        new InitValidator().validate();
     }
 }

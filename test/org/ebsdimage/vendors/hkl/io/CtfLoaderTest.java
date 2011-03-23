@@ -58,16 +58,6 @@ public class CtfLoaderTest extends HklMMapTester {
 
 
     @Test
-    public void testLoadPhaseNames() throws IOException {
-        String[] phaseNames = new CtfLoader().loadPhaseNames(file);
-
-        assertEquals(1, phaseNames.length);
-        assertEquals("Copper", phaseNames[0]);
-    }
-
-
-
-    @Test
     public void testLoadMetadata() {
         assertEquals("Project19", metadata.getProjectName());
 
@@ -76,6 +66,16 @@ public class CtfLoaderTest extends HklMMapTester {
         assertEquals(20e3, microscope.getBeamEnergy(), 1e-6);
         assertEquals(70, Math.toDegrees(microscope.getTiltAngle()), 1e-6);
         assertEquals(600, microscope.getMagnification(), 1e-6);
+    }
+
+
+
+    @Test
+    public void testLoadPhaseNames() throws IOException {
+        String[] phaseNames = new CtfLoader().loadPhaseNames(file);
+
+        assertEquals(1, phaseNames.length);
+        assertEquals("Copper", phaseNames[0]);
     }
 
 }

@@ -1,15 +1,14 @@
 package ptpshared.math;
 
-import static java.lang.Math.PI;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import static org.junit.Assert.assertEquals;
-
 import org.apache.commons.math.FunctionEvaluationException;
 import org.apache.commons.math.analysis.UnivariateRealFunction;
 import org.junit.Test;
 
-import ptpshared.math.Quad;
+import static org.junit.Assert.assertEquals;
+
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
 /**
  * Test taken from the test files of the original QUADPACK implementation in

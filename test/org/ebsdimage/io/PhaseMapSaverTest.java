@@ -78,37 +78,6 @@ public class PhaseMapSaverTest extends TestCase {
 
 
 
-    @Test
-    public void testSaveObjectFile() throws IOException {
-        saver.save((Object) phaseMap, file);
-
-        testPhasesMap();
-        testPhasesMapXml();
-    }
-
-
-
-    @Test
-    public void testSavePhasesMapFile() throws IOException {
-        saver.save(phaseMap, file);
-
-        testPhasesMap();
-        testPhasesMapXml();
-    }
-
-
-
-    @Test
-    public void testSavePhasesMap() throws IOException {
-        phaseMap.setFile(file);
-        saver.save(phaseMap);
-
-        testPhasesMap();
-        testPhasesMapXml();
-    }
-
-
-
     private void testPhasesMap() throws IOException {
         ByteMap byteMap = (ByteMap) new BasicBmpLoader().load(file);
 
@@ -132,6 +101,37 @@ public class PhaseMapSaverTest extends TestCase {
         assertEquals(PhaseMap.NO_PHASE, items.get(0), 1e-6);
         assertEquals(phase1, items.get(1), 1e-6);
         assertEquals(phase2, items.get(3), 1e-6);
+    }
+
+
+
+    @Test
+    public void testSaveObjectFile() throws IOException {
+        saver.save((Object) phaseMap, file);
+
+        testPhasesMap();
+        testPhasesMapXml();
+    }
+
+
+
+    @Test
+    public void testSavePhasesMap() throws IOException {
+        phaseMap.setFile(file);
+        saver.save(phaseMap);
+
+        testPhasesMap();
+        testPhasesMapXml();
+    }
+
+
+
+    @Test
+    public void testSavePhasesMapFile() throws IOException {
+        saver.save(phaseMap, file);
+
+        testPhasesMap();
+        testPhasesMapXml();
     }
 
 }

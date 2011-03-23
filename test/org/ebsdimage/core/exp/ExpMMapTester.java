@@ -47,10 +47,6 @@ import static junittools.test.Assert.assertEquals;
 
 public abstract class ExpMMapTester extends TestCase {
 
-    protected ExpMMap mmap;
-
-
-
     public static ExpMMap createExpMMap() {
         Camera camera =
                 new Camera(new Vector3D(1, 0, 0), new Vector3D(0, -1, 0), 0.04,
@@ -101,6 +97,8 @@ public abstract class ExpMMapTester extends TestCase {
 
         return mmap;
     }
+
+    protected ExpMMap mmap;
 
 
 
@@ -171,6 +169,17 @@ public abstract class ExpMMapTester extends TestCase {
 
 
     @Test(expected = IllegalArgumentException.class)
+    public void testExpMMapExceptionErrorIncorrectType() {
+        HashMap<String, Map> mapList = new HashMap<String, Map>();
+
+        mapList.put(EbsdMMap.ERRORS, new ByteMap(2, 2));
+
+        mmap = new ExpMMap(2, 2, mapList);
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
     public void testExpMMapExceptionPhasesIncorrectType() {
         HashMap<String, Map> mapList = new HashMap<String, Map>();
 
@@ -225,17 +234,6 @@ public abstract class ExpMMapTester extends TestCase {
 
 
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testExpMMapExceptionErrorIncorrectType() {
-        HashMap<String, Map> mapList = new HashMap<String, Map>();
-
-        mapList.put(EbsdMMap.ERRORS, new ByteMap(2, 2));
-
-        mmap = new ExpMMap(2, 2, mapList);
-    }
-
-
-
     @Test
     public void testExpMMapIntIntExpMetadata() {
         ExpMMap other = new ExpMMap(2, 2);
@@ -259,6 +257,24 @@ public abstract class ExpMMapTester extends TestCase {
         assertTrue(other.contains(EbsdMMap.Q3));
         assertTrue(other.contains(EbsdMMap.PHASES));
         assertTrue(other.contains(EbsdMMap.ERRORS));
+    }
+
+
+
+    @Test
+    public void testGetErrorMap() throws IOException {
+        ErrorMap errorMap = mmap.getErrorMap();
+
+        ErrorMap expectedErrorMap =
+                new ErrorMapLoader().load(getFile("org/ebsdimage/testdata/Errors.bmp"));
+
+        errorMap.assertEquals(expectedErrorMap);
+
+        java.util.Map<Integer, ErrorCode> errorCodes = errorMap.getItems();
+        assertEquals(2, errorCodes.size());
+
+        assertEquals("Error1", errorCodes.get(1).name);
+        assertEquals("First test error", errorCodes.get(1).description);
     }
 
 
@@ -349,24 +365,6 @@ public abstract class ExpMMapTester extends TestCase {
         assertEquals(PhaseMap.NO_PHASE, items.get(0), 1e-6);
         assertEquals(CrystalFactory.silicon(), items.get(1), 1e-6);
         assertEquals(CrystalFactory.ferrite(), items.get(2), 1e-6);
-    }
-
-
-
-    @Test
-    public void testGetErrorMap() throws IOException {
-        ErrorMap errorMap = mmap.getErrorMap();
-
-        ErrorMap expectedErrorMap =
-                new ErrorMapLoader().load(getFile("org/ebsdimage/testdata/Errors.bmp"));
-
-        errorMap.assertEquals(expectedErrorMap);
-
-        java.util.Map<Integer, ErrorCode> errorCodes = errorMap.getItems();
-        assertEquals(2, errorCodes.size());
-
-        assertEquals("Error1", errorCodes.get(1).name);
-        assertEquals("First test error", errorCodes.get(1).description);
     }
 
 

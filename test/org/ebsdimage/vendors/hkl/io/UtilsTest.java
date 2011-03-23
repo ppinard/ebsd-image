@@ -1,13 +1,13 @@
 package org.ebsdimage.vendors.hkl.io;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import rmlshared.io.FileUtil;
+
+import static org.junit.Assert.assertEquals;
 
 public class UtilsTest {
 

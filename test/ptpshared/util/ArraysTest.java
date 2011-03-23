@@ -17,11 +17,9 @@
  */
 package ptpshared.util;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
-import ptpshared.util.Arrays;
+import static org.junit.Assert.assertEquals;
 
 public class ArraysTest {
 

@@ -17,13 +17,13 @@
  */
 package org.ebsdimage.core;
 
-import static org.junit.Assert.assertEquals;
-
 import org.ebsdimage.TestCase;
 import org.junit.Test;
 
 import rmlimage.core.ByteMap;
 import rmlshared.util.Range;
+
+import static org.junit.Assert.assertEquals;
 
 public class MapStatsTest extends TestCase {
 
@@ -44,22 +44,6 @@ public class MapStatsTest extends TestCase {
 
 
     @Test
-    public void testStandardDeviation() {
-        ByteMap map = (ByteMap) load("org/ebsdimage/core/disk127.bmp");
-        assertEquals(0.0, MapStats.standardDeviation(map), 0.01);
-    }
-
-
-
-    @Test
-    public void testVariance() {
-        ByteMap map = (ByteMap) load("org/ebsdimage/core/disk127.bmp");
-        assertEquals(0.0, MapStats.variance(map), 0.01);
-    }
-
-
-
-    @Test
     public void testRange() {
         ByteMap map = (ByteMap) load("org/ebsdimage/core/disk127.bmp");
         Range<Integer> range = MapStats.range(map);
@@ -72,6 +56,22 @@ public class MapStatsTest extends TestCase {
 
         assertEquals(8, range.min.intValue());
         assertEquals(232, range.max.intValue());
+    }
+
+
+
+    @Test
+    public void testStandardDeviation() {
+        ByteMap map = (ByteMap) load("org/ebsdimage/core/disk127.bmp");
+        assertEquals(0.0, MapStats.standardDeviation(map), 0.01);
+    }
+
+
+
+    @Test
+    public void testVariance() {
+        ByteMap map = (ByteMap) load("org/ebsdimage/core/disk127.bmp");
+        assertEquals(0.0, MapStats.variance(map), 0.01);
     }
 
 }

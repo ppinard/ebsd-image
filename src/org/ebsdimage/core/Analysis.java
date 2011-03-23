@@ -30,80 +30,6 @@ import rmlimage.core.IdentMap;
 public class Analysis {
 
     /**
-     * Returns a list of the centroid of all the objects in the
-     * <code>BinMap</code>. The <code>BinMap</code> must come from the
-     * thresholding of a <code>HoughMap</code>. The centroid coordinates are
-     * returned in the (r;theta) coordinate system.
-     * 
-     * @param peaksMap
-     *            <code>IdentMap</code> to get the centroid of
-     * @param houghMap
-     *            <code>HoughMap</code> to get the intensity of
-     * @return the list of centroid coordinates in (r;theta)
-     * @throws NullPointerException
-     *             if the bin map is null
-     */
-    public static Centroid getCentroid(IdentMap peaksMap, HoughMap houghMap) {
-        // Validate maps
-        validate(peaksMap, houghMap);
-
-        int nbObjects = peaksMap.getObjectCount();
-
-        Calibration cal = peaksMap.getCalibration();
-        Centroid result = new Centroid(nbObjects, cal.unitsY);
-
-        // If there are no objects, return an empty result
-        if (nbObjects <= 0)
-            return result;
-
-        // centroidX and centroidY should be made double to avoid overflow
-        // +1 for object 0 (background)
-        int[] centroidX = new int[nbObjects + 1];
-        int[] centroidY = new int[nbObjects + 1];
-        int[] area = new int[nbObjects + 1];
-
-        Arrays.fill(centroidX, 0); // Initialize the array to 0
-        Arrays.fill(centroidY, 0); // Initialize the array to 0
-        Arrays.fill(area, 0); // Initialize the array to 0
-
-        short objectNumber;
-
-        int n = 0;
-        int width = peaksMap.width;
-        int height = peaksMap.height;
-        short[] pixArray = peaksMap.pixArray;
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                objectNumber = pixArray[n];
-
-                centroidX[objectNumber] += x;
-                centroidY[objectNumber] += y;
-                area[objectNumber]++;
-
-                n++;
-            }
-        }
-
-        // Apply the calibration factor and save the value to the Result object
-        double theta;
-        double rho;
-        byte[] houghPixArray = houghMap.pixArray;
-        for (n = 1; n <= nbObjects; n++) {
-            theta = (double) centroidX[n] / (double) area[n];
-            rho = (double) centroidY[n] / (double) area[n];
-
-            result.x[n - 1] = (float) cal.getCalibratedX(theta);
-            result.y[n - 1] = (float) cal.getCalibratedY(rho);
-            result.intensity[n - 1] =
-                    houghPixArray[houghMap.getIndex((int) theta, (int) rho)] & 0xff;
-        }
-
-        return result;
-    }
-
-
-
-    /**
      * Returns a list of centre of mass of each object in the
      * <code>BinMap</code>.
      * 
@@ -184,6 +110,80 @@ public class Analysis {
         System.arraycopy(result.x, 0, result.x, 0, n - 1);
         System.arraycopy(result.y, 0, result.y, 0, n - 1);
         System.arraycopy(result.intensity, 0, result.intensity, 0, n - 1);
+
+        return result;
+    }
+
+
+
+    /**
+     * Returns a list of the centroid of all the objects in the
+     * <code>BinMap</code>. The <code>BinMap</code> must come from the
+     * thresholding of a <code>HoughMap</code>. The centroid coordinates are
+     * returned in the (r;theta) coordinate system.
+     * 
+     * @param peaksMap
+     *            <code>IdentMap</code> to get the centroid of
+     * @param houghMap
+     *            <code>HoughMap</code> to get the intensity of
+     * @return the list of centroid coordinates in (r;theta)
+     * @throws NullPointerException
+     *             if the bin map is null
+     */
+    public static Centroid getCentroid(IdentMap peaksMap, HoughMap houghMap) {
+        // Validate maps
+        validate(peaksMap, houghMap);
+
+        int nbObjects = peaksMap.getObjectCount();
+
+        Calibration cal = peaksMap.getCalibration();
+        Centroid result = new Centroid(nbObjects, cal.unitsY);
+
+        // If there are no objects, return an empty result
+        if (nbObjects <= 0)
+            return result;
+
+        // centroidX and centroidY should be made double to avoid overflow
+        // +1 for object 0 (background)
+        int[] centroidX = new int[nbObjects + 1];
+        int[] centroidY = new int[nbObjects + 1];
+        int[] area = new int[nbObjects + 1];
+
+        Arrays.fill(centroidX, 0); // Initialize the array to 0
+        Arrays.fill(centroidY, 0); // Initialize the array to 0
+        Arrays.fill(area, 0); // Initialize the array to 0
+
+        short objectNumber;
+
+        int n = 0;
+        int width = peaksMap.width;
+        int height = peaksMap.height;
+        short[] pixArray = peaksMap.pixArray;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                objectNumber = pixArray[n];
+
+                centroidX[objectNumber] += x;
+                centroidY[objectNumber] += y;
+                area[objectNumber]++;
+
+                n++;
+            }
+        }
+
+        // Apply the calibration factor and save the value to the Result object
+        double theta;
+        double rho;
+        byte[] houghPixArray = houghMap.pixArray;
+        for (n = 1; n <= nbObjects; n++) {
+            theta = (double) centroidX[n] / (double) area[n];
+            rho = (double) centroidY[n] / (double) area[n];
+
+            result.x[n - 1] = (float) cal.getCalibratedX(theta);
+            result.y[n - 1] = (float) cal.getCalibratedY(rho);
+            result.intensity[n - 1] =
+                    houghPixArray[houghMap.getIndex((int) theta, (int) rho)] & 0xff;
+        }
 
         return result;
     }

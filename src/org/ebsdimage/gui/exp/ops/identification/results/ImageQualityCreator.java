@@ -29,6 +29,15 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class ImageQualityCreator implements OperationCreator {
 
     @Override
+    public String getDescription() {
+        return "Quality index on the identified Hough peaks. "
+                + "The image quality corresponds to the average intensity of the "
+                + "identified Hough peaks.";
+    }
+
+
+
+    @Override
     public ExpOperation getOperation() {
         return new ImageQuality();
     }
@@ -45,14 +54,5 @@ public class ImageQualityCreator implements OperationCreator {
     @Override
     public String toString() {
         return "Image Quality";
-    }
-
-
-
-    @Override
-    public String getDescription() {
-        return "Quality index on the identified Hough peaks. "
-                + "The image quality corresponds to the average intensity of the "
-                + "identified Hough peaks.";
     }
 }

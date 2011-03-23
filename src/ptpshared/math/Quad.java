@@ -1,11 +1,11 @@
 package ptpshared.math;
 
-import static java.lang.Math.*;
-
 import org.apache.commons.math.ConvergenceException;
 import org.apache.commons.math.FunctionEvaluationException;
 import org.apache.commons.math.analysis.UnivariateRealFunction;
 import org.apache.commons.math.analysis.integration.UnivariateRealIntegratorImpl;
+
+import static java.lang.Math.*;
 
 /**
  * Implementation in Java of the QUADPACK (only for bounded integrals). Code

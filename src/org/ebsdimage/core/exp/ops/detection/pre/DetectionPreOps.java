@@ -30,6 +30,20 @@ import org.ebsdimage.core.exp.ExpOperation;
  */
 public abstract class DetectionPreOps extends ExpOperation {
 
+    @Override
+    public final Object execute(Exp exp, Object... args) throws ExpError {
+        return process(exp, (HoughMap) args[0]);
+    }
+
+
+
+    @Override
+    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
+        listener.detectionPrePerformed(exp, this, (HoughMap) result);
+    }
+
+
+
     /**
      * Returns a processed Hough map.
      * 
@@ -42,19 +56,5 @@ public abstract class DetectionPreOps extends ExpOperation {
      *             if an error occurs during the execution
      */
     public abstract HoughMap process(Exp exp, HoughMap srcMap) throws ExpError;
-
-
-
-    @Override
-    public final Object execute(Exp exp, Object... args) throws ExpError {
-        return process(exp, (HoughMap) args[0]);
-    }
-
-
-
-    @Override
-    public final void fireExecuted(ExpListener listener, Exp exp, Object result) {
-        listener.detectionPrePerformed(exp, this, (HoughMap) result);
-    }
 
 }

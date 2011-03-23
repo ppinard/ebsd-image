@@ -97,6 +97,24 @@ public class TslImportWizard extends Wizard {
 
 
     /**
+     * Returns the microscope with the CTF parameters.
+     * 
+     * @return microscope
+     */
+    public Microscope getMicroscope() {
+        Microscope microscope =
+                (Microscope) results.get(org.ebsdimage.gui.MicroscopeWizardPage.KEY_MICROSCOPE);
+
+        if (microscope == null)
+            throw new NullPointerException(
+                    "Could not get the microscope from wizard.");
+
+        return microscope;
+    }
+
+
+
+    /**
      * Returns the output file for the multimap.
      * 
      * @return output file
@@ -109,24 +127,6 @@ public class TslImportWizard extends Wizard {
                     "Could not get output file from wizard.");
 
         return outputFile;
-    }
-
-
-
-    /**
-     * Returns the microscope with the CTF parameters.
-     * 
-     * @return microscope
-     */
-    public Microscope getMicroscope() {
-        Microscope microscope =
-                (Microscope) results.get(MicroscopeWizardPage.KEY_MICROSCOPE);
-
-        if (microscope == null)
-            throw new NullPointerException(
-                    "Could not get the microscope from wizard.");
-
-        return microscope;
     }
 
 

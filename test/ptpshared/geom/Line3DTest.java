@@ -21,8 +21,6 @@ import org.apache.commons.math.geometry.Vector3D;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.geom.Line3D;
-
 import static org.junit.Assert.assertEquals;
 
 public class Line3DTest {

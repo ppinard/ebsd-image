@@ -63,6 +63,31 @@ public class Sim extends PlugIn implements Monitorable {
 
 
 
+    /**
+     * Creates a new simulation from the results in the wizard.
+     * 
+     * @param wizard
+     *            simulation engine wizard dialog
+     */
+    private void createSim(SimWizard wizard) {
+        Microscope microscope = wizard.getMicroscope();
+        ScatteringFactorsEnum scatteringFactors = wizard.getScattringFactors();
+        int maxIndex = wizard.getMaxIndex();
+
+        SimMetadata metadata =
+                new SimMetadata(microscope, scatteringFactors, maxIndex);
+
+        Operation[] ops = wizard.getOperations();
+        Rotation[] rotations = wizard.getRotations();
+        Crystal[] phases = wizard.getPhases();
+
+        sim = new org.ebsdimage.core.sim.Sim(metadata, ops, phases, rotations);
+        sim.setName(wizard.getName());
+        sim.setDir(wizard.getDir());
+    }
+
+
+
     @Override
     public double getTaskProgress() {
         if (sim != null)
@@ -102,31 +127,6 @@ public class Sim extends PlugIn implements Monitorable {
     private void saveSim() throws IOException {
         File file = new File(sim.getDir(), sim.getName() + ".xml");
         new SimSaver().save(sim, file);
-    }
-
-
-
-    /**
-     * Creates a new simulation from the results in the wizard.
-     * 
-     * @param wizard
-     *            simulation engine wizard dialog
-     */
-    private void createSim(SimWizard wizard) {
-        Microscope microscope = wizard.getMicroscope();
-        ScatteringFactorsEnum scatteringFactors = wizard.getScattringFactors();
-        int maxIndex = wizard.getMaxIndex();
-
-        SimMetadata metadata =
-                new SimMetadata(microscope, scatteringFactors, maxIndex);
-
-        Operation[] ops = wizard.getOperations();
-        Rotation[] rotations = wizard.getRotations();
-        Crystal[] phases = wizard.getPhases();
-
-        sim = new org.ebsdimage.core.sim.Sim(metadata, ops, phases, rotations);
-        sim.setName(wizard.getName());
-        sim.setDir(wizard.getDir());
     }
 
 
