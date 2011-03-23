@@ -50,31 +50,31 @@ public class MicroscopeWizardPage extends WizardPage {
     public static final String KEY_LOADED = "microscope.loaded";
 
     /** Combo box to select the microscope configuration. */
-    private ComboBox<Microscope> microscopesCBox;
+    protected ComboBox<Microscope> microscopesCBox;
 
     /** Beam energy field. */
-    private CalibratedDoubleField energyField;
+    protected CalibratedDoubleField energyField;
 
     /** Magnification field. */
-    private DoubleField magField;
+    protected DoubleField magField;
 
     /** Working distance field. */
-    private CalibratedDoubleField wdField;
+    protected CalibratedDoubleField wdField;
 
     /** Sample tilt field. */
-    private CalibratedDoubleField tiltField;
+    protected CalibratedDoubleField tiltField;
 
     /** Sample rotation first Euler field. */
-    private RotationField sampleRotationField;
+    protected RotationField sampleRotationField;
 
     /** Pattern center horizontal coordinate field. */
-    private DoubleField pcXField;
+    protected DoubleField pcXField;
 
     /** Pattern center vertical coordinate field. */
-    private DoubleField pcYField;
+    protected DoubleField pcYField;
 
     /** Detector distance field. */
-    private CalibratedDoubleField ddField;
+    protected CalibratedDoubleField ddField;
 
 
 
@@ -231,7 +231,7 @@ public class MicroscopeWizardPage extends WizardPage {
      * 
      * @return a <code>EbsdMetadata</code>
      */
-    private Microscope getMicroscope() {
+    protected Microscope getMicroscope() {
         Microscope microscope = microscopesCBox.getSelectedItem();
 
         microscope.setBeamEnergy(energyField.getValue());
