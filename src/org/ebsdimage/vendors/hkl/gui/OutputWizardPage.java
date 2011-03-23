@@ -73,7 +73,6 @@ public class OutputWizardPage extends WizardPage {
                         "HKL multimap (*.zip)", "zip") };
         outputFileField =
                 new SingleFileBrowserField("Output file", false, filters);
-
         add(outputFileField);
         add(outputFileField.getBrowseButton(), "wrap");
 

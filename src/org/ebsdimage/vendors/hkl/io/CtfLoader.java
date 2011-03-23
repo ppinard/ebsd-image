@@ -71,10 +71,10 @@ public class CtfLoader implements Monitorable {
             "Unexpected error");
 
     /** Progress value. */
-    protected double progress;
+    private double progress;
 
     /** Progress status. */
-    protected String status;
+    private String status;
 
     /** Flag indicating if the operation should be interrupted. */
     private boolean isInterrupted = false;
