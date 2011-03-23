@@ -220,43 +220,31 @@ public class SingleFileBrowserField extends JComponent implements
      */
     @Override
     public boolean isCorrect(boolean showErrorDialog) {
-        String message = getValidationMessage(getFile());
-        if (message.length() > 0 && showErrorDialog) {
-            ErrorDialog.show(message);
+        File file = getFile();
+
+        if (file == null) {
+            if (showErrorDialog)
+                ErrorDialog.show("Please select a file.");
             return false;
-        } else
-            return true;
-    }
+        }
 
-
-
-    /**
-     * Returns a validation message whether the specified file is valid:
-     * <ul>
-     * <li>the file exists</li>
-     * <li>the file meets the file filters.</li>
-     * </ul>
-     * If the file is valid, an empty string is returned.
-     * 
-     * @param file
-     *            a file
-     * @return a validation message if the file is invalid or an empty string if
-     *         the file is valid
-     */
-    private String getValidationMessage(File file) {
         // File exists
         if (!file.exists()) {
-            return "Selected file (" + file
-                    + ") does not exists. Please make another selection.";
+            if (showErrorDialog)
+                ErrorDialog.show("Selected file (" + file
+                        + ") does not exists. Please make another selection.");
+            return false;
         }
 
         // File respects file filters
         if (!fileChooser.accept(file)) {
-            return "Selected file (" + file
-                    + ") does not have a valid extension.";
+            if (showErrorDialog)
+                ErrorDialog.show("Selected file (" + file
+                        + ") does not have a valid extension.");
+            return false;
         }
 
-        return "";
+        return true;
     }
 
 
@@ -340,12 +328,16 @@ public class SingleFileBrowserField extends JComponent implements
      *             if the file is invalid
      */
     public void setFile(File file) {
-        if (file == null)
+        if (file == null) {
             clear();
+            return;
+        }
 
-        String message = getValidationMessage(file);
-        if (message.length() > 0)
-            throw new IllegalArgumentException(message);
+        // File respects file filters
+        if (!fileChooser.accept(file)) {
+            throw new IllegalArgumentException("Selected file (" + file
+                    + ") does not have a valid extension.");
+        }
 
         nameField.setText(file.getPath());
         fileChooser.setSelectedFile(file);
