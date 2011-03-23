@@ -19,8 +19,8 @@ package org.ebsdimage.core;
 
 import org.apache.commons.math.geometry.CardanEulerSingularityException;
 import org.apache.commons.math.geometry.Rotation;
-import org.apache.commons.math.geometry.RotationOrder;
 
+import ptpshared.geom.RotationUtils;
 import rmlimage.core.ByteMap;
 import rmlimage.core.Calibration;
 import rmlimage.core.Map;
@@ -243,7 +243,7 @@ public class Conversion implements ConversionHandler {
         double[] eulers;
 
         try {
-            eulers = rotation.getAngles(RotationOrder.ZXZ);
+            eulers = RotationUtils.getBungeEulerAngles(rotation);
         } catch (CardanEulerSingularityException e) {
             return new int[] { 0, 0, 0 };
         }

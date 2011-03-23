@@ -2,7 +2,9 @@ package ptpshared.geom;
 
 import java.util.Random;
 
+import org.apache.commons.math.geometry.CardanEulerSingularityException;
 import org.apache.commons.math.geometry.Rotation;
+import org.apache.commons.math.geometry.RotationOrder;
 
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 import static java.lang.Math.PI;
@@ -110,5 +112,34 @@ public class RotationUtils {
     @CheckReturnValue
     public static Rotation randomRotation() {
         return randomRotation(System.currentTimeMillis());
+    }
+
+
+
+    /**
+     * Returns the Euler angles representation of a rotation in the Bunge
+     * convention.
+     * <ul>
+     * <li>0 < theta1 < 2PI</li>
+     * <li>0 < theta2 < PI</li>
+     * <li>0 < theta3 < 2PI</li>
+     * </ul>
+     * 
+     * @param r
+     *            a rotation
+     * @return array of three numbers
+     * @throws CardanEulerSingularityException
+     *             if the rotation cannot be represented as Euler angles
+     */
+    public static double[] getBungeEulerAngles(Rotation r)
+            throws CardanEulerSingularityException {
+        double[] eulers = r.getAngles(RotationOrder.ZXZ);
+
+        if (eulers[0] < 0)
+            eulers[0] += 2 * Math.PI;
+        if (eulers[2] < 0)
+            eulers[2] += 2 * Math.PI;
+
+        return eulers;
     }
 }

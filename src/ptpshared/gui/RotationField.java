@@ -9,6 +9,7 @@ import org.apache.commons.math.geometry.CardanEulerSingularityException;
 import org.apache.commons.math.geometry.Rotation;
 import org.apache.commons.math.geometry.RotationOrder;
 
+import ptpshared.geom.RotationUtils;
 import rmlshared.gui.DoubleField;
 import rmlshared.ui.InputBuffering;
 import rmlshared.ui.InputValidation;
@@ -55,7 +56,7 @@ public class RotationField extends JComponent implements PreferenceKeeping,
 
         double[] eulers;
         try {
-            eulers = defaultValue.getAngles(ROTATION_ORDER);
+            eulers = RotationUtils.getBungeEulerAngles(defaultValue);
         } catch (CardanEulerSingularityException e) {
             eulers = new double[] { 0.0, 0.0, 0.0 };
         }
@@ -165,7 +166,7 @@ public class RotationField extends JComponent implements PreferenceKeeping,
     public void setValue(Rotation rotation) {
         double eulers[];
         try {
-            eulers = rotation.getAngles(ROTATION_ORDER);
+            eulers = RotationUtils.getBungeEulerAngles(rotation);
         } catch (CardanEulerSingularityException e) {
             eulers = new double[] { 0.0, 0.0, 0.0 };
         }

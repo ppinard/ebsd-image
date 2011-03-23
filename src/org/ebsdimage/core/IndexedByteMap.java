@@ -1,10 +1,10 @@
 package org.ebsdimage.core;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import junittools.core.AlmostEquable;
 import rmlimage.core.ByteMap;
 import rmlimage.core.LUT;
 import rmlimage.core.Map;
@@ -145,9 +145,67 @@ public class IndexedByteMap<Item> extends ByteMap {
         @SuppressWarnings("unchecked")
         IndexedByteMap<Item> other = (IndexedByteMap<Item>) map;
 
-        if (!Arrays.equals(items, other.items))
-            throw new AssertionError(
-                    "The indexes from the two maps are different.");
+        if (items.length != other.items.length)
+            throw new AssertionError("Map (" + other.getName()
+                    + ") does not have the same number of items ("
+                    + other.items.length + ") than the current map ("
+                    + items.length + ").");
+
+        for (int i = 0; i < items.length; i++)
+            if (items[i] == null) {
+                if (other.items[i] != null)
+                    throw new AssertionError("Item " + i + " is different: "
+                            + items[i] + " vs. " + other.items[i] + ".");
+            } else {
+                if (!items[i].equals(other.items[i]))
+                    throw new AssertionError("Item " + i + " is different: "
+                            + items[i] + " vs. " + other.items[i] + ".");
+            }
+
+        super.assertEquals(map);
+    }
+
+
+
+    /**
+     * Same as <code>assertEquals(Map map)</code> except that the items will be
+     * considered equal if they are within the specified precision. The item
+     * must implement the <code>AlmostEquable</code> interface.
+     * 
+     * @param map
+     *            expected <dfn>Map</dfn>.
+     * @param precision
+     *            level of precision
+     * @throws AssertionError
+     *             if the type, the size, the calibration, the properties, the
+     *             LUT, the MapRenderer or any pixel differ.
+     * @see AlmostEquable
+     */
+    public void assertEquals(Map map, Object precision) {
+        @SuppressWarnings("unchecked")
+        IndexedByteMap<Item> other = (IndexedByteMap<Item>) map;
+
+        if (items.length != other.items.length)
+            throw new AssertionError("Map (" + other.getName()
+                    + ") does not have the same number of items ("
+                    + other.items.length + ") than the current map ("
+                    + items.length + ").");
+
+        for (int i = 0; i < items.length; i++)
+            if (items[i] == null) {
+                if (other.items[i] != null)
+                    throw new AssertionError("Item " + i + " is different: "
+                            + items[i] + " vs. " + other.items[i] + ".");
+            } else if (items[i] instanceof AlmostEquable) {
+                if (!((AlmostEquable) items[i]).equals(other.items[i],
+                        precision))
+                    throw new AssertionError("Item " + i + " is different: "
+                            + items[i] + " vs. " + other.items[i] + ".");
+            } else {
+                if (!items[i].equals(other.items[i]))
+                    throw new AssertionError("Item " + i + " is different: "
+                            + items[i] + " vs. " + other.items[i] + ".");
+            }
 
         super.assertEquals(map);
     }
