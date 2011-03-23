@@ -17,19 +17,18 @@
  */
 package org.ebsdimage.vendors.hkl.gui;
 
-import static rmlshared.io.FileUtil.getURL;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import org.ebsdimage.core.Camera;
+import org.ebsdimage.core.Microscope;
 
 import ptpshared.gui.Wizard;
 import ptpshared.gui.WizardPage;
 import crystallography.core.Crystal;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
+import static rmlshared.io.FileUtil.getURL;
 
 /**
  * Wizard to import HKL data.
@@ -43,7 +42,7 @@ public class HklImportWizard extends Wizard {
      */
     public HklImportWizard() {
         super("Import from HKL", new WizardPage[] { new StartWizardPage(),
-                new MissingDataWizardPage(), new PhasesWizardPage(),
+                new MicroscopeWizardPage(), new PhasesWizardPage(),
                 new PatternsWizardPage(), new OutputWizardPage() });
 
         BufferedImage image;
@@ -62,36 +61,35 @@ public class HklImportWizard extends Wizard {
 
 
     /**
-     * Returns the calibration specified in this dialog.
+     * Returns the CTF file to load.
      * 
-     * @return calibration
-     */
-    public Camera getCalibration() {
-        Camera calibration =
-                (Camera) results.get(MissingDataWizardPage.KEY_CALIBRATION);
-
-        if (calibration == null)
-            throw new NullPointerException(
-                    "Could not get calibration from wizard.");
-
-        return calibration;
-    }
-
-
-
-    /**
-     * Returns the ctf file to load.
-     * 
-     * @return ctf file
+     * @return CTF file
      */
     public File getCtfFile() {
         File ctfFile = (File) results.get(StartWizardPage.KEY_CTF_FILE);
 
         if (ctfFile == null)
             throw new NullPointerException(
-                    "Could not get ctf file from wizard.");
+                    "Could not get CTF file from wizard.");
 
         return ctfFile;
+    }
+
+
+
+    /**
+     * Returns the CPR file to load.
+     * 
+     * @return CPR file
+     */
+    public File getCprFile() {
+        File cprFile = (File) results.get(StartWizardPage.KEY_CPR_FILE);
+
+        if (cprFile == null)
+            throw new NullPointerException(
+                    "Could not get CPR file from wizard.");
+
+        return cprFile;
     }
 
 
@@ -117,9 +115,9 @@ public class HklImportWizard extends Wizard {
 
 
     /**
-     * Returns the output file for the MMap.
+     * Returns the output file for the multimap.
      * 
-     * @return outptu file
+     * @return output file
      */
     public File getOutputFile() {
         File outputFile = (File) results.get(OutputWizardPage.KEY_OUTPUT_FILE);
@@ -129,24 +127,6 @@ public class HklImportWizard extends Wizard {
                     "Could not get output file from wizard.");
 
         return outputFile;
-    }
-
-
-
-    /**
-     * Returns the working distance specified in this dialog.
-     * 
-     * @return working distance
-     */
-    public double getWorkingDistance() {
-        Double workingDistance =
-                (Double) results.get(MissingDataWizardPage.KEY_WORKING_DISTANCE);
-
-        if (workingDistance == null)
-            throw new NullPointerException(
-                    "Could not get working distance from wizard.");
-
-        return workingDistance;
     }
 
 
@@ -172,14 +152,31 @@ public class HklImportWizard extends Wizard {
      * @return phases
      */
     public Crystal[] getPhases() {
-        Crystal[] phases =
-                (Crystal[]) results.get(org.ebsdimage.gui.PhasesWizardPage.KEY_PHASES);
+        Crystal[] phases = (Crystal[]) results.get(PhasesWizardPage.KEY_PHASES);
 
         if (phases == null)
             throw new NullPointerException(
                     "Could not get the phases from wizard.");
 
         return phases;
+    }
+
+
+
+    /**
+     * Returns the microscope with the CTF parameters.
+     * 
+     * @return microscope
+     */
+    public Microscope getMicroscope() {
+        Microscope microscope =
+                (Microscope) results.get(MicroscopeWizardPage.KEY_MICROSCOPE);
+
+        if (microscope == null)
+            throw new NullPointerException(
+                    "Could not get the microscope from wizard.");
+
+        return microscope;
     }
 
 }

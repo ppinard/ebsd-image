@@ -19,23 +19,24 @@ package org.ebsdimage.vendors.hkl.core;
 
 import java.io.File;
 
-import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.EbsdMetadata;
-
-import ptpshared.core.math.Quaternion;
+import org.ebsdimage.core.Microscope;
+import org.simpleframework.xml.Element;
 
 /**
- * Metadata held in a <code>HKLMMap</code>.
+ * Metadata held in a <code>HklMMap</code>.
  * 
  * @author Philippe T. Pinard
  */
 public class HklMetadata extends EbsdMetadata {
 
     /** Name of the project. */
-    public final String projectName;
+    @Element(name = "projectName")
+    private String projectName;
 
     /** Directory where the project is located. */
-    public final File projectPath;
+    @Element(name = "projectDir")
+    private File projectDir;
 
 
 
@@ -43,63 +44,86 @@ public class HklMetadata extends EbsdMetadata {
      * Creates a <code>HklMetadata</code> with the required parameters. All
      * values are validated.
      * 
-     * @param beamEnergy
-     *            energy of the electron beam in eV
-     * @param magnification
-     *            magnification of the EBSD acquisition
-     * @param tiltAngle
-     *            angle of sample's tilt in radians
-     * @param workingDistance
-     *            working distance of the EBSD acquisition in meters
-     * @param pixelWidth
-     *            calibration for the width of the pixel in meters
-     * @param pixelHeight
-     *            calibration for the height of the pixel in meters
-     * @param sampleRotation
-     *            rotation from the pattern frame (camera) into the sample frame
-     * @param calibration
-     *            calibration of the camera
+     * @param microscope
+     *            microscope configuration
      * @param projectName
      *            name of the project
-     * @param projectPath
-     *            path of the project
+     * @param projectDir
+     *            directory where the project is located
      */
-    public HklMetadata(double beamEnergy, double magnification,
-            double tiltAngle, double workingDistance, double pixelWidth,
-            double pixelHeight, Quaternion sampleRotation, Camera calibration,
-            String projectName, File projectPath) {
-        super(beamEnergy, magnification, tiltAngle, workingDistance,
-                pixelWidth, pixelHeight, sampleRotation, calibration);
+    public HklMetadata(@Element(name = "microscope") Microscope microscope,
+            @Element(name = "projectName") String projectName,
+            @Element(name = "projectDir") File projectDir) {
+        super(microscope);
 
-        // Project name
-        if (projectName == null)
-            throw new NullPointerException("Undefined project name");
-        this.projectName = projectName;
+        setProjectName(projectName);
+        setProjectDir(projectDir);
+    }
 
-        // Project path
-        if (projectPath == null)
-            throw new NullPointerException("Undefined project path");
-        this.projectPath = projectPath.getAbsoluteFile();
+
+
+    @Override
+    public boolean equals(Object obj, Object precision) {
+        if (!super.equals(obj, precision))
+            return false;
+
+        HklMetadata other = (HklMetadata) obj;
+        if (!projectName.equals(other.projectName))
+            return false;
+        if (!projectDir.equals(other.projectDir))
+            return false;
+
+        return true;
     }
 
 
 
     /**
-     * Creates a <code>HklMetadata</code> from an <code>EbsdMetadata</code> and
-     * the extra required parameters. All values are validated.
+     * Returns the directory where the project is located.
      * 
-     * @param metadata
-     *            a valid <code>EbsdMetadata</code>
-     * @param projectName
-     *            name of the project
-     * @param projectPath
-     *            path of the project
+     * @return project's directory
      */
-    public HklMetadata(EbsdMetadata metadata, String projectName,
-            File projectPath) {
-        this(metadata.beamEnergy, metadata.magnification, metadata.tiltAngle,
-                metadata.workingDistance, metadata.pixelWidth,
-                metadata.pixelHeight, metadata.sampleRotation,
-                metadata.camera, projectName, projectPath);
+    public File getProjectDir() {
+        return projectDir;
     }
+
+
+
+    /**
+     * Returns the name of the project.
+     * 
+     * @return project's name
+     */
+    public String getProjectName() {
+        return projectName;
+    }
+
+
+
+    /**
+     * Sets the directory where the project is located.
+     * 
+     * @param dir
+     *            project's directory
+     */
+    public void setProjectDir(File dir) {
+        if (dir == null)
+            throw new NullPointerException("Undefined project dir");
+        this.projectDir = dir.getAbsoluteFile();
+    }
+
+
+
+    /**
+     * Sets the name of the project.
+     * 
+     * @param projectName
+     *            project's name
+     */
+    public void setProjectName(String projectName) {
+        if (projectName == null)
+            throw new NullPointerException("Undefined project name");
+        this.projectName = projectName;
+    }
+
 }

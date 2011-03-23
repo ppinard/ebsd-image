@@ -17,45 +17,65 @@
  */
 package org.ebsdimage.vendors.hkl.io;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
 import java.io.IOException;
 
-import org.ebsdimage.core.Camera;
-import org.ebsdimage.core.EbsdMetadata;
+import org.apache.commons.math.geometry.Rotation;
+import org.ebsdimage.core.Microscope;
 import org.ebsdimage.vendors.hkl.core.HklMMapTester;
+import org.ebsdimage.vendors.hkl.core.HklMetadata;
 import org.junit.Test;
 
 import crystallography.core.Crystal;
 import crystallography.io.CrystalLoader;
 
+import static org.junit.Assert.assertEquals;
+
+import static ptpshared.geom.Assert.assertEquals;
+
 public class CtfLoaderTest extends HklMMapTester {
 
     private File file;
 
+    private HklMetadata metadata;
 
 
-    public CtfLoaderTest() throws Exception {
+
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+
         file = getFile("org/ebsdimage/vendors/hkl/testdata/Project19.ctf");
 
         Crystal copperPhase =
                 new CrystalLoader().load(getFile("org/ebsdimage/vendors/hkl/testdata/Copper.xml"));
 
-        mmap =
-                new CtfLoader().load(file,
-                        EbsdMetadata.DEFAULT_WORKING_DISTANCE, new Camera(0.1,
-                                0.2, 0.3), new Crystal[] { copperPhase });
+        CtfLoader loader = new CtfLoader();
+        metadata = loader.loadMetadata(file, new Microscope());
+        mmap = loader.load(file, metadata, new Crystal[] { copperPhase });
     }
 
 
 
     @Test
-    public void testGetPhaseNames() throws IOException {
-        String[] phaseNames = CtfLoader.getPhaseNames(file);
+    public void testLoadPhaseNames() throws IOException {
+        String[] phaseNames = new CtfLoader().loadPhaseNames(file);
 
         assertEquals(1, phaseNames.length);
         assertEquals("Copper", phaseNames[0]);
+    }
+
+
+
+    @Test
+    public void testLoadMetadata() {
+        assertEquals("Project19", metadata.getProjectName());
+
+        Microscope microscope = metadata.getMicroscope();
+        assertEquals(Rotation.IDENTITY, microscope.getSampleRotation(), 1e-6);
+        assertEquals(20e3, microscope.getBeamEnergy(), 1e-6);
+        assertEquals(70, Math.toDegrees(microscope.getTiltAngle()), 1e-6);
+        assertEquals(600, microscope.getMagnification(), 1e-6);
     }
 
 }

@@ -17,14 +17,20 @@
  */
 package org.ebsdimage.vendors.hkl.gui;
 
+import java.io.File;
+
 import javax.swing.JLabel;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.ebsdimage.vendors.hkl.io.CprLoader;
 import org.ebsdimage.vendors.hkl.io.CtfLoader;
 
+import ptpshared.gui.SingleFileBrowserField;
 import ptpshared.gui.WizardPage;
-import rmlshared.gui.FileNameField;
+import rmlshared.io.FileUtil;
 
 /**
  * First page for the import wizard.
@@ -33,7 +39,10 @@ import rmlshared.gui.FileNameField;
  */
 public class StartWizardPage extends WizardPage {
 
-    /** Map key for the ctf file. */
+    /** Map key for the CPR file. */
+    public static final String KEY_CPR_FILE = "cprFile";
+
+    /** Map key for the CTF file. */
     public static final String KEY_CTF_FILE = "ctfFile";
 
 
@@ -47,8 +56,8 @@ public class StartWizardPage extends WizardPage {
         return "Start";
     }
 
-    /** Field for the ctf file. */
-    private FileNameField ctfFileField;
+    /** Field for the CPR file. */
+    private SingleFileBrowserField cprFileField;
 
 
 
@@ -61,39 +70,54 @@ public class StartWizardPage extends WizardPage {
 
         String text =
                 "<html>This importer converts the acquisition parameters "
-                        + "and data from a ctf file into EBSD-Image's EBSD multimap "
+                        + "and data from a CPR/CTF files into EBSD-Image's EBSD multimap "
                         + "format. The user can select whether if wants to import "
-                        + "the diffraction patterns of the acquisition to a smp file."
+                        + "the diffraction patterns of the acquisition to a SMP file."
                         + "<br/><br/>"
                         + "For more information, please visit: http://ebsd-image.sourceforge.net/wiki/ImportFromHKLChannel5"
                         + "</html>";
         add(new JLabel(text), "grow, span 3, wrap 40");
 
-        add(new JLabel("Ctf file"));
-        ctfFileField = new FileNameField("Ctf file", 32, false);
-        ctfFileField.setFileSelectionMode(FileNameField.FILES_ONLY);
-        rmlshared.gui.FileDialog.addFilter("*.ctf");
-        ctfFileField.setFileFilter("*.ctf");
-        add(ctfFileField);
-        add(ctfFileField.getBrowseButton(), "wrap");
+        add(new JLabel("CPR file"));
+
+        FileFilter[] filters =
+                new FileFilter[] { new FileNameExtensionFilter(
+                        "Channel 5 project file (*.cpr)", "cpr") };
+        cprFileField = new SingleFileBrowserField("CPR file", true, filters);
+        add(cprFileField, "wrap");
     }
 
 
 
     @Override
     public boolean isCorrect(boolean buffer) {
-        if (ctfFileField.getFile() == null) {
-            showErrorDialog("Please specify a ctf file.");
+        File cprFile = cprFileField.getFile();
+        if (cprFile == null) {
+            showErrorDialog("Please specify a CPR file.");
             return false;
         }
 
-        if (!CtfLoader.isCtf(ctfFileField.getFile())) {
-            showErrorDialog("The ctf file is not valid.");
+        if (!new CprLoader().canLoad(cprFile)) {
+            showErrorDialog("The CPR file is not valid.");
             return false;
         }
 
-        if (buffer)
-            put(KEY_CTF_FILE, ctfFileField.getFile());
+        File ctfFile = FileUtil.setExtension(cprFile, "ctf");
+        if (!ctfFile.exists()) {
+            showErrorDialog("No CTF file (" + ctfFile
+                    + ") for the specified CPR file.");
+            return false;
+        }
+
+        if (!new CtfLoader().canLoad(ctfFile)) {
+            showErrorDialog("The CTF file is not valid.");
+            return false;
+        }
+
+        if (buffer) {
+            put(KEY_CPR_FILE, cprFile);
+            put(KEY_CTF_FILE, ctfFile);
+        }
 
         return true;
     }

@@ -20,10 +20,12 @@ package org.ebsdimage.vendors.hkl.plugin;
 import java.io.File;
 import java.io.IOException;
 
-import org.ebsdimage.core.Camera;
+import org.ebsdimage.core.Microscope;
 import org.ebsdimage.io.SmpCreator;
 import org.ebsdimage.vendors.hkl.core.HklMMap;
+import org.ebsdimage.vendors.hkl.core.HklMetadata;
 import org.ebsdimage.vendors.hkl.gui.HklBatchImportWizard;
+import org.ebsdimage.vendors.hkl.io.CprLoader;
 import org.ebsdimage.vendors.hkl.io.CtfLoader;
 import org.ebsdimage.vendors.hkl.io.HklMMapSaver;
 import org.ebsdimage.vendors.hkl.io.Utils;
@@ -40,13 +42,16 @@ import crystallography.core.Crystal;
  */
 public class HklBatchImport extends PlugIn implements Monitorable {
 
-    /** Loader for the ctf file. */
+    /** Loader for the CPR file. */
+    private CprLoader cprLoader;
+
+    /** Loader for the CTF file. */
     private CtfLoader ctfLoader;
 
     /** Saver for the MMap. */
     private HklMMapSaver mmapSaver;
 
-    /** Creator for the smp file. */
+    /** Creator for the SMP file. */
     private SmpCreator smpCreator;
 
     /** Progress: index of current CTF file. */
@@ -65,85 +70,6 @@ public class HklBatchImport extends PlugIn implements Monitorable {
      */
     public HklBatchImport() {
         setInterruptable(true);
-    }
-
-
-
-    /**
-     * Displays a dialog and performs the import of the CTF files.
-     */
-    private void doImport() {
-        HklBatchImportWizard wizard = new HklBatchImportWizard();
-        wizard.setPreferences(getPreferences());
-
-        if (!wizard.show())
-            return;
-
-        // Constant parameters
-        Camera calibration = wizard.getCalibration();
-        double workingDistance = wizard.getWorkingDistance();
-        Crystal[] phases = wizard.getPhases();
-        File outputDir = wizard.getOutputDir();
-
-        File[] ctfFiles = wizard.getCtfFiles();
-        total = ctfFiles.length;
-
-        File ctfFile;
-        File outputFile;
-        for (int i = 0; i < ctfFiles.length; i++) {
-            // Progress
-            index = i;
-
-            // Load ctf
-            ctfFile = ctfFiles[i];
-            ctfLoader = new CtfLoader();
-            status = "Loading ctf file.";
-            HklMMap mmap = null;
-
-            try {
-                mmap =
-                        ctfLoader.load(ctfFile, workingDistance, calibration,
-                                phases);
-            } catch (IOException e) {
-                showErrorDialog("While loading the ctf:" + e.getMessage());
-            }
-
-            ctfLoader = null;
-
-            // Save MMap
-            mmapSaver = new HklMMapSaver();
-            status = "Saving multimap";
-            outputFile = new File(outputDir, FileUtil.getBaseName(ctfFile));
-            outputFile = FileUtil.setExtension(outputFile, "zip");
-
-            try {
-                mmapSaver.save(mmap, outputFile);
-            } catch (IOException e) {
-                showErrorDialog("While saving the multimap:" + e.getMessage());
-            }
-
-            mmapSaver = null;
-
-            // Load patterns
-            status = "Saving patterns in smp";
-
-            if (wizard.getSavePatterns()) {
-                File[] patternFiles =
-                        mmap.getPatternFiles(Utils.getPatternImagesDir(ctfFile));
-
-                File smpFile = FileUtil.setExtension(outputFile, "smp");
-                smpCreator = new SmpCreator();
-
-                try {
-                    smpCreator.create(smpFile, patternFiles);
-                } catch (IOException e) {
-                    showErrorDialog("While creating the smp file:"
-                            + e.getMessage());
-                }
-            }
-
-            smpCreator = null;
-        }
     }
 
 
@@ -178,16 +104,110 @@ public class HklBatchImport extends PlugIn implements Monitorable {
 
     @Override
     public void interrupt() {
-        super.interrupt();
-        ctfLoader.interrupt();
-        smpCreator.interrupt();
+        if (ctfLoader != null) {
+            super.interrupt();
+            ctfLoader.interrupt();
+        } else if (smpCreator != null) {
+            super.interrupt();
+            smpCreator.interrupt();
+        }
     }
 
 
 
     @Override
     protected void xRun() throws Exception {
-        doImport();
+        HklBatchImportWizard wizard = new HklBatchImportWizard();
+        wizard.setPreferences(getPreferences());
+
+        if (!wizard.show())
+            return;
+
+        // Constant parameters
+        Crystal[] phases = wizard.getPhases();
+        File outputDir = wizard.getOutputDir();
+
+        File[] cprFiles = wizard.getCprFiles();
+        total = cprFiles.length;
+
+        File cprFile;
+        File ctfFile;
+        HklMetadata metadata;
+        HklMMap mmap;
+        File outputFile;
+        for (int i = 0; i < cprFiles.length; i++) {
+            // Progress
+            index = i;
+
+            // Load CPR
+            status = "Loading ctf file.";
+            cprLoader = new CprLoader();
+
+            cprFile = cprFiles[i];
+
+            try {
+                metadata = cprLoader.load(cprFile, new Microscope());
+            } catch (IOException e) {
+                showErrorDialog("While loading the CPR (" + cprFile + "):"
+                        + e.getMessage());
+                return;
+            }
+
+            cprLoader = null;
+
+            // Load CTF
+            status = "Loading ctf file.";
+            ctfLoader = new CtfLoader();
+
+            ctfFile = FileUtil.setExtension(cprFile, "ctf");
+
+            try {
+                mmap = ctfLoader.load(ctfFile, metadata, phases);
+            } catch (IOException e) {
+                showErrorDialog("While loading the CTF (" + ctfFile + "):"
+                        + e.getMessage());
+                return;
+            }
+
+            ctfLoader = null;
+
+            // Save multimap
+            status = "Saving multimap";
+            mmapSaver = new HklMMapSaver();
+
+            outputFile = new File(outputDir, FileUtil.getBaseName(ctfFile));
+            outputFile = FileUtil.setExtension(outputFile, "zip");
+
+            try {
+                mmapSaver.save(mmap, outputFile);
+            } catch (IOException e) {
+                showErrorDialog("While saving the multimap:" + e.getMessage());
+                return;
+            }
+
+            mmapSaver = null;
+
+            // Load patterns
+            status = "Saving patterns as a SMP";
+
+            if (wizard.getSavePatterns()) {
+                File[] patternFiles =
+                        mmap.getPatternFiles(Utils.getPatternImagesDir(ctfFile));
+
+                File smpFile = FileUtil.setExtension(outputFile, "smp");
+                smpCreator = new SmpCreator();
+
+                try {
+                    smpCreator.create(smpFile, patternFiles);
+                } catch (IOException e) {
+                    showErrorDialog("While creating the SMP file (" + smpFile
+                            + "):" + e.getMessage());
+                    return;
+                }
+            }
+
+            smpCreator = null;
+        }
     }
 
 }

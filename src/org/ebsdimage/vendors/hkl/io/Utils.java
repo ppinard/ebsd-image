@@ -13,16 +13,16 @@ public class Utils {
 
     /**
      * Returns the directory containing the pattern images based on the
-     * specified location of the CTF file. The directory is assumed to be
-     * located in the same parent directory as the CTF file and to be named as
-     * the filename of the CTF file with the suffix "Image".
+     * specified location of the CPR or CTF file. The directory is assumed to be
+     * located in the same parent directory as the CPR or CTF file and to be
+     * named as the filename of the CPR or CTF file with the suffix "Image".
      * 
-     * @param ctfFile
-     *            location of the CTF file
+     * @param file
+     *            location of the CPR or CTF file
      * @return directory containing the pattern images
      */
-    public static File getPatternImagesDir(File ctfFile) {
-        String folder = FileUtil.getBaseName(ctfFile) + "Images";
-        return new File(ctfFile.getParentFile(), folder);
+    public static File getPatternImagesDir(File file) {
+        String folder = FileUtil.getBaseName(file) + "Images";
+        return new File(file.getParentFile(), folder);
     }
 }

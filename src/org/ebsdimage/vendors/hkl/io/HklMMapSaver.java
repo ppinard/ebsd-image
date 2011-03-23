@@ -18,12 +18,11 @@
 package org.ebsdimage.vendors.hkl.io;
 
 import org.ebsdimage.io.EbsdMMapSaver;
-import org.ebsdimage.io.EbsdMetadataXmlSaver;
 import org.ebsdimage.vendors.hkl.core.HklMMap;
 
 /**
  * Saver for a <code>HklMMap</code>. A <code>HklMMap</code> is saved in a human
- * readable zip file.
+ * readable ZIP file.
  * 
  * @author Philippe T. Pinard
  */
@@ -37,15 +36,15 @@ public class HklMMapSaver extends EbsdMMapSaver {
 
 
     @Override
-    protected EbsdMetadataXmlSaver getMetadataSaver() {
-        return new HklMetadataXmlSaver();
+    protected int getVersion() {
+        return HklMMap.VERSION;
     }
 
 
 
     @Override
-    protected int getVersion() {
-        return 1;
+    public boolean canSave(Object obj, String fileFormat) {
+        return (obj instanceof HklMMap) && fileFormat.equalsIgnoreCase("zip");
     }
 
 }

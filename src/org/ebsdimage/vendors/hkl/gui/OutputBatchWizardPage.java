@@ -22,9 +22,8 @@ import java.io.File;
 import javax.swing.JLabel;
 
 import net.miginfocom.swing.MigLayout;
+import ptpshared.gui.DirBrowserField;
 import ptpshared.gui.WizardPage;
-import rmlshared.gui.FileDialog;
-import rmlshared.gui.FileNameField;
 import rmlshared.io.FileUtil;
 
 /**
@@ -49,7 +48,7 @@ public class OutputBatchWizardPage extends WizardPage {
     }
 
     /** Field for the output directory. */
-    private FileNameField outputDirField;
+    private DirBrowserField outputDirField;
 
 
 
@@ -60,8 +59,7 @@ public class OutputBatchWizardPage extends WizardPage {
         setLayout(new MigLayout("", "[][grow, fill][]"));
 
         add(new JLabel("Multimaps output directory"));
-        outputDirField = new FileNameField("Output dir", 32, false);
-        outputDirField.setFileSelectionMode(FileDialog.DIRECTORIES_ONLY);
+        outputDirField = new DirBrowserField("Output dir", false);
         add(outputDirField);
         add(outputDirField.getBrowseButton(), "wrap");
     }
@@ -70,13 +68,15 @@ public class OutputBatchWizardPage extends WizardPage {
 
     @Override
     public boolean isCorrect(boolean buffer) {
-        if (outputDirField.getFile() == null) {
+        File outputdir = outputDirField.getDir();
+
+        if (outputdir == null) {
             showErrorDialog("Please specify an output direcotry.");
             return false;
         }
 
         if (buffer)
-            put(KEY_OUTPUT_DIR, outputDirField.getFile());
+            put(KEY_OUTPUT_DIR, outputdir);
 
         return true;
     }
@@ -87,13 +87,12 @@ public class OutputBatchWizardPage extends WizardPage {
     protected void renderingPage() {
         super.renderingPage();
 
-        if (get(StartWizardPage.KEY_CTF_FILE) == null)
+        File[] cprFiles = (File[]) get(StartBatchWizardPage.KEY_CPR_FILES);
+
+        if (cprFiles == null)
             return;
 
-        File file = (File) get(StartWizardPage.KEY_CTF_FILE);
-        file = FileUtil.setExtension(file, "zip");
-
-        outputDirField.setFile(file);
+        outputDirField.setDir(FileUtil.getParentFile(cprFiles[0]));
     }
 
 }

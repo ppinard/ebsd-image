@@ -1,23 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Crystal name="Copper" id="1">
-  <UnitCell a="3.6144" b="3.6144" c="3.6144" dimUnits="angstrom" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="1.5707963267948966" angleUnits="rad" />
-  <AtomSites>
-    <AtomSite>
-      <Element atomicNumber="14" />
-      <Position x="0.0" y="0.0" z="0.0" />
-    </AtomSite>
-    <AtomSite>
-      <Element atomicNumber="14" />
-      <Position x="0.0" y="0.5" z="0.5" />
-    </AtomSite>
-    <AtomSite>
-      <Element atomicNumber="14" />
-      <Position x="0.5" y="0.0" z="0.5" />
-    </AtomSite>
-    <AtomSite>
-      <Element atomicNumber="14" />
-      <Position x="0.5" y="0.5" z="0.0" />
-    </AtomSite>
-  </AtomSites>
-  <SpaceGroup index="208" />
-</Crystal>
+<crystal name="Copper">
+   <unitCell a="3.6144" b="3.6144" c="3.6144" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="1.5707963267948966"/>
+   <atoms>
+      <atom atomicNumber="29" occupancy="1.0">
+         <position>0.0;0.0;0.0</position>
+      </atom>
+      <atom atomicNumber="29" occupancy="1.0">
+         <position>0.0;0.5;0.5</position>
+      </atom>
+      <atom atomicNumber="29" occupancy="1.0">
+         <position>0.5;0.0;0.5</position>
+      </atom>
+      <atom atomicNumber="29" occupancy="1.0">
+         <position>0.5;0.5;0.0</position>
+      </atom>
+   </atoms>
+   <spaceGroup>209</spaceGroup>
+</crystal>

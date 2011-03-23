@@ -17,38 +17,102 @@
  */
 package org.ebsdimage.vendors.hkl.io;
 
-import static java.lang.Double.parseDouble;
-import static java.lang.Float.parseFloat;
-import static java.lang.Integer.parseInt;
-import static java.lang.Math.toRadians;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.ebsdimage.core.Camera;
-import org.ebsdimage.core.EbsdMMap;
-import org.ebsdimage.core.PhasesMap;
+import org.apache.commons.math.geometry.Rotation;
+import org.apache.commons.math.geometry.RotationOrder;
+import org.ebsdimage.core.*;
 import org.ebsdimage.vendors.hkl.core.HklMMap;
 import org.ebsdimage.vendors.hkl.core.HklMetadata;
 
-import ptpshared.core.math.Eulers;
-import ptpshared.core.math.Quaternion;
 import rmlimage.core.ByteMap;
+import rmlimage.core.Calibration;
 import rmlimage.core.Map;
 import rmlimage.module.real.core.RealMap;
 import rmlshared.io.FileUtil;
 import rmlshared.io.TsvReader;
 import rmlshared.ui.Monitorable;
 import crystallography.core.Crystal;
+import static java.lang.Double.parseDouble;
+import static java.lang.Float.parseFloat;
+import static java.lang.Integer.parseInt;
 
 /**
- * Parser for HKL ctf file.
+ * Parser for HKL CTF file.
  * 
  * @author Philippe T. Pinard
  */
 public class CtfLoader implements Monitorable {
+
+    /** Error code in CTF file. */
+    public static final ErrorCode ERROR_LOW_BAND_CONTRAST = new ErrorCode(
+            "Low band contrast");
+
+    /** Error code in CTF file. */
+    public static final ErrorCode ERROR_LOW_BAND_SLOPE = new ErrorCode(
+            "Low band slope");
+
+    /** Error code in CTF file. */
+    public static final ErrorCode ERROR_NO_SOLUTION = new ErrorCode(
+            "No solution");
+
+    /** Error code in CTF file. */
+    public static final ErrorCode ERROR_HIGH_MAD = new ErrorCode("High MAD");
+
+    /** Error code in CTF file. */
+    public static final ErrorCode ERROR_NOT_YET_ANALYSED = new ErrorCode(
+            "Not yet analysed", "job cancelled before point");
+
+    /** Error code in CTF file. */
+    public static final ErrorCode ERROR_UNEXPECTED = new ErrorCode(
+            "Unexpected error");
+
+    /** Progress value. */
+    protected double progress;
+
+    /** Progress status. */
+    protected String status;
+
+    /** Flag indicating if the operation should be interrupted. */
+    private boolean isInterrupted = false;
+
+
+
+    /**
+     * Verify that the specified file is a CTF file.
+     * 
+     * @param file
+     *            a file
+     * @return <code>true</code> if the file is a CTF file, <code>false</code>
+     *         otherwise
+     */
+    public boolean canLoad(File file) {
+        return getValidationMessage(file).isEmpty();
+    }
+
+
+
+    /**
+     * Returns the calibration (step size) saved in the CTF header.
+     * 
+     * @param headerLines
+     *            array list containing all the lines in the header
+     * @return calibration
+     * @throws IOException
+     *             if an error occurs while parsing the CTF file
+     */
+    private Calibration getCalibration(ArrayList<String[]> headerLines)
+            throws IOException {
+        double dx = parseHorizontalStepSize(headerLines);
+        double dy = parseVerticalStepSize(headerLines);
+
+        return new Calibration(dx, dy, "um");
+    }
+
+
 
     /**
      * Return an array list containing only the lines of the header. The file
@@ -56,13 +120,12 @@ public class CtfLoader implements Monitorable {
      * are ignored.
      * 
      * @param file
-     *            ctf file
+     *            CTF file
      * @return array list of lines
      * @throws IOException
-     *             if an error occurs while reading the ctf file
+     *             if an error occurs while reading the CTF file
      */
-    private static ArrayList<String[]> getHeaderLines(File file)
-            throws IOException {
+    private ArrayList<String[]> getHeaderLines(File file) throws IOException {
         TsvReader reader = new TsvReader(file);
 
         // Separate lines in to header and data
@@ -79,7 +142,7 @@ public class CtfLoader implements Monitorable {
                 continue;
 
             // End when column header line is read
-            if (isColumnsHeaderLine(line))
+            if (isDataHeaderLine(line))
                 break;
 
             headerLines.add(line);
@@ -92,96 +155,16 @@ public class CtfLoader implements Monitorable {
 
 
 
-    /**
-     * Returns a <code>HklMetadata</code> from parsing the header of the ctf
-     * file. Since the working distance and the calibration is not defined, it
-     * needs to be specified by the user.
-     * 
-     * @param headerLines
-     *            array list containing all the lines in the header
-     * @param workingDistance
-     *            working distance of the acquisition in meters
-     * @param calibration
-     *            calibration of the camera
-     * @return a <code>HklMetadata</code>
-     * @throws IOException
-     *             if an error occurs while parsing the ctf file
-     * @throws NullPointerException
-     *             if the file is null
-     */
-    private static HklMetadata getMetadata(ArrayList<String[]> headerLines,
-            double workingDistance, Camera calibration) throws IOException {
-        // Read project path
-        String projectName = parseProjectName(headerLines);
-        File projectPath = parseProjectPath(headerLines);
-
-        // Read horizontal step size
-        double xstep = parseHorizontalStepSize(headerLines);
-
-        // Read vertical step size
-        double ystep = parseVerticalStepSize(headerLines);
-
-        // Read acquisition eulers
-        Eulers acquisitionEulers = parseAcquisitionEulers(headerLines);
-
-        // Read magnification, beam energy, tilt angle
-        double magnification = parseMagnification(headerLines);
-        double beamEnergy = parseBeamEnergy(headerLines);
-        double tiltAngle = parseTiltAngle(headerLines);
-
-        return new HklMetadata(beamEnergy, magnification, tiltAngle,
-                workingDistance, xstep, ystep,
-                new Quaternion(acquisitionEulers), calibration, projectName,
-                projectPath);
+    @Override
+    public double getTaskProgress() {
+        return progress;
     }
 
 
 
-    /**
-     * Returns a <code>HklMetadata</code> from parsing the header of the ctf
-     * file. Since the working distance and the calibration is not defined, it
-     * needs to be specified by the user.
-     * 
-     * @param file
-     *            ctf file
-     * @param workingDistance
-     *            working distance of the acquisition in meters
-     * @param calibration
-     *            calibration of the camera
-     * @return a <code>HklMetadata</code>
-     * @throws IOException
-     *             if an error occurs while parsing the ctf file
-     * @throws NullPointerException
-     *             if the file is null
-     */
-    public static HklMetadata getMetadata(File file, double workingDistance,
-            Camera calibration) throws IOException {
-        if (file == null)
-            throw new NullPointerException("File cannot be null.");
-
-        ArrayList<String[]> headerLines = getHeaderLines(file);
-
-        return getMetadata(headerLines, workingDistance, calibration);
-    }
-
-
-
-    /**
-     * Returns the name of the phases as defined in the ctf file.
-     * 
-     * @param file
-     *            ctf file
-     * @return name of the phases
-     * @throws IOException
-     *             if an error occurs while parsing the ctf file
-     * @throws NullPointerException
-     *             if the file is null
-     */
-    public static String[] getPhaseNames(File file) throws IOException {
-        if (file == null)
-            throw new NullPointerException("File cannot be null.");
-
-        return parsePhaseNames(getHeaderLines(file));
+    @Override
+    public String getTaskStatus() {
+        return status;
     }
 
 
@@ -196,16 +179,25 @@ public class CtfLoader implements Monitorable {
      * @throws NullPointerException
      *             if the file is null
      */
-    private static String getValidationMessage(File file) {
+    private String getValidationMessage(File file) {
         if (file == null)
             throw new NullPointerException("File cannot be null.");
 
         // Check extension
         String ext = FileUtil.getExtension(file);
-        if (!ext.equalsIgnoreCase("ctf"))
-            return "The extension of the file must be ctf, not " + ext + ".";
+        if (!ext.equalsIgnoreCase("CTF"))
+            return "The extension of the file must be CTF, not " + ext + ".";
 
         return "";
+    }
+
+
+
+    /**
+     * Interrupts the operation.
+     */
+    public synchronized void interrupt() {
+        isInterrupted = true;
     }
 
 
@@ -218,7 +210,7 @@ public class CtfLoader implements Monitorable {
      * @return <code>true</code> if the line is the columns header line,
      *         <code>false</code> otherwise
      */
-    private static boolean isColumnsHeaderLine(String[] columns) {
+    private boolean isDataHeaderLine(String[] columns) {
         if (columns.length != 11)
             return false;
         if (!"Phase".equals(columns[0]))
@@ -232,20 +224,149 @@ public class CtfLoader implements Monitorable {
 
 
     /**
-     * Checks if the file is a valid ctf file.
+     * Checks if the operation should be interrupted. This method must be
+     * synchronized because interrupt() may be called from any thread.
+     * 
+     * @return <code>true</code> if the operation is interrupted,
+     *         <code>false</code> otherwise
+     */
+    private synchronized boolean isInterrupted() {
+        return isInterrupted;
+    }
+
+
+
+    /**
+     * Loads the CTF file in a <code>HklMMap</code>. The user can specify the
+     * missing metadata.
      * 
      * @param file
-     *            a file
-     * @return <code>true</code> if the file is valid, <code>false</code>
-     *         otherwise
+     *            CTF file
+     * @param metadata
+     *            metadata loaded from {@link #loadMetadata(File, Microscope)}
+     *            or from a CPR file
+     * @param phases
+     *            phases of the acquisition
+     * @return a <code>HklMMap</code>
+     * @throws IOException
+     *             if an error occurs while parsing the CTF file
+     * @throws NullPointerException
+     *             if the phases is null
+     * @throws IllegalArgumentException
+     *             if the working distance is invalid
+     * @throws NullPointerException
+     *             if the camera is null
+     */
+    public HklMMap load(File file, HklMetadata metadata, Crystal[] phases)
+            throws IOException {
+        if (phases == null)
+            throw new NullPointerException("Phases cannot be null.");
+
+        // Validate the file to be a CTF
+        status = "Validating CTF file.";
+        String message = getValidationMessage(file);
+        if (message.length() > 0)
+            throw new IOException(message);
+
+        // Parse header
+        status = "Parsing header.";
+        ArrayList<String[]> headerLines = getHeaderLines(file);
+        Calibration cal = getCalibration(headerLines);
+
+        // Read maps' dimensions
+        int width = parseWidth(headerLines);
+        int height = parseHeight(headerLines);
+
+        // Check number of phases
+        int phasesCount = parsePhaseNames(headerLines).length;
+        if (phases.length < phasesCount)
+            throw new IOException("At least " + phasesCount
+                    + " needs to be defined.");
+        if (phasesCount > 255)
+            throw new IOException("A maximum of 255 phases can be defined.");
+
+        // Read data
+        HashMap<String, Map> mapList = readData(file, width, height, phases);
+
+        // Set calibration
+        for (Map map : mapList.values())
+            map.setCalibration(cal);
+
+        // Create the MultiMap
+        HklMMap mmap = new HklMMap(width, height, mapList);
+        mmap.setMetadata(metadata);
+
+        // Set its file name to the same as the CTF file
+        // but with the proper extension
+        String[] validExtensions = mmap.getValidFileFormats();
+        file = FileUtil.setExtension(file, validExtensions[0]);
+        mmap.setFile(file);
+
+        return mmap;
+    }
+
+
+
+    /**
+     * Returns a <code>HklMetadata</code> from parsing the header of the CTF
+     * file.
+     * 
+     * @param file
+     *            a CTF file
+     * @param microscope
+     *            microscope configuration
+     * @return a <code>HklMetadata</code>
+     * @throws IOException
+     *             if an error occurs while parsing the CTF file
      * @throws NullPointerException
      *             if the file is null
      */
-    public static boolean isCtf(File file) {
+    public HklMetadata loadMetadata(File file, Microscope microscope)
+            throws IOException {
+        ArrayList<String[]> headerLines = getHeaderLines(file);
+
+        double[] acquisitionEulers = parseAcquisitionEulers(headerLines);
+        Rotation sampleRotation =
+                new Rotation(RotationOrder.ZXZ,
+                        Math.toRadians(acquisitionEulers[0]),
+                        Math.toRadians(acquisitionEulers[1]),
+                        Math.toRadians(acquisitionEulers[2]));
+        microscope.setSampleRotation(sampleRotation);
+
+        double magnification = parseMagnification(headerLines);
+        microscope.setMagnification(magnification);
+
+        double beamEnergy = parseBeamEnergy(headerLines);
+        microscope.setBeamEnergy(beamEnergy * 1000.0);
+
+        double tiltAngle = parseTiltAngle(headerLines);
+        microscope.setTiltAngle(Math.toRadians(tiltAngle));
+
+        // Read project path
+        String projectName = parseProjectName(headerLines);
+        File projectPath = parseProjectPath(headerLines);
+
+        return new HklMetadata(microscope, projectName, projectPath);
+    }
+
+
+
+    /**
+     * Returns the name of the phases as defined in the CTF file.
+     * 
+     * @param file
+     *            CTF file
+     * @return name of the phases
+     * @throws IOException
+     *             if an error occurs while parsing the CTF file
+     * @throws NullPointerException
+     *             if the file is null
+     */
+    public String[] loadPhaseNames(File file) throws IOException {
         if (file == null)
             throw new NullPointerException("File cannot be null.");
 
-        return (getValidationMessage(file).length() == 0) ? true : false;
+        return parsePhaseNames(getHeaderLines(file));
     }
 
 
@@ -255,11 +376,11 @@ public class CtfLoader implements Monitorable {
      * 
      * @param headerLines
      *            all the header lines
-     * @return acquisition eulers
+     * @return acquisition eulers in degrees
      * @throws IOException
      *             if an error occurs while parsing
      */
-    private static Eulers parseAcquisitionEulers(ArrayList<String[]> headerLines)
+    private double[] parseAcquisitionEulers(ArrayList<String[]> headerLines)
             throws IOException {
         double theta1 = Double.NaN;
         double theta2 = Double.NaN;
@@ -289,7 +410,7 @@ public class CtfLoader implements Monitorable {
         if (Double.isNaN(theta3))
             throw new IOException("Third acquisition angle could not be found.");
 
-        return new Eulers(theta1, theta2, theta3);
+        return new double[] { theta1, theta2, theta3 };
     }
 
 
@@ -299,11 +420,11 @@ public class CtfLoader implements Monitorable {
      * 
      * @param headerLines
      *            all the header lines
-     * @return beam energy
+     * @return beam energy in keV
      * @throws IOException
      *             if an error occurs while parsing
      */
-    private static double parseBeamEnergy(ArrayList<String[]> headerLines)
+    private double parseBeamEnergy(ArrayList<String[]> headerLines)
             throws IOException {
         double beamEnergy = Double.NaN;
 
@@ -312,7 +433,7 @@ public class CtfLoader implements Monitorable {
                 if (!"KV".equals(line[7]))
                     throw new IOException(
                             "Expected KV on line 'Euler angles refer to...'");
-                beamEnergy = parseDouble(line[8]) * 1000; // in eV
+                beamEnergy = parseDouble(line[8]);
                 break;
             }
         }
@@ -334,8 +455,7 @@ public class CtfLoader implements Monitorable {
      * @throws IOException
      *             if an error occurs while parsing
      */
-    private static int parseHeight(ArrayList<String[]> headerLines)
-            throws IOException {
+    private int parseHeight(ArrayList<String[]> headerLines) throws IOException {
         int height = -1;
 
         for (String[] line : headerLines) {
@@ -360,19 +480,19 @@ public class CtfLoader implements Monitorable {
      * 
      * @param headerLines
      *            all the header lines
-     * @return horizontal step size
+     * @return horizontal step size in microns
      * @throws IOException
      *             if an error occurs while parsing
      */
-    private static double parseHorizontalStepSize(
-            ArrayList<String[]> headerLines) throws IOException {
+    private double parseHorizontalStepSize(ArrayList<String[]> headerLines)
+            throws IOException {
         double xstep = -1;
 
         for (String[] line : headerLines) {
             if ("XStep".equals(line[0])) {
                 if (line.length != 2)
                     throw new IOException("Expected 2 items on line 'XStep'");
-                xstep = parseDouble(line[1]) * 1e-6; // in meters
+                xstep = parseDouble(line[1]);
                 break;
             }
         }
@@ -394,7 +514,7 @@ public class CtfLoader implements Monitorable {
      * @throws IOException
      *             if an error occurs while parsing
      */
-    private static double parseMagnification(ArrayList<String[]> headerLines)
+    private double parseMagnification(ArrayList<String[]> headerLines)
             throws IOException {
         double mag = Double.NaN;
 
@@ -425,7 +545,7 @@ public class CtfLoader implements Monitorable {
      * @throws IOException
      *             if an error occurs while parsing
      */
-    private static String[] parsePhaseNames(ArrayList<String[]> headerLines)
+    private String[] parsePhaseNames(ArrayList<String[]> headerLines)
             throws IOException {
         ArrayList<String> phaseNames = new ArrayList<String>();
 
@@ -449,7 +569,7 @@ public class CtfLoader implements Monitorable {
      * @throws IOException
      *             if an error occurs while parsing
      */
-    private static String parseProjectName(ArrayList<String[]> headerLines)
+    private String parseProjectName(ArrayList<String[]> headerLines)
             throws IOException {
         String projectName = null;
 
@@ -482,7 +602,7 @@ public class CtfLoader implements Monitorable {
      * @throws IOException
      *             if an error occurs while parsing
      */
-    private static File parseProjectPath(ArrayList<String[]> headerLines)
+    private File parseProjectPath(ArrayList<String[]> headerLines)
             throws IOException {
         File projectPath = null;
 
@@ -508,11 +628,11 @@ public class CtfLoader implements Monitorable {
      * 
      * @param headerLines
      *            all the header lines
-     * @return tilt angle
+     * @return tilt angle in degrees
      * @throws IOException
      *             if an error occurs while parsing
      */
-    private static double parseTiltAngle(ArrayList<String[]> headerLines)
+    private double parseTiltAngle(ArrayList<String[]> headerLines)
             throws IOException {
         double tiltAngle = Double.NaN;
 
@@ -521,7 +641,7 @@ public class CtfLoader implements Monitorable {
                 if (!"TiltAngle".equals(line[9]))
                     throw new IOException(
                             "Expected TiltAngle on line 'Euler angles refer to...'");
-                tiltAngle = toRadians(parseDouble(line[10])); // in rad
+                tiltAngle = parseDouble(line[10]);
                 break;
             }
         }
@@ -539,11 +659,11 @@ public class CtfLoader implements Monitorable {
      * 
      * @param headerLines
      *            all the header lines
-     * @return vertical step size
+     * @return vertical step size in microns
      * @throws IOException
      *             if an error occurs while parsing
      */
-    private static double parseVerticalStepSize(ArrayList<String[]> headerLines)
+    private double parseVerticalStepSize(ArrayList<String[]> headerLines)
             throws IOException {
         double ystep = -1;
 
@@ -551,7 +671,7 @@ public class CtfLoader implements Monitorable {
             if ("YStep".equals(line[0])) {
                 if (line.length != 2)
                     throw new IOException("Expected 2 items on line 'YStep'");
-                ystep = parseDouble(line[1]) * 1e-6; // in meters
+                ystep = parseDouble(line[1]);
                 break;
             }
         }
@@ -573,8 +693,7 @@ public class CtfLoader implements Monitorable {
      * @throws IOException
      *             if an error occurs while parsing
      */
-    private static int parseWidth(ArrayList<String[]> headerLines)
-            throws IOException {
+    private int parseWidth(ArrayList<String[]> headerLines) throws IOException {
         int width = -1;
 
         for (String[] line : headerLines) {
@@ -595,117 +714,22 @@ public class CtfLoader implements Monitorable {
 
 
     /**
-     * Validates the file to be a valid ctf file.
+     * Reads the data in the CTF file and save it in the appropriate maps.
      * 
      * @param file
-     *            a file
-     * @throws IOException
-     *             if the file is not valid
-     */
-    private static void validate(File file) throws IOException {
-        String message = getValidationMessage(file);
-        if (message.length() > 0)
-            throw new IOException(message);
-    }
-
-    /** Progress value. */
-    protected double progress;
-
-    /** Progress status. */
-    protected String status;
-
-    /** Flag indicating if the operation should be interrupted. */
-    private boolean isInterrupted = false;
-
-
-
-    @Override
-    public double getTaskProgress() {
-        return progress;
-    }
-
-
-
-    @Override
-    public String getTaskStatus() {
-        return status;
-    }
-
-
-
-    /**
-     * Interrupts the operation.
-     */
-    public synchronized void interrupt() {
-        isInterrupted = true;
-    }
-
-
-
-    /**
-     * Checks if the operation should be interrupted. This method must be
-     * synchronized because interrupt() may be called from any thread.
-     * 
-     * @return <code>true</code> if the operation is interrupted,
-     *         <code>false</code> otherwise
-     */
-    private synchronized boolean isInterrupted() {
-        return isInterrupted;
-    }
-
-
-
-    /**
-     * Loads the ctf file in a <code>HklMMap</code>. The user can specify the
-     * missing metadata.
-     * 
-     * @param file
-     *            ctf file
-     * @param workingDistance
-     *            working distance of the EBSD acquisition in meters
-     * @param calibration
-     *            calibration of the camera
+     *            CTF file
+     * @param width
+     *            width of the maps
+     * @param height
+     *            height of the maps
      * @param phases
-     *            phases of the acquisition
-     * @return a <code>HklMMap</code>
+     *            phases
+     * @return list of maps to be saved in the <code>HklMMap</code>
      * @throws IOException
-     *             if an error occurs while parsing the ctf file
-     * @throws NullPointerException
-     *             if the phases is null
-     * @throws IllegalArgumentException
-     *             if the working distance is invalid
-     * @throws NullPointerException
-     *             if the camera is null
+     *             if an error occurs while parsing the CTF file
      */
-    public HklMMap load(File file, double workingDistance, Camera calibration,
+    private HashMap<String, Map> readData(File file, int width, int height,
             Crystal[] phases) throws IOException {
-        if (phases == null)
-            throw new NullPointerException("Phases cannot be null.");
-
-        // Validate the file to be a ctf
-        status = "Validating ctf file.";
-        validate(file);
-
-        // Parse header
-        status = "Parsing header.";
-        ArrayList<String[]> headerLines = getHeaderLines(file);
-        HklMetadata metadata =
-                getMetadata(headerLines, workingDistance, calibration);
-
-        // Read width
-        int width = parseWidth(headerLines);
-
-        // Read height
-        int height = parseHeight(headerLines);
-
-        // Check number of phases
-        int phasesCount = parsePhaseNames(headerLines).length;
-        if (phases.length < phasesCount)
-            throw new IOException("At least " + phasesCount
-                    + " needs to be defined.");
-        if (phasesCount > 255)
-            throw new IOException("A maximum of 255 phases can be defined.");
-
         // Find first data line
         TsvReader reader = new TsvReader(file);
 
@@ -715,12 +739,8 @@ public class CtfLoader implements Monitorable {
                 throw new IOException(
                         "End of file without finding end of header.");
 
-            // Remove empty lines
-            if (line.length == 0)
-                continue;
-
             // End when column header line is read
-            if (isColumnsHeaderLine(line))
+            if (isDataHeaderLine(line))
                 break;
         }
 
@@ -729,44 +749,28 @@ public class CtfLoader implements Monitorable {
         RealMap q1Map = new RealMap(width, height);
         RealMap q2Map = new RealMap(width, height);
         RealMap q3Map = new RealMap(width, height);
+
+        PhaseMap phaseMap = new PhaseMap(width, height);
+        for (Crystal phase : phases)
+            phaseMap.register(phase);
+
+        ErrorMap errorMap = new ErrorMap(width, height);
+        errorMap.register(1, ERROR_LOW_BAND_CONTRAST);
+        errorMap.register(2, ERROR_LOW_BAND_SLOPE);
+        errorMap.register(3, ERROR_NO_SOLUTION);
+        errorMap.register(4, ERROR_HIGH_MAD);
+        errorMap.register(5, ERROR_NOT_YET_ANALYSED);
+        errorMap.register(6, ERROR_UNEXPECTED);
+
         ByteMap bcMap = new ByteMap(width, height);
-        RealMap euler1Map = new RealMap(width, height);
-        RealMap euler2Map = new RealMap(width, height);
-        RealMap euler3Map = new RealMap(width, height);
-        ByteMap bandsMap = new ByteMap(width, height);
-        ByteMap errorMap = new ByteMap(width, height);
-        RealMap madMap = new RealMap(width, height);
         ByteMap bsMap = new ByteMap(width, height);
-
-        int size = width * height;
-
-        float[] q0 = q0Map.pixArray;
-        float[] q1 = q1Map.pixArray;
-        float[] q2 = q2Map.pixArray;
-        float[] q3 = q3Map.pixArray;
-        byte[] phasesArray = new byte[size];
-        byte[] bc = bcMap.pixArray;
-        float[] euler1 = euler1Map.pixArray;
-        float[] euler2 = euler2Map.pixArray;
-        float[] euler3 = euler3Map.pixArray;
-        byte[] bands = bandsMap.pixArray;
-        byte[] error = errorMap.pixArray;
-        float[] mad = madMap.pixArray;
-        byte[] bs = bsMap.pixArray;
+        ByteMap bandsMap = new ByteMap(width, height);
+        RealMap madMap = new RealMap(width, height);
 
         status = "Reading data and creating maps.";
+        Rotation rotation;
+        int size = width * height;
         for (int n = 0; n < size; n++) {
-            // Get line
-            String[] line = reader.readLine();
-
-            if (line == null) // end of file
-                throw new IOException(
-                        "End of file while still data left to read");
-
-            if (line.length != 11)
-                throw new IOException("Line " + reader.getLineReadCount()
-                        + " does not have the right number of columns");
-
             // Update progress
             progress = (double) n / size;
 
@@ -774,73 +778,69 @@ public class CtfLoader implements Monitorable {
             if (isInterrupted())
                 break;
 
+            // Get line
+            String[] line = reader.readLine();
+            if (line == null) // end of file
+                throw new IOException(
+                        "End of file while still data left to read");
+            if (line.length != 11)
+                throw new IOException("Line " + reader.getLineReadCount()
+                        + " does not have the right number of columns");
+
             // Phase id
-            phasesArray[n] = (byte) parseInt(line[0]);
+            phaseMap.pixArray[n] = (byte) parseInt(line[0]);
 
             // Number of bands
-            bands[n] = (byte) parseInt(line[3]);
+            bandsMap.pixArray[n] = (byte) parseInt(line[3]);
 
             // Error code
-            error[n] = (byte) parseInt(line[4]);
+            errorMap.pixArray[n] = (byte) parseInt(line[4]);
 
             // Orientation
-            Eulers eulers =
-                    new Eulers(toRadians(parseDouble(line[5])),
-                            toRadians(parseDouble(line[6])),
-                            toRadians(parseDouble(line[7])));
+            rotation =
+                    new Rotation(RotationOrder.ZXZ,
+                            Math.toRadians(parseDouble(line[5])),
+                            Math.toRadians(parseDouble(line[6])),
+                            Math.toRadians(parseDouble(line[7])));
 
-            euler1[n] = (float) eulers.theta1;
-            euler2[n] = (float) eulers.theta2;
-            euler3[n] = (float) eulers.theta3;
-
-            Quaternion rotation = new Quaternion(eulers);
-
-            q0[n] = (float) rotation.getQ0();
-            q1[n] = (float) rotation.getQ1();
-            q2[n] = (float) rotation.getQ2();
-            q3[n] = (float) rotation.getQ3();
+            q0Map.pixArray[n] = (float) rotation.getQ0();
+            q1Map.pixArray[n] = (float) rotation.getQ1();
+            q2Map.pixArray[n] = (float) rotation.getQ2();
+            q3Map.pixArray[n] = (float) rotation.getQ3();
 
             // Mean angular deviation
-            mad[n] = parseFloat(line[8]);
+            madMap.pixArray[n] = parseFloat(line[8]);
 
             // Band contrast
-            bc[n] = (byte) parseInt(line[9]);
+            bcMap.pixArray[n] = (byte) parseInt(line[9]);
 
             // Band slope
-            bs[n] = (byte) parseInt(line[10]);
+            bsMap.pixArray[n] = (byte) parseInt(line[10]);
         }
 
         // Close reader
         reader.close();
 
+        // Validate PhaseMap and ErrorMap
+        phaseMap.validate();
+        errorMap.validate();
+
         // Set the maps
         HashMap<String, Map> mapList = new HashMap<String, Map>();
+
         mapList.put(EbsdMMap.Q0, q0Map);
         mapList.put(EbsdMMap.Q1, q1Map);
         mapList.put(EbsdMMap.Q2, q2Map);
         mapList.put(EbsdMMap.Q3, q3Map);
-        mapList.put(EbsdMMap.PHASES, new PhasesMap(width, height, phasesArray,
-                phases));
+        mapList.put(EbsdMMap.PHASES, phaseMap);
+        mapList.put(EbsdMMap.ERRORS, errorMap);
 
         mapList.put(HklMMap.BAND_COUNT, bandsMap);
-        mapList.put(HklMMap.ERROR_NUMBER, errorMap);
-        mapList.put(HklMMap.EULER1, euler1Map);
-        mapList.put(HklMMap.EULER2, euler2Map);
-        mapList.put(HklMMap.EULER3, euler3Map);
         mapList.put(HklMMap.MEAN_ANGULAR_DEVIATION, madMap);
         mapList.put(HklMMap.BAND_CONTRAST, bcMap);
         mapList.put(HklMMap.BAND_SLOPE, bsMap);
 
-        // Create the MultiMap
-        HklMMap mmap = new HklMMap(width, height, mapList, metadata);
-
-        // Set its file name to the same as the ctf file
-        // but with the proper extension
-        String[] validExtensions = mmap.getValidFileFormats();
-        file = FileUtil.setExtension(file, validExtensions[0]);
-        mmap.setFile(file);
-
-        return mmap;
+        return mapList;
     }
 
 }

@@ -56,17 +56,11 @@ import rmlshared.io.FileUtil;
  */
 public class HklMMap extends EbsdMMap {
 
-    /** Header for the zip file containing a hklMMap. */
+    /** Header for the ZIP file containing a hklMMap. */
     public static final String FILE_HEADER = EbsdMMap.FILE_HEADER + "-HKL";
 
-    /** Alias of the map of the first euler angle. */
-    public static final String EULER1 = "Euler1";
-
-    /** Alias of the map of the second euler angle. */
-    public static final String EULER2 = "Euler2";
-
-    /** Alias of the map of the third euler angle. */
-    public static final String EULER3 = "Euler3";
+    /** Version of the ZIP file. */
+    public static final int VERSION = 2;
 
     /** Alias of the band contrast map. */
     public static final String BAND_CONTRAST = "BandContrast";
@@ -77,17 +71,23 @@ public class HklMMap extends EbsdMMap {
     /** Alias of the band slope map. */
     public static final String BAND_SLOPE = "BandSlope";
 
-    /** Alias of the error number map. */
-    public static final String ERROR_NUMBER = "ErrorNumber";
-
     /** Alias for the mean angular deviation. */
     public static final String MEAN_ANGULAR_DEVIATION = "MeanAngularDeviation";
 
-    /** Name of the project. */
-    public final String projectName;
 
-    /** Directory where the project is located. */
-    public final File projectPath;
+
+    /**
+     * Creates a new <code>HklMMap</code> with the specified dimensions and
+     * metadata. All the required maps are created but are empty.
+     * 
+     * @param width
+     *            width of the map
+     * @param height
+     *            height of the map
+     */
+    public HklMMap(int width, int height) {
+        this(width, height, new HashMap<String, Map>());
+    }
 
 
 
@@ -100,102 +100,62 @@ public class HklMMap extends EbsdMMap {
      *            height of the map
      * @param mapList
      *            list of <code>Map</code> containing all the required maps
-     * @param metadata
-     *            metadata associated to the map
      */
-    public HklMMap(int width, int height, HashMap<String, Map> mapList,
-            HklMetadata metadata) {
-        super(width, height, mapList, metadata);
+    public HklMMap(int width, int height, HashMap<String, Map> mapList) {
+        super(width, height, mapList); // Setup EbsdMMap and add base maps
 
-        // Verify that all the needed Maps are present in the HashMap
-        if (!mapList.containsKey(BAND_CONTRAST))
-            throw new IllegalArgumentException("Undefined band contrast map");
+        // Add missing HKL maps
+        if (!contains(BAND_CONTRAST)) {
+            ByteMap bandContrast = new ByteMap(width, height);
+            bandContrast.clear();
+            bandContrast.cloneMetadataFrom(this);
+            add(BAND_CONTRAST, bandContrast);
+        }
 
-        if (!mapList.containsKey(BAND_COUNT))
-            throw new IllegalArgumentException("Undefined band count map");
+        if (!contains(BAND_COUNT)) {
+            ByteMap bandCount = new ByteMap(width, height);
+            bandCount.clear();
+            bandCount.cloneMetadataFrom(this);
+            add(BAND_COUNT, bandCount);
+        }
 
-        if (!mapList.containsKey(BAND_SLOPE))
-            throw new IllegalArgumentException("Undefined band slope map");
+        if (!contains(BAND_SLOPE)) {
+            ByteMap bandSlope = new ByteMap(width, height);
+            bandSlope.clear();
+            bandSlope.cloneMetadataFrom(this);
+            add(BAND_SLOPE, bandSlope);
+        }
 
-        if (!mapList.containsKey(ERROR_NUMBER))
-            throw new IllegalArgumentException("Undefined error number map");
+        if (!contains(MEAN_ANGULAR_DEVIATION)) {
+            RealMap mad = new RealMap(width, height);
+            mad.clear();
+            mad.cloneMetadataFrom(this);
+            add(MEAN_ANGULAR_DEVIATION, mad);
+        }
 
-        if (!mapList.containsKey(EULER1))
-            throw new IllegalArgumentException("Undefined euler1 map");
-
-        if (!mapList.containsKey(EULER2))
-            throw new IllegalArgumentException("Undefined euler2 map");
-
-        if (!mapList.containsKey(EULER3))
-            throw new IllegalArgumentException("Undefined euler3 map");
-
-        if (!mapList.containsKey(MEAN_ANGULAR_DEVIATION))
+        // Verify that all the needed Maps are present and have the right type
+        if (!getMap(BAND_CONTRAST).getClass().equals(ByteMap.class))
             throw new IllegalArgumentException(
-                    "Undefined mean angular deviation map");
+                    "Band contrast map must be a ByteMap.");
 
-        // Import metadata
-        projectName = metadata.projectName;
-        projectPath = metadata.projectPath;
-    }
+        if (!getMap(BAND_COUNT).getClass().equals(ByteMap.class))
+            throw new IllegalArgumentException(
+                    "Band count map must be a ByteMap.");
 
+        if (!getMap(BAND_SLOPE).getClass().equals(ByteMap.class))
+            throw new IllegalArgumentException(
+                    "Band slope map must be a ByteMap.");
 
-
-    /**
-     * Creates a new <code>HklMMap</code> with the specified dimensions and
-     * metadata. All the required maps are created but are empty.
-     * 
-     * @param width
-     *            width of the map
-     * @param height
-     *            height of the map
-     * @param metadata
-     *            metadata associated to the map
-     */
-    public HklMMap(int width, int height, HklMetadata metadata) {
-        super(width, height, metadata);
-
-        ByteMap bandContrast = new ByteMap(width, height);
-        bandContrast.clear((byte) 0);
-        add(BAND_CONTRAST, bandContrast);
-
-        ByteMap bandSlope = new ByteMap(width, height);
-        bandSlope.clear((byte) 0);
-        add(BAND_SLOPE, bandSlope);
-
-        ByteMap bandCount = new ByteMap(width, height);
-        bandCount.clear((byte) 0);
-        add(BAND_COUNT, bandCount);
-
-        ByteMap errorNumber = new ByteMap(width, height);
-        errorNumber.clear((byte) 0);
-        add(ERROR_NUMBER, errorNumber);
-
-        RealMap euler1 = new RealMap(width, height);
-        euler1.clear(Float.NaN);
-        add(EULER1, euler1);
-
-        RealMap euler2 = new RealMap(width, height);
-        euler2.clear(Float.NaN);
-        add(EULER2, euler2);
-
-        RealMap euler3 = new RealMap(width, height);
-        euler3.clear(Float.NaN);
-        add(EULER3, euler3);
-
-        RealMap mad = new RealMap(width, height);
-        mad.clear(Float.NaN);
-        add(MEAN_ANGULAR_DEVIATION, mad);
-
-        // Import metadata
-        projectName = metadata.projectName;
-        projectPath = metadata.projectPath;
+        if (!getMap(MEAN_ANGULAR_DEVIATION).getClass().equals(RealMap.class))
+            throw new IllegalArgumentException(
+                    "Mean angular deviation map must be a RealMap.");
     }
 
 
 
     @Override
     public HklMMap createMap(int width, int height) {
-        return new HklMMap(width, height, getMetadata());
+        return new HklMMap(width, height);
     }
 
 
@@ -207,8 +167,10 @@ public class HklMMap extends EbsdMMap {
         for (Entry<String, Map> entry : getEntrySet())
             mapList.put(entry.getKey(), entry.getValue().duplicate());
 
-        HklMMap dup = new HklMMap(width, height, mapList, getMetadata());
-        dup.setProperties(this);
+        HklMMap dup = new HklMMap(width, height, mapList);
+
+        dup.setMetadata(getMetadata());
+        cloneMetadataFrom(this);
 
         return dup;
     }
@@ -253,52 +215,6 @@ public class HklMMap extends EbsdMMap {
 
 
     /**
-     * Gets the error number. The data is taken from the <code>Error</code>
-     * column of the ctf file. The data is returned as a greyscale
-     * <dfn>ByteMap</dfn>.
-     * 
-     * @return the error number
-     */
-    public ByteMap getErrorMap() {
-        return (ByteMap) getMap(ERROR_NUMBER);
-    }
-
-
-
-    /**
-     * Returns the map for the first euler angle.
-     * 
-     * @return euler1 map
-     */
-    public RealMap getEuler1Map() {
-        return (RealMap) getMap(EULER1);
-    }
-
-
-
-    /**
-     * Returns the map for the second euler angle.
-     * 
-     * @return euler2 map
-     */
-    public RealMap getEuler2Map() {
-        return (RealMap) getMap(EULER2);
-    }
-
-
-
-    /**
-     * Returns the map for the third euler angle.
-     * 
-     * @return euler3 map
-     */
-    public RealMap getEuler3Map() {
-        return (RealMap) getMap(EULER3);
-    }
-
-
-
-    /**
      * Gets the mean angular deviation. The data is taken from the
      * <code>MAD</code> column of the ctf file.
      * 
@@ -312,9 +228,7 @@ public class HklMMap extends EbsdMMap {
 
     @Override
     public HklMetadata getMetadata() {
-        return new HklMetadata(beamEnergy, magnification, tiltAngle,
-                workingDistance, pixelWidth, pixelHeight, sampleRotation,
-                calibration, projectName, projectPath);
+        return (HklMetadata) super.getMetadata();
     }
 
 
@@ -331,6 +245,9 @@ public class HklMMap extends EbsdMMap {
      *             if the index is out of range
      */
     public File getPatternFile(int index) {
+        File projectPath = getMetadata().getProjectDir();
+        String projectName = getMetadata().getProjectName();
+
         File imageDir = new File(projectPath, projectName + "Images");
 
         return getPatternFile(index, imageDir);
@@ -360,11 +277,13 @@ public class HklMMap extends EbsdMMap {
         if (imageDir == null)
             throw new NullPointerException("Image dir cannot be null.");
 
+        String projectName = getMetadata().getProjectName();
         int nbDigits = Integer.toString(size).length();
         String suffix = rmlshared.math.Long.format(index + 1, nbDigits);
         File patternFile =
                 FileUtil.append(new File(imageDir, projectName), suffix);
         patternFile = FileUtil.setExtension(patternFile, "jpg");
+
         return patternFile;
     }
 

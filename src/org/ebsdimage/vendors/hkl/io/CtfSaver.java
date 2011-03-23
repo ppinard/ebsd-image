@@ -17,8 +17,6 @@
  */
 package org.ebsdimage.vendors.hkl.io;
 
-import static java.lang.Math.toDegrees;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -26,9 +24,14 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
+import org.apache.commons.math.geometry.CardanEulerSingularityException;
+import org.apache.commons.math.geometry.Rotation;
+import org.ebsdimage.core.Microscope;
 import org.ebsdimage.vendors.hkl.core.HklMMap;
+import org.ebsdimage.vendors.hkl.core.HklMetadata;
 
-import ptpshared.core.math.Eulers;
+import ptpshared.geom.RotationUtils;
+import rmlimage.core.Calibration;
 import rmlshared.io.FileUtil;
 import rmlshared.io.Saver;
 import crystallography.core.Crystal;
@@ -54,11 +57,18 @@ public class CtfSaver implements Saver {
      * @return a line
      */
     private String createAcqEulersLines(HklMMap mmap) {
-        Eulers acquisitioneulers = mmap.sampleRotation.toEuler();
-        return "AcqE1" + "\t" + formatDouble(acquisitioneulers.theta1) + "\n"
-                + "AcqE2" + "\t" + formatDouble(acquisitioneulers.theta2)
-                + "\n" + "AcqE3" + "\t"
-                + formatDouble(acquisitioneulers.theta3);
+        Rotation sampleRotation = mmap.getMicroscope().getSampleRotation();
+
+        double[] eulers;
+        try {
+            eulers = RotationUtils.getBungeEulerAngles(sampleRotation);
+        } catch (CardanEulerSingularityException e) {
+            eulers = new double[] { 0.0, 0.0, 0.0 };
+        }
+
+        return "AcqE1" + "\t" + formatDouble(eulers[0]) + "\n" + "AcqE2" + "\t"
+                + formatDouble(eulers[1]) + "\n" + "AcqE3" + "\t"
+                + formatDouble(eulers[2]);
     }
 
 
@@ -116,28 +126,33 @@ public class CtfSaver implements Saver {
      */
     private String createDataLine(HklMMap mmap, int index) {
         // Position
-        double x = (index % mmap.width) * mmap.pixelWidth * 1e6;
-        double y = (index / mmap.width) * mmap.pixelHeight * 1e6;
+        double x = mmap.getCalibratedX(index).getValue("um");
+        double y = mmap.getCalibratedY(index).getValue("um");
 
         // Phase
-        int phase = (mmap.getPhasesMap().pixArray[index] & 0xff);
+        int phase = (mmap.getPhaseMap().pixArray[index] & 0xff);
 
-        double[] e;
+        double[] eulers;
         double mad;
         int error;
         if (phase > 0) {
-            e = mmap.getRotation(index).toEuler().positive();
+            try {
+                eulers =
+                        RotationUtils.getBungeEulerAngles(mmap.getRotation(index));
+            } catch (CardanEulerSingularityException e) {
+                eulers = new double[] { 0.0, 0.0, 0.0 };
+            }
             mad = mmap.getMeanAngularDeviationMap().pixArray[index];
             error = (mmap.getErrorMap().pixArray[index] & 0xff);
         } else {
-            e = new double[] { 0.0, 0.0, 0.0 };
+            eulers = new double[] { 0.0, 0.0, 0.0 };
             mad = 0.0;
             error = 6;
         }
 
-        double e1 = toDegrees(e[0]);
-        double e2 = toDegrees(e[1]);
-        double e3 = toDegrees(e[2]);
+        double e1 = Math.toDegrees(eulers[0]);
+        double e2 = Math.toDegrees(eulers[1]);
+        double e3 = Math.toDegrees(eulers[2]);
 
         // Quality metrics
         int bands = (mmap.getBandCountMap().pixArray[index] & 0xff);
@@ -187,13 +202,15 @@ public class CtfSaver implements Saver {
      * @return a line
      */
     private String createMagEnergyTiltLine(HklMMap mmap) {
-        double energy = mmap.beamEnergy / 1e3;
-        double tiltAngle = toDegrees(mmap.tiltAngle);
+        Microscope microscope = mmap.getMicroscope();
+
+        double energy = microscope.getBeamEnergy() / 1e3;
+        double tiltAngle = Math.toDegrees(microscope.getTiltAngle());
 
         return "Euler angles refer to Sample Coordinate system (CS0)!" + "\t"
-                + "Mag" + "\t" + formatDouble(mmap.magnification) + "\t"
-                + "Coverage" + "\t" + "100" + "\t" + "Device" + "\t" + "0"
-                + "\t" + "KV" + "\t" + formatDouble(energy) + "\t"
+                + "Mag" + "\t" + formatDouble(microscope.getMagnification())
+                + "\t" + "Coverage" + "\t" + "100" + "\t" + "Device" + "\t"
+                + "0" + "\t" + "KV" + "\t" + formatDouble(energy) + "\t"
                 + "TiltAngle" + "\t" + formatDouble(tiltAngle) + "\t"
                 + "TiltAxis" + "\t" + "0";
     }
@@ -210,7 +227,7 @@ public class CtfSaver implements Saver {
     private String createPhasesLines(HklMMap mmap) {
         StringBuilder line = new StringBuilder();
 
-        Crystal[] phases = mmap.getPhasesMap().getPhases();
+        Crystal[] phases = mmap.getPhaseMap().getPhases();
 
         line.append("Phases" + "\t" + phases.length + "\n");
 
@@ -218,11 +235,11 @@ public class CtfSaver implements Saver {
             UnitCell u = crystal.unitCell; // for clarity
             line.append(formatDouble(u.a) + ";" + formatDouble(u.b) + ";"
                     + formatDouble(u.c) + "\t"
-                    + formatDouble(toDegrees(u.alpha)) + ";"
-                    + formatDouble(toDegrees(u.beta)) + ";"
-                    + formatDouble(toDegrees(u.gamma)) + "\t" + crystal.name
-                    + "\t" + crystal.spaceGroup.index + "\t" + 0 + "\n");
-            // NOTE: Space group is set to 0 (no bug reported)
+                    + formatDouble(Math.toDegrees(u.alpha)) + ";"
+                    + formatDouble(Math.toDegrees(u.beta)) + ";"
+                    + formatDouble(Math.toDegrees(u.gamma)) + "\t"
+                    + crystal.name + "\t" + crystal.spaceGroup.laueGroup.index
+                    + "\t" + crystal.spaceGroup.index + "\n");
         }
 
         line.setLength(line.length() - 1);
@@ -240,7 +257,10 @@ public class CtfSaver implements Saver {
      * @return a line
      */
     private String createProjectLine(HklMMap mmap) {
-        File project = new File(mmap.projectPath, mmap.projectName);
+        HklMetadata metadata = mmap.getMetadata();
+
+        File project =
+                new File(metadata.getProjectDir(), metadata.getProjectName());
         return "Prj" + "\t" + project.getAbsolutePath();
     }
 
@@ -254,8 +274,10 @@ public class CtfSaver implements Saver {
      * @return two lines
      */
     private String createStepLines(HklMMap mmap) {
-        double xstep = mmap.pixelWidth * 1e6;
-        double ystep = mmap.pixelHeight * 1e6;
+        Calibration cal = mmap.getCalibration();
+
+        double xstep = cal.getDX().getValue("um");
+        double ystep = cal.getDY().getValue("um");
         return "XStep" + "\t" + formatDouble(xstep) + "\n" + "YStep" + "\t"
                 + formatDouble(ystep);
     }
@@ -367,6 +389,13 @@ public class CtfSaver implements Saver {
     @Override
     public void save(Object obj, File file) throws IOException {
         save((HklMMap) obj, file);
+    }
+
+
+
+    @Override
+    public boolean canSave(Object obj, String fileFormat) {
+        return (obj instanceof HklMMap) && fileFormat.equalsIgnoreCase("CTF");
     }
 
 }

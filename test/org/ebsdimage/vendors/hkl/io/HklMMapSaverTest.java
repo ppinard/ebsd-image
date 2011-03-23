@@ -19,10 +19,10 @@ package org.ebsdimage.vendors.hkl.io;
 
 import java.io.File;
 
-import org.ebsdimage.core.Camera;
-import org.ebsdimage.core.EbsdMetadata;
+import org.ebsdimage.core.Microscope;
 import org.ebsdimage.vendors.hkl.core.HklMMap;
 import org.ebsdimage.vendors.hkl.core.HklMMapTester;
+import org.ebsdimage.vendors.hkl.core.HklMetadata;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -41,15 +41,16 @@ public class HklMMapSaverTest extends HklMMapTester {
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         // Create mmap from ctf
-        File file = getFile("org/ebsdimage/vendors/hkl/testdata/Project19.ctf");
+        File file =
+                FileUtil.getFile("org/ebsdimage/vendors/hkl/testdata/Project19.ctf");
 
         Crystal copperPhase =
-                new CrystalLoader().load(getFile("org/ebsdimage/vendors/hkl/testdata/Copper.xml"));
+                new CrystalLoader().load(FileUtil.getFile("org/ebsdimage/vendors/hkl/testdata/Copper.xml"));
 
+        CtfLoader loader = new CtfLoader();
+        HklMetadata metadata = loader.loadMetadata(file, new Microscope());
         HklMMap tempMMap =
-                new CtfLoader().load(file,
-                        EbsdMetadata.DEFAULT_WORKING_DISTANCE, new Camera(0.1,
-                                0.2, 0.3), new Crystal[] { copperPhase });
+                loader.load(file, metadata, new Crystal[] { copperPhase });
 
         // Save mmap to temp dir
         new HklMMapSaver().save(tempMMap, zipFile);

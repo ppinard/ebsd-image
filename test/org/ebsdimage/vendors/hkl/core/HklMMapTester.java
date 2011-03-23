@@ -17,27 +17,31 @@
  */
 package org.ebsdimage.vendors.hkl.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.math.geometry.Rotation;
 import org.ebsdimage.TestCase;
-import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.EbsdMMap;
-import org.ebsdimage.core.PhasesMap;
-import org.ebsdimage.io.PhasesMapLoader;
+import org.ebsdimage.core.ErrorMap;
+import org.ebsdimage.core.Microscope;
+import org.ebsdimage.core.PhaseMap;
+import org.ebsdimage.io.ErrorMapLoader;
+import org.ebsdimage.io.PhaseMapLoader;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.core.math.Quaternion;
 import rmlimage.core.ByteMap;
+import rmlimage.core.Calibration;
 import rmlimage.core.Map;
 import rmlimage.module.real.core.RealMap;
-import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
 import crystallography.io.CrystalLoader;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import static ptpshared.geom.Assert.assertEquals;
 
 public abstract class HklMMapTester extends TestCase {
 
@@ -51,6 +55,75 @@ public abstract class HklMMapTester extends TestCase {
     public void setUp() throws Exception {
         copperPhase =
                 new CrystalLoader().load(getFile("org/ebsdimage/vendors/hkl/testdata/Copper.xml"));
+    }
+
+
+
+    @Test
+    public void testCreateMapIntInt() {
+        HklMMap newMMap = mmap.createMap(2, 2);
+
+        assertEquals(2, newMMap.width);
+        assertEquals(2, newMMap.height);
+
+        RealMap q0Map = newMMap.getQ0Map();
+        assertEquals(2, q0Map.width);
+        assertEquals(2, q0Map.height);
+
+        RealMap q1Map = newMMap.getQ1Map();
+        assertEquals(2, q1Map.width);
+        assertEquals(2, q1Map.height);
+
+        RealMap q2Map = newMMap.getQ2Map();
+        assertEquals(2, q2Map.width);
+        assertEquals(2, q2Map.height);
+
+        RealMap q3Map = newMMap.getQ3Map();
+        assertEquals(2, q3Map.width);
+        assertEquals(2, q3Map.height);
+
+        PhaseMap phasesMap = newMMap.getPhaseMap();
+        assertEquals(2, phasesMap.width);
+        assertEquals(2, phasesMap.height);
+        assertEquals(0, phasesMap.getPhases().length);
+
+        ByteMap bandContrastMap = newMMap.getBandContrastMap();
+        assertEquals(2, bandContrastMap.width);
+        assertEquals(2, bandContrastMap.height);
+
+        ByteMap bandSlopeMap = newMMap.getBandSlopeMap();
+        assertEquals(2, bandSlopeMap.width);
+        assertEquals(2, bandSlopeMap.height);
+
+        ByteMap bandCountMap = newMMap.getBandCountMap();
+        assertEquals(2, bandCountMap.width);
+        assertEquals(2, bandCountMap.height);
+
+        RealMap madMap = newMMap.getMeanAngularDeviationMap();
+        assertEquals(2, madMap.width);
+        assertEquals(2, madMap.height);
+    }
+
+
+
+    @Test
+    public void testDuplicate() {
+        HklMMap newMMap = mmap.duplicate();
+
+        assertEquals(mmap.width, newMMap.width);
+        assertEquals(mmap.height, newMMap.height);
+
+        mmap.getQ0Map().assertEquals(newMMap.getQ0Map(), 1e-6);
+        mmap.getQ1Map().assertEquals(newMMap.getQ1Map(), 1e-6);
+        mmap.getQ2Map().assertEquals(newMMap.getQ2Map(), 1e-6);
+        mmap.getQ3Map().assertEquals(newMMap.getQ3Map(), 1e-6);
+        mmap.getPhaseMap().assertEquals(newMMap.getPhaseMap(), 1e-6);
+
+        mmap.getBandContrastMap().assertEquals(newMMap.getBandContrastMap());
+        mmap.getBandSlopeMap().assertEquals(newMMap.getBandSlopeMap());
+        mmap.getBandCountMap().assertEquals(newMMap.getBandCountMap());
+        mmap.getMeanAngularDeviationMap().assertEquals(
+                newMMap.getMeanAngularDeviationMap(), 1e-6);
     }
 
 
@@ -89,45 +162,12 @@ public abstract class HklMMapTester extends TestCase {
 
 
     @Test
-    public void testGetErrorNumberMap() {
+    public void testGetErrorMap() throws IOException {
         ByteMap byteMap = mmap.getErrorMap();
 
-        ByteMap expectedByteMap =
-                (ByteMap) load("org/ebsdimage/vendors/hkl/testdata/ErrorNumber.bmp");
-        byteMap.assertEquals(expectedByteMap);
-    }
-
-
-
-    @Test
-    public void testGetEuler1() {
-        RealMap realMap = mmap.getEuler1Map();
-
-        RealMap expectedRealMap =
-                (RealMap) load("org/ebsdimage/vendors/hkl/testdata/Euler1.rmp");
-        realMap.assertEquals(expectedRealMap, 1e-3);
-    }
-
-
-
-    @Test
-    public void testGetEuler2() {
-        RealMap realMap = mmap.getEuler2Map();
-
-        RealMap expectedRealMap =
-                (RealMap) load("org/ebsdimage/vendors/hkl/testdata/Euler2.rmp");
-        realMap.assertEquals(expectedRealMap, 1e-3);
-    }
-
-
-
-    @Test
-    public void testGetEuler3() {
-        RealMap realMap = mmap.getEuler3Map();
-
-        RealMap expectedRealMap =
-                (RealMap) load("org/ebsdimage/vendors/hkl/testdata/Euler3.rmp");
-        realMap.assertEquals(expectedRealMap, 1e-3);
+        ErrorMap expectedMap =
+                new ErrorMapLoader().load(getFile("org/ebsdimage/vendors/hkl/testdata/Errors.bmp"));
+        byteMap.assertEquals(expectedMap);
     }
 
 
@@ -147,14 +187,7 @@ public abstract class HklMMapTester extends TestCase {
     public void testGetMetaData() {
         HklMetadata metadata = mmap.getMetadata();
 
-        assertEquals(Quaternion.IDENTITY, metadata.sampleRotation);
-        assertEquals(20e3, metadata.beamEnergy, 1e-3);
-        assertEquals(600, metadata.magnification, 1e-3);
-        assertEquals(1.2217, metadata.tiltAngle, 1e-3);
-        assertEquals(8e-7, metadata.pixelWidth, 1e-9);
-        assertEquals(8e-7, metadata.pixelHeight, 1e-9);
-        assertEquals("Project19", metadata.projectName);
-        assertTrue(new Camera(0.1, 0.2, 0.3).equals(metadata.camera, 1e-3));
+        assertEquals("Project19", metadata.getProjectName());
         // Cannot be tested
         // assertEquals(new File("").getAbsoluteFile(), metadata.projectPath);
     }
@@ -162,20 +195,41 @@ public abstract class HklMMapTester extends TestCase {
 
 
     @Test
-    public void testGetPatternFileIndex() {
-        File patternFile;
-        File expected;
+    public void testGetMicroscope() {
+        Microscope microscope = mmap.getMicroscope();
 
-        patternFile = mmap.getPatternFile(0);
-        expected = new File(mmap.projectPath, "Project19Images/Project191.jpg");
+        assertEquals(Rotation.IDENTITY, microscope.getSampleRotation(), 1e-6);
+        assertEquals(20e3, microscope.getBeamEnergy(), 1e-6);
+        assertEquals(70, Math.toDegrees(microscope.getTiltAngle()), 1e-6);
+        assertEquals(600, microscope.getMagnification(), 1e-6);
+    }
+
+
+
+    @Test
+    public void testGetCalibration() {
+        Calibration cal = mmap.getCalibration();
+
+        assertEquals(0.8, cal.getDX().getValue("um"), 1e-6);
+        assertEquals(0.8, cal.getDY().getValue("um"), 1e-6);
+    }
+
+
+
+    @Test
+    public void testGetPatternFileIndex() {
+        File projectDir = mmap.getMetadata().getProjectDir();
+
+        File patternFile = mmap.getPatternFile(0);
+        File expected = new File(projectDir, "Project19Images/Project191.jpg");
         assertEquals(expected, patternFile);
 
         patternFile = mmap.getPatternFile(mmap.size - 1);
-        expected = new File(mmap.projectPath, "Project19Images/Project194.jpg");
+        expected = new File(projectDir, "Project19Images/Project194.jpg");
         assertEquals(expected, patternFile);
 
         patternFile = mmap.getPatternFile(1);
-        expected = new File(mmap.projectPath, "Project19Images/Project192.jpg");
+        expected = new File(projectDir, "Project19Images/Project192.jpg");
         assertEquals(expected, patternFile);
     }
 
@@ -199,15 +253,14 @@ public abstract class HklMMapTester extends TestCase {
 
     @Test
     public void testGetPatternFiles() {
-        File expected;
-
+        File projectDir = mmap.getMetadata().getProjectDir();
         File[] files = mmap.getPatternFiles();
         assertEquals(mmap.size, files.length);
 
-        expected = new File(mmap.projectPath, "Project19Images/Project191.jpg");
+        File expected = new File(projectDir, "Project19Images/Project191.jpg");
         assertEquals(expected, files[0]);
 
-        expected = new File(mmap.projectPath, "Project19Images/Project194.jpg");
+        expected = new File(projectDir, "Project19Images/Project194.jpg");
         assertEquals(expected, files[files.length - 1]);
     }
 
@@ -225,12 +278,12 @@ public abstract class HklMMapTester extends TestCase {
 
     @Test
     public void testGetPhasesMap() throws IOException {
-        PhasesMap phasesMap = mmap.getPhasesMap();
+        PhaseMap phasesMap = mmap.getPhaseMap();
 
-        PhasesMap expectedPhasesMap =
-                new PhasesMapLoader().load(FileUtil.getFile("org/ebsdimage/vendors/hkl/testdata/Phases.bmp"));
+        PhaseMap expectedPhasesMap =
+                new PhaseMapLoader().load(getFile("org/ebsdimage/vendors/hkl/testdata/Phases.bmp"));
 
-        phasesMap.assertEquals(expectedPhasesMap);
+        phasesMap.assertEquals(expectedPhasesMap, 1e-2);
 
         Crystal[] phases = phasesMap.getPhases();
         assertEquals(1, phases.length);
@@ -290,35 +343,22 @@ public abstract class HklMMapTester extends TestCase {
         assertEquals(2, mmap.height);
         assertEquals(4, mmap.size);
 
-        // Metadata
-        assertEquals(Quaternion.IDENTITY, mmap.sampleRotation);
-        assertEquals(20e3, mmap.beamEnergy, 1e-3);
-        assertEquals(600, mmap.magnification, 1e-3);
-        assertEquals(1.2217, mmap.tiltAngle, 1e-3);
-        assertEquals(8e-7, mmap.pixelWidth, 1e-9);
-        assertEquals(8e-7, mmap.pixelHeight, 1e-9);
-        assertEquals("Project19", mmap.projectName);
-        // Cannot be tested
-        // assertEquals(new File("").getAbsoluteFile(), mmap.projectPath);
-
         // Test nb of Maps in MultiMap
         Map[] maps = mmap.getMaps();
-        assertEquals(13, maps.length);
+        assertEquals(10, maps.length);
 
         // Test the presence of the Maps
         assertTrue(mmap.contains(EbsdMMap.Q0));
         assertTrue(mmap.contains(EbsdMMap.Q1));
         assertTrue(mmap.contains(EbsdMMap.Q2));
         assertTrue(mmap.contains(EbsdMMap.Q3));
+        assertTrue(mmap.contains(EbsdMMap.PHASES));
+        assertTrue(mmap.contains(HklMMap.ERRORS));
+
         assertTrue(mmap.contains(HklMMap.BAND_CONTRAST));
         assertTrue(mmap.contains(HklMMap.BAND_COUNT));
         assertTrue(mmap.contains(HklMMap.BAND_SLOPE));
-        assertTrue(mmap.contains(HklMMap.ERROR_NUMBER));
-        assertTrue(mmap.contains(HklMMap.EULER1));
-        assertTrue(mmap.contains(HklMMap.EULER2));
-        assertTrue(mmap.contains(HklMMap.EULER3));
         assertTrue(mmap.contains(HklMMap.MEAN_ANGULAR_DEVIATION));
-        assertTrue(mmap.contains(EbsdMMap.PHASES));
     }
 
 }

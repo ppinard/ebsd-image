@@ -23,13 +23,14 @@ import java.io.File;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
 import org.ebsdimage.vendors.hkl.io.Utils;
 
+import ptpshared.gui.DirBrowserField;
 import ptpshared.gui.WizardPage;
-import rmlshared.gui.FileNameField;
 import rmlshared.gui.RadioButton;
 
 /**
@@ -45,7 +46,7 @@ public class PatternsWizardPage extends WizardPage {
     private class RButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            userPatternsFileFiled.setEnabled(userPatternsRButton.isSelected());
+            userPatternsDirField.setEnabled(userPatternsRButton.isSelected());
         }
     }
 
@@ -66,14 +67,17 @@ public class PatternsWizardPage extends WizardPage {
     /** Do not import patterns radio button. */
     private RadioButton noPatternsRButton;
 
-    /** Import patterns from the folder specified in the ctf radio button. */
-    private RadioButton ctfPatternsRButton;
+    /** Import patterns from the folder specified in the CPR radio button. */
+    private RadioButton cprPatternsRButton;
+
+    /** Field to display what the folder specified in the CPR file is. */
+    private JTextField cprPatternsDirField;
 
     /** Import patterns from the folder specified by the user radio button. */
     private RadioButton userPatternsRButton;
 
     /** Field for the user defined folder for the patterns. */
-    private FileNameField userPatternsFileFiled;
+    private DirBrowserField userPatternsDirField;
 
 
 
@@ -86,29 +90,35 @@ public class PatternsWizardPage extends WizardPage {
         add(new JLabel("Three options whether or not to import "
                 + "diffraction patterns."), "wrap");
 
+        // No pattern
         noPatternsRButton =
                 new RadioButton("Do not import diffraction patterns.");
         noPatternsRButton.addActionListener(new RButtonListener());
         add(noPatternsRButton, "wrap");
 
-        ctfPatternsRButton =
+        // From CPR file
+        cprPatternsRButton =
                 new RadioButton(
-                        "Import from the folder specified in the ctf file.");
-        ctfPatternsRButton.addActionListener(new RButtonListener());
-        add(ctfPatternsRButton, "wrap");
+                        "Import from the folder specified in the CPR file.");
+        cprPatternsRButton.addActionListener(new RButtonListener());
+        add(cprPatternsRButton, "wrap");
 
+        cprPatternsDirField = new JTextField();
+        cprPatternsDirField.setEnabled(false);
+        add(cprPatternsDirField, "gapleft 35, growx, pushx, wrap");
+
+        // User defined
         userPatternsRButton = new RadioButton("Import from a specific folder.");
         userPatternsRButton.addActionListener(new RButtonListener());
         add(userPatternsRButton, "wrap");
 
-        userPatternsFileFiled = new FileNameField("Pattern file", true);
-        userPatternsFileFiled.setFileSelectionMode(FileNameField.DIRECTORIES_ONLY);
-        add(userPatternsFileFiled, "gapleft 35, growx, pushx, wrap");
+        userPatternsDirField = new DirBrowserField("User patterns folder");
+        add(userPatternsDirField, "gapleft 35, growx, pushx, wrap");
 
         // Used to manage only one radio button being selected at a time
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(noPatternsRButton);
-        buttonGroup.add(ctfPatternsRButton);
+        buttonGroup.add(cprPatternsRButton);
         buttonGroup.add(userPatternsRButton);
 
         // Initiate state
@@ -119,29 +129,45 @@ public class PatternsWizardPage extends WizardPage {
 
     @Override
     public boolean isCorrect(boolean buffer) {
-        if (userPatternsRButton.isSelected()) {
-            if (userPatternsFileFiled.getFile() == null) {
+        File patternsDir = null;
+
+        if (cprPatternsRButton.isSelected()) {
+            patternsDir = new File(cprPatternsDirField.getText());
+        } else if (userPatternsRButton.isSelected()) {
+            patternsDir = userPatternsDirField.getDir();
+
+            if (patternsDir == null) {
                 showErrorDialog("Please specify a folder.");
                 return false;
             }
         }
 
-        if (buffer) {
-            if (ctfPatternsRButton.isSelected()) {
-                // Get image folder from ctf file
-                File file = (File) get(StartWizardPage.KEY_CTF_FILE);
-
-                if (file != null) {
-                    put(KEY_PATTERNS_FOLDER, Utils.getPatternImagesDir(file));
-                } else
-                    put(KEY_PATTERNS_FOLDER, null);
-            } else if (userPatternsRButton.isSelected()) {
-                put(KEY_PATTERNS_FOLDER, userPatternsFileFiled.getFile());
-            } else {
-                put(KEY_PATTERNS_FOLDER, null);
-            }
-        }
+        if (buffer)
+            put(KEY_PATTERNS_FOLDER, patternsDir);
 
         return true;
+    }
+
+
+
+    @Override
+    protected void renderingPage() {
+        super.renderingPage();
+
+        File cprFile = (File) get(StartWizardPage.KEY_CPR_FILE);
+
+        if (cprFile == null) {
+            showErrorDialog("No CPR file was defined in the Start wizard page.");
+            return;
+        }
+
+        File patternsDir = Utils.getPatternImagesDir(cprFile);
+
+        if (!patternsDir.exists()) {
+            cprPatternsRButton.setEnabled(false);
+        } else {
+            cprPatternsRButton.setEnabled(true);
+            cprPatternsDirField.setText(patternsDir.toString());
+        }
     }
 }

@@ -1,0 +1,30 @@
+<map>
+   <item>
+      <key class="java.lang.Integer">0</key>
+      <value class="org.ebsdimage.core.ErrorCode" name="No error" description=""/>
+   </item>
+   <item>
+      <key class="java.lang.Integer">1</key>
+      <value class="org.ebsdimage.core.ErrorCode" name="Low band contrast" description=""/>
+   </item>
+   <item>
+      <key class="java.lang.Integer">2</key>
+      <value class="org.ebsdimage.core.ErrorCode" name="Low band slope" description=""/>
+   </item>
+   <item>
+      <key class="java.lang.Integer">3</key>
+      <value class="org.ebsdimage.core.ErrorCode" name="No solution" description=""/>
+   </item>
+   <item>
+      <key class="java.lang.Integer">4</key>
+      <value class="org.ebsdimage.core.ErrorCode" name="High MAD" description=""/>
+   </item>
+   <item>
+      <key class="java.lang.Integer">5</key>
+      <value class="org.ebsdimage.core.ErrorCode" name="Not yet analysed" description="job cancelled before point"/>
+   </item>
+   <item>
+      <key class="java.lang.Integer">6</key>
+      <value class="org.ebsdimage.core.ErrorCode" name="Unexpected error" description=""/>
+   </item>
+</map>

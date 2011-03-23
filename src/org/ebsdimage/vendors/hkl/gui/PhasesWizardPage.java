@@ -61,17 +61,20 @@ public class PhasesWizardPage extends org.ebsdimage.gui.PhasesWizardPage {
     protected void renderingPage() {
         super.renderingPage();
 
-        // Get ctf file
         File ctfFile = (File) get(StartWizardPage.KEY_CTF_FILE);
+
+        if (ctfFile == null) {
+            showErrorDialog("No CTF file was defined in the Start wizard page.");
+            return;
+        }
 
         // Load phases name
         String[] phasesName = new String[0];
-        if (ctfFile != null) {
-            try {
-                phasesName = CtfLoader.getPhaseNames(ctfFile);
-            } catch (IOException e) {
-                showErrorDialog(e.getMessage());
-            }
+        try {
+            phasesName = new CtfLoader().loadPhaseNames(ctfFile);
+        } catch (IOException e) {
+            showErrorDialog(e.getMessage());
+            return;
         }
 
         // Set minimum number of phases

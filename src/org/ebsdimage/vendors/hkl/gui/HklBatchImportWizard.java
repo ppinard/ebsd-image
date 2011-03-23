@@ -17,18 +17,15 @@
  */
 package org.ebsdimage.vendors.hkl.gui;
 
-import static rmlshared.io.FileUtil.getURL;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import org.ebsdimage.core.Camera;
-
 import ptpshared.gui.Wizard;
 import ptpshared.gui.WizardPage;
 import crystallography.core.Crystal;
+import static rmlshared.io.FileUtil.getURL;
 
 /**
  * Wizard to import several HKL data at once.
@@ -42,7 +39,6 @@ public class HklBatchImportWizard extends Wizard {
      */
     public HklBatchImportWizard() {
         super("Import from HKL", new WizardPage[] { new StartBatchWizardPage(),
-                new MissingDataWizardPage(),
                 new org.ebsdimage.gui.PhasesWizardPage(),
                 new OutputBatchWizardPage() });
 
@@ -62,31 +58,13 @@ public class HklBatchImportWizard extends Wizard {
 
 
     /**
-     * Returns the calibration specified in this dialog.
-     * 
-     * @return calibration
-     */
-    public Camera getCalibration() {
-        Camera calibration =
-                (Camera) results.get(MissingDataWizardPage.KEY_CALIBRATION);
-
-        if (calibration == null)
-            throw new NullPointerException(
-                    "Could not get calibration from wizard.");
-
-        return calibration;
-    }
-
-
-
-    /**
      * Returns the CTF files to load.
      * 
      * @return CTF files
      */
-    public File[] getCtfFiles() {
+    public File[] getCprFiles() {
         File[] ctfFiles =
-                (File[]) results.get(StartBatchWizardPage.KEY_CTF_FILES);
+                (File[]) results.get(StartBatchWizardPage.KEY_CPR_FILES);
 
         if (ctfFiles == null)
             throw new NullPointerException(
@@ -111,24 +89,6 @@ public class HklBatchImportWizard extends Wizard {
                     "Could not get output file from wizard.");
 
         return outputDir;
-    }
-
-
-
-    /**
-     * Returns the working distance specified in this dialog.
-     * 
-     * @return working distance
-     */
-    public double getWorkingDistance() {
-        Double workingDistance =
-                (Double) results.get(MissingDataWizardPage.KEY_WORKING_DISTANCE);
-
-        if (workingDistance == null)
-            throw new NullPointerException(
-                    "Could not get working distance from wizard.");
-
-        return workingDistance;
     }
 
 

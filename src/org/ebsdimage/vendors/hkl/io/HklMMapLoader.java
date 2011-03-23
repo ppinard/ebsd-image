@@ -21,13 +21,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.ebsdimage.core.EbsdMetadata;
 import org.ebsdimage.io.EbsdMMapLoader;
 import org.ebsdimage.vendors.hkl.core.HklMMap;
 import org.ebsdimage.vendors.hkl.core.HklMetadata;
-import org.jdom.Document;
-import org.jdom.Element;
 
 import rmlimage.core.Map;
+import rmlimage.module.multi.core.MultiMap;
 
 /**
  * Loader for an <code>HklMMap</code> from a zip file.
@@ -35,36 +35,6 @@ import rmlimage.core.Map;
  * @author Philippe T. Pinard
  */
 public class HklMMapLoader extends EbsdMMapLoader {
-
-    /**
-     * Checks if the file is a valid <code>HklMMap</code>.
-     * 
-     * @param file
-     *            a file
-     * @return <code>true</code> if the file is valid, <code>false</code>
-     *         otherwise
-     */
-    public static boolean isHklMMap(File file) {
-        return (new HklMMapLoader().getValidationMessage(file).length() == 0) ? true
-                : false;
-    }
-
-
-
-    @Override
-    protected HklMMap createMap(int version, int width, int height,
-            HashMap<String, Map> mapList, Document metadata) {
-
-        if (version != 1)
-            throw new IllegalArgumentException("Invalid version: " + version);
-
-        Element element = metadata.getRootElement();
-        HklMetadata data = new HklMetadataXmlLoader().load(element);
-
-        return new HklMMap(width, height, mapList, data);
-    }
-
-
 
     @Override
     protected String getValidHeader() {
@@ -75,8 +45,6 @@ public class HklMMapLoader extends EbsdMMapLoader {
 
     @Override
     public HklMMap load(File file) throws IOException {
-        validate(file);
-
         return (HklMMap) super.load(file);
     }
 
@@ -84,7 +52,25 @@ public class HklMMapLoader extends EbsdMMapLoader {
 
     @Override
     public HklMMap load(File file, Object obj) throws IOException {
-        return load(file);
+        return (HklMMap) super.load(file);
+    }
+
+
+
+    @Override
+    protected MultiMap createMap(int version, int width, int height,
+            HashMap<String, Map> mapList) {
+        if (version != HklMMap.VERSION)
+            throw new IllegalArgumentException("Invalid version: " + version);
+
+        return new HklMMap(width, height, mapList);
+    }
+
+
+
+    @Override
+    protected Class<? extends EbsdMetadata> getMetadataClass() {
+        return HklMetadata.class;
     }
 
 }

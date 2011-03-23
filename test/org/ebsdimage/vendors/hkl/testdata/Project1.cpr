@@ -1,0 +1,147 @@
+[ProjectionParameters]
+VHRatio=0.73300
+PCX=0.52451
+PCY=0.58419
+DD=0.49695
+[SEMFields]
+DOEuler1=359.80800
+DOEuler2=91.76600
+DOEuler3=359.94700
+[AOI2DHough]
+X0=83
+Y0=59
+R=64
+[AOI3DHough]
+Left=19
+Top=0
+Right=147
+Bottom=119
+[Band Detection]
+Detect=0
+Divergence=1
+Min=4
+Max=5
+HoughRes=65
+OLockLevel=1
+UseBandWidth=False
+OLock=False
+[Discriminators]
+BC=0
+BS=0
+MAD=5.00000
+[Live EBSP]
+Delay=0
+MinTimePerFrame=20
+BackgroundMode=1
+AutoBackgroundLevel=10
+NoFramesBackGround=300
+NoFrames=3
+LowerLimit=29471
+UpperLimit=36857
+InSoftware=True
+BackgroundCorrOn=True
+AutoBackgroundOn=True
+AutoStretch=False
+[FG_DCam parameters]
+Binning=4x4 binning
+Gain=0
+[Image Compression]
+Method=0
+Quality=100
+Smoothing=0
+NonVisibleBlack=0
+SaveWhen=2
+Percentage=100.0
+[Phases]
+NoReflectors=32
+Count=2
+[StagePosition]
+XPos=35.779000
+YPos=58.183000
+ZPos=19.000000
+RPos=0.000000
+TPos=0.000000
+ZValid=True
+[EDX Control]
+MappingEnabled=False
+MinCycleTime=500
+WindowCount=0
+[Job]
+Top=189.0000
+Left=-253.0000
+Coverage=100.0
+Magnification=250
+kV=15.00
+TiltAngle=70.00
+TiltAxis=0.00
+Device=None
+GridDistX=2.0000
+GridDistY=2.0000
+xCells=254
+yCells=190
+Automatic=True
+NoOfPoints=48260
+[EDX Windows]
+Count=0
+[Phase1]
+Database=HKL phases
+StructureName=Magnesium
+Reference=Proc. R. Soc. London, Ser. A [PRLAAZ], vol. A174, page 457
+Enabled=True
+a=3.2089
+b=3.2089
+c=5.2101
+alpha=90.00
+beta=90.00
+gamma=120.00
+LaueGroup=9
+SpaceGroup=194
+ID1=3803863129_5.0.6.3
+ID2=-453555888
+[Phase2]
+Database=Inorganic Crystal Structure Database 
+StructureName=Cu9 Al4
+Reference=Acta Crystallogr., Sec. A [ACACBN], (1978), vol. 34, pages 399-404
+Enabled=True
+a=8.7068
+b=8.7068
+c=8.7068
+alpha=90.00
+beta=90.00
+gamma=90.00
+LaueGroup=11
+SpaceGroup=215
+ID1=1079592441_5.0.6.2
+ID2=624457126
+[General]
+Version=5.0
+Date=9/24/2010
+Time=10:57:40 AM
+Duration=0:52:54
+PerCycle=0.066
+Description=[Unknown]
+Author=[Unknown]
+Notes=
+JobMode=RegularGrid
+SampleSymmetry=2
+[Acquisition Surface]
+Euler1=0.0
+Euler2=0.0
+Euler3=0.0
+[Fields]
+Count=9
+Field1=3
+Field2=4
+Field3=5
+Field4=6
+Field5=7
+Field6=8
+Field7=10
+Field8=11
+Field9=12
+[Maximum indices]
+Phase1=444
+Phase2=444
+[References]
+OriginalProjectName=Project1.cpr
+ImageStorageFolder=Project1Images

@@ -17,6 +17,7 @@
  */
 package org.ebsdimage.vendors.hkl;
 
+
 /**
  * Init class for the HKL vendor.
  * 
@@ -28,6 +29,9 @@ public class Init extends rmlimage.module.Init {
     public void preGUI() {
         if (rmlimage.module.Module.DEBUG)
             System.out.println("Running preGUI init of the EBSD module");
+
+        rmlimage.io.IO.addLoader(org.ebsdimage.vendors.hkl.io.HklMMapLoader.class);
+        rmlimage.io.IO.addSaver(org.ebsdimage.vendors.hkl.io.HklMMapSaver.class);
     }
 
 

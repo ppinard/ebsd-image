@@ -17,21 +17,21 @@
  */
 package org.ebsdimage.vendors.hkl.io;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
-import org.ebsdimage.core.Camera;
-import org.ebsdimage.core.EbsdMetadata;
+import org.ebsdimage.core.Microscope;
 import org.ebsdimage.vendors.hkl.core.HklMMap;
 import org.ebsdimage.vendors.hkl.core.HklMMapTester;
+import org.ebsdimage.vendors.hkl.core.HklMetadata;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
-import crystallography.io.CrystalLoader;
+
+import static org.junit.Assert.assertTrue;
 
 public class CtfSaverTest extends HklMMapTester {
 
@@ -60,14 +60,14 @@ public class CtfSaverTest extends HklMMapTester {
 
 
 
-    public CtfSaverTest() throws Exception {
-        Crystal copperPhase =
-                new CrystalLoader().load(getFile("org/ebsdimage/vendors/hkl/testdata/Copper.xml"));
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
 
-        mmap =
-                new CtfLoader().load(file,
-                        EbsdMetadata.DEFAULT_WORKING_DISTANCE, new Camera(0.1,
-                                0.2, 0.3), new Crystal[] { copperPhase });
+        CtfLoader loader = new CtfLoader();
+        HklMetadata metadata = loader.loadMetadata(file, new Microscope());
+        mmap = loader.load(file, metadata, new Crystal[] { copperPhase });
     }
 
 
