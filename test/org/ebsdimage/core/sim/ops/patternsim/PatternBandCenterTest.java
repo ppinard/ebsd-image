@@ -31,6 +31,7 @@ import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.core.ByteMap;
 import rmlimage.module.real.core.RealMap;
+import rmlimage.module.real.io.RmpLoader;
 import crystallography.core.CrystalFactory;
 import crystallography.core.Reflectors;
 import crystallography.core.ReflectorsFactory;
@@ -107,7 +108,7 @@ public class PatternBandCenterTest extends TestCase {
         RealMap patternMap = op.getPatternRealMap();
 
         RealMap expectedMap =
-                (RealMap) load("org/ebsdimage/testdata/patternbandcenter_rmp.rmp");
+                new RmpLoader().load(getFile("org/ebsdimage/testdata/patternbandcenter_rmp.rmp"));
 
         expectedMap.assertEquals(patternMap);
     }
