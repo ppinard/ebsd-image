@@ -56,7 +56,7 @@ public class PatternBandEdgesTest extends TestCase {
     public void setUp() throws Exception {
         op = new PatternBandEdges(400, 400);
 
-        microscope = SimTester.createMetadata().microscope;
+        microscope = SimTester.createMetadata().getMicroscope();
         reflectors =
                 ReflectorsFactory.generate(CrystalFactory.silicon(),
                         ScatteringFactorsEnum.XRAY, 4);

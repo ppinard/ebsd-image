@@ -50,9 +50,10 @@ public class SimMetadataTest extends TestCase {
 
     @Test
     public void testSimMetadata() {
-        assertEquals(new Microscope(), metadata.microscope, 1e-6);
-        assertEquals(ScatteringFactorsEnum.XRAY, metadata.scatteringFactors);
-        assertEquals(4, metadata.maxIndex);
+        assertEquals(new Microscope(), metadata.getMicroscope(), 1e-6);
+        assertEquals(ScatteringFactorsEnum.XRAY,
+                metadata.getScatteringFactors());
+        assertEquals(4, metadata.getMaxIndex());
     }
 
 

@@ -115,7 +115,7 @@ public abstract class EbsdMMap extends MultiMap {
             setCalibration(Calibration.NONE);
 
         // Metadata
-        setMetadata(getDefaultMetadata());
+        setMetadata(EbsdMetadata.DEFAULT);
 
         // Verify that all the needed Maps are present in the HashMap
         if (!mapList.containsKey(Q0)) {
@@ -191,17 +191,6 @@ public abstract class EbsdMMap extends MultiMap {
 
     @Override
     public abstract EbsdMMap duplicate();
-
-
-
-    /**
-     * Returns the default metadata.
-     * 
-     * @return <code>EbsdMetadata</code>
-     */
-    protected EbsdMetadata getDefaultMetadata() {
-        return EbsdMetadata.DEFAULT;
-    }
 
 
 
@@ -354,7 +343,7 @@ public abstract class EbsdMMap extends MultiMap {
      * @return microscope parameters
      */
     public Microscope getMicroscope() {
-        return getMetadata().microscope;
+        return getMetadata().getMicroscope();
     }
 
 

@@ -164,7 +164,7 @@ public abstract class ExpTester extends TestCase {
         assertEquals(1, exp.mmap.height);
 
         // Metadata
-        Microscope microscope = exp.getMetadata().microscope;
+        Microscope microscope = exp.getMetadata().getMicroscope();
         assertEquals(20e3, microscope.getBeamEnergy(), 1e-6);
         assertEquals(100, microscope.getMagnification(), 1e-6);
         assertEquals(toRadians(70), microscope.getTiltAngle(), 1e-6);

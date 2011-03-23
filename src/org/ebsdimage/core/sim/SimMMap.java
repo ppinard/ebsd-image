@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import org.ebsdimage.core.EbsdMMap;
-import org.ebsdimage.core.EbsdMetadata;
 
 import rmlimage.core.Map;
 
@@ -41,9 +40,17 @@ public class SimMMap extends EbsdMMap {
 
 
 
-    @Override
-    public SimMetadata getMetadata() {
-        return (SimMetadata) super.getMetadata();
+    /**
+     * Creates a new <code>SimMMap</code> with the specified dimensions and
+     * metadata. All the required maps are created but are empty.
+     * 
+     * @param width
+     *            width of the maps
+     * @param height
+     *            height of the maps
+     */
+    public SimMMap(int width, int height) {
+        this(width, height, new HashMap<String, Map>());
     }
 
 
@@ -60,28 +67,16 @@ public class SimMMap extends EbsdMMap {
      */
     public SimMMap(int width, int height, HashMap<String, Map> mapList) {
         super(width, height, mapList);
-    }
 
-
-
-    /**
-     * Creates a new <code>SimMMap</code> with the specified dimensions and
-     * metadata. All the required maps are created but are empty.
-     * 
-     * @param width
-     *            width of the maps
-     * @param height
-     *            height of the maps
-     */
-    public SimMMap(int width, int height) {
-        super(width, height);
+        // Override metadata
+        setMetadata(SimMetadata.DEFAULT);
     }
 
 
 
     @Override
-    protected EbsdMetadata getDefaultMetadata() {
-        return SimMetadata.DEFAULT;
+    public SimMMap createMap(int width, int height) {
+        return new SimMMap(width, height);
     }
 
 
@@ -104,8 +99,8 @@ public class SimMMap extends EbsdMMap {
 
 
     @Override
-    public SimMMap createMap(int width, int height) {
-        return new SimMMap(width, height);
+    public SimMetadata getMetadata() {
+        return (SimMetadata) super.getMetadata();
     }
 
 }

@@ -19,11 +19,11 @@ public class SimMetadata extends EbsdMetadata {
 
     /** Type of scattering factors. */
     @Element(name = "scatteringFactors")
-    public final ScatteringFactorsEnum scatteringFactors;
+    private ScatteringFactorsEnum scatteringFactors;
 
     /** Maximum index of the planes to compute. */
     @Element(name = "maxIndex")
-    public final int maxIndex;
+    private int maxIndex;
 
 
 
@@ -43,12 +43,8 @@ public class SimMetadata extends EbsdMetadata {
             @Element(name = "maxIndex") int maxIndex) {
         super(microscope);
 
-        this.scatteringFactors = scatteringFactors;
-
-        if (maxIndex < 1)
-            throw new IllegalArgumentException(
-                    "The maximum index has to greater or equal to 1.");
-        this.maxIndex = maxIndex;
+        setScatteringFactors(scatteringFactors);
+        setMaxIndex(maxIndex);
     }
 
 
@@ -66,6 +62,57 @@ public class SimMetadata extends EbsdMetadata {
             return false;
 
         return true;
+    }
+
+
+
+    /**
+     * Returns the maximum index of the planes to compute in the simulation.
+     * 
+     * @return maximum index of the planes
+     */
+    public int getMaxIndex() {
+        return maxIndex;
+    }
+
+
+
+    /**
+     * Returns the type of scattering factors.
+     * 
+     * @return type of scattering factors.
+     */
+    public ScatteringFactorsEnum getScatteringFactors() {
+        return scatteringFactors;
+    }
+
+
+
+    /**
+     * Sets the maximum index of the planes to compute in the simulation.
+     * 
+     * @param maxIndex
+     *            maximum index of the planes
+     */
+    public void setMaxIndex(int maxIndex) {
+        if (maxIndex < 1)
+            throw new IllegalArgumentException(
+                    "The maximum index has to greater or equal to 1.");
+        this.maxIndex = maxIndex;
+    }
+
+
+
+    /**
+     * Sets the type of scattering factors.
+     * 
+     * @param scatteringFactors
+     *            type of scattering factors.
+     */
+    public void setScatteringFactors(ScatteringFactorsEnum scatteringFactors) {
+        if (scatteringFactors == null)
+            throw new NullPointerException("Scattering factors cannot be null.");
+        this.scatteringFactors = scatteringFactors;
     }
 
 }

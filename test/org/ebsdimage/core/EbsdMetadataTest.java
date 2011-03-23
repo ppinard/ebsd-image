@@ -31,7 +31,7 @@ public class EbsdMetadataTest extends TestCase {
 
     @Test
     public void testEbsdMetadata() {
-        assertEquals(new Microscope(), metadata.microscope, 1e-6);
+        assertEquals(new Microscope(), metadata.getMicroscope(), 1e-6);
     }
 
 

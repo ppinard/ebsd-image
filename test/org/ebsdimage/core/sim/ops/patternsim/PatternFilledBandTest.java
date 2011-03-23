@@ -53,7 +53,7 @@ public class PatternFilledBandTest extends TestCase {
     public void setUp() throws Exception {
         op = new PatternFilledBand(400, 400);
 
-        microscope = SimTester.createMetadata().microscope;
+        microscope = SimTester.createMetadata().getMicroscope();
         reflectors =
                 ReflectorsFactory.generate(CrystalFactory.silicon(),
                         ScatteringFactorsEnum.XRAY, 4);

@@ -150,7 +150,8 @@ public abstract class SimMMapTester extends TestCase {
 
         SimMetadata metadata = mmap.getMetadata();
 
-        assertEquals(ScatteringFactorsEnum.ELECTRON, metadata.scatteringFactors);
-        assertEquals(3, metadata.maxIndex);
+        assertEquals(ScatteringFactorsEnum.ELECTRON,
+                metadata.getScatteringFactors());
+        assertEquals(3, metadata.getMaxIndex());
     }
 }

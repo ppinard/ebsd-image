@@ -34,7 +34,7 @@ public class MicroscopeWizardPage extends
             if ((Integer) get(KEY_LOADED) > 0)
                 return;
 
-        renderingPage(sim.getMetadata().microscope);
+        renderingPage(sim.getMetadata().getMicroscope());
 
         put(KEY_LOADED, 1);
     }

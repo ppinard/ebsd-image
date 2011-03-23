@@ -56,7 +56,7 @@ public class PatternSimOpMockTest extends TestCase {
                 ReflectorsFactory.generate(CrystalFactory.silicon(),
                         ScatteringFactorsEnum.XRAY, 1);
         rotation = Rotation.IDENTITY;
-        microscope = SimTester.createMetadata().microscope;
+        microscope = SimTester.createMetadata().getMicroscope();
     }
 
 

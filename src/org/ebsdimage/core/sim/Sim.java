@@ -203,8 +203,8 @@ public class Sim extends Run implements Monitorable {
         // Calculate reflectors
         SimMetadata metadata = mmap.getMetadata();
         Reflectors refls =
-                ReflectorsFactory.generate(crystal, metadata.scatteringFactors,
-                        metadata.maxIndex);
+                ReflectorsFactory.generate(crystal,
+                        metadata.getScatteringFactors(), metadata.getMaxIndex());
         reflectors.add(refls);
     }
 
@@ -550,7 +550,7 @@ public class Sim extends Run implements Monitorable {
 
         setStatus("Performing " + patternSimOp.getName() + "...");
 
-        patternSimOp.simulate(this, getMetadata().microscope, reflectorz,
+        patternSimOp.simulate(this, getMetadata().getMicroscope(), reflectorz,
                 rotation);
 
         firePatternSimOp(patternSimOp);
