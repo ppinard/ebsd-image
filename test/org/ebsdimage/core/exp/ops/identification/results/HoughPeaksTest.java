@@ -44,7 +44,7 @@ public class HoughPeaksTest extends TestCase {
 
     @Test
     public void testSave() throws IOException {
-        File file = new File("/tmp/houghpeaks.xml");
+        File file = createTempFile();
         op.save(peaks, file);
 
         HoughPeak[] other = new XmlLoader().loadArray(HoughPeak.class, file);

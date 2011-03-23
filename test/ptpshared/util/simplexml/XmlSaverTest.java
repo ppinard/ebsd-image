@@ -7,9 +7,6 @@ import org.ebsdimage.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.util.simplexml.XmlLoader;
-import ptpshared.util.simplexml.XmlSaver;
-
 public class XmlSaverTest extends TestCase {
 
     private Item[] items;
@@ -25,7 +22,7 @@ public class XmlSaverTest extends TestCase {
 
     @Test
     public void testSave() throws IOException {
-        File file = new File("/tmp/items.xml");
+        File file = createTempFile();
 
         Class<?> E = items.getClass().getComponentType();
         System.out.println(E);

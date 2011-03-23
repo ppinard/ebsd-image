@@ -1,7 +1,5 @@
 package crystallography.core;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
 
 import org.ebsdimage.TestCase;
@@ -10,6 +8,8 @@ import org.junit.Test;
 
 import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
+
+import static org.junit.Assert.assertEquals;
 
 public class ScatteringFactorsEnumTest extends TestCase {
 
@@ -34,7 +34,7 @@ public class ScatteringFactorsEnumTest extends TestCase {
 
     @Test
     public void testXML() throws Exception {
-        File tmpFile = new File("/tmp/scatter.xml");
+        File tmpFile = createTempFile();
 
         // Write
         new XmlSaver().save(scatterType, tmpFile);
