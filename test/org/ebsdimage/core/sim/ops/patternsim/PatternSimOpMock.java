@@ -20,20 +20,26 @@ package org.ebsdimage.core.sim.ops.patternsim;
 import org.ebsdimage.core.sim.Band;
 import org.ebsdimage.core.sim.BandsCalculator;
 import org.ebsdimage.core.sim.LinearBandsCalculator;
+import org.simpleframework.xml.Attribute;
 
 import rmlimage.module.real.core.RealMap;
 
 public class PatternSimOpMock extends PatternSimOp {
 
-    public PatternSimOpMock() {
-        super(2, 2);
+    public static final PatternSimOpMock DEFAULT = new PatternSimOpMock(2, 2);
+
+
+
+    public PatternSimOpMock(@Attribute(name = "width") int width,
+            @Attribute(name = "height") int height) {
+        super(width, height);
     }
 
 
 
     @Override
     protected RealMap createPatternMap() {
-        return new RealMap(2, 2);
+        return new RealMap(width, height);
     }
 
 

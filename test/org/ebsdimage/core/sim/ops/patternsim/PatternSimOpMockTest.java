@@ -50,7 +50,7 @@ public class PatternSimOpMockTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        op = new PatternSimOpMock();
+        op = new PatternSimOpMock(2, 2);
 
         reflectors =
                 ReflectorsFactory.generate(CrystalFactory.silicon(),

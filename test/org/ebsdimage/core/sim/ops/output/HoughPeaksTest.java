@@ -79,7 +79,8 @@ public class HoughPeaksTest extends TestCase {
     @Test
     public void testSave() throws IOException {
         // Create simulation
-        SimOperation[] ops = new SimOperation[] { new PatternSimOpMock(), op };
+        SimOperation[] ops =
+                new SimOperation[] { PatternSimOpMock.DEFAULT, op };
         Sim sim = SimTester.createSim(ops);
 
         // Run

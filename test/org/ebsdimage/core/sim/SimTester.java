@@ -46,7 +46,7 @@ import static junittools.test.Assert.assertEquals;
 public abstract class SimTester extends TestCase {
 
     public static SimOperation[] createOperations() {
-        return new SimOperation[] { new PatternSimOpMock(),
+        return new SimOperation[] { PatternSimOpMock.DEFAULT,
                 new OutputOpsMock(), new OutputOps2Mock() };
     }
 

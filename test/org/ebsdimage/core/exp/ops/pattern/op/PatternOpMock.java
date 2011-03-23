@@ -24,6 +24,13 @@ import rmlimage.core.ByteMap;
 
 public class PatternOpMock extends PatternOp {
 
+    public PatternOpMock(@Attribute(name = "startIndex") int startIndex,
+            @Attribute(name = "size") int size) {
+        this(size);
+    }
+
+
+
     public PatternOpMock(@Attribute(name = "size") int size) {
         super(0, size);
     }

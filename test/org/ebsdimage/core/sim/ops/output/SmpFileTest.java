@@ -51,7 +51,7 @@ public class SmpFileTest extends TestCase {
     @Before
     public void setUp() throws Exception {
         op = new SmpFile();
-        patternSimOp = new PatternSimOpMock();
+        patternSimOp = PatternSimOpMock.DEFAULT;
         SimOperation[] ops = new SimOperation[] { op, patternSimOp };
 
         sim = SimTester.createSim(ops);

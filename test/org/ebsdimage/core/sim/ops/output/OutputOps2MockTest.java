@@ -44,7 +44,7 @@ public class OutputOps2MockTest extends TestCase {
     @Before
     public void setUp() throws Exception {
         op = new OutputOps2Mock();
-        patternSimOp = new PatternSimOpMock();
+        patternSimOp = PatternSimOpMock.DEFAULT;
     }
 
 

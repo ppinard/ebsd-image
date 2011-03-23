@@ -93,19 +93,24 @@ public class PatternFilesLoader extends PatternOp {
 
 
     /**
-     * Creates a new <code>PatternFilesLoader</code> with the list of files. The
-     * start index is assigned the first file in the array.
+     * Constructor to deserialize a <code>PatternFilesLoader</code> operation.
      * 
      * @param startIndex
      *            index of the first pattern
+     * @param size
+     *            number of pattern files
      * @param filePaths
-     *            list of file paths
-     * @throws NullPointerException
-     *             if a file path in the array is null
+     *            list of pattern files
      */
-    public PatternFilesLoader(@Attribute(name = "startIndex") int startIndex,
+    private PatternFilesLoader(@Attribute(name = "startIndex") int startIndex,
+            @Attribute(name = "size") int size,
             @ElementArray(name = "files") String[] filePaths) {
         super(startIndex, filePaths.length);
+
+        if (size != filePaths.length)
+            throw new IllegalArgumentException("The size (" + size
+                    + ") does not match the number of files ("
+                    + filePaths.length + ").");
 
         files = new File[filePaths.length];
 
