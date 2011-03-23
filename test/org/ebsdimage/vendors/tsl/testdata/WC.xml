@@ -1,16 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Crystal name="WC">
-  <UnitCell a="2.906" b="2.906" c="2.838" dimUnits="angstrom" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="2.0943951023931953" angleUnits="rad" />
-  <AtomSites>
-    <AtomSite>
-      <Element atomicNumber="74" />
-      <Position x="0.0" y="0.0" z="0.0" />
-    </AtomSite>
-    <AtomSite>
-      <Element atomicNumber="6" />
-      <Position x="0.33333" y="0.66666" z="0.5" />
-    </AtomSite>
-  </AtomSites>
-  <SpaceGroup index="194" />
-</Crystal>
-
+<crystal name="WC">
+   <unitCell a="2.906" b="2.906" c="2.838" alpha="1.5707963267948966" beta="1.5707963267948966" gamma="2.0943951023931953"/>
+   <atoms>
+      <atom atomicNumber="74" occupancy="1.0">
+         <position>0.0;0.0;0.0</position>
+      </atom>
+      <atom atomicNumber="74" occupancy="1.0">
+         <position>0.0;0.0;0.5</position>
+      </atom>
+      <atom atomicNumber="6" occupancy="1.0">
+         <position>0.33333;0.66666;0.5</position>
+      </atom>
+      <atom atomicNumber="6" occupancy="1.0">
+         <position>0.66666;0.33333;0.0</position>
+      </atom>
+      <atom atomicNumber="6" occupancy="1.0">
+         <position>0.66667;0.33333;0.0</position>
+      </atom>
+      <atom atomicNumber="6" occupancy="1.0">
+         <position>0.66666;0.33333;0.5</position>
+      </atom>
+      <atom atomicNumber="6" occupancy="1.0">
+         <position>0.33333;0.66666;0.0</position>
+      </atom>
+   </atoms>
+   <spaceGroup>194</spaceGroup>
+</crystal>

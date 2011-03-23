@@ -17,13 +17,13 @@
  */
 package org.ebsdimage.vendors.tsl.io;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
 import org.ebsdimage.vendors.tsl.core.TslMMapTester;
 import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class TslMMapLoaderTest extends TslMMapTester {
 
@@ -39,9 +39,11 @@ public class TslMMapLoaderTest extends TslMMapTester {
 
 
     @Test
-    public void testIsTslMMap() {
-        assertTrue(TslMMapLoader.isTslMMap(file));
-        assertFalse(TslMMapLoader.isTslMMap(getFile("org/ebsdimage/vendors/tsl/testdata/WC.xml")));
+    public void testCanLoad() {
+        TslMMapLoader loader = new TslMMapLoader();
+
+        assertTrue(loader.canLoad(file));
+        assertFalse(loader.canLoad(getFile("org/ebsdimage/vendors/tsl/testdata/WC.xml")));
     }
 
 }

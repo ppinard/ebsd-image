@@ -37,7 +37,8 @@ public class TslMMapSaverTest extends TslMMapTester {
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         // Load mmap from zip
-        File file = getFile("org/ebsdimage/vendors/tsl/testdata/scan1.zip");
+        File file =
+                FileUtil.getFile("org/ebsdimage/vendors/tsl/testdata/scan1.zip");
         TslMMap tempMMap = new TslMMapLoader().load(file);
 
         // Save mmap to temp dir

@@ -25,7 +25,7 @@ import javax.swing.JLabel;
 import org.ebsdimage.vendors.tsl.io.AngLoader;
 
 /**
- * Wizard page to create phases based on the information in the ang file.
+ * Wizard page to create phases based on the information in the ANG file.
  * 
  * @author Philippe T. Pinard
  */
@@ -40,7 +40,7 @@ public class PhasesWizardPage extends org.ebsdimage.gui.PhasesWizardPage {
         return "Phases";
     }
 
-    /** Field for the description of phases in the ang file. */
+    /** Field for the description of phases in the ANG file. */
     private JLabel descField;
 
 
@@ -61,17 +61,20 @@ public class PhasesWizardPage extends org.ebsdimage.gui.PhasesWizardPage {
     protected void renderingPage() {
         super.renderingPage();
 
-        // Get ctf file
         File angFile = (File) get(StartWizardPage.KEY_ANG_FILE);
+
+        if (angFile == null) {
+            showErrorDialog("No ANG file was defined in the Start wizard page.");
+            return;
+        }
 
         // Load phases name
         String[] phasesName = new String[0];
-        if (angFile != null) {
-            try {
-                phasesName = AngLoader.getPhaseNames(angFile);
-            } catch (IOException e) {
-                showErrorDialog(e.getMessage());
-            }
+        try {
+            phasesName = new AngLoader().loadPhaseNames(angFile);
+        } catch (IOException e) {
+            showErrorDialog(e.getMessage());
+            return;
         }
 
         // Set minimum number of phases
@@ -82,7 +85,7 @@ public class PhasesWizardPage extends org.ebsdimage.gui.PhasesWizardPage {
         StringBuilder desc = new StringBuilder();
         desc.append("<html><u>Warning</u>: ");
         desc.append(phasesCount + " phase(s) need(s) to be defined. "
-                + "In the ang file, the following names "
+                + "In the ANG file, the following names "
                 + "were given to the phases: ");
         for (int i = 0; i < phasesCount; i++)
             desc.append("(" + (i + 1) + ") " + phasesName[i] + ",");

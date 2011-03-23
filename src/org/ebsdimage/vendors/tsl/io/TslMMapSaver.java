@@ -18,12 +18,11 @@
 package org.ebsdimage.vendors.tsl.io;
 
 import org.ebsdimage.io.EbsdMMapSaver;
-import org.ebsdimage.io.EbsdMetadataXmlSaver;
 import org.ebsdimage.vendors.tsl.core.TslMMap;
 
 /**
  * Saver for a <code>TslMMap</code>. A <code>TslMMap</code> is saved in a human
- * readable zip file.
+ * readable ZIP file.
  * 
  * @author Philippe T. Pinard
  */
@@ -37,15 +36,15 @@ public class TslMMapSaver extends EbsdMMapSaver {
 
 
     @Override
-    protected EbsdMetadataXmlSaver getMetadataSaver() {
-        return new TslMetadataXmlSaver();
+    protected int getVersion() {
+        return TslMMap.VERSION;
     }
 
 
 
     @Override
-    protected int getVersion() {
-        return 1;
+    public boolean canSave(Object obj, String fileFormat) {
+        return (obj instanceof TslMMap) && fileFormat.equalsIgnoreCase("zip");
     }
 
 }

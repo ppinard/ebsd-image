@@ -17,14 +17,18 @@
  */
 package org.ebsdimage.vendors.tsl.gui;
 
+import java.io.File;
+
 import javax.swing.JLabel;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.miginfocom.swing.MigLayout;
 
 import org.ebsdimage.vendors.tsl.io.AngLoader;
 
+import ptpshared.gui.SingleFileBrowserField;
 import ptpshared.gui.WizardPage;
-import rmlshared.gui.FileNameField;
 
 /**
  * First page for the import wizard.
@@ -33,7 +37,7 @@ import rmlshared.gui.FileNameField;
  */
 public class StartWizardPage extends WizardPage {
 
-    /** Map key for the ang file. */
+    /** Map key for the ANG file. */
     public static final String KEY_ANG_FILE = "angFile";
 
 
@@ -47,8 +51,8 @@ public class StartWizardPage extends WizardPage {
         return "Start";
     }
 
-    /** Field for the ang file. */
-    private FileNameField angFileField;
+    /** Field for the ANG file. */
+    private SingleFileBrowserField angFileField;
 
 
 
@@ -61,7 +65,7 @@ public class StartWizardPage extends WizardPage {
 
         String text =
                 "<html>This importer converts the acquisition parameters "
-                        + "and data from a ang file into EBSD-Image's EBSD multimap "
+                        + "and data from a ANG file into EBSD-Image's EBSD multimap "
                         + "format."
                         + "<br/><br/>"
                         + "For more information, please visit: http://ebsd-image.sourceforge.net/wiki/ImportFromTSLOIM"
@@ -69,10 +73,11 @@ public class StartWizardPage extends WizardPage {
         add(new JLabel(text), "grow, span 3, wrap 40");
 
         add(new JLabel("Ang file"));
-        angFileField = new FileNameField("Ang file", 32, false);
-        angFileField.setFileSelectionMode(FileNameField.FILES_ONLY);
-        rmlshared.gui.FileDialog.addFilter("*.ang");
-        angFileField.setFileFilter("*.ang");
+
+        FileFilter[] filters =
+                new FileFilter[] { new FileNameExtensionFilter(
+                        "TSL OIM ANG file (*.ang)", "ang") };
+        angFileField = new SingleFileBrowserField("Ang file", false, filters);
         add(angFileField);
         add(angFileField.getBrowseButton(), "wrap");
     }
@@ -81,13 +86,15 @@ public class StartWizardPage extends WizardPage {
 
     @Override
     public boolean isCorrect(boolean buffer) {
-        if (angFileField.getFile() == null) {
-            showErrorDialog("Please specify a ang file.");
+        File angFile = angFileField.getFile();
+
+        if (angFile == null) {
+            showErrorDialog("Please specify a ANG file.");
             return false;
         }
 
-        if (!AngLoader.isAng(angFileField.getFile())) {
-            showErrorDialog("The ang file is not valid.");
+        if (!new AngLoader().canLoad(angFile)) {
+            showErrorDialog("The ANG file is not valid.");
             return false;
         }
 

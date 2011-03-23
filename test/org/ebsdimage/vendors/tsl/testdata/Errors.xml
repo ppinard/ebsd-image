@@ -1,0 +1,6 @@
+<map>
+   <item>
+      <key class="java.lang.Integer">0</key>
+      <value class="org.ebsdimage.core.ErrorCode" name="No error" description=""/>
+   </item>
+</map>

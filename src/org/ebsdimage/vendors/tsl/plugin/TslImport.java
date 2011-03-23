@@ -20,24 +20,25 @@ package org.ebsdimage.vendors.tsl.plugin;
 import java.io.File;
 import java.io.IOException;
 
+import org.ebsdimage.core.Microscope;
 import org.ebsdimage.vendors.tsl.core.TslMMap;
+import org.ebsdimage.vendors.tsl.core.TslMetadata;
 import org.ebsdimage.vendors.tsl.gui.TslImportWizard;
 import org.ebsdimage.vendors.tsl.io.AngLoader;
 import org.ebsdimage.vendors.tsl.io.TslMMapSaver;
 
-import ptpshared.core.math.Quaternion;
 import rmlimage.plugin.PlugIn;
 import rmlshared.ui.Monitorable;
 import crystallography.core.Crystal;
 
 /**
- * Import an ang file by converting it to a multimap.
+ * Import an ANG file by converting it to a multimap.
  * 
  * @author Philippe T. Pinard
  */
 public class TslImport extends PlugIn implements Monitorable {
 
-    /** Loader for the ang file. */
+    /** Loader for the ANG file. */
     private AngLoader angLoader;
 
     /** Saver for the MMap. */
@@ -53,63 +54,6 @@ public class TslImport extends PlugIn implements Monitorable {
      */
     public TslImport() {
         setInterruptable(true);
-    }
-
-
-
-    /**
-     * Displays a dialog and performs the import of the ang file.
-     * 
-     * @return a <code>HklMMap</code>
-     */
-    private TslMMap doImport() {
-        TslImportWizard wizard = new TslImportWizard();
-        wizard.setPreferences(getPreferences());
-
-        if (!wizard.show())
-            return null;
-
-        // Load ctf
-        double beamEnergy = wizard.getBeamEnergy();
-        double magnification = wizard.getMagnification();
-        double tiltAngle = wizard.getTiltAngle();
-        Quaternion rotation = wizard.getSampleRotation();
-        Crystal[] phases = wizard.getPhases();
-        File angFile = wizard.getAngFile();
-
-        angLoader = new AngLoader();
-        status = "Loading ang file.";
-        TslMMap mmap = null;
-
-        try {
-            mmap =
-                    angLoader.load(angFile, beamEnergy, magnification,
-                            tiltAngle, rotation, phases);
-        } catch (IOException e) {
-            showErrorDialog("While loading the ang:" + e.getMessage());
-        }
-
-        angLoader = null;
-
-        // Save MMap
-        File outputFile = wizard.getOutputFile();
-
-        mmapSaver = new TslMMapSaver();
-        status = "Saving multimap.";
-
-        try {
-            mmapSaver.save(mmap, outputFile);
-        } catch (IOException e) {
-            showErrorDialog("While saving the multimap:" + e.getMessage());
-        }
-
-        mmapSaver = null;
-
-        // Display MMap in the GUI
-        if (wizard.getDisplayGUI())
-            add(mmap);
-
-        return mmap;
     }
 
 
@@ -148,7 +92,57 @@ public class TslImport extends PlugIn implements Monitorable {
 
     @Override
     protected void xRun() throws Exception {
-        doImport();
+        TslImportWizard wizard = new TslImportWizard();
+        wizard.setPreferences(getPreferences());
+
+        if (!wizard.show())
+            return;
+
+        // Load ANG
+        status = "Loading ANG file.";
+        angLoader = new AngLoader();
+
+        Microscope microscope = wizard.getMicroscope();
+        Crystal[] phases = wizard.getPhases();
+        File angFile = wizard.getAngFile();
+
+        TslMetadata metadata;
+        try {
+            metadata = angLoader.loadMetadata(angFile, microscope);
+        } catch (IOException e) {
+            showErrorDialog("While loading the ANG:" + e.getMessage());
+            return;
+        }
+        metadata.setMicroscope(microscope); // overwrite with user modification
+
+        TslMMap mmap;
+        try {
+            mmap = angLoader.load(angFile, metadata, phases);
+        } catch (IOException e) {
+            showErrorDialog("While loading the ANG:" + e.getMessage());
+            return;
+        }
+
+        angLoader = null;
+
+        // Save multimap
+        status = "Saving multimap.";
+        mmapSaver = new TslMMapSaver();
+
+        File outputFile = wizard.getOutputFile();
+
+        try {
+            mmapSaver.save(mmap, outputFile);
+        } catch (IOException e) {
+            showErrorDialog("While saving the multimap:" + e.getMessage());
+            return;
+        }
+
+        mmapSaver = null;
+
+        // Display multimap in the GUI
+        if (wizard.getDisplayGUI())
+            add(mmap);
     }
 
 }

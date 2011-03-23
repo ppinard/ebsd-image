@@ -17,26 +17,33 @@
  */
 package org.ebsdimage.vendors.tsl.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 
+import org.apache.commons.math.geometry.CardanEulerSingularityException;
+import org.apache.commons.math.geometry.Rotation;
 import org.ebsdimage.TestCase;
-import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.EbsdMMap;
-import org.ebsdimage.core.PhasesMap;
-import org.ebsdimage.io.PhasesMapLoader;
+import org.ebsdimage.core.ErrorMap;
+import org.ebsdimage.core.Microscope;
+import org.ebsdimage.core.PhaseMap;
+import org.ebsdimage.io.ErrorMapLoader;
+import org.ebsdimage.io.PhaseMapLoader;
 import org.junit.Before;
 import org.junit.Test;
 
-import ptpshared.core.math.Quaternion;
+import ptpshared.geom.RotationUtils;
+import rmlimage.core.ByteMap;
+import rmlimage.core.Calibration;
 import rmlimage.core.Map;
 import rmlimage.module.real.core.RealMap;
 import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
 import crystallography.io.CrystalLoader;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import static ptpshared.geom.Assert.assertEquals;
 
 public abstract class TslMMapTester extends TestCase {
 
@@ -51,9 +58,9 @@ public abstract class TslMMapTester extends TestCase {
     @Before
     public void setUp() throws Exception {
         wcPhase =
-                new CrystalLoader().load(FileUtil.getFile("org/ebsdimage/vendors/tsl/testdata/WC.xml"));
+                new CrystalLoader().load(getFile("org/ebsdimage/vendors/tsl/testdata/WC.xml"));
         nickelPhase =
-                new CrystalLoader().load(FileUtil.getFile("org/ebsdimage/vendors/tsl/testdata/Nickel.xml"));
+                new CrystalLoader().load(getFile("org/ebsdimage/vendors/tsl/testdata/Nickel.xml"));
     }
 
 
@@ -64,15 +71,6 @@ public abstract class TslMMapTester extends TestCase {
 
         assertEquals(2, newMMap.width);
         assertEquals(2, newMMap.height);
-
-        assertEquals(mmap.beamEnergy, newMMap.beamEnergy, 1e-6);
-        assertEquals(mmap.magnification, newMMap.magnification, 1e-6);
-        assertEquals(mmap.tiltAngle, newMMap.tiltAngle, 1e-6);
-        assertEquals(mmap.workingDistance, newMMap.workingDistance, 1e-6);
-        assertEquals(mmap.pixelWidth, newMMap.pixelWidth, 1e-6);
-        assertEquals(mmap.pixelHeight, newMMap.pixelHeight, 1e-6);
-        assertTrue(mmap.sampleRotation.equals(newMMap.sampleRotation, 1e-6));
-        assertTrue(mmap.calibration.equals(newMMap.calibration, 1e-6));
 
         RealMap q0Map = newMMap.getQ0Map();
         assertEquals(2, q0Map.width);
@@ -90,22 +88,10 @@ public abstract class TslMMapTester extends TestCase {
         assertEquals(2, q3Map.width);
         assertEquals(2, q3Map.height);
 
-        PhasesMap phasesMap = newMMap.getPhasesMap();
+        PhaseMap phasesMap = newMMap.getPhaseMap();
         assertEquals(2, phasesMap.width);
         assertEquals(2, phasesMap.height);
         assertEquals(0, phasesMap.getPhases().length);
-
-        RealMap euler1Map = newMMap.getEuler1Map();
-        assertEquals(2, euler1Map.width);
-        assertEquals(2, euler1Map.height);
-
-        RealMap euler2Map = newMMap.getEuler2Map();
-        assertEquals(2, euler2Map.width);
-        assertEquals(2, euler2Map.height);
-
-        RealMap euler3Map = newMMap.getEuler3Map();
-        assertEquals(2, euler3Map.width);
-        assertEquals(2, euler3Map.height);
 
         RealMap iqMap = newMMap.getImageQualityMap();
         assertEquals(2, iqMap.width);
@@ -125,24 +111,11 @@ public abstract class TslMMapTester extends TestCase {
         assertEquals(mmap.width, newMMap.width);
         assertEquals(mmap.height, newMMap.height);
 
-        assertEquals(mmap.beamEnergy, newMMap.beamEnergy, 1e-6);
-        assertEquals(mmap.magnification, newMMap.magnification, 1e-6);
-        assertEquals(mmap.tiltAngle, newMMap.tiltAngle, 1e-6);
-        assertEquals(mmap.workingDistance, newMMap.workingDistance, 1e-6);
-        assertEquals(mmap.pixelWidth, newMMap.pixelWidth, 1e-6);
-        assertEquals(mmap.pixelHeight, newMMap.pixelHeight, 1e-6);
-        assertTrue(mmap.sampleRotation.equals(newMMap.sampleRotation, 1e-6));
-        assertTrue(mmap.calibration.equals(newMMap.calibration, 1e-6));
-
         mmap.getQ0Map().assertEquals(newMMap.getQ0Map(), 1e-6);
         mmap.getQ1Map().assertEquals(newMMap.getQ1Map(), 1e-6);
         mmap.getQ2Map().assertEquals(newMMap.getQ2Map(), 1e-6);
         mmap.getQ3Map().assertEquals(newMMap.getQ3Map(), 1e-6);
-        mmap.getPhasesMap().assertEquals(newMMap.getPhasesMap(), 1e-6);
-
-        mmap.getEuler1Map().assertEquals(newMMap.getEuler1Map(), 1e-6);
-        mmap.getEuler2Map().assertEquals(newMMap.getEuler2Map(), 1e-6);
-        mmap.getEuler3Map().assertEquals(newMMap.getEuler3Map(), 1e-6);
+        mmap.getPhaseMap().assertEquals(newMMap.getPhaseMap(), 1e-6);
 
         mmap.getImageQualityMap().assertEquals(newMMap.getImageQualityMap(),
                 1e-6);
@@ -165,42 +138,6 @@ public abstract class TslMMapTester extends TestCase {
 
 
     @Test
-    public void testGetEuler1() {
-        RealMap realMap = mmap.getEuler1Map();
-
-        RealMap expectedRealMap =
-                (RealMap) load("org/ebsdimage/vendors/tsl/testdata/Euler1.rmp");
-
-        realMap.assertEquals(expectedRealMap, 1e-3);
-    }
-
-
-
-    @Test
-    public void testGetEuler2() {
-        RealMap realMap = mmap.getEuler2Map();
-
-        RealMap expectedRealMap =
-                (RealMap) load("org/ebsdimage/vendors/tsl/testdata/Euler2.rmp");
-
-        realMap.assertEquals(expectedRealMap, 1e-3);
-    }
-
-
-
-    @Test
-    public void testGetEuler3() {
-        RealMap realMap = mmap.getEuler3Map();
-
-        RealMap expectedRealMap =
-                (RealMap) load("org/ebsdimage/vendors/tsl/testdata/Euler3.rmp");
-
-        realMap.assertEquals(expectedRealMap, 1e-3);
-    }
-
-
-
-    @Test
     public void testGetImageQualityMap() {
         RealMap realMap = mmap.getImageQualityMap();
 
@@ -213,66 +150,53 @@ public abstract class TslMMapTester extends TestCase {
 
 
     @Test
-    public void testGetMetadata() {
-        TslMetadata metadata = mmap.getMetadata();
+    public void testGetMicroscope() {
+        Microscope microscope = mmap.getMicroscope();
 
-        assertEquals(Double.NaN, metadata.beamEnergy, 1e-3);
-        assertEquals(Double.NaN, metadata.magnification, 1e-3);
-        assertEquals(Double.NaN, metadata.tiltAngle, 1e-3);
-        assertEquals(15, metadata.workingDistance * 1000, 1e-3);
-        assertEquals(0.07, metadata.pixelWidth * 1e6, 1e-3);
-        assertEquals(0.07, metadata.pixelHeight * 1e6, 1e-3);
-        assertTrue(Quaternion.IDENTITY.equals(metadata.sampleRotation, 1e-3));
-        assertTrue(new Camera(0.0235, 0.3049, 0.7706).equals(
-                metadata.camera, 1e-3));
+        assertEquals(0.523500, microscope.getPatternCenterX(), 1e-6);
+        assertEquals(1 - 0.804900, microscope.getPatternCenterY(), 1e-6);
+        assertEquals(0.0, microscope.getCameraDistance(), 1e-6);
+        assertEquals(15, microscope.getWorkingDistance() * 1000, 1e-3);
+        assertEquals(Rotation.IDENTITY, microscope.getSampleRotation(), 1e-6);
     }
 
 
 
     @Test
-    public void testGetPhase() {
-        assertNull(mmap.getPhase(0));
-        assertTrue(wcPhase.equals(mmap.getPhase(1), 1e-4));
-        assertTrue(nickelPhase.equals(mmap.getPhase(5), 1e-4));
-    }
+    public void testCalibration() {
+        Calibration cal = mmap.getCalibration();
 
-
-
-    @Test
-    public void testGetPhaseId() {
-        assertEquals(0, mmap.getPhaseId(0));
-        assertEquals(1, mmap.getPhaseId(1));
-        assertEquals(2, mmap.getPhaseId(5));
-    }
-
-
-
-    @Test
-    public void testGetPhases() throws IOException {
-        Crystal[] phases = mmap.getPhases();
-
-        assertEquals(2, phases.length);
-
-        assertTrue(wcPhase.equals(phases[0], 1e-3));
-        assertTrue(nickelPhase.equals(phases[1], 1e-3));
+        assertEquals(0.07, cal.getDX().getValue("um"), 1e-6);
+        assertEquals(0.07, cal.getDY().getValue("um"), 1e-6);
     }
 
 
 
     @Test
     public void testGetPhasesMap() throws IOException {
-        PhasesMap phasesMap = mmap.getPhasesMap();
+        PhaseMap phasesMap = mmap.getPhaseMap();
 
-        PhasesMap expectedPhasesMap =
-                new PhasesMapLoader().load(FileUtil.getFile("org/ebsdimage/vendors/tsl/testdata/Phases.bmp"));
+        PhaseMap expectedPhasesMap =
+                new PhaseMapLoader().load(FileUtil.getFile("org/ebsdimage/vendors/tsl/testdata/Phases.bmp"));
 
-        phasesMap.assertEquals(expectedPhasesMap);
+        phasesMap.assertEquals(expectedPhasesMap, 1e-6);
 
         Crystal[] phases = phasesMap.getPhases();
         assertEquals(2, phases.length);
 
         assertTrue(wcPhase.equals(phases[0], 1e-3));
         assertTrue(nickelPhase.equals(phases[1], 1e-3));
+    }
+
+
+
+    @Test
+    public void testGetErrorMap() throws IOException {
+        ByteMap byteMap = mmap.getErrorMap();
+
+        ErrorMap expectedMap =
+                new ErrorMapLoader().load(getFile("org/ebsdimage/vendors/tsl/testdata/Errors.bmp"));
+        byteMap.assertEquals(expectedMap);
     }
 
 
@@ -326,8 +250,9 @@ public abstract class TslMMapTester extends TestCase {
 
 
     @Test
-    public void testGetRotation() {
-        double[] rotation = mmap.getRotation(1).toEuler().positive();
+    public void testGetRotation() throws CardanEulerSingularityException {
+        double[] rotation =
+                RotationUtils.getBungeEulerAngles(mmap.getRotation(1));
         assertEquals(5.92334, rotation[0], 1e-4);
         assertEquals(1.33599, rotation[1], 1e-4);
         assertEquals(2.82812, rotation[2], 1e-4);
@@ -341,20 +266,9 @@ public abstract class TslMMapTester extends TestCase {
         assertEquals(5, mmap.height);
         assertEquals(25, mmap.size);
 
-        // Metadata
-        assertEquals(Double.NaN, mmap.beamEnergy, 1e-3);
-        assertEquals(Double.NaN, mmap.magnification, 1e-3);
-        assertEquals(Double.NaN, mmap.tiltAngle, 1e-3);
-        assertEquals(15, mmap.workingDistance * 1000, 1e-3);
-        assertEquals(0.07, mmap.pixelWidth * 1e6, 1e-3);
-        assertEquals(0.07, mmap.pixelHeight * 1e6, 1e-3);
-        assertTrue(Quaternion.IDENTITY.equals(mmap.sampleRotation, 1e-3));
-        assertTrue(new Camera(0.0235, 0.3049, 0.7706).equals(mmap.calibration,
-                1e-3));
-
         // Test nb of Maps in MultiMap
         Map[] maps = mmap.getMaps();
-        assertEquals(10, maps.length);
+        assertEquals(8, maps.length);
 
         // Test the presence of the Maps
         assertTrue(mmap.contains(EbsdMMap.Q0));
@@ -362,49 +276,9 @@ public abstract class TslMMapTester extends TestCase {
         assertTrue(mmap.contains(EbsdMMap.Q2));
         assertTrue(mmap.contains(EbsdMMap.Q3));
         assertTrue(mmap.contains(EbsdMMap.PHASES));
-        assertTrue(mmap.contains(TslMMap.EULER1));
-        assertTrue(mmap.contains(TslMMap.EULER2));
-        assertTrue(mmap.contains(TslMMap.EULER3));
+        assertTrue(mmap.contains(EbsdMMap.ERRORS));
         assertTrue(mmap.contains(TslMMap.IMAGE_QUALITY));
         assertTrue(mmap.contains(TslMMap.CONFIDENCE_INDEX));
-    }
-
-
-
-    @Test
-    public void testTslMMapIntIntTslMetadata() {
-        TslMMap other = new TslMMap(2, 2, mmap.getMetadata());
-
-        assertEquals(2, other.width);
-        assertEquals(2, other.height);
-        assertEquals(4, other.size);
-
-        // Metadata
-        assertEquals(mmap.beamEnergy, other.beamEnergy, 1e-3);
-        assertEquals(mmap.magnification, other.magnification, 1e-3);
-        assertEquals(mmap.tiltAngle, other.tiltAngle, 1e-3);
-        assertEquals(mmap.workingDistance * 1000, other.workingDistance * 1000,
-                1e-3);
-        assertEquals(mmap.pixelWidth * 1e6, other.pixelWidth * 1e6, 1e-3);
-        assertEquals(mmap.pixelHeight * 1e6, other.pixelHeight * 1e6, 1e-3);
-        assertTrue(mmap.sampleRotation.equals(other.sampleRotation, 1e-3));
-        assertTrue(mmap.calibration.equals(other.calibration, 1e-3));
-
-        // Test nb of Maps in MultiMap
-        Map[] maps = other.getMaps();
-        assertEquals(10, maps.length);
-
-        // Test the presence of the Maps
-        assertTrue(other.contains(EbsdMMap.Q0));
-        assertTrue(other.contains(EbsdMMap.Q1));
-        assertTrue(other.contains(EbsdMMap.Q2));
-        assertTrue(other.contains(EbsdMMap.Q3));
-        assertTrue(other.contains(EbsdMMap.PHASES));
-        assertTrue(other.contains(TslMMap.EULER1));
-        assertTrue(other.contains(TslMMap.EULER2));
-        assertTrue(other.contains(TslMMap.EULER3));
-        assertTrue(other.contains(TslMMap.IMAGE_QUALITY));
-        assertTrue(other.contains(TslMMap.CONFIDENCE_INDEX));
     }
 
 }

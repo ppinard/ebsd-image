@@ -1,0 +1,12 @@
+#RML-Image Property File - Calib: (0.07um;0.07um;1.0)
+#Wed Mar 23 13:13:35 CET 2011
+calibration.flip.z=false
+calibration.flip.y=false
+calibration.flip.x=false
+calibration.dz=4607182418800017408
+calibration.dy=4589708452267294720
+calibration.dx=4589708452267294720
+calibration.units.z=
+calibration.units.y=um
+calibration.origin.set=false
+calibration.units.x=um

@@ -46,58 +46,17 @@ import rmlimage.module.real.core.RealMap;
  */
 public class TslMMap extends EbsdMMap {
 
-    /** Header for the zip file containing a TslMMap. */
+    /** Header for the ZIP file containing a TslMMap. */
     public static final String FILE_HEADER = EbsdMMap.FILE_HEADER + "-TSL";
 
-    /** Alias of the map of the first euler angle. */
-    public static final String EULER1 = "Euler1";
-
-    /** Alias of the map of the second euler angle. */
-    public static final String EULER2 = "Euler2";
-
-    /** Alias of the map of the third euler angle. */
-    public static final String EULER3 = "Euler3";
+    /** Version of the ZIP file. */
+    public static final int VERSION = 2;
 
     /** Alias of the map of the image quality. */
     public static final String IMAGE_QUALITY = "ImageQuality";
 
     /** Alias of the map of the confidence index. */
     public static final String CONFIDENCE_INDEX = "confidenceIndex";
-
-
-
-    /**
-     * Creates a new <code>HklMMap</code>.
-     * 
-     * @param width
-     *            width of the map
-     * @param height
-     *            height of the map
-     * @param mapList
-     *            list of <code>Map</code> containing all the required maps
-     * @param metadata
-     *            metadata associated to the map
-     */
-    public TslMMap(int width, int height, HashMap<String, Map> mapList,
-            TslMetadata metadata) {
-        super(width, height, mapList, metadata);
-
-        // Verify that all the needed maps are present in the HashMap
-        if (!mapList.containsKey(EULER1))
-            throw new IllegalArgumentException("Undefined euler1 map");
-
-        if (!mapList.containsKey(EULER2))
-            throw new IllegalArgumentException("Undefined euler2 map");
-
-        if (!mapList.containsKey(EULER3))
-            throw new IllegalArgumentException("Undefined euler3 map");
-
-        if (!mapList.containsKey(IMAGE_QUALITY))
-            throw new IllegalArgumentException("Undefined image quality map");
-
-        if (!mapList.containsKey(CONFIDENCE_INDEX))
-            throw new IllegalArgumentException("Undefined confidence index map");
-    }
 
 
 
@@ -109,38 +68,56 @@ public class TslMMap extends EbsdMMap {
      *            width of the map
      * @param height
      *            height of the map
-     * @param metadata
-     *            metadata associated to the map
      */
-    public TslMMap(int width, int height, TslMetadata metadata) {
-        super(width, height, metadata);
+    public TslMMap(int width, int height) {
+        this(width, height, new HashMap<String, Map>());
+    }
 
-        RealMap euler1 = new RealMap(width, height);
-        euler1.clear(Float.NaN);
-        add(EULER1, euler1);
 
-        RealMap euler2 = new RealMap(width, height);
-        euler2.clear(Float.NaN);
-        add(EULER2, euler2);
 
-        RealMap euler3 = new RealMap(width, height);
-        euler3.clear(Float.NaN);
-        add(EULER3, euler3);
+    /**
+     * Creates a new <code>TslMMap</code>.
+     * 
+     * @param width
+     *            width of the map
+     * @param height
+     *            height of the map
+     * @param mapList
+     *            list of <code>Map</code> containing all the required maps
+     */
+    public TslMMap(int width, int height, HashMap<String, Map> mapList) {
+        super(width, height, mapList); // Setup EbsdMMap and add base maps
 
-        RealMap iq = new RealMap(width, height);
-        iq.clear(Float.NaN);
-        add(IMAGE_QUALITY, iq);
+        // Add missing HKL maps
+        if (!contains(IMAGE_QUALITY)) {
+            RealMap imageQuality = new RealMap(width, height);
+            imageQuality.clear();
+            imageQuality.cloneMetadataFrom(this);
+            add(IMAGE_QUALITY, imageQuality);
+        }
 
-        RealMap ci = new RealMap(width, height);
-        ci.clear(Float.NaN);
-        add(CONFIDENCE_INDEX, ci);
+        if (!contains(CONFIDENCE_INDEX)) {
+            RealMap confidenceIndex = new RealMap(width, height);
+            confidenceIndex.clear();
+            confidenceIndex.cloneMetadataFrom(this);
+            add(CONFIDENCE_INDEX, confidenceIndex);
+        }
+
+        // Verify that all the needed Maps are present and have the right type
+        if (!getMap(IMAGE_QUALITY).getClass().equals(RealMap.class))
+            throw new IllegalArgumentException(
+                    "Image quality map must be a RealMap.");
+
+        if (!getMap(CONFIDENCE_INDEX).getClass().equals(RealMap.class))
+            throw new IllegalArgumentException(
+                    "Confidence index map must be a RealMap.");
     }
 
 
 
     @Override
     public TslMMap createMap(int width, int height) {
-        return new TslMMap(width, height, getMetadata());
+        return new TslMMap(width, height);
     }
 
 
@@ -152,8 +129,10 @@ public class TslMMap extends EbsdMMap {
         for (Entry<String, Map> entry : getEntrySet())
             mapList.put(entry.getKey(), entry.getValue().duplicate());
 
-        TslMMap dup = new TslMMap(width, height, mapList, getMetadata());
-        dup.setProperties(this);
+        TslMMap dup = new TslMMap(width, height, mapList);
+
+        dup.setMetadata(getMetadata());
+        cloneMetadataFrom(this);
 
         return dup;
     }
@@ -172,39 +151,6 @@ public class TslMMap extends EbsdMMap {
 
 
     /**
-     * Returns the map for the first euler angle.
-     * 
-     * @return euler1 map
-     */
-    public RealMap getEuler1Map() {
-        return (RealMap) getMap(EULER1);
-    }
-
-
-
-    /**
-     * Returns the map for the second euler angle.
-     * 
-     * @return euler2 map
-     */
-    public RealMap getEuler2Map() {
-        return (RealMap) getMap(EULER2);
-    }
-
-
-
-    /**
-     * Returns the map for the third euler angle.
-     * 
-     * @return euler3 map
-     */
-    public RealMap getEuler3Map() {
-        return (RealMap) getMap(EULER3);
-    }
-
-
-
-    /**
      * Returns the map for the image quality.
      * 
      * @return image quality map
@@ -217,9 +163,7 @@ public class TslMMap extends EbsdMMap {
 
     @Override
     public TslMetadata getMetadata() {
-        return new TslMetadata(beamEnergy, magnification, tiltAngle,
-                workingDistance, pixelWidth, pixelHeight, sampleRotation,
-                calibration);
+        return (TslMetadata) super.getMetadata();
     }
 
 }

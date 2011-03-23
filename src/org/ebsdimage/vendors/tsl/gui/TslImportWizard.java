@@ -17,17 +17,17 @@
  */
 package org.ebsdimage.vendors.tsl.gui;
 
-import static rmlshared.io.FileUtil.getURL;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import ptpshared.core.math.Quaternion;
+import org.ebsdimage.core.Microscope;
+
 import ptpshared.gui.Wizard;
 import ptpshared.gui.WizardPage;
 import crystallography.core.Crystal;
+import static rmlshared.io.FileUtil.getURL;
 
 /**
  * Wizard to import HKL data.
@@ -41,7 +41,7 @@ public class TslImportWizard extends Wizard {
      */
     public TslImportWizard() {
         super("Import from TSL", new WizardPage[] { new StartWizardPage(),
-                new MissingDataWizardPage(), new PhasesWizardPage(),
+                new MicroscopeWizardPage(), new PhasesWizardPage(),
                 new OutputWizardPage() });
 
         BufferedImage image;
@@ -60,36 +60,18 @@ public class TslImportWizard extends Wizard {
 
 
     /**
-     * Returns the ang file to load.
+     * Returns the ANG file to load.
      * 
-     * @return ang file
+     * @return ANG file
      */
     public File getAngFile() {
         File angFile = (File) results.get(StartWizardPage.KEY_ANG_FILE);
 
         if (angFile == null)
             throw new NullPointerException(
-                    "Could not get ang file from wizard.");
+                    "Could not get ANG file from wizard.");
 
         return angFile;
-    }
-
-
-
-    /**
-     * Returns the beam energy specified in this dialog.
-     * 
-     * @return beam energy
-     */
-    public double getBeamEnergy() {
-        Double beamEnergy =
-                (Double) results.get(MissingDataWizardPage.KEY_BEAM_ENERGY);
-
-        if (beamEnergy == null)
-            throw new NullPointerException(
-                    "Could not get beam energy from wizard.");
-
-        return beamEnergy;
     }
 
 
@@ -115,27 +97,9 @@ public class TslImportWizard extends Wizard {
 
 
     /**
-     * Returns the magnification specified in this dialog.
+     * Returns the output file for the multimap.
      * 
-     * @return magnification
-     */
-    public double getMagnification() {
-        Double magnification =
-                (Double) results.get(MissingDataWizardPage.KEY_MAGNIFICATION);
-
-        if (magnification == null)
-            throw new NullPointerException(
-                    "Could not get magnification from wizard.");
-
-        return magnification;
-    }
-
-
-
-    /**
-     * Returns the output file for the MMap.
-     * 
-     * @return outptu file
+     * @return output file
      */
     public File getOutputFile() {
         File outputFile = (File) results.get(OutputWizardPage.KEY_OUTPUT_FILE);
@@ -150,37 +114,19 @@ public class TslImportWizard extends Wizard {
 
 
     /**
-     * Returns the sample's rotation specified in this dialog.
+     * Returns the microscope with the CTF parameters.
      * 
-     * @return sample's rotation
+     * @return microscope
      */
-    public Quaternion getSampleRotation() {
-        Quaternion calibration =
-                (Quaternion) results.get(MissingDataWizardPage.KEY_SAMPLE_ROTATION);
+    public Microscope getMicroscope() {
+        Microscope microscope =
+                (Microscope) results.get(MicroscopeWizardPage.KEY_MICROSCOPE);
 
-        if (calibration == null)
+        if (microscope == null)
             throw new NullPointerException(
-                    "Could not get sample's rotation from wizard.");
+                    "Could not get the microscope from wizard.");
 
-        return calibration;
-    }
-
-
-
-    /**
-     * Returns the tilt angle specified in this dialog.
-     * 
-     * @return tilt angle
-     */
-    public double getTiltAngle() {
-        Double tiltAngle =
-                (Double) results.get(MissingDataWizardPage.KEY_TILT_ANGLE);
-
-        if (tiltAngle == null)
-            throw new NullPointerException(
-                    "Could not get tilt angle from wizard.");
-
-        return tiltAngle;
+        return microscope;
     }
 
 

@@ -20,11 +20,13 @@ package org.ebsdimage.vendors.tsl.gui;
 import java.io.File;
 
 import javax.swing.JLabel;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.miginfocom.swing.MigLayout;
+import ptpshared.gui.SingleFileBrowserField;
 import ptpshared.gui.WizardPage;
 import rmlshared.gui.CheckBox;
-import rmlshared.gui.FileNameField;
 import rmlshared.io.FileUtil;
 
 /**
@@ -52,7 +54,7 @@ public class OutputWizardPage extends WizardPage {
     }
 
     /** Field for the output file. */
-    private FileNameField outputFileField;
+    private SingleFileBrowserField outputFileField;
 
     /** Check box to display the MMap after being loaded. */
     private CheckBox displayCBox;
@@ -66,10 +68,11 @@ public class OutputWizardPage extends WizardPage {
         setLayout(new MigLayout("", "[][grow, fill][]"));
 
         add(new JLabel("Multimap output file"));
-        outputFileField = new FileNameField("OUTPUTFILE", 32, false);
-        rmlshared.gui.FileDialog.addFilter("*.zip");
-        outputFileField.setFileFilter("*.zip");
-        outputFileField.setExtension("zip");
+        FileFilter[] filters =
+                new FileFilter[] { new FileNameExtensionFilter(
+                        "HKL multimap (*.zip)", "zip") };
+        outputFileField =
+                new SingleFileBrowserField("Output file", false, filters);
         add(outputFileField);
         add(outputFileField.getBrowseButton(), "wrap");
 
@@ -101,12 +104,12 @@ public class OutputWizardPage extends WizardPage {
     protected void renderingPage() {
         super.renderingPage();
 
-        if (get(StartWizardPage.KEY_ANG_FILE) == null)
+        File file = (File) get(StartWizardPage.KEY_ANG_FILE);
+
+        if (file == null)
             return;
 
-        File file = (File) get(StartWizardPage.KEY_ANG_FILE);
         file = FileUtil.setExtension(file, "zip");
-
         outputFileField.setFile(file);
     }
 }

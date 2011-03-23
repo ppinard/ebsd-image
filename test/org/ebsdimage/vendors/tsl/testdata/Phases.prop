@@ -1,0 +1,9 @@
+#PhaseMap2 - Calib: (0.07um;0.07um)
+#Wed Mar 23 13:13:35 CET 2011
+calibration.flip.y=false
+calibration.units.y=um
+calibration.flip.x=false
+calibration.units.x=um
+calibration.origin.set=false
+calibration.dy=4589708452267294720
+calibration.dx=4589708452267294720

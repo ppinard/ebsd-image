@@ -28,6 +28,9 @@ public class Init extends rmlimage.module.Init {
     public void preGUI() {
         if (rmlimage.module.Module.DEBUG)
             System.out.println("Running preGUI init of the EBSD module");
+
+        rmlimage.io.IO.addLoader(org.ebsdimage.vendors.tsl.io.TslMMapLoader.class);
+        rmlimage.io.IO.addSaver(org.ebsdimage.vendors.tsl.io.TslMMapSaver.class);
     }
 
 
