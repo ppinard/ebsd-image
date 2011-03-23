@@ -193,39 +193,30 @@ public class DirBrowserField extends JComponent implements InputValidation,
      */
     @Override
     public boolean isCorrect(boolean showErrorDialog) {
-        String message = getValidationMessage(getDir());
-        if (!message.isEmpty() && showErrorDialog) {
-            ErrorDialog.show(message);
+        File dir = getDir();
+
+        if (dir == null) {
+            if (showErrorDialog)
+                ErrorDialog.show("Please select a directory.");
             return false;
-        } else
-            return true;
-    }
-
-
-
-    /**
-     * Returns a validation message whether the specified directory is valid:
-     * <ul>
-     * <li>the directory exists</li>
-     * </ul>
-     * If the directory is valid, an empty string is returned.
-     * 
-     * @param dir
-     *            a directory
-     * @return a validation message if the directory is invalid or an empty
-     *         string if the directory is valid
-     */
-    private String getValidationMessage(File dir) {
-        if (dir == null)
-            return "Please select a directory.";
+        }
 
         // Directory exists
         if (!dir.exists()) {
-            return "Selected directory (" + dir
-                    + ") does not exists. Please make another selection.";
+            if (showErrorDialog)
+                ErrorDialog.show("Selected directory (" + dir
+                        + ") does not exists. Please make another selection.");
+            return false;
         }
 
-        return "";
+        if (!dir.isDirectory()) {
+            if (showErrorDialog)
+                ErrorDialog.show("Selected file (" + dir
+                        + ") is not a directory.");
+            return false;
+        }
+
+        return true;
     }
 
 
@@ -311,12 +302,10 @@ public class DirBrowserField extends JComponent implements InputValidation,
      *             if the directory is invalid
      */
     public void setDir(File dir) {
-        if (dir == null)
+        if (dir == null) {
             clear();
-
-        String message = getValidationMessage(dir);
-        if (message.length() > 0)
-            throw new IllegalArgumentException(message);
+            return;
+        }
 
         nameField.setText(dir.getPath());
         dirChooser.setSelectedFile(dir);
