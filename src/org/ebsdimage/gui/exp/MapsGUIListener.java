@@ -56,8 +56,6 @@ public class MapsGUIListener implements ExpListener {
     @Override
     public void patternResultsPerformed(Exp exp, PatternResultsOps op,
             OpResult result) {
-        // TODO Auto-generated method stub
-
     }
 
 
@@ -86,8 +84,6 @@ public class MapsGUIListener implements ExpListener {
     @Override
     public void houghResultsPerformed(Exp exp, HoughResultsOps op,
             OpResult result) {
-        // TODO Auto-generated method stub
-
     }
 
 
@@ -118,8 +114,6 @@ public class MapsGUIListener implements ExpListener {
     @Override
     public void detectionResultsPerformed(Exp exp, DetectionResultsOps op,
             OpResult result) {
-        // TODO Auto-generated method stub
-
     }
 
 
@@ -155,8 +149,6 @@ public class MapsGUIListener implements ExpListener {
     @Override
     public void identificationResultsPerformed(Exp exp,
             IdentificationResultsOps op, OpResult result) {
-        // TODO Auto-generated method stub
-
     }
 
 
@@ -201,8 +193,6 @@ public class MapsGUIListener implements ExpListener {
     @Override
     public void indexingResultsPerformed(Exp exp, IndexingResultsOps op,
             OpResult result) {
-        // TODO Auto-generated method stub
-
     }
 
 
