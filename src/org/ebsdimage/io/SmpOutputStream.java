@@ -24,6 +24,8 @@ import java.io.IOException;
 
 import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
+import rmlimage.core.RGBMap;
+import rmlimage.core.Transform;
 
 /**
  * Saves a series of <code>Map</code>s to the "proprietary" <code>SMP</code>
@@ -130,6 +132,9 @@ public class SmpOutputStream {
      *             disk.
      */
     public void writeMap(Map map) throws IOException {
+        if (map instanceof RGBMap)
+            map = Transform.getBlueLayer((RGBMap) map);
+
         if (!(map instanceof ByteMap))
             throw new IllegalArgumentException("map type (" + map.getName()
                     + ")(" + map.getClass().getName() + " must be a ByteMap");

@@ -17,6 +17,7 @@
  */
 package org.ebsdimage.vendors.tsl.core;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.math.geometry.CardanEulerSingularityException;
@@ -179,6 +180,66 @@ public abstract class TslMMapTester extends TestCase {
         assertEquals(0.0, microscope.getCameraDistance(), 1e-6);
         assertEquals(15, microscope.getWorkingDistance() * 1000, 1e-3);
         assertEquals(Rotation.IDENTITY, microscope.getSampleRotation(), 1e-6);
+    }
+
+
+
+    @Test
+    public void testGetPatternFileIndex() {
+        File projectDir = FileUtil.getParentFile(mmap.getFile());
+
+        File patternFile = mmap.getPatternFile(0);
+        File expected = new File(projectDir, "scan1/scan1_r0c0.bmp");
+        assertEquals(expected, patternFile);
+
+        patternFile = mmap.getPatternFile(mmap.size - 1);
+        expected = new File(projectDir, "scan1/scan1_r4c4.bmp");
+        assertEquals(expected, patternFile);
+
+        patternFile = mmap.getPatternFile(1);
+        expected = new File(projectDir, "scan1/scan1_r0c1.bmp");
+        assertEquals(expected, patternFile);
+    }
+
+
+
+    @Test
+    public void testGetPatternFileIndexFile() {
+        File patternFile;
+
+        patternFile = mmap.getPatternFile(0, new File("blah"));
+        assertEquals(new File("blah/scan1_r0c0.bmp"), patternFile);
+
+        patternFile = mmap.getPatternFile(mmap.size - 1, new File("blah"));
+        assertEquals(new File("blah/scan1_r4c4.bmp"), patternFile);
+
+        patternFile = mmap.getPatternFile(1, new File("blah"));
+        assertEquals(new File("blah/scan1_r0c1.bmp"), patternFile);
+    }
+
+
+
+    @Test
+    public void testGetPatternFiles() {
+        File projectDir = FileUtil.getParentFile(mmap.getFile());
+        File[] files = mmap.getPatternFiles();
+        assertEquals(mmap.size, files.length);
+
+        File expected = new File(projectDir, "scan1/scan1_r0c0.bmp");
+        assertEquals(expected, files[0]);
+
+        expected = new File(projectDir, "scan1/scan1_r4c4.bmp");
+        assertEquals(expected, files[files.length - 1]);
+    }
+
+
+
+    @Test
+    public void testGetPatternFilesFile() {
+        File[] files = mmap.getPatternFiles(new File("blah"));
+        assertEquals(mmap.size, files.length);
+        assertEquals(new File("blah/scan1_r0c0.bmp"), files[0]);
+        assertEquals(new File("blah/scan1_r4c4.bmp"), files[files.length - 1]);
     }
 
 

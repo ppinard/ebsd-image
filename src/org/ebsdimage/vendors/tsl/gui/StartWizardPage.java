@@ -93,6 +93,11 @@ public class StartWizardPage extends WizardPage {
             return false;
         }
 
+        if (!angFile.exists()) {
+            showErrorDialog("ANG file (" + angFile + ") does not exist.");
+            return false;
+        }
+
         if (!new AngLoader().canLoad(angFile)) {
             showErrorDialog("The ANG file is not valid.");
             return false;

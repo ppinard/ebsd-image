@@ -97,6 +97,11 @@ public class StartWizardPage extends WizardPage {
             return false;
         }
 
+        if (!cprFile.exists()) {
+            showErrorDialog("CPR file (" + cprFile + ") does not exist.");
+            return false;
+        }
+
         if (!new CprLoader().canLoad(cprFile)) {
             showErrorDialog("The CPR file is not valid.");
             return false;

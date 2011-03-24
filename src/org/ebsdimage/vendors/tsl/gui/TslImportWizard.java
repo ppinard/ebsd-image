@@ -27,6 +27,7 @@ import org.ebsdimage.core.Microscope;
 import ptpshared.gui.Wizard;
 import ptpshared.gui.WizardPage;
 import crystallography.core.Crystal;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
 import static rmlshared.io.FileUtil.getURL;
 
 /**
@@ -42,7 +43,7 @@ public class TslImportWizard extends Wizard {
     public TslImportWizard() {
         super("Import from TSL", new WizardPage[] { new StartWizardPage(),
                 new MicroscopeWizardPage(), new PhasesWizardPage(),
-                new OutputWizardPage() });
+                new PatternsWizardPage(), new OutputWizardPage() });
 
         BufferedImage image;
         try {
@@ -145,6 +146,21 @@ public class TslImportWizard extends Wizard {
                     "Could not get the phases from wizard.");
 
         return phases;
+    }
+
+
+
+    /**
+     * Returns the directory where the patterns are located.
+     * 
+     * @return directory
+     */
+    @CheckForNull
+    public File getPatternsDir() {
+        File patternsDir =
+                (File) results.get(PatternsWizardPage.KEY_PATTERNS_FOLDER);
+
+        return patternsDir;
     }
 
 }

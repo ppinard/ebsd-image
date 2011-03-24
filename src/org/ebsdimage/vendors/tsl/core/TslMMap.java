@@ -17,6 +17,7 @@
  */
 package org.ebsdimage.vendors.tsl.core;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -25,6 +26,7 @@ import org.ebsdimage.core.EbsdMetadata;
 
 import rmlimage.core.Map;
 import rmlimage.module.real.core.RealMap;
+import rmlshared.io.FileUtil;
 
 /**
  * <code>EbsdMMap</code> holding all the data from a TSL acquisition.
@@ -166,4 +168,100 @@ public class TslMMap extends EbsdMMap {
         return (TslMetadata) super.getMetadata();
     }
 
+
+
+    /**
+     * Returns the possible location of the pattern image for the specified
+     * image. No check is performed to verify if the image exists. The location
+     * is found from the project's path, project's name and index value.
+     * 
+     * @param index
+     *            index of the pattern
+     * @return possible location of the pattern image
+     * @throws IllegalArgumentException
+     *             if the index is out of range
+     */
+    public File getPatternFile(int index) {
+        File imageDir = new File(FileUtil.getParentFile(getFile()), getName());
+
+        return getPatternFile(index, imageDir);
+    }
+
+
+
+    /**
+     * Returns the possible location of the pattern image for the specified
+     * image. No check is performed to verify if the image exists. The location
+     * is found from the image directory, project's name and index value.
+     * 
+     * @param index
+     *            index of the pattern
+     * @param imageDir
+     *            alternate location of the image directory
+     * @return possible location of the pattern image
+     * @throws IllegalArgumentException
+     *             if the index is out of range
+     * @throws NullPointerException
+     *             if the image directory is null
+     */
+    public File getPatternFile(int index, File imageDir) {
+        if (index < 0 || index >= size)
+            throw new IllegalArgumentException("Index (" + index
+                    + ") must be between [0," + size + "[.");
+        if (imageDir == null)
+            throw new NullPointerException("Image dir cannot be null.");
+
+        StringBuilder filename = new StringBuilder();
+        filename.append(getName() + "_");
+        filename.append("r" + getY(index));
+        filename.append("c" + getX(index));
+
+        File patternFile = new File(imageDir, filename.toString());
+        patternFile = FileUtil.setExtension(patternFile, "bmp");
+
+        return patternFile;
+    }
+
+
+
+    /**
+     * Returns an array of all the pattern image files of the map. No check is
+     * performed to verify if the pattern images exists.
+     * 
+     * @return an array of pattern image files
+     * @see #getPatternFile(int)
+     */
+    public File[] getPatternFiles() {
+        File[] files = new File[size];
+
+        for (int i = 0; i < size; i++)
+            files[i] = getPatternFile(i);
+
+        return files;
+    }
+
+
+
+    /**
+     * Returns an array of all the pattern image files of the map. No check is
+     * performed to verify if the pattern images exists.
+     * 
+     * @return an array of pattern image files
+     * @param imageDir
+     *            alternate location of the image directory
+     * @throws NullPointerException
+     *             if the image directory is null
+     * @see #getPatternFile(int, File)
+     */
+    public File[] getPatternFiles(File imageDir) {
+        if (imageDir == null)
+            throw new NullPointerException("Image directory cannot be null.");
+
+        File[] files = new File[size];
+
+        for (int i = 0; i < size; i++)
+            files[i] = getPatternFile(i, imageDir);
+
+        return files;
+    }
 }

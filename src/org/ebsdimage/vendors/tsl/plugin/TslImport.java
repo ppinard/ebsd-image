@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.core.Microscope;
+import org.ebsdimage.io.SmpCreator;
 import org.ebsdimage.vendors.tsl.core.TslMMap;
 import org.ebsdimage.vendors.tsl.core.TslMetadata;
 import org.ebsdimage.vendors.tsl.gui.TslImportWizard;
@@ -28,6 +29,7 @@ import org.ebsdimage.vendors.tsl.io.AngLoader;
 import org.ebsdimage.vendors.tsl.io.TslMMapSaver;
 
 import rmlimage.plugin.PlugIn;
+import rmlshared.io.FileUtil;
 import rmlshared.ui.Monitorable;
 import crystallography.core.Crystal;
 
@@ -43,6 +45,9 @@ public class TslImport extends PlugIn implements Monitorable {
 
     /** Saver for the MMap. */
     private TslMMapSaver mmapSaver;
+
+    /** Creator for the SMP file. */
+    private SmpCreator smpCreator;
 
     /** Progress status. */
     private String status;
@@ -64,6 +69,8 @@ public class TslImport extends PlugIn implements Monitorable {
             return angLoader.getTaskProgress();
         else if (mmapSaver != null)
             return mmapSaver.getTaskProgress();
+        else if (smpCreator != null)
+            return smpCreator.getTaskProgress();
         else
             return 0;
     }
@@ -74,6 +81,8 @@ public class TslImport extends PlugIn implements Monitorable {
     public String getTaskStatus() {
         if (angLoader != null)
             return status + " - " + angLoader.getTaskStatus();
+        else if (smpCreator != null)
+            return status + " - " + smpCreator.getTaskStatus();
         else
             return status;
     }
@@ -85,6 +94,9 @@ public class TslImport extends PlugIn implements Monitorable {
         if (angLoader != null) {
             super.interrupt();
             angLoader.interrupt();
+        } else if (smpCreator != null) {
+            super.interrupt();
+            smpCreator.interrupt();
         }
     }
 
@@ -139,6 +151,26 @@ public class TslImport extends PlugIn implements Monitorable {
         }
 
         mmapSaver = null;
+
+        // Load patterns
+        status = "Saving patterns in smp";
+
+        File patternsDir = wizard.getPatternsDir();
+        if (patternsDir != null) {
+            File[] patternFiles = mmap.getPatternFiles(patternsDir);
+
+            File smpFile = FileUtil.setExtension(outputFile, "smp");
+            smpCreator = new SmpCreator();
+
+            try {
+                smpCreator.create(smpFile, patternFiles);
+            } catch (IOException e) {
+                showErrorDialog("While creating the smp file:" + e.getMessage());
+                return;
+            }
+        }
+
+        smpCreator = null;
 
         // Display multimap in the GUI
         if (wizard.getDisplayGUI())
