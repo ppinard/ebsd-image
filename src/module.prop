@@ -26,6 +26,7 @@ menu=org/ebsdimage/plugin/SmpCreation.menu
 menu=org/ebsdimage/plugin/SmpViewer.menu
 menu=org/ebsdimage/plugin/MicroscopeSetup.menu
 menu=org/ebsdimage/plugin/NewPhase.menu
+menu=org/ebsdimage/plugin/SmpMapViewer.menu
 
 menu=org/ebsdimage/vendors/hkl/plugin/HklImport.menu
 menu=org/ebsdimage/vendors/hkl/plugin/HklBatchImport.menu

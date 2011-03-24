@@ -1,0 +1,5 @@
+menu=PlugIns/EBSD/Link SMP to map
+icon=org/ebsdimage/plugin/SmpMapViewer_(24x24).png
+tooltip=Link diffraction patterns in a SMP to an EBSD map
+plugin=org.ebsdimage.plugin.SmpMapViewer
+workerthread=false
