@@ -17,11 +17,14 @@ import rmlimage.module.real.core.ThreeSigmaRenderer;
  */
 public class NoiseCizmar extends PatternPostOps {
 
+    /** Default operation. */
+    public static final NoiseCizmar DEFAULT = new NoiseCizmar(25, 8, -1);
+
     /** Standard deviation of the Gaussian noise. */
     @Attribute(name = "gaussian")
     public final double gaussian;
 
-    /** Factor for the intensity of the Poisson noise. */
+    /** Amplitude of the Poisson noise. */
     @Attribute(name = "poisson")
     public final double poisson;
 
@@ -38,7 +41,7 @@ public class NoiseCizmar extends PatternPostOps {
      * @param sigma
      *            standard deviation of the Gaussian noise
      * @param poisson
-     *            factor for the intensity of the Poisson noise
+     *            amplitude of the Poisson noise
      * @param seed
      *            seed for the random number generator
      */
@@ -50,7 +53,7 @@ public class NoiseCizmar extends PatternPostOps {
                     "Standard deviation of the Gaussian noise must be greater than zero.");
         if (poisson <= 0)
             throw new IllegalArgumentException(
-                    "Factor for the intensity of the Poisson noise must be greater than zero.");
+                    "Amplitude of the Poisson noise must be greater than zero.");
 
         this.gaussian = sigma;
         this.poisson = poisson;
