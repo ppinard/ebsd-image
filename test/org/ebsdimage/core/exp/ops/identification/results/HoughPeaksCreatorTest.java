@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 
 import static junittools.test.Assert.assertEquals;
 
-public class HoughPeaksTest extends TestCase {
+public class HoughPeaksCreatorTest extends TestCase {
 
     private HoughPeaks op;
 

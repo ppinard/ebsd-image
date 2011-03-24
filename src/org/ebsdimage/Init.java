@@ -17,6 +17,8 @@
  */
 package org.ebsdimage;
 
+import java.io.IOException;
+
 import org.ebsdimage.io.*;
 import org.ebsdimage.io.exp.ExpMMapLoader;
 import org.ebsdimage.io.sim.SimMMapLoader;
@@ -69,6 +71,13 @@ public class Init extends rmlimage.module.Init {
 
         // MapMath
         rmlimage.core.MapMath.addHandler(org.ebsdimage.core.MapMath.class);
+
+        // Run operation validator
+        try {
+            new InitValidator().validate();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

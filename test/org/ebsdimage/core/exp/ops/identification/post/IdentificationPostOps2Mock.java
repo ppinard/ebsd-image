@@ -22,7 +22,7 @@ import org.ebsdimage.core.HoughPeak;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.ExpError;
 
-public class IdentificationPostOpsMock2 extends IdentificationPostOps {
+public class IdentificationPostOps2Mock extends IdentificationPostOps {
 
     public static final ErrorCode Error1 = new ErrorCode("Error1", "Desc1");
 

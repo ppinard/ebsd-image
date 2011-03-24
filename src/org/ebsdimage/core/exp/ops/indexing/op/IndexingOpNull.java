@@ -11,6 +11,11 @@ import org.ebsdimage.core.exp.Exp;
  */
 public class IndexingOpNull extends IndexingOp {
 
+    /** Default operation. */
+    public static final IndexingOpNull DEFAULT = new IndexingOpNull();
+
+
+
     @Override
     public Solution[] index(Exp exp, HoughPeak[] srcPeaks) {
         return new Solution[0];

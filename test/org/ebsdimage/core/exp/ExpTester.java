@@ -33,7 +33,7 @@ import org.ebsdimage.core.exp.ops.hough.pre.HoughPreOpsMock;
 import org.ebsdimage.core.exp.ops.hough.results.HoughResultsOpsMock;
 import org.ebsdimage.core.exp.ops.identification.op.IdentificationOpMock;
 import org.ebsdimage.core.exp.ops.identification.post.IdentificationPostOpsMock;
-import org.ebsdimage.core.exp.ops.identification.post.IdentificationPostOpsMock2;
+import org.ebsdimage.core.exp.ops.identification.post.IdentificationPostOps2Mock;
 import org.ebsdimage.core.exp.ops.identification.pre.IdentificationPreOpsMock;
 import org.ebsdimage.core.exp.ops.identification.results.IdentificationResultsOpsMock;
 import org.ebsdimage.core.exp.ops.indexing.op.IndexingOpMock;
@@ -448,7 +448,7 @@ public abstract class ExpTester extends TestCase {
         exp.setDir(expPath);
 
         // Add operation that throws ExpError
-        exp.addOperation(new IdentificationPostOpsMock2());
+        exp.addOperation(new IdentificationPostOps2Mock());
 
         exp.run();
 
@@ -505,7 +505,7 @@ public abstract class ExpTester extends TestCase {
         assertEquals(0, errorMap.pixArray[0]);
         assertEquals(1, errorMap.pixArray[1]);
 
-        assertEquals(IdentificationPostOpsMock2.Error1, errorMap.getItem(1));
+        assertEquals(IdentificationPostOps2Mock.Error1, errorMap.getItem(1));
 
         // PatternResultsOpsMock
         map = exp.mmap.getMap(PatternResultsOpsMock.class.getSimpleName());
