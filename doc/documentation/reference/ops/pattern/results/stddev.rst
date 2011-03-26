@@ -1,8 +1,8 @@
 
 .. _pattern-stddev:
 
-Standard deviation
-==================
+Pattern standard deviation
+==========================
 
 Quality metric that is computed from the standard deviation of all the pixels 
 in the diffraction pattern. 

@@ -1,8 +1,8 @@
 
 .. _pattern-entropy:
 
-Entropy
-=======
+Pattern entropy
+===============
 
 Quality metric that is computed from the entropy of all the pixels in the 
 diffraction pattern. 

@@ -12,4 +12,3 @@ includes:
   * Band slope (BS)
   * Band count
   * Mean angular deviation (MAD)
-  * Three maps for each Euler angles

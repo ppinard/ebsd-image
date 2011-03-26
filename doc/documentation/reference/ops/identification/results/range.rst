@@ -1,15 +1,11 @@
 
-.. _houghpeak-range:
+.. _peaks-range:
 
-Hough peak range
-================
+Peaks range
+===========
 
-Quality metric that is computed from the minimum and maximum intensity peaks of 
-the :ref:`houghtransform`. 
-This operation is different from the :ref:`hough-range` operation since the 
-subtraction is performed between the intensity of the Hough peaks instead of 
-the intensity of any pixels in the Hough transform. 
-However, the same rational applies.
+Quality metric that is computed from the difference between the intensity of
+the most intense and the least intense peak. 
 The difference between the most intense peak and the least intense peak should 
 be greater for a high quality diffraction pattern since there should be a 
 higher contrast between the Kikuchi bands.
@@ -18,10 +14,21 @@ By ordering the Hough peaks in descending order,
 
 .. math::
 
-   Q = H_\text{max}(\rho_0, \theta_0) - H_\text{max}(\rho_{(N-1)}, \theta_{(N-1)}
+   Q = I_i - I_{N-1}
    
-where :math:`H_\text{max}(\rho_i, \theta_i)` is the maximum intensity of the 
-Hough peak *i*.
+where *N* is the number of identified peaks, and :math:`I_i` is the intensity
+of peak *i*.
+
+Parameters
+----------
+
+This operation takes one parameter to select the least intense peak. 
+This allows to discard peaks with a very low intensity as they may or may not
+be peaks.
+For instance if the maximum number of peaks is 3, the range will consist in the
+difference between the most intense peak and the 3rd most intense peak.
+If the value of the maximum number of peaks is set to -1, all the identified
+peaks are considered.
 
 .. figure:: /images/ops/identification/results/range/nicocraly_houghpeakrange.png
    :align: center

@@ -10,4 +10,3 @@ includes:
 
   * Image quality (IQ)
   * Confidence index (CI)
-  * Three maps for each Euler angles

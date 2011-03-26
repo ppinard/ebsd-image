@@ -22,7 +22,9 @@ Map                                   Type of pixel       Uses
 :ref:`bytemap` (Byte map)             8-bit (0 to 255)    Greyscale images
 :ref:`identmap` (Identification map)  16-bit (0 to 65534) Objects map 
 :ref:`rgbmap` (Color map)             24-bit              Any color image 
-:ref:`phasemap` (Phase map)           8-bit (0 to 255)    Identify phases in EBSD acquisition 
+:ref:`phasemap` (Phase map)           8-bit (0 to 255)    Identify phases in EBSD acquisition
+:ref:`errormap` (Error map)           8-bit (0 to 255)    Report error(s) occured during the 
+                                                          processing of diffraction patterns
 :ref:`realmap` (Real map)             32-bit float        Store real values in a map 
 :ref:`houghmap` (Hough map)           8 bit (0 to 255)    Map resulting from the 
                                                           :ref:`houghtransform` 

@@ -11,3 +11,13 @@ happens that the area detected to represent a peak does not cover the whole
 peak. 
 By increasing this area, one can make sure that the identification operation 
 will be able to properly identify the location of the peaks and its intensity.
+
+Parameters
+----------
+
+This operation takes two parameters to define:
+
+  * minimum number of *ON* neighbour to an *OFF* pixel for it to be turned to 
+    *ON*.
+  * Maximum number of *ON* neighbour to an *OFF* pixel for it to be turned to 
+    *ON*.

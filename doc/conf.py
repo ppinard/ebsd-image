@@ -40,7 +40,7 @@ copyright = u'2011, Philippe T. Pinard'
 # built documents.
 #
 # The short X.Y version.
-with open('../../src/version.props', 'r') as f:
+with open('../src/version.props', 'r') as f:
     version = f.read().split('=')[1].strip()
 # The full version, including alpha/beta/rc tags.
 release = version

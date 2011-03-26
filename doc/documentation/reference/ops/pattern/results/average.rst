@@ -1,8 +1,8 @@
 
 .. _pattern-average:
 
-Average
-=======
+Pattern average
+===============
 
 Quality metric that is computed from the average of all the pixels in the 
 diffraction pattern. 

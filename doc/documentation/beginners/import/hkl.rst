@@ -44,8 +44,10 @@ Select the CTF file to import.
    During that time, the header containing the information about the EBSD 
    acquisition are loaded.
 
-Missing data
-^^^^^^^^^^^^
+Microscope configuration
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+This page is to add and modify the microscope configuration.
 
 Some metadata related to the EBSD acquisition can not be loaded directly from 
 the CTF file. 

@@ -9,5 +9,13 @@ peaks.
 By definition, an opening is an erosion followed by a dilation. 
 This results in removing small peaks without decreasing the size of the other 
 peaks. 
-In EBSD-Image, this corresponds to doing one opening with a minimum and maximum 
-number of neighbors to 2 and 8 respectively. 
+
+Parameters
+----------
+
+This operation takes two parameters to define:
+
+  * minimum number of *OFF* neighbour to an *ON* pixel for it to be turned to 
+    *OFF*.
+  * Maximum number of *OFF* neighbour to an *ON* pixel for it to be turned to 
+    *OFF*.

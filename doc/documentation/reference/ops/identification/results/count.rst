@@ -1,8 +1,8 @@
 
-.. _houghpeak-count:
+.. _peaks-count:
 
-Hough peak count
-================
+Peaks count
+===========
 
 Quality metric that is computed from the number of bands/peaks identified in 
 the Hough transform. 

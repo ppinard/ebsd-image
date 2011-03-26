@@ -11,11 +11,10 @@ average intensity will be greater than for low quality patterns.
 
 .. math::
 
-   Q = \frac{1}{N}\sum\limits_{i=0}^{N-1}{H_\text{max} \left( \rho_i, \theta_i \right)}
-   
-where *N* is the number of identified Hough peaks, 
-:math:`H_\text{max}\left( \rho_i, \theta_i \right)` maximum intensity of Hough 
-peak *i*.
+   Q = \frac{1}{N}\sum\limits_{i=0}^{N-1}{I_i}
+
+where *N* is the number of identified peaks, and :math:`I_i` is the intensity
+of peak *i*.
 
 This quality index was used by Wright and Nowell :cite:`Wright2006`. 
 They summarized this quality index as:

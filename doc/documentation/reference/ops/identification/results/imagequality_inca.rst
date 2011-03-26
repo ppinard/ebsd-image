@@ -16,9 +16,8 @@ By ordering the Hough peaks in descending order,
 
 .. math::
 
-   Q = H_\text{max}(\rho_0, \theta_0) - H_\text{max}(\rho_7, \theta_7)
+   Q = I_1 - I_7
    
-where :math:`H_\text{max}(\rho_i, \theta_i)` is the maximum intensity of the 
-Hough peak *i*.
+where :math:`I_i` is the intensity of peak *i*.
 
 .. bibliography::
