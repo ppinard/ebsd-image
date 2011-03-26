@@ -55,7 +55,7 @@ public class Count extends IdentificationResultsOps {
 
     @Override
     public String toString() {
-        return "Peaks Count";
+        return "Count";
     }
 
 }

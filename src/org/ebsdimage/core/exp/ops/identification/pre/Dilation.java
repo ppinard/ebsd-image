@@ -35,15 +35,15 @@ public class Dilation extends IdentificationPreOps {
     public static final Dilation DEFAULT = new Dilation(2, 8);
 
     /**
-     * Minimum number of <code>OFF</code> neighbour to an <code>ON</code> pixel
-     * for it to be turned to <code>OFF</code>.
+     * Minimum number of <code>ON</code> neighbor to an <code>OFF</code> pixel
+     * for it to be turned to <code>ON</code>.
      */
     @Attribute(name = "min")
     public final int min;
 
     /**
-     * Maximum number of <code>OFF</code> neighbour to an <code>ON</code> pixel
-     * for it to be turned to <code>OFF</code>.
+     * Maximum number of <code>ON</code> neighbor to an <code>OFF</code> pixel
+     * for it to be turned to <code>ON</code>.
      */
     @Attribute(name = "max")
     public final int max;
@@ -54,11 +54,11 @@ public class Dilation extends IdentificationPreOps {
      * Creates a new <code>Opening</code> operation.
      * 
      * @param min
-     *            minimum number of <code>OFF</code> neighbour to an
-     *            <code>ON</code> pixel for it to be turned to <code>OFF</code>
+     *            minimum number of <code>ON</code> neighbor to an
+     *            <code>OFF</code> pixel for it to be turned to <code>ON</code>
      * @param max
-     *            maximum number of <code>OFF</code> neighbour to an
-     *            <code>ON</code> pixel for it to be turned to <code>OFF</code>
+     *            maximum number of <code>OFF</code> neighbor to an
+     *            <code>OFF</code> pixel for it to be turned to <code>ON</code>
      */
     public Dilation(@Attribute(name = "min") int min,
             @Attribute(name = "max") int max) {

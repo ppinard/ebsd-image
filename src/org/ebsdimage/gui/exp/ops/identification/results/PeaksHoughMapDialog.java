@@ -45,7 +45,7 @@ public class PeaksHoughMapDialog extends OperationDialog {
 
         maxField =
                 new IntField("Maximum number of peaks",
-                        PeaksHoughMap.DEFAULT.count);
+                        PeaksHoughMap.DEFAULT.max);
         maxField.setRange(-1, Integer.MAX_VALUE);
 
         ColumnPanel panel = new ColumnPanel(2);
@@ -90,7 +90,7 @@ public class PeaksHoughMapDialog extends OperationDialog {
 
     @Override
     public String toString() {
-        return "Peaks HoughMap";
+        return "HoughMap";
     }
 
 }

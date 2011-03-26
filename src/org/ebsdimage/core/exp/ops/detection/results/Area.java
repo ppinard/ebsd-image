@@ -20,10 +20,7 @@ package org.ebsdimage.core.exp.ops.detection.results;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.OpResult;
 
-import rmlimage.core.Analysis;
-import rmlimage.core.BinMap;
-import rmlimage.core.IdentMap;
-import rmlimage.core.Identification;
+import rmlimage.core.*;
 import rmlimage.module.real.core.RealMap;
 import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.average;
 import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.max;
@@ -45,6 +42,9 @@ public class Area extends DetectionResultsOps {
     @Override
     public OpResult[] calculate(Exp exp, BinMap peaksMap) {
         IdentMap identMap = Identification.identify(peaksMap);
+
+        // Remove calibration to get the area in px2
+        identMap.setCalibration(Calibration.NONE);
 
         // ========= Calculate area ===========
 

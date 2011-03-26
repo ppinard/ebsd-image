@@ -37,7 +37,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class HoughPeaksTest extends TestCase {
+public class HoughPeaksXmlTest extends TestCase {
 
     private HoughPeaks op;
 

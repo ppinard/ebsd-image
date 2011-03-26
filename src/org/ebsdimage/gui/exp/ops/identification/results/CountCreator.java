@@ -52,7 +52,7 @@ public class CountCreator implements OperationCreator {
 
     @Override
     public String toString() {
-        return "Peaks Count";
+        return "Count";
     }
 
 }

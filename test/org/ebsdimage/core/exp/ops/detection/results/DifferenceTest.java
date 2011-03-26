@@ -36,7 +36,7 @@ import static junittools.test.Assert.assertEquals;
 
 public class DifferenceTest extends TestCase {
 
-    private Difference op;
+    private LocalDifference op;
 
     private BinMap peaksMap;
 
@@ -46,7 +46,7 @@ public class DifferenceTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        op = new Difference();
+        op = new LocalDifference();
 
         peaksMap =
                 (BinMap) load(getFile("org/ebsdimage/testdata/automatic_top_hat.bmp"));
@@ -79,7 +79,7 @@ public class DifferenceTest extends TestCase {
 
     @Test
     public void testToString() {
-        assertEquals("Difference", op.toString());
+        assertEquals("Local Difference", op.toString());
     }
 
 
@@ -89,7 +89,8 @@ public class DifferenceTest extends TestCase {
         File file = createTempFile();
         new XmlSaver().save(op, file);
 
-        Difference other = new XmlLoader().load(Difference.class, file);
+        LocalDifference other =
+                new XmlLoader().load(LocalDifference.class, file);
         assertEquals(op, other, 1e-6);
     }
 

@@ -22,9 +22,9 @@ public class PeaksHoughMap extends IdentificationResultsOps {
     /** Default operation. */
     public static final PeaksHoughMap DEFAULT = new PeaksHoughMap(-1);
 
-    /** Number of peaks to save. The most intense peaks are selected. */
-    @Attribute(name = "count")
-    public final int count;
+    /** Maximum number of peaks to save. The most intense peaks are selected. */
+    @Attribute(name = "max")
+    public final int max;
 
 
 
@@ -35,15 +35,16 @@ public class PeaksHoughMap extends IdentificationResultsOps {
      * specified value is -1, all the identified peaks will appear in the Hough
      * map.
      * 
-     * @param count
+     * @param max
      *            number of peaks to save
      */
-    public PeaksHoughMap(@Attribute(name = "count") int count) {
-        if (count < -1)
+    public PeaksHoughMap(@Attribute(name = "max") int max) {
+        if (max < -1)
             throw new IllegalArgumentException(
-                    "The number of peaks must be greater or equal to zero, or equal to -1.");
+                    "The number of peaks must be greater or equal to zero, "
+                            + "or equal to -1.");
 
-        this.count = count;
+        this.max = max;
     }
 
 
@@ -57,7 +58,7 @@ public class PeaksHoughMap extends IdentificationResultsOps {
 
         File file =
                 new File(exp.getDir(), exp.getName() + "_"
-                        + exp.getCurrentIndex() + ".bmp");
+                        + exp.getCurrentIndex() + "_peaks_houghmap.bmp");
 
         try {
             create(houghMap, peaks, file);
@@ -86,12 +87,12 @@ public class PeaksHoughMap extends IdentificationResultsOps {
         sortDescending(peaks);
 
         double thresholdIntensity;
-        if (count < 0)
+        if (max < 0)
             thresholdIntensity = peaks[peaks.length - 1].intensity;
-        else if (count >= peaks.length)
+        else if (max >= peaks.length)
             thresholdIntensity = peaks[peaks.length - 1].intensity;
         else
-            thresholdIntensity = peaks[count - 1].intensity;
+            thresholdIntensity = peaks[max - 1].intensity;
 
         int index;
         double rho;
@@ -127,7 +128,7 @@ public class PeaksHoughMap extends IdentificationResultsOps {
             return false;
 
         PeaksHoughMap other = (PeaksHoughMap) obj;
-        if (count != other.count)
+        if (max != other.max)
             return false;
 
         return true;
@@ -139,7 +140,7 @@ public class PeaksHoughMap extends IdentificationResultsOps {
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + count;
+        result = prime * result + max;
         return result;
     }
 
@@ -147,6 +148,6 @@ public class PeaksHoughMap extends IdentificationResultsOps {
 
     @Override
     public String toString() {
-        return "Peaks HoughMap [count=" + count + "]";
+        return "HoughMap [max=" + max + "]";
     }
 }

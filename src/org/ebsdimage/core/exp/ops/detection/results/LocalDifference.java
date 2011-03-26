@@ -39,10 +39,10 @@ import static org.ebsdimage.core.exp.ops.detection.results.ResultsHelper.standar
  * 
  * @author Philippe T. Pinard
  */
-public class Difference extends DetectionResultsOps {
+public class LocalDifference extends DetectionResultsOps {
 
     /** Default operation. */
-    public static final Difference DEFAULT = new Difference();
+    public static final LocalDifference DEFAULT = new LocalDifference();
 
 
 
@@ -58,9 +58,6 @@ public class Difference extends DetectionResultsOps {
      *         differences
      */
     protected OpResult[] calculate(BinMap peaksMap, HoughMap houghMap) {
-        // Apply houghMap properties on binMap
-        peaksMap.setProperties(houghMap);
-
         IdentMap identMap = Identification.identify(peaksMap);
 
         // ========= Find min and max of each peak ===========
@@ -113,14 +110,17 @@ public class Difference extends DetectionResultsOps {
         // ========= Calculate results ===========
 
         OpResult average =
-                new OpResult("Difference Average", average(diff), RealMap.class);
+                new OpResult("Local Difference Average", average(diff),
+                        RealMap.class);
         OpResult stddev =
-                new OpResult("Difference Standard Deviation",
+                new OpResult("Local Difference Standard Deviation",
                         standardDeviation(diff), RealMap.class);
         OpResult min =
-                new OpResult("Difference Min", (byte) min(diff), ByteMap.class);
+                new OpResult("Local Difference Min", (byte) min(diff),
+                        ByteMap.class);
         OpResult max =
-                new OpResult("Difference Max", (byte) max(diff), ByteMap.class);
+                new OpResult("Local Difference Max", (byte) max(diff),
+                        ByteMap.class);
 
         return new OpResult[] { average, stddev, min, max };
     }
@@ -136,7 +136,7 @@ public class Difference extends DetectionResultsOps {
 
     @Override
     public String toString() {
-        return "Difference";
+        return "Local Difference";
     }
 
 }

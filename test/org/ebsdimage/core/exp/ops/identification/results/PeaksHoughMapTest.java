@@ -97,14 +97,14 @@ public class PeaksHoughMapTest extends TestCase {
 
     @Test
     public void testPeaksHoughMap() {
-        assertEquals(5, op.count);
+        assertEquals(5, op.max);
     }
 
 
 
     @Test
     public void testToString() {
-        assertEquals(op.toString(), "Peaks HoughMap [count=5]");
+        assertEquals(op.toString(), "HoughMap [max=5]");
     }
 
 

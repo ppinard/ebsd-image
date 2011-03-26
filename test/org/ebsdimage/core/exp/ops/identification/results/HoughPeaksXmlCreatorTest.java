@@ -15,9 +15,9 @@ import static org.junit.Assert.assertEquals;
 
 import static junittools.test.Assert.assertEquals;
 
-public class HoughPeaksCreatorTest extends TestCase {
+public class HoughPeaksXmlCreatorTest extends TestCase {
 
-    private HoughPeaks op;
+    private PeaksXml op;
 
     private HoughPeak peak1;
 
@@ -31,7 +31,7 @@ public class HoughPeaksCreatorTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        op = new HoughPeaks();
+        op = new PeaksXml();
 
         peak1 = new HoughPeak(0.5, 3.0, 1);
         peak2 = new HoughPeak(1.5, 5.0, 3);
@@ -62,7 +62,7 @@ public class HoughPeaksCreatorTest extends TestCase {
         File file = createTempFile();
         new XmlSaver().save(op, file);
 
-        HoughPeaks other = new XmlLoader().load(HoughPeaks.class, file);
+        PeaksXml other = new XmlLoader().load(PeaksXml.class, file);
         assertEquals(op, other, 1e-6);
     }
 }

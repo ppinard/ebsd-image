@@ -18,7 +18,7 @@
 package org.ebsdimage.gui.exp.ops.detection.results;
 
 import org.ebsdimage.core.exp.ExpOperation;
-import org.ebsdimage.core.exp.ops.detection.results.Difference;
+import org.ebsdimage.core.exp.ops.detection.results.LocalDifference;
 import org.ebsdimage.gui.run.ops.OperationCreator;
 
 /**
@@ -26,7 +26,7 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
  * 
  * @author Philippe T. Pinard
  */
-public class DifferenceCreator implements OperationCreator {
+public class LocalDifferenceCreator implements OperationCreator {
 
     @Override
     public String getDescription() {
@@ -38,7 +38,7 @@ public class DifferenceCreator implements OperationCreator {
 
     @Override
     public ExpOperation getOperation() {
-        return new Difference();
+        return new LocalDifference();
     }
 
 
@@ -52,7 +52,7 @@ public class DifferenceCreator implements OperationCreator {
 
     @Override
     public String toString() {
-        return "Difference";
+        return "Local Difference";
     }
 
 }

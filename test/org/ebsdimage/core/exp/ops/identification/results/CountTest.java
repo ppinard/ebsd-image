@@ -65,7 +65,7 @@ public class CountTest extends TestCase {
 
     @Test
     public void testToString() {
-        assertEquals(op.toString(), "Peaks Count");
+        assertEquals(op.toString(), "Count");
     }
 
 

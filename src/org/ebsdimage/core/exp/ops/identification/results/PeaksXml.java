@@ -14,10 +14,10 @@ import ptpshared.util.simplexml.XmlSaver;
  * 
  * @author ppinard
  */
-public class HoughPeaks extends IdentificationResultsOps {
+public class PeaksXml extends IdentificationResultsOps {
 
     /** Default operation. */
-    public static final HoughPeaks DEFAULT = new HoughPeaks();
+    public static final PeaksXml DEFAULT = new PeaksXml();
 
 
 
@@ -26,7 +26,7 @@ public class HoughPeaks extends IdentificationResultsOps {
         HoughPeak[] peaks = srcPeaks.clone();
         File file =
                 new File(exp.getDir(), exp.getName() + "_"
-                        + exp.getCurrentIndex() + ".xml");
+                        + exp.getCurrentIndex() + "_peaks.xml");
 
         try {
             save(peaks, file);
@@ -53,6 +53,13 @@ public class HoughPeaks extends IdentificationResultsOps {
 
         // Save XML
         new XmlSaver().saveArray(peaks, file);
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "XML";
     }
 
 }

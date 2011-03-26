@@ -1,7 +1,7 @@
 package org.ebsdimage.gui.exp.ops.identification.results;
 
 import org.ebsdimage.core.exp.ExpOperation;
-import org.ebsdimage.core.exp.ops.identification.results.HoughPeaks;
+import org.ebsdimage.core.exp.ops.identification.results.PeaksXml;
 import org.ebsdimage.gui.run.ops.OperationCreator;
 
 /**
@@ -9,7 +9,7 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
  * 
  * @author Philippe T. Pinard
  */
-public class HoughPeaksCreator implements OperationCreator {
+public class PeaksXmlCreator implements OperationCreator {
 
     @Override
     public String getDescription() {
@@ -20,14 +20,14 @@ public class HoughPeaksCreator implements OperationCreator {
 
     @Override
     public ExpOperation getOperation() {
-        return new HoughPeaks();
+        return new PeaksXml();
     }
 
 
 
     @Override
     public String toString() {
-        return "Hough Peaks";
+        return "XML";
     }
 
 
