@@ -3,19 +3,18 @@
 Download
 ========
 
-**The current version of EBSD-Image is 0.1.2.**
-For older versions, please refer to the 
-`download section <https://sourceforge.net/projects/ebsd-image/files/>`_ of our 
-SourceForge project.
+**The current version of EBSD-Image is:** |version|.
+For older versions, please refer to the :sf-link:`download section <files>` 
+of our SourceForge project.
 
 EBSD-Image is licensed under the 
 `GNU General Public License v3 <http://www.gnu.org/licenses/gpl.html>`_ and 
-RML-Image under its own freeware :ref:`license <rmlimage_license>`. 
+RML-Image under its own freeware license. 
 For more information about the license and third-party libraries used in this 
 project, please refer to the :ref:`license` page.
 
 If you are experiencing problem running EBSD-Image, please report it in 
-our `bug tracker <https://bugs.launchpad.net/ebsd-image>`_.
+our :lp-link:`bug tracker <bugs>`.
 
 .. contents::
 
@@ -49,8 +48,8 @@ This means that if the version of EBSD-Image on your disk is 0.1.0, you can
 install the update of 0.1.5 even if you did not install the updates for 
 0.1.1, 0.1.2, 0.1.3 and 0.1.4. 
 
- * `Full version <https://sourceforge.net/projects/ebsd-image/files/v0.1.2/EBSD-Image_v0.1.2_ebsd-full.exe/download>`_
- * `Update <https://sourceforge.net/projects/ebsd-image/files/v0.1.2/EBSD-Image_v0.1.2_ebsd-update.exe/download>`_
+ * :sf-file:`Full version <EBSD-Image_v%(version)s_ebsd-full.exe>`
+ * :sf-file:`Update <EBSD-Image_v%(version)s_ebsd-update.exe>`
 
 Mac OS
 ------
@@ -61,7 +60,7 @@ Since EBSD-Image runs on Java 1.6, Mac OS X 10.5+ with all the latest updates
 is required.
 
   1. Download the tarball containing the 
-     `application <https://sourceforge.net/projects/ebsd-image/files/v0.1.0/EBSD-Image_v0.1.2_Mac.tgz/download>`_
+     :sf-file:`application <EBSD-Image_v%(version)s_Mac.tgz>`
   2. Extract the files
   3. Run the application
 
@@ -86,7 +85,7 @@ The update of the software will be automatically installed by the Update Manager
    For the time being, the package is not authenticated.
 
 Another way to install the software is by downloading and executing the 
-`deb <https://sourceforge.net/projects/ebsd-image/files/v0.1.2/ebsd-image0.1.2.deb>`_
+:sf-file:`deb <ebsd-image%(version)s.deb>`
 package.
 
 Cross-platform
@@ -94,7 +93,7 @@ Cross-platform
 
 Java 1.6 needs to be installed before running EBSD-Image. 
 
-  1. Download the `tarball <https://sourceforge.net/projects/ebsd-image/files/v0.1.2/EBSD-Image_v0.1.2.tgz/download>`_      
+  1. Download the :sf-file:`tarball <EBSD-Image_v%(version)s.tgz>`
   2. Extract the files
   3. Run the following command to start EBSD-Image from the extraction 
      directory::
@@ -105,12 +104,18 @@ Nightly Build
 -------------
 
 An unstable version of EBSD-Image is compiled every night from the source code. 
-To download it, visit `nightly build <https://sourceforge.net/projects/ebsd-image/files/nightly/ebsd-image_nightly_build.tgz/download>`_.
+To download it, visit `nightly build <http://sourceforge.net/projects/ebsd-image/files/nightly/ebsd-image_nightly_build.tgz/download>`_.
 
 Source code
 -----------
 
-Please refer to the `LaunchPad <https://code.launchpad.net/ebsd-image>`_ page 
-to access our `Bazaar <http://bazaar.canonical.com>`_ repository.
+Please refer to the :lp-link:`LaunchPad <home>` page to access our 
+`Bazaar <http://bazaar.canonical.com>`_ repository.
 You can also view to code directly from your browser.
 
+.. toctree::
+   :hidden:
+   :glob:
+   
+   download/*
+   
