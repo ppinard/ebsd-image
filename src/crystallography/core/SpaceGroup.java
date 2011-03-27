@@ -20,6 +20,8 @@ package crystallography.core;
 import org.apache.commons.math.geometry.Rotation;
 import org.simpleframework.xml.Root;
 
+import rmlshared.util.Labeled;
+
 /**
  * Crystallographic space group as defined in the International Tables for
  * Crystallography.
@@ -27,7 +29,7 @@ import org.simpleframework.xml.Root;
  * @author Philippe T. Pinard
  */
 @Root
-public class SpaceGroup {
+public class SpaceGroup implements Labeled, Comparable<SpaceGroup> {
 
     /** Crystallographic system. */
     public final CrystalSystem crystalSystem;
@@ -124,5 +126,24 @@ public class SpaceGroup {
     @Override
     public String toString() {
         return symbol;
+    }
+
+
+
+    @Override
+    public String getLabel() {
+        return symbol + " (" + index + ")";
+    }
+
+
+
+    @Override
+    public int compareTo(SpaceGroup o) {
+        if (index < o.index)
+            return -1;
+        else if (index > o.index)
+            return 1;
+        else
+            return 0;
     }
 }

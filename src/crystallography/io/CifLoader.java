@@ -100,6 +100,9 @@ public class CifLoader implements Loader, Monitorable {
     /** Parsing variable. */
     private boolean wasUnQuoted;
 
+    /** Logger. */
+    private Logger logger = Logger.getLogger("ebsd");
+
 
 
     @Override
@@ -236,7 +239,7 @@ public class CifLoader implements Loader, Monitorable {
                         atomPosY[index]).replace("z", atomPosZ[index]);
 
         try {
-            return (Double) interpreter.eval(posText);
+            return ((Number) interpreter.eval(posText)).doubleValue();
         } catch (EvalError e) {
             throw new IOException(e);
         }
@@ -258,9 +261,12 @@ public class CifLoader implements Loader, Monitorable {
             throws IOException {
         Hashtable<String, Object> data = allData.get("models").firstElement();
 
-        // Check key in cif
-        if (!data.containsKey("_chemical_name_mineral"))
-            throw new IOException("Lattice parameter a is missing.");
+        logger.info("Keys: "
+                + Arrays.toString(data.keySet().toArray(new String[0])));
+
+        // Check key in CIF
+        if (!(data.containsKey("_chemical_name_mineral") || data.containsKey("_chemical_name_common")))
+            throw new IOException("Chemical name is missing.");
         if (!data.containsKey("_cell_length_a"))
             throw new IOException("Lattice parameter a is missing.");
         if (!data.containsKey("_cell_length_b"))
@@ -281,11 +287,16 @@ public class CifLoader implements Loader, Monitorable {
             throw new IOException("Y coodinates of atom sites is missing.");
         if (!data.containsKey("_atom_site_fract_z"))
             throw new IOException("Z coodinates of atom sites is missing.");
-        if (!(data.containsKey("_space_group_IT_number") || data.containsKey("_symmetry_Int_Tables_number")))
+        if (!(data.containsKey("_space_group_IT_number")
+                || data.containsKey("_symmetry_Int_Tables_number") || data.containsKey("_symmetry_space_group_name_H-M")))
             throw new IOException("Space group number is missing.");
 
         // Name
-        String name = (String) data.get("_chemical_name_mineral");
+        String name = null;
+        if (data.containsKey("_chemical_name_mineral"))
+            name = (String) data.get("_chemical_name_mineral");
+        else if (data.containsKey("_chemical_name_common"))
+            name = (String) data.get("_chemical_name_common");
 
         // Unit cell
         double a = Double.parseDouble((String) data.get("_cell_length_a"));
@@ -364,12 +375,19 @@ public class CifLoader implements Loader, Monitorable {
         }
 
         // Point group
-        String indexStr = (String) data.get("_space_group_IT_number");
-        if (indexStr == null)
-            indexStr = (String) data.get("_symmetry_Int_Tables_number");
-
-        int index = Integer.parseInt(indexStr);
-        SpaceGroup sg = SpaceGroups.fromIndex(index);
+        SpaceGroup sg = null;
+        if (data.containsKey("_space_group_IT_number")) {
+            int index =
+                    Integer.parseInt((String) data.get("_space_group_IT_number"));
+            sg = SpaceGroups.fromIndex(index);
+        } else if (data.containsKey("_symmetry_Int_Tables_number")) {
+            int index =
+                    Integer.parseInt((String) data.get("_symmetry_Int_Tables_number"));
+            sg = SpaceGroups.fromIndex(index);
+        } else if (data.containsKey("_symmetry_space_group_name_H-M")) {
+            String symbol = (String) data.get("_symmetry_space_group_name_H-M");
+            sg = SpaceGroups.fromSymbol(symbol);
+        }
 
         return new Crystal(name, unitCell, atomSites, sg);
     }

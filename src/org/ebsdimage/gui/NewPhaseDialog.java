@@ -20,6 +20,7 @@ package org.ebsdimage.gui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
@@ -181,6 +182,16 @@ public class NewPhaseDialog extends BasicDialog {
             fireTableRowsDeleted(row, row);
         }
 
+
+
+        /**
+         * Clear all defined atom sites.
+         */
+        public void clear() {
+            atomSites.clear();
+            fireTableDataChanged();
+        }
+
         // /**
         // * Inserts an <code>AtomSite</code> at the specified row.
         // *
@@ -235,7 +246,33 @@ public class NewPhaseDialog extends BasicDialog {
     private class Remove extends PlugIn {
         @Override
         public void xRun() {
-            ((AtomSiteTableModel) atomSiteTable.getModel()).remove(atomSiteTable.getSelectedRow());
+            AtomSiteTableModel model =
+                    (AtomSiteTableModel) atomSiteTable.getModel();
+
+            for (int row : atomSiteTable.getSelectedRows())
+                model.remove(row);
+        }
+    }
+
+    /**
+     * Action to calculate the equivalent atom sites positions.
+     * 
+     * @author ppinard
+     */
+    private class CalculateAtomSites extends PlugIn {
+
+        @Override
+        public void xRun() throws Exception {
+            AtomSiteTableModel model =
+                    (AtomSiteTableModel) atomSiteTable.getModel();
+            AtomSites atoms = model.getAtomSites();
+            SpaceGroup spaceGroup = spaceGroupCBox.getSelectedItem();
+
+            atoms = Calculations.equivalentPositions(atoms, spaceGroup);
+
+            model.clear();
+            for (AtomSite atom : atoms)
+                model.append(atom);
         }
     }
 
@@ -246,6 +283,10 @@ public class NewPhaseDialog extends BasicDialog {
     /** Icon for the remove button. */
     private static final ImageIcon REMOVE_ICON =
             GuiUtil.loadIcon("ptpshared/data/icon/list-remove_(22x22).png");
+
+    /** Icon for the calculation button. */
+    private static final ImageIcon CALC_ICON =
+            GuiUtil.loadIcon("ptpshared/data/icon/calc_(22x22).png");
 
     /** Field for the crystal's name. */
     private TextField nameField;
@@ -282,6 +323,9 @@ public class NewPhaseDialog extends BasicDialog {
 
     /** Button to remove an atom from the table. */
     private Button removeButton;
+
+    /** Button to calculate the equivalent atom sites positions. */
+    private Button calcButton;
 
     /** Field for the atom's element symbol. */
     private TextField symbolField;
@@ -427,15 +471,20 @@ public class NewPhaseDialog extends BasicDialog {
         occupancyField.setRange(0, 1);
         atomSitesPanel.add(occupancyField, "wrap");
 
+        calcButton = new Button(CALC_ICON);
+        calcButton.setToolTipText("Calculate equivalent atoms positions");
+        calcButton.setPlugIn(new CalculateAtomSites());
+        atomSitesPanel.add(calcButton, "align right, split 2");
+
         removeButton = new Button(REMOVE_ICON);
         removeButton.setToolTipText("Remove selected atom");
         removeButton.setPlugIn(new Remove());
-        atomSitesPanel.add(removeButton, "align right");
+        atomSitesPanel.add(removeButton);
 
         addButton = new Button(ADD_ICON);
         addButton.setToolTipText("Add new atom");
         addButton.setPlugIn(new Add());
-        atomSitesPanel.add(addButton, "align right");
+        atomSitesPanel.add(addButton, "span, align right");
 
         Panel cPanel = new Panel(new FlowLayout(FlowLayout.VERTICAL));
         cPanel.add(crystalSystemPanel);
@@ -691,6 +740,7 @@ public class NewPhaseDialog extends BasicDialog {
         spaceGroupCBox.removeAllItems();
 
         SpaceGroup[] sgs = SpaceGroups.list(laueGroupCBox.getSelectedItem());
+        Arrays.sort(sgs);
         for (SpaceGroup sg : sgs)
             spaceGroupCBox.addGeneric(sg);
 
