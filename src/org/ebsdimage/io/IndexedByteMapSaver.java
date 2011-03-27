@@ -80,7 +80,8 @@ public abstract class IndexedByteMapSaver<Item> extends BasicBmpSaver {
         saveItems(map.getItems(), file);
 
         // Write the property file with the specified header
-        saveProperties(map, file, getFileHeader());
+        File propFile = rmlshared.io.FileUtil.setExtension(file, "prop");
+        saveProperties(map, propFile, getFileHeader());
 
         map.shouldSave(false); // No need to save anymore
     }

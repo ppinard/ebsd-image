@@ -73,7 +73,8 @@ public class HoughMapSaver extends BasicBmpSaver {
         super.save(map, file);
 
         // Write the property file with the specified header
-        saveProperties(map, file, FILE_HEADER);
+        File propFile = rmlshared.io.FileUtil.setExtension(file, "prop");
+        saveProperties(map, propFile, FILE_HEADER);
 
         map.shouldSave(false); // No need to save anymore
     }
