@@ -17,17 +17,12 @@
  */
 package org.ebsdimage.plugin;
 
-import magnitude.core.Magnitude;
-
 import org.ebsdimage.core.Edit;
 import org.ebsdimage.core.HoughMap;
 
-import ptpshared.gui.CalibratedDoubleField;
 import rmlimage.core.Map;
 import rmlimage.gui.PlugIn;
-import rmlshared.gui.BasicDialog;
-import rmlshared.gui.ColumnPanel;
-import rmlshared.gui.OkCancelDialog;
+import rmlshared.gui.*;
 import rmlshared.io.FileUtil;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 
@@ -39,6 +34,9 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
  */
 public class HoughCrop extends PlugIn {
 
+    /** Item of the combo box for uncalibrated unit (i.e. px). */
+    private static final String UNCALIBRATED_UNIT = "px (uncalibrated)";
+
     /**
      * Dialog to select the distance in rho from which to crop the
      * <code>HoughMap</code>.
@@ -48,7 +46,13 @@ public class HoughCrop extends PlugIn {
     private static class Dialog extends BasicDialog {
 
         /** Field for the crop radius. */
-        private CalibratedDoubleField rhoField;
+        private DoubleField rhoField;
+
+        /** Combo box to select the units. */
+        private ComboBox<String> unitsCBox;
+
+        /** Map to crop. */
+        private final HoughMap map;
 
 
 
@@ -62,31 +66,70 @@ public class HoughCrop extends PlugIn {
         public Dialog(HoughMap map) {
             super("Crop");
 
+            this.map = map;
+
             ColumnPanel cPanel = new ColumnPanel(3);
 
             cPanel.add("Positive \u03c1:");
 
-            String rhoUnits = map.getDeltaRho().getPreferredUnitsLabel();
-            String[] units = new String[] { rhoUnits };
-            Magnitude rhoMax = new Magnitude(map.getRhoMax(), rhoUnits);
-
-            rhoField = new CalibratedDoubleField("Rho", 5, rhoMax, units, true);
-            rhoField.setRange(new Magnitude(0.1, rhoMax), rhoMax);
+            rhoField = new DoubleField("Rho", map.getRhoMax());
+            rhoField.setRange(0.0, Double.POSITIVE_INFINITY);
             cPanel.add(rhoField);
+
+            unitsCBox =
+                    new ComboBox<String>(UNCALIBRATED_UNIT,
+                            map.getCalibration().unitsY);
+            unitsCBox.setName("units");
+            unitsCBox.setSelectedItem(map.getCalibration().unitsY);
+            cPanel.add(unitsCBox);
 
             setMainComponent(cPanel);
         }
 
 
 
+        @Override
+        public boolean isCorrect() {
+            if (!super.isCorrect())
+                return false;
+
+            double rho = rhoField.getValue();
+            double max;
+            if (unitsCBox.getSelectedItem() == UNCALIBRATED_UNIT)
+                max = map.height / 2;
+            else
+                max = map.getRhoMax();
+
+            if (rho > max) {
+                ErrorDialog.show("rho (" + rho + ") must be less than " + max
+                        + ".");
+                return false;
+            }
+
+            return true;
+        }
+
+
+
         /**
-         * Returns the distance in rho from which to drop the
+         * Returns the distance in rho from which to crop the
          * <code>HoughMap</code>.
          * 
          * @return distance in rho
          */
-        public Magnitude getRho() {
+        public double getRho() {
             return rhoField.getValueBFR();
+        }
+
+
+
+        /**
+         * Returns the units of rho.
+         * 
+         * @return units of rho
+         */
+        public String getUnits() {
+            return unitsCBox.getSelectedItemBFR();
         }
 
     }
@@ -115,7 +158,12 @@ public class HoughCrop extends PlugIn {
         if (dialog.show() != OkCancelDialog.OK)
             return null;
 
-        double rho = dialog.getRho().getPreferredUnitsValue();
+        String units = dialog.getUnits();
+
+        double rho = dialog.getRho();
+        if (units == UNCALIBRATED_UNIT)
+            rho *= srcMap.getCalibration().dy;
+
         HoughMap cropMap = Edit.crop(srcMap, rho);
 
         cropMap.setFile(FileUtil.append(srcMap.getFile(), "(Crop)"));
