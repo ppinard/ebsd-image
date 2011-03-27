@@ -352,7 +352,7 @@ public class Transform implements Monitorable {
         // c = sqrt(a^2 + b^2)
         Magnitude c = (a.power(2).add(b.power(2))).power(0.5);
 
-        Magnitude rMax = magnitude.core.Math.ceil(c.div(2));
+        Magnitude rMax = c.div(2);
 
         return new HoughMap(deltaTheta, deltaRho, rMax);
     }
