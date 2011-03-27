@@ -73,24 +73,24 @@ public class ExpListenerUtil {
             HoughPeak[] peaks) {
         MapMath.subtraction(houghMap, -3, houghMap);
 
-        houghMap.getLUT().setLUT(255, 255, 0, 0);
-        houghMap.getLUT().setLUT(254, 0, 255, 0);
-        houghMap.getLUT().setLUT(253, 0, 0, 255);
+        houghMap.lut.setLUT(255, 255, 0, 0);
+        houghMap.lut.setLUT(254, 0, 255, 0);
+        houghMap.lut.setLUT(253, 0, 0, 255);
 
         Arrays.sort(peaks, new HoughPeakIntensityComparator());
 
         int index;
         for (int i = 0; i < peaks.length / 3; i++) {
-            index = houghMap.getIndex(peaks[i].rho, peaks[i].theta);
+            index = houghMap.getIndex(peaks[i].theta, peaks[i].rho);
             drawHoughPeakPosition(houghMap, index, (byte) 253);
         }
         for (int i = peaks.length / 3; i < 2 * peaks.length / 3; i++) {
-            index = houghMap.getIndex(peaks[i].rho, peaks[i].theta);
+            index = houghMap.getIndex(peaks[i].theta, peaks[i].rho);
             drawHoughPeakPosition(houghMap, index, (byte) 254);
         }
 
         for (int i = 2 * peaks.length / 3; i < peaks.length; i++) {
-            index = houghMap.getIndex(peaks[i].rho, peaks[i].theta);
+            index = houghMap.getIndex(peaks[i].theta, peaks[i].rho);
             drawHoughPeakPosition(houghMap, index, (byte) 255);
         }
 
