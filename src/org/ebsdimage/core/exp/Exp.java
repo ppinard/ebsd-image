@@ -31,11 +31,6 @@ import org.ebsdimage.core.exp.ops.hough.op.HoughOp;
 import org.ebsdimage.core.exp.ops.hough.post.HoughPostOps;
 import org.ebsdimage.core.exp.ops.hough.pre.HoughPreOps;
 import org.ebsdimage.core.exp.ops.hough.results.HoughResultsOps;
-import org.ebsdimage.core.exp.ops.identification.op.CenterOfMass;
-import org.ebsdimage.core.exp.ops.identification.op.IdentificationOp;
-import org.ebsdimage.core.exp.ops.identification.post.IdentificationPostOps;
-import org.ebsdimage.core.exp.ops.identification.pre.IdentificationPreOps;
-import org.ebsdimage.core.exp.ops.identification.results.IdentificationResultsOps;
 import org.ebsdimage.core.exp.ops.indexing.op.IndexingOp;
 import org.ebsdimage.core.exp.ops.indexing.op.IndexingOpNull;
 import org.ebsdimage.core.exp.ops.indexing.post.IndexingPostOps;
@@ -44,6 +39,11 @@ import org.ebsdimage.core.exp.ops.indexing.results.IndexingResultsOps;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
 import org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps;
 import org.ebsdimage.core.exp.ops.pattern.results.PatternResultsOps;
+import org.ebsdimage.core.exp.ops.positioning.op.CenterOfMass;
+import org.ebsdimage.core.exp.ops.positioning.op.PositioningOp;
+import org.ebsdimage.core.exp.ops.positioning.post.PositioningPostOps;
+import org.ebsdimage.core.exp.ops.positioning.pre.PositioningPreOps;
+import org.ebsdimage.core.exp.ops.positioning.results.PositioningResultsOps;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.run.Run;
 import org.simpleframework.xml.*;
@@ -65,11 +65,10 @@ import static org.ebsdimage.core.exp.ExpConstants.*;
 @Order(elements = { "listeners", "metadata", "phases", "patternOp",
         "patternPostOps", "patternResultsOps", "houghPreOps", "houghOp",
         "houghPostOps", "houghResultsOps", "detectionPreOps", "detectionOp",
-        "detectionPostOps", "detectionResultsOps", "identificationPreOps",
-        "identificationOp", "identificationPostOps",
-        "identificationResultsOps", "indexingPreOps", "indexingOp",
-        "indexingPostOps", "indexingResultsOps" }, attributes = { "name",
-        "dir", "width", "height" })
+        "detectionPostOps", "detectionResultsOps", "positioningPreOps",
+        "positioningOp", "positioningPostOps", "positioningResultsOps",
+        "indexingPreOps", "indexingOp", "indexingPostOps", "indexingResultsOps" }, attributes = {
+        "name", "dir", "width", "height" })
 public class Exp extends Run {
 
     /** Experiment listeners. */
@@ -150,24 +149,24 @@ public class Exp extends Run {
     private ArrayList<DetectionResultsOps> detectionResultsOps =
             new ArrayList<DetectionResultsOps>();
 
-    /** List of identification pre operations of the experiment. */
-    private ArrayList<IdentificationPreOps> identificationPreOps =
-            new ArrayList<IdentificationPreOps>();
+    /** List of positioning pre operations of the experiment. */
+    private ArrayList<PositioningPreOps> positioningPreOps =
+            new ArrayList<PositioningPreOps>();
 
-    /** Default identification operation. */
-    public static final IdentificationOp DEFAULT_IDENTIFICATION_OP =
+    /** Default positioning operation. */
+    public static final PositioningOp DEFAULT_POSITIONING_OP =
             CenterOfMass.DEFAULT;
 
-    /** Identification operation. */
-    private IdentificationOp identificationOp = DEFAULT_IDENTIFICATION_OP;
+    /** Positioning operation. */
+    private PositioningOp positioningOp = DEFAULT_POSITIONING_OP;
 
-    /** List of identification post operations of the experiment. */
-    private ArrayList<IdentificationPostOps> identificationPostOps =
-            new ArrayList<IdentificationPostOps>();
+    /** List of positioning post operations of the experiment. */
+    private ArrayList<PositioningPostOps> positioningPostOps =
+            new ArrayList<PositioningPostOps>();
 
-    /** List of identification results operations of the experiment. */
-    private ArrayList<IdentificationResultsOps> identificationResultsOps =
-            new ArrayList<IdentificationResultsOps>();
+    /** List of positioning results operations of the experiment. */
+    private ArrayList<PositioningResultsOps> positioningResultsOps =
+            new ArrayList<PositioningResultsOps>();
 
     /** List of indexing pre operations of the experiment. */
     private ArrayList<IndexingPreOps> indexingPreOps =
@@ -202,8 +201,8 @@ public class Exp extends Run {
      * selected operations.
      * <p/>
      * The array of <code>Operation</code> contains all the operations that the
-     * experiment will execute. The <code>Operation</code>s are organised into
-     * each step of the experiment (pattern, Hough, detection, identification,
+     * experiment will execute. The <code>Operation</code>s are organized into
+     * each step of the experiment (pattern, Hough, detection, positioning,
      * indexing and output). The order of the <code>Operation</code> is
      * maintained.
      * <p/>
@@ -286,14 +285,14 @@ public class Exp extends Run {
      *            detection post operation(s)
      * @param detectionResultsOps
      *            detection results operation(s)
-     * @param identificationPreOps
-     *            identification pre operation(s)
-     * @param identificationOp
-     *            identification operation
-     * @param identificationPostOps
-     *            identification post operation(s)
-     * @param identificationResultsOps
-     *            identification results operation(s)
+     * @param positioningPreOps
+     *            positioning pre operation(s)
+     * @param positioningOp
+     *            positioning operation
+     * @param positioningPostOps
+     *            positioning post operation(s)
+     * @param positioningResultsOps
+     *            positioning results operation(s)
      * @param indexingPreOps
      *            indexing pre operation(s)
      * @param indexingOp
@@ -321,10 +320,10 @@ public class Exp extends Run {
             @Element(name = "detectionOp") DetectionOp detectionOp,
             @ElementArray(name = "detectionPostOps") DetectionPostOps[] detectionPostOps,
             @ElementArray(name = "detectionResultsOps") DetectionResultsOps[] detectionResultsOps,
-            @ElementArray(name = "identificationPreOps") IdentificationPreOps[] identificationPreOps,
-            @Element(name = "identificationOp") IdentificationOp identificationOp,
-            @ElementArray(name = "identificationPostOps") IdentificationPostOps[] identificationPostOps,
-            @ElementArray(name = "identificationResultsOps") IdentificationResultsOps[] identificationResultsOps,
+            @ElementArray(name = "positioningPreOps") PositioningPreOps[] positioningPreOps,
+            @Element(name = "positioningOp") PositioningOp positioningOp,
+            @ElementArray(name = "positioningPostOps") PositioningPostOps[] positioningPostOps,
+            @ElementArray(name = "positioningResultsOps") PositioningResultsOps[] positioningResultsOps,
             @ElementArray(name = "indexingPreOps") IndexingPreOps[] indexingPreOps,
             @Element(name = "indexingOp") IndexingOp indexingOp,
             @ElementArray(name = "indexingPostOps") IndexingPostOps[] indexingPostOps,
@@ -354,10 +353,10 @@ public class Exp extends Run {
         addOperations(detectionPostOps);
         addOperations(detectionResultsOps);
 
-        addOperations(identificationPreOps);
-        addOperation(identificationOp);
-        addOperations(identificationPostOps);
-        addOperations(identificationResultsOps);
+        addOperations(positioningPreOps);
+        addOperation(positioningOp);
+        addOperations(positioningPostOps);
+        addOperations(positioningResultsOps);
 
         addOperations(indexingPreOps);
         addOperation(indexingOp);
@@ -467,20 +466,20 @@ public class Exp extends Run {
                 detectionResultsOps.add((DetectionResultsOps) op);
         }
 
-        // Identification
-        else if (packageName.startsWith(IDENTIFICATION_CORE_PACKAGE)) {
+        // Positioning
+        else if (packageName.startsWith(POSITIONING_CORE_PACKAGE)) {
             if (packageName.equals(FileUtil.joinPackageNames(
-                    IDENTIFICATION_CORE_PACKAGE, "pre")))
-                identificationPreOps.add((IdentificationPreOps) op);
+                    POSITIONING_CORE_PACKAGE, "pre")))
+                positioningPreOps.add((PositioningPreOps) op);
             else if (packageName.equals(FileUtil.joinPackageNames(
-                    IDENTIFICATION_CORE_PACKAGE, "op")))
-                identificationOp = (IdentificationOp) op;
+                    POSITIONING_CORE_PACKAGE, "op")))
+                positioningOp = (PositioningOp) op;
             else if (packageName.equals(FileUtil.joinPackageNames(
-                    IDENTIFICATION_CORE_PACKAGE, "post")))
-                identificationPostOps.add((IdentificationPostOps) op);
+                    POSITIONING_CORE_PACKAGE, "post")))
+                positioningPostOps.add((PositioningPostOps) op);
             else if (packageName.equals(FileUtil.joinPackageNames(
-                    IDENTIFICATION_CORE_PACKAGE, "results")))
-                identificationResultsOps.add((IdentificationResultsOps) op);
+                    POSITIONING_CORE_PACKAGE, "results")))
+                positioningResultsOps.add((PositioningResultsOps) op);
         }
 
         // Indexing
@@ -597,10 +596,10 @@ public class Exp extends Run {
         ops.addAll(detectionPostOps);
         ops.addAll(detectionResultsOps);
 
-        ops.addAll(identificationPreOps);
-        ops.add(identificationOp);
-        ops.addAll(identificationPostOps);
-        ops.addAll(identificationResultsOps);
+        ops.addAll(positioningPreOps);
+        ops.add(positioningOp);
+        ops.addAll(positioningPostOps);
+        ops.addAll(positioningResultsOps);
 
         ops.addAll(indexingPreOps);
         ops.add(indexingOp);
@@ -808,49 +807,49 @@ public class Exp extends Run {
 
 
     /**
-     * Returns the identification operation of this experiment.
+     * Returns the operation of this experiment.
      * 
-     * @return identification operation
+     * @return operation
      */
-    @Element(name = "identificationOp")
-    public IdentificationOp getIdentificationOp() {
-        return identificationOp;
+    @Element(name = "positioningOp")
+    public PositioningOp getPositioningOp() {
+        return positioningOp;
     }
 
 
 
     /**
-     * Returns the identification post operations of this experiment.
+     * Returns the post operations of this experiment.
      * 
-     * @return identification post operations
+     * @return post operations
      */
-    @ElementArray(name = "identificationPostOps")
-    public IdentificationPostOps[] getIdentificationPostOps() {
-        return identificationPostOps.toArray(new IdentificationPostOps[identificationPostOps.size()]);
+    @ElementArray(name = "positioningPostOps")
+    public PositioningPostOps[] getPositioningPostOps() {
+        return positioningPostOps.toArray(new PositioningPostOps[positioningPostOps.size()]);
     }
 
 
 
     /**
-     * Returns the identification pre operations of this experiment.
+     * Returns the pre operations of this experiment.
      * 
-     * @return identification pre operations
+     * @return pre operations
      */
-    @ElementArray(name = "identificationPreOps")
-    public IdentificationPreOps[] getIdentificationPreOps() {
-        return identificationPreOps.toArray(new IdentificationPreOps[identificationPreOps.size()]);
+    @ElementArray(name = "positioningPreOps")
+    public PositioningPreOps[] getPositioningPreOps() {
+        return positioningPreOps.toArray(new PositioningPreOps[positioningPreOps.size()]);
     }
 
 
 
     /**
-     * Returns the identification results operations of this experiment.
+     * Returns the results operations of this experiment.
      * 
-     * @return identification results operations
+     * @return results operations
      */
-    @ElementArray(name = "identificationResultsOps")
-    public IdentificationResultsOps[] getIdentificationResultsOps() {
-        return identificationResultsOps.toArray(new IdentificationResultsOps[identificationResultsOps.size()]);
+    @ElementArray(name = "positioningResultsOps")
+    public PositioningResultsOps[] getPositioningResultsOps() {
+        return positioningResultsOps.toArray(new PositioningResultsOps[positioningResultsOps.size()]);
     }
 
 
@@ -1163,7 +1162,7 @@ public class Exp extends Run {
 
         // Test to continue
         if (houghResultsOps.size() > 0 || detectionResultsOps.size() > 0
-                || identificationResultsOps.size() > 0
+                || positioningResultsOps.size() > 0
                 || indexingResultsOps.size() > 0) {
 
             // Hough Pre Ops
@@ -1195,7 +1194,7 @@ public class Exp extends Run {
 
             // Test to continue
             if (detectionResultsOps.size() > 0
-                    || identificationResultsOps.size() > 0
+                    || positioningResultsOps.size() > 0
                     || indexingResultsOps.size() > 0) {
 
                 // Detection Pre Ops
@@ -1229,32 +1228,32 @@ public class Exp extends Run {
                     runResultsOperation(op, currentPeaksMap);
 
                 // Test to continue
-                if (identificationResultsOps.size() > 0
+                if (positioningResultsOps.size() > 0
                         || indexingResultsOps.size() > 0) {
 
-                    // Identification Pre Ops
-                    setStatus("--- Identification Pre Operations ---");
-                    for (IdentificationPreOps op : identificationPreOps)
+                    // Positioning Pre Ops
+                    setStatus("--- Positioning Pre Operations ---");
+                    for (PositioningPreOps op : positioningPreOps)
                         currentPeaksMap =
                                 (BinMap) runOperation(op, currentPeaksMap);
 
-                    // Identification Op
-                    setStatus("--- Identification Operation ---");
+                    // Positioning Op
+                    setStatus("--- Positioning Operation ---");
 
                     currentPeaks =
-                            (HoughPeak[]) runOperation(identificationOp,
+                            (HoughPeak[]) runOperation(positioningOp,
                                     currentPeaksMap, sourceHoughMap);
 
-                    // Identification Post Ops
-                    setStatus("--- Identification Post Operations ---");
-                    for (IdentificationPostOps op : identificationPostOps)
+                    // Positioning Post Ops
+                    setStatus("--- Positioning Post Operations ---");
+                    for (PositioningPostOps op : positioningPostOps)
                         currentPeaks =
                                 (HoughPeak[]) runOperation(op,
                                         (Object[]) currentPeaks);
 
-                    // Identification Results Ops
-                    setStatus("--- Identification Results Operations ---");
-                    for (IdentificationResultsOps op : identificationResultsOps)
+                    // Positioning Results Ops
+                    setStatus("--- Positioning Results Operations ---");
+                    for (PositioningResultsOps op : positioningResultsOps)
                         runResultsOperation(op, (Object[]) currentPeaks);
 
                     // Test to continue

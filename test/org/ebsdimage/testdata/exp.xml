@@ -79,16 +79,16 @@
    <detectionResultsOps length="1">
       <operation class="org.ebsdimage.core.exp.ops.detection.results.DetectionResultsOpsMock"/>
    </detectionResultsOps>
-   <identificationPreOps length="1">
-      <operation class="org.ebsdimage.core.exp.ops.identification.pre.IdentificationPreOpsMock"/>
-   </identificationPreOps>
-   <identificationOp class="org.ebsdimage.core.exp.ops.identification.op.IdentificationOpMock"/>
-   <identificationPostOps length="1">
-      <operation class="org.ebsdimage.core.exp.ops.identification.post.IdentificationPostOpsMock"/>
-   </identificationPostOps>
-   <identificationResultsOps length="1">
-      <operation class="org.ebsdimage.core.exp.ops.identification.results.IdentificationResultsOpsMock"/>
-   </identificationResultsOps>
+   <positioningPreOps length="1">
+      <operation class="org.ebsdimage.core.exp.ops.positioning.pre.PositioningPreOpsMock"/>
+   </positioningPreOps>
+   <positioningOp class="org.ebsdimage.core.exp.ops.positioning.op.PositioningOpMock"/>
+   <positioningPostOps length="1">
+      <operation class="org.ebsdimage.core.exp.ops.positioning.post.PositioningPostOpsMock"/>
+   </positioningPostOps>
+   <positioningResultsOps length="1">
+      <operation class="org.ebsdimage.core.exp.ops.positioning.results.PositioningResultsOpsMock"/>
+   </positioningResultsOps>
    <indexingPreOps length="1">
       <operation class="org.ebsdimage.core.exp.ops.indexing.pre.IndexingPreOpsMock"/>
    </indexingPreOps>

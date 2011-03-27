@@ -114,7 +114,7 @@ An experiment can be divided into five major steps:
    Location of the detected Hough peaks.
 ..
 
-  4. Peak identification operations
+  4. Peak positioning operations
   
      The result of the previous step is a :ref:`binary map <binmap>`. 
      Therefore, the next step is to identify the peaks by measuring their 
@@ -209,12 +209,12 @@ category in the following table:
                                  unwanted peaks
 10 Peak detection      Results   Compute results from the detected      Quality index using the number 
                                  peaks                                  of detected peaks
-11 Peak identification Pre       Process detected peaks prior to their  Keep only peaks of a certain 
-                                 identification                         shape
-12 Peak identification Operation Identify Hough peaks (position and     Find the position using the 
+11 Peak positioning    Pre       Process detected peaks prior to their  Keep only peaks of a certain 
+                                 positioning                            shape
+12 Peak positioning    Operation Identify Hough peaks (position and     Find the position using the 
                                  intensity) from the detected peaks     local centroid of each peak
-13 Peak identification Post      Process the identified Hough peaks 
-14 Peak identification Results   Compute results from the identified    Image quality index
+13 Peak positioning    Post      Process the identified Hough peaks 
+14 Peak positioning    Results   Compute results from the identified    Image quality index
                                  Hough peaks 
 15 Indexing            Pre       Process the Hough peaks before the     Select most intense peaks
                                  indexing
@@ -245,11 +245,11 @@ A summary of each category is given in the following table.
 8  Peak detection      Operation :ref:`houghmap`            :ref:`binmap`
 9  Peak detection      Post      :ref:`binmap`              :ref:`binmap` 
 10 Peak detection      Results   :ref:`binmap`              array of byte or float 
-11 Peak identification Pre       :ref:`binmap`              :ref:`binmap` 
-12 Peak identification Operation :ref:`binmap` and          array of :ref:`houghpeak`
+11 Peak positioning    Pre       :ref:`binmap`              :ref:`binmap` 
+12 Peak positioning    Operation :ref:`binmap` and          array of :ref:`houghpeak`
                                  :ref:`houghmap`
-13 Peak identification Post      array of :ref:`houghpeak`  array of :ref:`houghpeak`
-14 Peak identification Results   array of :ref:`houghpeak`  array of byte or float 
+13 Peak positioning    Post      array of :ref:`houghpeak`  array of :ref:`houghpeak`
+14 Peak positioning    Results   array of :ref:`houghpeak`  array of byte or float 
 15 Indexing            Pre       array of :ref:`houghpeak`  array of :ref:`houghpeak`
 16 Indexing            Operation array of :ref:`houghpeak`  array of :ref:`solution`
 17 Indexing            Post      array of :ref:`solution`   array of :ref:`solution`

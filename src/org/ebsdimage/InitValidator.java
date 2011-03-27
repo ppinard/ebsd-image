@@ -206,13 +206,13 @@ public class InitValidator {
                 "results"));
 
         validateOperationInPackage(joinPackageNames(
-                IDENTIFICATION_CORE_PACKAGE, "pre"));
+                POSITIONING_CORE_PACKAGE, "pre"));
         validateOperationInPackage(joinPackageNames(
-                IDENTIFICATION_CORE_PACKAGE, "op"));
+                POSITIONING_CORE_PACKAGE, "op"));
         validateOperationInPackage(joinPackageNames(
-                IDENTIFICATION_CORE_PACKAGE, "post"));
+                POSITIONING_CORE_PACKAGE, "post"));
         validateOperationInPackage(joinPackageNames(
-                IDENTIFICATION_CORE_PACKAGE, "results"));
+                POSITIONING_CORE_PACKAGE, "results"));
 
         validateOperationInPackage(joinPackageNames(INDEXING_CORE_PACKAGE,
                 "pre"));

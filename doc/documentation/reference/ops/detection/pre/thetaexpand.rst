@@ -8,7 +8,7 @@ Theta expand
 .. warning::
 
    This operation must be used in tandem with :ref:`doublepeakscleanup` 
-   operation in the peak identification post-operations.
+   operation in the peak positioning post-operations.
    
 This operation expands the right side of the :ref:`houghmap` pass 180 deg.
 No new :ref:`houghtransform` is performed. 

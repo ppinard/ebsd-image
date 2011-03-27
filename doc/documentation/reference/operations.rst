@@ -121,7 +121,7 @@ Results
    
    ops/detection/results/*
    
-Peak identification
+Peak positioning
 -------------------
 
 Pre
@@ -131,7 +131,7 @@ Pre
    :glob:
    :titlesonly:
    
-   ops/identification/pre/*
+   ops/positioning/pre/*
 
 Operation
 ^^^^^^^^^
@@ -140,7 +140,7 @@ Operation
    :glob:
    :titlesonly:
    
-   ops/identification/op/*
+   ops/positioning/op/*
 
 Post
 ^^^^
@@ -149,7 +149,7 @@ Post
    :glob:
    :titlesonly:
    
-   ops/identification/post/*
+   ops/positioning/post/*
 
 Results
 ^^^^^^^
@@ -158,7 +158,7 @@ Results
    :glob:
    :titlesonly:
    
-   ops/identification/results/*
+   ops/positioning/results/*
    
 Indexing
 --------

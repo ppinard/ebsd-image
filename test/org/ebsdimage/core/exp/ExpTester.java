@@ -31,11 +31,6 @@ import org.ebsdimage.core.exp.ops.hough.op.HoughOpMock;
 import org.ebsdimage.core.exp.ops.hough.post.HoughPostOpsMock;
 import org.ebsdimage.core.exp.ops.hough.pre.HoughPreOpsMock;
 import org.ebsdimage.core.exp.ops.hough.results.HoughResultsOpsMock;
-import org.ebsdimage.core.exp.ops.identification.op.IdentificationOpMock;
-import org.ebsdimage.core.exp.ops.identification.post.IdentificationPostOps2Mock;
-import org.ebsdimage.core.exp.ops.identification.post.IdentificationPostOpsMock;
-import org.ebsdimage.core.exp.ops.identification.pre.IdentificationPreOpsMock;
-import org.ebsdimage.core.exp.ops.identification.results.IdentificationResultsOpsMock;
 import org.ebsdimage.core.exp.ops.indexing.op.IndexingOpMock;
 import org.ebsdimage.core.exp.ops.indexing.post.IndexingPostOpsMock;
 import org.ebsdimage.core.exp.ops.indexing.pre.IndexingPreOpsMock;
@@ -43,6 +38,11 @@ import org.ebsdimage.core.exp.ops.indexing.results.IndexingResultsOpsMock;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOpMock;
 import org.ebsdimage.core.exp.ops.pattern.post.PatternPostOpsMock;
 import org.ebsdimage.core.exp.ops.pattern.results.PatternResultsOpsMock;
+import org.ebsdimage.core.exp.ops.positioning.op.PositioningOpMock;
+import org.ebsdimage.core.exp.ops.positioning.post.PositioningPostOps2Mock;
+import org.ebsdimage.core.exp.ops.positioning.post.PositioningPostOpsMock;
+import org.ebsdimage.core.exp.ops.positioning.pre.PositioningPreOpsMock;
+import org.ebsdimage.core.exp.ops.positioning.results.PositioningResultsOpsMock;
 import org.junit.After;
 import org.junit.Test;
 
@@ -127,10 +127,10 @@ public abstract class ExpTester extends TestCase {
         ops.add(new DetectionPostOpsMock());
         ops.add(new DetectionResultsOpsMock());
 
-        ops.add(new IdentificationPreOpsMock());
-        ops.add(new IdentificationOpMock());
-        ops.add(new IdentificationPostOpsMock());
-        ops.add(new IdentificationResultsOpsMock());
+        ops.add(new PositioningPreOpsMock());
+        ops.add(new PositioningOpMock());
+        ops.add(new PositioningPostOpsMock());
+        ops.add(new PositioningResultsOpsMock());
 
         ops.add(new IndexingPreOpsMock());
         ops.add(new IndexingOpMock());
@@ -242,35 +242,34 @@ public abstract class ExpTester extends TestCase {
 
 
     @Test
-    public void testGetIdentificationOp() {
-        assertEquals(new IdentificationOpMock(), exp.getIdentificationOp());
+    public void testGetPositioningOp() {
+        assertEquals(new PositioningOpMock(), exp.getPositioningOp());
     }
 
 
 
     @Test
-    public void testGetIdentificationPostOps() {
-        assertEquals(1, exp.getIdentificationPostOps().length);
-        assertEquals(new IdentificationPostOpsMock(),
-                exp.getIdentificationPostOps()[0]);
+    public void testGetPositioningPostOps() {
+        assertEquals(1, exp.getPositioningPostOps().length);
+        assertEquals(new PositioningPostOpsMock(),
+                exp.getPositioningPostOps()[0]);
     }
 
 
 
     @Test
-    public void testGetIdentificationPreOps() {
-        assertEquals(1, exp.getIdentificationPreOps().length);
-        assertEquals(new IdentificationPreOpsMock(),
-                exp.getIdentificationPreOps()[0]);
+    public void testGetPositioningPreOps() {
+        assertEquals(1, exp.getPositioningPreOps().length);
+        assertEquals(new PositioningPreOpsMock(), exp.getPositioningPreOps()[0]);
     }
 
 
 
     @Test
-    public void testGetIdentificationResultsOps() {
-        assertEquals(1, exp.getIdentificationResultsOps().length);
-        assertEquals(new IdentificationResultsOpsMock(),
-                exp.getIdentificationResultsOps()[0]);
+    public void testGetPositioningResultsOps() {
+        assertEquals(1, exp.getPositioningResultsOps().length);
+        assertEquals(new PositioningResultsOpsMock(),
+                exp.getPositioningResultsOps()[0]);
     }
 
 
@@ -420,9 +419,8 @@ public abstract class ExpTester extends TestCase {
         assertEquals(12, realMap.pixArray[0], 1e-6);
         assertEquals(12, realMap.pixArray[1], 1e-6);
 
-        // IdentificationResultsOpsMock
-        map =
-                exp.mmap.getMap(IdentificationResultsOpsMock.class.getSimpleName());
+        // PositioningResultsOpsMock
+        map = exp.mmap.getMap(PositioningResultsOpsMock.class.getSimpleName());
         assertNotNull(map);
         assertEquals(RealMap.class, map.getClass());
 
@@ -448,7 +446,7 @@ public abstract class ExpTester extends TestCase {
         exp.setDir(expPath);
 
         // Add operation that throws ExpError
-        exp.addOperation(new IdentificationPostOps2Mock());
+        exp.addOperation(new PositioningPostOps2Mock());
 
         exp.run();
 
@@ -505,7 +503,7 @@ public abstract class ExpTester extends TestCase {
         assertEquals(0, errorMap.pixArray[0]);
         assertEquals(1, errorMap.pixArray[1]);
 
-        assertEquals(IdentificationPostOps2Mock.Error1, errorMap.getItem(1));
+        assertEquals(PositioningPostOps2Mock.Error1, errorMap.getItem(1));
 
         // PatternResultsOpsMock
         map = exp.mmap.getMap(PatternResultsOpsMock.class.getSimpleName());
@@ -534,9 +532,8 @@ public abstract class ExpTester extends TestCase {
         assertEquals(12, realMap.pixArray[0], 1e-6);
         assertEquals(12, realMap.pixArray[1], 1e-6);
 
-        // IdentificationResultsOpsMock
-        map =
-                exp.mmap.getMap(IdentificationResultsOpsMock.class.getSimpleName());
+        // PositioningResultsOpsMock
+        map = exp.mmap.getMap(PositioningResultsOpsMock.class.getSimpleName());
         assertNotNull(map);
         assertEquals(RealMap.class, map.getClass());
 

@@ -28,10 +28,6 @@ import org.ebsdimage.core.exp.ops.hough.op.HoughOp;
 import org.ebsdimage.core.exp.ops.hough.post.HoughPostOps;
 import org.ebsdimage.core.exp.ops.hough.pre.HoughPreOps;
 import org.ebsdimage.core.exp.ops.hough.results.HoughResultsOps;
-import org.ebsdimage.core.exp.ops.identification.op.IdentificationOp;
-import org.ebsdimage.core.exp.ops.identification.post.IdentificationPostOps;
-import org.ebsdimage.core.exp.ops.identification.pre.IdentificationPreOps;
-import org.ebsdimage.core.exp.ops.identification.results.IdentificationResultsOps;
 import org.ebsdimage.core.exp.ops.indexing.op.IndexingOp;
 import org.ebsdimage.core.exp.ops.indexing.post.IndexingPostOps;
 import org.ebsdimage.core.exp.ops.indexing.pre.IndexingPreOps;
@@ -39,6 +35,10 @@ import org.ebsdimage.core.exp.ops.indexing.results.IndexingResultsOps;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
 import org.ebsdimage.core.exp.ops.pattern.post.PatternPostOps;
 import org.ebsdimage.core.exp.ops.pattern.results.PatternResultsOps;
+import org.ebsdimage.core.exp.ops.positioning.op.PositioningOp;
+import org.ebsdimage.core.exp.ops.positioning.post.PositioningPostOps;
+import org.ebsdimage.core.exp.ops.positioning.pre.PositioningPreOps;
+import org.ebsdimage.core.exp.ops.positioning.results.PositioningResultsOps;
 import org.simpleframework.xml.Root;
 
 import rmlimage.core.BinMap;
@@ -169,7 +169,7 @@ public interface ExpListener {
 
 
     /**
-     * Action fired after the identification operation is performed.
+     * Action fired after the positioning operation is performed.
      * 
      * @param exp
      *            experiment calling this method
@@ -178,13 +178,13 @@ public interface ExpListener {
      * @param peaks
      *            resultant peaks
      */
-    public void identificationOpPerformed(Exp exp, IdentificationOp op,
+    public void positioningOpPerformed(Exp exp, PositioningOp op,
             HoughPeak[] peaks);
 
 
 
     /**
-     * Action fired after an identification post-operation is performed.
+     * Action fired after an positioning post-operation is performed.
      * 
      * @param exp
      *            experiment calling this method
@@ -193,13 +193,13 @@ public interface ExpListener {
      * @param peaks
      *            resultant peaks
      */
-    public void identificationPostPerformed(Exp exp, IdentificationPostOps op,
+    public void positioningPostPerformed(Exp exp, PositioningPostOps op,
             HoughPeak[] peaks);
 
 
 
     /**
-     * Action fired after an identification pre-operation is performed.
+     * Action fired after an positioning pre-operation is performed.
      * 
      * @param exp
      *            experiment calling this method
@@ -208,13 +208,13 @@ public interface ExpListener {
      * @param peaksMap
      *            resultant peaks map
      */
-    public void identificationPrePerformed(Exp exp, IdentificationPreOps op,
+    public void positioningPrePerformed(Exp exp, PositioningPreOps op,
             BinMap peaksMap);
 
 
 
     /**
-     * Action fired after the calculation of an identification result.
+     * Action fired after the calculation of an positioning result.
      * 
      * @param exp
      *            experiment calling this method
@@ -223,8 +223,8 @@ public interface ExpListener {
      * @param result
      *            result of the operation
      */
-    public void identificationResultsPerformed(Exp exp,
-            IdentificationResultsOps op, OpResult result);
+    public void positioningResultsPerformed(Exp exp, PositioningResultsOps op,
+            OpResult result);
 
 
 

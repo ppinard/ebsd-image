@@ -77,7 +77,7 @@ public class IndexingWizardPage extends OperationWizardPage {
             return false;
 
         int previousOpCount =
-                ((Operation[]) get(IdentificationWizardPage.KEY_IDENTIFICATION_OP)).length;
+                ((Operation[]) get(PositioningWizardPage.KEY_POSITIONING_OP)).length;
         int preCount = (prePanel.getUserListModel()).size();
         int opCount = (opPanel.getUserListModel()).size();
         int postCount = (postPanel.getUserListModel()).size();
@@ -86,7 +86,7 @@ public class IndexingWizardPage extends OperationWizardPage {
         if (previousOpCount == 0)
             if (preCount > 0 || opCount > 0 || postCount > 0
                     || resultsCount > 0) {
-                showErrorDialog("An identification operation is required.");
+                showErrorDialog("A positioning operation is required.");
                 return false;
             }
 

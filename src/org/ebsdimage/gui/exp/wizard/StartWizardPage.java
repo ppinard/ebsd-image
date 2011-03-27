@@ -155,7 +155,7 @@ public class StartWizardPage extends WizardPage {
         put(PatternWizardPage.KEY_LOADED, 0);
         put(HoughWizardPage.KEY_LOADED, 0);
         put(DetectionWizardPage.KEY_LOADED, 0);
-        put(IdentificationWizardPage.KEY_LOADED, 0);
+        put(PositioningWizardPage.KEY_LOADED, 0);
         put(IndexingWizardPage.KEY_LOADED, 0);
 
         return super.allowNext(stepName, settings, wizard);

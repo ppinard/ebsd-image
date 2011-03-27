@@ -56,7 +56,7 @@ public class ExpWizard extends Wizard {
                 new InfoWizardPage(), new MicroscopeWizardPage(),
                 new PhasesWizardPage(), new PatternsWizardPage(),
                 new PatternWizardPage(), new HoughWizardPage(),
-                new DetectionWizardPage(), new IdentificationWizardPage(),
+                new DetectionWizardPage(), new PositioningWizardPage(),
                 new IndexingWizardPage(), new OutputWizardPage() });
 
         try {
@@ -221,11 +221,11 @@ public class ExpWizard extends Wizard {
         addOps(ops, DetectionWizardPage.KEY_DETECTION_POST);
         addOps(ops, DetectionWizardPage.KEY_DETECTION_RESULTS);
 
-        // Identification
-        addOps(ops, IdentificationWizardPage.KEY_IDENTIFICATION_PRE);
-        addOps(ops, IdentificationWizardPage.KEY_IDENTIFICATION_OP);
-        addOps(ops, IdentificationWizardPage.KEY_IDENTIFICATION_POST);
-        addOps(ops, IdentificationWizardPage.KEY_IDENTIFICATION_RESULTS);
+        // Positioning
+        addOps(ops, PositioningWizardPage.KEY_POSITIONING_PRE);
+        addOps(ops, PositioningWizardPage.KEY_POSITIONING_OP);
+        addOps(ops, PositioningWizardPage.KEY_POSITIONING_POST);
+        addOps(ops, PositioningWizardPage.KEY_POSITIONING_RESULTS);
 
         // Indexing
         addOps(ops, IndexingWizardPage.KEY_INDEXING_PRE);

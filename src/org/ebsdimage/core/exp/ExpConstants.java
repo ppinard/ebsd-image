@@ -48,13 +48,13 @@ public class ExpConstants {
     public static final String HOUGH_GUI_PACKAGE = FileUtil.joinPackageNames(
             OPS_GUI_PACKAGE, "hough");
 
-    /** Package name for the identification's core operations. */
-    public static final String IDENTIFICATION_CORE_PACKAGE =
-            FileUtil.joinPackageNames(OPS_CORE_PACKAGE, "identification");
+    /** Package name for the positioning's core operations. */
+    public static final String POSITIONING_CORE_PACKAGE =
+            FileUtil.joinPackageNames(OPS_CORE_PACKAGE, "positioning");
 
-    /** Package name for the identification's gui operations. */
-    public static final String IDENTIFICATION_GUI_PACKAGE =
-            FileUtil.joinPackageNames(OPS_GUI_PACKAGE, "identification");
+    /** Package name for the positioning's gui operations. */
+    public static final String POSITIONING_GUI_PACKAGE =
+            FileUtil.joinPackageNames(OPS_GUI_PACKAGE, "positioning");
 
     /** Package name for the indexing's core operations. */
     public static final String INDEXING_CORE_PACKAGE =
