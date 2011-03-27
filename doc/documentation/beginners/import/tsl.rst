@@ -4,13 +4,16 @@
 Import TSL OIM projects
 =======================
 
-To import an EBSD acquisition from TSL OIM, EBSD-Image requires an ANG file. 
+To import an EBSD acquisition from TSL OIM [#f1]_, EBSD-Image requires an 
+ANG file. 
 The result is an :ref:`tslmmap`.
 
-Generate an ang file
+Generate an ANG file
 --------------------
 
-*Under construction*
+.. todo::
+
+   Describe how to generate ANG file
 
 Wizard
 ------
@@ -32,8 +35,8 @@ Select the ANG file to import.
    During that time, the header containing the information about the EBSD 
    acquisition are loaded.
 
-Missing data
-^^^^^^^^^^^^
+Microscope configuration
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Some metadata related to the EBSD acquisition can not be loaded directly from 
 the ANG file. 
@@ -46,8 +49,9 @@ These information are optional.
  * Tilt angle: 
    Tilt of the sample (typically 70 deg).
  * Sample rotation: 
-   Rotation between the pattern frame (camera) and the sample frame. 
-   It can be used to rotate the sample in a particular direction. 
+   Rotation of the sample with respect to the sample frame. 
+   It can be used to rotate the sample in a particular direction (e.g. align
+   the rolling direction with the y-axis). 
    The sample rotation is defined using the three Euler angles expressed in the 
    Bunge convention.
 
@@ -65,7 +69,30 @@ as their order.
 For more information on how to create a new phase, please refer to the 
 :ref:`phase` guide.  
 
+
+Diffraction patterns
+^^^^^^^^^^^^^^^^^^^^
+
+This wizard page is to automatically convert the diffraction patterns saved 
+during a TSL acquisition to a :ref:`smp` file. 
+If this step is skipped, only the information in the ANG file will be converted 
+to an :ref:`tslmmap`. 
+If the diffraction patterns images have not being moved since their acquisition 
+by TSL OIM, the wizard can automatically find where the images are located, 
+however it is often easier to manually select the folder containing the images.
+This folder typically has the same name as the project's filename.
+Be careful not to enter the folder when you are selecting it since the listing 
+of the images files by the operating system is a lengthy process.
+
 Output
 ^^^^^^
 
-Finally, the location where to save the :ref:`tslmmap` must be specified. 
+Finally, the location where to save the :ref:`tslmmap` and :ref:`smp` file must 
+be specified. 
+Please note that only the location and name of the :ref:`tslmmap` is required 
+since the :ref:`smp` file will be saved in the same folder with the same name; 
+only the extension is changed to SMP.
+
+-----------
+
+.. [#f1] TSL OIM is a trademark of Ametek Inc.

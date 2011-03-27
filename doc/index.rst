@@ -42,7 +42,7 @@ Installation package for Windows, Mac OS and Linux Debian are available to
 :ref:`download`, as well as a Java executable jar. 
 For more information, please refer to the :ref:`documentation` page. 
 To collaborate to this project, please visit the :ref:`collaboration` page or 
-our SourceForge `project website <http://sourceforge.net/projects/ebsd-image/>`_.
+our SourceForge :sf-link:`project website <home>`.
 
 .. image:: /images/screenshot.png
    :align: center

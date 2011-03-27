@@ -15,9 +15,18 @@ First-time users
    :maxdepth: 1
    
    documentation/beginners/desktop.rst
+   documentation/beginners/microscope.rst
    documentation/beginners/phase.rst
+   
+   documentation/beginners/import/hkl.rst
+   documentation/beginners/import/tsl.rst
+   
    documentation/beginners/experiment.rst
    documentation/beginners/run.rst
+   
+   documentation/beginners/view_patterns.rst
+   
+   documentation/beginners/analysis.rst
    
 Reference material
 ------------------
@@ -36,16 +45,16 @@ Advanced users
 --------------
 
 .. toctree::
-   :glob:
    :maxdepth: 1
    
-   documentation/advanced/*
+   documentation/advanced/run_cui.rst
+   documentation/advanced/distributed_interface.rst
+   documentation/advanced/unwarp.rst
    
 Developers
 ----------
 
 .. toctree::
-   :glob:
    :maxdepth: 1
    
-   documentation/developers/*
+   documentation/developers/javadoc.rst
