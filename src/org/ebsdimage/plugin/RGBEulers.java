@@ -89,8 +89,10 @@ public class RGBEulers extends PlugIn {
      */
     @CheckForNull
     private RGBMap doConversion() {
-        if (!areMapsLoaded(true))
+        if (getMapCount(EbsdMMap.class) == 0) {
+            showErrorDialog("No EBSD multimaps loaded");
             return null;
+        }
 
         Dialog dialog = new Dialog();
         if (dialog.show() != OkCancelDialog.OK)
