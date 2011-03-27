@@ -22,11 +22,6 @@ class Build extends rmlimage.module.Build
 
   public void build()
   {
-        //Builds the needed modules
-    new rmlimage.module.integer.Build().buildCore()
-    new rmlimage.module.multi.Build().build()
-    new rmlimage.module.stitch.Build().build()
-
     compile()
     
         //Backup the development module.prop file
@@ -43,6 +38,7 @@ class Build extends rmlimage.module.Build
     ant.jar(destfile:"$modulesDir/ebsd.jar") {
       fileset(dir:classDir) {
         include(name:'org/ebsdimage/**')
+        exclude(name:'org/ebsdimage/core/old/**')
         include(name:'crystallography/**')
         include(name:'ptpshared/**')
         include(name:'rmlimage/module.prop')
@@ -53,7 +49,12 @@ class Build extends rmlimage.module.Build
     ant.move(file:"$tmpDir/module.prop", todir:"$classDir/rmlimage")
     
         //Copy the external libraries
-    jdom()
+    cli()
+    configuration()
+    jdirectorychooser()
+    opencsv()
+    math()
+    xml()
     wizard()
   }
   
@@ -71,20 +72,13 @@ class Build extends rmlimage.module.Build
   
   public void compile()
   {
-        //Compile the rmlshared.cui package
-    ant.javac(srcdir:rmlsharedSrcDir, destdir:classDir, source:"1.5",
-              extdirs:rmlimageLibDir, failonerror:true, debug:true) {
-      include(name:'rmlshared/cui/**')
-    }
-             
-        //Compiles the needed modules
-    new rmlimage.module.integer.Build().compileCore()
-    new rmlimage.module.multi.Build().compile()
-    new rmlimage.module.stitch.Build().compile()
     
         //Compile the EBSD module
     ant.javac(srcdir:ebsdimageSrcDir, destdir:classDir, source:"1.5",
-              extdirs:rmlimageLibDir, failonerror:true, debug:true)
+              extdirs:ebsdimageLibDir, failonerror:true, debug:true) {
+      exclude(name:'org/ebsdimage/core/old/**')
+      exclude(name:'ptpshared/math/old/**')
+    }
 
     //Copy the plugin button icon and menu definition files
     //and the support files
