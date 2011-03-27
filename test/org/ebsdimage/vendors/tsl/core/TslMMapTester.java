@@ -37,6 +37,7 @@ import rmlimage.core.ByteMap;
 import rmlimage.core.Calibration;
 import rmlimage.core.Map;
 import rmlimage.module.real.core.RealMap;
+import rmlimage.module.real.io.RmpLoader;
 import rmlshared.io.FileUtil;
 import crystallography.core.Crystal;
 import crystallography.io.CrystalLoader;
@@ -137,11 +138,11 @@ public abstract class TslMMapTester extends TestCase {
 
 
     @Test
-    public void testGetConfidenceIndexMap() {
+    public void testGetConfidenceIndexMap() throws IOException {
         RealMap realMap = mmap.getConfidenceIndexMap();
 
         RealMap expectedRealMap =
-                (RealMap) load("org/ebsdimage/vendors/tsl/testdata/confidenceIndex.rmp");
+                new RmpLoader().load(getFile("org/ebsdimage/vendors/tsl/testdata/confidenceIndex.rmp"));
 
         realMap.assertEquals(expectedRealMap);
     }
@@ -160,11 +161,11 @@ public abstract class TslMMapTester extends TestCase {
 
 
     @Test
-    public void testGetImageQualityMap() {
+    public void testGetImageQualityMap() throws IOException {
         RealMap realMap = mmap.getImageQualityMap();
 
         RealMap expectedRealMap =
-                (RealMap) load("org/ebsdimage/vendors/tsl/testdata/ImageQuality.rmp");
+                new RmpLoader().load(getFile("org/ebsdimage/vendors/tsl/testdata/ImageQuality.rmp"));
 
         realMap.assertEquals(expectedRealMap);
     }
@@ -263,11 +264,11 @@ public abstract class TslMMapTester extends TestCase {
 
 
     @Test
-    public void testGetQ0Map() {
+    public void testGetQ0Map() throws IOException {
         RealMap realMap = mmap.getQ0Map();
 
         RealMap expectedRealMap =
-                (RealMap) load("org/ebsdimage/vendors/tsl/testdata/Q0.rmp");
+                new RmpLoader().load(getFile("org/ebsdimage/vendors/tsl/testdata/Q0.rmp"));
 
         realMap.assertEquals(expectedRealMap, 1e-3);
     }
@@ -275,11 +276,11 @@ public abstract class TslMMapTester extends TestCase {
 
 
     @Test
-    public void testGetQ1Map() {
+    public void testGetQ1Map() throws IOException {
         RealMap realMap = mmap.getQ1Map();
 
         RealMap expectedRealMap =
-                (RealMap) load("org/ebsdimage/vendors/tsl/testdata/Q1.rmp");
+                new RmpLoader().load(getFile("org/ebsdimage/vendors/tsl/testdata/Q1.rmp"));
 
         realMap.assertEquals(expectedRealMap, 1e-3);
     }
@@ -287,11 +288,11 @@ public abstract class TslMMapTester extends TestCase {
 
 
     @Test
-    public void testGetQ2Map() {
+    public void testGetQ2Map() throws IOException {
         RealMap realMap = mmap.getQ2Map();
 
         RealMap expectedRealMap =
-                (RealMap) load("org/ebsdimage/vendors/tsl/testdata/Q2.rmp");
+                new RmpLoader().load(getFile("org/ebsdimage/vendors/tsl/testdata/Q2.rmp"));
 
         realMap.assertEquals(expectedRealMap, 1e-3);
     }
@@ -299,11 +300,11 @@ public abstract class TslMMapTester extends TestCase {
 
 
     @Test
-    public void testGetQ3Map() {
+    public void testGetQ3Map() throws IOException {
         RealMap realMap = mmap.getQ3Map();
 
         RealMap expectedRealMap =
-                (RealMap) load("org/ebsdimage/vendors/tsl/testdata/Q3.rmp");
+                new RmpLoader().load(getFile("org/ebsdimage/vendors/tsl/testdata/Q3.rmp"));
 
         realMap.assertEquals(expectedRealMap, 1e-3);
     }
