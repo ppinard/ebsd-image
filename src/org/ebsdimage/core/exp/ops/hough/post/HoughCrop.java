@@ -98,7 +98,7 @@ public class HoughCrop extends HoughPostOps {
     @Override
     public HoughMap process(Exp exp, HoughMap srcMap) {
         // Set default if needed
-        int radius = this.radius;
+        double radius = this.radius;
         if (radius < 0) {
             ByteMap patternMap = exp.getCurrentPatternMap();
             // The radius is either the radius read from the property of the
