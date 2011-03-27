@@ -31,7 +31,7 @@ RML-Image
 ---------
 
 RML-Image
-Copyright 2001-2010. Marin Lagace
+Copyright 2001-2010. Marin Lagacé
 All Rights Reserved.
 
 
@@ -123,6 +123,12 @@ The following libraries are used inside EBSD-Image.
 +-------------------+-----------------------------------+----------------------+
 | Library           | Description                       | License              |
 +===================+===================================+======================+
+| |bsh|_            | A small, free, embeddable Java    | Lesser GNU Public    |
+|                   | source interpreter                | License              |
++-------------------+-----------------------------------+----------------------+
+| |common-cli|_     | an API for parsing command line   | Apache 2.0 License   |
+|                   | options passed to programs        |                      |
++-------------------+-----------------------------------+----------------------+
 | |common-config|_  | A generic configuration interface | Apache 2.0 License   |
 |                   | which enables a Java application  |                      |
 |                   | to read configuration data from a |                      |
@@ -139,6 +145,8 @@ The following libraries are used inside EBSD-Image.
 | |junit|_          | A simple framework for writing    | Common Public        |
 |                   | and running automated tests in    | License 1.0          |
 |                   | Java                              |                      |
++-------------------+-----------------------------------+----------------------+
+| |l2fprod|_        | Extra components for Swing        | Apache 2.0 License   |
 +-------------------+-----------------------------------+----------------------+
 | |miglayout|_      | Java Layout Manager for Swing,    | GNU General Public   |
 |                   | SWT and JavaFX                    | License              |
@@ -158,6 +166,9 @@ The following libraries are used inside EBSD-Image.
 +-------------------+-----------------------------------+----------------------+
 
 
+.. |bsh| replace:: BeanShell
+.. _bsh: http://www.beanshell.org
+
 .. |FindBugs| replace:: FindBugs
 .. _FindBugs: http://findbugs.sourceforge.net
 
@@ -173,6 +184,9 @@ The following libraries are used inside EBSD-Image.
 .. |common-config| replace:: Apache Commons Configuration Library
 .. _common-config: http://commons.apache.org/configuration/
 
+.. |common-cli| replace:: Apache Commons CLI Library
+.. _common-cli: http://commons.apache.org/cli/
+
 .. |wizard| replace:: Wizard
 .. _wizard: https://wizard.dev.java.net
 
@@ -181,3 +195,6 @@ The following libraries are used inside EBSD-Image.
 
 .. |simplexml| replace:: Simple
 .. _simplexml: http://simple.sourceforge.net/
+
+.. |l2fprod| replace:: L2FProd Common Components
+.. _l2fprod: http://www.l2fprod.com/common/
