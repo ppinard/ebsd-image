@@ -21,4 +21,11 @@ public class IndexingOpNull extends IndexingOp {
         return new Solution[0];
     }
 
+
+
+    @Override
+    public String toString() {
+        return "Null Indexing";
+    }
+
 }
