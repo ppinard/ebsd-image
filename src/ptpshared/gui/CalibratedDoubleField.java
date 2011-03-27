@@ -22,14 +22,14 @@ import rmlshared.util.Range;
  * used. It offers the same functionalities as the original
  * <code>DoubleField</code>.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class CalibratedDoubleField extends Spinner {
 
     /**
      * Listener of the units combo box.
      * 
-     * @author ppinard
+     * @author Philippe T. Pinard
      */
     private class UnitsCBoxListener implements ActionListener {
 

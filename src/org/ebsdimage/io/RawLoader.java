@@ -28,7 +28,7 @@ import rmlshared.io.FileUtil;
 /**
  * Loader for RAW file.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class RawLoader extends MapLoader {
 

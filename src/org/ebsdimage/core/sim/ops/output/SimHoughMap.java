@@ -18,7 +18,7 @@ import ptpshared.util.Arrays;
  * Operation to save simulated peaks in a Hough map. Each peak is represented by
  * a white pixel in the Hough map.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class SimHoughMap extends OutputOps {
 

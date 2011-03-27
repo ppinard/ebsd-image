@@ -6,7 +6,7 @@ import org.simpleframework.xml.transform.Transform;
 /**
  * Simple XML transform for Apache Common Math's <code>Rotation</code>.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class RotationTransform implements Transform<Rotation> {
 

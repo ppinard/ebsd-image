@@ -12,7 +12,7 @@ import rmlimage.core.Map;
 /**
  * Loader for <code>ErrorMap</code>.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class ErrorMapLoader extends IndexedByteMapLoader<ErrorCode> {
 

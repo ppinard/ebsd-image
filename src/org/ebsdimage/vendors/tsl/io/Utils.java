@@ -7,7 +7,7 @@ import rmlshared.io.FileUtil;
 /**
  * Utilities for HKL files and formats.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class Utils {
 

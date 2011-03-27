@@ -69,7 +69,7 @@ public enum ScatteringFactorsEnum {
 /**
  * Converter to serialize and deserialize a scattering factor.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 class ScatteringFactorsEnumConverter implements
         Converter<ScatteringFactorsEnum> {

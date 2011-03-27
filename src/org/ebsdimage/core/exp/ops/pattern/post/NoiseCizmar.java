@@ -12,7 +12,7 @@ import rmlimage.module.real.core.ThreeSigmaRenderer;
  * Operation to add Gaussian and Poisson noise to a diffraction pattern based on
  * Cizmar et al.(2008) equation.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  * @see rmlimage.utility.Noise.cizmar
  */
 public class NoiseCizmar extends PatternPostOps {

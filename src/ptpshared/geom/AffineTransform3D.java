@@ -16,7 +16,7 @@ import static java.lang.Math.abs;
  * Based on:
  * http://www.euclideanspace.com/maths/geometry/affine/matrix4x4/index.htm
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 @Immutable
 public class AffineTransform3D implements AlmostEquable {

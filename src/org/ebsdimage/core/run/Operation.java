@@ -7,7 +7,7 @@ import org.simpleframework.xml.Root;
 /**
  * A run operation.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 @Immutable
 @Root

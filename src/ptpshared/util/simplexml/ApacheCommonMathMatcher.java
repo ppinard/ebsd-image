@@ -8,7 +8,7 @@ import org.simpleframework.xml.transform.Transform;
 /**
  * Simple XML matcher for some classes of the Apache Common Math library.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class ApacheCommonMathMatcher implements Matcher {
 

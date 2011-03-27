@@ -7,7 +7,7 @@ import org.ebsdimage.core.exp.Exp;
 /**
  * Temporary null indexing operation.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class IndexingOpNull extends IndexingOp {
 

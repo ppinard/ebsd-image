@@ -9,7 +9,7 @@ import org.simpleframework.xml.transform.Transform;
  * Utility to combine different Simple XML's matchers together before feeding
  * them to a <code>Serializer</code>.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class Matchers implements Matcher {
 

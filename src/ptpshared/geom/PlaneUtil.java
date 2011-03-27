@@ -5,7 +5,7 @@ import org.apache.commons.math.geometry.Vector3D;
 /**
  * Utilities to deal with <code>Plane</code>'s.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class PlaneUtil {
 

@@ -6,7 +6,7 @@ import org.simpleframework.xml.transform.Transform;
 /**
  * Simple XML transform for Apache Common Math's <code>Vector3D</code>.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class Vector3DTransform implements Transform<Vector3D> {
 

@@ -18,7 +18,7 @@ import crystallography.core.Reflectors;
  * A <code>BandsCalculator</code> that approximates the shape of the bands by
  * two straight edges.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class LinearBandsCalculator implements BandsCalculator {
 

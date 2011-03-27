@@ -14,7 +14,7 @@ import ptpshared.geom.*;
 /**
  * Microscope and acquisition parameters.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 @Root
 public class Microscope implements AlmostEquable {

@@ -5,7 +5,7 @@ import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 /**
  * When an object can be transformed using an affine transformation.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public interface Transformable {
 

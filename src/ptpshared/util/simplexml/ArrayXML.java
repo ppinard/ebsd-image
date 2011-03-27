@@ -9,7 +9,7 @@ import org.simpleframework.xml.Root;
 /**
  * Object used to serialize and deserialize an array of Object.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 @Root(name = "array")
 public class ArrayXML {

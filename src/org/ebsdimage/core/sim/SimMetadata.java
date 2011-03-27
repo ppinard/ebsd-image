@@ -9,7 +9,7 @@ import crystallography.core.ScatteringFactorsEnum;
 /**
  * Metadata for a <code>SimMMap</code>.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class SimMetadata extends EbsdMetadata {
 

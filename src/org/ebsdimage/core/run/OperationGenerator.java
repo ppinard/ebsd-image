@@ -33,7 +33,7 @@ import ptpshared.util.MultipleLoop;
  * Object use to serialize and deserialize items in the
  * <code>OperationGenerator</code>. An item combines an operation and its order.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 @Root
 class Item {

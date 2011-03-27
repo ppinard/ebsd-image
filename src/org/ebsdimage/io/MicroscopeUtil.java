@@ -13,7 +13,7 @@ import rmlshared.io.FileUtil;
 /**
  * Utilities to access microscope configurations.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class MicroscopeUtil {
     /**

@@ -8,7 +8,7 @@ import org.simpleframework.xml.Root;
 /**
  * Object used to serialize and deserialize a key-value map.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 @Root(name = "map")
 public class MapXML {

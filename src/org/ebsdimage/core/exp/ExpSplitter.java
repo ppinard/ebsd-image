@@ -9,7 +9,7 @@ import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
 /**
  * Splits a specified experiment into smaller experiments.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class ExpSplitter implements Iterator<Exp> {
 

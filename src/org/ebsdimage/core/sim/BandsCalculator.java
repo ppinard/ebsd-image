@@ -9,7 +9,7 @@ import crystallography.core.Reflectors;
  * Calculates the representation of a crystal's reflectors in a diffraction
  * pattern.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public interface BandsCalculator {
 

@@ -8,7 +8,7 @@ import crystallography.core.SpaceGroup;
 /**
  * Simple XML matcher for the <code>SpaceGroup</code> class.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class SpaceGroupMatcher implements Matcher {
 

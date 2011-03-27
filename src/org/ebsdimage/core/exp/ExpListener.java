@@ -30,7 +30,7 @@ import rmlimage.core.ByteMap;
 /**
  * Listener on the experiment after each category of operations is performed.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 @Root
 public interface ExpListener {

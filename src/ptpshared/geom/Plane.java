@@ -8,7 +8,7 @@ import org.apache.commons.math.geometry.Vector3D;
 /**
  * Representation of a 3D plane.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 @Immutable
 public class Plane implements AlmostEquable, Transformable {

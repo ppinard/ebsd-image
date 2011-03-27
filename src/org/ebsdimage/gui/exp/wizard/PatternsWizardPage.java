@@ -53,7 +53,7 @@ public class PatternsWizardPage extends WizardPage {
     /**
      * Panel to define the width, height and calibration of a mapping.
      * 
-     * @author ppinard
+     * @author Philippe T. Pinard
      */
     private class MappingPanel extends JPanel implements InputValidation {
 

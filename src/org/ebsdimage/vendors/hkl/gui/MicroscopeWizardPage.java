@@ -11,7 +11,7 @@ import org.ebsdimage.vendors.hkl.io.CprLoader;
 /**
  * Wizard page to fine-tune the microscope configuration.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class MicroscopeWizardPage extends
         org.ebsdimage.gui.MicroscopeWizardPage {
@@ -19,7 +19,7 @@ public class MicroscopeWizardPage extends
     /**
      * Action listener of the microscopes combo box.
      * 
-     * @author ppinard
+     * @author Philippe T. Pinard
      */
     private class MicroscopesCBoxListener implements ActionListener {
 

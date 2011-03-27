@@ -34,14 +34,14 @@ import rmlshared.io.FileUtil;
  * Setup of microscope configurations which allow users to create, edit and
  * delete microscope configurations.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class MicroscopeSetup extends PlugIn {
 
     /**
      * Dialog to create and edit <code>Microscope</code>.
      * 
-     * @author ppinard
+     * @author Philippe T. Pinard
      */
     private static class MicroscopeDialog extends BasicDialog {
 
@@ -217,14 +217,14 @@ public class MicroscopeSetup extends PlugIn {
      * Dialog to list, edit, add remove available microscope configurations
      * saved in the microscope base directory.
      * 
-     * @author ppinard
+     * @author Philippe T. Pinard
      */
     private static class SelectionDialog extends Dialog {
 
         /**
          * Common methods for the action plugins of this dialog.
          * 
-         * @author ppinard
+         * @author Philippe T. Pinard
          */
         private abstract class ActionPlugIn extends PlugIn {
 
@@ -283,7 +283,7 @@ public class MicroscopeSetup extends PlugIn {
         /**
          * Action to edit a microscope.
          * 
-         * @author ppinard
+         * @author Philippe T. Pinard
          */
         private class Edit extends ActionPlugIn {
             @Override
@@ -311,7 +311,7 @@ public class MicroscopeSetup extends PlugIn {
         /**
          * Action to create a new microscope.
          * 
-         * @author ppinard
+         * @author Philippe T. Pinard
          */
         private class New extends ActionPlugIn {
 
@@ -331,7 +331,7 @@ public class MicroscopeSetup extends PlugIn {
         /**
          * Action to remove a microscope configuration.
          * 
-         * @author ppinard
+         * @author Philippe T. Pinard
          */
         private class Remove extends ActionPlugIn {
 

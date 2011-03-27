@@ -27,7 +27,7 @@ import rmlshared.gui.Panel;
  * links an EBSD map with a SMP file. When the user moves the mouse over the
  * EBSD map, the diffraction pattern of the hovering pixel is shown.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class SmpMapViewer extends PlugIn {
 
@@ -133,7 +133,7 @@ public class SmpMapViewer extends PlugIn {
     /**
      * Listener to check for the map or SMP window are closing.
      * 
-     * @author ppinard
+     * @author Philippe T. Pinard
      */
     private class InternalFrameListener extends
             javax.swing.event.InternalFrameAdapter {
@@ -152,7 +152,7 @@ public class SmpMapViewer extends PlugIn {
     /**
      * Listener of the mouse motion over the EBSD map window.
      * 
-     * @author ppinard
+     * @author Philippe T. Pinard
      */
     private class MapMouseMotionListener implements
             rmlimage.gui.MapMouseMotionListener {

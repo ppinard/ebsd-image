@@ -6,7 +6,7 @@ import org.ebsdimage.core.sim.ops.patternsim.PatternSimOp;
 /**
  * Listener on the simulation after each operation is performed.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public interface SimListener {
 

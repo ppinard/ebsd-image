@@ -6,7 +6,7 @@ import org.apache.commons.math.linear.RealVector;
 /**
  * Utilities to use with Apache common <code>RealMatrix</code>.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class RealMatrixUtils {
 

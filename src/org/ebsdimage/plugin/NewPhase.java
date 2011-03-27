@@ -19,7 +19,7 @@ import crystallography.io.simplexml.SpaceGroupMatcher;
 /**
  * Plug-in to create a new phase.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class NewPhase extends PlugIn {
 

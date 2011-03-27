@@ -5,7 +5,7 @@ import org.ebsdimage.core.sim.Sim;
 /**
  * Microscope configuration wizard page.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class MicroscopeWizardPage extends
         org.ebsdimage.gui.MicroscopeWizardPage {

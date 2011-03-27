@@ -11,7 +11,7 @@ import rmlshared.thread.Reflection;
 /**
  * Factory to create reflectors of a crystal.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class ReflectorsFactory {
 

@@ -5,7 +5,7 @@ import rmlimage.core.Result;
 /**
  * Result to store the position of the centroids and their intensity.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class Centroid extends Result {
 

@@ -12,7 +12,7 @@ import ptpshared.util.simplexml.XmlSaver;
 /**
  * Operation to save the identified Hough peaks to a XML file.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class PeaksXml extends IdentificationResultsOps {
 

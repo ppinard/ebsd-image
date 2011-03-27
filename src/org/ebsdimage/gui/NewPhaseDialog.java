@@ -221,7 +221,7 @@ public class NewPhaseDialog extends BasicDialog {
     /**
      * Action to calculate the equivalent atom sites positions.
      * 
-     * @author ppinard
+     * @author Philippe T. Pinard
      */
     private class CalculateAtomSites extends PlugIn {
 

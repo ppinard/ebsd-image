@@ -18,7 +18,7 @@ import rmlshared.ui.Monitorable;
  * Loads a HKL CPR file and save some of its parameters in a
  * <code>HklMetadata</code>.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class CprLoader implements Monitorable {
 

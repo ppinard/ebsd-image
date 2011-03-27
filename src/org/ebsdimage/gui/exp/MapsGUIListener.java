@@ -33,7 +33,7 @@ import rmlimage.core.Map;
 /**
  * Listener to display the maps of an experiment in the graphical interface.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 @Root
 public class MapsGUIListener implements ExpListener {

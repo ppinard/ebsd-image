@@ -14,7 +14,7 @@ import rmlshared.util.Labeled;
  * A special <code>ByteMap</code> where an item can be associated to the value
  * of a pixel.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  * @param <Item>
  *            type of item
  */

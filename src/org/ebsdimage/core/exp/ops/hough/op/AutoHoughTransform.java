@@ -15,7 +15,7 @@ import static java.lang.Math.toDegrees;
  * automatically calculated from the resolution in theta to ensure that most of
  * the peaks have an aspect ratio close to unity.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class AutoHoughTransform extends HoughOp {
 

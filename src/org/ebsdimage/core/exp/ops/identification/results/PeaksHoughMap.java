@@ -15,7 +15,7 @@ import org.simpleframework.xml.Attribute;
  * pixel. The size and resolution of the original Hough map of the experiment is
  * used as the canvas.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class PeaksHoughMap extends IdentificationResultsOps {
 

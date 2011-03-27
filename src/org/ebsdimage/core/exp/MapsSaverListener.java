@@ -35,7 +35,7 @@ import rmlimage.io.IO;
 /**
  * Listener to save maps to file.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 @Root
 public class MapsSaverListener implements ExpListener {

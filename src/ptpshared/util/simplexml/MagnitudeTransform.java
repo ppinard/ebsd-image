@@ -7,7 +7,7 @@ import org.simpleframework.xml.transform.Transform;
 /**
  * Simple XML transform for the Magnitude library.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class MagnitudeTransform implements Transform<Magnitude> {
 

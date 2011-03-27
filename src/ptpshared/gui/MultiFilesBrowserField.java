@@ -21,7 +21,7 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
  * Field consisting of a text box and a browse button to select a directory or a
  * file.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class MultiFilesBrowserField extends JComponent implements
         InputValidation, InputBuffering, PreferenceKeeping {

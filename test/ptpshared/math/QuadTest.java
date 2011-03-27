@@ -14,7 +14,7 @@ import static java.lang.Math.sin;
  * Test taken from the test files of the original QUADPACK implementation in
  * Fortran.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class QuadTest {
 

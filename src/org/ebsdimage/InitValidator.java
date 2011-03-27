@@ -17,7 +17,7 @@ import static ptpshared.io.FileUtil.joinPackageNames;
 /**
  * Validates that the convention used in the experiment operations' definition.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class InitValidator {
 

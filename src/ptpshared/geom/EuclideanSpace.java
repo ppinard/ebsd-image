@@ -8,7 +8,7 @@ import org.apache.commons.math.geometry.Vector3D;
 /**
  * Representation of an Euclidean space.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 @Immutable
 public class EuclideanSpace implements AlmostEquable {

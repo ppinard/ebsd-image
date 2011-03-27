@@ -8,7 +8,7 @@ import org.ebsdimage.core.ErrorCode;
  * Minor error occurring during the execution of an experiment. The error will
  * be saved in the <code>ErrorMap</code> of the EBSD multimap.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 @Immutable
 public class ExpError extends Exception {

@@ -8,7 +8,7 @@ import crystallography.core.SpaceGroups;
 /**
  * Simple XML transform for the <code>SpaceGroup</code> class.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class SpaceGroupTransform implements Transform<SpaceGroup> {
 

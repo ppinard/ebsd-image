@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * Map to track errors encountered during an experiment.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class ErrorMap extends IndexedByteMap<ErrorCode> {
 

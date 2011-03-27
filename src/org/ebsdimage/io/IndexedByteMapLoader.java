@@ -17,7 +17,7 @@ import rmlshared.io.TextFileReader;
  * 
  * @param <Item>
  *            type of item
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public abstract class IndexedByteMapLoader<Item> extends BasicBmpLoader {
 

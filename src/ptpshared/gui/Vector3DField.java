@@ -18,7 +18,7 @@ import rmlshared.util.Range;
  * Field consisting of 3 <code>DoubleField</code> to enter the value of the x,y
  * and z components of a <code>Vector3D</code>.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class Vector3DField extends JComponent implements PreferenceKeeping,
         InputValidation, InputBuffering {

@@ -20,7 +20,7 @@ import rmlshared.util.Preferences;
  * Field consisting of 3 <code>DoubleField</code> to enter a rotation using
  * Euler angles.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class RotationField extends JComponent implements PreferenceKeeping,
         InputValidation, InputBuffering {

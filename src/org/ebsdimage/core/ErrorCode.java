@@ -12,7 +12,7 @@ import rmlshared.util.Labeled;
  * experiment. An error code is defined by an index, a type of error and a
  * descripton of the error.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 @Root
 @Immutable

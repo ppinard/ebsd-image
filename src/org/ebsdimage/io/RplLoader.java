@@ -28,7 +28,7 @@ import rmlshared.util.Properties;
 /**
  * Loader of RPL file.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class RplLoader implements Loader {
 

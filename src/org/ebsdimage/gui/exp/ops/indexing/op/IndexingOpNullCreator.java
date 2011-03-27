@@ -7,7 +7,7 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 /**
  * Temporary null indexing operation.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class IndexingOpNullCreator implements OperationCreator {
 

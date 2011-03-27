@@ -397,7 +397,7 @@ public class ParamsWizardPage extends WizardPage {
          * {@link #toString()}. This is required for the rotation to be showed
          * properly in a <code>JList</code>.
          * 
-         * @author ppinard
+         * @author Philippe T. Pinard
          */
         private class TmpRotation {
 

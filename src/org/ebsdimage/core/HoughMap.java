@@ -38,7 +38,7 @@ import static java.lang.Math.ceil;
  * <code>y = height/2</code>).
  * 
  * @author Marin Lagac&eacute;
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class HoughMap extends ByteMap {
 

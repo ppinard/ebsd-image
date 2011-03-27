@@ -20,7 +20,7 @@ package org.ebsdimage.io;
 /**
  * Properties given by a RPL file.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class RplFile {
 

@@ -41,7 +41,7 @@ public class Transform implements Monitorable {
      * Integrand of the double integral to calculate the delta rho from the
      * delta theta.
      * 
-     * @author ppinard
+     * @author Philippe T. Pinard
      */
     private static class Function implements UnivariateRealFunction {
 
@@ -82,7 +82,7 @@ public class Transform implements Monitorable {
     /**
      * Inside function to perform the double integral.
      * 
-     * @author ppinard
+     * @author Philippe T. Pinard
      */
     private static class InFunction implements UnivariateRealFunction {
 

@@ -8,7 +8,7 @@ import org.simpleframework.xml.transform.Transform;
 /**
  * Simple XML matcher for the Magnitude library.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class MagnitudeMatcher implements Matcher {
 

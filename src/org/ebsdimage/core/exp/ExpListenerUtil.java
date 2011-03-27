@@ -10,7 +10,7 @@ import rmlimage.core.MapMath;
 /**
  * Utilities used by the experiment listeners.
  * 
- * @author ppinard
+ * @author Philippe T. Pinard
  */
 public class ExpListenerUtil {
 
