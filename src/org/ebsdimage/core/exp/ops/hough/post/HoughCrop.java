@@ -97,16 +97,19 @@ public class HoughCrop extends HoughPostOps {
      */
     @Override
     public HoughMap process(Exp exp, HoughMap srcMap) {
+        ByteMap patternMap = exp.getCurrentPatternMap();
+
         // Set default if needed
         double radius = this.radius;
         if (radius < 0) {
-            ByteMap patternMap = exp.getCurrentPatternMap();
             // The radius is either the radius read from the property of the
             // pattern map or the minimum between half the pattern map's height
             // or half the pattern map's width
             radius =
                     patternMap.getProperty(MaskDisc.KEY_RADIUS,
                             min(patternMap.width / 2, patternMap.height / 2));
+
+            System.out.println(radius);
 
             // Decrease the radius by how much its value is negative
             // e.g radius = -1 => radius = maskdisc.radius
@@ -115,8 +118,12 @@ public class HoughCrop extends HoughPostOps {
             radius += this.radius + 1;
         }
 
+        System.out.println(radius);
+
         // Adjust radius value to be in deltaRho units
-        radius *= srcMap.getCalibration().dy;
+        radius *= patternMap.getCalibration().dx; // dx == dy
+
+        System.out.println(radius);
 
         HoughMap destMap = Edit.crop(srcMap, radius);
 
