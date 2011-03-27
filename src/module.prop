@@ -9,8 +9,8 @@ depends=Complex
 
 init=org.ebsdimage.Init
 init=org.ebsdimage.plugin.Init
-#init=org.ebsdimage.vendors.hkl.Init
-#init=org.ebsdimage.vendors.tsl.Init
+init=org.ebsdimage.vendors.hkl.Init
+init=org.ebsdimage.vendors.tsl.Init
 
 menu=org/ebsdimage/plugin/ContrastExpansion.menu
 menu=org/ebsdimage/plugin/HoughTransform.menu
