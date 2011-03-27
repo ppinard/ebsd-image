@@ -1199,9 +1199,13 @@ public class Exp extends Run {
 
                 // Detection Pre Ops
                 setStatus("--- Detection Pre Operations ---");
-                for (DetectionPreOps op : detectionPreOps)
+                for (DetectionPreOps op : detectionPreOps) {
                     currentHoughMap =
                             (HoughMap) runOperation(op, currentHoughMap);
+                    sourceHoughMap =
+                            (HoughMap) updateSourceMap(sourceHoughMap,
+                                    currentHoughMap);
+                }
 
                 // Detection Op
                 setStatus("--- Detection Operation ---");
@@ -1233,9 +1237,13 @@ public class Exp extends Run {
 
                     // Positioning Pre Ops
                     setStatus("--- Positioning Pre Operations ---");
-                    for (PositioningPreOps op : positioningPreOps)
+                    for (PositioningPreOps op : positioningPreOps) {
                         currentPeaksMap =
                                 (BinMap) runOperation(op, currentPeaksMap);
+                        sourcePeaksMap =
+                                (BinMap) updateSourceMap(sourcePeaksMap,
+                                        currentPeaksMap);
+                    }
 
                     // Positioning Op
                     setStatus("--- Positioning Operation ---");
