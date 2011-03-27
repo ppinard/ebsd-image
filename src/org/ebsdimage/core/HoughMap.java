@@ -214,15 +214,16 @@ public class HoughMap extends ByteMap {
                     + ") must be between 0 and " + (map.size - 1));
 
         Calibration cal = map.getCalibration();
+        Magnitude dx = cal.getDX();
 
-        if (!cal.getDX().areUnits("rad"))
+        if (!dx.areUnits("rad"))
             throw new IllegalArgumentException("Invalid map, delta x units ("
-                    + cal.getDX().getBaseUnitsLabel()
+                    + dx.getBaseUnitsLabel()
                     + ") cannot be expressed as \"rad\".");
 
         double theta = cal.getCalibratedX(map.getX(index));
 
-        return theta % Math.PI;
+        return theta % (Math.PI - dx.getValue("rad") / 2.0);
     }
 
     /** Maximum value of the distance axis (y = 0) in rho units. */
