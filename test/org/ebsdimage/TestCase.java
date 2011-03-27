@@ -20,25 +20,24 @@ package org.ebsdimage;
 import java.io.File;
 import java.io.IOException;
 
-import junittools.test.Assert;
 import rmlimage.core.Map;
 import rmlimage.io.IO;
 
 public class TestCase extends junittools.test.TestCase {
 
-    protected Map load(String fileName) {
-        return load(getFile(fileName));
-    }
-
-
-
     protected Map load(File file) {
         try {
             return IO.load(file);
         } catch (IOException e) {
-            Assert.fail(e.getMessage());
+            org.junit.Assert.fail(e.getMessage());
             return null;
         }
+    }
+
+
+
+    protected Map load(String fileName) {
+        return load(getFile(fileName));
     }
 
 }

@@ -12,13 +12,6 @@ import org.ebsdimage.gui.run.ops.OperationCreator;
 public class IndexingOpNullCreator implements OperationCreator {
 
     @Override
-    public String toString() {
-        return "Null Indexing";
-    }
-
-
-
-    @Override
     public String getDescription() {
         return "Temporary indexing operation";
     }
@@ -35,6 +28,13 @@ public class IndexingOpNullCreator implements OperationCreator {
     @Override
     public int show() {
         return OperationCreator.OK;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Null Indexing";
     }
 
 }

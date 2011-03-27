@@ -74,6 +74,18 @@ public class SpaceGroup implements Labeled, Comparable<SpaceGroup> {
 
 
     @Override
+    public int compareTo(SpaceGroup o) {
+        if (index < o.index)
+            return -1;
+        else if (index > o.index)
+            return 1;
+        else
+            return 0;
+    }
+
+
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
@@ -102,6 +114,13 @@ public class SpaceGroup implements Labeled, Comparable<SpaceGroup> {
 
 
 
+    @Override
+    public String getLabel() {
+        return symbol + " (" + index + ")";
+    }
+
+
+
     /**
      * Returns the symmetry operators of the Laue group.
      * 
@@ -126,24 +145,5 @@ public class SpaceGroup implements Labeled, Comparable<SpaceGroup> {
     @Override
     public String toString() {
         return symbol;
-    }
-
-
-
-    @Override
-    public String getLabel() {
-        return symbol + " (" + index + ")";
-    }
-
-
-
-    @Override
-    public int compareTo(SpaceGroup o) {
-        if (index < o.index)
-            return -1;
-        else if (index > o.index)
-            return 1;
-        else
-            return 0;
     }
 }

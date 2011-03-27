@@ -26,15 +26,15 @@ public class PeaksXmlCreator implements OperationCreator {
 
 
     @Override
-    public String toString() {
-        return "XML";
+    public int show() {
+        return OperationCreator.OK;
     }
 
 
 
     @Override
-    public int show() {
-        return OperationCreator.OK;
+    public String toString() {
+        return "XML";
     }
 
 }

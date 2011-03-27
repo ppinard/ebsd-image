@@ -19,6 +19,7 @@ import rmlimage.gui.BasicDialog;
 import rmlimage.gui.MapWindow;
 import rmlimage.gui.PlugIn;
 import rmlshared.gui.ComboBox;
+import rmlshared.gui.OkCancelDialog;
 import rmlshared.gui.Panel;
 
 /**
@@ -74,6 +75,28 @@ public class SmpMapViewer extends PlugIn {
 
 
 
+        /**
+         * Returns the selected map.
+         * 
+         * @return selected pattern map
+         */
+        public Map getMap() {
+            return comboBox.getSelectedItemBFR();
+        }
+
+
+
+        /**
+         * Returns the selected SMP file.
+         * 
+         * @return SMP file
+         */
+        public File getSmpFile() {
+            return smpFileField.getFileBFR();
+        }
+
+
+
         @Override
         public boolean isCorrect() {
             if (!super.isCorrect())
@@ -105,28 +128,25 @@ public class SmpMapViewer extends PlugIn {
             return true;
         }
 
+    }
 
+    /**
+     * Listener to check for the map or SMP window are closing.
+     * 
+     * @author ppinard
+     */
+    private class InternalFrameListener extends
+            javax.swing.event.InternalFrameAdapter {
+        @Override
+        public void internalFrameClosing(javax.swing.event.InternalFrameEvent e) {
+            mapWindow.removeMapMouseMotionListener(mapMouseMotionListener);
 
-        /**
-         * Returns the selected map.
-         * 
-         * @return selected pattern map
-         */
-        public Map getMap() {
-            return comboBox.getSelectedItemBFR();
+            try {
+                smpReader.close();
+            } catch (IOException e1) {
+                showErrorDialog(e1.getMessage());
+            }
         }
-
-
-
-        /**
-         * Returns the selected SMP file.
-         * 
-         * @return SMP file
-         */
-        public File getSmpFile() {
-            return smpFileField.getFileBFR();
-        }
-
     }
 
     /**
@@ -160,25 +180,6 @@ public class SmpMapViewer extends PlugIn {
 
     }
 
-    /**
-     * Listener to check for the map or SMP window are closing.
-     * 
-     * @author ppinard
-     */
-    private class InternalFrameListener extends
-            javax.swing.event.InternalFrameAdapter {
-        @Override
-        public void internalFrameClosing(javax.swing.event.InternalFrameEvent e) {
-            mapWindow.removeMapMouseMotionListener(mapMouseMotionListener);
-
-            try {
-                smpReader.close();
-            } catch (IOException e1) {
-                showErrorDialog(e1.getMessage());
-            }
-        }
-    }
-
     /** Reader of the SMP file. */
     SmpInputStream smpReader;
 
@@ -209,7 +210,7 @@ public class SmpMapViewer extends PlugIn {
         }
 
         Dialog dialog = new Dialog();
-        if (dialog.show() != BasicDialog.OK)
+        if (dialog.show() != OkCancelDialog.OK)
             return;
 
         // SMP window

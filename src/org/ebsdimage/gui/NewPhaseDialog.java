@@ -110,6 +110,16 @@ public class NewPhaseDialog extends BasicDialog {
 
 
         /**
+         * Clear all defined atom sites.
+         */
+        public void clear() {
+            atomSites.clear();
+            fireTableDataChanged();
+        }
+
+
+
+        /**
          * Returns a copy of the <code>AtomSite</code>s in the table.
          * 
          * @return atom sites
@@ -182,16 +192,6 @@ public class NewPhaseDialog extends BasicDialog {
             fireTableRowsDeleted(row, row);
         }
 
-
-
-        /**
-         * Clear all defined atom sites.
-         */
-        public void clear() {
-            atomSites.clear();
-            fireTableDataChanged();
-        }
-
         // /**
         // * Inserts an <code>AtomSite</code> at the specified row.
         // *
@@ -216,6 +216,28 @@ public class NewPhaseDialog extends BasicDialog {
         // fireTableRowsInserted(row, row);
         // }
 
+    }
+
+    /**
+     * Action to calculate the equivalent atom sites positions.
+     * 
+     * @author ppinard
+     */
+    private class CalculateAtomSites extends PlugIn {
+
+        @Override
+        public void xRun() throws Exception {
+            AtomSiteTableModel model =
+                    (AtomSiteTableModel) atomSiteTable.getModel();
+            AtomSites atoms = model.getAtomSites();
+            SpaceGroup spaceGroup = spaceGroupCBox.getSelectedItem();
+
+            atoms = Calculations.equivalentPositions(atoms, spaceGroup);
+
+            model.clear();
+            for (AtomSite atom : atoms)
+                model.append(atom);
+        }
     }
 
     /**
@@ -251,28 +273,6 @@ public class NewPhaseDialog extends BasicDialog {
 
             for (int row : atomSiteTable.getSelectedRows())
                 model.remove(row);
-        }
-    }
-
-    /**
-     * Action to calculate the equivalent atom sites positions.
-     * 
-     * @author ppinard
-     */
-    private class CalculateAtomSites extends PlugIn {
-
-        @Override
-        public void xRun() throws Exception {
-            AtomSiteTableModel model =
-                    (AtomSiteTableModel) atomSiteTable.getModel();
-            AtomSites atoms = model.getAtomSites();
-            SpaceGroup spaceGroup = spaceGroupCBox.getSelectedItem();
-
-            atoms = Calculations.equivalentPositions(atoms, spaceGroup);
-
-            model.clear();
-            for (AtomSite atom : atoms)
-                model.append(atom);
         }
     }
 

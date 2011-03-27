@@ -133,6 +133,21 @@ public class TslImportWizard extends Wizard {
 
 
     /**
+     * Returns the directory where the patterns are located.
+     * 
+     * @return directory
+     */
+    @CheckForNull
+    public File getPatternsDir() {
+        File patternsDir =
+                (File) results.get(PatternsWizardPage.KEY_PATTERNS_FOLDER);
+
+        return patternsDir;
+    }
+
+
+
+    /**
      * Returns the phases specified in this dialog.
      * 
      * @return phases
@@ -146,21 +161,6 @@ public class TslImportWizard extends Wizard {
                     "Could not get the phases from wizard.");
 
         return phases;
-    }
-
-
-
-    /**
-     * Returns the directory where the patterns are located.
-     * 
-     * @return directory
-     */
-    @CheckForNull
-    public File getPatternsDir() {
-        File patternsDir =
-                (File) results.get(PatternsWizardPage.KEY_PATTERNS_FOLDER);
-
-        return patternsDir;
     }
 
 }
