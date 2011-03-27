@@ -28,6 +28,7 @@ import org.junit.Test;
 
 import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
+import rmlimage.core.ByteMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -76,9 +77,11 @@ public class HoughCropTest extends TestCase {
 
     @Test
     public void testProcess() throws IOException {
+        ByteMap patternMap =
+                (ByteMap) load("org/ebsdimage/testdata/pattern_masked.bmp");
         HoughMap srcMap =
                 new HoughMapLoader().load(getFile("org/ebsdimage/testdata/houghmap.bmp"));
-        HoughMap destMap = op.process(null, srcMap);
+        HoughMap destMap = op.process(srcMap, patternMap);
 
         HoughMap expectedMap =
                 new HoughMapLoader().load(getFile("org/ebsdimage/testdata/hough_crop_op.bmp"));

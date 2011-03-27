@@ -1,8 +1,8 @@
-#HoughMap2 - Calib: (0.017453292rad;15.053351,1.8816689px)
-#Tue Mar 15 09:47:03 CET 2011
+#HoughMap2 - Calib: (0.017453292rad;7.5266757,1.8816689px)
+#Sun Mar 27 22:29:44 CEST 2011
 calibration.flip.y=true
 calibration.flip.x=false
-calibration.y0=4624663901525508096
+calibration.y0=4620160301898137600
 calibration.dy=4611153102643396608
 calibration.dx=4580687790437564416
 calibration.x0=0

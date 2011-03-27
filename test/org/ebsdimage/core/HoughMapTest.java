@@ -357,13 +357,13 @@ public class HoughMapTest extends TestCase {
 
         // theta always between [0, PI[
         assertEquals(181, map.getCalibratedX(181).getValue("deg"), 1e-3);
-        assertEquals(1, Math.toDegrees(HoughMap.getTheta(map, 181)), 1e-3);
+        assertEquals(1.5, Math.toDegrees(HoughMap.getTheta(map, 181)), 1e-3);
 
         assertEquals(182, map.getCalibratedX(182).getValue("deg"), 1e-3);
-        assertEquals(2, Math.toDegrees(HoughMap.getTheta(map, 182)), 1e-3);
+        assertEquals(2.5, Math.toDegrees(HoughMap.getTheta(map, 182)), 1e-3);
 
         assertEquals(359, map.getCalibratedX(359).getValue("deg"), 1e-3);
-        assertEquals(179, Math.toDegrees(HoughMap.getTheta(map, 359)), 1e-3);
+        assertEquals(179.5, Math.toDegrees(HoughMap.getTheta(map, 359)), 1e-3);
     }
 
 
