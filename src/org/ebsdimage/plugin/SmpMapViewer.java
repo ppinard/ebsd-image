@@ -17,6 +17,7 @@
  */
 package org.ebsdimage.plugin;
 
+import java.awt.event.InputEvent;
 import java.io.File;
 import java.io.IOException;
 
@@ -148,21 +149,41 @@ public class SmpMapViewer extends PlugIn {
     }
 
     /**
-     * Listener to check for the map or SMP window are closing.
+     * Listener of the mouse event over the EBSD map window.
      * 
-     * @author Philippe T. Pinard
+     * @author ppinard
      */
-    private class InternalFrameListener extends
-            javax.swing.event.InternalFrameAdapter {
-        @Override
-        public void internalFrameClosing(javax.swing.event.InternalFrameEvent e) {
-            mapWindow.removeMapMouseMotionListener(mapMouseMotionListener);
+    private class MapMouseListener implements rmlimage.gui.MapMouseListener {
 
+        @Override
+        public void mouseClicked(Map source, int mask, int x, int y) {
+            int onmask = BUTTON1_MASK | InputEvent.CTRL_MASK;
+            if ((mask & onmask) != onmask)
+                return;
+
+            int index = source.getPixArrayIndex(x, y);
+
+            Map map;
             try {
-                smpReader.close();
-            } catch (IOException e1) {
-                showErrorDialog(e1.getMessage());
+                map = smpReader.readMap(index);
+            } catch (IOException e) {
+                return;
             }
+
+            map.shouldSave(true);
+            add(map);
+        }
+
+
+
+        @Override
+        public void mousePressed(Map source, int mask, int x, int y) {
+        }
+
+
+
+        @Override
+        public void mouseReleased(Map source, int mask, int x, int y) {
         }
     }
 
@@ -197,12 +218,35 @@ public class SmpMapViewer extends PlugIn {
 
     }
 
+    /**
+     * Listener to check for the map or SMP window are closing.
+     * 
+     * @author ppinard
+     */
+    private class InternalFrameListener extends
+            javax.swing.event.InternalFrameAdapter {
+        @Override
+        public void internalFrameClosing(javax.swing.event.InternalFrameEvent e) {
+            mapWindow.removeMapMouseMotionListener(mapMouseMotionListener);
+            mapWindow.removeMapMouseListener(mapMouseListener);
+
+            try {
+                smpReader.close();
+            } catch (IOException e1) {
+                showErrorDialog(e1.getMessage());
+            }
+        }
+    }
+
     /** Reader of the SMP file. */
     SmpInputStream smpReader;
 
     /** Listener of the mouse motion in the map window. */
     private MapMouseMotionListener mapMouseMotionListener =
             new MapMouseMotionListener();
+
+    /** Listener of the mouse event in the map window. */
+    private MapMouseListener mapMouseListener = new MapMouseListener();
 
     /** Window of the EBSD map. */
     private MapWindow mapWindow;
@@ -247,6 +291,7 @@ public class SmpMapViewer extends PlugIn {
         Map selectedMap = dialog.getMap();
         mapWindow = getWindow(selectedMap);
         mapWindow.addMapMouseMotionListener(mapMouseMotionListener);
+        mapWindow.addMapMouseListener(mapMouseListener);
         mapWindow.addInternalFrameListener(internalFrameListener);
     }
 }
