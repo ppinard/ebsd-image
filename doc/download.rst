@@ -48,64 +48,40 @@ This means that if the version of EBSD-Image on your disk is 0.1.0, you can
 install the update of 0.1.5 even if you did not install the updates for 
 0.1.1, 0.1.2, 0.1.3 and 0.1.4. 
 
- * :sf-file:`Full version <EBSD-Image_v%(version)s_ebsd-full.exe>`
- * :sf-file:`Update <EBSD-Image_v%(version)s_ebsd-update.exe>`
+ * :sf-file:`Full version <EBSD-Image_v%(version)s_full.exe>`
+ * :sf-file:`Update <EBSD-Image_v%(version)s_update.exe>`
 
 Mac OS
 ------
 
-**Prototype version**
-
-Since EBSD-Image runs on Java 1.6, Mac OS X 10.5+ with all the latest updates 
-is required.
-
-  1. Download the tarball containing the 
-     :sf-file:`application <EBSD-Image_v%(version)s_Mac.tgz>`
-  2. Extract the files
-  3. Run the application
+Under testing. 
+Please refer to cross-platform download for the time being.
 
 Linux Debian
 ------------
 
-Here is the procedure to add EBSD-Image to the Synaptic Package Manager. 
-The update of the software will be automatically installed by the Update Manager. 
-
-  1. Add the following lines to your distribution to your /etc/apt/sources.list
-     (trailing slash is required)::
-     
-       deb http://www.ebsd-image.org/repos/debian stable/
-
-  2. To install EBSD-Image::
-  
-       sudo apt-get update
-       sudo apt-get install ebsd-image
-
-.. note::
-
-   For the time being, the package is not authenticated.
-
-Another way to install the software is by downloading and executing the 
-:sf-file:`deb <ebsd-image%(version)s.deb>`
-package.
+Under testing. 
+Please refer to cross-platform download for the time being.
 
 Cross-platform
 --------------
 
 Java 1.6 needs to be installed before running EBSD-Image. 
 
-  1. Download the :sf-file:`tarball <EBSD-Image_v%(version)s.tgz>`
-  2. Extract the files
-  3. Run the following command to start EBSD-Image from the extraction 
-     directory::
+  #. Download the :sf-file:`tarball <EBSD-Image_v%(version)s.tgz>`
+  #. Extract the files
+  #. Under Linux or Mac, make the :file:`EBSD-Image.sh` executable::
+  
+       chmod +x EBSD-Image.sh
+       
+     and execute the shell script::
+  
+       ./EBSD-Image.sh
+  
+  #. Under Windows, execute the batch script::
+  
+       EBSD-Image.bat
      
-       java -jar EBSD-Image.jar
-
-Nightly Build
--------------
-
-An unstable version of EBSD-Image is compiled every night from the source code. 
-To download it, visit `nightly build <http://sourceforge.net/projects/ebsd-image/files/nightly/ebsd-image_nightly_build.tgz/download>`_.
-
 Source code
 -----------
 
