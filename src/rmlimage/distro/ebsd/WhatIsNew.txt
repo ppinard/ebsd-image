@@ -1,3 +1,9 @@
+0.2.0 (Dusseldorf, March 2011)
+- Revise multimap file formats
+- New operations to calculate different quality metrics
+- Import diffraction patterns from TSL OIM
+- Calibration of all maps
+
 0.1.2
 - Prototype implementation of EBSD multimap stitching and smp files
 - Release for the Ecole de technologie superieure workshop (Montreal, July 2010)
