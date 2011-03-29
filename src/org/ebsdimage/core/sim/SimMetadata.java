@@ -17,8 +17,8 @@
  */
 package org.ebsdimage.core.sim;
 
+import org.ebsdimage.core.AcquisitionConfig;
 import org.ebsdimage.core.EbsdMetadata;
-import org.ebsdimage.core.Microscope;
 import org.simpleframework.xml.Element;
 
 import crystallography.core.ScatteringFactorsEnum;
@@ -31,8 +31,8 @@ import crystallography.core.ScatteringFactorsEnum;
 public class SimMetadata extends EbsdMetadata {
 
     /** Default simulation metadata. */
-    public static final SimMetadata DEFAULT = new SimMetadata(new Microscope(),
-            ScatteringFactorsEnum.XRAY, 4);
+    public static final SimMetadata DEFAULT = new SimMetadata(
+            AcquisitionConfig.DEFAULT, ScatteringFactorsEnum.XRAY, 4);
 
     /** Type of scattering factors. */
     @Element(name = "scatteringFactors")
@@ -47,18 +47,18 @@ public class SimMetadata extends EbsdMetadata {
     /**
      * Creates a new <code>SimMetadata</code>.
      * 
-     * @param microscope
-     *            microscope configuration
+     * @param acqConfig
+     *            acquisition configuration
      * @param scatteringFactors
      *            type of scattering factors
      * @param maxIndex
      *            maximum index of the planes to compute
      */
     public SimMetadata(
-            @Element(name = "microscope") Microscope microscope,
+            @Element(name = "acquisitionConfig") AcquisitionConfig acqConfig,
             @Element(name = "scatteringFactors") ScatteringFactorsEnum scatteringFactors,
             @Element(name = "maxIndex") int maxIndex) {
-        super(microscope);
+        super(acqConfig);
 
         setScatteringFactors(scatteringFactors);
         setMaxIndex(maxIndex);

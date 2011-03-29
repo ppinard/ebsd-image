@@ -92,10 +92,10 @@ public class EbsdMMapUtil {
             // Set properties
             map.setProperty(CLASS, mmap.getName());
             // map.setProperty(DETECTOR, alias);
-            Microscope microscope = mmap.getMicroscope();
-            map.setProperty(ENERGY, microscope.getBeamEnergy());
-            map.setProperty(MAGNIFICATION, microscope.getMagnification());
-            map.setProperty(WORKING_DISTANCE, microscope.getWorkingDistance());
+            AcquisitionConfig acqConfig = mmap.getAcquisitionConfig();
+            map.setProperty(ENERGY, acqConfig.beamEnergy);
+            map.setProperty(MAGNIFICATION, acqConfig.magnification);
+            map.setProperty(WORKING_DISTANCE, acqConfig.workingDistance);
 
             // Paste micron bar
             if (map instanceof ByteMap)

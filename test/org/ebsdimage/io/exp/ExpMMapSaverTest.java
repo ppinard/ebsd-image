@@ -36,9 +36,7 @@ public class ExpMMapSaverTest extends ExpMMapTester {
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        // Load mmap from zip
-        File file = FileUtil.getFile("org/ebsdimage/testdata/expmmap.zip");
-        ExpMMap tempMMap = new ExpMMapLoader().load(file);
+        ExpMMap tempMMap = ExpMMapTester.createExpMMap();
 
         // Save mmap to temp dir
         new ExpMMapSaver().save(tempMMap, zipFile);

@@ -331,22 +331,25 @@ public class CtfLoader implements Monitorable {
                         Math.toRadians(acquisitionEulers[0]),
                         Math.toRadians(acquisitionEulers[1]),
                         Math.toRadians(acquisitionEulers[2]));
-        microscope.setSampleRotation(sampleRotation);
 
         double magnification = parseMagnification(headerLines);
-        microscope.setMagnification(magnification);
 
-        double beamEnergy = parseBeamEnergy(headerLines);
-        microscope.setBeamEnergy(beamEnergy * 1000.0);
+        double beamEnergy = parseBeamEnergy(headerLines) * 1000.0;
 
-        double tiltAngle = parseTiltAngle(headerLines);
-        microscope.setTiltAngle(Math.toRadians(tiltAngle));
+        double tiltAngle = Math.toRadians(parseTiltAngle(headerLines));
 
         // Read project path
         String projectName = parseProjectName(headerLines);
         File projectPath = parseProjectPath(headerLines);
 
-        return new HklMetadata(microscope, projectName, projectPath);
+        AcquisitionConfig acqConfig =
+                new AcquisitionConfig(microscope, tiltAngle,
+                        AcquisitionConfig.DEFAULT.workingDistance, beamEnergy,
+                        magnification, sampleRotation,
+                        AcquisitionConfig.DEFAULT.patternCenterX,
+                        AcquisitionConfig.DEFAULT.patternCenterY,
+                        AcquisitionConfig.DEFAULT.cameraDistance);
+        return new HklMetadata(acqConfig, projectName, projectPath);
     }
 
 

@@ -25,7 +25,7 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
-import org.ebsdimage.core.Microscope;
+import org.ebsdimage.core.AcquisitionConfig;
 import org.ebsdimage.core.exp.ExpUtil;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternFilesLoader;
 import org.ebsdimage.core.exp.ops.pattern.op.PatternOp;
@@ -53,7 +53,7 @@ public class ExpWizard extends Wizard {
      */
     public ExpWizard() {
         super("Experiment", new WizardPage[] { new StartWizardPage(),
-                new InfoWizardPage(), new MicroscopeWizardPage(),
+                new InfoWizardPage(), new AcquisitionConfigWizardPage(),
                 new PhasesWizardPage(), new PatternsWizardPage(),
                 new PatternWizardPage(), new HoughWizardPage(),
                 new DetectionWizardPage(), new PositioningWizardPage(),
@@ -145,15 +145,15 @@ public class ExpWizard extends Wizard {
      * 
      * @return microscope
      */
-    public Microscope getMicroscope() {
-        Microscope microscope =
-                (Microscope) results.get(org.ebsdimage.gui.MicroscopeWizardPage.KEY_MICROSCOPE);
+    public AcquisitionConfig getAcquisitionConfig() {
+        AcquisitionConfig acqConfig =
+                (AcquisitionConfig) results.get(AcquisitionConfigWizardPage.KEY_ACQUISITION_CONFIG);
 
-        if (microscope == null)
+        if (acqConfig == null)
             throw new NullPointerException(
-                    "Could not get the Microscope from wizard.");
+                    "Could not get the acquisition configuration from wizard.");
 
-        return microscope;
+        return acqConfig;
     }
 
 

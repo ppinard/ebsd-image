@@ -70,7 +70,7 @@ public class SimHoughMapTest extends TestCase {
         Sim sim = SimTester.createSim(ops);
 
         SimMetadata metadata =
-                new SimMetadata(sim.getMetadata().getMicroscope(),
+                new SimMetadata(sim.getMetadata().acquisitionConfig,
                         ScatteringFactorsEnum.XRAY, 4);
         sim.mmap.setMetadata(metadata);
 

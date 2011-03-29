@@ -22,9 +22,9 @@ import java.io.IOException;
 
 import org.apache.commons.math.geometry.Rotation;
 import org.ebsdimage.TestCase;
+import org.ebsdimage.core.AcquisitionConfig;
 import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.ErrorMap;
-import org.ebsdimage.core.Microscope;
 import org.ebsdimage.core.PhaseMap;
 import org.ebsdimage.io.ErrorMapLoader;
 import org.ebsdimage.io.PhaseMapLoader;
@@ -35,6 +35,7 @@ import rmlimage.core.ByteMap;
 import rmlimage.core.Calibration;
 import rmlimage.core.Map;
 import rmlimage.module.real.core.RealMap;
+import rmlimage.module.real.io.RmpLoader;
 import crystallography.core.Crystal;
 import crystallography.io.CrystalLoader;
 
@@ -183,11 +184,11 @@ public abstract class HklMMapTester extends TestCase {
 
 
     @Test
-    public void testGetMeanAngularDeviation() {
+    public void testGetMeanAngularDeviation() throws IOException {
         RealMap realMap = mmap.getMeanAngularDeviationMap();
 
         RealMap expectedRealMap =
-                (RealMap) load("org/ebsdimage/vendors/hkl/testdata/MeanAngularDeviation.rmp");
+                new RmpLoader().load(getFile("org/ebsdimage/vendors/hkl/testdata/MeanAngularDeviation.rmp"));
         realMap.assertEquals(expectedRealMap, 1e-3);
     }
 
@@ -197,7 +198,7 @@ public abstract class HklMMapTester extends TestCase {
     public void testGetMetaData() {
         HklMetadata metadata = mmap.getMetadata();
 
-        assertEquals("Project19", metadata.getProjectName());
+        assertEquals("Project19", metadata.projectName);
         // Cannot be tested
         // assertEquals(new File("").getAbsoluteFile(), metadata.projectPath);
     }
@@ -206,19 +207,19 @@ public abstract class HklMMapTester extends TestCase {
 
     @Test
     public void testGetMicroscope() {
-        Microscope microscope = mmap.getMicroscope();
+        AcquisitionConfig acqConfig = mmap.getAcquisitionConfig();
 
-        assertEquals(Rotation.IDENTITY, microscope.getSampleRotation(), 1e-6);
-        assertEquals(20e3, microscope.getBeamEnergy(), 1e-6);
-        assertEquals(70, Math.toDegrees(microscope.getTiltAngle()), 1e-6);
-        assertEquals(600, microscope.getMagnification(), 1e-6);
+        assertEquals(Rotation.IDENTITY, acqConfig.sampleRotation, 1e-6);
+        assertEquals(20e3, acqConfig.beamEnergy, 1e-6);
+        assertEquals(70, Math.toDegrees(acqConfig.tiltAngle), 1e-6);
+        assertEquals(600, acqConfig.magnification, 1e-6);
     }
 
 
 
     @Test
     public void testGetPatternFileIndex() {
-        File projectDir = mmap.getMetadata().getProjectDir();
+        File projectDir = mmap.getMetadata().projectDir;
 
         File patternFile = mmap.getPatternFile(0);
         File expected = new File(projectDir, "Project19Images/Project191.jpg");
@@ -253,7 +254,7 @@ public abstract class HklMMapTester extends TestCase {
 
     @Test
     public void testGetPatternFiles() {
-        File projectDir = mmap.getMetadata().getProjectDir();
+        File projectDir = mmap.getMetadata().projectDir;
         File[] files = mmap.getPatternFiles();
         assertEquals(mmap.size, files.length);
 
@@ -294,44 +295,44 @@ public abstract class HklMMapTester extends TestCase {
 
 
     @Test
-    public void testGetQ0Map() {
+    public void testGetQ0Map() throws IOException {
         RealMap realMap = mmap.getQ0Map();
 
         RealMap expectedRealMap =
-                (RealMap) load("org/ebsdimage/vendors/hkl/testdata/Q0.rmp");
+                new RmpLoader().load(getFile("org/ebsdimage/vendors/hkl/testdata/Q0.rmp"));
         realMap.assertEquals(expectedRealMap, 1e-3);
     }
 
 
 
     @Test
-    public void testGetQ1Map() {
+    public void testGetQ1Map() throws IOException {
         RealMap realMap = mmap.getQ1Map();
 
         RealMap expectedRealMap =
-                (RealMap) load("org/ebsdimage/vendors/hkl/testdata/Q1.rmp");
+                new RmpLoader().load(getFile("org/ebsdimage/vendors/hkl/testdata/Q1.rmp"));
         realMap.assertEquals(expectedRealMap, 1e-3);
     }
 
 
 
     @Test
-    public void testGetQ2Map() {
+    public void testGetQ2Map() throws IOException {
         RealMap realMap = mmap.getQ2Map();
 
         RealMap expectedRealMap =
-                (RealMap) load("org/ebsdimage/vendors/hkl/testdata/Q2.rmp");
+                new RmpLoader().load(getFile("org/ebsdimage/vendors/hkl/testdata/Q2.rmp"));
         realMap.assertEquals(expectedRealMap, 1e-3);
     }
 
 
 
     @Test
-    public void testGetQ3Map() {
+    public void testGetQ3Map() throws IOException {
         RealMap realMap = mmap.getQ3Map();
 
         RealMap expectedRealMap =
-                (RealMap) load("org/ebsdimage/vendors/hkl/testdata/Q3.rmp");
+                new RmpLoader().load(getFile("org/ebsdimage/vendors/hkl/testdata/Q3.rmp"));
         realMap.assertEquals(expectedRealMap, 1e-3);
     }
 

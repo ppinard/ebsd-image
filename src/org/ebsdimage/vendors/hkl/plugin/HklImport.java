@@ -20,6 +20,7 @@ package org.ebsdimage.vendors.hkl.plugin;
 import java.io.File;
 import java.io.IOException;
 
+import org.ebsdimage.core.AcquisitionConfig;
 import org.ebsdimage.core.Microscope;
 import org.ebsdimage.io.SmpCreator;
 import org.ebsdimage.vendors.hkl.core.HklMMap;
@@ -123,16 +124,18 @@ public class HklImport extends PlugIn implements Monitorable {
         cprLoader = new CprLoader();
 
         File cprFile = wizard.getCprFile();
-        Microscope microscope = wizard.getMicroscope();
+        AcquisitionConfig acqConfig = wizard.getAcquisitionConfig();
 
         HklMetadata metadata;
         try {
-            metadata = cprLoader.load(cprFile, microscope);
+            metadata = cprLoader.load(cprFile, Microscope.DEFAULT);
         } catch (IOException e) {
             showErrorDialog("While loading the CPR:" + e.getMessage());
             return;
         }
-        metadata.setMicroscope(microscope); // overwrite with user modification
+        metadata =
+                new HklMetadata(acqConfig, metadata.projectName,
+                        metadata.projectDir);
 
         cprLoader = null;
 

@@ -20,11 +20,8 @@ package org.ebsdimage.core.sim.ops.patternsim;
 import java.util.logging.Logger;
 
 import org.apache.commons.math.geometry.Rotation;
-import org.ebsdimage.core.Microscope;
-import org.ebsdimage.core.sim.Band;
-import org.ebsdimage.core.sim.BandsCalculator;
-import org.ebsdimage.core.sim.Sim;
-import org.ebsdimage.core.sim.SimOperation;
+import org.ebsdimage.core.AcquisitionConfig;
+import org.ebsdimage.core.sim.*;
 import org.simpleframework.xml.Attribute;
 
 import rmlimage.core.ByteMap;
@@ -90,15 +87,15 @@ public abstract class PatternSimOp extends SimOperation {
      * 
      * @param reflectors
      *            reflectors of the crystal
-     * @param microscope
-     *            microscope parameters
+     * @param acqConfig
+     *            acquisition configuration
      * @param rotation
      *            rotation of the pattern
      */
-    private void calculateBands(Microscope microscope, Reflectors reflectors,
-            Rotation rotation) {
+    private void calculateBands(AcquisitionConfig acqConfig,
+            Reflectors reflectors, Rotation rotation) {
         bands =
-                getBandsCalculator().calculate(width, height, microscope,
+                getBandsCalculator().calculate(width, height, acqConfig,
                         reflectors, rotation);
     }
 
@@ -130,15 +127,15 @@ public abstract class PatternSimOp extends SimOperation {
      * 
      * @param reflectors
      *            reflectors of the crystal
-     * @param microscope
-     *            microscope parameters
+     * @param acqConfig
+     *            acquisition configuration
      * @param rotation
      *            rotation of the pattern
      * @return simulated pattern
      */
-    private RealMap drawRealMap(Microscope microscope, Reflectors reflectors,
-            Rotation rotation) {
-        calculateBands(microscope, reflectors, rotation);
+    private RealMap drawRealMap(AcquisitionConfig acqConfig,
+            Reflectors reflectors, Rotation rotation) {
+        calculateBands(acqConfig, reflectors, rotation);
 
         RealMap canvas = createPatternMap();
 
@@ -236,18 +233,19 @@ public abstract class PatternSimOp extends SimOperation {
      *            simulation executing this method
      * @param reflectors
      *            reflectors of the crystal
-     * @param microscope
-     *            microscope parameters
+     * @param metadata
+     *            simulation metadata
      * @param rotation
      *            rotation of the pattern
      */
-    public void simulate(Sim sim, Microscope microscope, Reflectors reflectors,
+    public void simulate(Sim sim, SimMetadata metadata, Reflectors reflectors,
             Rotation rotation) {
-        patternRealMap = drawRealMap(microscope, reflectors, rotation);
+        AcquisitionConfig acqConfig = metadata.acquisitionConfig;
+        patternRealMap = drawRealMap(acqConfig, reflectors, rotation);
 
         // Set calibration
-        patternRealMap.setCalibration(microscope.getCamera().getCalibration(
-                width, height));
+        patternRealMap.setCalibration(acqConfig.camera.getCalibration(width,
+                height));
 
         // Use 3-sigma rendered
         patternRealMap.setMapRenderer(new ThreeSigmaRenderer());

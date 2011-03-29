@@ -245,8 +245,8 @@ public class HklMMap extends EbsdMMap {
      *             if the index is out of range
      */
     public File getPatternFile(int index) {
-        File projectPath = getMetadata().getProjectDir();
-        String projectName = getMetadata().getProjectName();
+        File projectPath = getMetadata().projectDir;
+        String projectName = getMetadata().projectName;
 
         File imageDir = new File(projectPath, projectName + "Images");
 
@@ -277,7 +277,7 @@ public class HklMMap extends EbsdMMap {
         if (imageDir == null)
             throw new NullPointerException("Image dir cannot be null.");
 
-        String projectName = getMetadata().getProjectName();
+        String projectName = getMetadata().projectName;
         int nbDigits = Integer.toString(size).length();
         String suffix = rmlshared.math.Long.format(index + 1, nbDigits);
         File patternFile =

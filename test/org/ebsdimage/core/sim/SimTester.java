@@ -24,6 +24,7 @@ import org.apache.commons.math.geometry.Rotation;
 import org.apache.commons.math.geometry.RotationOrder;
 import org.apache.commons.math.geometry.Vector3D;
 import org.ebsdimage.TestCase;
+import org.ebsdimage.core.AcquisitionConfig;
 import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.Microscope;
 import org.ebsdimage.core.PhaseMap;
@@ -70,18 +71,15 @@ public abstract class SimTester extends TestCase {
                         0.04);
         Vector3D tiltAxis = new Vector3D(0, 1, 0);
 
-        Microscope microscope = new Microscope(camera, tiltAxis);
-        microscope.setBeamEnergy(20e3);
-        microscope.setPatternCenterX(0.5);
-        microscope.setPatternCenterY(0.5);
-        microscope.setWorkingDistance(0.015);
-        microscope.setCameraDistance(0.02);
-        microscope.setTiltAngle(0.0);
+        Microscope microscope = new Microscope("Unnamed", camera, tiltAxis);
+        AcquisitionConfig acqConfig =
+                new AcquisitionConfig(microscope, 0.0, 0.015, 20e3, 100,
+                        Rotation.IDENTITY, 0.5, 0.5, 0.02);
 
         ScatteringFactorsEnum scatteringFactors = ScatteringFactorsEnum.XRAY;
         int maxIndex = 2;
 
-        return new SimMetadata(microscope, scatteringFactors, maxIndex);
+        return new SimMetadata(acqConfig, scatteringFactors, maxIndex);
     }
 
 

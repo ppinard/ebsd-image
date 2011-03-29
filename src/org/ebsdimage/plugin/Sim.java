@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import org.apache.commons.math.geometry.Rotation;
-import org.ebsdimage.core.Microscope;
+import org.ebsdimage.core.AcquisitionConfig;
 import org.ebsdimage.core.run.Operation;
 import org.ebsdimage.core.sim.SimMetadata;
 import org.ebsdimage.gui.sim.wizard.SimWizard;
@@ -70,12 +70,12 @@ public class Sim extends PlugIn implements Monitorable {
      *            simulation engine wizard dialog
      */
     private void createSim(SimWizard wizard) {
-        Microscope microscope = wizard.getMicroscope();
+        AcquisitionConfig acqConfig = wizard.getACquisitionConfig();
         ScatteringFactorsEnum scatteringFactors = wizard.getScattringFactors();
         int maxIndex = wizard.getMaxIndex();
 
         SimMetadata metadata =
-                new SimMetadata(microscope, scatteringFactors, maxIndex);
+                new SimMetadata(acqConfig, scatteringFactors, maxIndex);
 
         Operation[] ops = wizard.getOperations();
         Rotation[] rotations = wizard.getRotations();

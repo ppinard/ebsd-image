@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import org.apache.commons.math.geometry.Rotation;
 import org.apache.commons.math.geometry.Vector3D;
+import org.ebsdimage.core.AcquisitionConfig;
 import org.ebsdimage.core.Camera;
 import org.ebsdimage.core.Microscope;
 import org.ebsdimage.vendors.tsl.core.TslMMapTester;
@@ -54,8 +55,10 @@ public class AngLoaderTest extends TslMMapTester {
         Crystal wc =
                 new CrystalLoader().load(getFile("org/ebsdimage/vendors/tsl/testdata/WC.xml"));
 
-        TslMetadata metadata = loader.loadMetadata(file, new Microscope());
+        TslMetadata metadata = loader.loadMetadata(file, Microscope.DEFAULT);
         mmap = loader.load(file, metadata, new Crystal[] { wc, nickel });
+
+        new TslMMapSaver().save(mmap, new File("/tmp/scan1.zip"));
     }
 
 
@@ -73,18 +76,18 @@ public class AngLoaderTest extends TslMMapTester {
         Camera camera =
                 new Camera(new Vector3D(1, 0, 0), new Vector3D(0, -1, 0), 0.04,
                         0.03);
-        Microscope microscope = new Microscope(camera, new Vector3D(0, 1, 0));
-        microscope.setBeamEnergy(15e3);
+        Microscope microscope =
+                new Microscope("Unnamed", camera, new Vector3D(0, 1, 0));
 
         TslMetadata metadata = loader.loadMetadata(file, microscope);
-        Microscope other = metadata.getMicroscope();
 
-        assertEquals(0.523500, other.getPatternCenterX(), 1e-6);
-        assertEquals(1 - 0.804900, other.getPatternCenterY(), 1e-6);
-        assertEquals(0.770600 * 0.04, other.getCameraDistance(), 1e-6);
-        assertEquals(15, other.getWorkingDistance() * 1000, 1e-3);
-        assertEquals(Rotation.IDENTITY, other.getSampleRotation(), 1e-6);
-        assertEquals(15e3, other.getBeamEnergy(), 1e-6);
+        AcquisitionConfig acqConfig = metadata.acquisitionConfig;
+        assertEquals(0.523500, acqConfig.patternCenterX, 1e-6);
+        assertEquals(1 - 0.804900, acqConfig.patternCenterY, 1e-6);
+        assertEquals(0.770600 * 0.04, acqConfig.cameraDistance, 1e-6);
+        assertEquals(15, acqConfig.workingDistance * 1000.0, 1e-3);
+        assertEquals(Rotation.IDENTITY, acqConfig.sampleRotation, 1e-6);
+        assertEquals(0.0, acqConfig.beamEnergy, 1e-6);
     }
 
 

@@ -240,7 +240,7 @@ public class PatternSmpLoader extends PatternOp {
         }
 
         // Calibrate diffraction pattern based on camera
-        patternMap.setCalibration(exp.mmap.getMicroscope().getCamera().getCalibration(
+        patternMap.setCalibration(exp.mmap.getAcquisitionConfig().camera.getCalibration(
                 patternMap.width, patternMap.height));
 
         return patternMap;

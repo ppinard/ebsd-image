@@ -1,23 +1,25 @@
 <sim name="Sim1" dir="/tmp/sim1">
    <listeners/>
    <metadata>
-      <microscope name="Unnamed">
-         <camera>
-            <n>1.0;0.0;0.0</n>
-            <x>0.0;-1.0;0.0</x>
-            <width>0.04</width>
-            <height>0.04</height>
-         </camera>
-         <tiltAxis>0.0;1.0;0.0</tiltAxis>
+      <acquisitionConfig>
+         <microscope name="Unnamed">
+            <camera>
+               <n>1.0;0.0;0.0</n>
+               <x>0.0;-1.0;0.0</x>
+               <width>0.04</width>
+               <height>0.04</height>
+            </camera>
+            <tiltAxis>0.0;1.0;0.0</tiltAxis>
+         </microscope>
          <tiltAngle>0.0</tiltAngle>
          <workingDistance>0.015</workingDistance>
          <beamEnergy>20000.0</beamEnergy>
-         <magnification>1.0</magnification>
+         <magnification>100.0</magnification>
          <sampleRotation>1.0;0.0;0.0;0.0</sampleRotation>
          <patternCenterX>0.5</patternCenterX>
          <patternCenterY>0.5</patternCenterY>
          <cameraDistance>0.02</cameraDistance>
-      </microscope>
+      </acquisitionConfig>
       <scatteringFactors>XRAY</scatteringFactors>
       <maxIndex>2</maxIndex>
    </metadata>

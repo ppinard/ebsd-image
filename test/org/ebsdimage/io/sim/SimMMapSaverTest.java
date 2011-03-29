@@ -36,9 +36,7 @@ public class SimMMapSaverTest extends SimMMapTester {
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        // Load mmap from zip
-        File file = FileUtil.getFile("org/ebsdimage/testdata/simmmap.zip");
-        SimMMap tempMMap = new SimMMapLoader().load(file);
+        SimMMap tempMMap = SimMMapTester.createSimMMap();
 
         // Save mmap to temp dir
         new SimMMapSaver().save(tempMMap, zipFile);

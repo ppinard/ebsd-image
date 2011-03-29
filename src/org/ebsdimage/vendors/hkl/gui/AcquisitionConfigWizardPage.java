@@ -15,23 +15,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.ebsdimage.vendors.tsl.gui;
+package org.ebsdimage.vendors.hkl.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
-import org.ebsdimage.vendors.tsl.core.TslMetadata;
-import org.ebsdimage.vendors.tsl.io.AngLoader;
+import org.ebsdimage.vendors.hkl.core.HklMetadata;
+import org.ebsdimage.vendors.hkl.io.CprLoader;
 
 /**
  * Wizard page to fine-tune the microscope configuration.
  * 
  * @author Philippe T. Pinard
  */
-public class MicroscopeWizardPage extends
-        org.ebsdimage.gui.MicroscopeWizardPage {
+public class AcquisitionConfigWizardPage extends
+        org.ebsdimage.gui.AcquisitionConfigWizardPage {
 
     /**
      * Action listener of the microscopes combo box.
@@ -55,18 +55,18 @@ public class MicroscopeWizardPage extends
      * @return description
      */
     public static String getDescription() {
-        return "Microscope configuration";
+        return "Acquisition configuration";
     }
 
-    /** ANG file being loaded. */
-    private File angFile;
+    /** CPR file being loaded. */
+    private File cprFile;
 
 
 
     /**
      * Creates a new <code>MicroscopeWizardPage</code>.
      */
-    public MicroscopeWizardPage() {
+    public AcquisitionConfigWizardPage() {
         super();
 
         microscopesCBox.addActionListener(new MicroscopesCBoxListener());
@@ -78,19 +78,21 @@ public class MicroscopeWizardPage extends
      * Refresh the microscope configuration based on the selected microscope.
      */
     private void refresh() {
-        if (angFile == null) {
+        if (cprFile == null) {
             return;
         }
 
-        TslMetadata metadata;
+        HklMetadata metadata;
         try {
-            metadata = new AngLoader().loadMetadata(angFile, getMicroscope());
+            metadata =
+                    new CprLoader().load(cprFile,
+                            getAcquisitionConfig().microscope);
         } catch (IOException e) {
-            showErrorDialog("Cannot load ANG file.");
+            showErrorDialog("Cannot load CPR file.");
             return;
         }
 
-        renderingPage(metadata.getMicroscope());
+        renderingPage(metadata.acquisitionConfig);
     }
 
 
@@ -99,7 +101,7 @@ public class MicroscopeWizardPage extends
     protected void renderingPage() {
         super.renderingPage();
 
-        angFile = (File) get(StartWizardPage.KEY_ANG_FILE);
+        cprFile = (File) get(StartWizardPage.KEY_CPR_FILE);
 
         refresh();
     }

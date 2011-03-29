@@ -21,7 +21,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.ebsdimage.TestCase;
-import org.ebsdimage.core.Microscope;
+import org.ebsdimage.core.AcquisitionConfig;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -54,20 +54,14 @@ public class SimMetadataTest extends TestCase {
         assertTrue(metadata.equals(metadata, 1e-3));
         assertFalse(metadata.equals(null, 1e-3));
         assertFalse(metadata.equals(new Object(), 1e-3));
-
-        Microscope microscope = new Microscope();
-        microscope.setCameraDistance(0.01);
-        SimMetadata other =
-                new SimMetadata(microscope, ScatteringFactorsEnum.XRAY, 4);
-        assertFalse(metadata.equals(other, 1e-3));
-        assertTrue(metadata.equals(other, 1e-2));
     }
 
 
 
     @Test
     public void testSimMetadata() {
-        assertEquals(new Microscope(), metadata.getMicroscope(), 1e-6);
+        assertEquals(AcquisitionConfig.DEFAULT, metadata.acquisitionConfig,
+                1e-6);
         assertEquals(ScatteringFactorsEnum.XRAY,
                 metadata.getScatteringFactors());
         assertEquals(4, metadata.getMaxIndex());

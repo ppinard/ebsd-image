@@ -25,6 +25,7 @@ import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.math.geometry.Rotation;
 import org.apache.commons.math.geometry.RotationOrder;
+import org.ebsdimage.core.AcquisitionConfig;
 import org.ebsdimage.core.Microscope;
 import org.ebsdimage.vendors.hkl.core.HklMetadata;
 
@@ -101,14 +102,9 @@ public class CprLoader implements Monitorable {
                 config.getSection("ProjectionParameters");
 
         double pcX = section.getDouble("PCX");
-        microscope.setPatternCenterX(pcX);
-
         double pcY = section.getDouble("PCY");
-        microscope.setPatternCenterY(pcY);
-
-        double cameraDistance = section.getDouble("DD");
-        microscope.setCameraDistance(cameraDistance
-                * microscope.getCamera().width);
+        double cameraDistance =
+                section.getDouble("DD") * microscope.camera.width;
 
         // Acquisition surface
         section = config.getSection("Acquisition Surface");
@@ -117,22 +113,23 @@ public class CprLoader implements Monitorable {
         double acqEuler2 = section.getDouble("Euler2");
         double acqEuler3 = section.getDouble("Euler3");
 
-        microscope.setSampleRotation(new Rotation(RotationOrder.ZXZ, acqEuler1,
-                acqEuler2, acqEuler3));
+        Rotation sampleRotation =
+                new Rotation(RotationOrder.ZXZ, acqEuler1, acqEuler2, acqEuler3);
 
         // Job
         section = config.getSection("Job");
 
         double magnification = section.getDouble("Magnification");
-        microscope.setMagnification(magnification);
 
-        double tiltAngle = section.getDouble("TiltAngle");
-        microscope.setTiltAngle(Math.toRadians(tiltAngle));
+        double tiltAngle = Math.toRadians(section.getDouble("TiltAngle"));
 
-        double beamEnergy = section.getDouble("kV");
-        microscope.setBeamEnergy(beamEnergy * 1e3);
+        double beamEnergy = section.getDouble("kV") * 1e3;
 
-        return new HklMetadata(microscope, projectName, projectPath);
+        AcquisitionConfig acqConfig =
+                new AcquisitionConfig(microscope, tiltAngle,
+                        AcquisitionConfig.DEFAULT.workingDistance, beamEnergy,
+                        magnification, sampleRotation, pcX, pcY, cameraDistance);
+        return new HklMetadata(acqConfig, projectName, projectPath);
     }
 
 }

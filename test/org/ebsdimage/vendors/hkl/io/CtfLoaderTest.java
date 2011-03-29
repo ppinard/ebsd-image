@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.math.geometry.Rotation;
+import org.ebsdimage.core.AcquisitionConfig;
 import org.ebsdimage.core.Microscope;
 import org.ebsdimage.vendors.hkl.core.HklMMapTester;
 import org.ebsdimage.vendors.hkl.core.HklMetadata;
@@ -51,7 +52,7 @@ public class CtfLoaderTest extends HklMMapTester {
                 new CrystalLoader().load(getFile("org/ebsdimage/vendors/hkl/testdata/Copper.xml"));
 
         CtfLoader loader = new CtfLoader();
-        metadata = loader.loadMetadata(file, new Microscope());
+        metadata = loader.loadMetadata(file, Microscope.DEFAULT);
         mmap = loader.load(file, metadata, new Crystal[] { copperPhase });
     }
 
@@ -59,13 +60,13 @@ public class CtfLoaderTest extends HklMMapTester {
 
     @Test
     public void testLoadMetadata() {
-        assertEquals("Project19", metadata.getProjectName());
+        assertEquals("Project19", metadata.projectName);
 
-        Microscope microscope = metadata.getMicroscope();
-        assertEquals(Rotation.IDENTITY, microscope.getSampleRotation(), 1e-6);
-        assertEquals(20e3, microscope.getBeamEnergy(), 1e-6);
-        assertEquals(70, Math.toDegrees(microscope.getTiltAngle()), 1e-6);
-        assertEquals(600, microscope.getMagnification(), 1e-6);
+        AcquisitionConfig acqConfig = metadata.acquisitionConfig;
+        assertEquals(Rotation.IDENTITY, acqConfig.sampleRotation, 1e-6);
+        assertEquals(20e3, acqConfig.beamEnergy, 1e-6);
+        assertEquals(70, Math.toDegrees(acqConfig.tiltAngle), 1e-6);
+        assertEquals(600, acqConfig.magnification, 1e-6);
     }
 
 

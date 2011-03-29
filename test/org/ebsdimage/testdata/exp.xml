@@ -3,14 +3,16 @@
       <expListener class="org.ebsdimage.core.exp.MapsSaverListener"/>
    </listeners>
    <metadata>
-      <microscope name="Unnamed">
-         <camera>
-            <n>1.0;0.0;0.0</n>
-            <x>0.0;-1.0;0.0</x>
-            <width>0.04</width>
-            <height>0.03</height>
-         </camera>
-         <tiltAxis>0.0;1.0;0.0</tiltAxis>
+      <acquisitionConfig>
+         <microscope name="Unnamed">
+            <camera>
+               <n>1.0;0.0;0.0</n>
+               <x>0.0;-1.0;0.0</x>
+               <width>0.04</width>
+               <height>0.03</height>
+            </camera>
+            <tiltAxis>0.0;1.0;0.0</tiltAxis>
+         </microscope>
          <tiltAngle>1.2217304763960306</tiltAngle>
          <workingDistance>0.015</workingDistance>
          <beamEnergy>20000.0</beamEnergy>
@@ -19,7 +21,7 @@
          <patternCenterX>0.0</patternCenterX>
          <patternCenterY>0.0</patternCenterY>
          <cameraDistance>0.0</cameraDistance>
-      </microscope>
+      </acquisitionConfig>
    </metadata>
    <phases class="java.util.HashMap">
       <entry>
@@ -54,49 +56,49 @@
    </phases>
    <patternOp class="org.ebsdimage.core.exp.ops.pattern.op.PatternOpMock" startIndex="0" size="2"/>
    <patternPostOps length="1">
-      <operation class="org.ebsdimage.core.exp.ops.pattern.post.PatternPostOpsMock"/>
+      <expOperation class="org.ebsdimage.core.exp.ops.pattern.post.PatternPostOpsMock"/>
    </patternPostOps>
    <patternResultsOps length="1">
-      <operation class="org.ebsdimage.core.exp.ops.pattern.results.PatternResultsOpsMock"/>
+      <expOperation class="org.ebsdimage.core.exp.ops.pattern.results.PatternResultsOpsMock"/>
    </patternResultsOps>
    <houghPreOps length="1">
-      <operation class="org.ebsdimage.core.exp.ops.hough.pre.HoughPreOpsMock"/>
+      <expOperation class="org.ebsdimage.core.exp.ops.hough.pre.HoughPreOpsMock"/>
    </houghPreOps>
    <houghOp class="org.ebsdimage.core.exp.ops.hough.op.HoughOpMock"/>
    <houghPostOps length="1">
-      <operation class="org.ebsdimage.core.exp.ops.hough.post.HoughPostOpsMock"/>
+      <expOperation class="org.ebsdimage.core.exp.ops.hough.post.HoughPostOpsMock"/>
    </houghPostOps>
    <houghResultsOps length="1">
-      <operation class="org.ebsdimage.core.exp.ops.hough.results.HoughResultsOpsMock"/>
+      <expOperation class="org.ebsdimage.core.exp.ops.hough.results.HoughResultsOpsMock"/>
    </houghResultsOps>
    <detectionPreOps length="1">
-      <operation class="org.ebsdimage.core.exp.ops.detection.pre.DetectionPreOpsMock"/>
+      <expOperation class="org.ebsdimage.core.exp.ops.detection.pre.DetectionPreOpsMock"/>
    </detectionPreOps>
    <detectionOp class="org.ebsdimage.core.exp.ops.detection.op.DetectionOpMock"/>
    <detectionPostOps length="1">
-      <operation class="org.ebsdimage.core.exp.ops.detection.post.DetectionPostOpsMock"/>
+      <expOperation class="org.ebsdimage.core.exp.ops.detection.post.DetectionPostOpsMock"/>
    </detectionPostOps>
    <detectionResultsOps length="1">
-      <operation class="org.ebsdimage.core.exp.ops.detection.results.DetectionResultsOpsMock"/>
+      <expOperation class="org.ebsdimage.core.exp.ops.detection.results.DetectionResultsOpsMock"/>
    </detectionResultsOps>
    <positioningPreOps length="1">
-      <operation class="org.ebsdimage.core.exp.ops.positioning.pre.PositioningPreOpsMock"/>
+      <expOperation class="org.ebsdimage.core.exp.ops.positioning.pre.PositioningPreOpsMock"/>
    </positioningPreOps>
    <positioningOp class="org.ebsdimage.core.exp.ops.positioning.op.PositioningOpMock"/>
    <positioningPostOps length="1">
-      <operation class="org.ebsdimage.core.exp.ops.positioning.post.PositioningPostOpsMock"/>
+      <expOperation class="org.ebsdimage.core.exp.ops.positioning.post.PositioningPostOpsMock"/>
    </positioningPostOps>
    <positioningResultsOps length="1">
-      <operation class="org.ebsdimage.core.exp.ops.positioning.results.PositioningResultsOpsMock"/>
+      <expOperation class="org.ebsdimage.core.exp.ops.positioning.results.PositioningResultsOpsMock"/>
    </positioningResultsOps>
    <indexingPreOps length="1">
-      <operation class="org.ebsdimage.core.exp.ops.indexing.pre.IndexingPreOpsMock"/>
+      <expOperation class="org.ebsdimage.core.exp.ops.indexing.pre.IndexingPreOpsMock"/>
    </indexingPreOps>
    <indexingOp class="org.ebsdimage.core.exp.ops.indexing.op.IndexingOpMock"/>
    <indexingPostOps length="1">
-      <operation class="org.ebsdimage.core.exp.ops.indexing.post.IndexingPostOpsMock"/>
+      <expOperation class="org.ebsdimage.core.exp.ops.indexing.post.IndexingPostOpsMock"/>
    </indexingPostOps>
    <indexingResultsOps length="1">
-      <operation class="org.ebsdimage.core.exp.ops.indexing.results.IndexingResultsOpsMock"/>
+      <expOperation class="org.ebsdimage.core.exp.ops.indexing.results.IndexingResultsOpsMock"/>
    </indexingResultsOps>
 </exp>

@@ -32,22 +32,25 @@ public class EbsdMetadata implements AlmostEquable {
 
     /** Default EBSD metadata. */
     public static final EbsdMetadata DEFAULT = new EbsdMetadata(
-            new Microscope());
+            AcquisitionConfig.DEFAULT);
 
     /** Microscope configuration. */
-    @Element(name = "microscope")
-    private Microscope microscope;
+    @Element(name = "acquisitionConfig")
+    public final AcquisitionConfig acquisitionConfig;
 
 
 
     /**
      * Creates a new <code>EbsdMetadata</code>.
      * 
-     * @param microscope
-     *            microscope parameters
+     * @param acqConfig
+     *            acquisition configuration
      */
-    public EbsdMetadata(@Element(name = "microscope") Microscope microscope) {
-        setMicroscope(microscope);
+    public EbsdMetadata(
+            @Element(name = "acquisitionConfig") AcquisitionConfig acqConfig) {
+        if (acqConfig == null)
+            throw new NullPointerException("Microscope cannot be null.");
+        this.acquisitionConfig = acqConfig;
     }
 
 
@@ -62,35 +65,10 @@ public class EbsdMetadata implements AlmostEquable {
             return false;
 
         EbsdMetadata other = (EbsdMetadata) obj;
-        if (!microscope.equals(other.microscope, precision))
+        if (!acquisitionConfig.equals(other.acquisitionConfig, precision))
             return false;
 
         return true;
-    }
-
-
-
-    /**
-     * Returns the microscope configuration.
-     * 
-     * @return microscope configuration
-     */
-    public Microscope getMicroscope() {
-        return microscope;
-    }
-
-
-
-    /**
-     * Sets the microscope configuration.
-     * 
-     * @param microscope
-     *            microscope configuration.
-     */
-    public void setMicroscope(Microscope microscope) {
-        if (microscope == null)
-            throw new NullPointerException("Microscope cannot be null.");
-        this.microscope = microscope;
     }
 
 }

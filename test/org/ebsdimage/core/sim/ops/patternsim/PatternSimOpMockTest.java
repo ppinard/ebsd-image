@@ -21,7 +21,7 @@ import java.io.File;
 
 import org.apache.commons.math.geometry.Rotation;
 import org.ebsdimage.TestCase;
-import org.ebsdimage.core.Microscope;
+import org.ebsdimage.core.sim.SimMetadata;
 import org.ebsdimage.core.sim.SimTester;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,7 +44,7 @@ public class PatternSimOpMockTest extends TestCase {
 
     private Rotation rotation;
 
-    private Microscope microscope;
+    private SimMetadata metadata;
 
 
 
@@ -56,14 +56,14 @@ public class PatternSimOpMockTest extends TestCase {
                 ReflectorsFactory.generate(CrystalFactory.silicon(),
                         ScatteringFactorsEnum.XRAY, 1);
         rotation = Rotation.IDENTITY;
-        microscope = SimTester.createMetadata().getMicroscope();
+        metadata = SimTester.createMetadata();
     }
 
 
 
     @Test
     public void testGetPattern() {
-        op.simulate(null, microscope, reflectors, rotation);
+        op.simulate(null, metadata, reflectors, rotation);
 
         ByteMap pattern = op.getPatternMap();
         assertEquals(2, pattern.width);

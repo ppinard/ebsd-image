@@ -26,7 +26,7 @@ import java.text.DecimalFormatSymbols;
 
 import org.apache.commons.math.geometry.CardanEulerSingularityException;
 import org.apache.commons.math.geometry.Rotation;
-import org.ebsdimage.core.Microscope;
+import org.ebsdimage.core.AcquisitionConfig;
 import org.ebsdimage.vendors.hkl.core.HklMMap;
 import org.ebsdimage.vendors.hkl.core.HklMetadata;
 
@@ -64,7 +64,7 @@ public class CtfSaver implements Saver {
      * @return a line
      */
     private String createAcqEulersLines(HklMMap mmap) {
-        Rotation sampleRotation = mmap.getMicroscope().getSampleRotation();
+        Rotation sampleRotation = mmap.getAcquisitionConfig().sampleRotation;
 
         double[] eulers;
         try {
@@ -209,17 +209,17 @@ public class CtfSaver implements Saver {
      * @return a line
      */
     private String createMagEnergyTiltLine(HklMMap mmap) {
-        Microscope microscope = mmap.getMicroscope();
+        AcquisitionConfig acqConfig = mmap.getAcquisitionConfig();
 
-        double energy = microscope.getBeamEnergy() / 1e3;
-        double tiltAngle = Math.toDegrees(microscope.getTiltAngle());
+        double energy = acqConfig.beamEnergy / 1e3;
+        double tiltAngle = Math.toDegrees(acqConfig.tiltAngle);
+        double mag = acqConfig.magnification;
 
         return "Euler angles refer to Sample Coordinate system (CS0)!" + "\t"
-                + "Mag" + "\t" + formatDouble(microscope.getMagnification())
-                + "\t" + "Coverage" + "\t" + "100" + "\t" + "Device" + "\t"
-                + "0" + "\t" + "KV" + "\t" + formatDouble(energy) + "\t"
-                + "TiltAngle" + "\t" + formatDouble(tiltAngle) + "\t"
-                + "TiltAxis" + "\t" + "0";
+                + "Mag" + "\t" + formatDouble(mag) + "\t" + "Coverage" + "\t"
+                + "100" + "\t" + "Device" + "\t" + "0" + "\t" + "KV" + "\t"
+                + formatDouble(energy) + "\t" + "TiltAngle" + "\t"
+                + formatDouble(tiltAngle) + "\t" + "TiltAxis" + "\t" + "0";
     }
 
 
@@ -266,8 +266,7 @@ public class CtfSaver implements Saver {
     private String createProjectLine(HklMMap mmap) {
         HklMetadata metadata = mmap.getMetadata();
 
-        File project =
-                new File(metadata.getProjectDir(), metadata.getProjectName());
+        File project = new File(metadata.projectDir, metadata.projectName);
         return "Prj" + "\t" + project.getAbsolutePath();
     }
 

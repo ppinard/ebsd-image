@@ -25,10 +25,7 @@ import java.util.HashMap;
 
 import org.apache.commons.math.geometry.Rotation;
 import org.apache.commons.math.geometry.RotationOrder;
-import org.ebsdimage.core.EbsdMMap;
-import org.ebsdimage.core.ErrorMap;
-import org.ebsdimage.core.Microscope;
-import org.ebsdimage.core.PhaseMap;
+import org.ebsdimage.core.*;
 import org.ebsdimage.vendors.tsl.core.TslMMap;
 import org.ebsdimage.vendors.tsl.core.TslMetadata;
 
@@ -292,21 +289,24 @@ public class AngLoader implements Monitorable {
         ArrayList<String[]> headerLines = getHeaderLines(file);
 
         double pcX = parsePatternCenterX(headerLines);
-        microscope.setPatternCenterX(pcX);
 
         // In TSL the pattern center Y is calculated from the bottom of the
         // image instead from the top
-        double pcY = parsePatternCenterY(headerLines);
-        microscope.setPatternCenterY(1.0 - pcY);
+        double pcY = 1.0 - parsePatternCenterY(headerLines);
 
-        double cameraDistance = parseCameraDistance(headerLines);
-        microscope.setCameraDistance(cameraDistance
-                * microscope.getCamera().width);
+        double cameraDistance =
+                parseCameraDistance(headerLines) * microscope.camera.width;
 
-        double workingDistance = parseWorkingDistance(headerLines);
-        microscope.setWorkingDistance(workingDistance * 1e-3);
+        double workingDistance = parseWorkingDistance(headerLines) * 1e-3;
 
-        return new TslMetadata(microscope);
+        AcquisitionConfig acqConfig =
+                new AcquisitionConfig(microscope,
+                        AcquisitionConfig.DEFAULT.tiltAngle, workingDistance,
+                        AcquisitionConfig.DEFAULT.beamEnergy,
+                        AcquisitionConfig.DEFAULT.magnification,
+                        AcquisitionConfig.DEFAULT.sampleRotation, pcX, pcY,
+                        cameraDistance);
+        return new TslMetadata(acqConfig);
     }
 
 

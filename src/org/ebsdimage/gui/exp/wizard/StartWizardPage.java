@@ -151,7 +151,7 @@ public class StartWizardPage extends WizardPage {
     public WizardPanelNavResult allowNext(String stepName,
             @SuppressWarnings("rawtypes") Map settings, Wizard wizard) {
 
-        put(org.ebsdimage.gui.MicroscopeWizardPage.KEY_LOADED, 0);
+        put(org.ebsdimage.gui.AcquisitionConfigWizardPage.KEY_LOADED, 0);
         put(PatternWizardPage.KEY_LOADED, 0);
         put(HoughWizardPage.KEY_LOADED, 0);
         put(DetectionWizardPage.KEY_LOADED, 0);

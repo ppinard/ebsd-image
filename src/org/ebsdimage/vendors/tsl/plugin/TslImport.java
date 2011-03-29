@@ -20,6 +20,7 @@ package org.ebsdimage.vendors.tsl.plugin;
 import java.io.File;
 import java.io.IOException;
 
+import org.ebsdimage.core.AcquisitionConfig;
 import org.ebsdimage.core.Microscope;
 import org.ebsdimage.io.SmpCreator;
 import org.ebsdimage.vendors.tsl.core.TslMMap;
@@ -114,18 +115,18 @@ public class TslImport extends PlugIn implements Monitorable {
         status = "Loading ANG file.";
         angLoader = new AngLoader();
 
-        Microscope microscope = wizard.getMicroscope();
+        AcquisitionConfig acqConfig = wizard.getAcquisitionConfig();
         Crystal[] phases = wizard.getPhases();
         File angFile = wizard.getAngFile();
 
         TslMetadata metadata;
         try {
-            metadata = angLoader.loadMetadata(angFile, microscope);
+            metadata = angLoader.loadMetadata(angFile, Microscope.DEFAULT);
         } catch (IOException e) {
             showErrorDialog("While loading the ANG:" + e.getMessage());
             return;
         }
-        metadata.setMicroscope(microscope); // overwrite with user modification
+        metadata = new TslMetadata(acqConfig);
 
         TslMMap mmap;
         try {

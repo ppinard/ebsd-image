@@ -20,9 +20,13 @@ package org.ebsdimage.core.exp.ops.pattern.op;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.math.geometry.Rotation;
 import org.apache.commons.math.geometry.Vector3D;
 import org.ebsdimage.TestCase;
+import org.ebsdimage.core.AcquisitionConfig;
 import org.ebsdimage.core.Camera;
+import org.ebsdimage.core.EbsdMetadata;
+import org.ebsdimage.core.Microscope;
 import org.ebsdimage.core.exp.Exp;
 import org.ebsdimage.core.exp.ExpTester;
 import org.junit.Before;
@@ -60,7 +64,13 @@ public class PatternSmpLoaderTest extends TestCase {
         Camera camera =
                 new Camera(new Vector3D(1, 0, 0), new Vector3D(0, -1, 0), 336,
                         256);
-        exp.mmap.getMicroscope().setCamera(camera);
+        Microscope microscope =
+                new Microscope("Unnamed", camera, new Vector3D(0, 1, 0));
+        AcquisitionConfig acqConfig =
+                new AcquisitionConfig(microscope, Math.toRadians(70), 0.015,
+                        20e3, 100, Rotation.IDENTITY, 0.0, 0.0, 0.0);
+
+        exp.mmap.setMetadata(new EbsdMetadata(acqConfig));
     }
 
 
@@ -92,7 +102,7 @@ public class PatternSmpLoaderTest extends TestCase {
 
         ByteMap expected =
                 (ByteMap) load("org/ebsdimage/testdata/Project19/Project193.jpg");
-        expected.setCalibration(exp.mmap.getMicroscope().getCamera().getCalibration(
+        expected.setCalibration(exp.mmap.getAcquisitionConfig().camera.getCalibration(
                 336, 256));
 
         patternMap.assertEquals(expected);

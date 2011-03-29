@@ -24,8 +24,8 @@ import org.ebsdimage.core.sim.Sim;
  * 
  * @author Philippe T. Pinard
  */
-public class MicroscopeWizardPage extends
-        org.ebsdimage.gui.MicroscopeWizardPage {
+public class AcquisitionConfigWizardPage extends
+        org.ebsdimage.gui.AcquisitionConfigWizardPage {
 
     /**
      * Returns a description of this step.
@@ -33,7 +33,7 @@ public class MicroscopeWizardPage extends
      * @return description
      */
     public static String getDescription() {
-        return "Microscope configuration";
+        return "Acquisition configuration";
     }
 
 
@@ -51,7 +51,7 @@ public class MicroscopeWizardPage extends
             if ((Integer) get(KEY_LOADED) > 0)
                 return;
 
-        renderingPage(sim.getMetadata().getMicroscope());
+        renderingPage(sim.getMetadata().acquisitionConfig);
 
         put(KEY_LOADED, 1);
     }

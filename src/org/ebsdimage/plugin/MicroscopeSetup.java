@@ -87,7 +87,7 @@ public class MicroscopeSetup extends PlugIn {
          * <code>Microscope</code>.
          */
         public MicroscopeDialog() {
-            this(new Microscope());
+            this(Microscope.DEFAULT);
         }
 
 
@@ -106,11 +106,11 @@ public class MicroscopeSetup extends PlugIn {
             Panel namePanel = new Panel(new MigLayout());
 
             namePanel.add("Name");
-            nameField = new TextField("name", microscope.getName());
+            nameField = new TextField("name", microscope.name);
             namePanel.add(nameField, "wrap");
 
             // Camera
-            Camera camera = microscope.getCamera();
+            Camera camera = microscope.camera;
 
             Panel cameraPanel = new Panel(new MigLayout());
             cameraPanel.setName("Camera");
@@ -147,8 +147,7 @@ public class MicroscopeSetup extends PlugIn {
             tiltAxisPanel.setName("Tilt axis");
 
             tiltAxisPanel.add("Tilt axis");
-            tiltAxisField =
-                    new Vector3DField("tilt axis", microscope.getTiltAxis());
+            tiltAxisField = new Vector3DField("tilt axis", microscope.tiltAxis);
             tiltAxisPanel.add(tiltAxisField, "wrap");
 
             // Main panel
@@ -174,11 +173,8 @@ public class MicroscopeSetup extends PlugIn {
                             directionField.getValue(), widthField.getValue(),
                             heightField.getValue());
 
-            Microscope microscope =
-                    new Microscope(camera, tiltAxisField.getValue());
-            microscope.setName(nameField.getValue());
-
-            return microscope;
+            return new Microscope(nameField.getValue(), camera,
+                    tiltAxisField.getValue());
         }
 
 
@@ -270,7 +266,7 @@ public class MicroscopeSetup extends PlugIn {
             private File getMicroscopeFile(Microscope microscope) {
                 File file =
                         new File(MicroscopeUtil.getMicroscopeBasedir(),
-                                microscope.getName());
+                                microscope.name);
                 return FileUtil.setExtension(file, "xml");
             }
 

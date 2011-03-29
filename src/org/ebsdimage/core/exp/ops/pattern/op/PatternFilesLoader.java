@@ -239,7 +239,7 @@ public class PatternFilesLoader extends PatternOp {
         }
 
         // Calibrate diffraction pattern based on camera
-        map.setCalibration(exp.mmap.getMicroscope().getCamera().getCalibration(
+        map.setCalibration(exp.mmap.getAcquisitionConfig().camera.getCalibration(
                 map.width, map.height));
 
         if (map instanceof ByteMap)

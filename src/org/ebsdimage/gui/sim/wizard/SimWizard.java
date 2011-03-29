@@ -24,7 +24,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.math.geometry.Rotation;
-import org.ebsdimage.core.Microscope;
+import org.ebsdimage.core.AcquisitionConfig;
 import org.ebsdimage.core.run.Operation;
 
 import ptpshared.gui.Wizard;
@@ -46,7 +46,7 @@ public class SimWizard extends Wizard {
      */
     public SimWizard() {
         super("Simulation", new WizardPage[] { new StartWizardPage(),
-                new InfoWizardPage(), new MicroscopeWizardPage(),
+                new InfoWizardPage(), new AcquisitionConfigWizardPage(),
                 new PhasesWizardPage(), new ParamsWizardPage() });
 
         try {
@@ -100,15 +100,15 @@ public class SimWizard extends Wizard {
      * 
      * @return microscope
      */
-    public Microscope getMicroscope() {
-        Microscope microscope =
-                (Microscope) results.get(org.ebsdimage.gui.MicroscopeWizardPage.KEY_MICROSCOPE);
+    public AcquisitionConfig getACquisitionConfig() {
+        AcquisitionConfig acqConfig =
+                (AcquisitionConfig) results.get(AcquisitionConfigWizardPage.KEY_ACQUISITION_CONFIG);
 
-        if (microscope == null)
+        if (acqConfig == null)
             throw new NullPointerException(
-                    "Could not get the microscope from wizard.");
+                    "Could not get the acquisition config from wizard.");
 
-        return microscope;
+        return acqConfig;
     }
 
 

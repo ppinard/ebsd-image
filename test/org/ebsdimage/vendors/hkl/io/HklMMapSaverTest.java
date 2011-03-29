@@ -48,7 +48,7 @@ public class HklMMapSaverTest extends HklMMapTester {
                 new CrystalLoader().load(FileUtil.getFile("org/ebsdimage/vendors/hkl/testdata/Copper.xml"));
 
         CtfLoader loader = new CtfLoader();
-        HklMetadata metadata = loader.loadMetadata(file, new Microscope());
+        HklMetadata metadata = loader.loadMetadata(file, Microscope.DEFAULT);
         HklMMap tempMMap =
                 loader.load(file, metadata, new Crystal[] { copperPhase });
 

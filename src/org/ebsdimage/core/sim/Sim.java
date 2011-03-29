@@ -550,8 +550,7 @@ public class Sim extends Run implements Monitorable {
 
         setStatus("Performing " + patternSimOp.getName() + "...");
 
-        patternSimOp.simulate(this, getMetadata().getMicroscope(), reflectorz,
-                rotation);
+        patternSimOp.simulate(this, getMetadata(), reflectorz, rotation);
 
         firePatternSimOp(patternSimOp);
 

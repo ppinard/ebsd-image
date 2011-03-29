@@ -17,8 +17,8 @@
  */
 package org.ebsdimage.vendors.tsl.core;
 
+import org.ebsdimage.core.AcquisitionConfig;
 import org.ebsdimage.core.EbsdMetadata;
-import org.ebsdimage.core.Microscope;
 import org.simpleframework.xml.Element;
 
 /**
@@ -31,11 +31,12 @@ public class TslMetadata extends EbsdMetadata {
     /**
      * Creates a <code>HklMetadata</code> with the required parameters.
      * 
-     * @param microscope
-     *            microscope configuration
+     * @param acqConfig
+     *            acquisition configuration
      */
-    public TslMetadata(@Element(name = "microscope") Microscope microscope) {
-        super(microscope);
+    public TslMetadata(
+            @Element(name = "acquisitionConfig") AcquisitionConfig acqConfig) {
+        super(acqConfig);
     }
 
 }

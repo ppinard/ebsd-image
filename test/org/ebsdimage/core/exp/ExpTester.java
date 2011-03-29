@@ -20,6 +20,7 @@ package org.ebsdimage.core.exp;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.apache.commons.math.geometry.Rotation;
 import org.apache.commons.math.geometry.Vector3D;
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.*;
@@ -93,13 +94,13 @@ public abstract class ExpTester extends TestCase {
         Camera camera =
                 new Camera(new Vector3D(1, 0, 0), new Vector3D(0, -1, 0), 0.04,
                         0.03);
-        Microscope microscope = new Microscope(camera, new Vector3D(0, 1, 0));
-        microscope.setBeamEnergy(20e3);
-        microscope.setMagnification(100);
-        microscope.setTiltAngle(Math.toRadians(70));
-        microscope.setWorkingDistance(0.015);
+        Microscope microscope =
+                new Microscope("Unnamed", camera, new Vector3D(0, 1, 0));
+        AcquisitionConfig acqConfig =
+                new AcquisitionConfig(microscope, Math.toRadians(70), 0.015,
+                        20e3, 100, Rotation.IDENTITY, 0.0, 0.0, 0.0);
 
-        EbsdMetadata metadata = new EbsdMetadata(microscope);
+        EbsdMetadata metadata = new EbsdMetadata(acqConfig);
         mmap.setMetadata(metadata);
 
         for (Crystal phase : createPhases())
@@ -164,11 +165,11 @@ public abstract class ExpTester extends TestCase {
         assertEquals(1, exp.mmap.height);
 
         // Metadata
-        Microscope microscope = exp.getMetadata().getMicroscope();
-        assertEquals(20e3, microscope.getBeamEnergy(), 1e-6);
-        assertEquals(100, microscope.getMagnification(), 1e-6);
-        assertEquals(toRadians(70), microscope.getTiltAngle(), 1e-6);
-        assertEquals(15e-3, microscope.getWorkingDistance(), 1e-6);
+        AcquisitionConfig acqConfig = exp.getMetadata().acquisitionConfig;
+        assertEquals(20e3, acqConfig.beamEnergy, 1e-6);
+        assertEquals(100, acqConfig.magnification, 1e-6);
+        assertEquals(toRadians(70), acqConfig.tiltAngle, 1e-6);
+        assertEquals(15e-3, acqConfig.workingDistance, 1e-6);
 
         // Phases
         assertEquals(1, exp.mmap.getPhases().length);

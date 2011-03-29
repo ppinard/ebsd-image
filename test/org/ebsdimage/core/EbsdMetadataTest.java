@@ -48,7 +48,8 @@ public class EbsdMetadataTest extends TestCase {
 
     @Test
     public void testEbsdMetadata() {
-        assertEquals(new Microscope(), metadata.getMicroscope(), 1e-6);
+        assertEquals(AcquisitionConfig.DEFAULT, metadata.acquisitionConfig,
+                1e-6);
     }
 
 
@@ -58,12 +59,6 @@ public class EbsdMetadataTest extends TestCase {
         assertTrue(metadata.equals(metadata, 1e-3));
         assertFalse(metadata.equals(null, 1e-3));
         assertFalse(metadata.equals(new Object(), 1e-3));
-
-        Microscope microscope = new Microscope();
-        microscope.setCameraDistance(0.01);
-        EbsdMetadata other = new EbsdMetadata(microscope);
-        assertFalse(metadata.equals(other, 1e-3));
-        assertTrue(metadata.equals(other, 1e-2));
     }
 
 

@@ -19,8 +19,8 @@ package org.ebsdimage.vendors.hkl.core;
 
 import java.io.File;
 
+import org.ebsdimage.core.AcquisitionConfig;
 import org.ebsdimage.core.EbsdMetadata;
-import org.ebsdimage.core.Microscope;
 import org.simpleframework.xml.Element;
 
 /**
@@ -32,11 +32,11 @@ public class HklMetadata extends EbsdMetadata {
 
     /** Name of the project. */
     @Element(name = "projectName")
-    private String projectName;
+    public final String projectName;
 
     /** Directory where the project is located. */
     @Element(name = "projectDir")
-    private File projectDir;
+    public final File projectDir;
 
 
 
@@ -44,20 +44,28 @@ public class HklMetadata extends EbsdMetadata {
      * Creates a <code>HklMetadata</code> with the required parameters. All
      * values are validated.
      * 
-     * @param microscope
-     *            microscope configuration
+     * @param acqConfig
+     *            acquisition configuration
      * @param projectName
      *            name of the project
      * @param projectDir
      *            directory where the project is located
      */
-    public HklMetadata(@Element(name = "microscope") Microscope microscope,
+    public HklMetadata(
+            @Element(name = "acquisitionConfig") AcquisitionConfig acqConfig,
             @Element(name = "projectName") String projectName,
             @Element(name = "projectDir") File projectDir) {
-        super(microscope);
+        super(acqConfig);
 
-        setProjectName(projectName);
-        setProjectDir(projectDir);
+        // Project's name
+        if (projectName == null)
+            throw new NullPointerException("Undefined project name");
+        this.projectName = projectName;
+
+        // Project's directory
+        if (projectDir == null)
+            throw new NullPointerException("Undefined project dir");
+        this.projectDir = projectDir.getAbsoluteFile();
     }
 
 
@@ -74,56 +82,6 @@ public class HklMetadata extends EbsdMetadata {
             return false;
 
         return true;
-    }
-
-
-
-    /**
-     * Returns the directory where the project is located.
-     * 
-     * @return project's directory
-     */
-    public File getProjectDir() {
-        return projectDir;
-    }
-
-
-
-    /**
-     * Returns the name of the project.
-     * 
-     * @return project's name
-     */
-    public String getProjectName() {
-        return projectName;
-    }
-
-
-
-    /**
-     * Sets the directory where the project is located.
-     * 
-     * @param dir
-     *            project's directory
-     */
-    public void setProjectDir(File dir) {
-        if (dir == null)
-            throw new NullPointerException("Undefined project dir");
-        this.projectDir = dir.getAbsoluteFile();
-    }
-
-
-
-    /**
-     * Sets the name of the project.
-     * 
-     * @param projectName
-     *            project's name
-     */
-    public void setProjectName(String projectName) {
-        if (projectName == null)
-            throw new NullPointerException("Undefined project name");
-        this.projectName = projectName;
     }
 
 }

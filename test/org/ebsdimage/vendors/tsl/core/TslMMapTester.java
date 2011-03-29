@@ -23,9 +23,9 @@ import java.io.IOException;
 import org.apache.commons.math.geometry.CardanEulerSingularityException;
 import org.apache.commons.math.geometry.Rotation;
 import org.ebsdimage.TestCase;
+import org.ebsdimage.core.AcquisitionConfig;
 import org.ebsdimage.core.EbsdMMap;
 import org.ebsdimage.core.ErrorMap;
-import org.ebsdimage.core.Microscope;
 import org.ebsdimage.core.PhaseMap;
 import org.ebsdimage.io.ErrorMapLoader;
 import org.ebsdimage.io.PhaseMapLoader;
@@ -174,13 +174,13 @@ public abstract class TslMMapTester extends TestCase {
 
     @Test
     public void testGetMicroscope() {
-        Microscope microscope = mmap.getMicroscope();
+        AcquisitionConfig acqConfig = mmap.getAcquisitionConfig();
 
-        assertEquals(0.523500, microscope.getPatternCenterX(), 1e-6);
-        assertEquals(1 - 0.804900, microscope.getPatternCenterY(), 1e-6);
-        assertEquals(0.0, microscope.getCameraDistance(), 1e-6);
-        assertEquals(15, microscope.getWorkingDistance() * 1000, 1e-3);
-        assertEquals(Rotation.IDENTITY, microscope.getSampleRotation(), 1e-6);
+        assertEquals(0.523500, acqConfig.patternCenterX, 1e-6);
+        assertEquals(1 - 0.804900, acqConfig.patternCenterY, 1e-6);
+        assertEquals(0.0, acqConfig.cameraDistance, 1e-6);
+        assertEquals(15, acqConfig.workingDistance * 1000, 1e-3);
+        assertEquals(Rotation.IDENTITY, acqConfig.sampleRotation, 1e-6);
     }
 
 

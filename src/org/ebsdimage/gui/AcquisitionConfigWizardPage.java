@@ -23,6 +23,8 @@ import javax.swing.JLabel;
 import magnitude.core.Magnitude;
 import net.miginfocom.swing.MigLayout;
 
+import org.apache.commons.math.geometry.Rotation;
+import org.ebsdimage.core.AcquisitionConfig;
 import org.ebsdimage.core.Microscope;
 import org.ebsdimage.io.MicroscopeUtil;
 
@@ -38,16 +40,16 @@ import rmlshared.gui.Panel;
  * 
  * @author Philippe T. Pinard
  */
-public class MicroscopeWizardPage extends WizardPage {
+public class AcquisitionConfigWizardPage extends WizardPage {
 
-    /** Map key for the metadata. */
-    public static final String KEY_MICROSCOPE = "microscope";
+    /** Map key for the acquisition configuration. */
+    public static final String KEY_ACQUISITION_CONFIG = "acqConfig";
 
     /**
      * Map key to store if the data has been previously loaded. It prevents
      * loading the temporary metadata twice.
      */
-    public static final String KEY_LOADED = "microscope.loaded";
+    public static final String KEY_LOADED = "acqConfig.loaded";
 
     /** Combo box to select the microscope configuration. */
     protected ComboBox<Microscope> microscopesCBox;
@@ -82,10 +84,8 @@ public class MicroscopeWizardPage extends WizardPage {
      * Creates a new <code>AcqMetadataWizardPage</code>. This page is to setup
      * all the EBSD metadata.
      */
-    public MicroscopeWizardPage() {
+    public AcquisitionConfigWizardPage() {
         setLayout(new MigLayout());
-
-        Microscope defaultMicroscope = new Microscope();
 
         // Microscope
         Panel microscopePanel = new Panel(new MigLayout());
@@ -114,7 +114,7 @@ public class MicroscopeWizardPage extends WizardPage {
 
         String[] units = new String[] { "eV", "keV" };
         Magnitude defaultValue =
-                new Magnitude(defaultMicroscope.getBeamEnergy(), "eV");
+                new Magnitude(AcquisitionConfig.DEFAULT.beamEnergy, "eV");
         energyField =
                 new CalibratedDoubleField("beam energy", defaultValue, units,
                         false);
@@ -127,7 +127,7 @@ public class MicroscopeWizardPage extends WizardPage {
 
         magField =
                 new DoubleField("Magnification",
-                        defaultMicroscope.getMagnification());
+                        AcquisitionConfig.DEFAULT.magnification);
         magField.setRange(0, 1e7);
         columnPanel.add(magField);
         columnPanel.add(new JLabel("X"), "wrap");
@@ -137,7 +137,7 @@ public class MicroscopeWizardPage extends WizardPage {
 
         units = new String[] { "mm", "cm" };
         defaultValue =
-                new Magnitude(defaultMicroscope.getWorkingDistance(), "m");
+                new Magnitude(AcquisitionConfig.DEFAULT.workingDistance, "m");
         defaultValue.setPreferredUnits("mm");
         wdField =
                 new CalibratedDoubleField("Working distance", defaultValue,
@@ -159,7 +159,8 @@ public class MicroscopeWizardPage extends WizardPage {
         samplePanel.add(new JLabel("Tilt angle"));
 
         units = new String[] { "deg", "rad" };
-        defaultValue = new Magnitude(defaultMicroscope.getTiltAngle(), "rad");
+        defaultValue =
+                new Magnitude(AcquisitionConfig.DEFAULT.tiltAngle, "rad");
         defaultValue.setPreferredUnits("deg");
         tiltField =
                 new CalibratedDoubleField("tilt angle", defaultValue, units);
@@ -171,7 +172,7 @@ public class MicroscopeWizardPage extends WizardPage {
 
         sampleRotationField =
                 new RotationField("rotation",
-                        defaultMicroscope.getSampleRotation());
+                        AcquisitionConfig.DEFAULT.sampleRotation);
         samplePanel.add(sampleRotationField, "wrap");
 
         add(samplePanel, "grow, push, wrap");
@@ -191,7 +192,7 @@ public class MicroscopeWizardPage extends WizardPage {
         patternCenterPanel.add("x");
         pcXField =
                 new DoubleField("x",
-                        defaultMicroscope.getPatternCenterX() * 100.0);
+                        AcquisitionConfig.DEFAULT.patternCenterX * 100.0);
         pcXField.setRange(0, 100);
         patternCenterPanel.add(pcXField);
         patternCenterPanel.add(new JLabel("%"));
@@ -199,7 +200,7 @@ public class MicroscopeWizardPage extends WizardPage {
         patternCenterPanel.add("y", "gapleft 10");
         pcYField =
                 new DoubleField("y",
-                        defaultMicroscope.getPatternCenterY() * 100.0);
+                        AcquisitionConfig.DEFAULT.patternCenterY * 100.0);
         pcYField.setRange(0, 100);
         patternCenterPanel.add(pcYField);
         patternCenterPanel.add(new JLabel("%"));
@@ -211,7 +212,7 @@ public class MicroscopeWizardPage extends WizardPage {
 
         units = new String[] { "mm", "cm" };
         defaultValue =
-                new Magnitude(defaultMicroscope.getCameraDistance(), "m");
+                new Magnitude(AcquisitionConfig.DEFAULT.cameraDistance, "m");
         defaultValue.setPreferredUnits("mm");
         ddField =
                 new CalibratedDoubleField("detector distance", defaultValue,
@@ -231,21 +232,23 @@ public class MicroscopeWizardPage extends WizardPage {
      * 
      * @return a <code>EbsdMetadata</code>
      */
-    protected Microscope getMicroscope() {
+    protected AcquisitionConfig getAcquisitionConfig() {
         Microscope microscope = microscopesCBox.getSelectedItem();
 
-        microscope.setBeamEnergy(energyField.getValue());
-        microscope.setMagnification(magField.getValue());
-        microscope.setWorkingDistance(wdField.getValue());
+        double beamEnergy = energyField.getValue().getValue("eV");
+        double magnification = magField.getValue();
+        double workingDistance = wdField.getValue().getValue("m");
 
-        microscope.setTiltAngle(tiltField.getValue());
-        microscope.setSampleRotation(sampleRotationField.getValue());
+        double tiltAngle = tiltField.getValue().getValue("rad");
+        Rotation sampleRotation = sampleRotationField.getValue();
 
-        microscope.setPatternCenterX(pcXField.getValue() / 100.0);
-        microscope.setPatternCenterY(pcYField.getValue() / 100.0);
-        microscope.setCameraDistance(ddField.getValue());
+        double patternCenterX = pcXField.getValue() / 100.0;
+        double patternCenterY = pcYField.getValue() / 100.0;
+        double cameraDistance = ddField.getValue().getValue("m");
 
-        return microscope;
+        return new AcquisitionConfig(microscope, tiltAngle, workingDistance,
+                beamEnergy, magnification, sampleRotation, patternCenterX,
+                patternCenterY, cameraDistance);
     }
 
 
@@ -271,16 +274,16 @@ public class MicroscopeWizardPage extends WizardPage {
         if (!ddField.isCorrect())
             return false;
 
-        Microscope microscope;
+        AcquisitionConfig acqConfig;
         try {
-            microscope = getMicroscope();
+            acqConfig = getAcquisitionConfig();
         } catch (Exception ex) {
             showErrorDialog(ex.getMessage());
             return false;
         }
 
         if (buffer)
-            put(KEY_MICROSCOPE, microscope);
+            put(KEY_ACQUISITION_CONFIG, acqConfig);
 
         return true;
     }
@@ -291,26 +294,26 @@ public class MicroscopeWizardPage extends WizardPage {
      * Render the page by filling the fields with the values from the specified
      * microscope.
      * 
-     * @param microscope
-     *            microscope configuration
+     * @param acqConfig
+     *            acquisition configuration
      */
-    protected void renderingPage(Microscope microscope) {
-        energyField.setValue(new Magnitude(microscope.getBeamEnergy(), "eV"));
-        magField.setValue(microscope.getMagnification());
+    protected void renderingPage(AcquisitionConfig acqConfig) {
+        energyField.setValue(new Magnitude(acqConfig.beamEnergy, "eV"));
+        magField.setValue(acqConfig.magnification);
 
-        Magnitude wd = new Magnitude(microscope.getWorkingDistance(), "m");
+        Magnitude wd = new Magnitude(acqConfig.workingDistance, "m");
         wd.setPreferredUnits("mm");
         wdField.setValue(wd);
 
-        Magnitude tiltAngle = new Magnitude(microscope.getTiltAngle(), "rad");
+        Magnitude tiltAngle = new Magnitude(acqConfig.tiltAngle, "rad");
         tiltAngle.setPreferredUnits("deg");
         tiltField.setValue(tiltAngle);
-        sampleRotationField.setValue(microscope.getSampleRotation());
+        sampleRotationField.setValue(acqConfig.sampleRotation);
 
-        pcXField.setValue(microscope.getPatternCenterX() * 100.0);
-        pcYField.setValue(microscope.getPatternCenterY() * 100.0);
+        pcXField.setValue(acqConfig.patternCenterX * 100.0);
+        pcYField.setValue(acqConfig.patternCenterY * 100.0);
 
-        Magnitude dd = new Magnitude(microscope.getCameraDistance(), "m");
+        Magnitude dd = new Magnitude(acqConfig.cameraDistance, "m");
         dd.setPreferredUnits("cm");
         ddField.setValue(dd);
     }

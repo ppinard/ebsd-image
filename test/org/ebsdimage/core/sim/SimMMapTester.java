@@ -19,6 +19,7 @@ package org.ebsdimage.core.sim;
 
 import java.util.HashMap;
 
+import org.apache.commons.math.geometry.Rotation;
 import org.apache.commons.math.geometry.Vector3D;
 import org.ebsdimage.TestCase;
 import org.ebsdimage.core.*;
@@ -42,14 +43,14 @@ public abstract class SimMMapTester extends TestCase {
         Camera camera =
                 new Camera(new Vector3D(1, 0, 0), new Vector3D(0, -1, 0), 0.04,
                         0.03);
-        Microscope microscope = new Microscope(camera, new Vector3D(0, 1, 0));
-        microscope.setBeamEnergy(20e3);
-        microscope.setMagnification(100);
-        microscope.setTiltAngle(Math.toRadians(70));
-        microscope.setWorkingDistance(0.015);
+        Microscope microscope =
+                new Microscope("Unnamed", camera, new Vector3D(0, 1, 0));
+        AcquisitionConfig acqConfig =
+                new AcquisitionConfig(microscope, Math.toRadians(70), 0.015,
+                        20e3, 100, Rotation.IDENTITY, 0.0, 0.0, 0.0);
 
         SimMetadata metadata =
-                new SimMetadata(microscope, ScatteringFactorsEnum.ELECTRON, 3);
+                new SimMetadata(acqConfig, ScatteringFactorsEnum.ELECTRON, 3);
 
         HashMap<String, Map> mapList = new HashMap<String, Map>();
 
@@ -147,12 +148,12 @@ public abstract class SimMMapTester extends TestCase {
 
     @Test
     public void testGetMetadata() {
-        Microscope microscope = mmap.getMicroscope();
+        AcquisitionConfig acqConfig = mmap.getAcquisitionConfig();
 
-        assertEquals(20e3, microscope.getBeamEnergy(), 1e-3);
-        assertEquals(100.0, microscope.getMagnification(), 1e-3);
-        assertEquals(toRadians(70), microscope.getTiltAngle(), 1e-3);
-        assertEquals(15, microscope.getWorkingDistance() * 1000, 1e-3);
+        assertEquals(20e3, acqConfig.beamEnergy, 1e-3);
+        assertEquals(100.0, acqConfig.magnification, 1e-3);
+        assertEquals(toRadians(70), acqConfig.tiltAngle, 1e-3);
+        assertEquals(15, acqConfig.workingDistance * 1000, 1e-3);
 
         SimMetadata metadata = mmap.getMetadata();
 

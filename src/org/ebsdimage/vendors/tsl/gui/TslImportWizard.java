@@ -22,7 +22,7 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import org.ebsdimage.core.Microscope;
+import org.ebsdimage.core.AcquisitionConfig;
 
 import ptpshared.gui.Wizard;
 import ptpshared.gui.WizardPage;
@@ -42,7 +42,7 @@ public class TslImportWizard extends Wizard {
      */
     public TslImportWizard() {
         super("Import from TSL", new WizardPage[] { new StartWizardPage(),
-                new MicroscopeWizardPage(), new PhasesWizardPage(),
+                new AcquisitionConfigWizardPage(), new PhasesWizardPage(),
                 new PatternsWizardPage(), new OutputWizardPage() });
 
         BufferedImage image;
@@ -98,19 +98,19 @@ public class TslImportWizard extends Wizard {
 
 
     /**
-     * Returns the microscope with the CTF parameters.
+     * Returns the acquisition configuration.
      * 
-     * @return microscope
+     * @return acquisition configuration
      */
-    public Microscope getMicroscope() {
-        Microscope microscope =
-                (Microscope) results.get(org.ebsdimage.gui.MicroscopeWizardPage.KEY_MICROSCOPE);
+    public AcquisitionConfig getAcquisitionConfig() {
+        AcquisitionConfig acqConfig =
+                (AcquisitionConfig) results.get(AcquisitionConfigWizardPage.KEY_ACQUISITION_CONFIG);
 
-        if (microscope == null)
+        if (acqConfig == null)
             throw new NullPointerException(
-                    "Could not get the microscope from wizard.");
+                    "Could not get the acquisition configuration from wizard.");
 
-        return microscope;
+        return acqConfig;
     }
 
 

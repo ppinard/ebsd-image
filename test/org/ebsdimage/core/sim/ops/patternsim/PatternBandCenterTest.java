@@ -22,7 +22,7 @@ import java.io.IOException;
 
 import org.apache.commons.math.geometry.Rotation;
 import org.ebsdimage.TestCase;
-import org.ebsdimage.core.Microscope;
+import org.ebsdimage.core.sim.SimMetadata;
 import org.ebsdimage.core.sim.SimTester;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,7 +45,7 @@ public class PatternBandCenterTest extends TestCase {
 
     private PatternBandCenter op;
 
-    private Microscope microscope;
+    private SimMetadata metadata;;
 
     private Reflectors reflectors;
 
@@ -57,7 +57,7 @@ public class PatternBandCenterTest extends TestCase {
     public void setUp() throws Exception {
         op = new PatternBandCenter(400, 400);
 
-        microscope = SimTester.createMetadata().getMicroscope();
+        metadata = SimTester.createMetadata();
         reflectors =
                 ReflectorsFactory.generate(CrystalFactory.silicon(),
                         ScatteringFactorsEnum.XRAY, 4);
@@ -81,7 +81,7 @@ public class PatternBandCenterTest extends TestCase {
 
     @Test
     public void testGetBands() {
-        op.simulate(null, microscope, reflectors, rotation);
+        op.simulate(null, metadata, reflectors, rotation);
         assertEquals(72, op.getBands().length);
     }
 
@@ -89,7 +89,7 @@ public class PatternBandCenterTest extends TestCase {
 
     @Test
     public void testGetPatternMap() throws IOException {
-        op.simulate(null, microscope, reflectors, rotation);
+        op.simulate(null, metadata, reflectors, rotation);
 
         ByteMap patternMap = op.getPatternMap();
 
@@ -103,7 +103,7 @@ public class PatternBandCenterTest extends TestCase {
 
     @Test
     public void testGetPatternRealMap() throws IOException {
-        op.simulate(null, microscope, reflectors, rotation);
+        op.simulate(null, metadata, reflectors, rotation);
 
         RealMap patternMap = op.getPatternRealMap();
 

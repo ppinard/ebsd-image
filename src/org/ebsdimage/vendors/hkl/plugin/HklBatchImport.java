@@ -146,7 +146,7 @@ public class HklBatchImport extends PlugIn implements Monitorable {
             cprFile = cprFiles[i];
 
             try {
-                metadata = cprLoader.load(cprFile, new Microscope());
+                metadata = cprLoader.load(cprFile, Microscope.DEFAULT);
             } catch (IOException e) {
                 showErrorDialog("While loading the CPR (" + cprFile + "):"
                         + e.getMessage());

@@ -18,7 +18,7 @@
 package org.ebsdimage.core.sim;
 
 import org.apache.commons.math.geometry.Rotation;
-import org.ebsdimage.core.Microscope;
+import org.ebsdimage.core.AcquisitionConfig;
 
 import crystallography.core.Reflectors;
 
@@ -38,14 +38,14 @@ public interface BandsCalculator {
      *            width of the diffraction pattern image
      * @param height
      *            height of the diffraction pattern image
-     * @param microscope
-     *            microscope configuration
+     * @param acqConfig
+     *            acquisition configuration
      * @param reflectors
      *            list of reflectors
      * @param rotation
      *            rotation of the crystal
      * @return bands
      */
-    public Band[] calculate(int width, int height, Microscope microscope,
+    public Band[] calculate(int width, int height, AcquisitionConfig acqConfig,
             Reflectors reflectors, Rotation rotation);
 }

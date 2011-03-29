@@ -22,7 +22,7 @@ import java.awt.geom.Rectangle2D;
 
 import org.apache.commons.math.geometry.Rotation;
 import org.apache.commons.math.geometry.Vector3D;
-import org.ebsdimage.core.Microscope;
+import org.ebsdimage.core.AcquisitionConfig;
 
 import ptpshared.geom.*;
 import rmlshared.geom.LineUtil;
@@ -40,23 +40,23 @@ import crystallography.core.Reflectors;
 public class LinearBandsCalculator implements BandsCalculator {
 
     @Override
-    public Band[] calculate(int width, int height, Microscope microscope,
+    public Band[] calculate(int width, int height, AcquisitionConfig acqConfig,
             Reflectors reflectors, Rotation rotation) {
-        EuclideanSpace microscopeCS = microscope.getMicroscopeCS();
-        EuclideanSpace acqPositionCS = microscope.getAcquisitionPositionCS();
-        EuclideanSpace cameraCS = microscope.getCameraCS();
-        Plane cameraPlane = microscope.getCameraPlane();
+        EuclideanSpace microscopeCS = acqConfig.getMicroscopeCS();
+        EuclideanSpace acqPositionCS = acqConfig.getAcquisitionPositionCS();
+        EuclideanSpace cameraCS = acqConfig.getCameraCS();
+        Plane cameraPlane = acqConfig.getCameraPlane();
 
         AffineTransform3D atFromAcqPositionToMicroscope =
                 acqPositionCS.getTransformationTo(microscopeCS);
         AffineTransform3D atFromMicroscopeToCamera =
                 microscopeCS.getTransformationTo(cameraCS);
 
-        double dx = width / microscope.getCamera().width;
-        double dy = height / microscope.getCamera().height;
+        double dx = width / acqConfig.camera.width;
+        double dy = height / acqConfig.camera.height;
 
         double wavelength =
-                Calculations.electronWavelength(microscope.getBeamEnergy());
+                Calculations.electronWavelength(acqConfig.beamEnergy);
 
         ArrayList<Band> bands = new ArrayList<Band>();
 

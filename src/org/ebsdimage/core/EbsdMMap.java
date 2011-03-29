@@ -217,12 +217,12 @@ public abstract class EbsdMMap extends MultiMap {
 
 
     /**
-     * Returns the microscope parameters from the metadata.
+     * Returns the acquisition configuration from the metadata.
      * 
-     * @return microscope parameters
+     * @return acquisition configuration
      */
-    public Microscope getMicroscope() {
-        return getMetadata().getMicroscope();
+    public AcquisitionConfig getAcquisitionConfig() {
+        return getMetadata().acquisitionConfig;
     }
 
 

@@ -66,7 +66,7 @@ public class CtfSaverTest extends HklMMapTester {
         super.setUp();
 
         CtfLoader loader = new CtfLoader();
-        HklMetadata metadata = loader.loadMetadata(file, new Microscope());
+        HklMetadata metadata = loader.loadMetadata(file, Microscope.DEFAULT);
         mmap = loader.load(file, metadata, new Crystal[] { copperPhase });
     }
 

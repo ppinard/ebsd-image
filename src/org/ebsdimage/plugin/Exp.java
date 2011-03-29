@@ -106,7 +106,7 @@ public class Exp extends PlugIn implements Monitorable {
     private void createExp(ExpWizard wizard) {
         ExpMMap mmap = new ExpMMap(wizard.getWidth(), wizard.getHeight());
 
-        EbsdMetadata metadata = new EbsdMetadata(wizard.getMicroscope());
+        EbsdMetadata metadata = new EbsdMetadata(wizard.getAcquisitionConfig());
         mmap.setMetadata(metadata);
 
         mmap.setCalibration(wizard.getCalibration());
@@ -131,7 +131,7 @@ public class Exp extends PlugIn implements Monitorable {
     private void createExpPreview(ExpWizard wizard) {
         ExpMMap mmap = new ExpMMap(wizard.getWidth(), wizard.getHeight());
 
-        EbsdMetadata metadata = new EbsdMetadata(wizard.getMicroscope());
+        EbsdMetadata metadata = new EbsdMetadata(wizard.getAcquisitionConfig());
         mmap.setMetadata(metadata);
 
         mmap.setCalibration(wizard.getCalibration());
