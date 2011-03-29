@@ -31,9 +31,6 @@ public class Init extends rmlimage.module.Init {
 
         rmlimage.plugin.builtin.ManualThresholding.addHandler(org.ebsdimage.plugin.PhaseThresholding.class);
         rmlimage.plugin.builtin.ManualThresholding.addHandler(org.ebsdimage.plugin.ErrorThresholding.class);
-
-        // Adds the SMP filters to the FileDialog
-        rmlshared.gui.FileDialog.addFilter("*.smp");
     }
 
 
