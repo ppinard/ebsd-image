@@ -17,6 +17,9 @@
  */
 package org.ebsdimage.vendors.tsl.io;
 
+import static java.lang.Double.parseDouble;
+import static ptpshared.util.Arrays.concatenate;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,7 +28,11 @@ import java.util.HashMap;
 
 import org.apache.commons.math.geometry.Rotation;
 import org.apache.commons.math.geometry.RotationOrder;
-import org.ebsdimage.core.*;
+import org.ebsdimage.core.AcquisitionConfig;
+import org.ebsdimage.core.EbsdMMap;
+import org.ebsdimage.core.ErrorMap;
+import org.ebsdimage.core.Microscope;
+import org.ebsdimage.core.PhaseMap;
 import org.ebsdimage.vendors.tsl.core.TslMMap;
 import org.ebsdimage.vendors.tsl.core.TslMetadata;
 
@@ -36,8 +43,6 @@ import rmlshared.io.FileUtil;
 import rmlshared.io.SsvReader;
 import rmlshared.ui.Monitorable;
 import crystallography.core.Crystal;
-import static ptpshared.util.Arrays.concatenate;
-import static java.lang.Double.parseDouble;
 
 /**
  * Parser for TSL ANG file.
@@ -720,9 +725,9 @@ public class AngLoader implements Monitorable {
                 continue;
 
             // Check for a valid data line
-            if (line.length != 10)
+            if (line.length < 8)
                 throw new IOException("Line " + reader.getLineReadCount()
-                        + " does not have the right number of columns");
+                        + " must have at least 8 columns");
 
             // Image quality
             iqMap.pixArray[n] = (float) parseDouble(line[5]);
