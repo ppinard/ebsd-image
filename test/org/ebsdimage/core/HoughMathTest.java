@@ -21,7 +21,7 @@ import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
-import magnitude.core.Magnitude;
+import net.sf.magnitude.core.Magnitude;
 
 import org.junit.Test;
 

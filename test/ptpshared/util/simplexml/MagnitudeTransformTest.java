@@ -17,14 +17,12 @@
  */
 package ptpshared.util.simplexml;
 
-import magnitude.core.Magnitude;
+import static net.sf.magnitude.test.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import net.sf.magnitude.core.Magnitude;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-
-import static junittools.test.Assert.assertEquals;
 
 public class MagnitudeTransformTest {
 
@@ -46,7 +44,7 @@ public class MagnitudeTransformTest {
         Magnitude expected = new Magnitude(1.23, "m.s-1");
         Magnitude actual = transform.read(value);
 
-        assertEquals(expected, actual, 1e-6);
+        assertEquals(expected, actual, new Magnitude(1e-3, "m.s-1"));
     }
 
 

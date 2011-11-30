@@ -20,7 +20,7 @@ package org.ebsdimage.io;
 import java.io.File;
 import java.io.IOException;
 
-import magnitude.core.Magnitude;
+import net.sf.magnitude.core.Magnitude;
 
 import org.ebsdimage.core.HoughMap;
 

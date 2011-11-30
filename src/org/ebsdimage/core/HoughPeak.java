@@ -18,7 +18,7 @@
 package org.ebsdimage.core;
 
 import junittools.core.AlmostEquable;
-import magnitude.core.Magnitude;
+import net.sf.magnitude.core.Magnitude;
 import net.jcip.annotations.Immutable;
 
 import org.simpleframework.xml.Element;

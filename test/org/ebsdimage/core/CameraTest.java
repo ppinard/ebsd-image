@@ -17,10 +17,15 @@
  */
 package org.ebsdimage.core;
 
+import static net.sf.magnitude.test.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 
-import magnitude.core.Magnitude;
+import net.sf.magnitude.core.Magnitude;
 
 import org.apache.commons.math.geometry.Vector3D;
 import org.ebsdimage.TestCase;
@@ -31,12 +36,6 @@ import ptpshared.util.simplexml.ApacheCommonMathMatcher;
 import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.core.Calibration;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import static junittools.test.Assert.assertEquals;
 
 public class CameraTest extends TestCase {
 
@@ -150,7 +149,7 @@ public class CameraTest extends TestCase {
     @Test
     public void testGetHeight() {
         Magnitude expected = new Magnitude(3, "cm");
-        assertEquals(expected, camera.getHeight(), 1e-6);
+        assertEquals(expected, camera.getHeight(), new Magnitude(1e-6, "cm"));
     }
 
 
@@ -158,7 +157,7 @@ public class CameraTest extends TestCase {
     @Test
     public void testGetWidth() {
         Magnitude expected = new Magnitude(4, "cm");
-        assertEquals(expected, camera.getWidth(), 1e-6);
+        assertEquals(expected, camera.getWidth(), new Magnitude(1e-6, "cm"));
     }
 
 

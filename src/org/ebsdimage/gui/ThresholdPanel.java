@@ -63,7 +63,8 @@ public class ThresholdPanel<Item> extends JPanel {
 
             // Remove the threshold panel from the image panel
             MapWindow window =
-                    ((MultiDesktop) rmlimage.plugin.PlugIn.getDesktop()).getWindow(map);
+                    (MapWindow) ((MultiDesktop) rmlimage.plugin.PlugIn
+                            .getDesktop()).getWindow(map);
             window.removeComponent(getPanel());
 
             // Needed to resume the threshold macro

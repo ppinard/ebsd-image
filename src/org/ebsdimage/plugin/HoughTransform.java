@@ -19,7 +19,7 @@ package org.ebsdimage.plugin;
 
 import java.io.IOException;
 
-import magnitude.core.Magnitude;
+import net.sf.magnitude.core.Magnitude;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.Transform;

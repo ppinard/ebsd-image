@@ -17,7 +17,11 @@
  */
 package org.ebsdimage.core;
 
-import magnitude.core.Magnitude;
+import static java.lang.Math.toRadians;
+import static junittools.test.Assert.assertEquals;
+import static net.sf.magnitude.test.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import net.sf.magnitude.core.Magnitude;
 
 import org.ebsdimage.TestCase;
 import org.junit.Before;
@@ -26,12 +30,6 @@ import org.junit.Test;
 import rmlimage.core.ByteMap;
 import rmlimage.core.Calibration;
 import rmlimage.core.Map;
-
-import static org.junit.Assert.assertEquals;
-
-import static java.lang.Math.toRadians;
-
-import static junittools.test.Assert.assertEquals;
 
 public class HoughMapTest extends TestCase {
 
@@ -129,10 +127,12 @@ public class HoughMapTest extends TestCase {
 
         assertEquals(mapEven.getRhoMin(), dup.getRhoMin(), 1e-5);
         assertEquals(mapEven.getRhoMax(), dup.getRhoMax(), 1e-5);
-        assertEquals(mapEven.getDeltaRho(), dup.getDeltaRho(), 1e-5);
+        assertEquals(mapEven.getDeltaRho(), dup.getDeltaRho(), new Magnitude(
+                1e-5, "px"));
         assertEquals(mapEven.getThetaMin(), dup.getThetaMin(), 1e-5);
         assertEquals(mapEven.getThetaMax(), dup.getThetaMax(), 1e-5);
-        assertEquals(mapEven.getDeltaTheta(), dup.getDeltaTheta(), 1e-5);
+        assertEquals(mapEven.getDeltaTheta(), dup.getDeltaTheta(),
+                new Magnitude(1e-5, "rad"));
 
         assertEquals(mapEven.width, dup.width);
         assertEquals(mapEven.height, dup.height);

@@ -17,9 +17,11 @@
  */
 package org.ebsdimage.core;
 
+import static java.lang.Math.min;
+
 import java.util.Arrays;
 
-import magnitude.core.Magnitude;
+import net.sf.magnitude.core.Magnitude;
 
 import org.apache.commons.math.FunctionEvaluationException;
 import org.apache.commons.math.analysis.UnivariateRealFunction;
@@ -28,7 +30,6 @@ import ptpshared.math.Quad;
 import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
 import rmlshared.ui.Monitorable;
-import static java.lang.Math.min;
 
 /**
  * Transformation of one map into another.
@@ -291,7 +292,7 @@ public class Transform implements Monitorable {
         Magnitude dx = byteMap.getCalibration().getDX();
         Magnitude dy = byteMap.getCalibration().getDY();
 
-        if (!dx.equals(dy, 1e-6))
+        if (!dx.equals(dy, new Magnitude(1e-6, dx)))
             throw new IllegalArgumentException(
                     "The calibration in x and y of the ByteMap (" + byteMap
                             + ") must be equal.");
@@ -337,7 +338,7 @@ public class Transform implements Monitorable {
         Magnitude dx = byteMap.getCalibration().getDX();
         Magnitude dy = byteMap.getCalibration().getDY();
 
-        if (!dx.equals(dy, 1e-6))
+        if (!dx.equals(dy, new Magnitude(1e-6, dx)))
             throw new IllegalArgumentException(
                     "The calibration in x and y of the ByteMap (" + byteMap
                             + ") must be equal.");

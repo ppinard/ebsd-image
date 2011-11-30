@@ -17,9 +17,16 @@
  */
 package org.ebsdimage.core;
 
+import static java.lang.Math.toRadians;
+import static net.sf.magnitude.test.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Logger;
+
+import net.sf.magnitude.core.Magnitude;
 
 import org.ebsdimage.TestCase;
 import org.ebsdimage.io.HoughMapLoader;
@@ -29,13 +36,6 @@ import org.junit.Test;
 import rmlimage.core.ByteMap;
 import rmlimage.core.Map;
 import rmlimage.core.ROI;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import static java.lang.Math.toRadians;
-
-import static junittools.test.Assert.assertEquals;
 
 public class EditTest extends TestCase {
 
@@ -128,14 +128,15 @@ public class EditTest extends TestCase {
     public void testCropHoughMapDouble() throws IOException {
         // Create a HoughMap
         HoughMap houghMap =
-                new HoughMapLoader().load(getFile("org/ebsdimage/testdata/houghmap.bmp"));
+                new HoughMapLoader()
+                        .load(getFile("org/ebsdimage/testdata/houghmap.bmp"));
 
         HoughMap croppedMap = Edit.crop(houghMap, 50.0);
         assertEquals(houghMap.width, croppedMap.width);
         assertEquals(55, croppedMap.height);
         assertEquals(50.80506, croppedMap.rhoMax, 0.001);
         assertTrue(houghMap.getDeltaRho().equals(croppedMap.getDeltaRho(),
-                0.001));
+                new Magnitude(1e-3, "px")));
 
         ByteMap expected =
                 (ByteMap) load("org/ebsdimage/testdata/houghmap_cropped.bmp");
@@ -155,9 +156,10 @@ public class EditTest extends TestCase {
             Logger.getLogger("ebsd").info("Cropping radius: " + i);
             HoughMap croppedMap = Edit.crop(houghMap, i);
 
-            assertEquals(houghMap.getDeltaRho(), croppedMap.getDeltaRho(), 1e-6);
+            assertEquals(houghMap.getDeltaRho(), croppedMap.getDeltaRho(),
+                    new Magnitude(1e-6, "px"));
             assertEquals(houghMap.getDeltaTheta(), croppedMap.getDeltaTheta(),
-                    1e-6);
+                    new Magnitude(1e-6, "rad"));
         }
     }
 

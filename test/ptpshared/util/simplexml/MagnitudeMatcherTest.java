@@ -17,7 +17,7 @@
  */
 package ptpshared.util.simplexml;
 
-import magnitude.core.Magnitude;
+import net.sf.magnitude.core.Magnitude;
 
 import org.junit.Before;
 import org.junit.Test;

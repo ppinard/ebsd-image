@@ -28,7 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import magnitude.core.Magnitude;
+import net.sf.magnitude.core.Magnitude;
 import net.miginfocom.swing.MigLayout;
 
 import org.ebsdimage.core.EbsdMMap;

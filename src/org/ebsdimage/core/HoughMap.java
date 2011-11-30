@@ -17,7 +17,7 @@
  */
 package org.ebsdimage.core;
 
-import magnitude.core.Magnitude;
+import net.sf.magnitude.core.Magnitude;
 import rmlimage.core.ByteMap;
 import rmlimage.core.Calibration;
 import rmlimage.core.Map;

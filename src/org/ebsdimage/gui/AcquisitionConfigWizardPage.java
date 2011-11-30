@@ -20,8 +20,8 @@ package org.ebsdimage.gui;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
-import magnitude.core.Magnitude;
 import net.miginfocom.swing.MigLayout;
+import net.sf.magnitude.core.Magnitude;
 
 import org.apache.commons.math.geometry.Rotation;
 import org.ebsdimage.core.AcquisitionConfig;

@@ -18,7 +18,11 @@
 package org.ebsdimage.io;
 
 import java.awt.Dimension;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import rmlimage.core.Map;
 import rmlimage.io.MapLoader;
@@ -223,7 +227,7 @@ public class RawLoader extends MapLoader {
 
 
     @Override
-    public Object load(File file, Object arg) throws IOException {
+    public Map load(File file, Object arg) throws IOException {
         if (!(arg instanceof IntMap))
             arg = null;
 

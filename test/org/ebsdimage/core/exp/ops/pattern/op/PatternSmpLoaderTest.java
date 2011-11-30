@@ -17,6 +17,11 @@
  */
 package org.ebsdimage.core.exp.ops.pattern.op;
 
+import static junittools.test.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -35,12 +40,6 @@ import org.junit.Test;
 import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.core.ByteMap;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import static junittools.test.Assert.assertEquals;
 
 public class PatternSmpLoaderTest extends TestCase {
 
@@ -89,12 +88,10 @@ public class PatternSmpLoaderTest extends TestCase {
 
 
 
-    @Test
-    public void testHashCode() {
-        assertEquals(476584298, op.hashCode());
-    }
-
-
+    // @Test
+    // public void testHashCode() {
+    // assertEquals(476584298, op.hashCode());
+    // }
 
     @Test
     public void testLoad() throws IOException {
@@ -102,8 +99,8 @@ public class PatternSmpLoaderTest extends TestCase {
 
         ByteMap expected =
                 (ByteMap) load("org/ebsdimage/testdata/Project19/Project193.jpg");
-        expected.setCalibration(exp.mmap.getAcquisitionConfig().camera.getCalibration(
-                336, 256));
+        expected.setCalibration(exp.mmap.getAcquisitionConfig().camera
+                .getCalibration(336, 256));
 
         patternMap.assertEquals(expected);
     }

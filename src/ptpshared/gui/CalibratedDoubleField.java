@@ -25,7 +25,7 @@ import java.text.ParseException;
 
 import javax.swing.JComponent;
 
-import magnitude.core.Magnitude;
+import net.sf.magnitude.core.Magnitude;
 import rmlshared.gui.ComboBox;
 import rmlshared.gui.ErrorDialog;
 import rmlshared.gui.Spinner;
@@ -64,7 +64,8 @@ public class CalibratedDoubleField extends Spinner {
                 if (Magnitude.isNaN(newValue))
                     setValue("NaN");
                 else
-                    setValue(numberFormatter.format(newValue.getPreferredUnitsValue()));
+                    setValue(numberFormatter.format(newValue
+                            .getPreferredUnitsValue()));
             }
         }
 
@@ -162,8 +163,8 @@ public class CalibratedDoubleField extends Spinner {
      *            default value
      */
     public CalibratedDoubleField(String name, Magnitude defaultValue) {
-        this(name, defaultValue,
-                new String[] { defaultValue.getPreferredUnitsLabel() });
+        this(name, defaultValue, new String[] { defaultValue
+                .getPreferredUnitsLabel() });
     }
 
 
@@ -486,7 +487,8 @@ public class CalibratedDoubleField extends Spinner {
         if (Magnitude.isNaN(value))
             super.setValue("NaN");
         else
-            super.setValue(numberFormatter.format(value.getPreferredUnitsValue()));
+            super.setValue(numberFormatter.format(value
+                    .getPreferredUnitsValue()));
     }
 
 

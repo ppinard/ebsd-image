@@ -20,7 +20,7 @@ package org.ebsdimage.core.sim.ops.output;
 import java.io.File;
 import java.io.IOException;
 
-import magnitude.core.Magnitude;
+import net.sf.magnitude.core.Magnitude;
 
 import org.ebsdimage.core.HoughMap;
 import org.ebsdimage.core.HoughPeak;
@@ -85,7 +85,7 @@ public class SimHoughMap extends OutputOps {
         // c = sqrt(a^2 + b^2)
         Magnitude c = (a.power(2).add(b.power(2))).power(0.5);
 
-        Magnitude rMax = magnitude.core.Math.ceil(c.div(2));
+        Magnitude rMax = net.sf.magnitude.core.Math.ceil(c.div(2));
 
         Magnitude dTheta = new Magnitude(deltaTheta, "rad");
         Magnitude dRho = dx.multiply(deltaRho);

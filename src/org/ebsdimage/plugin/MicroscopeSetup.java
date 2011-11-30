@@ -26,7 +26,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 
-import magnitude.core.Magnitude;
+import net.sf.magnitude.core.Magnitude;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.math.geometry.Vector3D;

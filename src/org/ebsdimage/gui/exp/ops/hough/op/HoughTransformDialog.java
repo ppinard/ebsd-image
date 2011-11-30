@@ -19,7 +19,7 @@ package org.ebsdimage.gui.exp.ops.hough.op;
 
 import javax.swing.JLabel;
 
-import magnitude.core.Magnitude;
+import net.sf.magnitude.core.Magnitude;
 
 import org.ebsdimage.core.exp.ExpOperation;
 import org.ebsdimage.core.exp.ops.hough.op.HoughTransform;
