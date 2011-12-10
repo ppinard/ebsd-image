@@ -43,6 +43,7 @@ import rmlshared.enums.YesNo;
 import rmlshared.geom.shape.String2D;
 import rmlshared.gui.ColumnPanel;
 import rmlshared.gui.FileNameField;
+import rmlshared.gui.FileSelectionMode;
 import rmlshared.gui.OkCancelDialog;
 import rmlshared.io.FileUtil;
 import rmlshared.ui.Monitorable;
@@ -89,17 +90,20 @@ public class UnWarp extends PlugIn implements Monitorable {
 
             // Create the src dir field
             srcDirField = new FileNameField("Source Directory", true);
-            srcDirField.setFileSelectionMode(FileNameField.FILES_AND_DIRECTORIES);
+            srcDirField
+                    .setFileSelectionMode(FileSelectionMode.FILES_AND_DIRECTORIES);
             cPanel.add("Source Directory: ", srcDirField);
 
             // Create the dest dir field
             destDirField = new FileNameField("Destination Directory", true);
-            destDirField.setFileSelectionMode(FileNameField.FILES_AND_DIRECTORIES);
+            destDirField
+                    .setFileSelectionMode(FileSelectionMode.FILES_AND_DIRECTORIES);
             cPanel.add("Destination Directory: ", destDirField);
 
             // Create the wapr dir field
             warpDirField = new FileNameField("Warp Maps Directory", true);
-            warpDirField.setFileSelectionMode(FileNameField.FILES_AND_DIRECTORIES);
+            warpDirField
+                    .setFileSelectionMode(FileSelectionMode.FILES_AND_DIRECTORIES);
             cPanel.add("Warp Maps Directory: ", warpDirField);
 
             setMainComponent(cPanel);

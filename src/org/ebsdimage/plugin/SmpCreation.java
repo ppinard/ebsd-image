@@ -24,6 +24,7 @@ import org.ebsdimage.io.SmpCreator;
 
 import rmlimage.plugin.PlugIn;
 import rmlshared.enums.YesNo;
+import rmlshared.gui.FileSelectionMode;
 import rmlshared.ui.Monitorable;
 
 /**
@@ -60,8 +61,10 @@ public class SmpCreation extends PlugIn implements Monitorable {
 
     @Override
     public void xRun() throws IOException {
-        rmlshared.gui.FileDialog.setFileSelectionMode(rmlshared.gui.FileDialog.DIRECTORIES_ONLY);
-        if (rmlshared.gui.FileDialog.showOpenDialog("Select directory holding files to process") == rmlshared.gui.FileDialog.CANCEL)
+        rmlshared.gui.FileDialog
+                .setFileSelectionMode(FileSelectionMode.DIRECTORIES_ONLY);
+        if (rmlshared.gui.FileDialog
+                .showOpenDialog("Select directory holding files to process") == rmlshared.gui.FileDialog.CANCEL)
             return;
         File directory = rmlshared.gui.FileDialog.getSelectedFile();
 

@@ -30,6 +30,7 @@ import rmlimage.core.Map;
 import rmlimage.gui.FileDialog;
 import rmlimage.module.stitch.Tessera;
 import rmlshared.enums.YesNo;
+import rmlshared.gui.FileSelectionMode;
 import rmlshared.gui.YesNoDialog;
 import rmlshared.io.FileUtil;
 import rmlshared.io.WildcardFileFilter;
@@ -161,7 +162,8 @@ public class HklMMapStitcher extends rmlimage.module.multi.gui.MultiMapStitcher 
         rmlshared.gui.FileDialog.setTitle("Saving EBSD multimap");
         rmlshared.gui.FileDialog.setFilter(new WildcardFileFilter("*.zip"));
         rmlshared.gui.FileDialog.setMultipleSelection(false);
-        rmlshared.gui.FileDialog.setFileSelectionMode(rmlshared.gui.FileDialog.FILES_AND_DIRECTORIES);
+        rmlshared.gui.FileDialog
+                .setFileSelectionMode(FileSelectionMode.FILES_AND_DIRECTORIES);
         rmlshared.gui.FileDialog.setSelectedFile(mmap.getFile());
 
         if (FileDialog.showSaveDialog() == rmlshared.gui.FileDialog.CANCEL)

@@ -34,6 +34,7 @@ import org.netbeans.spi.wizard.WizardPanelNavResult;
 import ptpshared.gui.WizardPage;
 import rmlshared.gui.CheckBox;
 import rmlshared.gui.FileNameField;
+import rmlshared.gui.FileSelectionMode;
 
 /**
  * Template for the start page of the wizard.
@@ -95,7 +96,7 @@ public class StartWizardPage extends WizardPage {
         add(paramsCBox, "wrap");
 
         paramsFileField = new FileNameField("OPS_FILE", 32, true);
-        paramsFileField.setFileSelectionMode(FileNameField.FILES_ONLY);
+        paramsFileField.setFileSelectionMode(FileSelectionMode.FILES_ONLY);
         rmlshared.gui.FileDialog.addFilter("*.xml");
         paramsFileField.setFileFilter("*.xml");
         paramsFileField.setEnabled(false);

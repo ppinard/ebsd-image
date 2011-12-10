@@ -32,7 +32,12 @@ import net.miginfocom.swing.MigLayout;
 import ptpshared.gui.DirBrowserField;
 import ptpshared.gui.GuiUtil;
 import ptpshared.gui.WizardPage;
-import rmlshared.gui.*;
+import rmlshared.gui.Button;
+import rmlshared.gui.ErrorDialog;
+import rmlshared.gui.FileDialog;
+import rmlshared.gui.FileSelectionMode;
+import rmlshared.gui.OkCancelDialog;
+import rmlshared.gui.Panel;
 import rmlshared.io.FileUtil;
 import rmlshared.thread.PlugIn;
 import crystallography.core.Crystal;
@@ -77,7 +82,8 @@ public class PhasesWizardPage extends WizardPage {
         @Override
         protected void xRun() {
             Object[] items =
-                    ((DefaultListModel) existingPhasesList.getModel()).toArray();
+                    ((DefaultListModel) existingPhasesList.getModel())
+                            .toArray();
 
             DefaultListModel model =
                     (DefaultListModel) currentPhasesList.getModel();
@@ -144,8 +150,9 @@ public class PhasesWizardPage extends WizardPage {
             try {
                 new CrystalSaver().save(crystal, crystalFile);
             } catch (IOException e) {
-                ErrorDialog.show("This error occured while saving the XML file for the phase: "
-                        + e.getMessage());
+                ErrorDialog
+                        .show("This error occured while saving the XML file for the phase: "
+                                + e.getMessage());
                 return;
             }
 
@@ -191,7 +198,7 @@ public class PhasesWizardPage extends WizardPage {
             FileDialog.setFilter(FileDialog.addFilter("*.cif"));
             FileDialog.setMultipleSelection(false);
             FileDialog.setTitle("Select cif file");
-            FileDialog.setFileSelectionMode(FileDialog.FILES_ONLY);
+            FileDialog.setFileSelectionMode(FileSelectionMode.FILES_ONLY);
 
             if (FileDialog.showOpenDialog() == FileDialog.CANCEL)
                 return;
@@ -239,9 +246,10 @@ public class PhasesWizardPage extends WizardPage {
          */
         protected boolean checkPhaseAlreadyExists(File crystalFile) {
             if (crystalFile.exists()) {
-                ErrorDialog.show("The file ("
-                        + crystalFile.getAbsolutePath()
-                        + ") already exists. Please choose a different name for the crystal.");
+                ErrorDialog
+                        .show("The file ("
+                                + crystalFile.getAbsolutePath()
+                                + ") already exists. Please choose a different name for the crystal.");
                 return false;
             } else
                 return true;
@@ -321,8 +329,9 @@ public class PhasesWizardPage extends WizardPage {
             try {
                 new CrystalSaver().save(crystal, crystalFile);
             } catch (IOException e) {
-                ErrorDialog.show("This error occured while saving the XML file for the phase: "
-                        + e.getMessage());
+                ErrorDialog
+                        .show("This error occured while saving the XML file for the phase: "
+                                + e.getMessage());
                 return;
             }
 
@@ -420,43 +429,43 @@ public class PhasesWizardPage extends WizardPage {
     }
 
     /** Icon for the add all button. */
-    private static final ImageIcon ADD_ALL_ICON =
-            GuiUtil.loadIcon("ptpshared/data/icon/list-add-all_(22x22).png");
+    private static final ImageIcon ADD_ALL_ICON = GuiUtil
+            .loadIcon("ptpshared/data/icon/list-add-all_(22x22).png");
 
     /** Icon for the add button. */
-    private static final ImageIcon ADD_ICON =
-            GuiUtil.loadIcon("ptpshared/data/icon/list-add_(22x22).png");
+    private static final ImageIcon ADD_ICON = GuiUtil
+            .loadIcon("ptpshared/data/icon/list-add_(22x22).png");
 
     /** Icon for the clear button. */
-    private static final ImageIcon CLEAR_ICON =
-            GuiUtil.loadIcon("ptpshared/data/icon/list-clear_(22x22).png");
+    private static final ImageIcon CLEAR_ICON = GuiUtil
+            .loadIcon("ptpshared/data/icon/list-clear_(22x22).png");
 
     /** Icon for the down button. */
-    private static final ImageIcon DOWN_ICON =
-            GuiUtil.loadIcon("ptpshared/data/icon/go-down_(22x22).png");
+    private static final ImageIcon DOWN_ICON = GuiUtil
+            .loadIcon("ptpshared/data/icon/go-down_(22x22).png");
 
     /** Icon for the edit button. */
-    private static final ImageIcon EDIT_ICON =
-            GuiUtil.loadIcon("ptpshared/data/icon/document-edit_(22x22).png");
+    private static final ImageIcon EDIT_ICON = GuiUtil
+            .loadIcon("ptpshared/data/icon/document-edit_(22x22).png");
 
     /** Icon for the import button. */
-    private static final ImageIcon IMPORT_ICON =
-            GuiUtil.loadIcon("ptpshared/data/icon/import-generic_(22x22).png");
+    private static final ImageIcon IMPORT_ICON = GuiUtil
+            .loadIcon("ptpshared/data/icon/import-generic_(22x22).png");
 
     /** Map key for the phases. */
     public static final String KEY_PHASES = "phases";
 
     /** Icon for the new button. */
-    private static final ImageIcon NEW_ICON =
-            GuiUtil.loadIcon("ptpshared/data/icon/document-new_(22x22).png");
+    private static final ImageIcon NEW_ICON = GuiUtil
+            .loadIcon("ptpshared/data/icon/document-new_(22x22).png");
 
     /** Icon for the remove button. */
-    private static final ImageIcon REMOVE_ICON =
-            GuiUtil.loadIcon("ptpshared/data/icon/list-remove_(22x22).png");
+    private static final ImageIcon REMOVE_ICON = GuiUtil
+            .loadIcon("ptpshared/data/icon/list-remove_(22x22).png");
 
     /** Icon for the up button. */
-    private static final ImageIcon UP_ICON =
-            GuiUtil.loadIcon("ptpshared/data/icon/go-up_(22x22).png");
+    private static final ImageIcon UP_ICON = GuiUtil
+            .loadIcon("ptpshared/data/icon/go-up_(22x22).png");
 
 
 

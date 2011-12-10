@@ -26,7 +26,12 @@ import org.ebsdimage.vendors.hkl.io.CtfSaver;
 import rmlimage.core.Map;
 import rmlimage.gui.BasicDialog;
 import rmlimage.plugin.PlugIn;
-import rmlshared.gui.*;
+import rmlshared.gui.ColumnPanel;
+import rmlshared.gui.ComboBox;
+import rmlshared.gui.FileDialog;
+import rmlshared.gui.FileSelectionMode;
+import rmlshared.gui.OkCancelDialog;
+import rmlshared.gui.Panel;
 import rmlshared.io.FileUtil;
 import rmlshared.ui.Monitorable;
 
@@ -113,11 +118,12 @@ public class HklExport extends PlugIn implements Monitorable {
         HklMMap mmap = dialog.getSelectedMap();
 
         // Ask where to save ctf
-        FileDialog.setFileSelectionMode(FileDialog.FILES_ONLY);
+        FileDialog.setFileSelectionMode(FileSelectionMode.FILES_ONLY);
         FileDialog.setMultipleSelection(false);
         FileDialog.addFilter("*.ctf");
         FileDialog.setFilter("*.ctf");
-        FileDialog.setSelectedFile(FileUtil.setExtension(mmap.getFile(), "ctf"));
+        FileDialog
+                .setSelectedFile(FileUtil.setExtension(mmap.getFile(), "ctf"));
         FileDialog.setTitle("Saving ctf file");
 
         if (FileDialog.showSaveDialog() == FileDialog.CANCEL)
