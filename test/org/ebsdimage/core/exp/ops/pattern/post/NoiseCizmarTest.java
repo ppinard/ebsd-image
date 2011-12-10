@@ -17,6 +17,11 @@
  */
 package org.ebsdimage.core.exp.ops.pattern.post;
 
+import static junittools.test.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -27,12 +32,6 @@ import org.junit.Test;
 import ptpshared.util.simplexml.XmlLoader;
 import ptpshared.util.simplexml.XmlSaver;
 import rmlimage.core.ByteMap;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import static junittools.test.Assert.assertEquals;
 
 public class NoiseCizmarTest extends TestCase {
 
@@ -75,8 +74,10 @@ public class NoiseCizmarTest extends TestCase {
                 (ByteMap) load("org/ebsdimage/testdata/pattern.bmp");
         ByteMap expected =
                 (ByteMap) load("org/ebsdimage/testdata/noisecizmar.bmp");
+        expected.clearProperties();
 
         ByteMap dest = op.process(null, patternMap);
+        dest.clearProperties();
 
         expected.assertEquals(dest);
     }

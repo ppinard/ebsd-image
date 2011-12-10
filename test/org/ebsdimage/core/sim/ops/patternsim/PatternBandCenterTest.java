@@ -17,6 +17,10 @@
  */
 package org.ebsdimage.core.sim.ops.patternsim;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -36,10 +40,6 @@ import crystallography.core.CrystalFactory;
 import crystallography.core.Reflectors;
 import crystallography.core.ReflectorsFactory;
 import crystallography.core.ScatteringFactorsEnum;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class PatternBandCenterTest extends TestCase {
 
@@ -92,9 +92,11 @@ public class PatternBandCenterTest extends TestCase {
         op.simulate(null, metadata, reflectors, rotation);
 
         ByteMap patternMap = op.getPatternMap();
+        patternMap.clearProperties();
 
         ByteMap expectedMap =
                 (ByteMap) load("org/ebsdimage/testdata/patternbandcenter.bmp");
+        expectedMap.clearProperties();
 
         expectedMap.assertEquals(patternMap);
     }
@@ -108,7 +110,8 @@ public class PatternBandCenterTest extends TestCase {
         RealMap patternMap = op.getPatternRealMap();
 
         RealMap expectedMap =
-                new RmpLoader().load(getFile("org/ebsdimage/testdata/patternbandcenter_rmp.rmp"));
+                new RmpLoader()
+                        .load(getFile("org/ebsdimage/testdata/patternbandcenter_rmp.rmp"));
 
         expectedMap.assertEquals(patternMap);
     }
