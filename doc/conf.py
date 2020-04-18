@@ -14,11 +14,11 @@
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest',
               'sphinx.ext.intersphinx', 'sphinx.ext.todo',
-              'sphinx.ext.coverage', 'sphinx.ext.pngmath',
+              'sphinx.ext.coverage', 'sphinx.ext.mathjax',
               'sphinx.ext.ifconfig', 'sphinx.ext.graphviz',
               'sphinx.ext.inheritance_diagram',
-              'sphinxtools.ext.bibtex', 'sphinxtools.ext.sf',
-              'sphinxtools.ext.lp']
+              'sphinxcontrib.bibtex'
+              ]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -199,17 +199,7 @@ intersphinx_mapping = {'http://docs.python.org/': None}
 #Extension Options
 todo_include_todos = True
 
-pngmath_latex_preamble = latex_preamble
+imgmath_latex_preamble = latex_preamble
 
 autoclass_content = "both"
 
-bibtex_path = 'bib/references.bib'
-bibtex_style = ('apa', 'apalike')
-bibtex_styles_path = ['/home/ppinard/documents/workspace/pydev/sphinxtools/ext/bibtex/styles']
-
-sf_project = {'name': 'ebsd-image',
-              'version': version}
-
-sf_file_uri = "http://sourceforge.net/projects/%(name)s/files/v%(version)s/%(file)s/download"
-
-lp_project = {'name': 'ebsd-image'}

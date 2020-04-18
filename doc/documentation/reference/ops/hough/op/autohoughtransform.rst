@@ -6,7 +6,7 @@ Auto Hough transform
 
 The Auto Hough transform operation is a special case of the :ref:`houghtransform`
 operation. For more general information about the Hough transform, refer to this
-:ref:`houghtransform <operation>`.
+:ref:`houghtransform`.
 
 As demonstrated by Krieger Lassen (1994) :cite:`KriegerLassen1994`, the size
 and shape of the peaks in Hough space vary based on the width of a Kikuchi 
@@ -173,5 +173,3 @@ the previous equation, the following result is obtained:
 
 The aspect ratio of the peaks for a large portion of the Hough space is close
 to unity. 
-
-.. bibliography::

@@ -17,5 +17,3 @@ By ordering the Hough peaks in descending order,
    
 where :math:`\sigma_h` is the standard deviation of the :ref:`houghmap` and 
 :math:`I_i` is the intensity of peak *i*.
-
-.. bibliography::

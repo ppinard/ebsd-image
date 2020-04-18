@@ -156,4 +156,4 @@ one set of crystallographic planes to another.
 However, this difference is "generally much smaller than the one due to phase,
 grain boundaries or strain" :cite:`Wright2006`.
 
-.. bibliography::
+   

@@ -17,5 +17,3 @@ The calculations are identical to the signal to noise ratio of images.
 This technique was used to evaluate the quality of electron micrographs,
 :cite:`Joy2002`, but it can also be applied to diffraction patterns.
 
-.. bibliography::
-

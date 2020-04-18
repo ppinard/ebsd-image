@@ -4,17 +4,12 @@ Download
 ========
 
 **The current version of EBSD-Image is:** |version|.
-For older versions, please refer to the :sf-link:`download section <files>` 
-of our SourceForge project.
 
 EBSD-Image is licensed under the 
 `GNU General Public License v3 <http://www.gnu.org/licenses/gpl.html>`_ and 
 RML-Image under its own freeware license. 
 For more information about the license and third-party libraries used in this 
 project, please refer to the :ref:`license` page.
-
-If you are experiencing problem running EBSD-Image, please report it in 
-our :lp-link:`bug tracker <bugs>`.
 
 .. contents::
 
@@ -34,22 +29,7 @@ download and install it.
    Exception for EBSD-Image and its update may have to be set in your Antivirus 
    software to allow the software to properly check for new updates.
 
-There are always two installers available for each version. 
-The first one (*Full*) holds all the files needed to run EBSD-Image along 
-with the proper Java Virtual Machine. 
-This makes it a much bigger download. 
-You should use this installer the first time you install EBSD-Image. 
-The second installer (*Update*) is much smaller as it only holds the files 
-needed to run EBSD-Image. 
-You should use this installer over the first one if you already have installed 
-EBSD-Image. 
-Also, there is no need to install intermediate updates if you missed them. 
-This means that if the version of EBSD-Image on your disk is 0.1.0, you can 
-install the update of 0.1.5 even if you did not install the updates for 
-0.1.1, 0.1.2, 0.1.3 and 0.1.4. 
-
- * :sf-file:`Full version <EBSD-Image_v%(version)s_full.exe>`
- * :sf-file:`Update <EBSD-Image_v%(version)s_update.exe>`
+`ebsd-image_0.2.6.exe <https://github.com/ppinard/ebsd-image/releases/download/v0.2.6/ebsd-image_0.2.6.exe>`_
 
 Mac OS
 ------
@@ -68,7 +48,7 @@ Cross-platform
 
 Java 1.6 needs to be installed before running EBSD-Image. 
 
-  #. Download the :sf-file:`tarball <EBSD-Image_v%(version)s.tgz>`
+  #. Download the `ebsd-image_0.2.6.tgz <https://github.com/ppinard/ebsd-image/releases/download/v0.2.6/ebsd-image_0.2.6.tgz>`_
   #. Extract the files
   #. Under Linux or Mac, make the :file:`EBSD-Image.sh` executable::
   
@@ -85,9 +65,7 @@ Java 1.6 needs to be installed before running EBSD-Image.
 Source code
 -----------
 
-Please refer to the :lp-link:`LaunchPad <home>` page to access our 
-`Bazaar <http://bazaar.canonical.com>`_ repository.
-You can also view to code directly from your browser.
+See `https://github.com/ppinard/ebsd-image <https://github.com/ppinard/ebsd-image>`_
 
 .. toctree::
    :hidden:

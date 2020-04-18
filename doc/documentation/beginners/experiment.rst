@@ -88,7 +88,7 @@ An experiment can be divided into five major steps:
 
   2. Hough operations
   
-     The Hough operations are related to the :ref:`Hough transform <hough_transform>`. 
+     The Hough operations are related to the :ref:`Hough transform <houghtransform>`. 
      This algorithm is used to transform the image space into the Hough space. 
      The Kikuchi bands in the diffraction pattern are converted to peaks. 
      One can select the resolution of the Hough transform, operations to select 

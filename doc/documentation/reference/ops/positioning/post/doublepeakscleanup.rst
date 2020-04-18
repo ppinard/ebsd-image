@@ -25,7 +25,7 @@ any peak since they are incomplete.
 
 To prevent this problem for vertical Kikuchi bands, two operations must be
 performed in tandem.
-First, the :ref:`houghmap` is expanded in :ref:`\theta` pass 180 deg by a 
+First, the :ref:`houghmap` is expanded in :math:`\theta` pass 180 deg by a 
 certain amount, typically 5 to 10 deg by the :ref:`thetaexpand` operation.
 One half of the split peaks near 180 deg is now complete and can be properly
 detected on its own.
@@ -33,7 +33,7 @@ detected on its own.
 .. figure:: /images/ops/positioning/post/doublepeakscleanup/expand-before.png
    :width: 40%
    
-   :ref:`houghmap` before expansion in :ref:`theta`. 
+   :ref:`houghmap` before expansion in :math:`\theta`. 
    A peak is split in two.
 ..
 
@@ -47,7 +47,7 @@ detected on its own.
 Then, after identifying the position of all peaks in the :ref:`houghmap`, peaks
 found in the expanded region of the :ref:`houghmap` are brought back
 inside the original :math:`\theta` range (0 to 180 deg).
-This is automatically performed when the :ref:`houghpeak`s are created as the
+This is automatically performed when the :ref:`houghpeak` are created as the
 :math:`\theta` value of the peaks must be between 0 and 180 deg.
 
 The *Double peaks clean-up* operation removed peaks that are approximately

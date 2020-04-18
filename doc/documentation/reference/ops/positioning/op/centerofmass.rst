@@ -16,5 +16,3 @@ The center of mass is calculated using the intensity of the pixels as follow:
     \frac{\sum\limits_i^N{\rho_iI_i}} {\sum\limits_i^N{I_i}}\right)
 
 Its intensity is taken as the value of the closest pixel to the center of mass.
-
-.. bibliography::

@@ -42,5 +42,3 @@ gives an acceptable thresholding level to detect Hough peaks.
    Detected Hough peaks
 ..
 
-.. bibliography::
-

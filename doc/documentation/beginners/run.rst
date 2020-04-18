@@ -169,7 +169,7 @@ You can also import a phase from a Crystallographic Information File (CIF)
 
 To add a phase to the *Current phases* list, click on the add |add| button.
 The order of the phases in the *Current phases* list will corresponds to the 
-index of the phases in the :ref:`phasesmap`.
+index of the phases in the :ref:`phasemap`.
 
 .. |newphase| image:: /images/run/newphase_button.png
 

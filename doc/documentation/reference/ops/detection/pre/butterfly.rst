@@ -58,5 +58,3 @@ This procedure is called flattening of the :ref:`realmap`.
 The limits depend on the values of the convolution kernel. 
 Values of -800 and 800 for the lower and upper limits are typically a good 
 choice for the 9x9 convolution kernel.
-
-.. bibliography::

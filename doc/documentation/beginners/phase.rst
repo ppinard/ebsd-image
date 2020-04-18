@@ -75,8 +75,6 @@ a new phase by importing the data from a Crystallographic Information File
 (CIF) [#f1]_.
 The status of this feature is at an experimental level.
 It may not support all CIF files.
-If you cannot open a CIF file, report it in the :lp-link:`bug tracker <bugs>`.
-Please attach the CIF file to the bug.
 
 In the bottom right corner, click on the *Import a phase from a CIF file* 
 button |cif|.

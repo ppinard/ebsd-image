@@ -31,5 +31,3 @@ Parameters
 
 The user must defined the standard deviation of Gaussian noise (:math:`\sigma`)
 and the amplitude of Poisson noise (*P*).
-
-.. bibliography::

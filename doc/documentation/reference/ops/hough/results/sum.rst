@@ -14,5 +14,5 @@ In other words, it sums the intensity of every pixels.
 where *W* is the width, *H* is the height of the :ref:`houghmap` and 
 :math:`I_{ij}` the pixel value at position (*i*, *j*).
 
-Results from this quality metric are similar to the :ref:`pattern-sum`
+Results from this quality metric are similar to the Pattern Sum
 operation.

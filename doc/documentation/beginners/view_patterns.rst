@@ -15,7 +15,7 @@ unindexed.
 How to
 ------
 
-  #. Open an :ref:`ebsdmmap`. It can be a :ref:`expmmap`, :ref:`hklmmap` or 
+  #. Open an :ref:`ebsdmmap`. It can be a :ref:`hklmmap` or 
      :ref:`tslmmap`.
   
   #. Select one map of the multimap from the :ref:`multimap-tree`. 

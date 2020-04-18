@@ -9,5 +9,3 @@ and the least intense pixel in the diffraction pattern.
 The least intense pixel is taken as the first non-zero pixel to ignore the
 pixels removed from the :ref:`maskdisc` operation are ignored.
 
-.. bibliography::
-

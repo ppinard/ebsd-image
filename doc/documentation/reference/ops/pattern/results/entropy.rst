@@ -34,5 +34,3 @@ They summarized this quality index as:
    
    Example on NiCoCrAlY sample
 ..
-
-.. bibliography::

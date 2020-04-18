@@ -5,8 +5,6 @@ Documentation
 
 You will find here examples of use, description of the parameters and design 
 objectives for most of the features. 
-If you feel that a feature requires more explanation, don't hesitate to send a 
-:lp-link:`question <answers>`. 
 
 First-time users
 ----------------

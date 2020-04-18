@@ -71,5 +71,3 @@ as followed:
    
    Example on NiCoCrAlY sample
 ..
-
-.. bibliography::

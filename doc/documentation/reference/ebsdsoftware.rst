@@ -56,5 +56,3 @@ Using a cross-correlation between the a priori recorded diffraction patterns,
 the software calculates the strain and lattice rotation tensor as well as the
 local strain to a precision of 1e-4 radians.
 *CrossCourt 3.0* is commercially distributed by the BLG Productions company.
-
-.. bibliography::

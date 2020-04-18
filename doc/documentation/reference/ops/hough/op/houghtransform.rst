@@ -125,7 +125,7 @@ the lines that pass through the pixels of the band and that are fully
 inscribed inside it.
 The operation :ref:`autohoughtransform` tries to minimize this phenomenon
 by properly selecting the :math:`\Delta\rho` for a given :math:`\Delta\theta`.
-More explanations are given in the operation :ref:`autohoughtransform <page>`.
+More explanations are given in the operation :ref:`autohoughtransform`.
 
 Moving away from the conceptual Hough transform, the following figures show
 an experimental diffraction pattern of a silicon single crystal and its 
@@ -182,6 +182,4 @@ Krieger Lassen :cite:`KriegerLassen1994`) intensity of all the sinusoidal
 functions passing through this coordinate. 
 The intensity of a coordinate in the Hough space is therefore the average 
 intensity of the pixels along its corresponding line in the image space. 
-
-.. bibliography::
 
