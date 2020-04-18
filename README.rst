@@ -4,6 +4,8 @@ EBSD-Image
 
 **This project is not maintained. This repository is only for archiving.**
 
+Old documentation: https://ebsd-image.readthedocs.io/en/latest/
+
 EBSD-Image is a free open-source software to analyze EBSD diffraction patterns 
 and mappings. 
 It is built on top of `RML-Image <http://rmlimage.com>`_, an image analysis 
